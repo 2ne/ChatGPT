@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chairly-booking.abuzz-pin-8545.chatgpt.site/sitemap.xml
