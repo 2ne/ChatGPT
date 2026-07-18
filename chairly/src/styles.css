@@ -47,11 +47,13 @@ h1, h2 { text-wrap: balance; }
 .rating small { color: var(--muted); }
 
 .booking-layout { max-width: 1160px; margin: 0 auto 80px; padding: 36px 24px 0; display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 46px; align-items: start; }
-.booking-card { min-width: 0; border-top: 3px solid var(--ink); }
-.stepper { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--line); padding: 0; }
-.stepper div { min-width: 0; height: 58px; display: flex; align-items: center; gap: 9px; padding-right: 10px; color: #999995; border-bottom: 2px solid transparent; margin-bottom: -1px; }
-.stepper div.done { color: var(--ink); border-bottom-color: var(--ink); }
-.stepper span { width: 21px; height: 21px; flex: none; border: 1px solid currentColor; display: grid; place-items: center; font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.booking-card { min-width: 0; }
+.stepper { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); padding: 4px 0 20px; }
+.stepper div { min-width: 0; min-height: 38px; display: flex; align-items: center; justify-content: center; padding: 0 20px 0 8px; color: #999995; position: relative; }
+.stepper div:not(:last-child)::after { content: "›"; position: absolute; right: 5px; color: #c4c4c1; font-size: 22px; font-weight: 400; line-height: 1; }
+.stepper div.completed { color: var(--ink); }
+.stepper div.active { color: var(--red); }
+.stepper div.upcoming { color: #999995; }
 .stepper small { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 12px; font-weight: 600; }
 .panel { padding: 38px 0 0; }
 .panel h2 { margin-bottom: 7px; font: 700 38px/.95 "Barlow Condensed", "Arial Narrow", sans-serif; text-transform: uppercase; letter-spacing: .01em; }
@@ -170,7 +172,8 @@ aside h3 { margin-bottom: 16px; font: 700 22px/1 "Barlow Condensed", "Arial Narr
 .day-pills button:hover { background: var(--surface); }
 .day-pills button.active { border-color: var(--ink); background: var(--ink); color: #fff; }
 .field-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-.field-row label { display: grid; gap: 7px; margin-top: 18px; font-size: 12px; font-weight: 600; }
+.field-row label { min-width: 0; display: grid; gap: 7px; margin-top: 18px; font-size: 12px; font-weight: 600; }
+.field-row input, .field-row select { min-width: 0; max-width: 100%; }
 
 @media (max-width: 760px) {
   .topbar { height: 58px; padding: 0 14px; }
@@ -188,10 +191,10 @@ aside h3 { margin-bottom: 16px; font: 700 22px/1 "Barlow Condensed", "Arial Narr
   .rating small { display: none; }
   .booking-layout { display: block; padding: 24px 14px 0; margin-bottom: 48px; }
   .booking-layout aside { display: none; }
-  .stepper div { height: 50px; gap: 6px; }
+  .stepper { padding: 2px 0 18px; }
+  .stepper div { min-height: 34px; padding: 0 17px 0 3px; }
+  .stepper div:not(:last-child)::after { right: 3px; font-size: 19px; }
   .stepper small { font-size: 10px; }
-  .stepper span { display: none; }
-  .stepper div { justify-content: center; padding-right: 0; }
   .panel { padding-top: 28px; }
   .panel h2 { font-size: 32px; }
   .choice { grid-template-columns: 40px minmax(0,1fr) auto 18px; gap: 9px; }
@@ -208,7 +211,7 @@ aside h3 { margin-bottom: 16px; font: 700 22px/1 "Barlow Condensed", "Arial Narr
   .section-title input { max-width: 145px; }
   .diary article { grid-template-columns: 52px 38px minmax(0,1fr); gap: 8px; padding: 12px 0; }
   .diary article > button { grid-column: 2/-1; justify-content: center; }
-  .field-row { grid-template-columns: 1fr 1fr; }
+  .field-row { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; width: 100%; }
   .field-row label:last-child { grid-column: 1/-1; }
 }
 
