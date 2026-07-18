@@ -123,7 +123,7 @@ function BookingFlow({ staff, bookings, editing, onSave, onExit }: { staff: Staf
       <div className="booking-card">
         {editing && <div className="editing-banner"><span>You’re changing an existing booking</span><button onClick={onExit}>Cancel changes</button></div>}
         <div className="stepper" aria-label={`Step ${step + 1} of 4`}>
-          {steps.map((label, index) => <div className={index <= step ? 'done' : ''} key={label}><span>{index < step ? <Check size={14}/> : index + 1}</span><small>{label}</small></div>)}
+          {steps.map((label, index) => <div className={index < step ? 'completed' : index === step ? 'active' : 'upcoming'} key={label}><small>{label}</small></div>)}
         </div>
 
         {step === 0 && <div className="panel"><span className="eyebrow">Step 1 of 4</span><h2>Choose a service</h2><p className="muted">Select what you’d like to book.</p><div className="choice-list">
