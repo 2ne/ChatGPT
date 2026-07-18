@@ -1,4 +1,4 @@
-# Chairly
+# Snip
 
 A mobile-first appointment booking prototype for independent barbers and hairdressers.
 
