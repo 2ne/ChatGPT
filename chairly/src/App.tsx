@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CalendarDays, Check, ChevronLeft, Clock3, MapPin, Scissors, Settings2, UserRound, UsersRound, X } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, Clock3, MapPin, Scissors, Settings2, UserRound, UsersRound } from 'lucide-react'
 
 type View = 'book' | 'bookings' | 'admin'
 type BookingStatus = 'confirmed' | 'completed' | 'cancelled'
@@ -26,7 +26,10 @@ const seedBookings: Booking[] = [
 
 function todayISO(offset = 0) {
   const date = new Date(); date.setDate(date.getDate() + offset)
-  return date.toISOString().slice(0, 10)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 function formatDate(value: string, short = false) {
@@ -36,6 +39,17 @@ function formatDate(value: string, short = false) {
 function addMinutes(time: string, minutes: number) {
   const [h, m] = time.split(':').map(Number); const total = h * 60 + m + minutes
   return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`
+}
+
+function isPastSlot(date: string, time: string) {
+  if (date !== todayISO()) return false
+  const now = new Date()
+  const [hours, minutes] = time.split(':').map(Number)
+  return hours * 60 + minutes <= now.getHours() * 60 + now.getMinutes()
+}
+
+function StaffPhoto({ id, name }: { id: string; name: string }) {
+  return <img className="staff-photo" src={`https://chairly-booking.abuzz-pin-8545.chatgpt.site/staff/${id}.webp`} width="44" height="44" alt="" aria-hidden="true" />
 }
 
 function App() {
@@ -83,18 +97,18 @@ function BookingFlow({ staff, bookings, editing, onSave, onExit }: { staff: Staf
   const [step, setStep] = useState(editing ? 2 : 0)
   const [serviceId, setServiceId] = useState(editing?.serviceId || '')
   const [staffId, setStaffId] = useState(editing?.staffId || '')
-  const [date, setDate] = useState(editing?.date || todayISO(1))
+  const [date, setDate] = useState(editing?.date || todayISO())
   const [time, setTime] = useState(editing?.time || '')
   const [customer, setCustomer] = useState(editing?.customer || '')
   const [email, setEmail] = useState(editing?.email || '')
   const service = SERVICES.find(s => s.id === serviceId)
   const person = staff.find(s => s.id === staffId)
-  const dates = Array.from({ length: 10 }, (_, index) => todayISO(index))
+  const dates = Array.from({ length: 14 }, (_, index) => todayISO(index))
   const slots = useMemo(() => {
     if (!person || !service || !person.workingDays.includes(new Date(`${date}T12:00:00`).getDay())) return []
     const output: string[] = []; let cursor = person.start
     while (addMinutes(cursor, service.duration) <= person.end) { output.push(cursor); cursor = addMinutes(cursor, person.slotMinutes) }
-    return output.filter(slot => !bookings.some(b => b.id !== editing?.id && b.staffId === person.id && b.date === date && b.time === slot && b.status === 'confirmed'))
+    return output.filter(slot => !isPastSlot(date, slot) && !bookings.some(b => b.id !== editing?.id && b.staffId === person.id && b.date === date && b.time === slot && b.status === 'confirmed'))
   }, [person, service, date, bookings, editing])
   const steps = ['Service', 'Professional', 'Time', 'Details']
 
@@ -113,15 +127,15 @@ function BookingFlow({ staff, bookings, editing, onSave, onExit }: { staff: Staf
         </div>
 
         {step === 0 && <div className="panel"><span className="eyebrow">Step 1 of 4</span><h2>Choose a service</h2><p className="muted">Select what you’d like to book.</p><div className="choice-list">
-          {SERVICES.map(item => <button key={item.id} className={`choice ${serviceId === item.id ? 'selected' : ''}`} onClick={() => setServiceId(item.id)}><span className="choice-icon"><Scissors size={18}/></span><span><strong>{item.name}</strong><small><Clock3 size={14}/>{item.duration} mins</small></span><b>£{item.price}</b><i>{serviceId === item.id && <Check size={14}/>}</i></button>)}
+          {SERVICES.map(item => <button key={item.id} className={`choice service-choice ${serviceId === item.id ? 'selected' : ''}`} onClick={() => setServiceId(item.id)}><span><strong>{item.name}</strong><small><Clock3 size={14}/>{item.duration} mins</small></span><b>£{item.price}</b><i>{serviceId === item.id && <Check size={14}/>}</i></button>)}
         </div><button className="primary" disabled={!serviceId} onClick={() => setStep(1)}>Choose a barber</button></div>}
 
         {step === 1 && <div className="panel"><Back onClick={() => setStep(0)}/><span className="eyebrow">Step 2 of 4</span><h2>Choose your barber</h2><p className="muted">Pick a professional or choose the first available.</p><div className="choice-list">
           <button className={`choice ${staffId === 'any' ? 'selected' : ''}`} onClick={() => setStaffId('any')}><span className="avatar neutral"><UsersRound size={19}/></span><span><strong>First available</strong><small>Show the most appointment times</small></span><i>{staffId === 'any' && <Check size={14}/>}</i></button>
-          {staff.map(item => <button key={item.id} className={`choice ${staffId === item.id ? 'selected' : ''}`} onClick={() => setStaffId(item.id)}><span className="avatar" style={{ background: item.colour }}>{item.initials}</span><span><strong>{item.name}</strong><small>{item.role}</small></span><i>{staffId === item.id && <Check size={14}/>}</i></button>)}
+          {staff.map(item => <button key={item.id} className={`choice ${staffId === item.id ? 'selected' : ''}`} onClick={() => setStaffId(item.id)}><StaffPhoto id={item.id} name={item.name}/><span><strong>{item.name}</strong><small>{item.role}</small></span><i>{staffId === item.id && <Check size={14}/>}</i></button>)}
         </div><button className="primary" disabled={!staffId} onClick={() => { if (staffId === 'any') setStaffId(staff[0].id); setTime(''); setStep(2) }}>Choose a time</button></div>}
 
-        {step === 2 && <div className="panel"><Back onClick={() => setStep(1)}/><span className="eyebrow">Step 3 of 4</span><h2>Choose a time</h2><p className="muted">Times shown are local to Brighton.</p><div className="date-strip">{dates.map(item => <button className={date === item ? 'selected' : ''} key={item} onClick={() => { setDate(item); setTime('') }}><small>{formatDate(item, true).split(' ')[0]}</small><strong>{new Date(`${item}T12:00:00`).getDate()}</strong><span>{new Intl.DateTimeFormat('en-GB', { month: 'short' }).format(new Date(`${item}T12:00:00`))}</span></button>)}</div>
+        {step === 2 && <div className="panel"><Back onClick={() => setStep(1)}/><span className="eyebrow">Step 3 of 4</span><h2>Choose a time</h2><p className="muted">Times shown are local to Brighton. Book up to 8 weeks ahead.</p><div className="date-picker-head"><strong>Next 14 days</strong><label>More dates<input aria-label="Choose another date" type="date" min={todayISO()} max={todayISO(56)} value={date} onChange={event => { setDate(event.target.value); setTime('') }}/></label></div><div className="date-strip">{dates.map(item => <button className={date === item ? 'selected' : ''} key={item} onClick={() => { setDate(item); setTime('') }}><small>{formatDate(item, true).split(' ')[0]}</small><strong>{new Date(`${item}T12:00:00`).getDate()}</strong><span>{new Intl.DateTimeFormat('en-GB', { month: 'short' }).format(new Date(`${item}T12:00:00`))}</span></button>)}</div>
           <h3>{formatDate(date)}</h3>{slots.length ? <div className="slots">{slots.map(slot => <button className={time === slot ? 'selected' : ''} onClick={() => setTime(slot)} key={slot}>{slot}</button>)}</div> : <div className="empty"><CalendarDays size={22}/><strong>No times available</strong><span>Choose another date or professional.</span></div>}<button className="primary" disabled={!time} onClick={() => setStep(3)}>Enter your details</button>
         </div>}
 
@@ -152,7 +166,7 @@ function Admin({ staff, setStaff, bookings, setBookings }: { staff: Staff[]; set
   const toggleDay = (member: Staff, day: number) => updateStaff(member.id, { workingDays: member.workingDays.includes(day) ? member.workingDays.filter(d => d !== day) : [...member.workingDays, day].sort() })
   const complete = (id: string) => setBookings(items => items.map(item => item.id === id ? { ...item, status: 'completed' } : item))
   return <section className="admin-page"><div className="admin-head"><div><span className="eyebrow">North Laine Barber Co.</span><h1>Good morning</h1><p>Manage appointments and team availability.</p></div><div className="admin-metric"><span>Today</span><strong>{bookings.filter(b => b.date === todayISO() && b.status === 'confirmed').length}</strong><small>appointments</small></div></div><div className="admin-tabs"><button className={tab === 'diary' ? 'active' : ''} onClick={() => setTab('diary')}><CalendarDays size={17}/>Diary</button><button className={tab === 'team' ? 'active' : ''} onClick={() => setTab('team')}><UsersRound size={17}/>Team & hours</button></div>
-    {tab === 'diary' ? <div className="admin-section"><div className="section-title"><div><h2>Appointments</h2><p>{formatDate(date)}</p></div><input type="date" value={date} onChange={e => setDate(e.target.value)}/></div>{dayBookings.length ? <div className="diary">{dayBookings.map(booking => { const service = SERVICES.find(s => s.id === booking.serviceId); const person = staff.find(s => s.id === booking.staffId); return <article key={booking.id}><time>{booking.time}<small>{addMinutes(booking.time, service?.duration || 30)}</small></time><span className="avatar" style={{ background: person?.colour }}>{person?.initials}</span><div><h3>{booking.customer}</h3><p>{service?.name} with {person?.name}</p></div><button onClick={() => complete(booking.id)}><Check size={15}/>Complete</button></article>})}</div> : <div className="big-empty compact"><span><CalendarDays size={25}/></span><h2>No appointments</h2><p>There are no confirmed bookings for this date.</p></div>}</div> : <div className="admin-section"><div className="section-title"><div><h2>Team availability</h2><p>Set working days, hours and booking intervals.</p></div></div><div className="staff-settings">{staff.map(member => <article key={member.id}><div className="staff-title"><span className="avatar" style={{ background: member.colour }}>{member.initials}</span><div><h3>{member.name}</h3><p>{member.role}</p></div></div><div className="field-group"><label>Working days</label><div className="day-pills">{['S','M','T','W','T','F','S'].map((day, index) => <button key={index} className={member.workingDays.includes(index) ? 'active' : ''} onClick={() => toggleDay(member, index)}>{day}</button>)}</div></div><div className="field-row"><label>Starts<input type="time" value={member.start} onChange={e => updateStaff(member.id, { start: e.target.value })}/></label><label>Finishes<input type="time" value={member.end} onChange={e => updateStaff(member.id, { end: e.target.value })}/></label><label>Slot length<select value={member.slotMinutes} onChange={e => updateStaff(member.id, { slotMinutes: Number(e.target.value) })}><option value="15">15 mins</option><option value="30">30 mins</option><option value="45">45 mins</option><option value="60">60 mins</option></select></label></div></article>)}</div></div>}
+    {tab === 'diary' ? <div className="admin-section"><div className="section-title"><div><h2>Appointments</h2><p>{formatDate(date)}</p></div><input type="date" value={date} onChange={e => setDate(e.target.value)}/></div>{dayBookings.length ? <div className="diary">{dayBookings.map(booking => { const service = SERVICES.find(s => s.id === booking.serviceId); const person = staff.find(s => s.id === booking.staffId); return <article key={booking.id}><time>{booking.time}<small>{addMinutes(booking.time, service?.duration || 30)}</small></time>{person && <StaffPhoto id={person.id} name={person.name}/>}<div><h3>{booking.customer}</h3><p>{service?.name} with {person?.name}</p></div><button onClick={() => complete(booking.id)}><Check size={15}/>Complete</button></article>})}</div> : <div className="big-empty compact"><span><CalendarDays size={25}/></span><h2>No appointments</h2><p>There are no confirmed bookings for this date.</p></div>}</div> : <div className="admin-section"><div className="section-title"><div><h2>Team availability</h2><p>Set working days, hours and booking intervals.</p></div></div><div className="staff-settings">{staff.map(member => <article key={member.id}><div className="staff-title"><StaffPhoto id={member.id} name={member.name}/><div><h3>{member.name}</h3><p>{member.role}</p></div></div><div className="field-group"><label>Working days</label><div className="day-pills">{['S','M','T','W','T','F','S'].map((day, index) => <button key={index} className={member.workingDays.includes(index) ? 'active' : ''} onClick={() => toggleDay(member, index)}>{day}</button>)}</div></div><div className="field-row"><label>Starts<input type="time" value={member.start} onChange={e => updateStaff(member.id, { start: e.target.value })}/></label><label>Finishes<input type="time" value={member.end} onChange={e => updateStaff(member.id, { end: e.target.value })}/></label><label>Slot length<select value={member.slotMinutes} onChange={e => updateStaff(member.id, { slotMinutes: Number(e.target.value) })}><option value="15">15 mins</option><option value="30">30 mins</option><option value="45">45 mins</option><option value="60">60 mins</option></select></label></div></article>)}</div></div>}
   </section>
 }
 
