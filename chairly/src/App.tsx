@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CalendarDays, Check, ChevronLeft, Clock3, MapPin, Scissors, Settings2, UserRound, UsersRound } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, MapPin, Scissors, Settings2, UserRound, UsersRound } from 'lucide-react'
 
 type View = 'book' | 'bookings' | 'admin'
 type BookingStatus = 'confirmed' | 'completed' | 'cancelled'
@@ -123,11 +123,11 @@ function BookingFlow({ staff, bookings, editing, onSave, onExit }: { staff: Staf
       <div className="booking-card">
         {editing && <div className="editing-banner"><span>You’re changing an existing booking</span><button onClick={onExit}>Cancel changes</button></div>}
         <div className="stepper" aria-label={`Step ${step + 1} of 4`}>
-          {steps.map((label, index) => <div className={index < step ? 'completed' : index === step ? 'active' : 'upcoming'} key={label}><small>{label}</small></div>)}
+          {steps.map((label, index) => <div className="step-item" key={label}><span className={index < step ? 'completed' : index === step ? 'active' : 'upcoming'}>{label}</span>{index < steps.length - 1 && <i className="step-chevron" aria-hidden="true">›</i>}</div>)}
         </div>
 
         {step === 0 && <div className="panel"><span className="eyebrow">Step 1 of 4</span><h2>Choose a service</h2><p className="muted">Select what you’d like to book.</p><div className="choice-list">
-          {SERVICES.map(item => <button key={item.id} className={`choice service-choice ${serviceId === item.id ? 'selected' : ''}`} onClick={() => setServiceId(item.id)}><span><strong>{item.name}</strong><small><Clock3 size={14}/>{item.duration} mins</small></span><b>£{item.price}</b><i>{serviceId === item.id && <Check size={14}/>}</i></button>)}
+          {SERVICES.map(item => <button key={item.id} className={`choice service-choice ${serviceId === item.id ? 'selected' : ''}`} onClick={() => setServiceId(item.id)}><span><strong>{item.name}</strong><small>{item.duration} mins</small></span><b>£{item.price}</b><i>{serviceId === item.id && <Check size={14}/>}</i></button>)}
         </div><button className="primary" disabled={!serviceId} onClick={() => setStep(1)}>Choose a barber</button></div>}
 
         {step === 1 && <div className="panel"><Back onClick={() => setStep(0)}/><span className="eyebrow">Step 2 of 4</span><h2>Choose your barber</h2><p className="muted">Pick a professional or choose the first available.</p><div className="choice-list">
