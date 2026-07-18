@@ -56,7 +56,7 @@ function App() {
 
   return <div className="app-shell">
     <header className="topbar">
-      <button className="brand" onClick={() => setView('book')} aria-label="Chairly home"><span><Scissors size={19}/></span>chairly</button>
+      <button className="brand" onClick={() => setView('book')} aria-label="Snip home"><span><Scissors size={19}/></span>snip</button>
       <nav aria-label="Main navigation">
         <button className={view === 'book' ? 'active' : ''} onClick={() => { setEditingId(null); setView('book') }}>Book</button>
         <button className={view === 'bookings' ? 'active' : ''} onClick={() => setView('bookings')}>My bookings</button>
