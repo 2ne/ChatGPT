@@ -9,9 +9,9 @@ review process.
 
 ## Status
 
-Complete. GitHub Pages deployment is configured for:
+Complete. GitHub Pages deployment is configured for the project-specific URL:
 
-https://2ne.github.io/ChatGPT/
+https://2ne.github.io/ChatGPT/readability-presentation/
 
 ## Experience
 
@@ -66,3 +66,4 @@ npm run preview
 - AI is positioned as a writing aid while humans remain responsible for
   clarity, audience and judgement.
 - The production build is fully static and deployed through GitHub Actions.
+- Each monorepo project is published beneath its own GitHub Pages path.
