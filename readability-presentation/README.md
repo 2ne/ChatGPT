@@ -9,9 +9,9 @@ review process.
 
 ## Status
 
-Complete and deployed:
+Complete. GitHub Pages deployment is configured for:
 
-https://readability-under-pressure.abuzz-pin-8545.chatgpt.site
+https://2ne.github.io/ChatGPT/
 
 ## Experience
 
@@ -27,7 +27,7 @@ https://readability-under-pressure.abuzz-pin-8545.chatgpt.site
 ## Stack
 
 - React and TypeScript
-- Next.js App Router through Vinext
+- Vite
 - Tailwind CSS
 - Framer Motion
 - GSAP ScrollTrigger
@@ -49,7 +49,7 @@ npm run dev
 npm run dev
 npm run lint
 npm run build
-npm test
+npm run preview
 ```
 
 ## Presentation controls
@@ -65,3 +65,4 @@ npm test
 - Interactions are used to involve the audience, not to decorate the page.
 - AI is positioned as a writing aid while humans remain responsible for
   clarity, audience and judgement.
+- The production build is fully static and deployed through GitHub Actions.
