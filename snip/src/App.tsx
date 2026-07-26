@@ -12,7 +12,7 @@ type Booking = { id: string; shopId: string; customer: string; email: string; se
 type Shop = {
   id: string
   name: string
-  town: 'Brighton' | 'Burgess Hill'
+  town: string
   address: string
   postcode: string
   latitude: number
@@ -53,7 +53,7 @@ const INITIAL_STAFF: Staff[] = [
   { id: 'sam', name: 'Sam Taylor', role: 'Barber', initials: 'ST', colour: '#f1dfc7', workingDays: [2, 3, 4, 5, 6], start: '10:00', end: '18:00', slotMinutes: 30 },
 ]
 
-const SHOPS: Shop[] = [
+const LOCAL_SHOPS: Shop[] = [
   {
     id: 'north-laine',
     name: 'North Laine Barber Co.',
@@ -135,6 +135,42 @@ const SHOPS: Shop[] = [
     services: SERVICES.map(service => ({ ...service, price: service.price + 1 })),
   },
 ]
+
+const countrywideShopData = [
+  { id: 'harbour-hewn-truro', name: 'Harbour & Hewn', town: 'Truro, Cornwall', address: '14 Lemon Street, Truro', postcode: 'TR1 2LS', latitude: 50.2632, longitude: -5.051, rating: 4.9, reviewCount: 118, priceFrom: 17, nextAvailable: 'Today, 14:30', image: 'harbour-hewn-truro.webp', priceOffset: 1 },
+  { id: 'iron-gate-derby', name: 'Iron Gate Barbers', town: 'Derby', address: '27 Sadler Gate, Derby', postcode: 'DE1 3NF', latitude: 52.9235, longitude: -1.4776, rating: 4.8, reviewCount: 146, priceFrom: 16, nextAvailable: 'Tomorrow, 09:00', image: 'iron-gate-derby.webp', priceOffset: 0 },
+  { id: 'north-bridge-edinburgh', name: 'North Bridge Grooming', town: 'Edinburgh', address: '42 Broughton Street, Edinburgh', postcode: 'EH1 3SA', latitude: 55.9582, longitude: -3.1847, rating: 4.9, reviewCount: 203, priceFrom: 20, nextAvailable: 'Today, 16:00', image: 'north-bridge-edinburgh.webp', priceOffset: 4 },
+  { id: 'crooked-spire-chesterfield', name: 'Crooked Spire Barbers', town: 'Chesterfield', address: '11 Knifesmithgate, Chesterfield', postcode: 'S40 1RF', latitude: 53.235, longitude: -1.421, rating: 4.7, reviewCount: 89, priceFrom: 15, nextAvailable: 'Today, 12:30', image: 'crooked-spire-chesterfield.webp', priceOffset: -1 },
+  { id: 'thames-chair-maidenhead', name: 'The Thames Chair', town: 'Maidenhead', address: '35 Queen Street, Maidenhead', postcode: 'SL6 1NB', latitude: 51.5224, longitude: -0.7198, rating: 4.8, reviewCount: 112, priceFrom: 19, nextAvailable: 'Tomorrow, 10:30', image: 'thames-chair-maidenhead.webp', priceOffset: 3 },
+  { id: 'county-cut-maidstone', name: 'County Cut Co.', town: 'Maidstone', address: "18 Gabriel's Hill, Maidstone", postcode: 'ME15 6JG', latitude: 51.2704, longitude: 0.523, rating: 4.9, reviewCount: 174, priceFrom: 18, nextAvailable: 'Today, 15:00', image: 'county-cut-maidstone.webp', priceOffset: 2 },
+  { id: 'clyde-comb-glasgow', name: 'Clyde & Comb', town: 'Glasgow', address: '62 Wilson Street, Glasgow', postcode: 'G1 1HD', latitude: 55.859, longitude: -4.2447, rating: 4.8, reviewCount: 231, priceFrom: 18, nextAvailable: 'Today, 17:30', image: 'clyde-comb-glasgow.webp', priceOffset: 2 },
+  { id: 'granite-room-aberdeen', name: 'Granite Room', town: 'Aberdeen', address: '29 Belmont Street, Aberdeen', postcode: 'AB10 1JS', latitude: 57.1477, longitude: -2.1017, rating: 4.7, reviewCount: 96, priceFrom: 17, nextAvailable: 'Tomorrow, 11:00', image: 'granite-room-aberdeen.webp', priceOffset: 1 },
+  { id: 'arcade-barbers-cardiff', name: 'Arcade Barbers', town: 'Cardiff', address: '16 Morgan Arcade, Cardiff', postcode: 'CF10 1AF', latitude: 51.4798, longitude: -3.177, rating: 4.9, reviewCount: 188, priceFrom: 18, nextAvailable: 'Today, 13:30', image: 'arcade-cardiff.webp', priceOffset: 2 },
+  { id: 'copper-jack-swansea', name: 'Copper Jack Cuts', town: 'Swansea', address: '41 Wind Street, Swansea', postcode: 'SA1 1EE', latitude: 51.6196, longitude: -3.9395, rating: 4.7, reviewCount: 77, priceFrom: 16, nextAvailable: 'Tomorrow, 09:30', image: 'copper-jack-swansea.webp', priceOffset: 0 },
+  { id: 'linen-quarter-belfast', name: 'Linen Quarter Barbers', town: 'Belfast', address: '24 Linenhall Street, Belfast', postcode: 'BT2 8BG', latitude: 54.5965, longitude: -5.9322, rating: 4.9, reviewCount: 164, priceFrom: 17, nextAvailable: 'Today, 16:30', image: 'linen-quarter-belfast.webp', priceOffset: 1 },
+  { id: 'foyle-barber-house', name: 'Foyle Barber House', town: 'Derry', address: '9 Waterloo Street, Derry', postcode: 'BT48 6HA', latitude: 54.9966, longitude: -7.324, rating: 4.8, reviewCount: 91, priceFrom: 15, nextAvailable: 'Tomorrow, 10:00', image: 'foyle-house-derry.webp', priceOffset: -1 },
+  { id: 'tyne-standard-newcastle', name: 'Tyne Standard', town: 'Newcastle', address: '33 Grey Street, Newcastle', postcode: 'NE1 6EE', latitude: 54.9738, longitude: -1.6131, rating: 4.9, reviewCount: 219, priceFrom: 18, nextAvailable: 'Today, 14:00', image: 'tyne-standard-newcastle.webp', priceOffset: 2 },
+  { id: 'kirkgate-grooming-leeds', name: 'Kirkgate Grooming', town: 'Leeds', address: '8 New Market Street, Leeds', postcode: 'LS1 6DG', latitude: 53.796, longitude: -1.5404, rating: 4.8, reviewCount: 176, priceFrom: 17, nextAvailable: 'Today, 17:00', image: 'kirkgate-leeds.webp', priceOffset: 1 },
+  { id: 'northern-quarter-cuts', name: 'Northern Quarter Cuts', town: 'Manchester', address: '51 Tib Street, Manchester', postcode: 'M4 1LS', latitude: 53.4828, longitude: -2.2351, rating: 4.9, reviewCount: 264, priceFrom: 20, nextAvailable: 'Tomorrow, 09:00', image: 'northern-quarter-manchester.webp', priceOffset: 4 },
+  { id: 'dockside-barber-liverpool', name: 'Dockside Barber Co.', town: 'Liverpool', address: '22 Castle Street, Liverpool', postcode: 'L2 0NE', latitude: 53.4062, longitude: -2.9912, rating: 4.8, reviewCount: 197, priceFrom: 18, nextAvailable: 'Today, 15:30', image: 'dockside-liverpool.webp', priceOffset: 2 },
+  { id: 'jewellery-quarter-barbers', name: 'Jewellery Quarter Barbers', town: 'Birmingham', address: '19 Warstone Lane, Birmingham', postcode: 'B18 6JQ', latitude: 52.4865, longitude: -1.9118, rating: 4.7, reviewCount: 139, priceFrom: 17, nextAvailable: 'Tomorrow, 11:30', image: 'jewellery-quarter-birmingham.webp', priceOffset: 1 },
+  { id: 'harbourside-grooming-bristol', name: 'Harbourside Grooming', town: 'Bristol', address: '44 King Street, Bristol', postcode: 'BS1 4DZ', latitude: 51.4519, longitude: -2.5945, rating: 4.9, reviewCount: 182, priceFrom: 19, nextAvailable: 'Today, 13:00', image: 'harbourside-bristol.webp', priceOffset: 3 },
+  { id: 'elm-hill-barbers-norwich', name: 'Elm Hill Barbers', town: 'Norwich', address: '7 St Benedicts Street, Norwich', postcode: 'NR2 4PE', latitude: 52.6318, longitude: 1.2882, rating: 4.8, reviewCount: 104, priceFrom: 16, nextAvailable: 'Tomorrow, 10:30', image: 'elm-hill-norwich.webp', priceOffset: 0 },
+  { id: 'borough-blade-london', name: 'Borough & Blade', town: 'London', address: '86 Rye Lane, Peckham', postcode: 'SE15 5BY', latitude: 51.4696, longitude: -0.0697, rating: 4.9, reviewCount: 286, priceFrom: 22, nextAvailable: 'Today, 18:00', image: 'borough-blade-london.webp', priceOffset: 6 },
+] as const
+
+const COUNTRYWIDE_SHOPS: Shop[] = countrywideShopData.map(shop => ({
+  ...shop,
+  images: [
+    { src: assetPath(`/shops/countrywide/${shop.image}`), alt: `A barber at work inside ${shop.name} in ${shop.town}.` },
+    { src: assetPath('/hero/barber-hero-2.webp'), alt: `A haircut at ${shop.name}.` },
+    { src: assetPath('/hero/barber-hero-3.webp'), alt: `Inside ${shop.name}.` },
+    { src: assetPath('/hero/barber-hero-4.webp'), alt: `The team at ${shop.name}.` },
+  ],
+  services: SERVICES.map(service => ({ ...service, price: Math.max(14, service.price + shop.priceOffset) })),
+}))
+
+const SHOPS: Shop[] = [...LOCAL_SHOPS, ...COUNTRYWIDE_SHOPS]
 
 const seedBookings: Booking[] = [
   { id: 'demo-1', shopId: 'north-laine', customer: 'Jamie Collins', email: 'jamie@example.com', serviceId: 'cut', staffId: 'alex', date: todayISO(1), time: '10:00', status: 'confirmed' },

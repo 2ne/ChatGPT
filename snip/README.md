@@ -4,6 +4,10 @@ Snip is a mobile-first UK barber marketplace and booking prototype. Customers
 can find nearby barbers, choose a service and appointment, then manage their
 booking. The prototype also includes diary and team availability views.
 
+The discovery experience currently includes 24 fictional barber businesses
+across England, Scotland, Wales and Northern Ireland, each with its own listing
+image.
+
 ## Live prototype
 
 https://2ne.github.io/ChatGPT/snip/
