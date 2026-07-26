@@ -1,0 +1,52 @@
+name: Update Snip copy
+
+on:
+  push:
+    branches:
+      - agent/update-snip-uk-copy
+
+permissions:
+  contents: write
+
+jobs:
+  update-copy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/update-snip-uk-copy
+
+      - name: Update metadata and heading
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('snip/index.html'): {
+                  'Find an available barber in Brighton and book, change or cancel your haircut appointment online.':
+                  'Find and book trusted barbers across the United Kingdom. Change or cancel your haircut appointment online.',
+              },
+              Path('snip/src/App.tsx'): {
+                  '<h1>Find your next barber</h1>': '<h1>Find your barber</h1>',
+              },
+          }
+
+          for path, changes in replacements.items():
+              content = path.read_text()
+              for old, new in changes.items():
+                  if content.count(old) != 1:
+                      raise SystemExit(f'Expected exactly one match for {old!r} in {path}')
+                  content = content.replace(old, new)
+              path.write_text(content)
+          PY
+
+          rm .github/workflows/update-snip-copy.yml
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add snip/index.html snip/src/App.tsx .github/workflows/update-snip-copy.yml
+          git commit -m "Update Snip UK copy"
+          git push origin HEAD:agent/update-snip-uk-copy
