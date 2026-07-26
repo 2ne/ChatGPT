@@ -1,0 +1,19 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="white"/>
+  <rect x="72" y="72" width="96" height="112" fill="#111111"/>
+  <path d="M96 92L126 124M144 92L114 124" stroke="white" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="101" cy="143" r="11" stroke="white" stroke-width="7"/>
+  <circle cx="139" cy="143" r="11" stroke="white" stroke-width="7"/>
+  <path d="M72 174H168" stroke="#D92D20" stroke-width="10"/>
+  <path d="M104 174H136" stroke="white" stroke-width="10"/>
+  <path d="M136 174H168" stroke="#174EA6" stroke-width="10"/>
+  <text x="198" y="158" fill="#111111" font-family="Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="5">SNIP</text>
+  <line x1="72" y1="232" x2="1128" y2="232" stroke="#DEDEDB" stroke-width="2"/>
+  <text x="72" y="366" fill="#111111" font-family="Arial Narrow, Arial, sans-serif" font-size="92" font-weight="700">BOOK YOUR NEXT CUT.</text>
+  <text x="72" y="438" fill="#666662" font-family="Arial, sans-serif" font-size="32">Choose a service, barber and available time.</text>
+  <rect x="72" y="500" width="282" height="64" fill="#111111"/>
+  <text x="105" y="543" fill="white" font-family="Arial, sans-serif" font-size="23" font-weight="700">NO PAYMENT REQUIRED</text>
+  <rect x="1120" y="72" width="8" height="492" fill="#D92D20"/>
+  <rect x="1120" y="236" width="8" height="164" fill="white"/>
+  <rect x="1120" y="400" width="8" height="164" fill="#174EA6"/>
+</svg>
