@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "readability-presentation/**"
+      - "snip/**"
       - ".github/workflows/deploy-readability-presentation.yml"
   workflow_dispatch:
 
@@ -26,17 +27,22 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: readability-presentation/package-lock.json
+          cache-dependency-path: |
+            readability-presentation/package-lock.json
+            snip/package-lock.json
       - name: Install dependencies
-        working-directory: readability-presentation
-        run: npm ci
-      - name: Build readability presentation
-        working-directory: readability-presentation
-        run: npm run build
-      - name: Package project at its own URL
         run: |
-          mkdir -p pages/readability-presentation
+          npm ci --prefix readability-presentation
+          npm ci --prefix snip
+      - name: Build projects
+        run: |
+          npm run build --prefix readability-presentation
+          npm run build --prefix snip
+      - name: Package projects at their own URLs
+        run: |
+          mkdir -p pages/readability-presentation pages/snip
           cp -R readability-presentation/dist/. pages/readability-presentation/
+          cp -R snip/dist/. pages/snip/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -45,7 +51,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}readability-presentation/
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
