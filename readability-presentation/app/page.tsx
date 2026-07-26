@@ -387,13 +387,24 @@ function App() {
 
         <section data-section="2" className="standards section-dark">
           <Stars count={34} />
-          <Reveal className="standards-intro"><span className="eyebrow">THE STANDARD</span><h2>Apollo was too complex<br />for one person.</h2></Reveal>
+          <Reveal className="standards-intro">
+            <span className="eyebrow">THE STANDARD</span>
+            <h2>Apollo was too complex<br />for one person.</h2>
+            <p>So the information people relied on could not merely exist. It had to work.</p>
+          </Reveal>
           <div className="standards-words">
-            {["Unambiguous.", "Concise.", "Reviewed."].map((word, i) => (
-              <Reveal key={word} delay={i * 0.12}><span>{word}</span></Reveal>
+            {[
+              ["Unambiguous.", "One meaning. No room for interpretation."],
+              ["Concise.", "The next action was easy to find."],
+              ["Reviewed.", "Another engineer checked it before it was needed."],
+            ].map(([word, meaning], i) => (
+              <Reveal key={word} delay={i * 0.12} className="standard-row">
+                <span>{word}</span>
+                <p>{meaning}</p>
+              </Reveal>
             ))}
           </div>
-          <p className="standards-caption">Documentation had to work under pressure.</p>
+          <p className="standards-caption">Not writing preferences. Operating requirements.</p>
         </section>
 
         <section data-section="3" className="complexity section-light">
@@ -407,6 +418,16 @@ function App() {
             <div className="evolution"><span>Apollo</span><b>↓</b><span>Microservices</span><b>↓</b><span>Cloud</span><b>↓</b><span>Modern engineering</span></div>
             <h2>Our systems aren’t spacecraft.</h2>
             <p>They’re becoming just as complicated.</p>
+            <div className="reader-bridge">
+              <span>THE USER</span>
+              <p>Documentation is a product. Its user is the next person who has to understand your work.</p>
+              <div>
+                <b>New starter</b>
+                <b>Engineer on call</b>
+                <b>Adjacent team</b>
+                <b>Future you</b>
+              </div>
+            </div>
           </Reveal>
         </section>
 
@@ -491,7 +512,12 @@ function App() {
             <Reveal><h2>Write for future you…</h2><span>…six months from now…</span><span>…when you haven’t had those three shots of espresso.</span></Reveal>
             <Reveal className="for-people"><p>Write for the new starter.</p><p>Write for the engineer on call.</p></Reveal>
             <Reveal className="reliance"><p>One day…</p><h3>Someone will rely on<br />what you’ve written.</h3></Reveal>
-            <Reveal className="final-message"><p>The easier it is to understand,</p><h2>the faster they can<br />solve the problem.</h2></Reveal>
+            <Reveal className="final-message">
+              <p>Great documentation is not about recording what you know.</p>
+              <h3>It is about helping<br />someone else succeed.</h3>
+              <p>The easier it is to understand,</p>
+              <h2>the faster they can<br />solve the problem.</h2>
+            </Reveal>
             <Reveal className="last-line"><span>That’s why readability matters.</span></Reveal>
           </div>
         </section>
