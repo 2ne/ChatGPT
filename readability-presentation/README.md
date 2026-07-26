@@ -29,6 +29,7 @@ https://2ne.github.io/ChatGPT/readability-presentation/
 - React and TypeScript
 - Vite
 - Tailwind CSS
+- Inter (from [rsms.me/inter](https://rsms.me/inter/)), with Dynamic Metrics tracking
 - Framer Motion
 - GSAP ScrollTrigger
 - Lenis smooth scrolling
@@ -62,6 +63,11 @@ npm run preview
 
 - The experience is a single narrative rather than a collection of slides.
 - Apollo gold is the only accent colour.
+- Typography uses Inter Variable from the official RSMS CDN, with
+  `liga` / `calt` / `kern` enabled and letter-spacing derived from Inter
+  Dynamic Metrics (`tracking = a + b × e^(c × size)`).
+- Section navigation goes through Lenis (`scrollTo`) so keyboard and
+  present controls stay in sync with smooth scrolling.
 - Interactions are used to involve the audience, not to decorate the page.
 - AI is positioned as a writing aid while humans remain responsible for
   clarity, audience and judgement.

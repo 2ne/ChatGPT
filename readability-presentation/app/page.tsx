@@ -273,10 +273,14 @@ function Challenge() {
 
 function App() {
   const root = useRef<HTMLDivElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
+  const activeRef = useRef(0);
   const [active, setActive] = useState(0);
   const [presenting, setPresenting] = useState(false);
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.13], ["0%", "18%"]);
+
+  activeRef.current = active;
 
   async function toggleFullscreen() {
     if (!document.fullscreenElement) {
@@ -288,10 +292,30 @@ function App() {
     }
   }
 
+  const scrollToSection = (index: number) => {
+    const next = Math.max(0, Math.min(sections.length - 1, index));
+    const target = document.querySelector<HTMLElement>(`[data-section="${next}"]`);
+    if (!target) return;
+
+    const lenis = lenisRef.current;
+    if (lenis) {
+      lenis.scrollTo(target, { offset: 0, duration: 1.15, lock: true });
+      return;
+    }
+
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    const lenis = new Lenis({
+      duration: 1.15,
+      smoothWheel: true,
+      anchors: false,
+    });
+    lenisRef.current = lenis;
     lenis.on("scroll", ScrollTrigger.update);
+
     const tick = (time: number) => {
       lenis.raf(time * 1000);
     };
@@ -310,28 +334,41 @@ function App() {
     );
 
     const handleKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
-        document.querySelector(`[data-section="${Math.min(active + 1, sections.length - 1)}"]`)?.scrollIntoView({ behavior: "smooth" });
+        scrollToSection(activeRef.current + 1);
       }
       if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
         e.preventDefault();
-        document.querySelector(`[data-section="${Math.max(active - 1, 0)}"]`)?.scrollIntoView({ behavior: "smooth" });
+        scrollToSection(activeRef.current - 1);
       }
-      if (e.key.toLowerCase() === "f") toggleFullscreen();
+      if (e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        void toggleFullscreen();
+      }
     };
+
+    const onFullscreenChange = () => {
+      setPresenting(Boolean(document.fullscreenElement));
+    };
+
     window.addEventListener("keydown", handleKey);
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+
     return () => {
       window.removeEventListener("keydown", handleKey);
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
       triggers.forEach((t) => t.kill());
       gsap.ticker.remove(tick);
       lenis.destroy();
+      lenisRef.current = null;
     };
-  }, [active]);
+  }, []);
 
   const move = (direction: number) => {
-    const next = Math.max(0, Math.min(sections.length - 1, active + direction));
-    document.querySelector(`[data-section="${next}"]`)?.scrollIntoView({ behavior: "smooth" });
+    scrollToSection(activeRef.current + direction);
   };
 
   return (
@@ -369,18 +406,29 @@ function App() {
         </section>
 
         <section data-section="1" className="mission-control section-dark">
-          <div className="control-image">
-            <div className="monitor-grid">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
-            <div className="control-light" />
+          <div className="control-sticky-bg" aria-hidden="true">
+            <div className="control-image">
+              <div className="monitor-grid">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
+              <div className="control-light" />
+            </div>
           </div>
-          <div className="control-copy">
+          <div className="control-panel">
             <Reveal><span className="eyebrow">MISSION CONTROL</span><h2>You arrive.</h2></Reveal>
-            <Reveal delay={0.15}><p>The room is full of brilliant engineers.</p><p>Each understands their own system.</p><p>No one understands everything.</p></Reveal>
+            <Reveal delay={0.15} className="control-lines">
+              <p>The room is full of brilliant engineers.</p>
+              <p>Each understands their own system.</p>
+              <p>No one understands everything.</p>
+            </Reveal>
           </div>
-          <div className="read-reveal">
-            <Reveal><p>So how do they help?</p><h2>READ.</h2></Reveal>
+          <div className="control-panel read-panel">
+            <Reveal className="read-prompt">
+              <p>So how do they help?</p>
+              <h2>READ.</h2>
+            </Reveal>
             <Reveal delay={0.2} className="read-list">
-              {["Procedures.", "Schematics.", "Checklists.", "Knowledge captured by someone else."].map((x) => <span key={x}>{x}</span>)}
+              {["Procedures.", "Schematics.", "Checklists.", "Knowledge captured by someone else."].map((x) => (
+                <span key={x}>{x}</span>
+              ))}
             </Reveal>
           </div>
         </section>
@@ -505,20 +553,32 @@ function App() {
         </section>
 
         <section data-section="10" className="finale section-dark">
-          <Stars count={100} />
-          <div className="earth" aria-hidden="true"><div className="earth-light" /><i /><i /><i /></div>
+          <div className="finale-sticky-bg" aria-hidden="true">
+            <Stars count={100} />
+            <div className="earth"><div className="earth-light" /><i /><i /><i /></div>
+          </div>
           <div className="finale-copy">
-            <Reveal><p>Don’t write for yourself today.</p></Reveal>
-            <Reveal><h2>Write for future you…</h2><span>…six months from now…</span><span>…when you haven’t had those three shots of espresso.</span></Reveal>
-            <Reveal className="for-people"><p>Write for the new starter.</p><p>Write for the engineer on call.</p></Reveal>
-            <Reveal className="reliance"><p>One day…</p><h3>Someone will rely on<br />what you’ve written.</h3></Reveal>
-            <Reveal className="final-message">
+            <Reveal className="finale-beat"><p>Don’t write for yourself today.</p></Reveal>
+            <Reveal className="finale-beat">
+              <h2>Write for future you…</h2>
+              <span>…six months from now…</span>
+              <span>…when you haven’t had those three shots of espresso.</span>
+            </Reveal>
+            <Reveal className="finale-beat for-people">
+              <p>Write for the new starter.</p>
+              <p>Write for the engineer on call.</p>
+            </Reveal>
+            <Reveal className="finale-beat reliance">
+              <p>One day…</p>
+              <h3>Someone will rely on<br />what you’ve written.</h3>
+            </Reveal>
+            <Reveal className="finale-beat final-message">
               <p>Great documentation is not about recording what you know.</p>
               <h3>It is about helping<br />someone else succeed.</h3>
               <p>The easier it is to understand,</p>
               <h2>the faster they can<br />solve the problem.</h2>
             </Reveal>
-            <Reveal className="last-line"><span>That’s why readability matters.</span></Reveal>
+            <Reveal className="finale-beat last-line"><span>That’s why readability matters.</span></Reveal>
           </div>
         </section>
       </main>
