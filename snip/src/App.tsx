@@ -437,7 +437,7 @@ function DiscoverHome({ shops, onSelect }: { shops: Shop[]; onSelect: (shopId: s
   return <section className="discover-page">
     <div className="discover-intro">
       <div>
-        <h1>Find your next barber</h1>
+        <h1>Find your barber</h1>
         <p>Browse trusted barbers across the UK and book in a few taps.</p>
       </div>
       <div className="barber-search">
