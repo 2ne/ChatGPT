@@ -193,7 +193,7 @@ function distanceMiles(latitude: number, longitude: number, shop: Shop) {
 }
 
 function StaffPhoto({ id, name }: { id: string; name: string }) {
-  return <img className="staff-photo" src={`/staff/${id}.webp`} width="44" height="44" alt="" aria-hidden="true" />
+  return <img className="staff-photo" src={assetPath(`/staff/${id}.webp`)} width="44" height="44" alt="" aria-hidden="true" />
 }
 
 function App() {
