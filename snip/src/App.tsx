@@ -202,7 +202,9 @@ function App() {
   const [staff, setStaff] = useState<Staff[]>(() => typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('chairly-staff') || 'null') || INITIAL_STAFF) : INITIAL_STAFF)
   const [bookings, setBookings] = useState<Booking[]>(() => typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('chairly-bookings') || 'null') || seedBookings) : seedBookings)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [leaveBookingOpen, setLeaveBookingOpen] = useState(false)
   const bookingDirtyRef = useRef(false)
+  const allowBookingExitRef = useRef(false)
   const selectedShop = SHOPS.find(shop => shop.id === selectedShopId) || SHOPS[0]
 
   useEffect(() => localStorage.setItem('chairly-staff', JSON.stringify(staff)), [staff])
@@ -254,11 +256,13 @@ function App() {
     const handlePopState = () => {
       const url = new URL(window.location.href)
       const shopId = url.searchParams.get('barber')
-      if (!shopId && bookingDirtyRef.current) {
-        if (!window.confirm('Leave this booking? Your selections will be lost.')) {
-          window.history.forward()
-          return
-        }
+      if (!shopId && bookingDirtyRef.current && !allowBookingExitRef.current) {
+        window.history.forward()
+        setLeaveBookingOpen(true)
+        return
+      }
+      if (allowBookingExitRef.current) {
+        allowBookingExitRef.current = false
         bookingDirtyRef.current = false
       }
       if (shopId && SHOPS.some(shop => shop.id === shopId)) {
@@ -289,6 +293,11 @@ function App() {
       {view === 'bookings' && <MyBookings bookings={bookings} shops={SHOPS} staff={staff} onChange={changeBooking} onCancel={cancelBooking}/>}
       {view === 'admin' && <Admin shop={selectedShop} staff={staff} setStaff={setStaff} bookings={bookings.filter(booking => (booking.shopId || 'north-laine') === selectedShop.id)} setBookings={setBookings}/>}
     </main>
+    {leaveBookingOpen && <LeaveBookingDrawer onStay={() => setLeaveBookingOpen(false)} onLeave={() => {
+      allowBookingExitRef.current = true
+      setLeaveBookingOpen(false)
+      window.history.back()
+    }}/>} 
     <Toaster
       position="bottom-center"
       offset={{ bottom: 24 }}
@@ -438,6 +447,19 @@ function ShopHeader({ shop }: { shop: Shop }) {
     </div>
     <div className="shop-copy"><h1>{shop.name}</h1><a className="address" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${shop.address}, ${shop.postcode}`)}`} target="_blank" rel="noopener noreferrer" aria-label={`View ${shop.address} in Google Maps`}><MapPin size={16}/>{shop.address} · {shop.postcode}</a><div className="rating"><strong>{shop.rating}</strong><span className="rating-stars" aria-label={`${shop.rating} out of 5 stars`}>★★★★★</span><Drawer.Root><Drawer.Trigger asChild><button type="button" className="review-count">{shop.reviewCount} verified reviews</button></Drawer.Trigger><Drawer.Portal><Drawer.Overlay className="review-overlay"/><Drawer.Content className="review-drawer"><Drawer.Handle className="drawer-handle"/><div className="drawer-heading"><div><Drawer.Title>Reviews</Drawer.Title><Drawer.Description>{shop.rating} from {shop.reviewCount} verified reviews</Drawer.Description></div><Drawer.Close asChild><button type="button" className="drawer-close" aria-label="Close reviews"><X size={20}/></button></Drawer.Close></div><div className="review-list">{REVIEWS.map(review => <article key={`${review.name}-${review.date}`}><div><strong>{review.name}</strong><time>{review.date}</time></div><span className="review-stars" aria-label="5 out of 5 stars">★★★★★</span><p>{review.text}</p></article>)}</div></Drawer.Content></Drawer.Portal></Drawer.Root></div></div>
   </section>
+}
+
+function LeaveBookingDrawer({ onStay, onLeave }: { onStay: () => void; onLeave: () => void }) {
+  return <Drawer.Root open onOpenChange={open => { if (!open) onStay() }}>
+    <Drawer.Portal>
+      <Drawer.Overlay className="review-overlay"/>
+      <Drawer.Content className="confirm-drawer">
+        <Drawer.Handle className="drawer-handle"/>
+        <div className="drawer-heading"><div><Drawer.Title>Leave booking?</Drawer.Title><Drawer.Description>Your selections will be lost.</Drawer.Description></div><Drawer.Close asChild><button type="button" className="drawer-close" aria-label="Continue booking"><X size={20}/></button></Drawer.Close></div>
+        <div className="confirm-drawer-action"><button type="button" className="secondary-action" onClick={onStay}>Continue booking</button><button type="button" className="danger-primary" onClick={onLeave}>Leave booking</button></div>
+      </Drawer.Content>
+    </Drawer.Portal>
+  </Drawer.Root>
 }
 
 function BookingFlow({ shop, staff, bookings, editing, onSave, onDirtyChange, onExit }: { shop: Shop; staff: Staff[]; bookings: Booking[]; editing?: Booking; onSave: (b: Booking) => void; onDirtyChange: (dirty: boolean) => void; onExit: () => void }) {
