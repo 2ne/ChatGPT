@@ -28,6 +28,19 @@ type Shop = {
 const assetPath = (path: string) =>
   `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
 
+function useMobileViewport() {
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches)
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(query.matches)
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
+
+  return isMobile
+}
+
 const SERVICES: Service[] = [
   { id: 'cut', name: "Men's haircut", duration: 30, price: 24 },
   { id: 'skin', name: 'Skin fade', duration: 45, price: 29 },
@@ -197,6 +210,7 @@ function StaffPhoto({ id, name }: { id: string; name: string }) {
 }
 
 function App() {
+  const isMobile = useMobileViewport()
   const [view, setView] = useState<View>('discover')
   const [selectedShopId, setSelectedShopId] = useState('north-laine')
   const [staff, setStaff] = useState<Staff[]>(() => typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('chairly-staff') || 'null') || INITIAL_STAFF) : INITIAL_STAFF)
@@ -299,9 +313,11 @@ function App() {
       window.history.back()
     }}/>} 
     <Toaster
-      position="bottom-center"
-      offset={{ bottom: 24 }}
-      mobileOffset={{ bottom: view === 'book' ? 'calc(92px + env(safe-area-inset-bottom))' : 'calc(14px + env(safe-area-inset-bottom))', left: 14, right: 14 }}
+      position={isMobile ? 'top-center' : 'bottom-center'}
+      offset={isMobile
+        ? { top: 'calc(var(--topbar-height) + 14px + env(safe-area-inset-top))', left: 14, right: 14 }
+        : { bottom: 24 }}
+      mobileOffset={{ top: 'calc(var(--topbar-height) + 14px + env(safe-area-inset-top))', left: 14, right: 14 }}
       toastOptions={{ className: 'snip-toast' }}
     />
   </div>
