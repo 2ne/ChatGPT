@@ -202,6 +202,7 @@ function App() {
   const [staff, setStaff] = useState<Staff[]>(() => typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('chairly-staff') || 'null') || INITIAL_STAFF) : INITIAL_STAFF)
   const [bookings, setBookings] = useState<Booking[]>(() => typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('chairly-bookings') || 'null') || seedBookings) : seedBookings)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const bookingDirtyRef = useRef(false)
   const selectedShop = SHOPS.find(shop => shop.id === selectedShopId) || SHOPS[0]
 
   useEffect(() => localStorage.setItem('chairly-staff', JSON.stringify(staff)), [staff])
@@ -226,12 +227,14 @@ function App() {
     else updateView()
   }
   const goHome = () => {
+    bookingDirtyRef.current = false
     setEditingId(null)
     setView('discover')
     window.history.pushState({ view: 'discover' }, '', window.location.pathname)
   }
   const saveBooking = (booking: Booking) => {
     const isUpdate = Boolean(editingId)
+    bookingDirtyRef.current = false
     setBookings(current => current.some(item => item.id === booking.id) ? current.map(item => item.id === booking.id ? booking : item) : [...current, booking])
     setEditingId(null); setView('bookings')
     toast.success(isUpdate ? 'Booking updated' : 'Booking confirmed')
@@ -249,7 +252,15 @@ function App() {
       setView('book')
     }
     const handlePopState = () => {
-      const shopId = new URL(window.location.href).searchParams.get('barber')
+      const url = new URL(window.location.href)
+      const shopId = url.searchParams.get('barber')
+      if (!shopId && bookingDirtyRef.current) {
+        if (!window.confirm('Leave this booking? Your selections will be lost.')) {
+          window.history.forward()
+          return
+        }
+        bookingDirtyRef.current = false
+      }
       if (shopId && SHOPS.some(shop => shop.id === shopId)) {
         setSelectedShopId(shopId)
         setView('book')
@@ -274,7 +285,7 @@ function App() {
     </header>
     <main id="main-content">
       {view === 'discover' && <DiscoverHome shops={SHOPS} onSelect={openShop}/>}
-      {view === 'book' && <BookingFlow shop={selectedShop} staff={staff} bookings={bookings} editing={bookings.find(b => b.id === editingId)} onSave={saveBooking} onExit={() => { setEditingId(null); setView('bookings') }}/>}
+      {view === 'book' && <BookingFlow shop={selectedShop} staff={staff} bookings={bookings} editing={bookings.find(b => b.id === editingId)} onSave={saveBooking} onDirtyChange={dirty => { bookingDirtyRef.current = dirty }} onExit={() => { bookingDirtyRef.current = false; setEditingId(null); setView('bookings') }}/>}
       {view === 'bookings' && <MyBookings bookings={bookings} shops={SHOPS} staff={staff} onChange={changeBooking} onCancel={cancelBooking}/>}
       {view === 'admin' && <Admin shop={selectedShop} staff={staff} setStaff={setStaff} bookings={bookings.filter(booking => (booking.shopId || 'north-laine') === selectedShop.id)} setBookings={setBookings}/>}
     </main>
@@ -429,7 +440,7 @@ function ShopHeader({ shop }: { shop: Shop }) {
   </section>
 }
 
-function BookingFlow({ shop, staff, bookings, editing, onSave, onExit }: { shop: Shop; staff: Staff[]; bookings: Booking[]; editing?: Booking; onSave: (b: Booking) => void; onExit: () => void }) {
+function BookingFlow({ shop, staff, bookings, editing, onSave, onDirtyChange, onExit }: { shop: Shop; staff: Staff[]; bookings: Booking[]; editing?: Booking; onSave: (b: Booking) => void; onDirtyChange: (dirty: boolean) => void; onExit: () => void }) {
   const [step, setStep] = useState(editing ? 1 : 0)
   const [serviceId, setServiceId] = useState(editing?.serviceId || '')
   const [staffId, setStaffId] = useState(editing?.staffId || 'any')
@@ -492,6 +503,11 @@ function BookingFlow({ shop, staff, bookings, editing, onSave, onExit }: { shop:
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [editing])
+
+  useEffect(() => {
+    onDirtyChange(isDirty)
+    return () => onDirtyChange(false)
+  }, [isDirty, onDirtyChange])
 
   useEffect(() => {
     if (!isDirty) return
