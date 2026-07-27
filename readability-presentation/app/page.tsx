@@ -781,7 +781,7 @@ function App() {
           </motion.div>
           <div className="hero-copy">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="mission-label">
-              IMAGINE THIS
+              HOUSTON · 13 APRIL 1970
             </motion.p>
             <motion.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}>
               It’s <span>9:08 p.m.</span>
