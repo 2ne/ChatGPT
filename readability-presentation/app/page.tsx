@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -19,6 +19,7 @@ import {
 
 const earthPhotoSrc = `${import.meta.env.BASE_URL}images/earth-from-space.jpg`;
 const missionControlSrc = `${import.meta.env.BASE_URL}images/mission-control.jpg`;
+const moonPhotoSrc = `${import.meta.env.BASE_URL}images/moon.jpg`;
 
 const sections = [
   "The call",
@@ -26,12 +27,24 @@ const sections = [
   "The standard",
   "Complexity",
   "The contrast",
-  "The review",
   "AI",
   "The principles",
   "The challenge",
   "The change",
   "The reason",
+];
+
+const systemNodes = [
+  "Auth",
+  "API",
+  "Queue",
+  "Cache",
+  "Database",
+  "CDN",
+  "Search",
+  "Logs",
+  "Events",
+  "Billing",
 ];
 
 function Reveal({
@@ -173,7 +186,15 @@ function DocumentationTransform() {
 }
 
 function PullRequest({ checklist = false }: { checklist?: boolean }) {
-  const [checked, setChecked] = useState(checklist ? 2 : 0);
+  const [checked, setChecked] = useState(0);
+
+  useEffect(() => {
+    if (!checklist) return;
+    setChecked(0);
+    const tick = setTimeout(() => setChecked(1), 1200);
+    return () => clearTimeout(tick);
+  }, [checklist]);
+
   return (
     <div className="pr-window">
       <div className="pr-top">
@@ -183,32 +204,46 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
       <div className="pr-tabs">
         <span className="active">Conversation</span><span>Commits <b>2</b></span><span>Files changed <b>3</b></span>
       </div>
-      {checklist ? (
-        <div className="review-checklist">
-          <span className="eyebrow">PULL REQUEST CHECKLIST</span>
-          {[
-            "Does this change need documentation?",
-            "Has the documentation been updated?",
-            "Has it been reviewed for readability?",
-          ].map((label, i) => (
-            <button key={label} onClick={() => setChecked(i + 1)} className={checked > i ? "done" : ""}>
-              <span>{checked > i ? <Check size={15} /> : <Circle size={15} />}</span>{label}
+      <AnimatePresence mode="wait" initial={false}>
+        {checklist ? (
+          <motion.div
+            key="checklist"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="review-checklist"
+          >
+            <span className="eyebrow">PULL REQUEST CHECKLIST</span>
+            <button onClick={() => setChecked(1)} className={checked > 0 ? "done" : ""}>
+              <span>{checked > 0 ? <Check size={15} /> : <Circle size={15} />}</span>
+              <div className="check-label">
+                Documentation updated and reviewed for readability
+                <small>Or one line in the description saying why none is needed.</small>
+              </div>
             </button>
-          ))}
-        </div>
-      ) : (
-        <div className="review-body">
-          <div className="review-comment">
-            <div className="avatar">AR</div>
-            <div><b>Alex reviewed 2 minutes ago</b><p>Can we name the failure modes explicitly?</p></div>
-          </div>
-          <div className="review-comment">
-            <div className="avatar gold">MK</div>
-            <div><b>Maya approved these changes</b><p>Clear, tested and ready to merge.</p></div>
-          </div>
-          <button className="merge-button"><Check size={16} /> Merge pull request</button>
-        </div>
-      )}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="review"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="review-body"
+          >
+            <div className="review-comment">
+              <div className="avatar">AR</div>
+              <div><b>Alex reviewed 2 minutes ago</b><p>Can we name the failure modes explicitly?</p></div>
+            </div>
+            <div className="review-comment">
+              <div className="avatar gold">MK</div>
+              <div><b>Maya approved these changes</b><p>Clear, tested and ready to merge.</p></div>
+            </div>
+            <button className="merge-button"><Check size={16} /> Merge pull request</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -285,6 +320,10 @@ function App() {
   const [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.13], ["0%", "18%"]);
+  const checklistBeatRef = useRef<HTMLDivElement>(null);
+  const checklistInView = useInView(checklistBeatRef, { amount: 0.5 });
+  const lastLineRef = useRef<HTMLDivElement>(null);
+  const lastLineInView = useInView(lastLineRef, { amount: 0.4 });
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -328,7 +367,22 @@ function App() {
         <section data-section="0" className="hero section-dark">
           <Stars count={90} />
           <motion.div className="hero-orbit" style={{ y: heroY }} aria-hidden="true">
-            <div className="moon-glow" />
+            <motion.div
+              className="moon-wrap"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 7, delay: 1.6, ease: "easeOut" }}
+            >
+              <div className="moon">
+                <img
+                  className="moon-photo"
+                  src={moonPhotoSrc}
+                  alt=""
+                  decoding="async"
+                  draggable={false}
+                />
+              </div>
+            </motion.div>
           </motion.div>
           <div className="hero-copy">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }} className="mission-label">
@@ -343,7 +397,6 @@ function App() {
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 5.5 }}>You’re needed in Mission Control.</motion.p>
             </div>
           </div>
-          <div className="scroll-cue"><span>SCROLL TO ENTER</span><ArrowDown size={17} /></div>
         </section>
 
         <section data-section="1" className="mission-control section-dark">
@@ -402,25 +455,35 @@ function App() {
         </section>
 
         <section data-section="3" className="complexity section-light">
-          <div className="architecture" aria-hidden="true">
-            <div className="arch-ring ring-one" /><div className="arch-ring ring-two" />
-            {Array.from({ length: 14 }).map((_, i) => <i key={i} style={{ transform: `rotate(${i * 25.7}deg) translateY(-190px)` }} />)}
-            <div className="arch-core"><Command /><span>SYSTEM</span></div>
+          <div className="complexity-main">
+            <div className="architecture" aria-hidden="true">
+              <div className="arch-ring ring-one" /><div className="arch-ring ring-two" />
+              {systemNodes.map((label, i) => (
+                <div
+                  key={label}
+                  className="arch-node"
+                  style={{ offsetDistance: `${(75 + (i / systemNodes.length) * 100) % 100}%` }}
+                >
+                  <i /><span>{label}</span>
+                </div>
+              ))}
+              <div className="arch-core"><Command /><span>SYSTEM</span></div>
+            </div>
+            <Reveal delay={0.1} className="complexity-copy">
+              <span className="eyebrow">1970 → TODAY</span>
+              <h2>Our systems aren’t spacecraft.</h2>
+              <p>They’re becoming just as complicated.</p>
+              <div className="evolution"><span>Apollo</span><b>→</b><span>Microservices</span><b>→</b><span>Cloud</span><b>→</b><span>Modern engineering</span></div>
+            </Reveal>
           </div>
-          <Reveal className="complexity-copy">
-            <span className="eyebrow">1970 → TODAY</span>
-            <div className="evolution"><span>Apollo</span><b>↓</b><span>Microservices</span><b>↓</b><span>Cloud</span><b>↓</b><span>Modern engineering</span></div>
-            <h2>Our systems aren’t spacecraft.</h2>
-            <p>They’re becoming just as complicated.</p>
-            <div className="reader-bridge">
-              <span>THE USER</span>
-              <p>Documentation is a product. Its user is the next person who has to understand your work.</p>
-              <div>
-                <b>New starter</b>
-                <b>Engineer on call</b>
-                <b>Adjacent team</b>
-                <b>Future you</b>
-              </div>
+          <Reveal delay={0.2} className="reader-bridge">
+            <span>THE USER</span>
+            <p>Documentation is a product. Its user is the next person who has to understand your work.</p>
+            <div>
+              <b>New starter</b>
+              <b>Engineer on call</b>
+              <b>Adjacent team</b>
+              <b>Future you</b>
             </div>
           </Reveal>
         </section>
@@ -436,20 +499,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="5" className="review section-light">
-          <Reveal className="review-copy">
-            <span className="eyebrow">THE REVIEW</span>
-            <h2>We already write<br />great code.</h2>
-            <p>We question it. Test it. Improve it.</p>
-          </Reveal>
-          <Reveal delay={0.18} className="pr-wrap"><PullRequest /></Reveal>
-          <Reveal className="review-statement">
-            <p>We already review code carefully.</p>
-            <h3>Let’s hold our documentation<br />to the same standard.</h3>
-          </Reveal>
-        </section>
-
-        <section data-section="6" className="ai-section section-dark">
+        <section data-section="5" className="ai-section section-dark">
           <div className="ai-halo" aria-hidden="true"><span /><span /><span /></div>
           <Reveal className="ai-heading">
             <span className="eyebrow">AI & DOCUMENTATION</span>
@@ -468,7 +518,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="7" className="principles section-dark">
+        <section data-section="6" className="principles section-dark">
           <Reveal className="principles-heading"><span className="eyebrow">THREE PRINCIPLES</span><h2>Make the next reader<br />your priority.</h2></Reveal>
           <div className="principle-list">
             {[
@@ -483,7 +533,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="8" className="challenge-section section-light">
+        <section data-section="7" className="challenge-section section-light">
           <Reveal className="challenge-heading">
             <span className="eyebrow">AUDIENCE CHALLENGE</span>
             <h2>Which document would you rather open at <span>2:17 a.m.</span> during a production incident?</h2>
@@ -492,17 +542,38 @@ function App() {
           <Challenge />
         </section>
 
-        <section data-section="9" className="change section-dark">
-          <Reveal className="change-heading"><span className="eyebrow">ONE PRACTICAL CHANGE</span><h2>Put documentation<br />inside the review.</h2></Reveal>
-          <Reveal delay={0.15} className="change-pr"><PullRequest checklist /></Reveal>
+        <section data-section="8" className="change section-dark">
+          <div className="change-scroll">
+            <div className="change-beats">
+              <div className="change-beat">
+                <Reveal className="review-copy">
+                  <span className="eyebrow">THE REVIEW</span>
+                  <h2>We already write<br />great code.</h2>
+                  <p>We question it. Test it. Review it carefully. Then we merge.</p>
+                </Reveal>
+              </div>
+              <div className="change-beat" ref={checklistBeatRef}>
+                <Reveal className="review-copy">
+                  <span className="eyebrow">ONE PRACTICAL CHANGE</span>
+                  <h2>Put documentation<br />inside the review.</h2>
+                  <p>Not more process. One question, answered before we merge.</p>
+                </Reveal>
+              </div>
+            </div>
+            <div className="change-sticky">
+              <Reveal delay={0.18} className="pr-wrap"><PullRequest checklist={checklistInView} /></Reveal>
+            </div>
+          </div>
           <Reveal className="change-statement"><span>CODE</span><i /><span>DOCUMENTATION</span><p>One change. One review. One standard.</p></Reveal>
         </section>
 
-        <section data-section="10" className="finale section-dark">
+        <section data-section="9" className="finale section-dark">
           <div className="finale-sticky-bg" aria-hidden="true">
             <Stars count={100} />
-            <div className="earth">
-              <img className="earth-photo" src={earthPhotoSrc} alt="" decoding="async" draggable={false} />
+            <div className={`earth${lastLineInView ? " centered" : ""}`}>
+              <div className="earth-riser">
+                <img className="earth-photo" src={earthPhotoSrc} alt="" decoding="async" draggable={false} />
+              </div>
               <div className="earth-light" aria-hidden="true" />
             </div>
           </div>
@@ -524,10 +595,14 @@ function App() {
             <Reveal className="finale-beat final-message">
               <p>Great documentation is not about recording what you know.</p>
               <h3>It is about helping<br />someone else succeed.</h3>
+            </Reveal>
+            <Reveal className="finale-beat final-message">
               <p>The easier it is to understand,</p>
               <h2>the faster they can<br />solve the problem.</h2>
             </Reveal>
-            <Reveal className="finale-beat last-line"><span>That’s why readability matters.</span></Reveal>
+            <div ref={lastLineRef}>
+              <Reveal className="finale-beat last-line"><span>That’s why readability matters.</span></Reveal>
+            </div>
           </div>
         </section>
       </main>

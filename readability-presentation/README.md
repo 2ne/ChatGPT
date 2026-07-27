@@ -16,7 +16,7 @@ https://2ne.github.io/ChatGPT/readability-presentation/
 ## Experience
 
 - Continuous scroll-based storytelling
-- Apollo and Mission Control opening
+- Apollo and Mission Control opening, with a real NASA moon photograph in the hero
 - Animated code and documentation comparison
 - Interactive audience challenge
 - Pull request review and documentation checklist
@@ -54,6 +54,7 @@ npm run preview
 ## Presentation controls
 
 - The deck is presented over screen share and driven entirely by scrolling.
+- There is no on-screen scroll prompt; the presenter controls the pace.
 - Use the browser's own full-screen mode (`F11`) if needed.
 
 ## Key decisions
@@ -65,6 +66,9 @@ npm run preview
   (`tracking = a + b × e^(c × size)`).
 - All assets (fonts and imagery) are served locally so the deck cannot
   break on a flaky network during a live screen share.
+- The hero moon and the finale Earth are real NASA photographs (public
+  domain), each cropped to a circle and rotated slowly, so the deck opens
+  at the Moon and ends back home at Earth.
 - Interactions are used to involve the audience, not to decorate the page.
 - AI is positioned as a writing aid while humans remain responsible for
   clarity, audience and judgement.
