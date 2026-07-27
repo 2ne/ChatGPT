@@ -634,14 +634,14 @@ h1, h2, h3 {
 
 .complexity h2 {
   margin: 28px 0 0;
-  font-size: clamp(42px, 5.4vw, 80px);
+  font-size: clamp(42px, 5vw, 72px);
   line-height: 1.02;
   letter-spacing: var(--track-display);
 }
 
 .complexity-copy > p {
   margin: 18px 0 0;
-  font-size: clamp(22px, 2.6vw, 36px);
+  font-size: clamp(21px, 2.2vw, 30px);
   color: #71717a;
   letter-spacing: var(--track-24);
   line-height: 1.2;
@@ -738,6 +738,8 @@ h1, h2, h3 {
 
 .quality-code .code-window pre {
   min-height: 0;
+  font-size: 16px;
+  line-height: 1.65;
 }
 
 .contrast {
@@ -1099,6 +1101,12 @@ h1, h2, h3 {
   font-size: clamp(16px, 1.4vw, 20px);
   line-height: 1.5;
   letter-spacing: var(--track-16);
+}
+
+.ai-note code {
+  color: var(--gold);
+  font: 600 0.88em var(--font-mono);
+  letter-spacing: 0;
 }
 
 .quiz-section {
@@ -1618,7 +1626,7 @@ h1, h2, h3 {
   justify-content: center;
 }
 
-.review-checklist { padding: 30px; }
+.review-checklist { padding: 38px; }
 
 .review-checklist > .eyebrow {
   color: #71717a;
@@ -1660,18 +1668,7 @@ h1, h2, h3 {
   margin-top: 1px;
 }
 
-.review-subchecks {
-  overflow: hidden;
-  padding-left: 38px;
-  border-left: 1px solid #e4e4e7;
-  margin-left: 12px;
-}
-
-.review-subchecks button {
-  padding: 14px 0;
-}
-
-.review-subchecks .check-label {
+.check-label {
   padding-top: 2px;
   font-size: 15px;
 }
@@ -1684,9 +1681,9 @@ h1, h2, h3 {
 }
 
 .check-label small {
-  color: #999;
+  color: #71717a;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: var(--track-14);
   line-height: 1.5;
 }
@@ -1865,12 +1862,16 @@ h1, h2, h3 {
   text-align: center;
 }
 
-.last-line span {
-  font-size: clamp(30px, 4.6vw, 64px);
-  letter-spacing: var(--track-display);
-  color: #fafafa;
-  line-height: 1.15;
-  text-shadow: 0 2px 28px rgba(9, 9, 11, 0.7);
+.finale-copy .last-line p {
+  color: #d4d4d8;
+  font-size: clamp(24px, 3vw, 42px);
+}
+
+.finale-copy .last-line h2 {
+  margin-top: 36px;
+  color: var(--gold);
+  font-size: clamp(64px, 8.5vw, 122px);
+  line-height: 0.96;
 }
 
 @media (max-width: 1100px) {

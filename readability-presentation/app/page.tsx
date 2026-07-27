@@ -133,28 +133,27 @@ function HeroTranscript() {
 const sections = [
   "The call",
   "Mission Control",
-  "Today",
+  "Our systems",
   "Our quality bar",
   "The contrast",
-  "Write consciously",
-  "Choose",
+  "Three habits",
+  "A real choice",
   "AI",
-  "Good examples",
   "The change",
-  "Leave it better",
+  "Why it matters",
 ];
 
 const systemNodes = [
+  "Research",
   "Agents",
-  "MCP",
+  "MCPs",
   "Models",
-  "RAG",
-  "Tools",
-  "Auth",
+  "Permissions",
+  "Documents",
+  "Citations",
   "Search",
-  "Eval",
-  "Memory",
-  "API",
+  "Evals",
+  "APIs",
 ];
 
 function Reveal({
@@ -216,10 +215,6 @@ const readItems = [
   {
     title: "Checklists.",
     line: "What must be true before the next move, not left to memory under pressure.",
-  },
-  {
-    title: "Live data.",
-    line: "Telemetry showed what was changing while specialists interpreted it together.",
   },
 ];
 
@@ -301,23 +296,19 @@ function CodeWindow() {
     <div className="code-window">
       <div className="window-bar">
         <div className="dots"><i /><i /><i /></div>
-        <span>retry.ts</span>
+        <span>searchDeals.ts</span>
         <Code2 size={14} />
       </div>
       <pre>
-        <span className="muted">{"// Retry only when the failure is temporary"}</span>{"\n"}
-        <span className="violet">export async function</span>{" "}
-        <span className="blue">withRetry</span>
-        <span>{"<T>("}</span>{"\n  "}
-        <span className="blue">operation</span>: () <span className="violet">=&gt;</span> Promise&lt;T&gt;,{"\n  "}
-        <span className="blue">shouldRetry</span>: (error: unknown) <span className="violet">=&gt;</span> boolean,{"\n  "}
-        <span>{"{ attempts = "}</span><span className="gold">3</span>, delay = <span className="gold">500</span> {"} = {}"}{"\n"}
-        <span>{") {"}</span>{"\n  "}
-        <span className="violet">for</span> (<span className="violet">let</span> attempt = <span className="gold">1</span>; attempt &lt;= attempts; attempt++) {"{"}{"\n    "}
-        <span className="violet">try</span> {"{"} <span className="violet">return await</span> operation(); {"}"}{"\n    "}
-        <span className="violet">catch</span> (error) {"{"}{"\n      "}
-        <span className="violet">if</span> (!shouldRetry(error) || attempt === attempts) <span className="violet">throw</span> error;{"\n      "}
-        <span className="violet">await</span> sleep(delay * <span className="gold">2</span> ** (attempt - <span className="gold">1</span>));{"\n    }}\n  }\n}"}
+        <span className="violet">export const</span>{" "}
+        <span className="blue">searchDeals</span> = tool({"{\n  "}
+        <span className="blue">name</span>: <span className="gold">"search_deals"</span>,{"\n  "}
+        <span className="blue">input</span>: DealQuerySchema,{"\n  "}
+        <span className="blue">execute</span>: <span className="violet">async</span> (query) <span className="violet">=&gt;</span> {"{\n    "}
+        assertMatterAccess(query.matterId);{"\n    "}
+        <span className="violet">return</span> research.search({"{\n      "}
+        ...query,{"\n      "}
+        citeSources: <span className="violet">true</span>,{"\n    });\n  }\n});"}
       </pre>
     </div>
   );
@@ -328,7 +319,7 @@ function DocumentationTransform() {
   return (
     <div className="docs-demo">
       <div className="demo-label">
-        <span>README.md</span>
+        <span>deal-research-agent.md</span>
         <button type="button" onClick={() => setClean(!clean)}>
           {clean ? "Show original" : "Make it readable"}
           <Sparkles size={14} />
@@ -336,39 +327,25 @@ function DocumentationTransform() {
       </div>
       <AnimatePresence mode="wait">
         {!clean ? (
-          <motion.div
-            key="dense"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, filter: "blur(10px)" }}
-            className="dense-doc"
-          >
+          <motion.div key="dense" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: "blur(10px)" }} className="dense-doc">
             <p>
-              The retry functionality is a utility that can be utilised by the
-              system in circumstances where an operation has failed and it
-              should be noted that the default retry count is three although
-              this can be configured as required and there is also a delay that
-              is increased between every execution which assists with various
-              situations where an upstream service may be temporarily
-              unavailable and it is important that callers understand…
+              The deal research agent can be used where a user needs information
+              about a transaction and it uses the research platform together
+              with available tools to produce an answer, although results may
+              vary depending on the query, documents and permissions and users
+              should review the output as appropriate…
             </p>
           </motion.div>
         ) : (
-          <motion.div
-            key="clean"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="clean-doc"
-          >
-            <span className="eyebrow">RETRY UTILITY</span>
-            <h3>Retry temporary failures</h3>
-            <p>Runs an operation up to three times, with an increasing delay.</p>
+          <motion.div key="clean" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="clean-doc">
+            <span className="eyebrow">M&amp;A RESEARCH AGENT</span>
+            <h3>Compare deal points across authorised documents</h3>
+            <p>Returns a cited comparison for one matter and deal point.</p>
             <div className="doc-grid">
-              <div><b>Use it for</b><span>Rate limits and temporary outages</span></div>
-              <div><b>Do not use it for</b><span>Validation or permission errors</span></div>
+              <div><b>Inputs</b><span>Matter number and deal point</span></div>
+              <div><b>Checks</b><span>Access, source coverage and citations</span></div>
             </div>
-            <code>await withRetry(() =&gt; fetchAccount(id), isTransientError)</code>
+            <code>Flag conflicting or missing evidence. Never infer it.</code>
           </motion.div>
         )}
       </AnimatePresence>
@@ -377,27 +354,19 @@ function DocumentationTransform() {
 }
 
 function PullRequest({ checklist = false }: { checklist?: boolean }) {
-  const [documentationNeeded, setDocumentationNeeded] = useState(false);
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     if (!checklist) return;
-    setDocumentationNeeded(false);
-    setCheckedItems([]);
-    const tick = setTimeout(() => setDocumentationNeeded(true), 900);
+    setChecked(false);
+    const tick = setTimeout(() => setChecked(true), 900);
     return () => clearTimeout(tick);
   }, [checklist]);
-
-  const toggleItem = (item: string) => {
-    setCheckedItems((items) =>
-      items.includes(item) ? items.filter((current) => current !== item) : [...items, item],
-    );
-  };
 
   return (
     <div className="pr-window">
       <div className="pr-top">
-        <div><GitPullRequest size={21} /><span>docs: explain retry behaviour</span></div>
+        <div><GitPullRequest size={21} /><span>agent: add cited deal-point comparison</span></div>
         <span className="open-pill">Open</span>
       </div>
       <div className="pr-tabs">
@@ -405,73 +374,25 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
       </div>
       <AnimatePresence mode="wait" initial={false}>
         {checklist ? (
-          <motion.div
-            key="checklist"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="review-checklist"
-          >
-            <span className="eyebrow">REVIEWER CHECK</span>
-            <button
-              type="button"
-              onClick={() => setDocumentationNeeded((needed) => !needed)}
-              className={documentationNeeded ? "done" : ""}
-            >
-              <span>{documentationNeeded ? <Check size={15} /> : <Circle size={15} />}</span>
+          <motion.div key="checklist" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="review-checklist">
+            <span className="eyebrow">ONE REVIEWER CHECK</span>
+            <button type="button" onClick={() => setChecked((value) => !value)} className={checked ? "done" : ""}>
+              <span>{checked ? <Check size={15} /> : <Circle size={15} />}</span>
               <div className="check-label">
-                Does this change need documentation?
-                <small>Decide coverage before reviewing quality.</small>
+                Documentation checked
+                <small>Updated and readable, or no change needed is explained.</small>
               </div>
             </button>
-            <AnimatePresence initial={false}>
-              {documentationNeeded && (
-                <motion.div
-                  className="review-subchecks"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  {[
-                    "Documentation included",
-                    "Checked for ambiguity",
-                    "Checked for concision",
-                    "Reviewed by another person",
-                  ].map((item) => {
-                    const done = checkedItems.includes(item);
-                    return (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => toggleItem(item)}
-                        className={done ? "done" : ""}
-                      >
-                        <span>{done ? <Check size={15} /> : <Circle size={15} />}</span>
-                        <div className="check-label">{item}</div>
-                      </button>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.div>
         ) : (
-          <motion.div
-            key="review"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="review-body"
-          >
+          <motion.div key="review" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="review-body">
             <div className="review-comment">
               <div className="avatar">AR</div>
-              <div><b>Alex reviewed 2 minutes ago</b><p>Can we name the failure modes explicitly?</p></div>
+              <div><b>Alex reviewed 2 minutes ago</b><p>Can we document permission failures and missing evidence?</p></div>
             </div>
             <div className="review-comment">
               <div className="avatar gold">MK</div>
-              <div><b>Maya approved these changes</b><p>Clear, tested and ready to merge.</p></div>
+              <div><b>Maya approved these changes</b><p>Clear owner, limits and recovery path.</p></div>
             </div>
             <button type="button" className="merge-button"><Check size={16} /> Merge pull request</button>
           </motion.div>
@@ -483,28 +404,28 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
 
 const quizOptions = [
   {
-    id: "concise",
-    title: "A concise runbook",
-    meta: "90-second read · no named owner",
-    body: "Clear, ordered incident actions and escalation thresholds. Nobody knows which team maintains it or when it was last tested.",
+    id: "architecture",
+    title: "The architecture overview",
+    meta: "Current · clear system map",
+    body: "Explains search, models, MCPs and data flow. It does not show where this request failed.",
     good: false,
-    why: "Easy to act on, but hard to trust without ownership or verification.",
+    why: "Useful context, but not a diagnosis path.",
   },
   {
-    id: "comprehensive",
-    title: "A comprehensive page",
-    meta: "Strong summary · reviewed this month",
-    body: "Accurate context, architecture and ownership. The incident steps are complete, but buried halfway down the page.",
+    id: "specification",
+    title: "The agent specification",
+    meta: "Reviewed yesterday · named owner",
+    body: "Defines inputs, outputs and expected behaviour. It does not show what happened in this run.",
     good: false,
-    why: "Trustworthy and complete, but too slow to scan during an incident.",
+    why: "Good for expected behaviour, not the live failure.",
   },
   {
-    id: "runbook",
-    title: "An ordered runbook",
-    meta: "Named owner · verified last week",
-    body: "Clear actions, escalation thresholds and links to deeper context. The owning team and last-tested date are visible at the top.",
+    id: "diagnosis",
+    title: "The diagnosis runbook",
+    meta: "Tested last week · named owner",
+    body: "Check matter access, retrieval logs, source coverage and citations, then escalate with the query ID.",
     good: true,
-    why: "Readable and operationally safe: ordered, owned and recently verified.",
+    why: "It turns the symptom into an ordered, verifiable next action.",
   },
 ];
 
@@ -550,98 +471,9 @@ function DocQuiz() {
       )}
       {revealed && (
         <p className="quiz-reveal">
-          Concision helps. Ownership and verification make the document trustworthy.
+          Readable documentation gets you to the next useful action.
         </p>
       )}
-    </div>
-  );
-}
-
-const goodExamples = [
-  {
-    kind: "INCIDENT PLAYBOOK",
-    title: "payments-api",
-    meta: "Verified last week · 90-second read",
-    lines: [
-      "Symptom: checkout returns 502",
-      "1. Confirm impact → Payments dashboard",
-      "2. Check Redis and Stripe health",
-      "3. Roll back if error rate > 5%",
-      "4. Escalate to Payments on-call after 10 min",
-    ],
-    why: "Ordered actions. Clear escalate point.",
-  },
-  {
-    kind: "SERVICE README",
-    title: "auth-gateway",
-    meta: "First screen answers the job",
-    lines: [
-      "What it does: issues session tokens",
-      "Owner: Identity · Slack #identity-oncall",
-      "Start here: /docs/local-setup",
-      "Do not: call /v1/internal externally",
-      "Rotate keys: /docs/rotate-keys",
-    ],
-    why: "Ownership and next step up front.",
-  },
-  {
-    kind: "DECISION RECORD",
-    title: "ADR-014 · Retries",
-    meta: "Short enough to stay true",
-    lines: [
-      "Decision: exponential backoff, max 3",
-      "Why: transient faults recover within 2s",
-      "Not chosen: infinite retry hides outages",
-      "Alert if retry rate > 2% for 5 minutes",
-      "Owner: Platform reliability",
-    ],
-    why: "Why, not just what. Easy to challenge.",
-  },
-];
-
-function ExamplesGallery() {
-  const [activeExample, setActiveExample] = useState(0);
-  const example = goodExamples[activeExample];
-
-  return (
-    <div className="examples-gallery">
-      <div className="example-tabs" role="tablist" aria-label="Documentation examples">
-        {goodExamples.map((item, index) => (
-          <button
-            key={item.title}
-            type="button"
-            role="tab"
-            aria-selected={activeExample === index}
-            className={activeExample === index ? "is-active" : ""}
-            onClick={() => setActiveExample(index)}
-          >
-            <span>{item.kind}</span>
-            {item.title}
-          </button>
-        ))}
-      </div>
-      <AnimatePresence mode="wait">
-        <motion.article
-          key={example.title}
-          role="tabpanel"
-          className="example-card example-card-featured"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3 }}
-        >
-          <span className="example-kind">{example.kind}</span>
-          <h3>{example.title}</h3>
-          <small>{example.meta}</small>
-          <ul>
-            {example.lines.map((line) => <li key={line}>{line}</li>)}
-          </ul>
-          <footer className="example-why">
-            <span>Why it works</span>
-            <p>{example.why}</p>
-          </footer>
-        </motion.article>
-      </AnimatePresence>
     </div>
   );
 }
@@ -813,18 +645,18 @@ function App() {
             </div>
             <Reveal delay={0.08} className="complexity-copy">
               <span className="eyebrow">TODAY</span>
-              <h2>Our systems aren’t spacecraft.</h2>
-              <p>They’re becoming just as complicated, and the next person still has to understand them.</p>
-              <div className="evolution"><span>Services</span><b>→</b><span>Cloud</span><b>→</b><span>AI systems</span></div>
+              <h2>Our systems are built for legal work.</h2>
+              <p>Research, permissions, agents, models and MCPs have to work together. No one person holds the whole system.</p>
+              <div className="evolution"><span>M&amp;A research</span><b>→</b><span>Agents</span><b>→</b><span>Lawyers</span></div>
             </Reveal>
           </div>
           <Reveal delay={0.15} className="reader-bridge">
-            <span>THE HABIT</span>
-            <p>Write documentation consciously. Leave it clearer than you found it. The user is the next person who has to understand your work.</p>
+            <span>THE COST OF UNCLEAR DOCS</span>
+            <p>A vague page slows debugging, duplicates work and makes the next engineer guess.</p>
             <div>
               <b>New starter</b>
-              <b>Engineer on call</b>
-              <b>Adjacent team</b>
+              <b>On call</b>
+              <b>Another team</b>
               <b>Future you</b>
             </div>
           </Reveal>
@@ -844,26 +676,26 @@ function App() {
 
         <section data-section="4" data-step className="contrast section-dark">
           <Reveal className="section-heading">
-            <span className="eyebrow">EXTEND THE STANDARD</span>
-            <h2>One engineering practice.<br /><span>Two kinds of output.</span></h2>
+            <span className="eyebrow">THE SAME QUALITY BAR</span>
+            <h2>The code is designed to be read.<br /><span>The documentation should be too.</span></h2>
           </Reveal>
           <div className="contrast-grid">
             <Reveal><span className="panel-title"><Check size={14} /> THE CODE</span><CodeWindow /></Reveal>
-            <Reveal delay={0.12}><span className="panel-title"><X size={14} /> THE DOCUMENTATION</span><DocumentationTransform /></Reveal>
+            <Reveal delay={0.12}><span className="panel-title">THE WIKI PAGE</span><DocumentationTransform /></Reveal>
           </div>
         </section>
 
         <section data-section="5" data-step className="principles section-dark">
           <Reveal className="principles-heading">
             <span className="eyebrow">THREE HABITS</span>
-            <h2>Write for the next reader<br />on purpose.</h2>
-            <p className="principles-lead">These are the criteria. Use them when you write and when you review.</p>
+            <h2>Three habits.<br />That’s enough.</h2>
+            <p className="principles-lead">Use them when you write. Use them when you review.</p>
           </Reveal>
           <div className="principle-list">
             {[
-              ["01", "Remove ambiguity.", "Say what happens, when it happens, and who owns the next action."],
-              ["02", "Be concise.", "Make the answer easy to find before making the document complete."],
-              ["03", "Review it like code.", "Accuracy is expected. Readability deserves the same attention."],
+              ["01", "Be clear.", "Name the purpose, inputs, limits and owner."],
+              ["02", "Be concise.", "Put the next action first. Link to deeper context."],
+              ["03", "Check it.", "Verify facts, links and examples before merge."],
             ].map(([n, title, desc], i) => (
               <Reveal key={n} delay={i * 0.08}>
                 <article>
@@ -879,8 +711,8 @@ function App() {
         <section data-section="6" data-step className="quiz-section section-light">
           <Reveal className="quiz-heading">
             <span className="eyebrow">CHOOSE</span>
-            <h2>Which document would you rather open during an incident?</h2>
-            <p>Pick the one you’d trust under pressure. Then we’ll look at patterns worth copying.</p>
+            <h2>The M&amp;A research agent missed a clause. What do you open first?</h2>
+            <p>A lawyer is waiting. Search ran, but the answer has no supporting citation.</p>
           </Reveal>
           <Reveal delay={0.1}>
             <DocQuiz />
@@ -897,35 +729,26 @@ function App() {
           <div className="ownership-grid">
             <Reveal className="ownership-card ai-card">
               <Sparkles /><span>AI HELPS WITH</span>
-              {["First drafts", "Structure", "Consistency"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
+              {["Structure", "First draft", "Plain-language alternatives"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
             </Reveal>
             <Reveal delay={0.12} className="ownership-card human-card">
               <Moon /><span>YOU STILL OWN</span>
-              {["Audience", "Judgement", "Leaving it better"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
+              {["Technical truth", "Missing detail", "Final edit"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
             </Reveal>
           </div>
           <Reveal delay={0.18} className="ai-note">
-            <p>Use AI to draft and structure. You still own whether the result is clear, useful and true.</p>
+            <p>If a fact is missing, write <code>[NEEDS CONFIRMATION]</code>. Never let AI fill the gap.</p>
           </Reveal>
         </section>
 
-        <section data-section="8" data-step className="examples-section section-light">
-          <Reveal className="examples-heading">
-            <span className="eyebrow">WHAT GOOD LOOKS LIKE</span>
-            <h2>Three patterns worth copying.</h2>
-            <p>Short. Owned. Easy to act on. Steal the shape, not the length.</p>
-          </Reveal>
-          <Reveal delay={0.1}><ExamplesGallery /></Reveal>
-        </section>
-
-        <section data-section="9" className="change section-dark">
+        <section data-section="8" className="change section-dark">
           <div className="change-scroll">
             <div className="change-beats">
               <div data-step className="change-beat" ref={checklistBeatRef}>
                 <Reveal className="review-copy">
                   <span className="eyebrow">ONE PRACTICAL CHANGE</span>
-                  <h2>Put documentation<br />inside the review.</h2>
-                  <p>First check coverage. If documentation is needed, the reviewer checks its quality.</p>
+                  <h2>One documentation check<br />in every PR.</h2>
+                  <p>Not another checklist. Update the docs, or explain why nothing changed.</p>
                 </Reveal>
               </div>
             </div>
@@ -936,11 +759,11 @@ function App() {
           <Reveal className="change-statement" >
             <div data-step className="step-anchor" />
             <span>CODE</span><i /><span>DOCUMENTATION</span>
-            <p>One change. One review. One standard.</p>
+            <p>Same change. Same review. Same standard.</p>
           </Reveal>
         </section>
 
-        <section data-section="10" className="finale section-dark">
+        <section data-section="9" className="finale section-dark">
           <div className="finale-sticky-bg" aria-hidden="true">
             <Stars count={100} />
             <div className={`earth${lastLineInView ? " centered" : ""}`}>
@@ -965,7 +788,8 @@ function App() {
             <div ref={lastLineRef}>
               <Reveal className="finale-beat last-line">
                 <div data-step className="step-anchor" />
-                <span>The easier it is to understand,<br />the faster they can solve the problem.</span>
+                <p>The easier it is to understand,<br />the faster they can solve the problem.</p>
+                <h2>That’s why<br />readability matters.</h2>
               </Reveal>
             </div>
           </div>
