@@ -8,18 +8,17 @@ import Lenis from "lenis";
 import {
   ArrowDown,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Circle,
   Code2,
   Command,
   GitPullRequest,
-  Maximize2,
-  Minimize2,
   Moon,
   Sparkles,
   X,
 } from "lucide-react";
+
+const earthPhotoSrc = `${import.meta.env.BASE_URL}images/earth-from-space.jpg`;
+const missionControlSrc = `${import.meta.env.BASE_URL}images/mission-control.jpg`;
 
 const sections = [
   "The call",
@@ -235,6 +234,16 @@ const challengeOptions = [
 function Challenge() {
   const [selected, setSelected] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const answerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!revealed) return;
+    const frame = requestAnimationFrame(() => {
+      answerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [revealed]);
+
   return (
     <div className="challenge">
       <div className="challenge-options">
@@ -258,7 +267,7 @@ function Challenge() {
       </button>
       <AnimatePresence>
         {revealed && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="answer">
+          <motion.div ref={answerRef} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="answer">
             <div className="answer-icon"><Check /></div>
             <div>
               <span>THE INCIDENT RUNBOOK</span>
@@ -273,38 +282,9 @@ function Challenge() {
 
 function App() {
   const root = useRef<HTMLDivElement>(null);
-  const lenisRef = useRef<Lenis | null>(null);
-  const activeRef = useRef(0);
   const [active, setActive] = useState(0);
-  const [presenting, setPresenting] = useState(false);
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.13], ["0%", "18%"]);
-
-  activeRef.current = active;
-
-  async function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen();
-      setPresenting(true);
-    } else {
-      await document.exitFullscreen();
-      setPresenting(false);
-    }
-  }
-
-  const scrollToSection = (index: number) => {
-    const next = Math.max(0, Math.min(sections.length - 1, index));
-    const target = document.querySelector<HTMLElement>(`[data-section="${next}"]`);
-    if (!target) return;
-
-    const lenis = lenisRef.current;
-    if (lenis) {
-      lenis.scrollTo(target, { offset: 0, duration: 1.15, lock: true });
-      return;
-    }
-
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -313,7 +293,6 @@ function App() {
       smoothWheel: true,
       anchors: false,
     });
-    lenisRef.current = lenis;
     lenis.on("scroll", ScrollTrigger.update);
 
     const tick = (time: number) => {
@@ -333,65 +312,27 @@ function App() {
       })
     );
 
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-
-      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
-        e.preventDefault();
-        scrollToSection(activeRef.current + 1);
-      }
-      if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
-        e.preventDefault();
-        scrollToSection(activeRef.current - 1);
-      }
-      if (e.key.toLowerCase() === "f") {
-        e.preventDefault();
-        void toggleFullscreen();
-      }
-    };
-
-    const onFullscreenChange = () => {
-      setPresenting(Boolean(document.fullscreenElement));
-    };
-
-    window.addEventListener("keydown", handleKey);
-    document.addEventListener("fullscreenchange", onFullscreenChange);
-
     return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.removeEventListener("fullscreenchange", onFullscreenChange);
       triggers.forEach((t) => t.kill());
       gsap.ticker.remove(tick);
       lenis.destroy();
-      lenisRef.current = null;
     };
   }, []);
-
-  const move = (direction: number) => {
-    scrollToSection(activeRef.current + direction);
-  };
 
   return (
     <div ref={root}>
       <motion.div className="top-progress" style={{ scaleX: scrollYProgress }} />
       <Progress active={active} />
-      <button className="present-button" onClick={toggleFullscreen} aria-label="Toggle presentation mode">
-        {presenting ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-        <span>{presenting ? "Exit" : "Present"}</span>
-      </button>
 
       <main>
         <section data-section="0" className="hero section-dark">
           <Stars count={90} />
           <motion.div className="hero-orbit" style={{ y: heroY }} aria-hidden="true">
             <div className="moon-glow" />
-            <div className="rocket">
-              <div className="rocket-tip" /><div className="rocket-body"><i /><i /></div><div className="rocket-flame" />
-            </div>
           </motion.div>
           <div className="hero-copy">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }} className="mission-label">
-              HOUSTON · 13 APRIL 1970
+              HOUSTON · 14 APRIL 1970
             </motion.p>
             <motion.h1 initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
               It’s <span>2:17 a.m.</span>
@@ -407,7 +348,12 @@ function App() {
 
         <section data-section="1" className="mission-control section-dark">
           <div className="control-sticky-bg" aria-hidden="true">
-            <div className="control-image">
+            <div
+              className="control-image"
+              style={{
+                backgroundImage: `linear-gradient(90deg, rgba(7, 8, 8, 0.95) 0%, rgba(7, 8, 8, 0.45) 55%, rgba(7, 8, 8, 0.65)), url(${missionControlSrc})`,
+              }}
+            >
               <div className="monitor-grid">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
               <div className="control-light" />
             </div>
@@ -555,7 +501,10 @@ function App() {
         <section data-section="10" className="finale section-dark">
           <div className="finale-sticky-bg" aria-hidden="true">
             <Stars count={100} />
-            <div className="earth"><div className="earth-light" /><i /><i /><i /></div>
+            <div className="earth">
+              <img className="earth-photo" src={earthPhotoSrc} alt="" decoding="async" draggable={false} />
+              <div className="earth-light" aria-hidden="true" />
+            </div>
           </div>
           <div className="finale-copy">
             <Reveal className="finale-beat"><p>Don’t write for yourself today.</p></Reveal>
@@ -582,12 +531,6 @@ function App() {
           </div>
         </section>
       </main>
-
-      <div className="keyboard-controls">
-        <button onClick={() => move(-1)} aria-label="Previous section"><ChevronLeft /></button>
-        <button onClick={() => move(1)} aria-label="Next section"><ChevronRight /></button>
-        <span><kbd>F</kbd> Present</span>
-      </div>
     </div>
   );
 }

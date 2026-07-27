@@ -20,8 +20,6 @@ https://2ne.github.io/ChatGPT/readability-presentation/
 - Animated code and documentation comparison
 - Interactive audience challenge
 - Pull request review and documentation checklist
-- Full-screen presentation mode
-- Keyboard navigation
 - Responsive and reduced-motion support
 
 ## Stack
@@ -29,7 +27,7 @@ https://2ne.github.io/ChatGPT/readability-presentation/
 - React and TypeScript
 - Vite
 - Tailwind CSS
-- Inter (from [rsms.me/inter](https://rsms.me/inter/)), with Dynamic Metrics tracking
+- Inter Variable (self-hosted via `@fontsource-variable/inter`), with Dynamic Metrics tracking
 - Framer Motion
 - GSAP ScrollTrigger
 - Lenis smooth scrolling
@@ -55,19 +53,18 @@ npm run preview
 
 ## Presentation controls
 
-- Scroll, `Space`, `Page Down` or the right arrow to move forwards.
-- `Page Up` or the left arrow to move backwards.
-- Press `F` or select **Present** to enter full-screen mode.
+- The deck is presented over screen share and driven entirely by scrolling.
+- Use the browser's own full-screen mode (`F11`) if needed.
 
 ## Key decisions
 
 - The experience is a single narrative rather than a collection of slides.
 - Apollo gold is the only accent colour.
-- Typography uses Inter Variable from the official RSMS CDN, with
-  `liga` / `calt` / `kern` enabled and letter-spacing derived from Inter
-  Dynamic Metrics (`tracking = a + b × e^(c × size)`).
-- Section navigation goes through Lenis (`scrollTo`) so keyboard and
-  present controls stay in sync with smooth scrolling.
+- Typography uses self-hosted Inter Variable, with `liga` / `calt` / `kern`
+  enabled and letter-spacing derived from Inter Dynamic Metrics
+  (`tracking = a + b × e^(c × size)`).
+- All assets (fonts and imagery) are served locally so the deck cannot
+  break on a flaky network during a live screen share.
 - Interactions are used to involve the audience, not to decorate the page.
 - AI is positioned as a writing aid while humans remain responsible for
   clarity, audience and judgement.
