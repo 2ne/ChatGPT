@@ -29,23 +29,30 @@ const missionControlSrc = `${import.meta.env.BASE_URL}images/mission-control.jpg
 const apolloTranscript = [
   { time: "55:55:20", speaker: "SWIGERT", line: "Okay, Houston, we've had a problem here." },
   { time: "55:55:28", speaker: "CAPCOM", line: "This is Houston. Say again, please." },
-  { time: "55:55:35", speaker: "LOVELL", line: "Ah, Houston, we've had a problem. We've had a Main B Bus Undervolt." },
+  { time: "55:55:35", speaker: "LOVELL", line: "Houston, we've had a problem. We've had a Main B Bus Undervolt." },
   { time: "55:55:42", speaker: "CAPCOM", line: "Roger. Main B Undervolt." },
-  { time: "55:55:58", speaker: "LOVELL", line: "Okay. Right now, Houston, the voltage is looking good." },
-  { time: "55:56:10", speaker: "HAISE", line: "We had a pretty large bang associated with the caution and warning." },
-  { time: "55:57:39", speaker: "LOVELL", line: "And it looks to me, looking out the hatch, that we are venting something." },
-  { time: "55:57:44", speaker: "CAPCOM", line: "Roger." },
-  { time: "55:57:47", speaker: "LOVELL", line: "We are venting something out into the, into space." },
-  { time: "55:58:07", speaker: "LOVELL", line: "It's a gas of some sort." },
-  { time: "55:58:25", speaker: "HAISE", line: "Yeah. We got a Main Bus A Undervolt now, too." },
-  { time: "55:58:38", speaker: "CAPCOM", line: "Main Bus A Undervolt." },
-  { time: "55:58:40", speaker: "HAISE", line: "It's reading about 25 and a half. Main B is reading zip right now." },
-  { time: "55:58:48", speaker: "CAPCOM", line: "Okay." },
-  { time: "55:59:08", speaker: "SWIGERT", line: "Okay, Houston. Are you still reading us okay?" },
-  { time: "55:59:12", speaker: "CAPCOM", line: "That's affirmative." },
-  { time: "56:00:02", speaker: "HAISE", line: "Okay, Houston. Fuel cell 1 and 3 are both showing grey flags." },
-  { time: "56:00:15", speaker: "CAPCOM", line: "Roger. Copy that." },
-  { time: "56:25:41", speaker: "CAPCOM", line: "We'd like you to start powering down. We'll give you the procedure." },
+  {
+    time: "55:56:10",
+    speaker: "HAISE",
+    line: "Okay. Right now, Houston, the voltage is looking good. And we had a pretty large bang associated with the caution and warning there.",
+  },
+  { time: "55:56:30", speaker: "CAPCOM", line: "Roger, Fred." },
+  {
+    time: "55:56:54",
+    speaker: "HAISE",
+    line: "In the interim here, we're starting to go ahead and button up the tunnel again.",
+  },
+  {
+    time: "55:57:04",
+    speaker: "HAISE",
+    line: "That jolt must have rocked the sensor on oxygen quantity 2. It was oscillating down around 20 to 60 percent. Now it's full-scale high.",
+  },
+  { time: "55:58:07", speaker: "HAISE", line: "AC 2 is showing zip." },
+  {
+    time: "55:58:25",
+    speaker: "HAISE",
+    line: "Yes, we got a Main Bus A Undervolt now, too. It's reading about 25 and a half. Main B is reading zip right now.",
+  },
 ];
 
 const TRANSCRIPT_WINDOW = 3;
@@ -199,7 +206,7 @@ function Stars({ count = 70 }: { count?: number }) {
 const readItems = [
   {
     title: "Procedures.",
-    line: "The exact steps when a system fails, written so anyone can follow them.",
+    line: "The exact steps to follow when a system fails, written so trained people can execute them consistently.",
   },
   {
     title: "Schematics.",
@@ -207,11 +214,11 @@ const readItems = [
   },
   {
     title: "Checklists.",
-    line: "What must be true before the next move — not left to memory under pressure.",
+    line: "What must be true before the next move, not left to memory under pressure.",
   },
   {
-    title: "Shared knowledge.",
-    line: "Captured by someone else, so the room can act as one.",
+    title: "Live data.",
+    line: "Telemetry showed what was changing while specialists interpreted it together.",
   },
 ];
 
@@ -243,8 +250,8 @@ function MissionControlSection() {
       </div>
       <div className="read-compact">
         <Reveal className="read-compact-prompt">
-          <p>So how do they help?</p>
-          <h2>READ.</h2>
+          <p>How do they act as one?</p>
+          <h2>SHARED INFORMATION.</h2>
         </Reveal>
         <div className="read-compact-list">
           {readItems.map((item, i) => (
@@ -258,7 +265,9 @@ function MissionControlSection() {
           ))}
         </div>
         <Reveal delay={0.2} className="apollo-exit">
-          <p>That is the standard. Now leave Houston — the same problem sits in our own systems.</p>
+          <p>
+            Mission Control combined telemetry, specialist judgement and tested procedures. Controllers later wrote and tested the command module power-up procedure in three days, rather than the usual three months.
+          </p>
         </Reveal>
       </div>
     </section>
@@ -286,18 +295,19 @@ function CodeWindow() {
         <Code2 size={14} />
       </div>
       <pre>
-        <span className="muted">{"// Retry transient failures only"}</span>{"\n"}
+        <span className="muted">{"// Retry only when the failure is temporary"}</span>{"\n"}
         <span className="violet">export async function</span>{" "}
         <span className="blue">withRetry</span>
         <span>{"<T>("}</span>{"\n  "}
-        <span className="blue">operation</span>: () <span className="violet">=&gt;</span> Promise&lt;T&gt;,{"\n"}
-        <span>{"  { attempts = "}</span><span className="gold">3</span>, delay = <span className="gold">500</span> {"} = {}"}{"\n"}
+        <span className="blue">operation</span>: () <span className="violet">=&gt;</span> Promise&lt;T&gt;,{"\n  "}
+        <span className="blue">shouldRetry</span>: (error: unknown) <span className="violet">=&gt;</span> boolean,{"\n  "}
+        <span>{"{ attempts = "}</span><span className="gold">3</span>, delay = <span className="gold">500</span> {"} = {}"}{"\n"}
         <span>{") {"}</span>{"\n  "}
         <span className="violet">for</span> (<span className="violet">let</span> attempt = <span className="gold">1</span>; attempt &lt;= attempts; attempt++) {"{"}{"\n    "}
         <span className="violet">try</span> {"{"} <span className="violet">return await</span> operation(); {"}"}{"\n    "}
         <span className="violet">catch</span> (error) {"{"}{"\n      "}
-        <span className="violet">if</span> (attempt === attempts) <span className="violet">throw</span> error;{"\n      "}
-        <span className="violet">await</span> sleep(delay * attempt);{"\n    }}\n  }\n}"}
+        <span className="violet">if</span> (!shouldRetry(error) || attempt === attempts) <span className="violet">throw</span> error;{"\n      "}
+        <span className="violet">await</span> sleep(delay * <span className="gold">2</span> ** (attempt - <span className="gold">1</span>));{"\n    }}\n  }\n}"}
       </pre>
     </div>
   );
@@ -348,7 +358,7 @@ function DocumentationTransform() {
               <div><b>Use it for</b><span>Rate limits and temporary outages</span></div>
               <div><b>Do not use it for</b><span>Validation or permission errors</span></div>
             </div>
-            <code>await withRetry(() =&gt; fetchAccount(id))</code>
+            <code>await withRetry(() =&gt; fetchAccount(id), isTransientError)</code>
           </motion.div>
         )}
       </AnimatePresence>
@@ -390,7 +400,7 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
               <span>{checked > 0 ? <Check size={15} /> : <Circle size={15} />}</span>
               <div className="check-label">
                 Documentation updated and reviewed for readability
-                <small>Using the three habits — or one line saying why none is needed.</small>
+                <small>Using the three habits, or one line saying why none is needed.</small>
               </div>
             </button>
           </motion.div>
@@ -484,11 +494,11 @@ function DocQuiz() {
         })}
       </div>
       {!revealed && (
-        <p className="quiz-hint">Choose one. There is a right answer for 2:17 a.m.</p>
+        <p className="quiz-hint">Choose one. There is a right answer under pressure.</p>
       )}
       {revealed && (
         <p className="quiz-reveal">
-          Readable docs answer the next question first — not every question eventually.
+          Readable docs answer the next question first, not every question eventually.
         </p>
       )}
     </div>
@@ -658,15 +668,15 @@ function App() {
           </motion.div>
           <div className="hero-copy">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="mission-label">
-              HOUSTON · 14 APRIL 1970
+              HOUSTON · 13 APRIL 1970
             </motion.p>
             <motion.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}>
-              It’s <span>2:17 a.m.</span>
+              It’s <span>9:08 p.m.</span>
             </motion.h1>
             <div className="hero-sequence">
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 1.4 }}>Your phone rings.</motion.p>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 2.4 }}>There’s been an explosion on Apollo 13.</motion.p>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 3.4 }}>You’re needed in Mission Control.</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 1.4 }}>A routine tank stir is followed by a bang aboard Apollo 13.</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 2.4 }}>Mission Control sees several conflicting failures.</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 3.4 }}>No one yet knows what has happened.</motion.p>
             </div>
           </div>
         </section>
@@ -691,7 +701,7 @@ function App() {
             <Reveal delay={0.08} className="complexity-copy">
               <span className="eyebrow">TODAY</span>
               <h2>Our systems aren’t spacecraft.</h2>
-              <p>They’re becoming just as complicated — and the next person still has to understand them.</p>
+              <p>They can be too complicated for any one person to understand end to end, and the next person still has to work with them.</p>
               <div className="evolution"><span>Services</span><b>→</b><span>Cloud</span><b>→</b><span>AI systems</span></div>
             </Reveal>
           </div>
@@ -711,7 +721,7 @@ function App() {
           <Reveal className="principles-heading">
             <span className="eyebrow">THREE HABITS</span>
             <h2>Write for the next reader<br />on purpose.</h2>
-            <p className="principles-lead">These are the criteria. Use them when you write — and when you review.</p>
+            <p className="principles-lead">These are the criteria. Use them when you write, and when you review.</p>
           </Reveal>
           <div className="principle-list">
             {[
@@ -744,8 +754,8 @@ function App() {
         <section data-section="5" className="quiz-section section-light">
           <Reveal className="quiz-heading">
             <span className="eyebrow">CHOOSE</span>
-            <h2>Which document would you rather open at 2:17 a.m.?</h2>
-            <p>Pick the one you’d trust in an incident. Then we’ll look at patterns worth copying.</p>
+            <h2>Which document would you rather open during an incident?</h2>
+            <p>Pick the one you’d trust under pressure. Then we’ll look at patterns worth copying.</p>
           </Reveal>
           <Reveal delay={0.1}>
             <DocQuiz />
@@ -778,7 +788,7 @@ function App() {
           <Reveal className="examples-heading">
             <span className="eyebrow">WHAT GOOD LOOKS LIKE</span>
             <h2>Three patterns worth copying.</h2>
-            <p>Short. Owned. Easy to act on. Steal the shape — not the length.</p>
+            <p>Short. Owned. Easy to act on. Steal the shape, not the length.</p>
           </Reveal>
           <div className="examples-grid">
             {goodExamples.map((example, i) => (
@@ -814,7 +824,7 @@ function App() {
                 <Reveal className="review-copy">
                   <span className="eyebrow">ONE PRACTICAL CHANGE</span>
                   <h2>Put documentation<br />inside the review.</h2>
-                  <p>Not more process. One conscious check before we merge — using the three habits.</p>
+                  <p>Not more process. One conscious check before we merge, using the three habits.</p>
                 </Reveal>
               </div>
             </div>
