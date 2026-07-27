@@ -308,8 +308,7 @@ function CodeWindow() {
         assertMatterAccess(query.matterId);{"\n    "}
         <span className="violet">return</span> research.search({"{\n      "}
         ...query,{"\n      "}
-        citeSources: <span className="violet">true</span>,{"\n    "}});
-        {"\n  }\n"}});
+        citeSources: <span className="violet">true</span>,{"\n    });\n  }\n});"}
       </pre>
     </div>
   );
