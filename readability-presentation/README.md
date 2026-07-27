@@ -1,11 +1,11 @@
 # Readability Under Pressure
 
-An interactive presentation about treating engineering documentation with the
-same care as code.
+An interactive presentation about writing engineering documentation
+consciously — so the next person can understand and act on it.
 
-The presentation uses Apollo 13 as its opening narrative, moves into modern
-software complexity, and ends with a practical change to the pull request
-review process.
+The deck opens with Apollo 13 as a short hook, then moves into modern
+software complexity, practical habits, concrete examples, and a single
+change to the pull request review process.
 
 ## Status
 
@@ -15,11 +15,12 @@ https://2ne.github.io/ChatGPT/readability-presentation/
 
 ## Experience
 
-- Continuous scroll-based storytelling
-- Apollo and Mission Control opening, with a real NASA moon photograph in the hero
+- Continuous scroll storytelling with keyboard section control for screen share
+- Short Apollo / Mission Control opening, then a clear exit into today’s systems
 - Animated code and documentation comparison
-- Interactive audience challenge
-- Pull request review and documentation checklist
+- Interactive “which doc at 2:17 a.m.?” choice
+- Concrete examples of readable docs (playbook, README, ADR)
+- Pull request review checklist tied to three writing habits
 - Responsive and reduced-motion support
 
 ## Stack
@@ -53,24 +54,29 @@ npm run preview
 
 ## Presentation controls
 
-- The deck is presented over screen share and driven entirely by scrolling.
-- There is no on-screen scroll prompt; the presenter controls the pace.
+- Present over screen share.
+- Prefer keyboard section jumps while talking:
+  - `→` / `↓` / `Page Down` / `Space` — next section
+  - `←` / `↑` / `Page Up` — previous section
+  - `Home` / `End` — first / last section
+- Mouse wheel scrolling still works if you want a slower cinematic pace.
 - Use the browser's own full-screen mode (`F11`) if needed.
 
 ## Key decisions
 
-- The experience is a single narrative rather than a collection of slides.
-- Apollo gold is the only accent colour.
+- Apollo is only the opening metaphor; the talk exits it early and stays
+  on conscious documentation habits for engineers.
+- Cleary green is the accent colour on dark and light surfaces.
 - Typography uses self-hosted Inter Variable, with `liga` / `calt` / `kern`
   enabled and letter-spacing derived from Inter Dynamic Metrics
   (`tracking = a + b × e^(c × size)`).
 - All assets (fonts and imagery) are served locally so the deck cannot
   break on a flaky network during a live screen share.
-- The hero moon and the finale Earth are real NASA photographs (public
-  domain), each cropped to a circle and rotated slowly, so the deck opens
-  at the Moon and ends back home at Earth.
-- Interactions are used to involve the audience, not to decorate the page.
-- AI is positioned as a writing aid while humans remain responsible for
-  clarity, audience and judgement.
+- The hero opens on a quiet Apollo 13 air-to-ground transcript; the finale
+  Earth remains a NASA photograph so the deck ends back home.
+- Interactions reinforce the ask: write consciously, leave docs better,
+  and put readability inside the PR review.
+- AI is positioned as a drafting aid; humans still own audience, judgement
+  and whether the result is clearer than before.
 - The production build is fully static and deployed through GitHub Actions.
 - Each monorepo project is published beneath its own GitHub Pages path.

@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  LayoutGroup,
+  useScroll,
+  useTransform,
+  useInView,
+} from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import {
-  ArrowDown,
   Check,
   Circle,
   Code2,
@@ -19,32 +25,128 @@ import {
 
 const earthPhotoSrc = `${import.meta.env.BASE_URL}images/earth-from-space.jpg`;
 const missionControlSrc = `${import.meta.env.BASE_URL}images/mission-control.jpg`;
-const moonPhotoSrc = `${import.meta.env.BASE_URL}images/moon.jpg`;
+
+const apolloTranscript = [
+  { time: "55:55:20", speaker: "SWIGERT", line: "Okay, Houston, we've had a problem here." },
+  { time: "55:55:28", speaker: "CAPCOM", line: "This is Houston. Say again, please." },
+  { time: "55:55:35", speaker: "LOVELL", line: "Ah, Houston, we've had a problem. We've had a Main B Bus Undervolt." },
+  { time: "55:55:42", speaker: "CAPCOM", line: "Roger. Main B Undervolt." },
+  { time: "55:55:58", speaker: "LOVELL", line: "Okay. Right now, Houston, the voltage is looking good." },
+  { time: "55:56:10", speaker: "HAISE", line: "We had a pretty large bang associated with the caution and warning." },
+  { time: "55:57:39", speaker: "LOVELL", line: "And it looks to me, looking out the hatch, that we are venting something." },
+  { time: "55:57:44", speaker: "CAPCOM", line: "Roger." },
+  { time: "55:57:47", speaker: "LOVELL", line: "We are venting something out into the, into space." },
+  { time: "55:58:07", speaker: "LOVELL", line: "It's a gas of some sort." },
+  { time: "55:58:25", speaker: "HAISE", line: "Yeah. We got a Main Bus A Undervolt now, too." },
+  { time: "55:58:38", speaker: "CAPCOM", line: "Main Bus A Undervolt." },
+  { time: "55:58:40", speaker: "HAISE", line: "It's reading about 25 and a half. Main B is reading zip right now." },
+  { time: "55:58:48", speaker: "CAPCOM", line: "Okay." },
+  { time: "55:59:08", speaker: "SWIGERT", line: "Okay, Houston. Are you still reading us okay?" },
+  { time: "55:59:12", speaker: "CAPCOM", line: "That's affirmative." },
+  { time: "56:00:02", speaker: "HAISE", line: "Okay, Houston. Fuel cell 1 and 3 are both showing grey flags." },
+  { time: "56:00:15", speaker: "CAPCOM", line: "Roger. Copy that." },
+  { time: "56:25:41", speaker: "CAPCOM", line: "We'd like you to start powering down. We'll give you the procedure." },
+];
+
+const TRANSCRIPT_WINDOW = 3;
+
+function getSeconds(time: string) {
+  const [h, m, s] = time.split(":").map(Number);
+  return h * 3600 + m * 60 + s;
+}
+
+function nextTranscriptDelay(count: number) {
+  if (count === 0) return 2000;
+  const len = apolloTranscript.length;
+  const prev = apolloTranscript[(count - 1) % len];
+  const next = apolloTranscript[count % len];
+  if (count % len === 0) return 2800;
+  const delta = Math.max(0, getSeconds(next.time) - getSeconds(prev.time));
+  return Math.min(3600, Math.max(1600, 1400 + delta * 35));
+}
+
+function HeroTranscript() {
+  const [count, setCount] = useState(0);
+  const start = Math.max(0, count - TRANSCRIPT_WINDOW);
+  const visible = Array.from({ length: count - start }, (_, i) => {
+    const abs = start + i;
+    return { ...apolloTranscript[abs % apolloTranscript.length], key: abs };
+  });
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setCount((n) => n + 1), nextTranscriptDelay(count));
+    return () => clearTimeout(timer);
+  }, [count]);
+
+  return (
+    <div className="hero-transcript" aria-hidden="true">
+      <div className="transcript-meta">
+        <span>Air-to-ground</span>
+        <span>Apollo 13 · GET</span>
+      </div>
+      <div className="transcript-viewport">
+        <LayoutGroup id="apollo-transcript">
+          <div className="transcript-feed">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {visible.map((entry, i) => {
+                const age = visible.length - 1 - i;
+                return (
+                  <motion.div
+                    key={entry.key}
+                    className={`transcript-msg is-age-${Math.min(age, 3)}`}
+                    layout
+                    initial={{ opacity: 0, y: 48 }}
+                    animate={{
+                      opacity: age === 0 ? 1 : age === 1 ? 0.62 : 0.28,
+                      y: 0,
+                    }}
+                    exit={{ opacity: 0, y: -56 }}
+                    transition={{
+                      layout: { type: "spring", stiffness: 70, damping: 20, mass: 1.05 },
+                      opacity: { duration: 0.7, ease: "easeOut" },
+                      y: { type: "spring", stiffness: 70, damping: 20, mass: 1.05 },
+                    }}
+                  >
+                    <div className="transcript-msg-top">
+                      <span className="transcript-speaker">{entry.speaker}</span>
+                      <span className="transcript-time">{entry.time}</span>
+                    </div>
+                    <p className="transcript-text">{entry.line}</p>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        </LayoutGroup>
+      </div>
+    </div>
+  );
+}
 
 const sections = [
   "The call",
   "Mission Control",
-  "The standard",
-  "Complexity",
+  "Today",
+  "Write consciously",
   "The contrast",
+  "Choose",
   "AI",
-  "The principles",
-  "The challenge",
+  "Good examples",
   "The change",
-  "The reason",
+  "Leave it better",
 ];
 
 const systemNodes = [
+  "Agents",
+  "MCP",
+  "Models",
+  "RAG",
+  "Tools",
   "Auth",
-  "API",
-  "Queue",
-  "Cache",
-  "Database",
-  "CDN",
   "Search",
-  "Logs",
-  "Events",
-  "Billing",
+  "Eval",
+  "Memory",
+  "API",
 ];
 
 function Reveal({
@@ -58,10 +160,10 @@ function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 36 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -91,6 +193,75 @@ function Stars({ count = 70 }: { count?: number }) {
         />
       ))}
     </div>
+  );
+}
+
+const readItems = [
+  {
+    title: "Procedures.",
+    line: "The exact steps when a system fails, written so anyone can follow them.",
+  },
+  {
+    title: "Schematics.",
+    line: "Where systems connect, so you can find the fault without knowing every subsystem.",
+  },
+  {
+    title: "Checklists.",
+    line: "What must be true before the next move — not left to memory under pressure.",
+  },
+  {
+    title: "Shared knowledge.",
+    line: "Captured by someone else, so the room can act as one.",
+  },
+];
+
+function MissionControlSection() {
+  return (
+    <section data-section="1" className="mission-control section-dark">
+      <div className="control-sticky-bg" aria-hidden="true">
+        <div
+          className="control-image"
+          style={{
+            backgroundImage: `linear-gradient(90deg, rgba(9, 9, 11, 0.92) 0%, rgba(9, 9, 11, 0.55) 50%, rgba(9, 9, 11, 0.72)), url(${missionControlSrc})`,
+          }}
+        >
+          <div className="monitor-grid">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
+          <div className="control-light" />
+        </div>
+        <div className="control-dim is-static" />
+      </div>
+      <div className="control-panel">
+        <Reveal>
+          <span className="eyebrow">MISSION CONTROL</span>
+          <h2>You arrive.</h2>
+        </Reveal>
+        <Reveal delay={0.12} className="control-lines">
+          <p>The room is full of brilliant engineers.</p>
+          <p>Each understands their own system.</p>
+          <p>No one understands everything.</p>
+        </Reveal>
+      </div>
+      <div className="read-compact">
+        <Reveal className="read-compact-prompt">
+          <p>So how do they help?</p>
+          <h2>READ.</h2>
+        </Reveal>
+        <div className="read-compact-list">
+          {readItems.map((item, i) => (
+            <Reveal key={item.title} delay={0.08 + i * 0.08} className="read-compact-item">
+              <b>{String(i + 1).padStart(2, "0")}</b>
+              <div>
+                <span>{item.title}</span>
+                <p>{item.line}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.2} className="apollo-exit">
+          <p>That is the standard. Now leave Houston — the same problem sits in our own systems.</p>
+        </Reveal>
+      </div>
+    </section>
   );
 }
 
@@ -138,7 +309,7 @@ function DocumentationTransform() {
     <div className="docs-demo">
       <div className="demo-label">
         <span>README.md</span>
-        <button onClick={() => setClean(!clean)}>
+        <button type="button" onClick={() => setClean(!clean)}>
           {clean ? "Show original" : "Make it readable"}
           <Sparkles size={14} />
         </button>
@@ -215,11 +386,11 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
             className="review-checklist"
           >
             <span className="eyebrow">PULL REQUEST CHECKLIST</span>
-            <button onClick={() => setChecked(1)} className={checked > 0 ? "done" : ""}>
+            <button type="button" onClick={() => setChecked(1)} className={checked > 0 ? "done" : ""}>
               <span>{checked > 0 ? <Check size={15} /> : <Circle size={15} />}</span>
               <div className="check-label">
                 Documentation updated and reviewed for readability
-                <small>Or one line in the description saying why none is needed.</small>
+                <small>Using the three habits — or one line saying why none is needed.</small>
               </div>
             </button>
           </motion.div>
@@ -240,7 +411,7 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
               <div className="avatar gold">MK</div>
               <div><b>Maya approved these changes</b><p>Clear, tested and ready to merge.</p></div>
             </div>
-            <button className="merge-button"><Check size={16} /> Merge pull request</button>
+            <button type="button" className="merge-button"><Check size={16} /> Merge pull request</button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -248,90 +419,149 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
   );
 }
 
-const challengeOptions = [
+const quizOptions = [
   {
+    id: "dump",
     title: "The knowledge dump",
-    desc: "1,847 words · no headings · generated yesterday",
-    preview: "This system has numerous important dependencies and in the event that the service becomes unavailable there are several actions which may be considered…",
+    meta: "1,847 words · no headings · generated yesterday",
+    body: "This system has numerous important dependencies and in the event that the service becomes unavailable there are several actions which may be considered…",
+    good: false,
+    why: "Long, unstructured, hard to act on when it matters.",
   },
   {
+    id: "wiki",
     title: "The exhaustive wiki",
-    desc: "14 pages · complete · last updated 2023",
-    preview: "Background / Architecture / Historical decisions / Ownership / Operational model / Known limitations / Change log…",
+    meta: "14 pages · complete · last updated 2023",
+    body: "Background / Architecture / Historical decisions / Ownership / Operational model / Known limitations / Change log…",
+    good: false,
+    why: "Complete on paper. Too slow when you need the next step.",
   },
   {
+    id: "runbook",
     title: "The incident runbook",
-    desc: "90-second summary · verified last week",
-    preview: "1. Confirm impact  2. Check dependency health  3. Roll back latest deployment  4. Escalate to Payments on-call",
+    meta: "90-second summary · verified last week",
+    body: "1. Confirm impact  2. Check dependency health  3. Roll back latest deployment  4. Escalate to Payments on-call",
+    good: true,
+    why: "Ordered. Owned. Easy to act on under pressure.",
   },
 ];
 
-function Challenge() {
-  const [selected, setSelected] = useState<number | null>(null);
-  const [revealed, setRevealed] = useState(false);
-  const answerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!revealed) return;
-    const frame = requestAnimationFrame(() => {
-      answerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [revealed]);
+function DocQuiz() {
+  const [picked, setPicked] = useState<string | null>(null);
+  const revealed = picked !== null;
 
   return (
-    <div className="challenge">
-      <div className="challenge-options">
-        {challengeOptions.map((option, i) => (
-          <motion.button
-            whileHover={{ y: -6 }}
-            key={option.title}
-            onClick={() => { setSelected(i); setRevealed(false); }}
-            className={selected === i ? "selected" : ""}
-          >
-            <span className="option-number">0{i + 1}</span>
-            <h3>{option.title}</h3>
-            <small>{option.desc}</small>
-            <p>{option.preview}</p>
-            <span className="radio">{selected === i && <i />}</span>
-          </motion.button>
-        ))}
+    <div className="quiz">
+      <div className="quiz-grid">
+        {quizOptions.map((option) => {
+          const selected = picked === option.id;
+          const showResult = revealed;
+          return (
+            <button
+              key={option.id}
+              type="button"
+              className={[
+                "quiz-card",
+                selected ? "is-selected" : "",
+                showResult && option.good ? "is-good" : "",
+                showResult && selected && !option.good ? "is-miss" : "",
+                showResult && !option.good && !selected ? "is-dim" : "",
+              ].filter(Boolean).join(" ")}
+              onClick={() => setPicked(option.id)}
+              aria-pressed={selected}
+            >
+              <span className="quiz-meta">{option.meta}</span>
+              <h3>{option.title}</h3>
+              <p>{option.body}</p>
+              {showResult && (selected || option.good) && (
+                <footer>
+                  {option.good ? <Check size={15} /> : <X size={15} />}
+                  <span>{option.why}</span>
+                </footer>
+              )}
+            </button>
+          );
+        })}
       </div>
-      <button className="reveal-answer" disabled={selected === null} onClick={() => setRevealed(true)}>
-        Reveal the best answer
-      </button>
-      <AnimatePresence>
-        {revealed && (
-          <motion.div ref={answerRef} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="answer">
-            <div className="answer-icon"><Check /></div>
-            <div>
-              <span>THE INCIDENT RUNBOOK</span>
-              <p>It answers the immediate question, orders the next actions and shows when to escalate. At 2:17 a.m., retrieval speed matters.</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {!revealed && (
+        <p className="quiz-hint">Choose one. There is a right answer for 2:17 a.m.</p>
+      )}
+      {revealed && (
+        <p className="quiz-reveal">
+          Readable docs answer the next question first — not every question eventually.
+        </p>
+      )}
     </div>
   );
 }
 
+const goodExamples = [
+  {
+    kind: "INCIDENT PLAYBOOK",
+    title: "payments-api",
+    meta: "Verified last week · 90-second read",
+    lines: [
+      "Symptom: checkout returns 502",
+      "1. Confirm impact → Payments dashboard",
+      "2. Check Redis and Stripe health",
+      "3. Roll back if error rate > 5%",
+      "4. Escalate to Payments on-call after 10 min",
+    ],
+    why: "Ordered actions. Clear escalate point.",
+  },
+  {
+    kind: "SERVICE README",
+    title: "auth-gateway",
+    meta: "First screen answers the job",
+    lines: [
+      "What it does: issues session tokens",
+      "Owner: Identity · Slack #identity-oncall",
+      "Start here: /docs/local-setup",
+      "Do not: call /v1/internal externally",
+      "Rotate keys: /docs/rotate-keys",
+    ],
+    why: "Ownership and next step up front.",
+  },
+  {
+    kind: "DECISION RECORD",
+    title: "ADR-014 · Retries",
+    meta: "Short enough to stay true",
+    lines: [
+      "Decision: exponential backoff, max 3",
+      "Why: transient faults recover within 2s",
+      "Not chosen: infinite retry hides outages",
+      "Alert if retry rate > 2% for 5 minutes",
+      "Owner: Platform reliability",
+    ],
+    why: "Why, not just what. Easy to challenge.",
+  },
+];
+
 function App() {
   const root = useRef<HTMLDivElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
+  const activeRef = useRef(0);
   const [active, setActive] = useState(0);
+  const [hintVisible, setHintVisible] = useState(true);
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.13], ["0%", "18%"]);
+  const heroY = useTransform(scrollYProgress, [0, 0.1], ["0%", "14%"]);
   const checklistBeatRef = useRef<HTMLDivElement>(null);
   const checklistInView = useInView(checklistBeatRef, { amount: 0.5 });
   const lastLineRef = useRef<HTMLDivElement>(null);
-  const lastLineInView = useInView(lastLineRef, { amount: 0.4 });
+  const lastLineInView = useInView(lastLineRef, { amount: 0.45 });
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.05,
       smoothWheel: true,
       anchors: false,
     });
+    lenisRef.current = lenis;
     lenis.on("scroll", ScrollTrigger.update);
 
     const tick = (time: number) => {
@@ -351,110 +581,99 @@ function App() {
       })
     );
 
+    const hideHint = window.setTimeout(() => setHintVisible(false), 5000);
+
     return () => {
+      window.clearTimeout(hideHint);
       triggers.forEach((t) => t.kill());
       gsap.ticker.remove(tick);
       lenis.destroy();
+      lenisRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    const isTypingTarget = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      const tag = target.tagName;
+      return tag === "INPUT" || tag === "TEXTAREA" || target.isContentEditable;
+    };
+
+    const go = (dir: 1 | -1) => {
+      const items = Array.from(document.querySelectorAll<HTMLElement>("[data-section]"));
+      const next = Math.min(items.length - 1, Math.max(0, activeRef.current + dir));
+      const el = items[next];
+      if (!el) return;
+      setHintVisible(false);
+      lenisRef.current?.scrollTo(el, { offset: 0, duration: 1.05 });
+    };
+
+    const onKey = (event: KeyboardEvent) => {
+      if (isTypingTarget(event.target)) return;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+      if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        go(1);
+      } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        go(-1);
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        const first = document.querySelector<HTMLElement>("[data-section]");
+        if (first) lenisRef.current?.scrollTo(first, { offset: 0, duration: 1.05 });
+      } else if (event.key === "End") {
+        event.preventDefault();
+        const items = document.querySelectorAll<HTMLElement>("[data-section]");
+        const last = items[items.length - 1];
+        if (last) lenisRef.current?.scrollTo(last, { offset: 0, duration: 1.05 });
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   return (
     <div ref={root}>
       <motion.div className="top-progress" style={{ scaleX: scrollYProgress }} />
       <Progress active={active} />
+      <div className={`presenter-hint${hintVisible ? " is-visible" : ""}`} aria-hidden={!hintVisible}>
+        <kbd>←</kbd><kbd>→</kbd>
+        <span>or scroll</span>
+      </div>
 
       <main>
         <section data-section="0" className="hero section-dark">
           <Stars count={90} />
           <motion.div className="hero-orbit" style={{ y: heroY }} aria-hidden="true">
             <motion.div
-              className="moon-wrap"
+              className="transcript-wrap"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 7, delay: 1.6, ease: "easeOut" }}
+              transition={{ duration: 1.6, delay: 0.8, ease: "easeOut" }}
             >
-              <div className="moon">
-                <img
-                  className="moon-photo"
-                  src={moonPhotoSrc}
-                  alt=""
-                  decoding="async"
-                  draggable={false}
-                />
-              </div>
+              <HeroTranscript />
             </motion.div>
           </motion.div>
           <div className="hero-copy">
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }} className="mission-label">
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="mission-label">
               HOUSTON · 14 APRIL 1970
             </motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.8 }}>
+            <motion.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}>
               It’s <span>2:17 a.m.</span>
             </motion.h1>
             <div className="hero-sequence">
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 2.2 }}>Your phone rings.</motion.p>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 3.8 }}>There’s been an explosion on Apollo 13.</motion.p>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 5.5 }}>You’re needed in Mission Control.</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 1.4 }}>Your phone rings.</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 2.4 }}>There’s been an explosion on Apollo 13.</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 3.4 }}>You’re needed in Mission Control.</motion.p>
             </div>
           </div>
         </section>
 
-        <section data-section="1" className="mission-control section-dark">
-          <div className="control-sticky-bg" aria-hidden="true">
-            <div
-              className="control-image"
-              style={{
-                backgroundImage: `linear-gradient(90deg, rgba(7, 8, 8, 0.95) 0%, rgba(7, 8, 8, 0.45) 55%, rgba(7, 8, 8, 0.65)), url(${missionControlSrc})`,
-              }}
-            >
-              <div className="monitor-grid">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
-              <div className="control-light" />
-            </div>
-          </div>
-          <div className="control-panel">
-            <Reveal><span className="eyebrow">MISSION CONTROL</span><h2>You arrive.</h2></Reveal>
-            <Reveal delay={0.15} className="control-lines">
-              <p>The room is full of brilliant engineers.</p>
-              <p>Each understands their own system.</p>
-              <p>No one understands everything.</p>
-            </Reveal>
-          </div>
-          <div className="control-panel read-panel">
-            <Reveal className="read-prompt">
-              <p>So how do they help?</p>
-              <h2>READ.</h2>
-            </Reveal>
-            <Reveal delay={0.2} className="read-list">
-              {["Procedures.", "Schematics.", "Checklists.", "Knowledge captured by someone else."].map((x) => (
-                <span key={x}>{x}</span>
-              ))}
-            </Reveal>
-          </div>
-        </section>
+        <MissionControlSection />
 
-        <section data-section="2" className="standards section-dark">
-          <Stars count={34} />
-          <Reveal className="standards-intro">
-            <span className="eyebrow">THE STANDARD</span>
-            <h2>Apollo was too complex<br />for one person.</h2>
-            <p>So the information people relied on could not merely exist. It had to work.</p>
-          </Reveal>
-          <div className="standards-words">
-            {[
-              ["Unambiguous.", "One meaning. No room for interpretation."],
-              ["Concise.", "The next action was easy to find."],
-              ["Reviewed.", "Another engineer checked it before it was needed."],
-            ].map(([word, meaning], i) => (
-              <Reveal key={word} delay={i * 0.12} className="standard-row">
-                <span>{word}</span>
-                <p>{meaning}</p>
-              </Reveal>
-            ))}
-          </div>
-          <p className="standards-caption">Not writing preferences. Operating requirements.</p>
-        </section>
-
-        <section data-section="3" className="complexity section-light">
+        <section data-section="2" className="complexity section-light">
           <div className="complexity-main">
             <div className="architecture" aria-hidden="true">
               <div className="arch-ring ring-one" /><div className="arch-ring ring-two" />
@@ -469,16 +688,16 @@ function App() {
               ))}
               <div className="arch-core"><Command /><span>SYSTEM</span></div>
             </div>
-            <Reveal delay={0.1} className="complexity-copy">
-              <span className="eyebrow">1970 → TODAY</span>
+            <Reveal delay={0.08} className="complexity-copy">
+              <span className="eyebrow">TODAY</span>
               <h2>Our systems aren’t spacecraft.</h2>
-              <p>They’re becoming just as complicated.</p>
-              <div className="evolution"><span>Apollo</span><b>→</b><span>Microservices</span><b>→</b><span>Cloud</span><b>→</b><span>Modern engineering</span></div>
+              <p>They’re becoming just as complicated — and the next person still has to understand them.</p>
+              <div className="evolution"><span>Services</span><b>→</b><span>Cloud</span><b>→</b><span>AI systems</span></div>
             </Reveal>
           </div>
-          <Reveal delay={0.2} className="reader-bridge">
-            <span>THE USER</span>
-            <p>Documentation is a product. Its user is the next person who has to understand your work.</p>
+          <Reveal delay={0.15} className="reader-bridge">
+            <span>THE HABIT</span>
+            <p>Write documentation consciously. Leave it clearer than you found it. The user is the next person who has to understand your work.</p>
             <div>
               <b>New starter</b>
               <b>Engineer on call</b>
@@ -488,6 +707,29 @@ function App() {
           </Reveal>
         </section>
 
+        <section data-section="3" className="principles section-dark">
+          <Reveal className="principles-heading">
+            <span className="eyebrow">THREE HABITS</span>
+            <h2>Write for the next reader<br />on purpose.</h2>
+            <p className="principles-lead">These are the criteria. Use them when you write — and when you review.</p>
+          </Reveal>
+          <div className="principle-list">
+            {[
+              ["01", "Remove ambiguity.", "Say what happens, when it happens, and who owns the next action."],
+              ["02", "Be concise.", "Make the answer easy to find before making the document complete."],
+              ["03", "Review it like code.", "Accuracy is expected. Readability deserves the same attention."],
+            ].map(([n, title, desc], i) => (
+              <Reveal key={n} delay={i * 0.08}>
+                <article>
+                  <span>{n}</span>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
         <section data-section="4" className="contrast section-dark">
           <Reveal className="section-heading">
             <span className="eyebrow">THE CONTRAST</span>
@@ -495,51 +737,67 @@ function App() {
           </Reveal>
           <div className="contrast-grid">
             <Reveal><span className="panel-title"><Check size={14} /> THE CODE</span><CodeWindow /></Reveal>
-            <Reveal delay={0.15}><span className="panel-title"><X size={14} /> THE DOCUMENTATION</span><DocumentationTransform /></Reveal>
+            <Reveal delay={0.12}><span className="panel-title"><X size={14} /> THE DOCUMENTATION</span><DocumentationTransform /></Reveal>
           </div>
         </section>
 
-        <section data-section="5" className="ai-section section-dark">
+        <section data-section="5" className="quiz-section section-light">
+          <Reveal className="quiz-heading">
+            <span className="eyebrow">CHOOSE</span>
+            <h2>Which document would you rather open at 2:17 a.m.?</h2>
+            <p>Pick the one you’d trust in an incident. Then we’ll look at patterns worth copying.</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <DocQuiz />
+          </Reveal>
+        </section>
+
+        <section data-section="6" className="ai-section section-dark">
           <div className="ai-halo" aria-hidden="true"><span /><span /><span /></div>
           <Reveal className="ai-heading">
             <span className="eyebrow">AI & DOCUMENTATION</span>
             <h2>AI helps us write <em>more.</em></h2>
-            <p>But clarity is still our responsibility.</p>
+            <p>Use it to draft. You still own whether it’s clear, useful, and true for the next reader.</p>
           </Reveal>
           <div className="ownership-grid">
             <Reveal className="ownership-card ai-card">
               <Sparkles /><span>AI HELPS WITH</span>
-              {["Structure", "Editing", "Consistency"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
+              {["First drafts", "Structure", "Consistency"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
             </Reveal>
-            <Reveal delay={0.15} className="ownership-card human-card">
-              <Moon /><span>HUMANS OWN</span>
-              {["Clarity", "Audience", "Judgement"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
+            <Reveal delay={0.12} className="ownership-card human-card">
+              <Moon /><span>YOU STILL OWN</span>
+              {["Audience", "Judgement", "Leaving it better"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
             </Reveal>
           </div>
+          <Reveal delay={0.18} className="ai-note">
+            <p>A longer document is not a better one. Conscious editing is the difference.</p>
+          </Reveal>
         </section>
 
-        <section data-section="6" className="principles section-dark">
-          <Reveal className="principles-heading"><span className="eyebrow">THREE PRINCIPLES</span><h2>Make the next reader<br />your priority.</h2></Reveal>
-          <div className="principle-list">
-            {[
-              ["01", "Remove ambiguity.", "Say what happens, when it happens and who owns the next action."],
-              ["02", "Be concise.", "Make the answer easy to find before making the document complete."],
-              ["03", "Review it like code.", "Accuracy is expected. Readability deserves the same attention."],
-            ].map(([n, title, desc]) => (
-              <motion.article key={n} whileHover={{ x: 10 }} transition={{ type: "spring", stiffness: 220 }}>
-                <span>{n}</span><h3>{title}</h3><p>{desc}</p><ArrowDown />
-              </motion.article>
+        <section data-section="7" className="examples-section section-light">
+          <Reveal className="examples-heading">
+            <span className="eyebrow">WHAT GOOD LOOKS LIKE</span>
+            <h2>Three patterns worth copying.</h2>
+            <p>Short. Owned. Easy to act on. Steal the shape — not the length.</p>
+          </Reveal>
+          <div className="examples-grid">
+            {goodExamples.map((example, i) => (
+              <Reveal key={example.title} delay={i * 0.1} className="example-card">
+                <span className="example-kind">{example.kind}</span>
+                <h3>{example.title}</h3>
+                <small>{example.meta}</small>
+                <ul>
+                  {example.lines.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+                <footer className="example-why">
+                  <span>Why it works</span>
+                  <p>{example.why}</p>
+                </footer>
+              </Reveal>
             ))}
           </div>
-        </section>
-
-        <section data-section="7" className="challenge-section section-light">
-          <Reveal className="challenge-heading">
-            <span className="eyebrow">AUDIENCE CHALLENGE</span>
-            <h2>Which document would you rather open at <span>2:17 a.m.</span> during a production incident?</h2>
-            <p>Choose one, then reveal the answer.</p>
-          </Reveal>
-          <Challenge />
         </section>
 
         <section data-section="8" className="change section-dark">
@@ -556,15 +814,18 @@ function App() {
                 <Reveal className="review-copy">
                   <span className="eyebrow">ONE PRACTICAL CHANGE</span>
                   <h2>Put documentation<br />inside the review.</h2>
-                  <p>Not more process. One question, answered before we merge.</p>
+                  <p>Not more process. One conscious check before we merge — using the three habits.</p>
                 </Reveal>
               </div>
             </div>
             <div className="change-sticky">
-              <Reveal delay={0.18} className="pr-wrap"><PullRequest checklist={checklistInView} /></Reveal>
+              <Reveal delay={0.12} className="pr-wrap"><PullRequest checklist={checklistInView} /></Reveal>
             </div>
           </div>
-          <Reveal className="change-statement"><span>CODE</span><i /><span>DOCUMENTATION</span><p>One change. One review. One standard.</p></Reveal>
+          <Reveal className="change-statement">
+            <span>CODE</span><i /><span>DOCUMENTATION</span>
+            <p>One change. One review. One standard.</p>
+          </Reveal>
         </section>
 
         <section data-section="9" className="finale section-dark">
@@ -578,30 +839,19 @@ function App() {
             </div>
           </div>
           <div className="finale-copy">
-            <Reveal className="finale-beat"><p>Don’t write for yourself today.</p></Reveal>
             <Reveal className="finale-beat">
-              <h2>Write for future you…</h2>
-              <span>…six months from now…</span>
-              <span>…when you haven’t had those three shots of espresso.</span>
-            </Reveal>
-            <Reveal className="finale-beat for-people">
-              <p>Write for the new starter.</p>
-              <p>Write for the engineer on call.</p>
-            </Reveal>
-            <Reveal className="finale-beat reliance">
-              <p>One day…</p>
-              <h3>Someone will rely on<br />what you’ve written.</h3>
+              <p>Don’t write only for yourself today.</p>
+              <h2>Write for the next person.</h2>
+              <span>The new starter. The engineer on call. Future you.</span>
             </Reveal>
             <Reveal className="finale-beat final-message">
-              <p>Great documentation is not about recording what you know.</p>
-              <h3>It is about helping<br />someone else succeed.</h3>
-            </Reveal>
-            <Reveal className="finale-beat final-message">
-              <p>The easier it is to understand,</p>
-              <h2>the faster they can<br />solve the problem.</h2>
+              <p>Great documentation isn’t a dump of what you know.</p>
+              <h3>It’s a conscious choice<br />to leave things clearer.</h3>
             </Reveal>
             <div ref={lastLineRef}>
-              <Reveal className="finale-beat last-line"><span>That’s why readability matters.</span></Reveal>
+              <Reveal className="finale-beat last-line">
+                <span>Leave the docs better than you found them.</span>
+              </Reveal>
             </div>
           </div>
         </section>
