@@ -127,9 +127,8 @@ const sections = [
   "The call",
   "Mission Control",
   "Today",
-  "Our quality bar",
-  "The contrast",
   "Write consciously",
+  "The contrast",
   "Choose",
   "AI",
   "Good examples",
@@ -208,7 +207,7 @@ const readItems = [
   },
   {
     title: "Checklists.",
-    line: "What must be true before the next move, not left to memory under pressure.",
+    line: "What must be true before the next move — not left to memory under pressure.",
   },
   {
     title: "Shared knowledge.",
@@ -231,7 +230,7 @@ function MissionControlSection() {
         </div>
         <div className="control-dim is-static" />
       </div>
-      <div data-step className="control-panel">
+      <div className="control-panel">
         <Reveal>
           <span className="eyebrow">MISSION CONTROL</span>
           <h2>You arrive.</h2>
@@ -242,7 +241,7 @@ function MissionControlSection() {
           <p>No one understands everything.</p>
         </Reveal>
       </div>
-      <div data-step className="read-compact">
+      <div className="read-compact">
         <Reveal className="read-compact-prompt">
           <p>So how do they help?</p>
           <h2>READ.</h2>
@@ -258,19 +257,8 @@ function MissionControlSection() {
             </Reveal>
           ))}
         </div>
-      </div>
-      <div data-step className="apollo-lesson">
-        <Reveal>
-          <p>When people are working under pressure,</p>
-          <h2>ambiguity is a defect.</h2>
-        </Reveal>
-        <Reveal delay={0.14} className="lesson-words">
-          <span>Clear.</span>
-          <span>Concise.</span>
-          <span>Checked.</span>
-        </Reveal>
-        <Reveal delay={0.24} className="apollo-exit">
-          <p>That is the engineering lesson. The same need exists in our own systems.</p>
+        <Reveal delay={0.2} className="apollo-exit">
+          <p>That is the standard. Now leave Houston — the same problem sits in our own systems.</p>
         </Reveal>
       </div>
     </section>
@@ -369,22 +357,14 @@ function DocumentationTransform() {
 }
 
 function PullRequest({ checklist = false }: { checklist?: boolean }) {
-  const [documentationNeeded, setDocumentationNeeded] = useState(false);
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [checked, setChecked] = useState(0);
 
   useEffect(() => {
     if (!checklist) return;
-    setDocumentationNeeded(false);
-    setCheckedItems([]);
-    const tick = setTimeout(() => setDocumentationNeeded(true), 900);
+    setChecked(0);
+    const tick = setTimeout(() => setChecked(1), 1200);
     return () => clearTimeout(tick);
   }, [checklist]);
-
-  const toggleItem = (item: string) => {
-    setCheckedItems((items) =>
-      items.includes(item) ? items.filter((current) => current !== item) : [...items, item],
-    );
-  };
 
   return (
     <div className="pr-window">
@@ -405,48 +385,14 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="review-checklist"
           >
-            <span className="eyebrow">REVIEWER CHECK</span>
-            <button
-              type="button"
-              onClick={() => setDocumentationNeeded((needed) => !needed)}
-              className={documentationNeeded ? "done" : ""}
-            >
-              <span>{documentationNeeded ? <Check size={15} /> : <Circle size={15} />}</span>
+            <span className="eyebrow">PULL REQUEST CHECKLIST</span>
+            <button type="button" onClick={() => setChecked(1)} className={checked > 0 ? "done" : ""}>
+              <span>{checked > 0 ? <Check size={15} /> : <Circle size={15} />}</span>
               <div className="check-label">
-                Does this change need documentation?
-                <small>Decide coverage before reviewing quality.</small>
+                Documentation updated and reviewed for readability
+                <small>Using the three habits — or one line saying why none is needed.</small>
               </div>
             </button>
-            <AnimatePresence initial={false}>
-              {documentationNeeded && (
-                <motion.div
-                  className="review-subchecks"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  {[
-                    "Documentation included",
-                    "Checked for ambiguity",
-                    "Checked for concision",
-                    "Reviewed by another person",
-                  ].map((item) => {
-                    const done = checkedItems.includes(item);
-                    return (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => toggleItem(item)}
-                        className={done ? "done" : ""}
-                      >
-                        <span>{done ? <Check size={15} /> : <Circle size={15} />}</span>
-                        <div className="check-label">{item}</div>
-                      </button>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.div>
         ) : (
           <motion.div
@@ -475,28 +421,28 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
 
 const quizOptions = [
   {
-    id: "concise",
-    title: "A concise runbook",
-    meta: "90-second read · no named owner",
-    body: "Clear, ordered incident actions and escalation thresholds. Nobody knows which team maintains it or when it was last tested.",
+    id: "dump",
+    title: "The knowledge dump",
+    meta: "1,847 words · no headings · generated yesterday",
+    body: "This system has numerous important dependencies and in the event that the service becomes unavailable there are several actions which may be considered…",
     good: false,
-    why: "Easy to act on, but hard to trust without ownership or verification.",
+    why: "Long, unstructured, hard to act on when it matters.",
   },
   {
-    id: "comprehensive",
-    title: "A comprehensive page",
-    meta: "Strong summary · reviewed this month",
-    body: "Accurate context, architecture and ownership. The incident steps are complete, but buried halfway down the page.",
+    id: "wiki",
+    title: "The exhaustive wiki",
+    meta: "14 pages · complete · last updated 2023",
+    body: "Background / Architecture / Historical decisions / Ownership / Operational model / Known limitations / Change log…",
     good: false,
-    why: "Trustworthy and complete, but too slow to scan during an incident.",
+    why: "Complete on paper. Too slow when you need the next step.",
   },
   {
     id: "runbook",
-    title: "An ordered runbook",
-    meta: "Named owner · verified last week",
-    body: "Clear actions, escalation thresholds and links to deeper context. The owning team and last-tested date are visible at the top.",
+    title: "The incident runbook",
+    meta: "90-second summary · verified last week",
+    body: "1. Confirm impact  2. Check dependency health  3. Roll back latest deployment  4. Escalate to Payments on-call",
     good: true,
-    why: "Readable and operationally safe: ordered, owned and recently verified.",
+    why: "Ordered. Owned. Easy to act on under pressure.",
   },
 ];
 
@@ -538,11 +484,11 @@ function DocQuiz() {
         })}
       </div>
       {!revealed && (
-        <p className="quiz-hint">Choose the one you would trust first.</p>
+        <p className="quiz-hint">Choose one. There is a right answer for 2:17 a.m.</p>
       )}
       {revealed && (
         <p className="quiz-reveal">
-          Concision helps. Ownership and verification make the document trustworthy.
+          Readable docs answer the next question first — not every question eventually.
         </p>
       )}
     </div>
@@ -591,57 +537,10 @@ const goodExamples = [
   },
 ];
 
-function ExamplesGallery() {
-  const [activeExample, setActiveExample] = useState(0);
-  const example = goodExamples[activeExample];
-
-  return (
-    <div className="examples-gallery">
-      <div className="example-tabs" role="tablist" aria-label="Documentation examples">
-        {goodExamples.map((item, index) => (
-          <button
-            key={item.title}
-            type="button"
-            role="tab"
-            aria-selected={activeExample === index}
-            className={activeExample === index ? "is-active" : ""}
-            onClick={() => setActiveExample(index)}
-          >
-            <span>{item.kind}</span>
-            {item.title}
-          </button>
-        ))}
-      </div>
-      <AnimatePresence mode="wait">
-        <motion.article
-          key={example.title}
-          role="tabpanel"
-          className="example-card example-card-featured"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3 }}
-        >
-          <span className="example-kind">{example.kind}</span>
-          <h3>{example.title}</h3>
-          <small>{example.meta}</small>
-          <ul>
-            {example.lines.map((line) => <li key={line}>{line}</li>)}
-          </ul>
-          <footer className="example-why">
-            <span>Why it works</span>
-            <p>{example.why}</p>
-          </footer>
-        </motion.article>
-      </AnimatePresence>
-    </div>
-  );
-}
-
 function App() {
   const root = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
-  const activeStepRef = useRef(0);
+  const activeRef = useRef(0);
   const [active, setActive] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
   const { scrollYProgress } = useScroll();
@@ -650,6 +549,10 @@ function App() {
   const checklistInView = useInView(checklistBeatRef, { amount: 0.5 });
   const lastLineRef = useRef<HTMLDivElement>(null);
   const lastLineInView = useInView(lastLineRef, { amount: 0.45 });
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -677,23 +580,12 @@ function App() {
         onEnterBack: () => setActive(i),
       })
     );
-    const steps = gsap.utils.toArray<HTMLElement>("[data-step]");
-    const stepTriggers = steps.map((item, index) =>
-      ScrollTrigger.create({
-        trigger: item,
-        start: "top 55%",
-        end: "bottom 45%",
-        onEnter: () => { activeStepRef.current = index; },
-        onEnterBack: () => { activeStepRef.current = index; },
-      })
-    );
 
     const hideHint = window.setTimeout(() => setHintVisible(false), 5000);
 
     return () => {
       window.clearTimeout(hideHint);
       triggers.forEach((t) => t.kill());
-      stepTriggers.forEach((t) => t.kill());
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
@@ -708,12 +600,11 @@ function App() {
     };
 
     const go = (dir: 1 | -1) => {
-      const items = Array.from(document.querySelectorAll<HTMLElement>("[data-step]"));
-      const next = Math.min(items.length - 1, Math.max(0, activeStepRef.current + dir));
+      const items = Array.from(document.querySelectorAll<HTMLElement>("[data-section]"));
+      const next = Math.min(items.length - 1, Math.max(0, activeRef.current + dir));
       const el = items[next];
       if (!el) return;
       setHintVisible(false);
-      activeStepRef.current = next;
       lenisRef.current?.scrollTo(el, { offset: 0, duration: 1.05 });
     };
 
@@ -729,19 +620,13 @@ function App() {
         go(-1);
       } else if (event.key === "Home") {
         event.preventDefault();
-        const first = document.querySelector<HTMLElement>("[data-step]");
-        if (first) {
-          activeStepRef.current = 0;
-          lenisRef.current?.scrollTo(first, { offset: 0, duration: 1.05 });
-        }
+        const first = document.querySelector<HTMLElement>("[data-section]");
+        if (first) lenisRef.current?.scrollTo(first, { offset: 0, duration: 1.05 });
       } else if (event.key === "End") {
         event.preventDefault();
-        const items = document.querySelectorAll<HTMLElement>("[data-step]");
+        const items = document.querySelectorAll<HTMLElement>("[data-section]");
         const last = items[items.length - 1];
-        if (last) {
-          activeStepRef.current = items.length - 1;
-          lenisRef.current?.scrollTo(last, { offset: 0, duration: 1.05 });
-        }
+        if (last) lenisRef.current?.scrollTo(last, { offset: 0, duration: 1.05 });
       }
     };
 
@@ -759,7 +644,7 @@ function App() {
       </div>
 
       <main>
-        <section data-section="0" data-step className="hero section-dark">
+        <section data-section="0" className="hero section-dark">
           <Stars count={90} />
           <motion.div className="hero-orbit" style={{ y: heroY }} aria-hidden="true">
             <motion.div
@@ -773,7 +658,7 @@ function App() {
           </motion.div>
           <div className="hero-copy">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="mission-label">
-              IMAGINE THIS
+              HOUSTON · 14 APRIL 1970
             </motion.p>
             <motion.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}>
               It’s <span>2:17 a.m.</span>
@@ -788,7 +673,7 @@ function App() {
 
         <MissionControlSection />
 
-        <section data-section="2" data-step className="complexity section-light">
+        <section data-section="2" className="complexity section-light">
           <div className="complexity-main">
             <div className="architecture" aria-hidden="true">
               <div className="arch-ring ring-one" /><div className="arch-ring ring-two" />
@@ -806,7 +691,7 @@ function App() {
             <Reveal delay={0.08} className="complexity-copy">
               <span className="eyebrow">TODAY</span>
               <h2>Our systems aren’t spacecraft.</h2>
-              <p>They’re becoming just as complicated, and the next person still has to understand them.</p>
+              <p>They’re becoming just as complicated — and the next person still has to understand them.</p>
               <div className="evolution"><span>Services</span><b>→</b><span>Cloud</span><b>→</b><span>AI systems</span></div>
             </Reveal>
           </div>
@@ -822,34 +707,11 @@ function App() {
           </Reveal>
         </section>
 
-        <section data-section="3" data-step className="quality-bar section-dark">
-          <Reveal className="quality-copy">
-            <span className="eyebrow">OUR EXISTING STRENGTH</span>
-            <h2>We already write<br />readable code.</h2>
-            <p>We name things carefully. We test behaviour. We review changes before they merge.</p>
-            <strong>The code already has the quality bar.<br />Our documentation should meet it.</strong>
-          </Reveal>
-          <Reveal delay={0.12} className="quality-code">
-            <CodeWindow />
-          </Reveal>
-        </section>
-
-        <section data-section="4" data-step className="contrast section-dark">
-          <Reveal className="section-heading">
-            <span className="eyebrow">EXTEND THE STANDARD</span>
-            <h2>One engineering practice.<br /><span>Two kinds of output.</span></h2>
-          </Reveal>
-          <div className="contrast-grid">
-            <Reveal><span className="panel-title"><Check size={14} /> THE CODE</span><CodeWindow /></Reveal>
-            <Reveal delay={0.12}><span className="panel-title"><X size={14} /> THE DOCUMENTATION</span><DocumentationTransform /></Reveal>
-          </div>
-        </section>
-
-        <section data-section="5" data-step className="principles section-dark">
+        <section data-section="3" className="principles section-dark">
           <Reveal className="principles-heading">
             <span className="eyebrow">THREE HABITS</span>
             <h2>Write for the next reader<br />on purpose.</h2>
-            <p className="principles-lead">These are the criteria. Use them when you write and when you review.</p>
+            <p className="principles-lead">These are the criteria. Use them when you write — and when you review.</p>
           </Reveal>
           <div className="principle-list">
             {[
@@ -868,7 +730,18 @@ function App() {
           </div>
         </section>
 
-        <section data-section="6" data-step className="quiz-section section-light">
+        <section data-section="4" className="contrast section-dark">
+          <Reveal className="section-heading">
+            <span className="eyebrow">THE CONTRAST</span>
+            <h2>Same engineering.<br /><span>Different standards.</span></h2>
+          </Reveal>
+          <div className="contrast-grid">
+            <Reveal><span className="panel-title"><Check size={14} /> THE CODE</span><CodeWindow /></Reveal>
+            <Reveal delay={0.12}><span className="panel-title"><X size={14} /> THE DOCUMENTATION</span><DocumentationTransform /></Reveal>
+          </div>
+        </section>
+
+        <section data-section="5" className="quiz-section section-light">
           <Reveal className="quiz-heading">
             <span className="eyebrow">CHOOSE</span>
             <h2>Which document would you rather open at 2:17 a.m.?</h2>
@@ -879,12 +752,12 @@ function App() {
           </Reveal>
         </section>
 
-        <section data-section="7" data-step className="ai-section section-dark">
+        <section data-section="6" className="ai-section section-dark">
           <div className="ai-halo" aria-hidden="true"><span /><span /><span /></div>
           <Reveal className="ai-heading">
             <span className="eyebrow">AI & DOCUMENTATION</span>
-            <h2>AI can generate a document.<br /><em>It cannot guarantee understanding.</em></h2>
-            <p>AI has made writing easy. Editing is now the valuable part.</p>
+            <h2>AI helps us write <em>more.</em></h2>
+            <p>Use it to draft. You still own whether it’s clear, useful, and true for the next reader.</p>
           </Reveal>
           <div className="ownership-grid">
             <Reveal className="ownership-card ai-card">
@@ -897,27 +770,51 @@ function App() {
             </Reveal>
           </div>
           <Reveal delay={0.18} className="ai-note">
-            <p>Use AI to draft and structure. You still own whether the result is clear, useful and true.</p>
+            <p>A longer document is not a better one. Conscious editing is the difference.</p>
           </Reveal>
         </section>
 
-        <section data-section="8" data-step className="examples-section section-light">
+        <section data-section="7" className="examples-section section-light">
           <Reveal className="examples-heading">
             <span className="eyebrow">WHAT GOOD LOOKS LIKE</span>
             <h2>Three patterns worth copying.</h2>
-            <p>Short. Owned. Easy to act on. Steal the shape, not the length.</p>
+            <p>Short. Owned. Easy to act on. Steal the shape — not the length.</p>
           </Reveal>
-          <Reveal delay={0.1}><ExamplesGallery /></Reveal>
+          <div className="examples-grid">
+            {goodExamples.map((example, i) => (
+              <Reveal key={example.title} delay={i * 0.1} className="example-card">
+                <span className="example-kind">{example.kind}</span>
+                <h3>{example.title}</h3>
+                <small>{example.meta}</small>
+                <ul>
+                  {example.lines.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+                <footer className="example-why">
+                  <span>Why it works</span>
+                  <p>{example.why}</p>
+                </footer>
+              </Reveal>
+            ))}
+          </div>
         </section>
 
-        <section data-section="9" className="change section-dark">
+        <section data-section="8" className="change section-dark">
           <div className="change-scroll">
             <div className="change-beats">
-              <div data-step className="change-beat" ref={checklistBeatRef}>
+              <div className="change-beat">
+                <Reveal className="review-copy">
+                  <span className="eyebrow">THE REVIEW</span>
+                  <h2>We already write<br />great code.</h2>
+                  <p>We question it. Test it. Review it carefully. Then we merge.</p>
+                </Reveal>
+              </div>
+              <div className="change-beat" ref={checklistBeatRef}>
                 <Reveal className="review-copy">
                   <span className="eyebrow">ONE PRACTICAL CHANGE</span>
                   <h2>Put documentation<br />inside the review.</h2>
-                  <p>First check coverage. If documentation is needed, the reviewer checks its quality.</p>
+                  <p>Not more process. One conscious check before we merge — using the three habits.</p>
                 </Reveal>
               </div>
             </div>
@@ -925,14 +822,13 @@ function App() {
               <Reveal delay={0.12} className="pr-wrap"><PullRequest checklist={checklistInView} /></Reveal>
             </div>
           </div>
-          <Reveal className="change-statement" >
-            <div data-step className="step-anchor" />
+          <Reveal className="change-statement">
             <span>CODE</span><i /><span>DOCUMENTATION</span>
             <p>One change. One review. One standard.</p>
           </Reveal>
         </section>
 
-        <section data-section="10" className="finale section-dark">
+        <section data-section="9" className="finale section-dark">
           <div className="finale-sticky-bg" aria-hidden="true">
             <Stars count={100} />
             <div className={`earth${lastLineInView ? " centered" : ""}`}>
@@ -944,20 +840,17 @@ function App() {
           </div>
           <div className="finale-copy">
             <Reveal className="finale-beat">
-              <div data-step className="step-anchor" />
               <p>Don’t write only for yourself today.</p>
               <h2>Write for the next person.</h2>
-              <span>The new starter.<br />The engineer on call.<br />Future you, six months from now, without those three shots of espresso.</span>
+              <span>The new starter. The engineer on call. Future you.</span>
             </Reveal>
             <Reveal className="finale-beat final-message">
-              <div data-step className="step-anchor" />
-              <p>One day, someone will rely on what you’ve written.</p>
-              <h3>Make the problem<br />easier to solve.</h3>
+              <p>Great documentation isn’t a dump of what you know.</p>
+              <h3>It’s a conscious choice<br />to leave things clearer.</h3>
             </Reveal>
             <div ref={lastLineRef}>
               <Reveal className="finale-beat last-line">
-                <div data-step className="step-anchor" />
-                <span>The easier it is to understand,<br />the faster they can solve the problem.</span>
+                <span>Leave the docs better than you found them.</span>
               </Reveal>
             </div>
           </div>
