@@ -652,7 +652,7 @@ function App() {
           </div>
           <Reveal delay={0.15} className="reader-bridge">
             <span>THE COST OF UNCLEAR DOCS</span>
-            <p>A vague page slows debugging, repeats decisions and makes the next engineer guess.</p>
+            <p>A vague page slows debugging, duplicates work and makes the next engineer guess.</p>
             <div>
               <b>New starter</b>
               <b>On call</b>
@@ -677,11 +677,11 @@ function App() {
         <section data-section="4" data-step className="contrast section-dark">
           <Reveal className="section-heading">
             <span className="eyebrow">THE SAME QUALITY BAR</span>
-            <h2>The code explains itself.<br /><span>The documentation should too.</span></h2>
+            <h2>The code is designed to be read.<br /><span>The documentation should be too.</span></h2>
           </Reveal>
           <div className="contrast-grid">
             <Reveal><span className="panel-title"><Check size={14} /> THE CODE</span><CodeWindow /></Reveal>
-            <Reveal delay={0.12}><span className="panel-title"><X size={14} /> THE WIKI PAGE</span><DocumentationTransform /></Reveal>
+            <Reveal delay={0.12}><span className="panel-title">THE WIKI PAGE</span><DocumentationTransform /></Reveal>
           </div>
         </section>
 
