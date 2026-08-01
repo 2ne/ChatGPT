@@ -63,7 +63,7 @@ Within minutes, the spacecraft is losing oxygen and electrical power.`,
 
 They’re no longer trying to land on the Moon.
 
-They’re trying to get three people home.`,
+They’re trying to get everyone home safely.`,
   },
   {
     title: "Shared understanding",
@@ -503,7 +503,7 @@ function MissionShift() {
       </div>
       <div className="mission-after">
         <span>New mission</span>
-        <strong>Get three people home</strong>
+        <strong>Get everyone home safely</strong>
       </div>
       <p>Oxygen and electrical power are falling.</p>
     </div>
@@ -909,44 +909,48 @@ const evidenceText = {
   after: "Ask Platform for the development environment values. Add them to .env. Run npm run migrate, then npm run dev. Open /health. A 200 response means the service is ready.",
 };
 
-function Metric({ label, before, after }: { label: string; before: string | number; after: string | number }) {
+const evidenceSteps = [
+  "Ask Platform for the development environment values.",
+  "Add them to .env.",
+  "Run npm run migrate, then npm run dev.",
+  "Open /health.",
+  "A 200 response means the service is ready.",
+];
+
+function EvidenceMetrics({ metrics }: { metrics: ReturnType<typeof readingMetrics> }) {
   return (
-    <div className="metric">
-      <span>{label}</span>
-      <div><small>Before</small><s>{before}</s></div>
-      <div><small>After</small><strong>{after}</strong></div>
-    </div>
+    <dl className="evidence-metrics">
+      <div><dt>Words</dt><dd>{metrics.words}</dd></div>
+      <div><dt>Sentence length</dt><dd>{metrics.averageSentence}</dd></div>
+      <div><dt>Reading ease</dt><dd>{metrics.score}</dd></div>
+    </dl>
   );
 }
 
 function EvidenceComparison() {
   const before = readingMetrics(evidenceText.before);
   const after = readingMetrics(evidenceText.after);
-  const [showAfter, setShowAfter] = useState(false);
 
   return (
     <div className="evidence-comparison">
-      <div className="evidence-document">
-        <div className="evidence-tabs">
-          <button type="button" className={!showAfter ? "active" : ""} onClick={() => setShowAfter(false)}>Before</button>
-          <button type="button" className={showAfter ? "active" : ""} onClick={() => setShowAfter(true)}>After</button>
-        </div>
-        <AnimatePresence mode="wait">
-          <motion.div key={showAfter ? "after" : "before"} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <span>Local setup</span>
-            <p>{showAfter ? evidenceText.after : evidenceText.before}</p>
-          </motion.div>
-        </AnimatePresence>
+      <div className="evidence-versions">
+        <Reveal className="evidence-version evidence-before">
+          <header><span>Before</span><strong>Local setup</strong></header>
+          <p>{evidenceText.before}</p>
+          <EvidenceMetrics metrics={before} />
+        </Reveal>
+        <Reveal delay={0.1} className="evidence-version evidence-after">
+          <header><span>After</span><strong>Start the service locally</strong></header>
+          <ol>
+            {evidenceSteps.map((step) => <li key={step}>{step}</li>)}
+          </ol>
+          <EvidenceMetrics metrics={after} />
+        </Reveal>
       </div>
-      <div className="metric-panel">
-        <span className="eyebrow">WHAT CHANGED?</span>
-        <Metric label="Words" before={before.words} after={after.words} />
-        <Metric label="Average sentence" before={`${before.averageSentence} words`} after={`${after.averageSentence} words`} />
-        <Metric label="Reading ease" before={before.score} after={after.score} />
-        <div className="human-check">
-          <p><span>THE USEFUL TEST</span><strong>Do we think it is actually better?</strong></p>
-        </div>
-      </div>
+      <Reveal className="human-check">
+        <span>The human test</span>
+        <strong>Do we think it is actually better?</strong>
+      </Reveal>
     </div>
   );
 }
@@ -1174,7 +1178,7 @@ function App() {
             <Reveal className="mission-change-copy">
               <span className="eyebrow">THE MISSION HAS CHANGED</span>
               <h2>They’re no longer trying to land on the Moon.</h2>
-              <p>They’re trying to get three people home.</p>
+              <p>They’re trying to get everyone home safely.</p>
             </Reveal>
             <Reveal delay={0.12}><MissionShift /></Reveal>
           </div>
@@ -1279,9 +1283,9 @@ function App() {
         </section>
 
         <section id="evidence" data-section="13" data-step className="evidence section-light">
-          <Reveal className="section-title">
-            <span className="eyebrow">TEST WHETHER IT WORKS</span>
-            <h2>Measure the change.<br />Then make the human judgement.</h2>
+          <Reveal className="evidence-heading">
+            <span className="eyebrow">TEST THE RESULT</span>
+            <h2>Measure it. Then read it.</h2>
           </Reveal>
           <EvidenceComparison />
         </section>
