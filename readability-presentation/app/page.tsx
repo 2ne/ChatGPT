@@ -1,40 +1,23 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   AnimatePresence,
   motion,
   useScroll,
-  useTransform,
 } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import {
-  AlertTriangle,
-  ArrowRight,
-  BookOpen,
-  Braces,
   Check,
-  CheckCircle2,
   Circle,
-  Code2,
-  FileText,
-  Gauge,
-  GitPullRequest,
-  Moon,
-  Radio,
-  Search,
-  Sparkles,
-  Users,
   X,
-  Zap,
 } from "lucide-react";
 
 const earthPhotoSrc = `${import.meta.env.BASE_URL}images/earth-from-space.jpg`;
 const missionControlSrc = `${import.meta.env.BASE_URL}images/mission-control.jpg`;
-const moonPhotoSrc = `${import.meta.env.BASE_URL}images/moon.jpg`;
 
 const sectionLabels = [
   "The call",
@@ -429,7 +412,6 @@ function SourceLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <a className="source-link" href={href} target="_blank" rel="noreferrer">
       {children}
-      <ArrowRight size={11} aria-hidden="true" />
     </a>
   );
 }
@@ -491,7 +473,7 @@ function ApolloTranscript() {
   return (
     <div className="apollo-transcript" aria-hidden="true">
       <div className="transcript-title">
-        <span><Radio size={12} /> Air-to-ground</span>
+        <span>Air-to-ground</span>
         <span>Apollo 13 · GET</span>
       </div>
       <AnimatePresence initial={false}>
@@ -512,26 +494,18 @@ function ApolloTranscript() {
   );
 }
 
-function MissionStatus() {
+function MissionShift() {
   return (
-    <div className="mission-status">
-      <div className="status-header">
-        <span>SPACECRAFT STATUS</span>
-        <span className="status-alert"><AlertTriangle size={13} /> EMERGENCY</span>
+    <div className="mission-shift">
+      <div className="mission-before">
+        <span>Original mission</span>
+        <s>Land on the Moon</s>
       </div>
-      <div className="system-meter">
-        <div><span>Oxygen</span><b>FALLING</b></div>
-        <div className="meter-track"><motion.i initial={{ width: "92%" }} whileInView={{ width: "18%" }} transition={{ duration: 2.2, delay: 0.2 }} /></div>
+      <div className="mission-after">
+        <span>New mission</span>
+        <strong>Get three people home</strong>
       </div>
-      <div className="system-meter">
-        <div><span>Electrical power</span><b>FALLING</b></div>
-        <div className="meter-track"><motion.i initial={{ width: "86%" }} whileInView={{ width: "24%" }} transition={{ duration: 2.2, delay: 0.55 }} /></div>
-      </div>
-      <div className="mission-switch">
-        <div className="old-mission"><Moon size={18} /><span>Land on the Moon</span></div>
-        <ArrowRight />
-        <div className="new-mission"><Users size={18} /><span>Bring three people home</span></div>
-      </div>
+      <p>Oxygen and electrical power are falling.</p>
     </div>
   );
 }
@@ -548,16 +522,14 @@ const specialists = [
 function SpecialistNetwork() {
   return (
     <div className="specialist-network" aria-label="Apollo engineering specialisms">
-      <div className="network-orbit" />
-      <div className="network-core">
-        <span>SAFE NEXT STEP</span>
-        <strong>What still works?</strong>
-      </div>
+      <div className="network-orbit network-orbit-one" />
+      <div className="network-orbit network-orbit-two" />
+      <div className="network-core"><span>APOLLO 13</span><strong>What still works?</strong></div>
       {specialists.map((specialist, index) => (
         <div
           key={specialist}
           className="specialist-node"
-          style={{ "--angle": `${index * 60}deg` } as CSSProperties}
+          style={{ offsetDistance: `${(76 + (index / specialists.length) * 100) % 100}%` }}
         >
           <i />
           <span>{specialist}</span>
@@ -567,38 +539,11 @@ function SpecialistNetwork() {
   );
 }
 
-const docTypes = [
-  ["PROCEDURES", "What to do, in order"],
-  ["CHECKLISTS", "What must be true"],
-  ["SCHEMATICS", "How systems connect"],
-  ["TECHNICAL DOCS", "What another engineer knows"],
-];
-
-function InformationBridge() {
-  return (
-    <div className="information-bridge">
-      <span className="bridge-label">SHARED UNDERSTANDING</span>
-      <div className="bridge-line"><i /><b>Information they can understand</b><i /></div>
-      <div className="bridge-docs">
-        {docTypes.map(([title, description], index) => (
-          <Reveal key={title} delay={index * 0.07}>
-            <article>
-              <FileText size={16} />
-              <strong>{title}</strong>
-              <span>{description}</span>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function NASAReview() {
   return (
     <div className="nasa-review">
       <div className="nasa-requirements">
-        <span className="eyebrow">NASA REQUIREMENTS GUIDANCE</span>
+        <span className="small-label">NASA requirements guidance</span>
         <div className="standard-words">
           {["Clear", "Unambiguous", "Concise", "Simple"].map((word, index) => (
             <Reveal key={word} delay={index * 0.08}>
@@ -611,15 +556,13 @@ function NASAReview() {
         </SourceLink>
       </div>
       <div className="review-types">
-        <Reveal className="review-card technical-review">
-          <span>TECHNICAL REVIEW</span>
-          <Code2 />
+        <Reveal className="review-type">
+          <span>Technical review</span>
           <h3>Is it correct?</h3>
           <p>Technical integrity and merit.</p>
         </Reveal>
-        <Reveal delay={0.1} className="review-card professional-review">
-          <span>PROFESSIONAL REVIEW</span>
-          <BookOpen />
+        <Reveal delay={0.1} className="review-type">
+          <span>Professional review</span>
           <h3>Can the audience use it?</h3>
           <p>Readability, communication and suitability for the audience.</p>
         </Reveal>
@@ -645,14 +588,11 @@ function OurWork() {
     <div className="our-work-layout">
       <Reveal className="our-work-copy">
         <span className="eyebrow">OUR WORK</span>
-        <h2>We write things<br />other people need<br />to understand.</h2>
+        <h2>We write things other people need to understand.</h2>
       </Reveal>
-      <Reveal delay={0.08} className="document-stack">
-        {ourDocuments.map((item, index) => (
-          <div key={item} style={{ "--index": index } as CSSProperties}>
-            <FileText size={15} />
-            <span>{item}</span>
-          </div>
+      <Reveal delay={0.08} className="document-list">
+        {ourDocuments.map((item) => (
+          <span key={item}>{item}</span>
         ))}
       </Reveal>
       <Reveal delay={0.16} className="definition-card">
@@ -697,8 +637,10 @@ function FailureModes() {
         <Reveal key={item.number} delay={index * 0.07}>
           <article>
             <span className="failure-number">{item.number}</span>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
             <code>{item.sample}</code>
           </article>
         </Reveal>
@@ -783,9 +725,7 @@ function FleschDemo() {
         <span className="eyebrow">FLESCH READING EASE · 1948</span>
         <h2>A signal.<br />Not a verdict.</h2>
         <p>It combines sentence length and syllables per word. A higher score generally means easier reading.</p>
-        <div className="formula">
-          <span>206.835</span><b>−</b><span>sentence length</span><b>−</b><span>word complexity</span>
-        </div>
+        <p className="formula">Sentence length + word complexity</p>
         <SourceLink href="https://doi.org/10.1037/h0057532">
           Rudolf Flesch · A New Readability Yardstick
         </SourceLink>
@@ -799,7 +739,7 @@ function FleschDemo() {
           <motion.p key={version} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>{text}</motion.p>
         </AnimatePresence>
         <div className="score-readout">
-          <div><Gauge /><span>Illustrative score</span><strong>{metrics.score}</strong></div>
+          <div className="score-heading"><span>Illustrative score</span><strong>{metrics.score}</strong></div>
           <div className="score-scale">
             <span>Harder</span><span>Easier</span>
             <i style={{ left: `${gaugePosition}%` }} />
@@ -809,11 +749,7 @@ function FleschDemo() {
             <span>{metrics.words} words</span>
           </div>
         </div>
-        <div className="score-limits">
-          <span><X size={13} /> Cannot check accuracy</span>
-          <span><X size={13} /> Cannot find missing steps</span>
-          <span><X size={13} /> Cannot test the task</span>
-        </div>
+        <p className="score-limits">It cannot check accuracy, find missing steps or test the task.</p>
       </Reveal>
     </div>
   );
@@ -823,9 +759,7 @@ function CodeWindow() {
   return (
     <div className="code-window">
       <div className="window-bar">
-        <div><i /><i /><i /></div>
         <span>searchDeals.ts</span>
-        <Code2 size={14} />
       </div>
       <pre>
         <span className="syntax-violet">export const</span>{" "}
@@ -843,20 +777,14 @@ function CodeWindow() {
 }
 
 function CodeStandard() {
-  const practices = [
-    ["CONVENTIONS", "Shared patterns"],
-    ["LINT", "Automatic signals"],
-    ["TEST", "Expected behaviour"],
-    ["REVIEW", "Another person reads it"],
-  ];
   return (
     <div className="code-standard-layout">
       <Reveal className="code-standard-copy">
         <span className="eyebrow">WE ALREADY DO THIS</span>
         <h2>Readable code is part of the quality bar.</h2>
         <p>We do not stop at “does it work?”. We ask whether somebody else can understand and maintain it.</p>
-        <div className="practice-grid">
-          {practices.map(([title, body]) => <div key={title}><Check size={14} /><span><b>{title}</b>{body}</span></div>)}
+        <div className="practice-line" aria-label="Code quality practices">
+          {['Conventions', 'Lint', 'Tests', 'Review'].map((practice) => <span key={practice}>{practice}</span>)}
         </div>
         <strong>Documentation deserves similar attention.</strong>
       </Reveal>
@@ -870,10 +798,9 @@ function PullRequestCheck() {
   return (
     <div className="pr-window">
       <div className="pr-header">
-        <div><GitPullRequest size={20} /><span>agent: add cited deal comparison</span></div>
-        <span className="open-pill">Open</span>
+        <span>Pull request</span>
+        <strong>agent: add cited deal comparison</strong>
       </div>
-      <div className="pr-tabs"><span>Conversation</span><span>Commits <b>2</b></span><span>Files changed <b>3</b></span></div>
       <div className="pr-check">
         <span className="eyebrow">ONE REVIEW QUESTION</span>
         <button type="button" className={checked ? "is-checked" : ""} onClick={() => setChecked((value) => !value)}>
@@ -884,38 +811,25 @@ function PullRequestCheck() {
           </div>
         </button>
       </div>
-      <div className="pr-footer">
-        <div><span>Coverage</span><b>Does the change need documentation?</b></div>
-        <ArrowRight />
-        <div><span>Quality</span><b>Could somebody else follow it?</b></div>
-      </div>
     </div>
   );
 }
 
 function AIDocumentFactory() {
-  const cards = [
-    ["README.md", "Generated from repository"],
-    ["setup-guide.md", "Generated from code"],
-    ["architecture.md", "Generated from notes"],
-    ["wiki-page.md", "Generated from transcript"],
-  ];
+  const files = ["README.md", "setup-guide.md", "architecture.md", "wiki-page.md"];
   return (
     <div className="ai-factory">
-      <div className="agent-core"><Sparkles /><span>AI AGENT</span></div>
-      <div className="factory-line" />
+      <span className="small-label">Generated in seconds</span>
       <div className="generated-docs">
-        {cards.map(([title, meta], index) => (
-          <motion.div
-            key={title}
+        {files.map((file, index) => (
+          <motion.span
+            key={file}
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.13 }}
           >
-            <FileText />
-            <span><strong>{title}</strong><small>{meta}</small></span>
-            <CheckCircle2 />
-          </motion.div>
+            {file}
+          </motion.span>
         ))}
       </div>
       <p><strong>More documentation</strong> is not the same as <strong>better documentation.</strong></p>
@@ -940,7 +854,7 @@ function AIReviewDemo() {
       <div className="review-toolbar">
         <span>incident-runbook.md</span>
         <button type="button" onClick={() => setReviewed((value) => !value)}>
-          <Sparkles size={14} />{reviewed ? "Hide review" : "Review for readability"}
+          {reviewed ? "Hide review" : "Review for readability"}
         </button>
       </div>
       <div className="review-document">
@@ -978,12 +892,12 @@ function SkillFile() {
   return (
     <div className="skill-file">
       <div className="skill-file-header">
-        <div><Braces size={17} /><span>documentation-readability/SKILL.md</span></div>
-        <span>TEAM OWNED</span>
+        <span>documentation-readability/SKILL.md</span>
+        <span>Team-owned</span>
       </div>
       <div className="skill-file-body">
         <span className="skill-heading">## Review rules</span>
-        {skillRules.map((rule, index) => (
+        {skillRules.slice(0, 4).map((rule, index) => (
           <motion.div key={rule} initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05 }}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <p>{rule}</p>
@@ -991,8 +905,7 @@ function SkillFile() {
         ))}
       </div>
       <div className="skill-diff">
-        <span>+ Add what we learn.</span>
-        <span>+ Improve the skill with the documentation.</span>
+        <span>+ Add what we learn as a team.</span>
       </div>
     </div>
   );
@@ -1007,7 +920,8 @@ function Metric({ label, before, after }: { label: string; before: string | numb
   return (
     <div className="metric">
       <span>{label}</span>
-      <div><s>{before}</s><ArrowRight size={13} /><strong>{after}</strong></div>
+      <div><small>Before</small><s>{before}</s></div>
+      <div><small>After</small><strong>{after}</strong></div>
     </div>
   );
 }
@@ -1037,7 +951,6 @@ function EvidenceComparison() {
         <Metric label="Average sentence" before={`${before.averageSentence} words`} after={`${after.averageSentence} words`} />
         <Metric label="Reading ease" before={before.score} after={after.score} />
         <div className="human-check">
-          <CheckCircle2 />
           <p><span>THE USEFUL TEST</span><strong>Do we think it is actually better?</strong></p>
         </div>
       </div>
@@ -1079,7 +992,7 @@ function WorkshopExample({ number, context, a, b, winner, reasons }: WorkshopExa
               <article className={`version-card${isWinner ? " is-winner" : ""}${revealed && !isWinner ? " is-muted" : ""}`}>
                 <header>
                   <span>{label}</span>
-                  {isWinner && <b><Check size={13} /> Easier to use</b>}
+                  {isWinner && <b>Easier to use</b>}
                 </header>
                 <h3>{version.title}</h3>
                 <div className="version-content">{version.content}</div>
@@ -1091,13 +1004,12 @@ function WorkshopExample({ number, context, a, b, winner, reasons }: WorkshopExa
       <div className="example-reveal">
         <button type="button" onClick={() => setRevealed((value) => !value)}>
           {revealed ? "Hide the difference" : "Reveal the difference"}
-          {revealed ? <X size={15} /> : <Search size={15} />}
         </button>
         <AnimatePresence>
           {revealed && (
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
               <span>Why {winner} works better here</span>
-              {reasons.map((reason) => <p key={reason}><Check size={13} />{reason}</p>)}
+              {reasons.map((reason) => <p key={reason}>{reason}</p>)}
             </motion.div>
           )}
         </AnimatePresence>
@@ -1114,7 +1026,6 @@ function App() {
   const [hintVisible, setHintVisible] = useState(true);
   const [notesOpen, setNotesOpen] = useState(() => new URLSearchParams(window.location.search).get("notes") === "1");
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.08], ["0%", "14%"]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -1172,7 +1083,14 @@ function App() {
 
     const go = (direction: 1 | -1) => {
       const steps = Array.from(document.querySelectorAll<HTMLElement>("[data-step]"));
-      const next = Math.min(steps.length - 1, Math.max(0, activeStepRef.current + direction));
+      const current = steps.reduce(
+        (closest, step, index) => {
+          const distance = Math.abs(step.getBoundingClientRect().top);
+          return distance < closest.distance ? { index, distance } : closest;
+        },
+        { index: activeStepRef.current, distance: Number.POSITIVE_INFINITY },
+      );
+      const next = Math.min(steps.length - 1, Math.max(0, current.index + direction));
       const target = steps[next];
       if (!target) return;
       setHintVisible(false);
@@ -1232,27 +1150,23 @@ function App() {
       <PresenterNotes activeStep={activeStep} open={notesOpen} onClose={() => setNotesOpen(false)} />
 
       <main>
-        <section data-section="0" data-step className="hero section-dark">
-          <Stars count={95} />
-          <motion.div className="hero-space" style={{ y: heroY }} aria-hidden="true">
-            <div className="hero-moon" style={{ backgroundImage: `url(${moonPhotoSrc})` }} />
-            <div className="hero-distance">200,000 MILES FROM EARTH</div>
-          </motion.div>
+        <section id="the-call" data-section="0" data-step className="hero section-dark">
+          <Stars count={72} />
           <div className="hero-layout">
             <div className="hero-copy">
               <motion.span className="eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}>APOLLO 13 · 13 APRIL 1970</motion.span>
               <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.9 }}>
                 It’s <em>9:08 p.m.</em>
               </motion.h1>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95 }}>The crew hear a bang.</motion.p>
+              <motion.div className="hero-sequence" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95 }}>
+                <p>Apollo 13 is 200,000 miles from Earth.</p>
+                <p>The crew hear a bang.</p>
+              </motion.div>
               <motion.blockquote initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55 }}>
                 “Houston, we’ve had a problem here.”
                 <cite>Jack Swigert</cite>
               </motion.blockquote>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.1 }} className="hero-facts">
-                <span><Zap size={14} /> Oxygen tank exploded</span>
-                <span><AlertTriangle size={14} /> Oxygen and power falling</span>
-              </motion.div>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.1 }} className="hero-consequence">Oxygen and electrical power begin to fall.</motion.p>
               <SourceLink href="https://www.nasa.gov/missions/apollo/apollo-13-mission-details/">NASA · Apollo 13 mission details</SourceLink>
             </div>
             <motion.div className="transcript-wrap" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 1.1 }}>
@@ -1261,7 +1175,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="1" data-step className="mission-change section-dark">
+        <section id="mission-changes" data-section="1" data-step className="mission-change section-dark">
           <div className="mission-bg" style={{ backgroundImage: `linear-gradient(90deg, rgba(9,9,11,.94), rgba(9,9,11,.45), rgba(9,9,11,.9)), url(${missionControlSrc})` }} />
           <div className="mission-change-layout">
             <Reveal className="mission-change-copy">
@@ -1269,11 +1183,11 @@ function App() {
               <h2>They’re no longer trying to land on the Moon.</h2>
               <p>They’re trying to get three people home.</p>
             </Reveal>
-            <Reveal delay={0.12}><MissionStatus /></Reveal>
+            <Reveal delay={0.12}><MissionShift /></Reveal>
           </div>
         </section>
 
-        <section data-section="2" data-step className="specialists section-light">
+        <section id="shared-understanding" data-section="2" data-step className="specialists section-light">
           <div className="specialists-layout">
             <Reveal className="specialists-copy">
               <span className="eyebrow">ANOTHER PROBLEM</span>
@@ -1282,30 +1196,29 @@ function App() {
             </Reveal>
             <Reveal delay={0.1}><SpecialistNetwork /></Reveal>
           </div>
-          <InformationBridge />
-          <Reveal className="ambiguity-line">
-            <p>There isn’t much room for ambiguity</p>
-            <strong>200,000 miles from Earth.</strong>
+          <Reveal className="specialist-footnote">
+            <p>They rely on procedures, checklists and technical documentation written by other engineers.</p>
+            <strong>There isn’t much room for ambiguity 200,000 miles from Earth.</strong>
           </Reveal>
         </section>
 
-        <section data-section="3" data-step className="nasa-standard section-light">
-          <Reveal className="section-title">
-            <span className="eyebrow">THIS IS STILL AN ENGINEERING CONCERN</span>
-            <h2>NASA checks the information<br />and how it communicates.</h2>
-          </Reveal>
-          <NASAReview />
-          <Reveal className="nasa-conclusion">
-            <p>Readability is not about making something sound nicer.</p>
-            <strong>It affects whether somebody can use the information.</strong>
-          </Reveal>
+        <section id="nasa-standard" data-section="3" data-step className="nasa-standard section-light">
+          <div className="nasa-standard-layout">
+            <Reveal className="nasa-standard-copy">
+              <span className="eyebrow">STILL AN ENGINEERING CONCERN</span>
+              <h2>NASA checks the information and how it communicates.</h2>
+              <p>Readability is not about making something sound nicer.</p>
+              <strong>It affects whether somebody can use the information.</strong>
+            </Reveal>
+            <NASAReview />
+          </div>
         </section>
 
-        <section data-section="4" data-step className="our-work section-dark">
+        <section id="readability" data-section="4" data-step className="our-work section-dark">
           <OurWork />
         </section>
 
-        <section data-section="5" data-step className="failure-modes section-dark">
+        <section id="failure-modes" data-section="5" data-step className="failure-modes section-dark">
           <Reveal className="section-title">
             <span className="eyebrow">ACCURATE CAN STILL BE DIFFICULT</span>
             <h2>Every hidden decision gives<br />the reader more work.</h2>
@@ -1313,19 +1226,19 @@ function App() {
           <FailureModes />
         </section>
 
-        <section data-section="6" data-step className="readability-rules section-light">
+        <section id="what-helps" data-section="6" data-step className="readability-rules section-light">
           <ReadabilityRules />
         </section>
 
-        <section data-section="7" data-step className="flesch section-dark">
+        <section id="flesch" data-section="7" data-step className="flesch section-dark">
           <FleschDemo />
         </section>
 
-        <section data-section="8" data-step className="code-standard section-dark">
+        <section id="code-standard" data-section="8" data-step className="code-standard section-dark">
           <CodeStandard />
         </section>
 
-        <section data-section="9" data-step className="pr-section section-light">
+        <section id="pr-check" data-section="9" data-step className="pr-section section-light">
           <div className="pr-layout">
             <Reveal className="pr-copy">
               <span className="eyebrow">START SMALL</span>
@@ -1336,7 +1249,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="10" data-step className="ai-output section-dark">
+        <section id="ai-output" data-section="10" data-step className="ai-output section-dark">
           <div className="ai-output-layout">
             <Reveal className="ai-output-copy">
               <span className="eyebrow">AI CHANGES THE VOLUME</span>
@@ -1348,7 +1261,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="11" data-step className="ai-review section-light">
+        <section id="ai-review" data-section="11" data-step className="ai-review section-light">
           <div className="ai-review-layout">
             <Reveal className="ai-review-copy">
               <span className="eyebrow">USE AI ON BOTH SIDES</span>
@@ -1360,7 +1273,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="12" data-step className="shared-skill section-dark">
+        <section id="shared-skill" data-section="12" data-step className="shared-skill section-dark">
           <div className="shared-skill-layout">
             <Reveal className="shared-skill-copy">
               <span className="eyebrow">A TEAM-OWNED SKILL</span>
@@ -1371,7 +1284,7 @@ function App() {
           </div>
         </section>
 
-        <section data-section="13" data-step className="evidence section-light">
+        <section id="evidence" data-section="13" data-step className="evidence section-light">
           <Reveal className="section-title">
             <span className="eyebrow">TEST WHETHER IT WORKS</span>
             <h2>Measure the change.<br />Then make the human judgement.</h2>
@@ -1379,7 +1292,7 @@ function App() {
           <EvidenceComparison />
         </section>
 
-        <section data-section="14" data-step className="workshop-section section-dark">
+        <section id="example-one" data-section="14" data-step className="workshop-section section-dark">
           <WorkshopExample
             number={1}
             context="A new engineer is setting up the service."
@@ -1396,7 +1309,7 @@ function App() {
           />
         </section>
 
-        <section data-section="15" data-step className="workshop-section section-light">
+        <section id="example-two" data-section="15" data-step className="workshop-section section-light">
           <WorkshopExample
             number={2}
             context="A lawyer opens a matter they cannot access."
@@ -1413,7 +1326,7 @@ function App() {
           />
         </section>
 
-        <section data-section="16" data-step className="workshop-section section-dark">
+        <section id="example-three" data-section="16" data-step className="workshop-section section-dark">
           <WorkshopExample
             number={3}
             context="An AI-generated deal summary is ready to share."
@@ -1430,7 +1343,7 @@ function App() {
           />
         </section>
 
-        <section data-section="17" className="finale section-dark">
+        <section id="human-test" data-section="17" className="finale section-dark">
           <div className="finale-background" aria-hidden="true">
             <Stars count={110} />
             <div className="earth">
@@ -1438,13 +1351,13 @@ function App() {
             </div>
           </div>
           <div className="finale-beats">
-            <div data-step className="finale-beat readers-beat">
+            <div id="write-for-the-reader" data-step className="finale-beat readers-beat">
               <Reveal>
                 <span className="eyebrow">WRITE FOR THE PERSON WHO READS IT</span>
                 <h2>The new starter.<br />The adjacent engineer.<br />Someone fixing a problem.<br />Future you.</h2>
               </Reveal>
             </div>
-            <div data-step className="finale-beat coffee-beat">
+            <div id="future-you" data-step className="finale-beat coffee-beat">
               <Reveal>
                 <span>Actually, forget ten years.</span>
                 <h2>Write it for yourself<br />tomorrow night at 11.</h2>
@@ -1452,7 +1365,7 @@ function App() {
                 <strong>Because occasionally, that person is you.</strong>
               </Reveal>
             </div>
-            <div data-step className="finale-beat final-question">
+            <div id="final-question" data-step className="finale-beat final-question">
               <Reveal>
                 <p>Whether a human writes it or an AI writes it,<br />the test is still the same.</p>
                 <h2>Can another human<br /><em>understand it?</em></h2>
