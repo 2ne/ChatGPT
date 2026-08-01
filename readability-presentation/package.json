@@ -1,5 +1,5 @@
 {
-  "name": "readability-under-pressure",
+  "name": "readability-workshop",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -31,5 +31,5 @@
     "vite": "8.0.13"
   },
   "type": "module",
-  "displayName": "Readability Under Pressure"
+  "displayName": "Readability"
 }
