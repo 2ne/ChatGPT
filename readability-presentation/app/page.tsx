@@ -542,32 +542,25 @@ function SpecialistNetwork() {
 function NASAReview() {
   return (
     <div className="nasa-review">
-      <div className="nasa-requirements">
-        <span className="small-label">NASA requirements guidance</span>
-        <div className="standard-words">
-          {["Clear", "Unambiguous", "Concise", "Simple"].map((word, index) => (
-            <Reveal key={word} delay={index * 0.08}>
-              <span>{word}</span>
-            </Reveal>
-          ))}
-        </div>
-        <SourceLink href="https://www.nasa.gov/reference/appendix-c-how-to-write-a-good-requirement/">
-          NASA Systems Engineering Handbook · Appendix C
-        </SourceLink>
-      </div>
       <div className="review-types">
         <Reveal className="review-type">
           <span>Technical review</span>
           <h3>Is it correct?</h3>
-          <p>Technical integrity and merit.</p>
         </Reveal>
         <Reveal delay={0.1} className="review-type">
           <span>Professional review</span>
           <h3>Can the audience use it?</h3>
-          <p>Readability, communication and suitability for the audience.</p>
         </Reveal>
+      </div>
+      <Reveal className="nasa-takeaway">
+        <p>Readability affects whether somebody can use the information.</p>
+      </Reveal>
+      <div className="nasa-sources">
+        <SourceLink href="https://www.nasa.gov/reference/appendix-c-how-to-write-a-good-requirement/">
+          NASA requirements guidance
+        </SourceLink>
         <SourceLink href="https://nodis3.gsfc.nasa.gov/displayCA.cfm?Internal_ID=N_PR_2200_002C_&page_name=Chapter4">
-          NASA STI review guidance
+          NASA review guidance
         </SourceLink>
       </div>
     </div>
@@ -1204,11 +1197,12 @@ function App() {
 
         <section id="nasa-standard" data-section="3" data-step className="nasa-standard section-light">
           <div className="nasa-standard-layout">
-            <Reveal className="nasa-standard-copy">
-              <span className="eyebrow">STILL AN ENGINEERING CONCERN</span>
-              <h2>NASA checks the information and how it communicates.</h2>
-              <p>Readability is not about making something sound nicer.</p>
-              <strong>It affects whether somebody can use the information.</strong>
+            <Reveal className="nasa-standard-heading">
+              <span className="eyebrow">NASA’S STANDARD</span>
+              <h2>
+                <span>Clear. Unambiguous.</span>
+                <span>Concise. Simple.</span>
+              </h2>
             </Reveal>
             <NASAReview />
           </div>

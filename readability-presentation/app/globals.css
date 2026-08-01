@@ -664,79 +664,47 @@ h3 {
 .nasa-standard {
   display: grid;
   min-height: 100vh;
-  padding: 8vh 9vw;
+  padding: 8vh 9vw 7vh;
 }
 
 .nasa-standard-layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(460px, 1.1fr);
-  gap: clamp(72px, 9vw, 140px);
-  align-items: center;
+  align-content: center;
+  width: min(100%, 1480px);
+  min-height: 85vh;
+  margin: 0 auto;
 }
 
-.nasa-standard-copy h2 {
-  max-width: 650px;
+.nasa-standard-heading h2 {
+  display: grid;
+  gap: 0.02em;
   margin-top: 24px;
-  font-size: var(--title);
-}
-
-.nasa-standard-copy p {
-  margin: 30px 0 8px;
-  color: var(--muted);
-  font-size: 17px;
-}
-
-.nasa-standard-copy strong {
-  display: block;
-  max-width: 540px;
-  color: var(--green-text);
-  font-size: 19px;
-  font-weight: 600;
-  line-height: 1.4;
+  font-size: clamp(64px, 6.7vw, 102px);
+  line-height: 0.98;
 }
 
 .nasa-review {
   display: grid;
-  gap: 32px;
-}
-
-.nasa-requirements {
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--line-light);
-}
-
-.standard-words {
-  display: grid;
-  gap: 0;
-  margin-top: 14px;
-}
-
-.standard-words > div {
-  border-top: 1px solid var(--line-light);
-  padding: 6px 0;
-}
-
-.standard-words span {
-  display: block;
-  font-size: clamp(29px, 2.7vw, 39px);
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  gap: 22px;
+  margin-top: clamp(54px, 8vh, 88px);
 }
 
 .review-types {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  gap: clamp(70px, 9vw, 150px);
+  padding: 26px 0 28px;
+  border-top: 1px solid var(--line-light);
+  border-bottom: 1px solid var(--line-light);
 }
 
 .review-type {
-  padding-top: 17px;
-  border-top: 1px solid var(--line-light);
+  display: grid;
+  gap: 14px;
 }
 
 .review-type > span {
-  color: var(--green-text);
+  color: var(--muted);
   font-size: 10px;
   font-weight: 650;
   letter-spacing: 0.13em;
@@ -744,21 +712,26 @@ h3 {
 }
 
 .review-type h3 {
-  margin-top: 14px;
-  font-size: 25px;
+  font-size: clamp(27px, 2.3vw, 35px);
+  line-height: 1.12;
 }
 
-.review-type p {
-  margin: 12px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
+.nasa-takeaway p {
+  margin: 0;
+  color: var(--green-text);
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 560;
+  letter-spacing: -0.024em;
+  line-height: 1.3;
 }
 
-.review-types .source-link {
-  grid-column: 1 / -1;
-  justify-self: start;
-  margin-top: -8px;
+.nasa-sources {
+  display: flex;
+  gap: 24px;
+}
+
+.nasa-sources .source-link {
+  margin-top: 0;
 }
 
 .our-work {
@@ -1820,8 +1793,7 @@ h3 {
   .specialists { padding-top: 5vh; padding-bottom: 5vh; }
   .specialist-network { width: min(34vw, 410px); }
   .network-core { width: 126px; }
-  .nasa-review { gap: 22px; }
-  .standard-words > div { padding: 4px 0; }
+  .nasa-review { margin-top: 44px; }
   .our-work-layout { gap: 34px clamp(60px, 8vw, 110px); }
   .document-list span { padding: 7px 0; }
   .failure-grid article { min-height: 88px; }
@@ -1844,7 +1816,6 @@ h3 {
   .hero-layout,
   .mission-change-layout,
   .specialists-layout,
-  .nasa-standard-layout,
   .our-work-layout,
   .failure-modes,
   .rules-layout,
