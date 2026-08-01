@@ -22,6 +22,8 @@ https://2ne.github.io/ChatGPT/readability-presentation/presenter.html
 ## Experience
 
 - Eighteen sections with twenty speaker beats
+- Restrained black and off-white visual system with Cleary green used only for emphasis
+- Large type, generous spacing and one main idea per screen
 - Fact-checked Apollo 13 opening at 9:08 p.m. on 13 April 1970
 - NASA requirements and review guidance with links to the primary sources
 - Interactive Flesch Reading Ease comparison
@@ -79,14 +81,16 @@ shortcuts while a button or link has focus.
   to the twenty keyboard-controlled beats.
 - The website supports the spoken script rather than placing every sentence on
   screen.
+- The cleaner pre-workshop deck is the visual reference: minimal cards, very
+  few icons, a limited type scale and no secondary accent colours.
 - Cleary green remains the accent, with a darker accessible green for text on
   light surfaces.
 - The Apollo material establishes the need for shared understanding, then the
   presentation moves into everyday engineering documentation.
 - Flesch Reading Ease is presented as a signal, not a target. The live scores
   are labelled illustrative because syllable counting is calculated locally.
-- The PR mock-up keeps one documentation check, with coverage and readability
-  described inside it.
+- The PR mock-up keeps one documentation check and removes unnecessary pull
+  request chrome around it.
 - AI feedback always identifies a problem, explains it and points towards a
   specific edit.
 - The three workshop examples use realistic setup, permissions and AI review
