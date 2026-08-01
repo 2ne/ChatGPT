@@ -1,159 +1,375 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
-  motion,
   AnimatePresence,
-  LayoutGroup,
+  motion,
   useScroll,
   useTransform,
-  useInView,
 } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import {
+  AlertTriangle,
+  ArrowRight,
+  BookOpen,
+  Braces,
   Check,
+  CheckCircle2,
   Circle,
   Code2,
-  Command,
+  FileText,
+  Gauge,
   GitPullRequest,
   Moon,
+  Radio,
+  Search,
   Sparkles,
+  Users,
   X,
+  Zap,
 } from "lucide-react";
 
 const earthPhotoSrc = `${import.meta.env.BASE_URL}images/earth-from-space.jpg`;
 const missionControlSrc = `${import.meta.env.BASE_URL}images/mission-control.jpg`;
+const moonPhotoSrc = `${import.meta.env.BASE_URL}images/moon.jpg`;
 
-const apolloTranscript = [
-  { time: "55:55:20", speaker: "SWIGERT", line: "Okay, Houston, we've had a problem here." },
-  { time: "55:55:28", speaker: "CAPCOM", line: "This is Houston. Say again, please." },
-  { time: "55:55:35", speaker: "LOVELL", line: "Houston, we've had a problem. We've had a Main B Bus Undervolt." },
-  { time: "55:55:42", speaker: "CAPCOM", line: "Roger. Main B Undervolt." },
-  {
-    time: "55:56:10",
-    speaker: "HAISE",
-    line: "Okay. Right now, Houston, the voltage is looking good. And we had a pretty large bang associated with the caution and warning there.",
-  },
-  { time: "55:56:30", speaker: "CAPCOM", line: "Roger, Fred." },
-  {
-    time: "55:56:54",
-    speaker: "HAISE",
-    line: "In the interim here, we're starting to go ahead and button up the tunnel again.",
-  },
-  {
-    time: "55:57:04",
-    speaker: "HAISE",
-    line: "That jolt must have rocked the sensor on oxygen quantity 2. It was oscillating down around 20 to 60 percent. Now it's full-scale high.",
-  },
-  { time: "55:58:07", speaker: "HAISE", line: "AC 2 is showing zip." },
-  {
-    time: "55:58:25",
-    speaker: "HAISE",
-    line: "Yes, we got a Main Bus A Undervolt now, too. It's reading about 25 and a half. Main B is reading zip right now.",
-  },
-];
-
-const TRANSCRIPT_WINDOW = 3;
-
-function getSeconds(time: string) {
-  const [h, m, s] = time.split(":").map(Number);
-  return h * 3600 + m * 60 + s;
-}
-
-function nextTranscriptDelay(count: number) {
-  if (count === 0) return 2000;
-  const len = apolloTranscript.length;
-  const prev = apolloTranscript[(count - 1) % len];
-  const next = apolloTranscript[count % len];
-  if (count % len === 0) return 2800;
-  const delta = Math.max(0, getSeconds(next.time) - getSeconds(prev.time));
-  return Math.min(3600, Math.max(1600, 1400 + delta * 35));
-}
-
-function HeroTranscript() {
-  const [count, setCount] = useState(0);
-  const start = Math.max(0, count - TRANSCRIPT_WINDOW);
-  const visible = Array.from({ length: count - start }, (_, i) => {
-    const abs = start + i;
-    return { ...apolloTranscript[abs % apolloTranscript.length], key: abs };
-  });
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setCount((n) => n + 1), nextTranscriptDelay(count));
-    return () => clearTimeout(timer);
-  }, [count]);
-
-  return (
-    <div className="hero-transcript" aria-hidden="true">
-      <div className="transcript-meta">
-        <span>Air-to-ground</span>
-        <span>Apollo 13 · GET</span>
-      </div>
-      <div className="transcript-viewport">
-        <LayoutGroup id="apollo-transcript">
-          <div className="transcript-feed">
-            <AnimatePresence mode="popLayout" initial={false}>
-              {visible.map((entry, i) => {
-                const age = visible.length - 1 - i;
-                return (
-                  <motion.div
-                    key={entry.key}
-                    className={`transcript-msg is-age-${Math.min(age, 3)}`}
-                    layout
-                    initial={{ opacity: 0, y: 48 }}
-                    animate={{
-                      opacity: age === 0 ? 1 : age === 1 ? 0.62 : 0.28,
-                      y: 0,
-                    }}
-                    exit={{ opacity: 0, y: -56 }}
-                    transition={{
-                      layout: { type: "spring", stiffness: 70, damping: 20, mass: 1.05 },
-                      opacity: { duration: 0.7, ease: "easeOut" },
-                      y: { type: "spring", stiffness: 70, damping: 20, mass: 1.05 },
-                    }}
-                  >
-                    <div className="transcript-msg-top">
-                      <span className="transcript-speaker">{entry.speaker}</span>
-                      <span className="transcript-time">{entry.time}</span>
-                    </div>
-                    <p className="transcript-text">{entry.line}</p>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
-        </LayoutGroup>
-      </div>
-    </div>
-  );
-}
-
-const sections = [
+const sectionLabels = [
   "The call",
-  "Mission Control",
-  "Our systems",
-  "Our quality bar",
-  "The contrast",
-  "Three habits",
-  "A real choice",
-  "AI",
-  "The change",
-  "Why it matters",
+  "The mission changes",
+  "Shared understanding",
+  "NASA’s standard",
+  "Readability",
+  "Where it fails",
+  "What helps",
+  "A useful signal",
+  "The code standard",
+  "The PR check",
+  "AI produces more",
+  "AI reviews too",
+  "A shared skill",
+  "Test the result",
+  "Example one",
+  "Example two",
+  "Example three",
+  "The human test",
 ];
 
-const systemNodes = [
-  "Research",
-  "Agents",
-  "MCPs",
-  "Models",
-  "Permissions",
-  "Documents",
-  "Citations",
-  "Search",
-  "Evals",
-  "APIs",
+const speakerNotes = [
+  {
+    title: "The call",
+    body: `Good morning.
+
+It’s 9:08 p.m., 13 April 1970.
+
+Apollo 13 is about 200,000 miles from Earth when the crew hear a bang.
+
+Jack Swigert radios Mission Control:
+
+“Houston, we’ve had a problem here.”
+
+An oxygen tank has exploded.
+
+Within minutes, the spacecraft is losing oxygen and electrical power.`,
+  },
+  {
+    title: "The mission changes",
+    body: `The mission has changed.
+
+They’re no longer trying to land on the Moon.
+
+They’re trying to get three people home.`,
+  },
+  {
+    title: "Shared understanding",
+    body: `And there’s another problem.
+
+No single engineer understands every part of Apollo 13.
+
+You’ve got people who understand electrical systems. People who understand propulsion. Life support. Guidance. The command module. The lunar module.
+
+They need to work out what has happened, what still works and what they can safely do next.
+
+And to do that, they need information they can understand.
+
+Procedures. Checklists. Technical documentation. Information produced by other engineers.
+
+There isn’t much room for ambiguity when you’re 200,000 miles from Earth.`,
+  },
+  {
+    title: "NASA’s standard",
+    body: `And I think there’s something interesting there for us.
+
+NASA engineering guidance today talks explicitly about requirements being clear, unambiguous, concise and simple. NASA also distinguishes technical review from professional review, with professional review looking specifically at things such as readability, communication and suitability for the audience.
+
+So readability isn’t just about making something sound nicer.
+
+It affects whether somebody can actually use the information.`,
+  },
+  {
+    title: "Readability",
+    body: `Now, obviously, we’re not trying to get three astronauts home from space.
+
+But we do have something in common with those engineers.
+
+We write things that other people need to understand.
+
+We write wiki pages. Technical documentation. Pull requests. Setup instructions. Architecture decisions. Requirements.
+
+And increasingly, we have AI writing some of that for us as well.
+
+So I want to talk about readability.
+
+And by readability, I mean something quite simple:
+
+How much effort does somebody have to put in to understand what we’ve written?`,
+  },
+  {
+    title: "Where readability fails",
+    body: `Because something can be completely accurate and still be difficult to use.
+
+A sentence can be technically correct, but too long.
+
+A paragraph can contain everything somebody needs, but bury the important bit halfway through it.
+
+We can use an acronym everybody on our team understands, forgetting that the person joining next month has never heard it before.
+
+We can assume knowledge that the reader simply doesn’t have.
+
+And every time we do that, we’re giving the reader a little bit more work.`,
+  },
+  {
+    title: "What makes it readable",
+    body: `So what makes something readable?
+
+There are some fairly straightforward things we can look for.
+
+Shorter sentences. One idea at a time. Clear headings. Plain language where possible. Acronyms explained the first time they’re used. Instructions in a logical order. Important information easy to find. And assumptions made explicit rather than left for the reader to work out.`,
+  },
+  {
+    title: "A useful signal",
+    body: `But readability isn’t entirely subjective either.
+
+We’ve actually been measuring aspects of it for decades.
+
+One example is Flesch Reading Ease. It was developed by Rudolf Flesch in 1948.
+
+It looks at things such as sentence length and the number of syllables in words, and produces a score. Higher scores generally indicate text that’s easier to read.
+
+Now, I wouldn’t suggest that we put all of our documentation through a formula and declare that anything above a particular number is good documentation.
+
+Technical documentation contains technical language. Sometimes a long word is exactly the right word.
+
+A readability score can’t tell us whether the documentation is correct. It can’t tell us whether we’ve forgotten a step. And it certainly can’t tell us whether somebody can actually complete the task.
+
+But it can give us a signal.`,
+  },
+  {
+    title: "The code standard",
+    body: `And that’s interesting because we already do this sort of thing somewhere else.
+
+Code.
+
+We put a lot of effort into making our code readable.
+
+We have conventions. We lint it. We test it. We review it. Someone else looks at it before we merge it.
+
+We don’t just ask, “Does this code work?”
+
+We also care whether somebody else can understand it and maintain it.
+
+So perhaps documentation deserves a similar level of attention.`,
+  },
+  {
+    title: "The PR check",
+    body: `And maybe that starts with something very small.
+
+When we’re reviewing a change, we add another question:
+
+Does this change introduce something that requires new or updated documentation?
+
+If it does, has that documentation been written?
+
+And has somebody actually checked whether it’s readable?
+
+Not just: “Yep, there’s a wiki page.”
+
+Actually read it. Could you follow it? Does it make sense if you don’t already know what the author knows? Could somebody use it to complete the task?`,
+  },
+  {
+    title: "AI produces more",
+    body: `And then there’s AI.
+
+Because AI changes this slightly.
+
+AI means we can produce documentation incredibly quickly.
+
+We can give an agent some code and ask it to document it. We can ask it to rewrite something. Summarise something. Create instructions. Turn notes into a wiki page.
+
+That’s useful.
+
+But producing more documentation doesn’t necessarily mean we’re producing better documentation.
+
+Ultimately, a human still has to read it.`,
+  },
+  {
+    title: "AI can review",
+    body: `So perhaps AI can help us with both sides of the problem.
+
+We can give an AI agent a documentation skill that helps it write readable documentation in the first place.
+
+And that skill can be based on established techniques.
+
+Use Flesch Reading Ease as one signal. Look at sentence length. Identify overly complicated language. Look for large blocks of text. Check whether acronyms are introduced. Look for ambiguous instructions. Identify assumptions. Check whether steps are in a sensible order. Ask whether headings help somebody scan the page.
+
+And perhaps most importantly:
+
+Can you tell what you’re supposed to do?
+
+Then we can use essentially the same skill as a reviewer.
+
+So even if a human wrote the documentation, or another AI agent wrote it, we can say:
+
+Review this for readability. Tell me where somebody might struggle. Explain why. And suggest an improvement.`,
+  },
+  {
+    title: "A shared skill",
+    body: `That last part matters.
+
+I don’t want a tool that just gives somebody 62 out of 100. That’s not particularly useful.
+
+I want something that teaches us.
+
+“This paragraph is difficult to scan because it contains three separate ideas.”
+
+“This acronym hasn’t been explained.”
+
+“This instruction assumes the reader has already configured X.”
+
+“This sentence is 43 words long. Consider splitting it here.”
+
+Now we’re not just measuring readability. We’re helping people learn how to improve it.
+
+And the skill itself doesn’t have to be finished. It can belong to the team.
+
+We use it. We find something it doesn’t catch. We add that. Someone discovers a better rule. We add that. Our documentation changes. The skill changes with it.
+
+So over time, we’re effectively building our own shared definition of readable technical documentation.`,
+  },
+  {
+    title: "Test the result",
+    body: `And we can test whether any of this actually works.
+
+We could take some of our existing wiki pages and run them through it.
+
+Here’s the page before. Here’s the page afterwards.
+
+How many words did we remove? What happened to the average sentence length? What happened to the readability score? Is it easier to scan?
+
+But ultimately, there’s a much simpler test.
+
+Do we think it’s actually better?
+
+So let’s try that.`,
+  },
+  {
+    title: "Example one",
+    body: `I’ve got three examples from documentation.
+
+For each one, I’m going to show you two versions. A and B.
+
+I’m not going to tell you which one has the better readability score. I’m not going to tell you which one AI prefers.
+
+Just read them.
+
+Hands up for A.
+
+Hands up for B.
+
+Interesting. Why? What made that one easier?
+
+Take one or two responses.`,
+  },
+  {
+    title: "Example two",
+    body: `Okay. Number two.
+
+Same again.
+
+Hands up for A.
+
+Hands up for B.
+
+Why?
+
+Take one or two responses.`,
+  },
+  {
+    title: "Example three",
+    body: `And one more.
+
+A?
+
+B?
+
+Why?
+
+Take one or two responses.`,
+  },
+  {
+    title: "Write for the reader",
+    body: `And that’s really what I want us to become more conscious of.
+
+Not a score for the sake of having a score.
+
+Not a rule saying every sentence must contain fewer than a certain number of words.
+
+And definitely not AI deciding what good writing is for us.
+
+It’s about the person who eventually has to read what we’ve written.
+
+So when you write documentation, think about who you’re writing it for.
+
+Write it for the new starter who’s on their first week and is slightly anxious about breaking something.
+
+Write it for the engineer who knows the system next door to yours, but doesn’t know yours.
+
+Write it for someone trying to fix a problem quickly.
+
+Write it for yourself in ten years’ time, when you’ve completely forgotten why you made that decision.`,
+  },
+  {
+    title: "Future you",
+    body: `Actually, forget ten years.
+
+Write it for yourself tomorrow night at 11 o’clock…
+
+when the espresso has run out…
+
+and you’re wondering what on earth the person who wrote this documentation was thinking.
+
+Because occasionally…
+
+that person is you.`,
+  },
+  {
+    title: "The human test",
+    body: `If we can make that person’s job slightly easier, then we’ve written better documentation.
+
+And if AI can help us get there faster, great.
+
+But whether a human writes it or an AI writes it, the test is still the same:
+
+Can another human understand it?`,
+  },
+];
+
+const transcript = [
+  ["55:55:20", "SWIGERT", "Okay, Houston, we’ve had a problem here."],
+  ["55:55:28", "CAPCOM", "This is Houston. Say again, please."],
+  ["55:55:35", "LOVELL", "Houston, we’ve had a problem. We’ve had a Main B Bus Undervolt."],
 ];
 
 function Reveal({
@@ -161,121 +377,39 @@ function Reveal({
   className = "",
   delay = 0,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   delay?: number;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      className={className}
+      initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
+      transition={{ duration: 0.72, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   );
 }
 
-function Stars({ count = 70 }: { count?: number }) {
-  const stars = Array.from({ length: count }, (_, i) => ({
-    left: `${(i * 47.13) % 100}%`,
-    top: `${(i * 31.77) % 100}%`,
-    size: i % 9 === 0 ? 2 : 1,
-    delay: (i % 11) * 0.4,
-  }));
+function Stars({ count = 80 }: { count?: number }) {
   return (
     <div className="stars" aria-hidden="true">
-      {stars.map((s, i) => (
+      {Array.from({ length: count }, (_, index) => (
         <i
-          key={i}
+          key={index}
           style={{
-            left: s.left,
-            top: s.top,
-            width: s.size,
-            height: s.size,
-            animationDelay: `${s.delay}s`,
+            left: `${(index * 47.13) % 100}%`,
+            top: `${(index * 31.77) % 100}%`,
+            width: index % 11 === 0 ? 2 : 1,
+            height: index % 11 === 0 ? 2 : 1,
+            animationDelay: `${(index % 13) * 0.28}s`,
           }}
         />
       ))}
     </div>
-  );
-}
-
-const readItems = [
-  {
-    title: "Procedures.",
-    line: "The exact steps to follow when a system fails, written so trained people can execute them consistently.",
-  },
-  {
-    title: "Schematics.",
-    line: "Where systems connect, so you can find the fault without knowing every subsystem.",
-  },
-  {
-    title: "Checklists.",
-    line: "What must be true before the next move, not left to memory under pressure.",
-  },
-];
-
-function MissionControlSection() {
-  return (
-    <section data-section="1" className="mission-control section-dark">
-      <div className="control-sticky-bg" aria-hidden="true">
-        <div
-          className="control-image"
-          style={{
-            backgroundImage: `linear-gradient(90deg, rgba(9, 9, 11, 0.92) 0%, rgba(9, 9, 11, 0.55) 50%, rgba(9, 9, 11, 0.72)), url(${missionControlSrc})`,
-          }}
-        >
-          <div className="monitor-grid">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
-          <div className="control-light" />
-        </div>
-        <div className="control-dim is-static" />
-      </div>
-      <div data-step className="control-panel">
-        <Reveal>
-          <span className="eyebrow">MISSION CONTROL</span>
-          <h2>You arrive.</h2>
-        </Reveal>
-        <Reveal delay={0.12} className="control-lines">
-          <p>The room is full of brilliant engineers.</p>
-          <p>Each understands their own system.</p>
-          <p>No one understands everything.</p>
-        </Reveal>
-      </div>
-      <div data-step className="read-compact">
-        <Reveal className="read-compact-prompt">
-          <p>So how do they help?</p>
-          <h2>READ.</h2>
-        </Reveal>
-        <div className="read-compact-list">
-          {readItems.map((item, i) => (
-            <Reveal key={item.title} delay={0.08 + i * 0.08} className="read-compact-item">
-              <b>{String(i + 1).padStart(2, "0")}</b>
-              <div>
-                <span>{item.title}</span>
-                <p>{item.line}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-      <div data-step className="apollo-lesson">
-        <Reveal>
-          <p>When people are working under pressure,</p>
-          <h2>ambiguity is a defect.</h2>
-        </Reveal>
-        <Reveal delay={0.14} className="lesson-words">
-          <span>Clear.</span>
-          <span>Concise.</span>
-          <span>Checked.</span>
-        </Reveal>
-        <Reveal delay={0.24} className="apollo-exit">
-          <p>That is the engineering lesson. The same need exists in our own systems.</p>
-        </Reveal>
-      </div>
-    </section>
   );
 }
 
@@ -284,10 +418,404 @@ function Progress({ active }: { active: number }) {
     <aside className="presentation-nav" aria-label="Presentation progress">
       <span className="nav-count">{String(active + 1).padStart(2, "0")}</span>
       <div className="nav-line">
-        <motion.div animate={{ height: `${((active + 1) / sections.length) * 100}%` }} />
+        <motion.div animate={{ height: `${((active + 1) / sectionLabels.length) * 100}%` }} />
       </div>
-      <span className="nav-label">{sections[active]}</span>
+      <span className="nav-label">{sectionLabels[active]}</span>
     </aside>
+  );
+}
+
+function SourceLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a className="source-link" href={href} target="_blank" rel="noreferrer">
+      {children}
+      <ArrowRight size={11} aria-hidden="true" />
+    </a>
+  );
+}
+
+function PresenterNotes({
+  activeStep,
+  open,
+  onClose,
+}: {
+  activeStep: number;
+  open: boolean;
+  onClose: () => void;
+}) {
+  const note = speakerNotes[activeStep] ?? speakerNotes[0];
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.aside
+          className="presenter-notes"
+          initial={{ opacity: 0, x: 32 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 32 }}
+          aria-label="Speaker notes"
+        >
+          <header>
+            <div>
+              <span>Speaker notes</span>
+              <strong>{note.title}</strong>
+            </div>
+            <button type="button" onClick={onClose} aria-label="Close speaker notes">
+              <X size={18} />
+            </button>
+          </header>
+          <div className="notes-scroll">
+            {note.body.split(/\n\n+/).map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+          <footer>
+            <span>{activeStep + 1} / {speakerNotes.length}</span>
+            <span>Press N to close</span>
+          </footer>
+        </motion.aside>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function ApolloTranscript() {
+  const [visible, setVisible] = useState(1);
+
+  useEffect(() => {
+    if (visible >= transcript.length) return;
+    const timer = window.setTimeout(() => setVisible((value) => value + 1), 1650);
+    return () => window.clearTimeout(timer);
+  }, [visible]);
+
+  return (
+    <div className="apollo-transcript" aria-hidden="true">
+      <div className="transcript-title">
+        <span><Radio size={12} /> Air-to-ground</span>
+        <span>Apollo 13 · GET</span>
+      </div>
+      <AnimatePresence initial={false}>
+        {transcript.slice(0, visible).map(([time, speaker, line], index) => (
+          <motion.div
+            key={time}
+            className={index === visible - 1 ? "transcript-line is-current" : "transcript-line"}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: index === visible - 1 ? 1 : 0.38, y: 0 }}
+          >
+            <span>{speaker}</span>
+            <time>{time}</time>
+            <p>{line}</p>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function MissionStatus() {
+  return (
+    <div className="mission-status">
+      <div className="status-header">
+        <span>SPACECRAFT STATUS</span>
+        <span className="status-alert"><AlertTriangle size={13} /> EMERGENCY</span>
+      </div>
+      <div className="system-meter">
+        <div><span>Oxygen</span><b>FALLING</b></div>
+        <div className="meter-track"><motion.i initial={{ width: "92%" }} whileInView={{ width: "18%" }} transition={{ duration: 2.2, delay: 0.2 }} /></div>
+      </div>
+      <div className="system-meter">
+        <div><span>Electrical power</span><b>FALLING</b></div>
+        <div className="meter-track"><motion.i initial={{ width: "86%" }} whileInView={{ width: "24%" }} transition={{ duration: 2.2, delay: 0.55 }} /></div>
+      </div>
+      <div className="mission-switch">
+        <div className="old-mission"><Moon size={18} /><span>Land on the Moon</span></div>
+        <ArrowRight />
+        <div className="new-mission"><Users size={18} /><span>Bring three people home</span></div>
+      </div>
+    </div>
+  );
+}
+
+const specialists = [
+  "Electrical",
+  "Propulsion",
+  "Life support",
+  "Guidance",
+  "Command module",
+  "Lunar module",
+];
+
+function SpecialistNetwork() {
+  return (
+    <div className="specialist-network" aria-label="Apollo engineering specialisms">
+      <div className="network-orbit" />
+      <div className="network-core">
+        <span>SAFE NEXT STEP</span>
+        <strong>What still works?</strong>
+      </div>
+      {specialists.map((specialist, index) => (
+        <div
+          key={specialist}
+          className="specialist-node"
+          style={{ "--angle": `${index * 60}deg` } as CSSProperties}
+        >
+          <i />
+          <span>{specialist}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const docTypes = [
+  ["PROCEDURES", "What to do, in order"],
+  ["CHECKLISTS", "What must be true"],
+  ["SCHEMATICS", "How systems connect"],
+  ["TECHNICAL DOCS", "What another engineer knows"],
+];
+
+function InformationBridge() {
+  return (
+    <div className="information-bridge">
+      <span className="bridge-label">SHARED UNDERSTANDING</span>
+      <div className="bridge-line"><i /><b>Information they can understand</b><i /></div>
+      <div className="bridge-docs">
+        {docTypes.map(([title, description], index) => (
+          <Reveal key={title} delay={index * 0.07}>
+            <article>
+              <FileText size={16} />
+              <strong>{title}</strong>
+              <span>{description}</span>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function NASAReview() {
+  return (
+    <div className="nasa-review">
+      <div className="nasa-requirements">
+        <span className="eyebrow">NASA REQUIREMENTS GUIDANCE</span>
+        <div className="standard-words">
+          {["Clear", "Unambiguous", "Concise", "Simple"].map((word, index) => (
+            <Reveal key={word} delay={index * 0.08}>
+              <span>{word}</span>
+            </Reveal>
+          ))}
+        </div>
+        <SourceLink href="https://www.nasa.gov/reference/appendix-c-how-to-write-a-good-requirement/">
+          NASA Systems Engineering Handbook · Appendix C
+        </SourceLink>
+      </div>
+      <div className="review-types">
+        <Reveal className="review-card technical-review">
+          <span>TECHNICAL REVIEW</span>
+          <Code2 />
+          <h3>Is it correct?</h3>
+          <p>Technical integrity and merit.</p>
+        </Reveal>
+        <Reveal delay={0.1} className="review-card professional-review">
+          <span>PROFESSIONAL REVIEW</span>
+          <BookOpen />
+          <h3>Can the audience use it?</h3>
+          <p>Readability, communication and suitability for the audience.</p>
+        </Reveal>
+        <SourceLink href="https://nodis3.gsfc.nasa.gov/displayCA.cfm?Internal_ID=N_PR_2200_002C_&page_name=Chapter4">
+          NASA STI review guidance
+        </SourceLink>
+      </div>
+    </div>
+  );
+}
+
+const ourDocuments = [
+  "Wiki pages",
+  "Technical documentation",
+  "Pull requests",
+  "Setup instructions",
+  "Architecture decisions",
+  "Requirements",
+];
+
+function OurWork() {
+  return (
+    <div className="our-work-layout">
+      <Reveal className="our-work-copy">
+        <span className="eyebrow">OUR WORK</span>
+        <h2>We write things<br />other people need<br />to understand.</h2>
+      </Reveal>
+      <Reveal delay={0.08} className="document-stack">
+        {ourDocuments.map((item, index) => (
+          <div key={item} style={{ "--index": index } as CSSProperties}>
+            <FileText size={15} />
+            <span>{item}</span>
+          </div>
+        ))}
+      </Reveal>
+      <Reveal delay={0.16} className="definition-card">
+        <span>READABILITY</span>
+        <p>How much effort does somebody have to put in to understand what we’ve written?</p>
+      </Reveal>
+    </div>
+  );
+}
+
+const failureModes = [
+  {
+    number: "01",
+    title: "Technically correct.",
+    body: "But the sentence is too long to hold in working memory.",
+    sample: "One sentence · four separate ideas · no pause",
+  },
+  {
+    number: "02",
+    title: "Everything is there.",
+    body: "But the action is buried halfway through the paragraph.",
+    sample: "Context · context · context · action",
+  },
+  {
+    number: "03",
+    title: "The team understands.",
+    body: "But the acronym means nothing to the new starter.",
+    sample: "RAG · MCP · ACL · DAA",
+  },
+  {
+    number: "04",
+    title: "The author knows.",
+    body: "But the reader is expected to infer a missing step.",
+    sample: "Configure it as usual, then continue",
+  },
+];
+
+function FailureModes() {
+  return (
+    <div className="failure-grid">
+      {failureModes.map((item, index) => (
+        <Reveal key={item.number} delay={index * 0.07}>
+          <article>
+            <span className="failure-number">{item.number}</span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+            <code>{item.sample}</code>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+const readabilityRules = [
+  ["Shorter sentences", "Reduce the amount a reader has to hold at once."],
+  ["One idea at a time", "Split explanation, instruction and rationale."],
+  ["Clear headings", "Let somebody scan before they read."],
+  ["Plain language", "Use the familiar word when it is still accurate."],
+  ["Explain acronyms", "Introduce them the first time they appear."],
+  ["Logical order", "Put instructions in the order they happen."],
+  ["Visible information", "Do not bury the action inside context."],
+  ["Explicit assumptions", "Say what must already be true."],
+];
+
+function ReadabilityRules() {
+  return (
+    <div className="rules-layout">
+      <Reveal className="rules-intro">
+        <span className="eyebrow">WHAT HELPS</span>
+        <h2>Reduce the reader’s work.</h2>
+        <p>Readable writing is not simplistic. It is organised around the person who needs to use it.</p>
+      </Reveal>
+      <div className="rules-list">
+        {readabilityRules.map(([title, description], index) => (
+          <Reveal key={title} delay={index * 0.04}>
+            <article>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div><h3>{title}</h3><p>{description}</p></div>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function countSyllables(value: string) {
+  const word = value.toLowerCase().replace(/[^a-z]/g, "");
+  if (!word) return 0;
+  if (word.length <= 3) return 1;
+  const trimmed = word
+    .replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, "")
+    .replace(/^y/, "");
+  return Math.max(1, trimmed.match(/[aeiouy]{1,2}/g)?.length ?? 1);
+}
+
+function readingMetrics(text: string) {
+  const words = text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g) ?? [];
+  const sentences = Math.max(1, text.match(/[.!?]+/g)?.length ?? 1);
+  const syllables = words.reduce((total, word) => total + countSyllables(word), 0);
+  const averageSentence = words.length / sentences;
+  const score = words.length
+    ? 206.835 - 1.015 * averageSentence - 84.6 * (syllables / words.length)
+    : 0;
+
+  return {
+    words: words.length,
+    averageSentence: Math.round(averageSentence * 10) / 10,
+    score: Math.round(score),
+  };
+}
+
+const fleschSamples = {
+  dense: "The implementation of the documentation validation functionality should be undertaken subsequent to completion of configuration and prior to the initiation of deployment activities.",
+  clear: "Configure the service first. Then validate the documentation. Deploy only when both checks pass.",
+};
+
+function FleschDemo() {
+  const [version, setVersion] = useState<keyof typeof fleschSamples>("dense");
+  const text = fleschSamples[version];
+  const metrics = useMemo(() => readingMetrics(text), [text]);
+  const gaugePosition = Math.max(4, Math.min(96, metrics.score));
+
+  return (
+    <div className="flesch-layout">
+      <Reveal className="flesch-copy">
+        <span className="eyebrow">FLESCH READING EASE · 1948</span>
+        <h2>A signal.<br />Not a verdict.</h2>
+        <p>It combines sentence length and syllables per word. A higher score generally means easier reading.</p>
+        <div className="formula">
+          <span>206.835</span><b>−</b><span>sentence length</span><b>−</b><span>word complexity</span>
+        </div>
+        <SourceLink href="https://doi.org/10.1037/h0057532">
+          Rudolf Flesch · A New Readability Yardstick
+        </SourceLink>
+      </Reveal>
+      <Reveal delay={0.1} className="flesch-demo">
+        <div className="sample-toggle" role="group" aria-label="Readability sample">
+          <button type="button" className={version === "dense" ? "active" : ""} onClick={() => setVersion("dense")}>Dense</button>
+          <button type="button" className={version === "clear" ? "active" : ""} onClick={() => setVersion("clear")}>Clear</button>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.p key={version} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>{text}</motion.p>
+        </AnimatePresence>
+        <div className="score-readout">
+          <div><Gauge /><span>Illustrative score</span><strong>{metrics.score}</strong></div>
+          <div className="score-scale">
+            <span>Harder</span><span>Easier</span>
+            <i style={{ left: `${gaugePosition}%` }} />
+          </div>
+          <div className="score-details">
+            <span>{metrics.averageSentence} words per sentence</span>
+            <span>{metrics.words} words</span>
+          </div>
+        </div>
+        <div className="score-limits">
+          <span><X size={13} /> Cannot check accuracy</span>
+          <span><X size={13} /> Cannot find missing steps</span>
+          <span><X size={13} /> Cannot test the task</span>
+        </div>
+      </Reveal>
+    </div>
   );
 }
 
@@ -295,106 +823,139 @@ function CodeWindow() {
   return (
     <div className="code-window">
       <div className="window-bar">
-        <div className="dots"><i /><i /><i /></div>
+        <div><i /><i /><i /></div>
         <span>searchDeals.ts</span>
         <Code2 size={14} />
       </div>
       <pre>
-        <span className="violet">export const</span>{" "}
-        <span className="blue">searchDeals</span> = tool({"{\n  "}
-        <span className="blue">name</span>: <span className="gold">"search_deals"</span>,{"\n  "}
-        <span className="blue">input</span>: DealQuerySchema,{"\n  "}
-        <span className="blue">execute</span>: <span className="violet">async</span> (query) <span className="violet">=&gt;</span> {"{\n    "}
+        <span className="syntax-violet">export const</span>{" "}
+        <span className="syntax-blue">searchDeals</span> = tool({"{\n  "}
+        <span className="syntax-blue">name</span>: <span className="syntax-green">"search_deals"</span>,{"\n  "}
+        <span className="syntax-blue">input</span>: DealQuerySchema,{"\n  "}
+        <span className="syntax-blue">execute</span>: <span className="syntax-violet">async</span> (query) <span className="syntax-violet">=&gt;</span> {"{\n    "}
         assertMatterAccess(query.matterId);{"\n    "}
-        <span className="violet">return</span> research.search({"{\n      "}
+        <span className="syntax-violet">return</span> research.search({"{\n      "}
         ...query,{"\n      "}
-        citeSources: <span className="violet">true</span>,{"\n    });\n  }\n});"}
+        citeSources: <span className="syntax-violet">true</span>,{"\n    });\n  }\n});"}
       </pre>
     </div>
   );
 }
 
-function DocumentationTransform() {
-  const [clean, setClean] = useState(false);
+function CodeStandard() {
+  const practices = [
+    ["CONVENTIONS", "Shared patterns"],
+    ["LINT", "Automatic signals"],
+    ["TEST", "Expected behaviour"],
+    ["REVIEW", "Another person reads it"],
+  ];
   return (
-    <div className="docs-demo">
-      <div className="demo-label">
-        <span>deal-research-agent.md</span>
-        <button type="button" onClick={() => setClean(!clean)}>
-          {clean ? "Show original" : "Make it readable"}
-          <Sparkles size={14} />
-        </button>
-      </div>
-      <AnimatePresence mode="wait">
-        {!clean ? (
-          <motion.div key="dense" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, filter: "blur(10px)" }} className="dense-doc">
-            <p>
-              The deal research agent can be used where a user needs information
-              about a transaction and it uses the research platform together
-              with available tools to produce an answer, although results may
-              vary depending on the query, documents and permissions and users
-              should review the output as appropriate…
-            </p>
-          </motion.div>
-        ) : (
-          <motion.div key="clean" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="clean-doc">
-            <span className="eyebrow">M&amp;A RESEARCH AGENT</span>
-            <h3>Compare deal points across authorised documents</h3>
-            <p>Returns a cited comparison for one matter and deal point.</p>
-            <div className="doc-grid">
-              <div><b>Inputs</b><span>Matter number and deal point</span></div>
-              <div><b>Checks</b><span>Access, source coverage and citations</span></div>
-            </div>
-            <code>Flag conflicting or missing evidence. Never infer it.</code>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="code-standard-layout">
+      <Reveal className="code-standard-copy">
+        <span className="eyebrow">WE ALREADY DO THIS</span>
+        <h2>Readable code is part of the quality bar.</h2>
+        <p>We do not stop at “does it work?”. We ask whether somebody else can understand and maintain it.</p>
+        <div className="practice-grid">
+          {practices.map(([title, body]) => <div key={title}><Check size={14} /><span><b>{title}</b>{body}</span></div>)}
+        </div>
+        <strong>Documentation deserves similar attention.</strong>
+      </Reveal>
+      <Reveal delay={0.12} className="code-standard-window"><CodeWindow /></Reveal>
     </div>
   );
 }
 
-function PullRequest({ checklist = false }: { checklist?: boolean }) {
+function PullRequestCheck() {
   const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    if (!checklist) return;
-    setChecked(false);
-    const tick = setTimeout(() => setChecked(true), 900);
-    return () => clearTimeout(tick);
-  }, [checklist]);
-
   return (
     <div className="pr-window">
-      <div className="pr-top">
-        <div><GitPullRequest size={21} /><span>agent: add cited deal-point comparison</span></div>
+      <div className="pr-header">
+        <div><GitPullRequest size={20} /><span>agent: add cited deal comparison</span></div>
         <span className="open-pill">Open</span>
       </div>
-      <div className="pr-tabs">
-        <span className="active">Conversation</span><span>Commits <b>2</b></span><span>Files changed <b>3</b></span>
+      <div className="pr-tabs"><span>Conversation</span><span>Commits <b>2</b></span><span>Files changed <b>3</b></span></div>
+      <div className="pr-check">
+        <span className="eyebrow">ONE REVIEW QUESTION</span>
+        <button type="button" className={checked ? "is-checked" : ""} onClick={() => setChecked((value) => !value)}>
+          <span>{checked ? <Check size={18} /> : <Circle size={18} />}</span>
+          <div>
+            <strong>Documentation checked</strong>
+            <p>Updated and checked for readability, or no change needed is explained.</p>
+          </div>
+        </button>
       </div>
-      <AnimatePresence mode="wait" initial={false}>
-        {checklist ? (
-          <motion.div key="checklist" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="review-checklist">
-            <span className="eyebrow">ONE REVIEWER CHECK</span>
-            <button type="button" onClick={() => setChecked((value) => !value)} className={checked ? "done" : ""}>
-              <span>{checked ? <Check size={15} /> : <Circle size={15} />}</span>
-              <div className="check-label">
-                Documentation checked
-                <small>Updated and readable, or no change needed is explained.</small>
-              </div>
-            </button>
+      <div className="pr-footer">
+        <div><span>Coverage</span><b>Does the change need documentation?</b></div>
+        <ArrowRight />
+        <div><span>Quality</span><b>Could somebody else follow it?</b></div>
+      </div>
+    </div>
+  );
+}
+
+function AIDocumentFactory() {
+  const cards = [
+    ["README.md", "Generated from repository"],
+    ["setup-guide.md", "Generated from code"],
+    ["architecture.md", "Generated from notes"],
+    ["wiki-page.md", "Generated from transcript"],
+  ];
+  return (
+    <div className="ai-factory">
+      <div className="agent-core"><Sparkles /><span>AI AGENT</span></div>
+      <div className="factory-line" />
+      <div className="generated-docs">
+        {cards.map(([title, meta], index) => (
+          <motion.div
+            key={title}
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.13 }}
+          >
+            <FileText />
+            <span><strong>{title}</strong><small>{meta}</small></span>
+            <CheckCircle2 />
           </motion.div>
-        ) : (
-          <motion.div key="review" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="review-body">
-            <div className="review-comment">
-              <div className="avatar">AR</div>
-              <div><b>Alex reviewed 2 minutes ago</b><p>Can we document permission failures and missing evidence?</p></div>
-            </div>
-            <div className="review-comment">
-              <div className="avatar gold">MK</div>
-              <div><b>Maya approved these changes</b><p>Clear owner, limits and recovery path.</p></div>
-            </div>
-            <button type="button" className="merge-button"><Check size={16} /> Merge pull request</button>
+        ))}
+      </div>
+      <p><strong>More documentation</strong> is not the same as <strong>better documentation.</strong></p>
+    </div>
+  );
+}
+
+const reviewCopy = "Where RAG results may be incomplete following MCP execution, engineers should validate the ACL configuration and ensure that the applicable matter context has previously been configured, after which the process can be retried and escalated as required.";
+
+function AIReviewDemo() {
+  const [reviewed, setReviewed] = useState(false);
+  const wordCount = readingMetrics(reviewCopy).words;
+  const comments = [
+    [`${wordCount}-word sentence`, "Split the actions into ordered steps."],
+    ["Unexplained acronyms", "Introduce RAG, MCP and ACL on first use."],
+    ["Hidden assumption", "This assumes the matter context already exists."],
+    ["Ambiguous escalation", "Name when to escalate and who owns it."],
+  ];
+
+  return (
+    <div className="review-demo">
+      <div className="review-toolbar">
+        <span>incident-runbook.md</span>
+        <button type="button" onClick={() => setReviewed((value) => !value)}>
+          <Sparkles size={14} />{reviewed ? "Hide review" : "Review for readability"}
+        </button>
+      </div>
+      <div className="review-document">
+        <span>Agent failure recovery</span>
+        <p className={reviewed ? "is-reviewed" : ""}>{reviewCopy}</p>
+      </div>
+      <AnimatePresence>
+        {reviewed && (
+          <motion.div className="review-comments" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            {comments.map(([title, body], index) => (
+              <motion.div key={title} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.09 }}>
+                <span>{index + 1}</span>
+                <p><strong>{title}</strong>{body}</p>
+              </motion.div>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -402,138 +963,203 @@ function PullRequest({ checklist = false }: { checklist?: boolean }) {
   );
 }
 
-const quizOptions = [
-  {
-    id: "architecture",
-    title: "The architecture overview",
-    meta: "Current · clear system map",
-    body: "Explains search, models, MCPs and data flow. It does not show where this request failed.",
-    good: false,
-    why: "Useful context, but not a diagnosis path.",
-  },
-  {
-    id: "specification",
-    title: "The agent specification",
-    meta: "Reviewed yesterday · named owner",
-    body: "Defines inputs, outputs and expected behaviour. It does not show what happened in this run.",
-    good: false,
-    why: "Good for expected behaviour, not the live failure.",
-  },
-  {
-    id: "diagnosis",
-    title: "The diagnosis runbook",
-    meta: "Tested last week · named owner",
-    body: "Check matter access, retrieval logs, source coverage and citations, then escalate with the query ID.",
-    good: true,
-    why: "It turns the symptom into an ordered, verifiable next action.",
-  },
+const skillRules = [
+  "Lead with the reader’s task.",
+  "Keep one idea in each sentence.",
+  "Explain acronyms on first use.",
+  "Make assumptions explicit.",
+  "Put instructions in the order they happen.",
+  "Flag ambiguity and suggest a specific edit.",
+  "Use Flesch Reading Ease as a signal, not a target.",
+  "Ask: can the reader tell what to do next?",
 ];
 
-function DocQuiz() {
-  const [picked, setPicked] = useState<string | null>(null);
-  const revealed = picked !== null;
+function SkillFile() {
+  return (
+    <div className="skill-file">
+      <div className="skill-file-header">
+        <div><Braces size={17} /><span>documentation-readability/SKILL.md</span></div>
+        <span>TEAM OWNED</span>
+      </div>
+      <div className="skill-file-body">
+        <span className="skill-heading">## Review rules</span>
+        {skillRules.map((rule, index) => (
+          <motion.div key={rule} initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05 }}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{rule}</p>
+          </motion.div>
+        ))}
+      </div>
+      <div className="skill-diff">
+        <span>+ Add what we learn.</span>
+        <span>+ Improve the skill with the documentation.</span>
+      </div>
+    </div>
+  );
+}
+
+const evidenceText = {
+  before: "The service configuration process requires engineers to populate the necessary environment variables before running the application, and those values should be obtained from the Platform team because the application may otherwise fail during start-up. Once the variables have been added, the database migration should be executed and the development server may then be started. It is important to verify that the application is operating correctly before beginning any work.",
+  after: "Ask Platform for the development environment values. Add them to .env. Run npm run migrate, then npm run dev. Open /health. A 200 response means the service is ready.",
+};
+
+function Metric({ label, before, after }: { label: string; before: string | number; after: string | number }) {
+  return (
+    <div className="metric">
+      <span>{label}</span>
+      <div><s>{before}</s><ArrowRight size={13} /><strong>{after}</strong></div>
+    </div>
+  );
+}
+
+function EvidenceComparison() {
+  const before = readingMetrics(evidenceText.before);
+  const after = readingMetrics(evidenceText.after);
+  const [showAfter, setShowAfter] = useState(false);
 
   return (
-    <div className="quiz">
-      <div className="quiz-grid">
-        {quizOptions.map((option) => {
-          const selected = picked === option.id;
-          const showResult = revealed;
+    <div className="evidence-comparison">
+      <div className="evidence-document">
+        <div className="evidence-tabs">
+          <button type="button" className={!showAfter ? "active" : ""} onClick={() => setShowAfter(false)}>Before</button>
+          <button type="button" className={showAfter ? "active" : ""} onClick={() => setShowAfter(true)}>After</button>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div key={showAfter ? "after" : "before"} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <span>Local setup</span>
+            <p>{showAfter ? evidenceText.after : evidenceText.before}</p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="metric-panel">
+        <span className="eyebrow">WHAT CHANGED?</span>
+        <Metric label="Words" before={before.words} after={after.words} />
+        <Metric label="Average sentence" before={`${before.averageSentence} words`} after={`${after.averageSentence} words`} />
+        <Metric label="Reading ease" before={before.score} after={after.score} />
+        <div className="human-check">
+          <CheckCircle2 />
+          <p><span>THE USEFUL TEST</span><strong>Do we think it is actually better?</strong></p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type ExampleVersion = {
+  title: string;
+  content: ReactNode;
+};
+
+type WorkshopExampleProps = {
+  number: number;
+  context: string;
+  a: ExampleVersion;
+  b: ExampleVersion;
+  winner: "A" | "B";
+  reasons: string[];
+};
+
+function WorkshopExample({ number, context, a, b, winner, reasons }: WorkshopExampleProps) {
+  const [revealed, setRevealed] = useState(false);
+  const versions = { A: a, B: b } as const;
+
+  return (
+    <div className="workshop-example">
+      <Reveal className="example-heading">
+        <span className="eyebrow">EXAMPLE {String(number).padStart(2, "0")} · READ BOTH</span>
+        <h2>{context}</h2>
+        <p>Hands up for A. Hands up for B.</p>
+      </Reveal>
+      <div className="version-grid">
+        {(["A", "B"] as const).map((label, index) => {
+          const version = versions[label];
+          const isWinner = revealed && winner === label;
           return (
-            <button
-              key={option.id}
-              type="button"
-              className={[
-                "quiz-card",
-                selected ? "is-selected" : "",
-                showResult && option.good ? "is-good" : "",
-                showResult && selected && !option.good ? "is-miss" : "",
-                showResult && !option.good && !selected ? "is-dim" : "",
-              ].filter(Boolean).join(" ")}
-              onClick={() => setPicked(option.id)}
-              aria-pressed={selected}
-            >
-              <span className="quiz-meta">{option.meta}</span>
-              <h3>{option.title}</h3>
-              <p>{option.body}</p>
-              {showResult && (selected || option.good) && (
-                <footer>
-                  {option.good ? <Check size={15} /> : <X size={15} />}
-                  <span>{option.why}</span>
-                </footer>
-              )}
-            </button>
+            <Reveal key={label} delay={index * 0.08}>
+              <article className={`version-card${isWinner ? " is-winner" : ""}${revealed && !isWinner ? " is-muted" : ""}`}>
+                <header>
+                  <span>{label}</span>
+                  {isWinner && <b><Check size={13} /> Easier to use</b>}
+                </header>
+                <h3>{version.title}</h3>
+                <div className="version-content">{version.content}</div>
+              </article>
+            </Reveal>
           );
         })}
       </div>
-      {!revealed && (
-        <p className="quiz-hint">Choose the one you would trust first.</p>
-      )}
-      {revealed && (
-        <p className="quiz-reveal">
-          Readable documentation gets you to the next useful action.
-        </p>
-      )}
+      <div className="example-reveal">
+        <button type="button" onClick={() => setRevealed((value) => !value)}>
+          {revealed ? "Hide the difference" : "Reveal the difference"}
+          {revealed ? <X size={15} /> : <Search size={15} />}
+        </button>
+        <AnimatePresence>
+          {revealed && (
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+              <span>Why {winner} works better here</span>
+              {reasons.map((reason) => <p key={reason}><Check size={13} />{reason}</p>)}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
 
 function App() {
-  const root = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   const activeStepRef = useRef(0);
-  const [active, setActive] = useState(0);
+  const [activeSection, setActiveSection] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
+  const [notesOpen, setNotesOpen] = useState(() => new URLSearchParams(window.location.search).get("notes") === "1");
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.1], ["0%", "14%"]);
-  const checklistBeatRef = useRef<HTMLDivElement>(null);
-  const checklistInView = useInView(checklistBeatRef, { amount: 0.5 });
-  const lastLineRef = useRef<HTMLDivElement>(null);
-  const lastLineInView = useInView(lastLineRef, { amount: 0.45 });
+  const heroY = useTransform(scrollYProgress, [0, 0.08], ["0%", "14%"]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({
-      duration: 1.05,
-      smoothWheel: true,
-      anchors: false,
-    });
+    const lenis = new Lenis({ duration: 1.02, smoothWheel: true, anchors: false });
     lenisRef.current = lenis;
     lenis.on("scroll", ScrollTrigger.update);
 
-    const tick = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+    const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
-    const items = gsap.utils.toArray<HTMLElement>("[data-section]");
-    const triggers = items.map((item, i) =>
+    const sections = gsap.utils.toArray<HTMLElement>("[data-section]");
+    const sectionTriggers = sections.map((section, index) =>
       ScrollTrigger.create({
-        trigger: item,
+        trigger: section,
         start: "top 55%",
         end: "bottom 45%",
-        onEnter: () => setActive(i),
-        onEnterBack: () => setActive(i),
-      })
-    );
-    const steps = gsap.utils.toArray<HTMLElement>("[data-step]");
-    const stepTriggers = steps.map((item, index) =>
-      ScrollTrigger.create({
-        trigger: item,
-        start: "top 55%",
-        end: "bottom 45%",
-        onEnter: () => { activeStepRef.current = index; },
-        onEnterBack: () => { activeStepRef.current = index; },
-      })
+        onEnter: () => setActiveSection(index),
+        onEnterBack: () => setActiveSection(index),
+      }),
     );
 
-    const hideHint = window.setTimeout(() => setHintVisible(false), 5000);
+    const steps = gsap.utils.toArray<HTMLElement>("[data-step]");
+    const stepTriggers = steps.map((step, index) =>
+      ScrollTrigger.create({
+        trigger: step,
+        start: "top 55%",
+        end: "bottom 45%",
+        onEnter: () => {
+          activeStepRef.current = index;
+          setActiveStep(index);
+        },
+        onEnterBack: () => {
+          activeStepRef.current = index;
+          setActiveStep(index);
+        },
+      }),
+    );
+
+    const hideHint = window.setTimeout(() => setHintVisible(false), 6500);
 
     return () => {
       window.clearTimeout(hideHint);
-      triggers.forEach((t) => t.kill());
-      stepTriggers.forEach((t) => t.kill());
+      sectionTriggers.forEach((trigger) => trigger.kill());
+      stepTriggers.forEach((trigger) => trigger.kill());
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
@@ -541,25 +1167,41 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const isTypingTarget = (target: EventTarget | null) => {
-      if (!(target instanceof HTMLElement)) return false;
-      const tag = target.tagName;
-      return tag === "INPUT" || tag === "TEXTAREA" || target.isContentEditable;
-    };
+    const isInteractive = (target: EventTarget | null) =>
+      target instanceof HTMLElement && Boolean(target.closest("button, a, input, textarea, select, [contenteditable='true']"));
 
-    const go = (dir: 1 | -1) => {
-      const items = Array.from(document.querySelectorAll<HTMLElement>("[data-step]"));
-      const next = Math.min(items.length - 1, Math.max(0, activeStepRef.current + dir));
-      const el = items[next];
-      if (!el) return;
+    const go = (direction: 1 | -1) => {
+      const steps = Array.from(document.querySelectorAll<HTMLElement>("[data-step]"));
+      const next = Math.min(steps.length - 1, Math.max(0, activeStepRef.current + direction));
+      const target = steps[next];
+      if (!target) return;
       setHintVisible(false);
       activeStepRef.current = next;
-      lenisRef.current?.scrollTo(el, { offset: 0, duration: 1.05 });
+      setActiveStep(next);
+      lenisRef.current?.scrollTo(target, { offset: 0, duration: 1.02 });
     };
 
-    const onKey = (event: KeyboardEvent) => {
-      if (isTypingTarget(event.target)) return;
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
+    const jump = (position: "first" | "last") => {
+      const steps = Array.from(document.querySelectorAll<HTMLElement>("[data-step]"));
+      const index = position === "first" ? 0 : steps.length - 1;
+      const target = steps[index];
+      if (!target) return;
+      activeStepRef.current = index;
+      setActiveStep(index);
+      lenisRef.current?.scrollTo(target, { offset: 0, duration: 1.02 });
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === "n") {
+        event.preventDefault();
+        setNotesOpen((value) => !value);
+        return;
+      }
+      if (event.key === "Escape" && notesOpen) {
+        setNotesOpen(false);
+        return;
+      }
+      if (isInteractive(event.target) || event.metaKey || event.ctrlKey || event.altKey) return;
 
       if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(event.key)) {
         event.preventDefault();
@@ -569,227 +1211,251 @@ function App() {
         go(-1);
       } else if (event.key === "Home") {
         event.preventDefault();
-        const first = document.querySelector<HTMLElement>("[data-step]");
-        if (first) {
-          activeStepRef.current = 0;
-          lenisRef.current?.scrollTo(first, { offset: 0, duration: 1.05 });
-        }
+        jump("first");
       } else if (event.key === "End") {
         event.preventDefault();
-        const items = document.querySelectorAll<HTMLElement>("[data-step]");
-        const last = items[items.length - 1];
-        if (last) {
-          activeStepRef.current = items.length - 1;
-          lenisRef.current?.scrollTo(last, { offset: 0, duration: 1.05 });
-        }
+        jump("last");
       }
     };
 
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [notesOpen]);
 
   return (
-    <div ref={root}>
+    <div className="presentation-root">
       <motion.div className="top-progress" style={{ scaleX: scrollYProgress }} />
-      <Progress active={active} />
+      <Progress active={activeSection} />
       <div className={`presenter-hint${hintVisible ? " is-visible" : ""}`} aria-hidden={!hintVisible}>
-        <kbd>←</kbd><kbd>→</kbd>
-        <span>or scroll</span>
+        <kbd>←</kbd><kbd>→</kbd><span>navigate</span><i /><kbd>N</kbd><span>notes</span>
       </div>
+      <PresenterNotes activeStep={activeStep} open={notesOpen} onClose={() => setNotesOpen(false)} />
 
       <main>
         <section data-section="0" data-step className="hero section-dark">
-          <Stars count={90} />
-          <motion.div className="hero-orbit" style={{ y: heroY }} aria-hidden="true">
-            <motion.div
-              className="transcript-wrap"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.6, delay: 0.8, ease: "easeOut" }}
-            >
-              <HeroTranscript />
-            </motion.div>
+          <Stars count={95} />
+          <motion.div className="hero-space" style={{ y: heroY }} aria-hidden="true">
+            <div className="hero-moon" style={{ backgroundImage: `url(${moonPhotoSrc})` }} />
+            <div className="hero-distance">200,000 MILES FROM EARTH</div>
           </motion.div>
-          <div className="hero-copy">
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="mission-label">
-              HOUSTON · 13 APRIL 1970
-            </motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}>
-              It’s <span>9:08 p.m.</span>
-            </motion.h1>
-            <div className="hero-sequence">
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 1.4 }}>A routine tank stir is followed by a bang aboard Apollo 13.</motion.p>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 2.4 }}>Mission Control sees several conflicting failures.</motion.p>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 3.4 }}>No one yet knows what has happened.</motion.p>
+          <div className="hero-layout">
+            <div className="hero-copy">
+              <motion.span className="eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}>APOLLO 13 · 13 APRIL 1970</motion.span>
+              <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.9 }}>
+                It’s <em>9:08 p.m.</em>
+              </motion.h1>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95 }}>The crew hear a bang.</motion.p>
+              <motion.blockquote initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55 }}>
+                “Houston, we’ve had a problem here.”
+                <cite>Jack Swigert</cite>
+              </motion.blockquote>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.1 }} className="hero-facts">
+                <span><Zap size={14} /> Oxygen tank exploded</span>
+                <span><AlertTriangle size={14} /> Oxygen and power falling</span>
+              </motion.div>
+              <SourceLink href="https://www.nasa.gov/missions/apollo/apollo-13-mission-details/">NASA · Apollo 13 mission details</SourceLink>
             </div>
+            <motion.div className="transcript-wrap" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 1.1 }}>
+              <ApolloTranscript />
+            </motion.div>
           </div>
         </section>
 
-        <MissionControlSection />
-
-        <section data-section="2" data-step className="complexity section-light">
-          <div className="complexity-main">
-            <div className="architecture" aria-hidden="true">
-              <div className="arch-ring ring-one" /><div className="arch-ring ring-two" />
-              {systemNodes.map((label, i) => (
-                <div
-                  key={label}
-                  className="arch-node"
-                  style={{ offsetDistance: `${(75 + (i / systemNodes.length) * 100) % 100}%` }}
-                >
-                  <i /><span>{label}</span>
-                </div>
-              ))}
-              <div className="arch-core"><Command /><span>SYSTEM</span></div>
-            </div>
-            <Reveal delay={0.08} className="complexity-copy">
-              <span className="eyebrow">TODAY</span>
-              <h2>Our systems are built for legal work.</h2>
-              <p>Research, permissions, agents, models and MCPs have to work together. No one person holds the whole system.</p>
-              <div className="evolution"><span>M&amp;A research</span><b>→</b><span>Agents</span><b>→</b><span>Lawyers</span></div>
+        <section data-section="1" data-step className="mission-change section-dark">
+          <div className="mission-bg" style={{ backgroundImage: `linear-gradient(90deg, rgba(9,9,11,.94), rgba(9,9,11,.45), rgba(9,9,11,.9)), url(${missionControlSrc})` }} />
+          <div className="mission-change-layout">
+            <Reveal className="mission-change-copy">
+              <span className="eyebrow">THE MISSION HAS CHANGED</span>
+              <h2>They’re no longer trying to land on the Moon.</h2>
+              <p>They’re trying to get three people home.</p>
             </Reveal>
+            <Reveal delay={0.12}><MissionStatus /></Reveal>
           </div>
-          <Reveal delay={0.15} className="reader-bridge">
-            <span>THE COST OF UNCLEAR DOCS</span>
-            <p>A vague page slows debugging, duplicates work and makes the next engineer guess.</p>
-            <div>
-              <b>New starter</b>
-              <b>On call</b>
-              <b>Another team</b>
-              <b>Future you</b>
+        </section>
+
+        <section data-section="2" data-step className="specialists section-light">
+          <div className="specialists-layout">
+            <Reveal className="specialists-copy">
+              <span className="eyebrow">ANOTHER PROBLEM</span>
+              <h2>No single engineer understands every part of Apollo 13.</h2>
+              <p>They must work out what happened, what still works and what they can safely do next.</p>
+            </Reveal>
+            <Reveal delay={0.1}><SpecialistNetwork /></Reveal>
+          </div>
+          <InformationBridge />
+          <Reveal className="ambiguity-line">
+            <p>There isn’t much room for ambiguity</p>
+            <strong>200,000 miles from Earth.</strong>
+          </Reveal>
+        </section>
+
+        <section data-section="3" data-step className="nasa-standard section-light">
+          <Reveal className="section-title">
+            <span className="eyebrow">THIS IS STILL AN ENGINEERING CONCERN</span>
+            <h2>NASA checks the information<br />and how it communicates.</h2>
+          </Reveal>
+          <NASAReview />
+          <Reveal className="nasa-conclusion">
+            <p>Readability is not about making something sound nicer.</p>
+            <strong>It affects whether somebody can use the information.</strong>
+          </Reveal>
+        </section>
+
+        <section data-section="4" data-step className="our-work section-dark">
+          <OurWork />
+        </section>
+
+        <section data-section="5" data-step className="failure-modes section-dark">
+          <Reveal className="section-title">
+            <span className="eyebrow">ACCURATE CAN STILL BE DIFFICULT</span>
+            <h2>Every hidden decision gives<br />the reader more work.</h2>
+          </Reveal>
+          <FailureModes />
+        </section>
+
+        <section data-section="6" data-step className="readability-rules section-light">
+          <ReadabilityRules />
+        </section>
+
+        <section data-section="7" data-step className="flesch section-dark">
+          <FleschDemo />
+        </section>
+
+        <section data-section="8" data-step className="code-standard section-dark">
+          <CodeStandard />
+        </section>
+
+        <section data-section="9" data-step className="pr-section section-light">
+          <div className="pr-layout">
+            <Reveal className="pr-copy">
+              <span className="eyebrow">START SMALL</span>
+              <h2>Put documentation inside the review.</h2>
+              <p>Not just “there’s a wiki page”. Read it. Could you follow it without already knowing what the author knows?</p>
+            </Reveal>
+            <Reveal delay={0.1}><PullRequestCheck /></Reveal>
+          </div>
+        </section>
+
+        <section data-section="10" data-step className="ai-output section-dark">
+          <div className="ai-output-layout">
+            <Reveal className="ai-output-copy">
+              <span className="eyebrow">AI CHANGES THE VOLUME</span>
+              <h2>Writing documentation is now fast.</h2>
+              <p>Document code. Rewrite a page. Summarise notes. Create instructions.</p>
+              <strong>Ultimately, a human still has to read it.</strong>
+            </Reveal>
+            <Reveal delay={0.1}><AIDocumentFactory /></Reveal>
+          </div>
+        </section>
+
+        <section data-section="11" data-step className="ai-review section-light">
+          <div className="ai-review-layout">
+            <Reveal className="ai-review-copy">
+              <span className="eyebrow">USE AI ON BOTH SIDES</span>
+              <h2>Draft with it.<br />Review with it.</h2>
+              <p>A useful review names the problem, explains why it matters and suggests a specific edit.</p>
+              <strong>Do not just give somebody 62 out of 100.</strong>
+            </Reveal>
+            <Reveal delay={0.1}><AIReviewDemo /></Reveal>
+          </div>
+        </section>
+
+        <section data-section="12" data-step className="shared-skill section-dark">
+          <div className="shared-skill-layout">
+            <Reveal className="shared-skill-copy">
+              <span className="eyebrow">A TEAM-OWNED SKILL</span>
+              <h2>Build our shared definition of readable documentation.</h2>
+              <p>Use it. Find what it misses. Add the rule. Let the skill change with the documentation.</p>
+            </Reveal>
+            <Reveal delay={0.1}><SkillFile /></Reveal>
+          </div>
+        </section>
+
+        <section data-section="13" data-step className="evidence section-light">
+          <Reveal className="section-title">
+            <span className="eyebrow">TEST WHETHER IT WORKS</span>
+            <h2>Measure the change.<br />Then make the human judgement.</h2>
+          </Reveal>
+          <EvidenceComparison />
+        </section>
+
+        <section data-section="14" data-step className="workshop-section section-dark">
+          <WorkshopExample
+            number={1}
+            context="A new engineer is setting up the service."
+            a={{
+              title: "Local setup",
+              content: <p>The configuration process requires the environment variables to be populated prior to the application being started and developers should ensure that the appropriate values have been obtained from the Platform team, after which the database migration command can be executed and the development server initiated.</p>,
+            }}
+            b={{
+              title: "Start the service locally",
+              content: <ol><li>Copy <code>.env.example</code> to <code>.env</code>.</li><li>Ask Platform for the development values.</li><li>Run <code>npm run migrate</code>.</li><li>Run <code>npm run dev</code>.</li><li>Check that <code>/health</code> returns 200.</li></ol>,
+            }}
+            winner="B"
+            reasons={["The steps follow the order of the task.", "The prerequisite and success check are explicit.", "Each sentence carries one action."]}
+          />
+        </section>
+
+        <section data-section="15" data-step className="workshop-section section-light">
+          <WorkshopExample
+            number={2}
+            context="A lawyer opens a matter they cannot access."
+            a={{
+              title: "Access denied",
+              content: <><p>You do not have permission to view this matter.</p><p>Request access from the matter team. Your search has not been saved.</p></>,
+            }}
+            b={{
+              title: "Unable to complete request",
+              content: <p>The system encountered an authorisation condition associated with the selected content. Appropriate access may be requested if required, after which the operation can be attempted again.</p>,
+            }}
+            winner="A"
+            reasons={["It says what happened without hiding behind system language.", "It gives the next action.", "It explains what happened to the reader’s work."]}
+          />
+        </section>
+
+        <section data-section="16" data-step className="workshop-section section-dark">
+          <WorkshopExample
+            number={3}
+            context="An AI-generated deal summary is ready to share."
+            a={{
+              title: "Review guidance",
+              content: <p>Review the AI output as appropriate and confirm that all relevant information has been included before use.</p>,
+            }}
+            b={{
+              title: "Before sharing this summary",
+              content: <ul><li>Check every quoted amount and date against its citation.</li><li>Confirm the governing law and notice period.</li><li>If a claim has no citation, remove it or mark it unverified.</li></ul>,
+            }}
+            winner="B"
+            reasons={["The checks are specific to the task.", "It explains how to handle missing evidence.", "The reader can tell when the review is complete."]}
+          />
+        </section>
+
+        <section data-section="17" className="finale section-dark">
+          <div className="finale-background" aria-hidden="true">
+            <Stars count={110} />
+            <div className="earth">
+              <img src={earthPhotoSrc} alt="" draggable={false} />
             </div>
-          </Reveal>
-        </section>
-
-        <section data-section="3" data-step className="quality-bar section-dark">
-          <Reveal className="quality-copy">
-            <span className="eyebrow">OUR EXISTING STRENGTH</span>
-            <h2>We already write<br />readable code.</h2>
-            <p>We name things carefully. We test behaviour. We review changes before they merge.</p>
-            <strong>The code already has the quality bar.<br />Our documentation should meet it.</strong>
-          </Reveal>
-          <Reveal delay={0.12} className="quality-code">
-            <CodeWindow />
-          </Reveal>
-        </section>
-
-        <section data-section="4" data-step className="contrast section-dark">
-          <Reveal className="section-heading">
-            <span className="eyebrow">THE SAME QUALITY BAR</span>
-            <h2>The code is designed to be read.<br /><span>The documentation should be too.</span></h2>
-          </Reveal>
-          <div className="contrast-grid">
-            <Reveal><span className="panel-title"><Check size={14} /> THE CODE</span><CodeWindow /></Reveal>
-            <Reveal delay={0.12}><span className="panel-title">THE WIKI PAGE</span><DocumentationTransform /></Reveal>
           </div>
-        </section>
-
-        <section data-section="5" data-step className="principles section-dark">
-          <Reveal className="principles-heading">
-            <span className="eyebrow">THREE HABITS</span>
-            <h2>Three habits.<br />That’s enough.</h2>
-            <p className="principles-lead">Use them when you write. Use them when you review.</p>
-          </Reveal>
-          <div className="principle-list">
-            {[
-              ["01", "Be clear.", "Name the purpose, inputs, limits and owner."],
-              ["02", "Be concise.", "Put the next action first. Link to deeper context."],
-              ["03", "Check it.", "Verify facts, links and examples before merge."],
-            ].map(([n, title, desc], i) => (
-              <Reveal key={n} delay={i * 0.08}>
-                <article>
-                  <span>{n}</span>
-                  <h3>{title}</h3>
-                  <p>{desc}</p>
-                </article>
+          <div className="finale-beats">
+            <div data-step className="finale-beat readers-beat">
+              <Reveal>
+                <span className="eyebrow">WRITE FOR THE PERSON WHO READS IT</span>
+                <h2>The new starter.<br />The adjacent engineer.<br />Someone fixing a problem.<br />Future you.</h2>
               </Reveal>
-            ))}
-          </div>
-        </section>
-
-        <section data-section="6" data-step className="quiz-section section-light">
-          <Reveal className="quiz-heading">
-            <span className="eyebrow">CHOOSE</span>
-            <h2>The M&amp;A research agent missed a clause. What do you open first?</h2>
-            <p>A lawyer is waiting. Search ran, but the answer has no supporting citation.</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <DocQuiz />
-          </Reveal>
-        </section>
-
-        <section data-section="7" data-step className="ai-section section-dark">
-          <div className="ai-halo" aria-hidden="true"><span /><span /><span /></div>
-          <Reveal className="ai-heading">
-            <span className="eyebrow">AI & DOCUMENTATION</span>
-            <h2>AI can generate a document.<br /><em>It cannot guarantee understanding.</em></h2>
-            <p>AI has made writing easy. Editing is now the valuable part.</p>
-          </Reveal>
-          <div className="ownership-grid">
-            <Reveal className="ownership-card ai-card">
-              <Sparkles /><span>AI HELPS WITH</span>
-              {["Structure", "First draft", "Plain-language alternatives"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
-            </Reveal>
-            <Reveal delay={0.12} className="ownership-card human-card">
-              <Moon /><span>YOU STILL OWN</span>
-              {["Technical truth", "Missing detail", "Final edit"].map((x) => <div key={x}><Check size={17} />{x}</div>)}
-            </Reveal>
-          </div>
-          <Reveal delay={0.18} className="ai-note">
-            <p>If a fact is missing, write <code>[NEEDS CONFIRMATION]</code>. Never let AI fill the gap.</p>
-          </Reveal>
-        </section>
-
-        <section data-section="8" className="change section-dark">
-          <div className="change-scroll">
-            <div className="change-beats">
-              <div data-step className="change-beat" ref={checklistBeatRef}>
-                <Reveal className="review-copy">
-                  <span className="eyebrow">ONE PRACTICAL CHANGE</span>
-                  <h2>One documentation check<br />in every PR.</h2>
-                  <p>Not another checklist. Update the docs, or explain why nothing changed.</p>
-                </Reveal>
-              </div>
             </div>
-            <div className="change-sticky">
-              <Reveal delay={0.12} className="pr-wrap"><PullRequest checklist={checklistInView} /></Reveal>
+            <div data-step className="finale-beat coffee-beat">
+              <Reveal>
+                <span>Actually, forget ten years.</span>
+                <h2>Write it for yourself<br />tomorrow night at 11.</h2>
+                <p>When the espresso has run out and you’re wondering what the person who wrote this was thinking.</p>
+                <strong>Because occasionally, that person is you.</strong>
+              </Reveal>
             </div>
-          </div>
-          <Reveal className="change-statement" >
-            <div data-step className="step-anchor" />
-            <span>CODE</span><i /><span>DOCUMENTATION</span>
-            <p>Same change. Same review. Same standard.</p>
-          </Reveal>
-        </section>
-
-        <section data-section="9" className="finale section-dark">
-          <div className="finale-sticky-bg" aria-hidden="true">
-            <Stars count={100} />
-            <div className={`earth${lastLineInView ? " centered" : ""}`}>
-              <div className="earth-riser">
-                <img className="earth-photo" src={earthPhotoSrc} alt="" decoding="async" draggable={false} />
-              </div>
-              <div className="earth-light" aria-hidden="true" />
-            </div>
-          </div>
-          <div className="finale-copy">
-            <Reveal className="finale-beat">
-              <div data-step className="step-anchor" />
-              <p>Don’t write only for yourself today.</p>
-              <h2>Write for the next person.</h2>
-              <span>The new starter.<br />The engineer on call.<br />Future you, six months from now, without those three shots of espresso.</span>
-            </Reveal>
-            <Reveal className="finale-beat final-message">
-              <div data-step className="step-anchor" />
-              <p>One day, someone will rely on what you’ve written.</p>
-              <h3>Make the problem<br />easier to solve.</h3>
-            </Reveal>
-            <div ref={lastLineRef}>
-              <Reveal className="finale-beat last-line">
-                <div data-step className="step-anchor" />
-                <p>The easier it is to understand,<br />the faster they can solve the problem.</p>
-                <h2>That’s why<br />readability matters.</h2>
+            <div data-step className="finale-beat final-question">
+              <Reveal>
+                <p>Whether a human writes it or an AI writes it,<br />the test is still the same.</p>
+                <h2>Can another human<br /><em>understand it?</em></h2>
               </Reveal>
             </div>
           </div>

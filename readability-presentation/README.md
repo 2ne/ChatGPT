@@ -1,37 +1,46 @@
-# Readability Under Pressure
+# Readability
 
-An interactive presentation about writing engineering documentation
-consciously, so the next person can understand and act on it.
+An interactive workshop about making engineering documentation easier for
+another person to understand and use.
 
-The deck opens with Apollo 13 as a short hook, then connects readability
-to Cleary’s research platform, AI agents, MCPs and M&A workflows. It ends
-with three writing habits and one documentation check in the pull request.
+The presentation opens with Apollo 13, defines readability as the effort
+required to understand what somebody has written, introduces Flesch Reading
+Ease as one signal, and applies the same quality bar used for code review to
+documentation. It then covers AI-assisted writing and review before moving
+into three live A/B examples and a human-centred closing.
 
 ## Status
 
-Complete. GitHub Pages deployment is configured for the project-specific URL:
+Complete. GitHub Pages deployment is configured for:
 
 https://2ne.github.io/ChatGPT/readability-presentation/
 
+Speaker notes open at:
+
+https://2ne.github.io/ChatGPT/readability-presentation/presenter.html
+
 ## Experience
 
-- Continuous scroll storytelling with keyboard control for every narrative beat
-- Fact-checked Apollo 13 and Mission Control opening
-- Cleary-specific examples covering M&A research, agents, permissions and citations
-- Animated code and wiki-page comparison
-- Interactive agent-diagnosis choice
+- Eighteen sections with twenty speaker beats
+- Fact-checked Apollo 13 opening at 9:08 p.m. on 13 April 1970
+- NASA requirements and review guidance with links to the primary sources
+- Interactive Flesch Reading Ease comparison
 - One pull-request documentation check
-- Fixed presentation viewport and reduced-motion support
+- AI readability review with specific, teachable feedback
+- Team-owned documentation skill example
+- Before-and-after metrics using the text shown on screen
+- Three live A/B workshop examples with a B, A, B answer pattern
+- Three-part closing that keeps the espresso line and ends on the human test
+- Keyboard navigation, reduced-motion support and optional speaker notes
 
 ## Stack
 
 - React and TypeScript
 - Vite
-- Tailwind CSS
-- Inter Variable (self-hosted via `@fontsource-variable/inter`), with Dynamic Metrics tracking
+- Inter Variable, served locally
 - Framer Motion
 - GSAP ScrollTrigger
-- Lenis smooth scrolling
+- Lenis
 - Lucide icons
 
 ## Setup
@@ -54,36 +63,40 @@ npm run preview
 
 ## Presentation controls
 
-- Present over screen share.
-- Prefer keyboard section jumps while talking:
-  - `→` / `↓` / `Page Down` / `Space`: next section
-  - `←` / `↑` / `Page Up`: previous section
-  - `Home` / `End`: first / last section
-- Mouse wheel scrolling still works if you want a slower cinematic pace.
-- Use the browser's own full-screen mode (`F11`) if needed.
+- `→`, `↓`, `Page Down` or `Space`: next speaker beat
+- `←`, `↑` or `Page Up`: previous speaker beat
+- `Home` or `End`: first or final beat
+- `N`: open or close the script for the current beat
+- `Escape`: close speaker notes
+- Use the browser's full-screen mode when presenting
+
+The workshop interactions use buttons. Keyboard navigation ignores presentation
+shortcuts while a button or link has focus.
 
 ## Key decisions
 
-- Apollo is only the opening metaphor; the talk exits it early and stays
-  on conscious documentation habits for engineers.
-- The opening uses NASA’s chronology for the Apollo 13 accident and air-to-ground transcript.
-- Cleary green is the accent colour on dark and light surfaces.
-- Typography uses self-hosted Inter Variable, with `liga` / `calt` / `kern`
-  enabled and letter-spacing derived from Inter Dynamic Metrics
-  (`tracking = a + b × e^(c × size)`).
-- All assets (fonts and imagery) are served locally so the deck cannot
-  break on a flaky network during a live screen share.
-- The hero opens on a quiet Apollo 13 air-to-ground transcript; the finale
-  Earth remains a NASA photograph so the deck ends back home.
-- The examples reflect the team’s legal-tech work rather than generic SaaS documentation.
-- The PR mock-up uses one documentation decision rather than a second checklist.
-- AI is positioned as a drafting aid; humans still own technical truth,
-  missing information and the final edit.
-- The production build is fully static and deployed through GitHub Actions.
-- Each monorepo project is published beneath its own GitHub Pages path.
+- The supplied script is stored in the presentation as speaker notes and mapped
+  to the twenty keyboard-controlled beats.
+- The website supports the spoken script rather than placing every sentence on
+  screen.
+- Cleary green remains the accent, with a darker accessible green for text on
+  light surfaces.
+- The Apollo material establishes the need for shared understanding, then the
+  presentation moves into everyday engineering documentation.
+- Flesch Reading Ease is presented as a signal, not a target. The live scores
+  are labelled illustrative because syllable counting is calculated locally.
+- The PR mock-up keeps one documentation check, with coverage and readability
+  described inside it.
+- AI feedback always identifies a problem, explains it and points towards a
+  specific edit.
+- The three workshop examples use realistic setup, permissions and AI review
+  content. The stronger answer changes sides in the second example.
+- Images and fonts are local so the presentation does not depend on the network
+  during screen sharing.
 
-## Sources for the Apollo opening
+## Sources
 
-- NASA, “Detailed Chronology of Events Surrounding the Apollo 13 Accident”
-- NASA, “Apollo 13: Mission Details”
-- NASA, “Houston, We’ve Had a Problem”
+- [NASA: Apollo 13 mission details](https://www.nasa.gov/missions/apollo/apollo-13-mission-details/)
+- [NASA Systems Engineering Handbook: Appendix C, How to Write a Good Requirement](https://www.nasa.gov/reference/appendix-c-how-to-write-a-good-requirement/)
+- [NASA STI review guidance](https://nodis3.gsfc.nasa.gov/displayCA.cfm?Internal_ID=N_PR_2200_002C_&page_name=Chapter4)
+- [Rudolf Flesch: A New Readability Yardstick](https://doi.org/10.1037/h0057532)
