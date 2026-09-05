@@ -91,21 +91,46 @@ export function generateWorkout(hype: number, durationMinutes: number): WorkoutP
     }
   }
 
+  const leftoverBeforeClose = total - cursor - peak - cool;
+  if (leftoverBeforeClose > cycle * 0.55 && cycles < (level === "relaxed" ? 3 : 5)) {
+    push("build", build, buildSpeed, "Another lift");
+    push("hard", hard, secondHard, "Hold the pace");
+    push("recovery", recover, recoverSpeed, "Settle");
+  }
+
   push("build", build, buildSpeed + 0.3, "Last build");
   push("peak", peak, peakSpeed, "Peak effort");
-  push("cool-down", Math.max(cool, total - cursor), interpolate(5.2, 5.6, 1 - t), "Bring it home");
-
-  if (sections.length > 0) {
-    const last = sections[sections.length - 1];
-    last.end = total;
-  }
+  push("cool-down", cool, interpolate(5.2, 5.6, 1 - t), "Bring it home");
 
   return {
     duration: total,
     hype,
     hypeLevel: level,
-    sections,
+    sections: fitToDuration(sections, total, interpolate(165, 100, t)),
   };
+}
+
+function fitToDuration(sections: WorkoutSection[], total: number, maxCool: number): WorkoutSection[] {
+  if (sections.length === 0) return sections;
+  const coolIndex = sections.findIndex((section) => section.phase === "cool-down");
+  const work = sections.filter((section) => section.phase !== "cool-down");
+  const workBudget = work.reduce((sum, section) => sum + (section.end - section.start), 0);
+  const desiredCool = Math.min(maxCool, Math.max(70, total - workBudget));
+  const extra = Math.max(0, total - workBudget - desiredCool);
+  const stretchable = work.filter((section) => section.phase === "hard" || section.phase === "recovery" || section.phase === "warm-up");
+  const share = stretchable.length > 0 ? extra / stretchable.length : 0;
+
+  const timed: WorkoutSection[] = [];
+  let cursor = 0;
+  for (const section of work) {
+    const bonus = stretchable.some((item) => item.id === section.id) ? share : 0;
+    const duration = section.end - section.start + bonus;
+    timed.push({ ...section, start: cursor, end: cursor + duration });
+    cursor += duration;
+  }
+  const cool = sections[coolIndex] ?? sections[sections.length - 1];
+  timed.push({ ...cool, start: cursor, end: total, phase: "cool-down" });
+  return timed;
 }
 
 export function sectionAtTime(plan: WorkoutPlan, elapsed: number): WorkoutSection {

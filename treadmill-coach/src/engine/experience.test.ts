@@ -241,6 +241,16 @@ describe("master timeline and pause sync", () => {
   });
 });
 
+describe("session shape", () => {
+  it("does not dump leftover time into an oversized cool-down", () => {
+    const plan = generateWorkout(62, 16);
+    const cool = plan.sections.find((section) => section.phase === "cool-down")!;
+    expect(cool.end).toBe(plan.duration);
+    expect(cool.end - cool.start).toBeLessThan(180);
+    expect(plan.sections.some((section) => section.phase === "peak")).toBe(true);
+  });
+});
+
 describe("hype controls intervention, not constant switching", () => {
   it("keeps hyped sessions more compact without making continuity optional", () => {
     const relaxed = generateWorkout(15, 16);

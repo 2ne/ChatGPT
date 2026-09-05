@@ -210,8 +210,9 @@ export function App() {
   }
 
   if (!running || !snapshot) {
+    const peak = preview.sections.find((section) => section.phase === "peak");
     return (
-      <main className="safe mx-auto flex min-h-dvh max-w-md flex-col gap-6">
+      <main className="safe mx-auto flex min-h-dvh max-w-md flex-col gap-5 pb-28">
         <header className="pt-3">
           <p className="text-xs uppercase tracking-[0.28em] text-[var(--muted)]">Programmed session</p>
           <h1 className="display mt-2 text-6xl leading-none">Treadmill Coach</h1>
@@ -260,16 +261,23 @@ export function App() {
               </button>
             ))}
           </div>
-          <ol className="mt-4 space-y-2 text-sm text-[var(--muted)]">
-            {preview.sections.map((section) => (
-              <li key={section.id} className="flex justify-between gap-3">
-                <span className="capitalize">{formatPhase(section.phase)}</span>
-                <span>
-                  {formatSpeed(section.speedKph)} km/h · {formatClock(section.end - section.start)}
-                </span>
-              </li>
-            ))}
-          </ol>
+          <p className="mt-4 text-sm text-[var(--muted)]">
+            Opens at {formatSpeed(preview.sections[0].speedKph)} km/h
+            {peak ? ` · peaks at ${formatSpeed(peak.speedKph)} km/h` : ""} · {preview.sections.length} programmed blocks
+          </p>
+          <details className="mt-3 text-sm text-[var(--muted)]">
+            <summary className="cursor-pointer font-medium text-[var(--text)]">Session shape</summary>
+            <ol className="mt-3 space-y-2">
+              {preview.sections.map((section) => (
+                <li key={section.id} className="flex justify-between gap-3">
+                  <span className="capitalize">{formatPhase(section.phase)}</span>
+                  <span>
+                    {formatSpeed(section.speedKph)} km/h · {formatClock(section.end - section.start)}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </details>
         </section>
 
         <label className="flex items-center justify-between rounded-3xl border border-[var(--line)] bg-[var(--panel)] px-5 py-4">
@@ -286,13 +294,6 @@ export function App() {
         </label>
 
         <button
-          className="rounded-full bg-[var(--accent)] px-5 py-4 text-lg font-semibold text-black"
-          type="button"
-          onClick={() => void startSession()}
-        >
-          Start session
-        </button>
-        <button
           className="rounded-full border border-[var(--line)] px-5 py-3 text-sm text-[var(--muted)]"
           disabled={previewing}
           type="button"
@@ -301,6 +302,15 @@ export function App() {
           {previewing ? "Playing voice clips…" : "Preview four coaching deliveries"}
         </button>
         {speechNote ? <p className="text-sm text-[var(--muted)]">{speechNote}</p> : null}
+        <div className="fixed inset-x-0 bottom-0 z-10 border-t border-[var(--line)] bg-[#0b0d10]/95 px-4 py-3 backdrop-blur">
+          <button
+            className="mx-auto block w-full max-w-md rounded-full bg-[var(--accent)] px-5 py-4 text-lg font-semibold text-black"
+            type="button"
+            onClick={() => void startSession()}
+          >
+            Start session
+          </button>
+        </div>
       </main>
     );
   }
