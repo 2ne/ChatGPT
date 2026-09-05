@@ -6,6 +6,7 @@ on:
     paths:
       - "readability-presentation/**"
       - "snip/**"
+      - "treadmill-coach/**"
       - ".github/workflows/deploy-readability-presentation.yml"
   workflow_dispatch:
 
@@ -30,19 +31,23 @@ jobs:
           cache-dependency-path: |
             readability-presentation/package-lock.json
             snip/package-lock.json
+            treadmill-coach/package-lock.json
       - name: Install dependencies
         run: |
           npm ci --prefix readability-presentation
           npm ci --prefix snip
+          npm ci --prefix treadmill-coach
       - name: Build projects
         run: |
           npm run build --prefix readability-presentation
           npm run build --prefix snip
+          npm run build --prefix treadmill-coach
       - name: Package projects at their own URLs
         run: |
-          mkdir -p pages/readability-presentation pages/snip
+          mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach
           cp -R readability-presentation/dist/. pages/readability-presentation/
           cp -R snip/dist/. pages/snip/
+          cp -R treadmill-coach/dist/. pages/treadmill-coach/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

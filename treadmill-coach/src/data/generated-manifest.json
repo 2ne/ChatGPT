@@ -1,0 +1,371 @@
+[
+  {
+    "id": "easy-miles",
+    "title": "Easy Miles",
+    "bpm": 96,
+    "duration": 190.0,
+    "baseEnergy": 0.31,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 20.0,
+        "energy": 0.22
+      },
+      {
+        "type": "verse",
+        "start": 20.0,
+        "end": 70.0,
+        "energy": 0.3
+      },
+      {
+        "type": "chorus",
+        "start": 70.0,
+        "end": 100.0,
+        "energy": 0.4
+      },
+      {
+        "type": "verse",
+        "start": 100.0,
+        "end": 140.0,
+        "energy": 0.32
+      },
+      {
+        "type": "chorus",
+        "start": 140.0,
+        "end": 170.0,
+        "energy": 0.42
+      },
+      {
+        "type": "outro",
+        "start": 170.0,
+        "end": 190.0,
+        "energy": 0.2
+      }
+    ]
+  },
+  {
+    "id": "steady-horizon",
+    "title": "Steady Horizon",
+    "bpm": 108,
+    "duration": 186.667,
+    "baseEnergy": 0.429,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 17.778,
+        "energy": 0.28
+      },
+      {
+        "type": "verse",
+        "start": 17.778,
+        "end": 53.333,
+        "energy": 0.4
+      },
+      {
+        "type": "build",
+        "start": 53.333,
+        "end": 71.111,
+        "energy": 0.5
+      },
+      {
+        "type": "chorus",
+        "start": 71.111,
+        "end": 106.667,
+        "energy": 0.58
+      },
+      {
+        "type": "verse",
+        "start": 106.667,
+        "end": 142.222,
+        "energy": 0.42
+      },
+      {
+        "type": "chorus",
+        "start": 142.222,
+        "end": 168.889,
+        "energy": 0.56
+      },
+      {
+        "type": "outro",
+        "start": 168.889,
+        "end": 186.667,
+        "energy": 0.26
+      }
+    ]
+  },
+  {
+    "id": "rising-cadence",
+    "title": "Rising Cadence",
+    "bpm": 118,
+    "duration": 187.117,
+    "baseEnergy": 0.535,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 16.271,
+        "energy": 0.32
+      },
+      {
+        "type": "verse",
+        "start": 16.271,
+        "end": 48.814,
+        "energy": 0.44
+      },
+      {
+        "type": "build",
+        "start": 48.814,
+        "end": 65.085,
+        "energy": 0.6
+      },
+      {
+        "type": "chorus",
+        "start": 65.085,
+        "end": 97.627,
+        "energy": 0.74
+      },
+      {
+        "type": "verse",
+        "start": 97.627,
+        "end": 122.034,
+        "energy": 0.46
+      },
+      {
+        "type": "build",
+        "start": 122.034,
+        "end": 138.305,
+        "energy": 0.64
+      },
+      {
+        "type": "chorus",
+        "start": 138.305,
+        "end": 170.847,
+        "energy": 0.78
+      },
+      {
+        "type": "outro",
+        "start": 170.847,
+        "end": 187.119,
+        "energy": 0.3
+      }
+    ]
+  },
+  {
+    "id": "night-stride",
+    "title": "Night Stride",
+    "bpm": 122,
+    "duration": 173.115,
+    "baseEnergy": 0.56,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 15.738,
+        "energy": 0.34
+      },
+      {
+        "type": "verse",
+        "start": 15.738,
+        "end": 47.213,
+        "energy": 0.48
+      },
+      {
+        "type": "build",
+        "start": 47.213,
+        "end": 62.951,
+        "energy": 0.62
+      },
+      {
+        "type": "chorus",
+        "start": 62.951,
+        "end": 94.426,
+        "energy": 0.8
+      },
+      {
+        "type": "breakdown",
+        "start": 94.426,
+        "end": 110.164,
+        "energy": 0.4
+      },
+      {
+        "type": "build",
+        "start": 110.164,
+        "end": 125.902,
+        "energy": 0.66
+      },
+      {
+        "type": "drop",
+        "start": 125.902,
+        "end": 157.377,
+        "energy": 0.86
+      },
+      {
+        "type": "outro",
+        "start": 157.377,
+        "end": 173.115,
+        "energy": 0.32
+      }
+    ]
+  },
+  {
+    "id": "push-window",
+    "title": "Push Window",
+    "bpm": 128,
+    "duration": 157.497,
+    "baseEnergy": 0.625,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 15.0,
+        "energy": 0.4
+      },
+      {
+        "type": "verse",
+        "start": 15.0,
+        "end": 37.5,
+        "energy": 0.54
+      },
+      {
+        "type": "build",
+        "start": 37.5,
+        "end": 52.5,
+        "energy": 0.7
+      },
+      {
+        "type": "drop",
+        "start": 52.5,
+        "end": 82.5,
+        "energy": 0.88
+      },
+      {
+        "type": "breakdown",
+        "start": 82.5,
+        "end": 97.5,
+        "energy": 0.48
+      },
+      {
+        "type": "build",
+        "start": 97.5,
+        "end": 112.5,
+        "energy": 0.74
+      },
+      {
+        "type": "chorus",
+        "start": 112.5,
+        "end": 142.5,
+        "energy": 0.9
+      },
+      {
+        "type": "outro",
+        "start": 142.5,
+        "end": 157.5,
+        "energy": 0.36
+      }
+    ]
+  },
+  {
+    "id": "summit-drive",
+    "title": "Summit Drive",
+    "bpm": 136,
+    "duration": 148.232,
+    "baseEnergy": 0.675,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 14.118,
+        "energy": 0.46
+      },
+      {
+        "type": "verse",
+        "start": 14.118,
+        "end": 35.294,
+        "energy": 0.6
+      },
+      {
+        "type": "build",
+        "start": 35.294,
+        "end": 49.412,
+        "energy": 0.76
+      },
+      {
+        "type": "drop",
+        "start": 49.412,
+        "end": 77.647,
+        "energy": 0.94
+      },
+      {
+        "type": "breakdown",
+        "start": 77.647,
+        "end": 91.765,
+        "energy": 0.5
+      },
+      {
+        "type": "build",
+        "start": 91.765,
+        "end": 105.882,
+        "energy": 0.8
+      },
+      {
+        "type": "chorus",
+        "start": 105.882,
+        "end": 134.118,
+        "energy": 0.96
+      },
+      {
+        "type": "outro",
+        "start": 134.118,
+        "end": 148.235,
+        "energy": 0.38
+      }
+    ]
+  },
+  {
+    "id": "cool-current",
+    "title": "Cool Current",
+    "bpm": 92,
+    "duration": 198.258,
+    "baseEnergy": 0.243,
+    "sections": [
+      {
+        "type": "intro",
+        "start": 0.0,
+        "end": 20.87,
+        "energy": 0.18
+      },
+      {
+        "type": "verse",
+        "start": 20.87,
+        "end": 73.043,
+        "energy": 0.28
+      },
+      {
+        "type": "chorus",
+        "start": 73.043,
+        "end": 104.348,
+        "energy": 0.36
+      },
+      {
+        "type": "verse",
+        "start": 104.348,
+        "end": 146.087,
+        "energy": 0.26
+      },
+      {
+        "type": "breakdown",
+        "start": 146.087,
+        "end": 177.391,
+        "energy": 0.22
+      },
+      {
+        "type": "outro",
+        "start": 177.391,
+        "end": 198.261,
+        "energy": 0.16
+      }
+    ]
+  }
+]
