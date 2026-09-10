@@ -9,7 +9,7 @@
   --muted: #69746f;
   --accent: #079867;
   --accent-rgb: 7, 152, 103;
-  --pixel: #31d695;
+  --pixel: #00b100;
   --shadow: 0 24px 58px rgba(15, 50, 36, .075);
   font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -24,7 +24,7 @@
   --muted: #93a19a;
   --accent: #39dfa0;
   --accent-rgb: 57, 223, 160;
-  --pixel: #48e7a8;
+  --pixel: #aced98;
   --shadow: 0 28px 68px rgba(0, 0, 0, .42);
 }
 * { box-sizing: border-box; }
