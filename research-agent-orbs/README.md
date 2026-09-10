@@ -1,6 +1,6 @@
 # Research agent orbs
 
-Six lightweight animated orb directions for a research agent. Every concept responds to light and dark mode and is built with CSS, inline SVG and a small amount of vanilla JavaScript.
+Six lightweight 3D pixel-wave directions for a research agent. Every concept is shown at its intended 64 × 64 pixel size, responds to light and dark mode, and is built with CSS transforms and a small amount of vanilla JavaScript.
 
 ## Live prototype
 
@@ -8,7 +8,7 @@ https://2ne.github.io/ChatGPT/research-agent-orbs/
 
 ## Status
 
-Visual exploration ready for review. The gallery includes theme and motion controls plus a small-size check.
+Second visual exploration ready for review. The gallery includes theme and motion controls, with all concepts rendered at the intended product size.
 
 ## Run locally
 
@@ -24,8 +24,8 @@ Then open `http://localhost:4173`.
 
 - No runtime dependencies
 - No canvas, WebGL or Three.js
-- CSS animations and gradients for depth and motion
-- Small inline SVGs for the Weave and Topography geometry
+- CSS `perspective`, `rotateX`, `rotateY` and `translate3d` for spatial depth
+- JavaScript-generated pixel fields with no runtime dependency
 - Respects `prefers-reduced-motion`
 - Keyboard-visible focus and semantic controls
 
@@ -35,7 +35,7 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 
 ## Key decisions
 
-- The concepts use one green research-agent palette so shape and motion are easier to compare.
+- The concepts use one green research-agent palette so geometry and motion are easier to compare.
 - Light and dark modes alter the surfaces and contrast while preserving the orb identity.
 - The animation language is measured rather than playful: scanning, mapping, connecting and resolving.
-- The orbs remain recognisable at 32, 48 and 64 pixels.
+- Every gallery preview is rendered at exactly 64 × 64 pixels.
