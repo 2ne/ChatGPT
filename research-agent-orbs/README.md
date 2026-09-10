@@ -41,6 +41,6 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - The preview is rendered at exactly 64 × 64 pixels.
 - Rotation is limited to safe viewing angles so the latitude rings never collapse into a flat line.
 - The orb is formed only from solid dots, with no glow, outline, highlight or background gradient.
-- Each dot stays circular while the lattice rotates, and the particle count is kept light enough to read clearly at 64 pixels.
+- Each dot stays circular while the lattice rotates, with 128 particles so the structure reads clearly at 64 pixels.
 - A measured meridian scan changes particle size and brightness independently of the camera motion.
 - The denser lattice and irregular four-beat orbit borrow the energy of high-quality AI thinking indicators without adding their packages.
