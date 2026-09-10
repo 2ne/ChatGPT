@@ -27,24 +27,34 @@ const point = (styles) => {
 };
 
 function buildSphere(field) {
-  for (let lat = 1; lat < 7; lat += 1) {
-    const phi = Math.PI * lat / 7;
-    for (let lon = 0; lon < 10; lon += 1) {
-      const theta = Math.PI * 2 * lon / 10 + (lat % 2) * .22;
-      const radius = 27;
+  const latitudeRings = 11;
+  const longitudeDensity = 30;
+  const radius = 26.5;
+
+  for (let lat = 0; lat <= latitudeRings; lat += 1) {
+    const phi = Math.PI * lat / latitudeRings;
+    const latitudeRadius = Math.sin(phi);
+    const longitudeCount = Math.max(1, Math.round(latitudeRadius * longitudeDensity));
+
+    for (let lon = 0; lon < longitudeCount; lon += 1) {
+      const theta = Math.PI * 2 * lon / longitudeCount + (lat % 2) * .11;
       const x = Math.sin(phi) * Math.cos(theta) * radius;
       const y = Math.cos(phi) * radius;
       const z = Math.sin(phi) * Math.sin(theta) * radius;
       const depth = (z + radius) / (radius * 2);
+      const scale = .68 + depth * .38;
+      const scanPhase = -(theta / (Math.PI * 2)) * 1.65 - lat * .018;
       field.append(point({
         x: round(x), y: round(y), z: round(z),
-        size: `${round(2.3 + depth * .9)}px`,
-        scale: round(.72 + depth * .34),
-        opacity: round(.54 + depth * .44),
-        'opacity-low': round(.42 + depth * .34),
-        glow: round(.08 + depth * .24),
-        duration: `${round(2.4 + (lat % 3) * .45)}s`,
-        delay: `${round(-(lat * .21 + lon * .08))}s`
+        size: `${round(1.45 + depth * 1.15)}px`,
+        scale: round(scale),
+        'scale-low': round(scale * .78),
+        'scale-mid': round(scale * 1.12),
+        'scale-high': round(scale * 1.62),
+        opacity: round(.5 + depth * .48),
+        'opacity-low': round(.28 + depth * .42),
+        glow: round(.06 + depth * .26),
+        'scan-delay': `${round(scanPhase)}s`
       }));
     }
   }
