@@ -1,6 +1,6 @@
 # Research agent orbs
 
-Six lightweight 3D pixel-wave directions for a research agent. Every concept is shown at its intended 64 × 64 pixel size, responds to light and dark mode, and is built with CSS transforms and a small amount of vanilla JavaScript.
+A lightweight 3D pixel lattice orb for a research agent. It is shown at its intended 64 × 64 pixel size, responds to light and dark mode, and is built with CSS transforms and a small amount of vanilla JavaScript.
 
 ## Live prototype
 
@@ -8,7 +8,7 @@ https://2ne.github.io/ChatGPT/research-agent-orbs/
 
 ## Status
 
-Second visual exploration ready for review. The gallery includes theme and motion controls, with all concepts rendered at the intended product size.
+Selected Lattice direction ready for review. The preview includes theme and motion controls and renders at the intended product size.
 
 ## Run locally
 
@@ -35,7 +35,9 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 
 ## Key decisions
 
-- The concepts use one green research-agent palette so geometry and motion are easier to compare.
+- The orb uses a restrained green research-agent palette.
 - Light and dark modes alter the surfaces and contrast while preserving the orb identity.
 - The animation language is measured rather than playful: scanning, mapping, connecting and resolving.
-- Every gallery preview is rendered at exactly 64 × 64 pixels.
+- The preview is rendered at exactly 64 × 64 pixels.
+- Rotation is limited to safe viewing angles so the latitude rings never collapse into a flat line.
+- Soft volumetric glow replaces the previous circular outlines.
