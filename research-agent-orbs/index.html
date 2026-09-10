@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f7f5" />
+    <meta
+      name="description"
+      content="A lightweight set of animated research-agent orb directions, built with CSS and inline SVG."
+    />
+    <title>Research agent orbs</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Research agent</p>
+        <h1>Orb studies</h1>
+      </div>
+
+      <div class="controls" aria-label="Preview controls">
+        <fieldset class="segmented" aria-label="Colour theme">
+          <legend class="sr-only">Colour theme</legend>
+          <label>
+            <input type="radio" name="theme" value="light" checked />
+            <span>Light</span>
+          </label>
+          <label>
+            <input type="radio" name="theme" value="dark" />
+            <span>Dark</span>
+          </label>
+        </fieldset>
+
+        <button class="motion-button" type="button" aria-pressed="false">
+          <span class="motion-icon" aria-hidden="true"></span>
+          <span class="motion-label">Pause motion</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="intro-title">
+        <h2 id="intro-title">Six directions, one small footprint</h2>
+        <p>
+          Each concept is a repeatable CSS animation with a small inline SVG. No runtime dependencies,
+          canvas or WebGL.
+        </p>
+      </section>
+
+      <section class="orb-grid" aria-label="Orb concepts">
+        <article class="orb-card" tabindex="0">
+          <div class="orb-stage">
+            <div class="orb orb-atlas" role="img" aria-label="Atlas animated research orb">
+              <span class="atlas-globe"></span>
+              <span class="atlas-arc atlas-arc-a"></span>
+              <span class="atlas-arc atlas-arc-b"></span>
+              <span class="atlas-arc atlas-arc-c"></span>
+              <span class="atlas-node atlas-node-a"></span>
+              <span class="atlas-node atlas-node-b"></span>
+              <span class="atlas-node atlas-node-c"></span>
+            </div>
+          </div>
+          <div class="card-copy">
+            <span class="number">01</span>
+            <div><h3>Atlas</h3><p>Scanning arcs map sources around a quiet core.</p></div>
+          </div>
+        </article>
+
+        <article class="orb-card" tabindex="0">
+          <div class="orb-stage">
+            <div class="orb orb-weave" role="img" aria-label="Weave animated research orb">
+              <svg viewBox="0 0 160 160" aria-hidden="true">
+                <defs>
+                  <clipPath id="weave-clip"><circle cx="80" cy="80" r="62" /></clipPath>
+                  <linearGradient id="weave-gradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="var(--orb-bright)" />
+                    <stop offset="1" stop-color="var(--orb-deep)" />
+                  </linearGradient>
+                </defs>
+                <g clip-path="url(#weave-clip)" class="weave-lines">
+                  <path d="M-4 44 C30 10 60 76 90 42 S142 26 168 54" />
+                  <path d="M-8 66 C28 30 56 96 92 62 S144 46 170 74" />
+                  <path d="M-8 88 C28 52 56 118 92 84 S144 68 170 96" />
+                  <path d="M-8 110 C28 74 56 140 92 106 S144 90 170 118" />
+                  <path d="M44 -4 C10 30 76 60 42 90 S26 142 54 168" />
+                  <path d="M66 -8 C30 28 96 56 62 92 S46 144 74 170" />
+                  <path d="M88 -8 C52 28 118 56 84 92 S68 144 96 170" />
+                  <path d="M110 -8 C74 28 140 56 106 92 S90 144 118 170" />
+                </g>
+                <circle class="weave-rim" cx="80" cy="80" r="62" />
+              </svg>
+              <span class="weave-shine"></span>
+            </div>
+          </div>
+          <div class="card-copy">
+            <span class="number">02</span>
+            <div><h3>Weave</h3><p>Intersecting evidence resolves into one field.</p></div>
+          </div>
+        </article>
+
+        <article class="orb-card" tabindex="0">
+          <div class="orb-stage">
+            <div class="orb orb-constellation" role="img" aria-label="Constellation animated research orb">
+              <div class="constellation-field" aria-hidden="true"></div>
+              <span class="constellation-ring ring-a"></span>
+              <span class="constellation-ring ring-b"></span>
+              <span class="constellation-centre"></span>
+            </div>
+          </div>
+          <div class="card-copy">
+            <span class="number">03</span>
+            <div><h3>Constellation</h3><p>Sources gather, connect and settle into a result.</p></div>
+          </div>
+        </article>
+
+        <article class="orb-card" tabindex="0">
+          <div class="orb-stage">
+            <div class="orb orb-topography" role="img" aria-label="Topography animated research orb">
+              <svg viewBox="0 0 160 160" aria-hidden="true">
+                <defs><clipPath id="topo-clip"><circle cx="80" cy="80" r="63" /></clipPath></defs>
+                <g clip-path="url(#topo-clip)" class="topo-lines">
+                  <ellipse cx="80" cy="80" rx="58" ry="22" />
+                  <ellipse cx="80" cy="80" rx="50" ry="30" />
+                  <ellipse cx="80" cy="80" rx="41" ry="38" />
+                  <ellipse cx="80" cy="80" rx="31" ry="47" />
+                  <ellipse cx="80" cy="80" rx="20" ry="56" />
+                </g>
+                <circle class="topo-rim" cx="80" cy="80" r="63" />
+              </svg>
+              <span class="topo-scan"></span>
+            </div>
+          </div>
+          <div class="card-copy">
+            <span class="number">04</span>
+            <div><h3>Topography</h3><p>Layered contours give the signal depth and precision.</p></div>
+          </div>
+        </article>
+
+        <article class="orb-card" tabindex="0">
+          <div class="orb-stage">
+            <div class="orb orb-aperture" role="img" aria-label="Aperture animated research orb">
+              <div class="aperture-blades" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <span class="aperture-core"></span>
+              <span class="aperture-spark spark-a"></span>
+              <span class="aperture-spark spark-b"></span>
+            </div>
+          </div>
+          <div class="card-copy">
+            <span class="number">05</span>
+            <div><h3>Aperture</h3><p>A focused lens closes in on the useful detail.</p></div>
+          </div>
+        </article>
+
+        <article class="orb-card" tabindex="0">
+          <div class="orb-stage">
+            <div class="orb orb-spectrum" role="img" aria-label="Spectrum animated research orb">
+              <div class="spectrum-bars" aria-hidden="true"></div>
+              <span class="spectrum-shell"></span>
+              <span class="spectrum-highlight"></span>
+            </div>
+          </div>
+          <div class="card-copy">
+            <span class="number">06</span>
+            <div><h3>Spectrum</h3><p>Dense signals move in measured, analytical waves.</p></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="size-strip" aria-labelledby="size-title">
+        <div>
+          <p class="eyebrow">Scale check</p>
+          <h2 id="size-title">Designed to survive at product size</h2>
+        </div>
+        <div class="size-examples" aria-label="Atlas orb at three sizes">
+          <div><span class="mini-orb size-32"></span><small>32</small></div>
+          <div><span class="mini-orb size-48"></span><small>48</small></div>
+          <div><span class="mini-orb size-64"></span><small>64</small></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Pure CSS, inline SVG and a small amount of vanilla JavaScript.</p>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

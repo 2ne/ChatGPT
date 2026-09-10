@@ -7,6 +7,7 @@ on:
       - "readability-presentation/**"
       - "snip/**"
       - "treadmill-coach/**"
+      - "research-agent-orbs/**"
       - ".github/workflows/deploy-readability-presentation.yml"
   workflow_dispatch:
 
@@ -44,10 +45,11 @@ jobs:
           npm run build --prefix treadmill-coach
       - name: Package projects at their own URLs
         run: |
-          mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach
+          mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach pages/research-agent-orbs
           cp -R readability-presentation/dist/. pages/readability-presentation/
           cp -R snip/dist/. pages/snip/
           cp -R treadmill-coach/dist/. pages/treadmill-coach/
+          cp -R research-agent-orbs/. pages/research-agent-orbs/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
