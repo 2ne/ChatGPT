@@ -28,7 +28,7 @@ const point = (styles) => {
 
 function buildSphere(field) {
   const latitudeRings = 11;
-  const longitudeDensity = 30;
+  const longitudeDensity = 26;
   const radius = 26.5;
 
   for (let lat = 0; lat <= latitudeRings; lat += 1) {
