@@ -43,7 +43,7 @@ function buildSphere(field) {
       const z = Math.sin(phi) * Math.sin(theta) * radius;
       const depth = (z + radius) / (radius * 2);
       const scale = .68 + depth * .38;
-      const scanPhase = -(theta / (Math.PI * 2)) * 1.65 - lat * .018;
+      const scanPhase = -(theta / (Math.PI * 2)) * 2.1 - lat * .018;
       field.append(point({
         x: round(x), y: round(y), z: round(z),
         size: `${round(1.45 + depth * 1.15)}px`,
@@ -53,7 +53,6 @@ function buildSphere(field) {
         'scale-high': round(scale * 1.62),
         opacity: round(.5 + depth * .48),
         'opacity-low': round(.28 + depth * .42),
-        glow: round(.06 + depth * .26),
         'scan-delay': `${round(scanPhase)}s`
       }));
     }
