@@ -40,6 +40,6 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - The animation language is measured rather than playful: scanning, mapping, connecting and resolving.
 - The preview is rendered at exactly 64 × 64 pixels.
 - Rotation is limited to safe viewing angles so the latitude rings never collapse into a flat line.
-- Soft volumetric glow replaces the previous circular outlines.
-- A fast meridian scan changes particle size and brightness independently of the camera motion.
+- The orb is formed only from solid dots, with no glow, outline, highlight or background gradient.
+- A measured meridian scan changes particle size and brightness independently of the camera motion.
 - The denser lattice and irregular four-beat orbit borrow the energy of high-quality AI thinking indicators without adding their packages.
