@@ -16,21 +16,22 @@ themeInputs.forEach((input) => {
   });
 });
 
-// Staggered latitude rings retain the original lattice, without doubled poles.
+// Equal-area points keep the sphere legible without sparse latitude bands.
 const spheres = [...document.querySelectorAll('.pixel-orb')].map((orb) => {
   const field = document.createElement('div');
   field.className = 'pixel-field';
   const particles = [];
-  for (let lat = 0; lat <= 11; lat += 1) {
-    const phi = Math.PI * lat / 11;
-    const count = Math.max(1, Math.round(Math.sin(phi) * 18));
-    for (let lon = 0; lon < count; lon += 1) {
-      const theta = Math.PI * 2 * lon / count + (lat % 2) * .11;
-      const dot = document.createElement('span');
-      dot.className = 'pixel';
-      field.append(dot);
-      particles.push({ dot, x: Math.sin(phi) * Math.cos(theta), y: Math.cos(phi), z: Math.sin(phi) * Math.sin(theta), phi, theta });
-    }
+  const count = 56;
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < count; i += 1) {
+    const y = 1 - 2 * (i + .5) / count;
+    const phi = Math.acos(y);
+    const theta = i * goldenAngle;
+    const ringRadius = Math.sqrt(1 - y * y);
+    const dot = document.createElement('span');
+    dot.className = 'pixel';
+    field.append(dot);
+    particles.push({ dot, x: ringRadius * Math.cos(theta), y, z: ringRadius * Math.sin(theta), phi, theta });
   }
   field.setAttribute('aria-hidden', 'true');
   orb.append(field);
@@ -39,11 +40,26 @@ const spheres = [...document.querySelectorAll('.pixel-orb')].map((orb) => {
 
 function render(time) {
   // A continuous turn avoids the old stop-start rocking. Tilt changes slowly.
-  const turn = time * .34 - .52;
+  const baseTurn = time * .34 - .52;
   const tilt = -.24 + Math.sin(time * .29) * .09;
-  const ct = Math.cos(turn), st = Math.sin(turn);
   const cx = Math.cos(tilt), sx = Math.sin(tilt);
-  const breath = 1 + Math.sin(time * 1.15) * .018;
+  // A more direct gathering gesture, followed by a small elastic release.
+  // Quadratic easing spends less time near the endpoints than quintic easing.
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const phase = time % 8;
+  let contraction = 0;
+  if (phase >= 4.8 && phase < 5.7) {
+    contraction = ease((phase - 4.8) / .9);
+  } else if (phase >= 5.7 && phase < 7.1) {
+    contraction = 1 - 1.06 * ease((phase - 5.7) / 1.4);
+  } else if (phase >= 7.1 && phase < 7.6) {
+    contraction = -.06 * (1 - ease((phase - 7.1) / .5));
+  }
+  const radius = 26.5 * (1 - contraction * .29);
+  // Keep each gathering turn: expansion returns to the steady forward spin.
+  const gatheredTurns = Math.floor(time / 8) + ease(Math.max(0, Math.min(1, (phase - 4.8) / .9)));
+  const turn = baseTurn + gatheredTurns * (Math.PI * 24 / 180);
+  const ct = Math.cos(turn), st = Math.sin(turn);
   for (const particles of spheres) {
     for (const p of particles) {
       const x = p.x * ct + p.z * st;
@@ -51,12 +67,15 @@ function render(time) {
       const y = p.y * cx - rotatedZ * sx;
       const z = p.y * sx + rotatedZ * cx;
       const depth = (z + 1) / 2;
-      const perspective = 180 / (180 - z * 26.5);
+      const perspective = 180 / (180 - z * radius);
       // A soft travelling meridian, defined on the sphere rather than the screen.
       const scan = Math.pow((1 + Math.cos(p.theta - time * 1.65 + p.phi * .65)) / 2, 12);
-      const size = (1.25 + depth * .85 + scan * .55) * perspective;
-      p.dot.style.transform = `translate3d(${(x * 26.5 * perspective * breath).toFixed(3)}px, ${(y * 26.5 * perspective * breath).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
-      p.dot.style.opacity = (.18 + depth * .66 + scan * .16).toFixed(3);
+      const size = (.9 + depth * .6 + scan * .25) * perspective;
+      p.dot.style.transform = `translate3d(${(x * radius * perspective).toFixed(3)}px, ${(y * radius * perspective).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
+      // Solid theme-relative depth: pale rear dots in light mode, dark rear dots in dark mode.
+      const light = Math.max(0, x * -.35 + y * -.45 + z * .82);
+      const shade = Math.min(1, .12 + depth * .48 + light * .28 + scan * .12);
+      p.dot.style.setProperty('--shade', `${(shade * 100).toFixed(2)}%`);
       p.dot.style.zIndex = String(Math.round(depth * 100));
     }
   }
