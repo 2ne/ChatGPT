@@ -40,9 +40,8 @@ const spheres = [...document.querySelectorAll('.pixel-orb')].map((orb) => {
 
 function render(time) {
   // A continuous turn avoids the old stop-start rocking. Tilt changes slowly.
-  const turn = time * .34 - .52;
+  const baseTurn = time * .34 - .52;
   const tilt = -.24 + Math.sin(time * .29) * .09;
-  const ct = Math.cos(turn), st = Math.sin(turn);
   const cx = Math.cos(tilt), sx = Math.sin(tilt);
   // A more direct gathering gesture, followed by a small elastic release.
   // Quadratic easing spends less time near the endpoints than quintic easing.
@@ -56,7 +55,10 @@ function render(time) {
   } else if (phase >= 7.1 && phase < 7.6) {
     contraction = -.06 * (1 - ease((phase - 7.1) / .5));
   }
-  const radius = 26.5 * (1 - contraction * .24);
+  const radius = 26.5 * (1 - contraction * .29);
+  // Gather with an extra 24-degree Y turn, then unwind on release.
+  const turn = baseTurn + contraction * (Math.PI * 24 / 180);
+  const ct = Math.cos(turn), st = Math.sin(turn);
   for (const particles of spheres) {
     for (const p of particles) {
       const x = p.x * ct + p.z * st;
