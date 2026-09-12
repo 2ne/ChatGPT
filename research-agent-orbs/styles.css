@@ -56,38 +56,14 @@ h1 { margin-bottom: 0; font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 520; le
 .orb-card:hover, .orb-card:focus-visible { border-color: var(--line-strong); transform: translateY(-2px); }
 .orb-stage { position: relative; display: grid; place-items: center; min-height: 260px; overflow: hidden; perspective: 280px; }
 .size-label { position: absolute; right: 13px; top: 12px; color: var(--muted); font: 600 .65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; }
-.pixel-orb { position: relative; z-index: 1; width: 64px; height: 64px; perspective: 180px; transform-style: preserve-3d; }
-.pixel-field { position: absolute; inset: 0; transform-style: preserve-3d; }
-.pixel { position: absolute; left: 50%; top: 50%; width: var(--size, 3px); height: var(--size, 3px); margin: calc(var(--size, 3px) / -2); opacity: var(--opacity, .9); transform-style: preserve-3d; will-change: transform, opacity; }
-.pixel::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--pixel); animation: sphere-billboard 5.2s cubic-bezier(.45,0,.2,1) infinite; will-change: transform; }
-.pixel-orb[data-variant="sphere"] .pixel-field { animation: sphere-turn 5.2s cubic-bezier(.45,0,.2,1) infinite; }
-.pixel-orb[data-variant="sphere"] .pixel { transform: translate3d(calc(var(--x) * 1px), calc(var(--y) * 1px), calc(var(--z) * 1px)) scale(var(--scale)); animation: sphere-search 2.1s cubic-bezier(.45,0,.2,1) var(--scan-delay) infinite; }
+.pixel-orb { position: relative; z-index: 1; width: 64px; height: 64px; }
+.pixel-field { position: absolute; inset: 0; }
+.pixel { position: absolute; left: 50%; top: 50%; width: 1px; height: 1px; margin: -.5px; border-radius: 50%; background: var(--pixel); }
 .card-copy { padding: 18px 20px 21px; border-top: 1px solid var(--line); }
 .card-copy h3 { margin-bottom: 5px; font-size: 1rem; font-weight: 650; }
 .card-copy p { margin-bottom: 0; color: var(--muted); font-size: .86rem; line-height: 1.45; }
 footer { padding: 27px 0 40px; color: var(--muted); font-size: .78rem; }
 footer p { margin: 0; }
-@keyframes sphere-turn {
-  0% { transform: rotateX(-16deg) rotateY(-30deg) rotateZ(-4deg); }
-  22% { transform: rotateX(-7deg) rotateY(-4deg) rotateZ(3deg); }
-  50% { transform: rotateX(-14deg) rotateY(30deg) rotateZ(-2deg); }
-  74% { transform: rotateX(-6deg) rotateY(8deg) rotateZ(5deg); }
-  100% { transform: rotateX(-16deg) rotateY(-30deg) rotateZ(-4deg); }
-}
-@keyframes sphere-billboard {
-  0% { transform: rotateZ(4deg) rotateY(30deg) rotateX(16deg); }
-  22% { transform: rotateZ(-3deg) rotateY(4deg) rotateX(7deg); }
-  50% { transform: rotateZ(2deg) rotateY(-30deg) rotateX(14deg); }
-  74% { transform: rotateZ(-5deg) rotateY(-8deg) rotateX(6deg); }
-  100% { transform: rotateZ(4deg) rotateY(30deg) rotateX(16deg); }
-}
-@keyframes sphere-search {
-  0%, 100% { transform: translate3d(calc(var(--x) * 1px), calc(var(--y) * 1px), calc(var(--z) * 1px)) scale(var(--scale-low)); filter: brightness(.72); opacity: var(--opacity-low); }
-  18% { transform: translate3d(calc(var(--x) * 1px), calc(var(--y) * 1px), calc(var(--z) * 1px)) scale(var(--scale-high)); filter: brightness(1.35); opacity: 1; }
-  38% { transform: translate3d(calc(var(--x) * 1px), calc(var(--y) * 1px), calc(var(--z) * 1px)) scale(var(--scale)); filter: brightness(.94); opacity: var(--opacity); }
-  68% { transform: translate3d(calc(var(--x) * 1px), calc(var(--y) * 1px), calc(var(--z) * 1px)) scale(var(--scale-mid)); filter: brightness(1.12); opacity: var(--opacity); }
-}
-:root[data-motion="paused"] *, :root[data-motion="paused"] *::before, :root[data-motion="paused"] *::after { animation-play-state: paused !important; }
 @media (max-width: 620px) {
   .topbar, main, footer { width: min(100% - 28px,1120px); }
   .topbar { align-items: flex-start; padding-top: 28px; }
@@ -98,5 +74,5 @@ footer p { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
-  .motion-button { display: none; }
+  *, *::before, *::after { transition: none !important; }
 }
