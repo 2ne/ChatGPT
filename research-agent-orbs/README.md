@@ -46,7 +46,7 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - Pause freezes the exact pose and resumes without jumping. Hidden tabs stop rendering. Reduced motion starts paused, with an explicit Play control available.
 
 - Opaque shades are mixed in OKLab relative to the theme green, with a fixed above-left light direction. No particle opacity is used.
-- Every eight seconds, the sphere draws all dots 18% inward over one second and releases over 1.8 seconds, with smooth acceleration at the joins.
+- Every eight seconds, the sphere draws all dots 24% inward over 0.9 seconds, releases over 1.4 seconds to a subtle 1.44% outward overshoot, then settles over 0.5 seconds. Quadratic easing keeps the gesture direct with a gentle bounce.
 
 - A Fibonacci sphere distributes dots evenly instead of leaving gaps between sparse latitude rings.
 

@@ -44,14 +44,19 @@ function render(time) {
   const tilt = -.24 + Math.sin(time * .29) * .09;
   const ct = Math.cos(turn), st = Math.sin(turn);
   const cx = Math.cos(tilt), sx = Math.sin(tilt);
-  // One deliberate gathering gesture every 8 seconds: draw in, then ease out.
-  // Quintic easing has zero velocity and acceleration at each join.
-  const ease = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+  // A more direct gathering gesture, followed by a small elastic release.
+  // Quadratic easing spends less time near the endpoints than quintic easing.
+  const ease = (t) => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   const phase = time % 8;
-  const contraction = phase < 4.8 ? 0
-    : phase < 5.8 ? ease((phase - 4.8) / 1.0)
-    : phase < 7.6 ? 1 - ease((phase - 5.8) / 1.8) : 0;
-  const radius = 26.5 * (1 - contraction * .18);
+  let contraction = 0;
+  if (phase >= 4.8 && phase < 5.7) {
+    contraction = ease((phase - 4.8) / .9);
+  } else if (phase >= 5.7 && phase < 7.1) {
+    contraction = 1 - 1.06 * ease((phase - 5.7) / 1.4);
+  } else if (phase >= 7.1 && phase < 7.6) {
+    contraction = -.06 * (1 - ease((phase - 7.1) / .5));
+  }
+  const radius = 26.5 * (1 - contraction * .24);
   for (const particles of spheres) {
     for (const p of particles) {
       const x = p.x * ct + p.z * st;
