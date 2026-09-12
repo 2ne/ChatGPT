@@ -41,9 +41,11 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - The preview is rendered at exactly 64 × 64 pixels.
 - A continuous 18.5-second turn, gently changing tilt and an occasional inward contraction preserve a spherical silhouette.
 - The orb is formed only from solid dots, with no glow, outline, highlight or background gradient.
-- Each dot stays circular while the lattice rotates, with 46 particles with a 2 px base size and depth-dependent scaling so the structure reads clearly at 64 pixels.
+- Each dot stays circular while the lattice rotates, with 56 evenly distributed particles with a 2 px base size and depth-dependent scaling so the structure reads clearly at 64 pixels.
 - A soft travelling meridian scan changes particle size and colour independently of the rotation.
 - Pause freezes the exact pose and resumes without jumping. Hidden tabs stop rendering. Reduced motion starts paused, with an explicit Play control available.
 
 - Opaque shades are mixed in OKLab relative to the theme green, with a fixed above-left light direction. No particle opacity is used.
 - Every eight seconds, the sphere draws all dots 18% inward over one second and releases over 1.8 seconds, with smooth acceleration at the joins.
+
+- A Fibonacci sphere distributes dots evenly instead of leaving gaps between sparse latitude rings.

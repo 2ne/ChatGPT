@@ -16,21 +16,22 @@ themeInputs.forEach((input) => {
   });
 });
 
-// Staggered latitude rings retain the original lattice, without doubled poles.
+// Equal-area points keep the sphere legible without sparse latitude bands.
 const spheres = [...document.querySelectorAll('.pixel-orb')].map((orb) => {
   const field = document.createElement('div');
   field.className = 'pixel-field';
   const particles = [];
-  for (let lat = 0; lat <= 6; lat += 1) {
-    const phi = Math.PI * lat / 6;
-    const count = Math.max(1, Math.round(Math.sin(phi) * 12));
-    for (let lon = 0; lon < count; lon += 1) {
-      const theta = Math.PI * 2 * lon / count + (lat % 2) * .11;
-      const dot = document.createElement('span');
-      dot.className = 'pixel';
-      field.append(dot);
-      particles.push({ dot, x: Math.sin(phi) * Math.cos(theta), y: Math.cos(phi), z: Math.sin(phi) * Math.sin(theta), phi, theta });
-    }
+  const count = 56;
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < count; i += 1) {
+    const y = 1 - 2 * (i + .5) / count;
+    const phi = Math.acos(y);
+    const theta = i * goldenAngle;
+    const ringRadius = Math.sqrt(1 - y * y);
+    const dot = document.createElement('span');
+    dot.className = 'pixel';
+    field.append(dot);
+    particles.push({ dot, x: ringRadius * Math.cos(theta), y, z: ringRadius * Math.sin(theta), phi, theta });
   }
   field.setAttribute('aria-hidden', 'true');
   orb.append(field);
