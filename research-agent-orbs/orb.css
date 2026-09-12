@@ -1,0 +1,111 @@
+@property --turn {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: -0.52rad;
+}
+@property --tilt {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: -0.24rad;
+}
+@property --contraction {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --scan-phase {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+.orb {
+  position: relative;
+  z-index: 1;
+  width: 64px;
+  height: 64px;
+  isolation: isolate;
+  --pixel: light-dark(#00b100, #aced98);
+  --pixel-rear: light-dark(
+    color-mix(in oklab, var(--pixel), white 82%),
+    color-mix(in oklab, var(--pixel), #031c12 68%)
+  );
+  --pixel-front: light-dark(
+    color-mix(in oklab, var(--pixel), #063e26 22%),
+    color-mix(in oklab, var(--pixel), white 18%)
+  );
+}
+.orb-rig { position: absolute; inset: 0; }
+.pixel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  margin: -1px;
+  border-radius: 50%;
+  --ct: cos(var(--turn));
+  --st: sin(var(--turn));
+  --cx: cos(var(--tilt));
+  --sx: sin(var(--tilt));
+  --rx: calc(var(--px) * var(--ct) + var(--pz) * var(--st));
+  --rz1: calc(var(--pz) * var(--ct) - var(--px) * var(--st));
+  --ry: calc(var(--py) * var(--cx) - var(--rz1) * var(--sx));
+  --rz: calc(var(--py) * var(--sx) + var(--rz1) * var(--cx));
+  --depth: calc((var(--rz) + 1) / 2);
+  --light: max(0, calc(var(--rx) * -0.35 + var(--ry) * -0.45 + var(--rz) * 0.82));
+  --scan: pow(calc((1 + cos(calc(var(--theta) - var(--scan-phase) + var(--phi) * 0.65))) / 2), 12);
+  --shade-n: min(1, calc(0.12 + var(--depth) * 0.48 + var(--light) * 0.28 + var(--scan) * 0.12));
+  --persp: calc(180 / (180 - var(--rz) * 26.5));
+  --radius: calc(26.5px * (1 - var(--contraction) * 0.29));
+  --size: calc((0.9 + var(--depth) * 0.6 + var(--scan) * 0.25) * var(--persp));
+  background: color-mix(in oklab, var(--pixel-rear), var(--pixel-front) calc(var(--shade-n) * 100%));
+  transform: translate3d(calc(var(--rx) * var(--radius) * var(--persp)), calc(var(--ry) * var(--radius) * var(--persp)), 0) scale(var(--size));
+  z-index: round(calc(var(--depth) * 100), 1);
+}
+.orb-rig {
+  --turn: -0.52rad;
+  --tilt: -0.24rad;
+  --contraction: 0;
+  --scan-phase: 0deg;
+  animation:
+    orb-turn 18.479957s linear infinite,
+    orb-tilt 21.666156s linear infinite,
+    orb-breathe 8s linear infinite,
+    orb-scan 3.807991s linear infinite;
+}
+@keyframes orb-turn {
+  from { --turn: -0.52rad; }
+  to { --turn: calc(-0.52rad + 360deg); }
+}
+@keyframes orb-tilt {
+  0%, 100% { --tilt: -0.24rad; }
+  12.5% { --tilt: calc(-0.24rad + 0.06364rad); }
+  25% { --tilt: calc(-0.24rad + 0.09rad); }
+  37.5% { --tilt: calc(-0.24rad + 0.06364rad); }
+  50% { --tilt: -0.24rad; }
+  62.5% { --tilt: calc(-0.24rad - 0.06364rad); }
+  75% { --tilt: calc(-0.24rad - 0.09rad); }
+  87.5% { --tilt: calc(-0.24rad - 0.06364rad); }
+}
+@keyframes orb-breathe {
+  0%, 60% { --contraction: 0; }
+  62.8125% { --contraction: 0.125; }
+  65.625% { --contraction: 0.5; }
+  68.4375% { --contraction: 0.875; }
+  71.25% { --contraction: 1; }
+  75.625% { --contraction: 0.8675; }
+  80% { --contraction: 0.47; }
+  84.375% { --contraction: 0.0725; }
+  88.75% { --contraction: -0.06; }
+  90.3125% { --contraction: -0.0525; }
+  91.875% { --contraction: -0.03; }
+  93.4375% { --contraction: -0.0075; }
+  95%, 100% { --contraction: 0; }
+}
+@keyframes orb-scan {
+  from { --scan-phase: 0deg; }
+  to { --scan-phase: 360deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orb-rig { animation-play-state: paused; }
+}

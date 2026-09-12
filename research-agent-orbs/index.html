@@ -3,45 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f4f6f3" />
+    <meta name="theme-color" content="#f3f5f2" />
     <meta name="description" content="A 64px 3D pixel lattice orb for a research agent." />
-    <title>Research agent pixel orbs</title>
+    <title>Research agent pixel orb</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./orb.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Research agent</p>
-        <h1>Lattice orb</h1>
+    <fieldset class="segmented" aria-label="Colour theme">
+      <legend class="sr-only">Colour theme</legend>
+      <label><input type="radio" name="theme" value="light" checked /><span>Light</span></label>
+      <label><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+    </fieldset>
+
+    <div class="orb" role="img" aria-label="Lattice 3D pixel sphere">
+      <div class="orb-rig" aria-hidden="true">
+        <span class="pixel" style="--px:0.188137;--py:0.982143;--pz:0.000000;--theta:0.000000rad;--phi:0.189265rad"></span>
+        <span class="pixel" style="--px:-0.238106;--py:0.946429;--pz:0.218125;--theta:2.399963rad;--phi:0.328806rad"></span>
+        <span class="pixel" style="--px:0.036110;--py:0.910714;--pz:-0.411455;--theta:4.799926rad;--phi:0.425786rad"></span>
+        <span class="pixel" style="--px:0.294559;--py:0.875000;--pz:0.384200;--theta:7.199890rad;--phi:0.505361rad"></span>
+        <span class="pixel" style="--px:-0.535379;--py:0.839286;--pz:-0.094701;--theta:9.599853rad;--phi:0.574828rad"></span>
+        <span class="pixel" style="--px:0.502210;--py:0.803571;--pz:-0.319465;--theta:11.999816rad;--phi:0.637525rad"></span>
+        <span class="pixel" style="--px:-0.166308;--py:0.767857;--pz:0.618657;--theta:14.399779rad;--phi:0.695307rad"></span>
+        <span class="pixel" style="--px:-0.313947;--py:0.732143;--pz:-0.604486;--theta:16.799743rad;--phi:0.749334rad"></span>
+        <span class="pixel" style="--px:0.674081;--py:0.696429;--pz:0.246173;--theta:19.199706rad;--phi:0.800388rad"></span>
+        <span class="pixel" style="--px:-0.693848;--py:0.660714;--pz:0.286411;--theta:21.599669rad;--phi:0.849026rad"></span>
+        <span class="pixel" style="--px:0.330865;--py:0.625000;--pz:-0.707039;--theta:23.999632rad;--phi:0.895665rad"></span>
+        <span class="pixel" style="--px:0.241799;--py:0.589286;--pz:0.770893;--theta:26.399596rad;--phi:0.940622rad"></span>
+        <span class="pixel" style="--px:-0.720549;--py:0.553571;--pz:-0.417573;--theta:28.799559rad;--phi:0.984150rad"></span>
+        <span class="pixel" style="--px:0.835514;--py:0.517857;--pz:-0.183685;--theta:31.199522rad;--phi:1.026452rad"></span>
+        <span class="pixel" style="--px:-0.503867;--py:0.482143;--pz:0.716698;--theta:33.599485rad;--phi:1.067697rad"></span>
+        <span class="pixel" style="--px:-0.114994;--py:0.446429;--pz:-0.887400;--theta:35.999448rad;--phi:1.108026rad"></span>
+        <span class="pixel" style="--px:0.697180;--py:0.410714;--pz:0.587584;--theta:38.399412rad;--phi:1.147559rad"></span>
+        <span class="pixel" style="--px:-0.926233;--py:0.375000;--pz:0.038303;--theta:40.799375rad;--phi:1.186400rad"></span>
+        <span class="pixel" style="--px:0.666784;--py:0.339286;--pz:-0.663539;--theta:43.199338rad;--phi:1.224639rad"></span>
+        <span class="pixel" style="--px:-0.044012;--py:0.303571;--pz:0.951792;--theta:45.599301rad;--phi:1.262358rad"></span>
+        <span class="pixel" style="--px:-0.617297;--py:0.267857;--pz:-0.739728;--theta:47.999265rad;--phi:1.299628rad"></span>
+        <span class="pixel" style="--px:0.963995;--py:0.232143;--pz:0.129704;--theta:50.399228rad;--phi:1.336516rad"></span>
+        <span class="pixel" style="--px:-0.804866;--py:0.196429;--pz:0.560005;--theta:52.799191rad;--phi:1.373082rad"></span>
+        <span class="pixel" style="--px:0.216628;--py:0.160714;--pz:-0.962935;--theta:55.199154rad;--phi:1.409382rad"></span>
+        <span class="pixel" style="--px:0.493281;--py:0.125000;--pz:0.860842;--theta:57.599118rad;--phi:1.445468rad"></span>
+        <span class="pixel" style="--px:-0.948888;--py:0.089286;--pz:-0.302721;--theta:59.999081rad;--phi:1.481392rad"></span>
+        <span class="pixel" style="--px:0.906488;--py:0.053571;--pz:-0.418820;--theta:62.399044rad;--phi:1.517199rad"></span>
+        <span class="pixel" style="--px:-0.386000;--py:0.017857;--pz:0.922326;--theta:64.799007rad;--phi:1.552938rad"></span>
+        <span class="pixel" style="--px:-0.338398;--py:-0.017857;--pz:-0.940834;--theta:67.198970rad;--phi:1.588654rad"></span>
+        <span class="pixel" style="--px:0.883918;--py:-0.053571;--pz:0.464563;--theta:69.598934rad;--phi:1.624393rad"></span>
+        <span class="pixel" style="--px:-0.963108;--py:-0.089286;--pz:0.253872;--theta:71.998897rad;--phi:1.660201rad"></span>
+        <span class="pixel" style="--px:0.536596;--py:-0.125000;--pz:-0.834530;--theta:74.398860rad;--phi:1.696124rad"></span>
+        <span class="pixel" style="--px:0.167174;--py:-0.160714;--pz:0.972740;--theta:76.798823rad;--phi:1.732211rad"></span>
+        <span class="pixel" style="--px:-0.775220;--py:-0.196429;--pz:-0.600374;--theta:79.198787rad;--phi:1.768511rad"></span>
+        <span class="pixel" style="--px:0.969361;--py:-0.232143;--pz:-0.080310;--theta:81.598750rad;--phi:1.805076rad"></span>
+        <span class="pixel" style="--px:-0.654265;--py:-0.267857;--pz:0.707241;--theta:83.998713rad;--phi:1.841965rad"></span>
+        <span class="pixel" style="--px:0.004648;--py:-0.303571;--pz:-0.952797;--theta:86.398676rad;--phi:1.879235rad"></span>
+        <span class="pixel" style="--px:0.632031;--py:-0.339286;--pz:0.696722;--theta:88.798639rad;--phi:1.916954rad"></span>
+        <span class="pixel" style="--px:-0.923069;--py:-0.375000;--pz:-0.085550;--theta:91.198603rad;--phi:1.955193rad"></span>
+        <span class="pixel" style="--px:0.726274;--py:-0.410714;--pz:-0.551216;--theta:93.598566rad;--phi:1.994034rad"></span>
+        <span class="pixel" style="--px:-0.160158;--py:-0.446429;--pz:0.880370;--theta:95.998529rad;--phi:2.033566rad"></span>
+        <span class="pixel" style="--px:-0.466612;--py:-0.482143;--pz:-0.741493;--theta:98.398492rad;--phi:2.073895rad"></span>
+        <span class="pixel" style="--px:0.825044;--py:-0.517857;--pz:0.226110;--theta:100.798456rad;--phi:2.115140rad"></span>
+        <span class="pixel" style="--px:-0.740932;--py:-0.553571;--pz:0.380234;--theta:103.198419rad;--phi:2.157443rad"></span>
+        <span class="pixel" style="--px:0.280848;--py:-0.589286;--pz:-0.757540;--theta:105.598382rad;--phi:2.200971rad"></span>
+        <span class="pixel" style="--px:0.294329;--py:-0.625000;--pz:0.723011;--theta:107.998345rad;--phi:2.245928rad"></span>
+        <span class="pixel" style="--px:-0.678318;--py:-0.660714;--pz:-0.321468;--theta:110.398309rad;--phi:2.292566rad"></span>
+        <span class="pixel" style="--px:0.685773;--py:-0.696429;--pz:-0.211431;--theta:112.798272rad;--phi:2.341205rad"></span>
+        <span class="pixel" style="--px:-0.344405;--py:-0.732143;--pz:0.587666;--theta:115.198235rad;--phi:2.392259rad"></span>
+        <span class="pixel" style="--px:-0.134500;--py:-0.767857;--pz:-0.626343;--theta:117.598198rad;--phi:2.446286rad"></span>
+        <span class="pixel" style="--px:0.485242;--py:-0.803571;--pz:0.344693;--theta:119.998161rad;--phi:2.504068rad"></span>
+        <span class="pixel" style="--px:-0.539517;--py:-0.839286;--pz:0.067239;--theta:122.398125rad;--phi:2.566764rad"></span>
+        <span class="pixel" style="--px:0.313794;--py:-0.875000;--pz:-0.368658;--theta:124.798088rad;--phi:2.636232rad"></span>
+        <span class="pixel" style="--px:0.015052;--py:-0.910714;--pz:0.412763;--theta:127.198051rad;--phi:2.715806rad"></span>
+        <span class="pixel" style="--px:-0.226657;--py:-0.946429;--pz:-0.229999;--theta:129.598014rad;--phi:2.812787rad"></span>
+        <span class="pixel" style="--px:0.187891;--py:-0.982143;--pz:0.009607;--theta:131.997978rad;--phi:2.952328rad"></span>
       </div>
-      <div class="controls" aria-label="Preview controls">
-        <fieldset class="segmented" aria-label="Colour theme">
-          <legend class="sr-only">Colour theme</legend>
-          <label><input type="radio" name="theme" value="light" checked /><span>Light</span></label>
-          <label><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
-        </fieldset>
-        <button class="motion-button" type="button" aria-pressed="false">
-          <span class="motion-icon" aria-hidden="true"></span>
-          <span class="motion-label">Pause motion</span>
-        </button>
-      </div>
-    </header>
-
-    <main>
-      <section class="intro" aria-labelledby="intro-title">
-        <h2 id="intro-title">A spherical research signal</h2>
-        <p>Shown at its intended 64 × 64 px size. A continuous turn, a travelling scan, and depth that follows every dot.</p>
-      </section>
-
-      <section class="orb-grid" aria-label="Lattice orb preview">
-        <article class="orb-card" tabindex="0">
-          <div class="orb-stage"><div class="pixel-orb" data-variant="sphere" role="img" aria-label="Lattice 3D pixel sphere"></div><span class="size-label">64 px</span></div>
-          <div class="card-copy"><div><h3>Lattice</h3><p>A rotating globe of connected evidence.</p></div></div>
-        </article>
-      </section>
-    </main>
-
-    <footer><p>Depth-projected dots and vanilla JavaScript. No canvas, WebGL or runtime dependencies.</p></footer>
-    <script src="./app.js"></script>
+    </div>
   </body>
 </html>
