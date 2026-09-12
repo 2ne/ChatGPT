@@ -49,3 +49,5 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - Every eight seconds, the sphere draws all dots 18% inward over one second and releases over 1.8 seconds, with smooth acceleration at the joins.
 
 - A Fibonacci sphere distributes dots evenly instead of leaving gaps between sparse latitude rings.
+
+- Light mode uses pale green rear dots and stronger green front dots; dark mode retains dark rear dots and lighter front dots. Both use opaque colours.

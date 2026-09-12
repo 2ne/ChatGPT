@@ -64,7 +64,7 @@ function render(time) {
       const scan = Math.pow((1 + Math.cos(p.theta - time * 1.65 + p.phi * .65)) / 2, 12);
       const size = (.9 + depth * .6 + scan * .25) * perspective;
       p.dot.style.transform = `translate3d(${(x * radius * perspective).toFixed(3)}px, ${(y * radius * perspective).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
-      // Solid colour, lit from above-left; rear dots remain opaque and darker.
+      // Solid theme-relative depth: pale rear dots in light mode, dark rear dots in dark mode.
       const light = Math.max(0, x * -.35 + y * -.45 + z * .82);
       const shade = Math.min(1, .12 + depth * .48 + light * .28 + scan * .12);
       p.dot.style.setProperty('--shade', `${(shade * 100).toFixed(2)}%`);
