@@ -1,6 +1,6 @@
 # Research agent orbs
 
-A lightweight 3D pixel lattice orb for a research agent. It is shown at its intended 64 × 64 pixel size, responds to light and dark mode, and is built with CSS transforms and a small amount of vanilla JavaScript.
+A lightweight 3D pixel lattice orb for a research agent. It is shown at its intended 64 × 64 pixel size, responds to light and dark mode, and is built with projected DOM dots and vanilla JavaScript.
 
 ## Live prototype
 
@@ -24,7 +24,7 @@ Then open `http://localhost:4173`.
 
 - No runtime dependencies
 - No canvas, WebGL or Three.js
-- CSS `perspective`, `rotateX`, `rotateY` and `translate3d` for spatial depth
+- A single requestAnimationFrame loop projects rotated 3D points into CSS transforms; depth controls size, opacity and stacking
 - JavaScript-generated pixel fields with no runtime dependency
 - Respects `prefers-reduced-motion`
 - Keyboard-visible focus and semantic controls
@@ -39,8 +39,8 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - Light and dark modes alter the surfaces and contrast while preserving the orb identity.
 - The animation language is measured rather than playful: scanning, mapping, connecting and resolving.
 - The preview is rendered at exactly 64 × 64 pixels.
-- Rotation is limited to safe viewing angles so the latitude rings never collapse into a flat line.
+- A continuous 18.5-second turn, gently changing tilt and subtle breathing preserve a spherical silhouette.
 - The orb is formed only from solid dots, with no glow, outline, highlight or background gradient.
 - Each dot stays circular while the lattice rotates, with 128 particles so the structure reads clearly at 64 pixels.
-- A measured meridian scan changes particle size and brightness independently of the camera motion.
-- The denser lattice and irregular four-beat orbit borrow the energy of high-quality AI thinking indicators without adding their packages.
+- A soft travelling meridian scan changes particle size and opacity independently of the rotation.
+- Pause freezes the exact pose and resumes without jumping. Hidden tabs stop rendering. Reduced motion starts paused, with an explicit Play control available.

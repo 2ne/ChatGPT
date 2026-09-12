@@ -2,6 +2,11 @@ const root = document.documentElement;
 const themeInputs = document.querySelectorAll('input[name="theme"]');
 const motionButton = document.querySelector('.motion-button');
 const motionLabel = document.querySelector('.motion-label');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let paused = reducedMotion.matches;
+let elapsed = 0;
+let previousTime = null;
+let frame = null;
 
 themeInputs.forEach((input) => {
   input.addEventListener('change', () => {
@@ -11,56 +16,78 @@ themeInputs.forEach((input) => {
   });
 });
 
-motionButton.addEventListener('click', () => {
-  const paused = motionButton.getAttribute('aria-pressed') !== 'true';
-  motionButton.setAttribute('aria-pressed', String(paused));
-  motionLabel.textContent = paused ? 'Play motion' : 'Pause motion';
-  root.dataset.motion = paused ? 'paused' : 'playing';
+// Staggered latitude rings retain the original lattice, without doubled poles.
+const spheres = [...document.querySelectorAll('.pixel-orb')].map((orb) => {
+  const field = document.createElement('div');
+  field.className = 'pixel-field';
+  const particles = [];
+  for (let lat = 0; lat <= 11; lat += 1) {
+    const phi = Math.PI * lat / 11;
+    const count = Math.max(1, Math.round(Math.sin(phi) * 18));
+    for (let lon = 0; lon < count; lon += 1) {
+      const theta = Math.PI * 2 * lon / count + (lat % 2) * .11;
+      const dot = document.createElement('span');
+      dot.className = 'pixel';
+      field.append(dot);
+      particles.push({ dot, x: Math.sin(phi) * Math.cos(theta), y: Math.cos(phi), z: Math.sin(phi) * Math.sin(theta), phi, theta });
+    }
+  }
+  field.setAttribute('aria-hidden', 'true');
+  orb.append(field);
+  return particles;
 });
 
-const round = (value) => Math.round(value * 100) / 100;
-const point = (styles) => {
-  const dot = document.createElement('span');
-  dot.className = 'pixel';
-  dot.style.cssText = Object.entries(styles).map(([key, value]) => `--${key}:${value}`).join(';');
-  return dot;
-};
-
-function buildSphere(field) {
-  const latitudeRings = 11;
-  const longitudeDensity = 18;
-  const radius = 26.5;
-
-  for (let lat = 0; lat <= latitudeRings; lat += 1) {
-    const phi = Math.PI * lat / latitudeRings;
-    const latitudeRadius = Math.sin(phi);
-    const longitudeCount = Math.max(1, Math.round(latitudeRadius * longitudeDensity));
-
-    for (let lon = 0; lon < longitudeCount; lon += 1) {
-      const theta = Math.PI * 2 * lon / longitudeCount + (lat % 2) * .11;
-      const x = Math.sin(phi) * Math.cos(theta) * radius;
-      const y = Math.cos(phi) * radius;
-      const z = Math.sin(phi) * Math.sin(theta) * radius;
-      const depth = (z + radius) / (radius * 2);
-      const scale = .68 + depth * .38;
-      const scanPhase = -(theta / (Math.PI * 2)) * 2.1 - lat * .018;
-      field.append(point({
-        x: round(x), y: round(y), z: round(z),
-        size: `${round(1.45 + depth * 1.15)}px`,
-        scale: round(scale),
-        'scale-low': round(scale * .78),
-        'scale-mid': round(scale * 1.12),
-        'scale-high': round(scale * 1.62),
-        opacity: round(.5 + depth * .48),
-        'opacity-low': round(.28 + depth * .42),
-        'scan-delay': `${round(scanPhase)}s`
-      }));
+function render(time) {
+  // A continuous turn avoids the old stop-start rocking. Tilt changes slowly.
+  const turn = time * .34 - .52;
+  const tilt = -.24 + Math.sin(time * .29) * .09;
+  const ct = Math.cos(turn), st = Math.sin(turn);
+  const cx = Math.cos(tilt), sx = Math.sin(tilt);
+  const breath = 1 + Math.sin(time * 1.15) * .018;
+  for (const particles of spheres) {
+    for (const p of particles) {
+      const x = p.x * ct + p.z * st;
+      const rotatedZ = p.z * ct - p.x * st;
+      const y = p.y * cx - rotatedZ * sx;
+      const z = p.y * sx + rotatedZ * cx;
+      const depth = (z + 1) / 2;
+      const perspective = 180 / (180 - z * 26.5);
+      // A soft travelling meridian, defined on the sphere rather than the screen.
+      const scan = Math.pow((1 + Math.cos(p.theta - time * 1.65 + p.phi * .65)) / 2, 12);
+      const size = (1.25 + depth * .85 + scan * .55) * perspective;
+      p.dot.style.transform = `translate3d(${(x * 26.5 * perspective * breath).toFixed(3)}px, ${(y * 26.5 * perspective * breath).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
+      p.dot.style.opacity = (.18 + depth * .66 + scan * .16).toFixed(3);
+      p.dot.style.zIndex = String(Math.round(depth * 100));
     }
   }
 }
-document.querySelectorAll('.pixel-orb').forEach((orb) => {
-  const field = document.createElement('div');
-  field.className = 'pixel-field';
-  buildSphere(field);
-  orb.append(field);
+
+function tick(timestamp) {
+  frame = null;
+  if (previousTime !== null) elapsed += Math.min((timestamp - previousTime) / 1000, .05);
+  previousTime = timestamp;
+  render(elapsed);
+  frame = requestAnimationFrame(tick);
+}
+
+function syncMotion() {
+  motionButton.setAttribute('aria-pressed', String(paused));
+  motionLabel.textContent = paused ? 'Play motion' : 'Pause motion';
+  root.dataset.motion = paused ? 'paused' : 'playing';
+  if (frame !== null) cancelAnimationFrame(frame);
+  frame = null;
+  previousTime = null;
+  if (!paused && !document.hidden) frame = requestAnimationFrame(tick);
+}
+
+motionButton.addEventListener('click', () => {
+  paused = !paused;
+  syncMotion();
 });
+reducedMotion.addEventListener('change', () => {
+  paused = reducedMotion.matches;
+  syncMotion();
+});
+document.addEventListener('visibilitychange', syncMotion);
+render(0);
+syncMotion();
