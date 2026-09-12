@@ -43,7 +43,14 @@ function render(time) {
   const tilt = -.24 + Math.sin(time * .29) * .09;
   const ct = Math.cos(turn), st = Math.sin(turn);
   const cx = Math.cos(tilt), sx = Math.sin(tilt);
-  const breath = 1 + Math.sin(time * 1.15) * .018;
+  // One deliberate gathering gesture every 8 seconds: draw in, then ease out.
+  // Quintic easing has zero velocity and acceleration at each join.
+  const ease = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+  const phase = time % 8;
+  const contraction = phase < 4.8 ? 0
+    : phase < 5.8 ? ease((phase - 4.8) / 1.0)
+    : phase < 7.6 ? 1 - ease((phase - 5.8) / 1.8) : 0;
+  const radius = 26.5 * (1 - contraction * .18);
   for (const particles of spheres) {
     for (const p of particles) {
       const x = p.x * ct + p.z * st;
@@ -51,12 +58,15 @@ function render(time) {
       const y = p.y * cx - rotatedZ * sx;
       const z = p.y * sx + rotatedZ * cx;
       const depth = (z + 1) / 2;
-      const perspective = 180 / (180 - z * 26.5);
+      const perspective = 180 / (180 - z * radius);
       // A soft travelling meridian, defined on the sphere rather than the screen.
       const scan = Math.pow((1 + Math.cos(p.theta - time * 1.65 + p.phi * .65)) / 2, 12);
       const size = (1.25 + depth * .85 + scan * .55) * perspective;
-      p.dot.style.transform = `translate3d(${(x * 26.5 * perspective * breath).toFixed(3)}px, ${(y * 26.5 * perspective * breath).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
-      p.dot.style.opacity = (.18 + depth * .66 + scan * .16).toFixed(3);
+      p.dot.style.transform = `translate3d(${(x * radius * perspective).toFixed(3)}px, ${(y * radius * perspective).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
+      // Solid colour, lit from above-left; rear dots remain opaque and darker.
+      const light = Math.max(0, x * -.35 + y * -.45 + z * .82);
+      const shade = Math.min(1, .12 + depth * .48 + light * .28 + scan * .12);
+      p.dot.style.setProperty('--shade', `${(shade * 100).toFixed(2)}%`);
       p.dot.style.zIndex = String(Math.round(depth * 100));
     }
   }
