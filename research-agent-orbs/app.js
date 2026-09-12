@@ -21,9 +21,9 @@ const spheres = [...document.querySelectorAll('.pixel-orb')].map((orb) => {
   const field = document.createElement('div');
   field.className = 'pixel-field';
   const particles = [];
-  for (let lat = 0; lat <= 11; lat += 1) {
-    const phi = Math.PI * lat / 11;
-    const count = Math.max(1, Math.round(Math.sin(phi) * 18));
+  for (let lat = 0; lat <= 8; lat += 1) {
+    const phi = Math.PI * lat / 8;
+    const count = Math.max(1, Math.round(Math.sin(phi) * 14));
     for (let lon = 0; lon < count; lon += 1) {
       const theta = Math.PI * 2 * lon / count + (lat % 2) * .11;
       const dot = document.createElement('span');
@@ -61,7 +61,7 @@ function render(time) {
       const perspective = 180 / (180 - z * radius);
       // A soft travelling meridian, defined on the sphere rather than the screen.
       const scan = Math.pow((1 + Math.cos(p.theta - time * 1.65 + p.phi * .65)) / 2, 12);
-      const size = (1.25 + depth * .85 + scan * .55) * perspective;
+      const size = (1.6 + depth * 1.05 + scan * .65) * perspective;
       p.dot.style.transform = `translate3d(${(x * radius * perspective).toFixed(3)}px, ${(y * radius * perspective).toFixed(3)}px, 0) scale(${size.toFixed(3)})`;
       // Solid colour, lit from above-left; rear dots remain opaque and darker.
       const light = Math.max(0, x * -.35 + y * -.45 + z * .82);

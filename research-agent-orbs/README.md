@@ -41,7 +41,7 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 - The preview is rendered at exactly 64 × 64 pixels.
 - A continuous 18.5-second turn, gently changing tilt and an occasional inward contraction preserve a spherical silhouette.
 - The orb is formed only from solid dots, with no glow, outline, highlight or background gradient.
-- Each dot stays circular while the lattice rotates, with 128 particles so the structure reads clearly at 64 pixels.
+- Each dot stays circular while the lattice rotates, with 72 slightly larger particles so the structure reads clearly at 64 pixels.
 - A soft travelling meridian scan changes particle size and colour independently of the rotation.
 - Pause freezes the exact pose and resumes without jumping. Hidden tabs stop rendering. Reduced motion starts paused, with an explicit Play control available.
 
