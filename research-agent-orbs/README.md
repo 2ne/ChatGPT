@@ -52,4 +52,4 @@ The project is published at `/ChatGPT/research-agent-orbs/` by the repository's 
 
 - Light mode uses pale green rear dots and stronger green front dots; dark mode retains dark rear dots and lighter front dots. Both use opaque colours.
 
-- Contraction adds a 24-degree Y-axis turn that unwinds with the release.
+- Contraction adds a 24-degree forward Y-axis turn. The accumulated turn is retained on release, so rotation never reverses or resets between cycles.

@@ -56,8 +56,9 @@ function render(time) {
     contraction = -.06 * (1 - ease((phase - 7.1) / .5));
   }
   const radius = 26.5 * (1 - contraction * .29);
-  // Gather with an extra 24-degree Y turn, then unwind on release.
-  const turn = baseTurn + contraction * (Math.PI * 24 / 180);
+  // Keep each gathering turn: expansion returns to the steady forward spin.
+  const gatheredTurns = Math.floor(time / 8) + ease(Math.max(0, Math.min(1, (phase - 4.8) / .9)));
+  const turn = baseTurn + gatheredTurns * (Math.PI * 24 / 180);
   const ct = Math.cos(turn), st = Math.sin(turn);
   for (const particles of spheres) {
     for (const p of particles) {
