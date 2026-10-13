@@ -113,9 +113,9 @@ every question feels like part of the quest.
 
 ### Header
 
-72px sticky, blurred paper, 2px bottom border. Left: white Pip tile + wordmark
-+ `Learn something every day` tagline (hidden on phones). Right: learner chip
-(avatar face + name) + Exit pill (dark) or Reset text.
+72px sticky, blurred paper, 2px bottom border. Left: white Pip tile vertically
+centred with the "Primary Path" wordmark (no tagline). Right: learner chip
+(avatar face centred in its circle + name) + Exit pill (dark) or Reset text.
 
 ### Home
 

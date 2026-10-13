@@ -22,7 +22,6 @@ export function AppHeader({ right, learnerName, learnerEmoji }: AppHeaderProps) 
             <span className="brand-name">
               Primary <em>Path</em>
             </span>
-            <span className="brand-tag">Learn something every day</span>
           </span>
         </div>
         <div className="app-header-right">
