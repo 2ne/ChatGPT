@@ -7,7 +7,7 @@ type PipProps = {
 };
 
 /**
- * Pip — Primary Path's friendly guide.
+ * Pip — Primary Maths' friendly guide.
  * A round "path-berry" blob: deep indigo body, sunny spark, sprout of growth.
  * Pure SVG + CSS motion (blink, cheer hop, think tilt). No WebGL.
  */

@@ -32,27 +32,9 @@
   --red-soft: #ffe3e3;
   --gold: #ffb100;
 
-  /* subject colours */
+  /* maths tile */
   --sub-maths: #f97316;
   --sub-maths-soft: #ffead7;
-  --sub-english: #0ea5e9;
-  --sub-english-soft: #dcf2fd;
-  --sub-science: #10b981;
-  --sub-science-soft: #d9f7e8;
-  --sub-computing: #8b5cf6;
-  --sub-computing-soft: #e9e2ff;
-  --sub-history: #d97706;
-  --sub-history-soft: #fbeed3;
-  --sub-geography: #14b8a6;
-  --sub-geography-soft: #d3f5ef;
-  --sub-art: #ec4899;
-  --sub-art-soft: #fbdff0;
-  --sub-music: #a855f7;
-  --sub-music-soft: #efe0ff;
-  --sub-pe: #ef4444;
-  --sub-pe-soft: #ffe0e0;
-  --sub-pshe: #eab308;
-  --sub-pshe-soft: #fdf3c8;
 
   --font-display: "Baloo 2", "Nunito", system-ui, sans-serif;
   --font-body: "Nunito", "Noto Sans", system-ui, sans-serif;

@@ -16,18 +16,7 @@ export const ABILITY_BANDS = ["emerging", "expected", "greater-depth"] as const;
 
 export type AbilityBand = (typeof ABILITY_BANDS)[number];
 
-/** Broad National Curriculum / EYFS subject areas used in this app. */
-export const SUBJECTS = [
-  "maths",
-  "english",
-  "science",
-  "computing",
-  "history",
-  "geography",
-  "art",
-  "music",
-  "pe",
-  "pshe",
-] as const;
+/** This app teaches maths only. */
+export const SUBJECTS = ["maths"] as const;
 
 export type Subject = (typeof SUBJECTS)[number];

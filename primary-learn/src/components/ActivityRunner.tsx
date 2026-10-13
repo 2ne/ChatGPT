@@ -17,7 +17,6 @@ import type { Activity } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
-import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, formatYearGroups } from "../data/labels";
 import { subjectTheme } from "../data/subjects";
 import { ConfettiBurst } from "./ConfettiBurst";
 import { Pip } from "./mascot/Pip";
@@ -230,10 +229,6 @@ export function ActivityRunner({
               <ThemeIcon />
             </span>
             <div style={{ display: "grid", gap: 4 }}>
-              <p className="t-meta">
-                {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
-                {formatYearGroups(activity.yearGroups)}
-              </p>
               <h1 className="t-title">{activity.title}</h1>
             </div>
           </div>
@@ -373,9 +368,6 @@ export function ActivityRunner({
             <ThemeIcon />
           </span>
           <div style={{ minWidth: 0 }}>
-            <p className="t-meta">
-              {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]}
-            </p>
             <p className="context-title" style={{ fontSize: 21 }}>
               {activity.title}
             </p>

@@ -3,15 +3,6 @@ import type { AbilityBand, Subject, YearGroup } from "../types/curriculum";
 
 export const SUBJECT_LABELS: Record<Subject, string> = {
   maths: "Maths",
-  english: "English",
-  science: "Science",
-  computing: "Computing",
-  history: "History",
-  geography: "Geography",
-  art: "Art & design",
-  music: "Music",
-  pe: "PE",
-  pshe: "PSHE",
 };
 
 export const YEAR_GROUP_LABELS: Record<YearGroup, string> = {
@@ -32,14 +23,9 @@ export const ABILITY_LABELS: Record<AbilityBand, string> = {
 
 export const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = {
   "number-bonds": "Number bonds",
-  phonics: "Phonics",
   "times-tables": "Times tables",
-  spelling: "Spelling",
-  "reading-comprehension": "Reading",
   fractions: "Fractions",
   "place-value": "Place value",
-  grammar: "Grammar",
-  "science-concepts": "Science",
   reasoning: "Reasoning",
 };
 

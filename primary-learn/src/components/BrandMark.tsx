@@ -9,7 +9,7 @@ export function BrandMark({ size = 40 }: { size?: number }) {
       </span>
       <span className="brand-text">
         <span className="brand-name">
-          Primary <em>Path</em>
+          Primary <em>Maths</em>
         </span>
       </span>
     </div>

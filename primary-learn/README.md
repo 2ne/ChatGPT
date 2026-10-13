@@ -1,6 +1,6 @@
-# Primary Path
+# Primary Maths
 
-Interactive UK primary e-learning for children. Learners pick a name and avatar, practise curriculum activities, and build mastery — with marks stored in **localStorage** on this device (no accounts).
+Interactive UK primary maths for children. Learners pick a name and avatar, practise maths quests, and build mastery — with marks stored in **localStorage** on this device (no accounts). Other subjects are out of scope.
 
 ## Live prototype
 
@@ -8,12 +8,12 @@ https://2ne.github.io/ChatGPT/primary-learn/
 
 ## Status
 
-Foundation release: profile onboarding, activity catalogue, shared interactive runner, progress/mastery tracking, and a sample **Year 1 number bonds to 10** activity. Agent instructions in `AGENTS.md` define how to add further curriculum activities.
+Foundation release: profile onboarding, a single maths quest list (no subject or year filters), shared interactive runner, progress/mastery tracking, and a sample **Year 1 number bonds to 10** quest. Agent instructions in `AGENTS.md` define how to add further maths quests.
 
 ## What it does
 
 - Asks for a child’s name and woodland avatar on first visit
-- Lists learning activities with subject, year group, ability band and type
+- Lists maths quests by title, with stars and a best score
 - Runs interactive question kinds (multiple choice, multi-select, fill blank, ordered, match pairs)
 - Retries missed questions in a calm mastery loop, without changing the first-try mark
 - Saves best score and mastery per activity in localStorage
@@ -35,13 +35,13 @@ Visual system is documented in **`DESIGN.md`** (Khan Academy / Wonder Blocks–i
 
 ## Curriculum map
 
-UK (England) pathways and gap tracking live in **`curriculum/`**:
+UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 
-- `curriculum/overview.md` — stages and subjects  
-- `curriculum/maths.md` / `english.md` / `science.md` — building-block order  
+- `curriculum/overview.md` — stages and ages  
+- `curriculum/maths.md` — building-block order  
 - `curriculum/coverage.md` — what the app already covers vs missing  
 
-Start from the earliest missing prerequisite, not the flashiest topic.
+Start from the earliest missing maths prerequisite, not the flashiest topic.
 
 ## Stack
 
@@ -65,9 +65,10 @@ npm run preview
 ## Key decisions
 
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`
-- **UK framing** — year groups Reception–Year 6, British English, National Curriculum / EYFS references on each activity
+- **Maths only** — one quest list. No subject catalogue, year filters, or category pills
+- **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
-- **Pip the path-berry** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods in the header, feedback reactions, hero and finish screen. No WebGL. Question cards carry a rainbow ribbon and a numbered prompt badge
+- **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods in the header, feedback reactions, and the finish screen. No WebGL. Question cards carry a rainbow ribbon and a numbered prompt badge
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
 
 ## Limitations

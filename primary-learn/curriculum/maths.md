@@ -15,7 +15,7 @@ Source: [National curriculum mathematics programmes of study](https://www.gov.uk
 6. Geometry (shape; position & direction)  
 7. Statistics (from Year 2)
 
-For Primary Path, ship **number threads first** — they unlock almost everything else.
+For Primary Maths, ship **number threads first** — they unlock almost everything else.
 
 ---
 
@@ -211,7 +211,7 @@ Highlights:
 
 ---
 
-## Suggested Primary Path maths sequence (what to build next)
+## Suggested Primary Maths sequence (what to build next)
 
 1. Reception: subitising + composition to 5  
 2. Reception/Y1: deepen bonds to 10 (expand current activity)  

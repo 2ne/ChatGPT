@@ -3,14 +3,9 @@ import type { AbilityBand, Subject, YearGroup } from "./curriculum";
 /** Pedagogical activity kinds. Extend this union when introducing a new format. */
 export const ACTIVITY_TYPES = [
   "number-bonds",
-  "phonics",
   "times-tables",
-  "spelling",
-  "reading-comprehension",
   "fractions",
   "place-value",
-  "grammar",
-  "science-concepts",
   "reasoning",
 ] as const;
 

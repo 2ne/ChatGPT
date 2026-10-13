@@ -1,40 +1,36 @@
-# UK primary curriculum map (England)
+# UK primary maths map (England)
 
-Working notes for **Primary Path**, distilled from official DfE sources so we can build activities in the right order and see gaps.
+Working notes for **Primary Maths**, distilled from official DfE sources so we can build quests in the right order and see gaps.
+
+This app teaches **mathematics only**. Do not add English, science, or foundation-subject pathways.
 
 ## How to use these files
 
-1. Pick a subject file (start with `maths.md` or `english.md`).
+1. Open `maths.md`.
 2. Find the earliest **building block** the learner still needs.
-3. Add activities that teach that block before anything that depends on it.
-4. Update `coverage.md` when an activity ships.
+3. Add a quest that teaches that block before anything that depends on it.
+4. Update `coverage.md` when a quest ships.
 
-Agents: when creating activities, set `curriculumRef` and `skills` to match a node in these files. See also `../AGENTS.md`.
+Agents: when creating quests, set `curriculumRef` and `skills` to match a node in these files. See also `../AGENTS.md`.
 
 ## Files
 
 | File | What it covers |
 | --- | --- |
-| [overview.md](./overview.md) | Stages, ages, which subjects when, sources |
-| [eyfs.md](./eyfs.md) | Reception / Early Years (before Year 1) |
-| [maths.md](./maths.md) | Number pathways Reception → Year 6 (priority) |
-| [english.md](./english.md) | Spoken language, phonics, reading, writing, spelling |
-| [science.md](./science.md) | Science topics by year / key stage |
-| [foundation-subjects.md](./foundation-subjects.md) | Computing, history, geography, art, music, PE, DT, languages |
-| [coverage.md](./coverage.md) | What Primary Path already teaches vs missing |
+| [overview.md](./overview.md) | Stages and ages |
+| [eyfs.md](./eyfs.md) | Reception maths (before Year 1) |
+| [maths.md](./maths.md) | Number pathways Reception → Year 6 |
+| [coverage.md](./coverage.md) | What Primary Maths already teaches vs missing |
 
 ## Jurisdiction
 
-This map follows the **England** National Curriculum and EYFS statutory framework.  
+This map follows the **England** National Curriculum mathematics programmes of study and the EYFS mathematics Early Learning Goals.  
 Wales, Scotland and Northern Ireland use different systems — do not mix them in without an explicit request.
 
 ## Sources (official)
 
 - [EYFS statutory framework](https://www.gov.uk/government/publications/early-years-foundation-stage-framework--2)
 - [Development Matters (non-statutory EYFS guidance)](https://www.gov.uk/government/publications/development-matters--2)
-- [Primary national curriculum](https://www.gov.uk/government/publications/national-curriculum-in-england-primary-curriculum)
 - [Mathematics programmes of study](https://www.gov.uk/government/publications/national-curriculum-in-england-mathematics-programmes-of-study)
-- [English programmes of study](https://www.gov.uk/government/publications/national-curriculum-in-england-english-programmes-of-study)
-- [Science programmes of study](https://www.gov.uk/government/publications/national-curriculum-in-england-science-programmes-of-study)
 
 These MD files are **summaries for product planning**, not a full legal reprint of the statutory documents.

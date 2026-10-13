@@ -20,7 +20,7 @@ export function AppHeader({ right, learnerName, learnerEmoji }: AppHeaderProps) 
           </span>
           <span className="brand-text">
             <span className="brand-name">
-              Primary <em>Path</em>
+              Primary <em>Maths</em>
             </span>
           </span>
         </div>

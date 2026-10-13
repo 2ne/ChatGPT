@@ -1,4 +1,4 @@
-# Primary Path — design system ("Sunny Path")
+# Primary Maths — design system ("Sunny Path")
 
 Playful, warm, premium kids' learning UI. Think Duolingo cheer meets Khan Kids
 clarity: big rounded shapes, a sunny paper background, one friendly mascot, and
@@ -9,8 +9,8 @@ rules, change the design — do not invent a second system.
 
 ## Design north star
 
-1. **Always know where you are** — every activity screen shows the quest name,
-   subject, and `Question X of N`. Never a bare question on a blank page.
+1. **Always know where you are** — every activity screen shows the quest name
+   and `Question X of N`. Never a bare question on a blank page.
 2. **One job per screen** — onboarding asks name; home picks a quest; activity
    asks one question.
 3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
@@ -19,7 +19,7 @@ rules, change the design — do not invent a second system.
    ≥ 64px with letter badges (A–D).
 5. **Celebrate constantly** — stars, streak flames, confetti pops, cheering Pip.
    Kids should feel progress every 30 seconds.
-6. **Colour with meaning** — subjects have signature colours; green = correct,
+6. **Colour with meaning** — maths tiles are orange; green = correct,
    red = try again, gold = stars only.
 
 ## Mascot: Pip
@@ -48,8 +48,8 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 ## Colour
 
-CSS variables in `src/index.css`. Subject themes live in
-`src/data/subjects.tsx` (colour + soft tint + Lucide icon per subject).
+CSS variables in `src/index.css`. The maths tile colour lives in
+`src/data/subjects.tsx` (orange + calculator icon).
 
 | Token | Hex | Use |
 | --- | --- | --- |
@@ -62,10 +62,7 @@ CSS variables in `src/index.css`. Subject themes live in
 | `--red` / `--red-soft` | `#E03131` / `#FFE3E3` | Try-again only |
 | `--gold` | `#FFB100` | Stars only |
 
-Subject colours: maths `#F97316` · english `#0EA5E9` · science `#10B981` ·
-computing `#8B5CF6` · history `#D97706` · geography `#14B8A6` · art `#EC4899` ·
-music `#A855F7` · PE `#EF4444` · PSHE `#CA8A04`. Each has a `-soft` tint for
-tiles and pills.
+Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
 
 **Rules**
 
@@ -73,7 +70,7 @@ tiles and pills.
 - CTAs are the indigo→violet gradient with a 2px deep border + bottom `4px`
   "squishy" shadow (Duolingo-style press). Disabled = 55% opacity, not grey.
 - Correct / incorrect colour appears **only after Check**.
-- Subject colour appears on icon tiles + pills only, never as full-page theme.
+- Maths orange appears on quest icon tiles only, never as a full-page theme.
 
 ## Typography
 
@@ -86,7 +83,7 @@ Loaded from Google Fonts. Rounded letterforms read friendly at kid sizes.
 | Title (`.t-title`) | Baloo 800, 24–30px | Quest titles, question prompts (`.q-prompt` 22–27px) |
 | Title-sm (`.t-title-sm`) | Baloo 700, 20px | Card titles, names |
 | Body (`.t-body`) | Nunito 500–600, 16px | Summaries, explanations |
-| Meta (`.t-meta`) | Nunito 800, 12.5px, caps, tracked | Breadcrumbs only: `Maths · Number bonds` |
+| Meta (`.t-meta`) | Nunito 800, 12.5px, caps, tracked | Short counts only, such as `1 quest` |
 
 **Rules**
 
@@ -114,7 +111,7 @@ every question feels like part of the quest.
 ### Header
 
 72px sticky, blurred paper, 2px bottom border. Left: white Pip tile vertically
-centred with the "Primary Path" wordmark (no tagline). Right: learner chip
+centred with the "Primary Maths" wordmark (no tagline). Right: learner chip
 (avatar face centred in its circle + name) + Exit pill (dark) or Reset text.
 
 ### Home
@@ -122,16 +119,14 @@ centred with the "Primary Path" wordmark (no tagline). Right: learner chip
 1. **Hero** — indigo→violet gradient panel, very faint dot texture, sun accent:
    `Hi, {name}!` + buddy emoji, subline, stat pills (stars, quests done).
    No mascot on this banner.
-2. **Filter chips** — horizontally scrolling subject dots + year chips. Active
-   chip is dark ink. No dropdown selects.
-3. **Quest cards** — icon tile (subject gradient) · subject + type/year pills ·
-   Baloo title · one-line summary · best-score micro-bar · status pill
-   (`New quest` / `Best X of N` / `Done!`) · dark `Play →` button that turns
-   gradient on hover. Whole card is the hit target.
+2. **Quest list** — one list, no subject chips, year chips, or category pills.
+3. **Quest cards** — orange calculator tile · Baloo title · one-line summary ·
+   best-score micro-bar · status pill (`New quest` / `Best X of N` / `Done!`) ·
+   dark `Play →` button that turns gradient on hover. Whole card is the hit target.
 
 ### Activity intro
 
-Back link → icon tile + meta + big title → summary sentence → fact pills
+Back link → icon tile + big title → summary sentence → fact pills
 (`10 questions`, `~6 min`, `3 stars`) → Pip + speech bubble
 (`You've got this, {name}!`) → gradient `Start quest →`.
 
@@ -140,7 +135,6 @@ Back link → icon tile + meta + big title → summary sentence → fact pills
 ```
 [← Exit quest]              [avatar chip in header]
 [🎨 tile  Number bonds to 10      ]
-[Maths · Number bonds             ]
 [Question 3 of 10      Keep going!]
 [▰▰▰▱▱▱▱▱▱▱]  segmented progress
 [🔥 3 in a row!]           (streak)
@@ -212,6 +206,6 @@ Pip blinks/sways/twinkles.
 | Thin lonely progress line | Segmented per-question bar + count + cheer line |
 | Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
 | 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
-| Dropdown filters | Scrollable subject/year chips |
-| Emoji-only tiles | Lucide icon tiles in subject colours |
+| Subject or year filter chips | One maths quest list |
+| Emoji-only tiles | Lucide calculator tile in maths orange |
 | Identical Check/Continue | Labelled actions: `Check it` → `Next question` → `See my stars` |

@@ -1,16 +1,18 @@
-# Primary Path — agent instructions
+# Primary Maths — agent instructions
 
-This project is an interactive UK primary e-learning app for children. Progress and profile data live in **browser localStorage only** (no auth, no backend).
+This project is an interactive UK primary **maths** app for children. Progress and profile data live in **browser localStorage only** (no auth, no backend).
+
+Do not add other subjects (English, science, foundation subjects). The product is maths only, with one list of quests and no subject or year filters.
 
 When asked to add or change a learning activity, follow this document strictly. Do not invent a parallel activity format.
 
 **UI:** Follow `DESIGN.md` for spacing, type, colour and activity layout (Khan Academy / Wonder Blocks–inspired). Do not invent a second visual system.
 
-**Curriculum:** Follow `curriculum/` (England EYFS + National Curriculum pathways). Prefer the earliest missing building block in `curriculum/coverage.md` over skipping ahead. Tag `curriculumRef` / `skills` to nodes in those files.
+**Curriculum:** Follow `curriculum/maths.md` (England EYFS number + National Curriculum mathematics). Prefer the earliest missing building block in `curriculum/coverage.md` over skipping ahead. Tag `curriculumRef` / `skills` to nodes in those files.
 
 ## Goals
 
-- Cover the UK primary curriculum over time (Reception → Year 6).
+- Cover UK primary **maths** over time (Reception → Year 6). Do not expand into other subjects.
 - Prefer **interactive, mastery-oriented** practice over one-shot quizzes.
 - Keep the UI kid-friendly, accessible, and touch-first.
 - Track marks per activity and overall subject progress in localStorage.
@@ -45,7 +47,7 @@ Every new activity **must**:
 5. Use only question types defined in `src/types/activity.ts`.
 6. Target a clear UK year group (and ability band) — not “all ages”.
 7. Encourage mastery: clear feedback, retry of missed items, and a `masteryThreshold`.
-8. Use British English spelling and UK curriculum wording (e.g. *maths*, *phonics*, *Year 2*).
+8. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
 
 Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the shared runner.
 
@@ -56,7 +58,7 @@ Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the sh
 | `id` | Stable kebab-case string, unique across the registry. Never reuse an id. |
 | `title` | Child-facing, short (e.g. “Number bonds to 10”). |
 | `summary` | One sentence for parents/teachers on the home screen. |
-| `subject` | One of the `Subject` union values. |
+| `subject` | Always `maths`. |
 | `type` | One of the `ActivityType` union values (extend the union if adding a new type). |
 | `yearGroups` | Non-empty list of `YearGroup` values (`Reception` … `Year6`). |
 | `ability` | `emerging` \| `expected` \| `greater-depth`. |
@@ -73,15 +75,17 @@ Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the sh
 - `emerging` = supported / earlier in the sequence; `expected` = on track; `greater-depth` = stretch / deeper reasoning.
 - Never label difficulty with vague words like “hard mode” instead of year + ability.
 
-### Subjects and activity types
+### Activity types
 
-Use existing unions first. If you need a new subject or type:
+The only subject is `maths`. Do not add another subject.
 
-1. Add it to `src/types/curriculum.ts` or `src/types/activity.ts`.
+If you need a new maths activity type:
+
+1. Add it to `src/types/activity.ts`.
 2. Update labels in `src/data/labels.ts`.
 3. Mention the addition in the project README “Key decisions” if it is consequential.
 
-Current activity-type examples (not exhaustive forever): `number-bonds`, `phonics`, `times-tables`, `spelling`, `reading-comprehension`, `fractions`, `place-value`, `grammar`, `science-concepts`, `reasoning`.
+Current types: `number-bonds`, `times-tables`, `fractions`, `place-value`, `reasoning`.
 
 ## Question design rules
 
@@ -116,7 +120,7 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 
 ## UI expectations when adding activities
 
-- Home lists activities from the registry; filtering by subject / year is preferred over hard-coded sections.
+- Home is one list of maths quests. Do not add subject chips, year chips, or category pills.
 - Empty, loading, error and success states must remain useful (especially empty progress and “not mastered yet”).
 - Keep motion subtle and purposeful; do not add noisy celebration that blocks the next question.
 - Match the existing visual language in `src/index.css` (brand tokens, fonts). Do not introduce a second theme.
@@ -124,7 +128,7 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 ## Definition of done for a new activity
 
 1. `npm run build` succeeds (skip lint and tests — this repo ships straight to `main`).
-2. Activity appears on the home screen with correct subject, year and ability labels.
+2. Activity appears on the home screen as a quest (title, one-line summary, progress). Do not show subject, year, or type pills.
 3. Completing it updates local progress (marks / mastery) and survives a refresh.
 4. Missed questions show teaching feedback and can be retried.
 5. README activity count / examples updated if the catalogue meaningfully changes.
@@ -133,5 +137,6 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 ## Out of scope unless explicitly requested
 
 - Login, cloud sync, teacher dashboards, payments.
-- Generating the entire curriculum in one change — add activities in focused batches.
+- Generating the entire maths curriculum in one change — add activities in focused batches.
+- English, science, or any non-maths subject.
 - Changing GitHub Pages base path without updating the deploy workflow.
