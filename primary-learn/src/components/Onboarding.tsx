@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { AVATARS } from "../data/avatars";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
-import { Pip } from "./mascot/Pip";
+import { usePipMood } from "./PipMood";
+import { PipScene } from "./mascot/PipScene";
 
 type OnboardingProps = {
   onComplete: (profile: LearnerProfile) => void;
@@ -11,6 +12,12 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState<LearnerAvatarId>("fox");
   const [error, setError] = useState<string | null>(null);
+  const { setMood } = usePipMood();
+
+  useEffect(() => {
+    setMood("cheer");
+    return () => setMood("happy");
+  }, [setMood]);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -38,7 +45,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     <main className="page page-narrow page-under-header">
       <section className="panel" style={{ display: "grid", gap: "var(--space-5)" }}>
         <div className="pip-aside">
-          <Pip size={56} mood="cheer" />
+          <PipScene size={112} mood="cheer" />
           <header style={{ display: "grid", gap: "var(--space-2)" }}>
             <h1 className="t-title-sm">What’s your name?</h1>
             <p className="t-body">

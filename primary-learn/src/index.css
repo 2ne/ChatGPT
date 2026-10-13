@@ -98,7 +98,8 @@ button:disabled {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-a:focus-visible {
+a:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
@@ -335,67 +336,67 @@ p {
   min-width: 0;
 }
 
-/* Confetti — radial pop from centre (not rain from the top) */
+.pip-slot {
+  display: grid;
+  flex: none;
+  place-items: center;
+}
+
+.pip-slot > canvas,
+.pip-slot > svg {
+  grid-area: 1 / 1;
+}
+
+svg.pip-alive .pip-ring {
+  transform-origin: 30px 34px;
+  animation: pip-orbit 14s linear infinite;
+}
+
+svg.pip-alive .pip-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pip-blink 6.5s ease-in-out infinite;
+}
+
+svg.pip-cheer {
+  animation: pip-hop 0.6s ease;
+}
+
+@keyframes pip-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pip-blink {
+  0%,
+  86%,
+  100% {
+    transform: scaleY(1);
+  }
+  92% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes pip-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Confetti — canvas particles, short pop or mastery shower */
 .confetti-layer {
   position: fixed;
   inset: 0;
   z-index: 50;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  overflow: hidden;
-}
-
-.confetti-origin {
-  position: absolute;
-  left: 50%;
-  top: 42%;
-  width: 0;
-  height: 0;
-}
-
-.confetti-piece {
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: 1px;
-  box-shadow: 0 1px 2px rgba(33, 36, 44, 0.12);
-  animation-name: confetti-burst;
-  animation-timing-function: cubic-bezier(0.14, 0.85, 0.28, 1);
-  animation-fill-mode: forwards;
-  will-change: transform, opacity;
-}
-
-.confetti-piece.is-circle {
-  border-radius: 999px;
-}
-
-.confetti-piece.is-square {
-  border-radius: 2px;
-}
-
-@keyframes confetti-burst {
-  0% {
-    transform: translate3d(0, 0, 0) scale(0.4) rotate(0deg);
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  55% {
-    /* shoot outward */
-    transform: translate3d(var(--burst-x), var(--burst-y), 0) scale(1)
-      rotate(calc(var(--burst-spin) * 0.55));
-    opacity: 1;
-  }
-  100% {
-    /* soft settle with a little gravity */
-    transform: translate3d(
-        calc(var(--burst-x) * 1.08),
-        calc(var(--burst-y) * 0.75 + 48px),
-        0
-      )
-      scale(0.85) rotate(var(--burst-spin));
-    opacity: 0;
-  }
 }
 
 .feedback.is-correct.pop-correct {
@@ -417,22 +418,55 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .confetti-layer {
-    display: none !important;
+  .confetti-layer,
+  svg.pip-alive .pip-ring,
+  svg.pip-alive .pip-eyes,
+  svg.pip-cheer,
+  .question-card {
+    animation: none !important;
   }
 
   .feedback.is-correct.pop-correct {
     animation: none !important;
   }
+
+  .progress-marker {
+    transition: none;
+  }
 }
 
 /* Progress */
+.progress-meta {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-3);
+}
+
+.progress-wrap {
+  position: relative;
+  margin-bottom: var(--space-4);
+}
+
 .progress-track {
   height: 8px;
   width: 100%;
   border-radius: var(--radius-pill);
   background: var(--off-black-8);
   overflow: hidden;
+}
+
+.progress-marker {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 2px solid var(--white);
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue);
+  pointer-events: none;
+  transition: left 200ms ease;
 }
 
 .progress-fill {
@@ -470,6 +504,16 @@ p {
   background: var(--blue-soft);
 }
 
+.option.is-correct {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+
+.option.is-wrong {
+  border-color: var(--red);
+  background: var(--red-soft);
+}
+
 .option-check {
   width: 20px;
   height: 20px;
@@ -490,6 +534,147 @@ p {
 .option-stack {
   display: grid;
   gap: var(--space-3);
+}
+
+.question-card {
+  display: grid;
+  gap: var(--space-4);
+  animation: question-in 180ms ease;
+}
+
+.question-card .btn-text {
+  justify-self: start;
+}
+
+.retry-note {
+  margin-bottom: var(--space-3);
+}
+
+@keyframes question-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.equation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--off-black-16);
+  border-radius: var(--radius-card);
+  background: var(--white);
+}
+
+.equation input {
+  width: 96px;
+  min-height: 48px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--off-black-16);
+  border-radius: var(--radius-btn);
+  background: var(--white);
+  font-size: var(--text-title-sm);
+  font-weight: 700;
+  text-align: center;
+}
+
+.equation input:focus {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.equation.is-correct {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+
+.equation.is-wrong {
+  border-color: var(--red);
+  background: var(--red-soft);
+}
+
+.step-pair {
+  display: flex;
+  gap: var(--space-2);
+  flex: none;
+}
+
+.step-btn {
+  min-width: 48px;
+  padding: 0;
+}
+
+.match-board {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.match-row {
+  justify-content: space-between;
+}
+
+.match-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 1px dashed var(--off-black-16);
+  border-radius: var(--radius-btn);
+  background: var(--off-white);
+  color: var(--off-black-50);
+}
+
+.match-slot.is-filled {
+  border-style: solid;
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--off-black);
+}
+
+.match-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.match-chip {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--off-black-16);
+  border-radius: var(--radius-card);
+  background: var(--white);
+  font-weight: 700;
+}
+
+.match-chip.is-used {
+  background: var(--off-black-8);
+  color: var(--off-black-64);
+}
+
+.score-block {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.score-figure {
+  font-variant-numeric: tabular-nums;
+}
+
+.score-actions {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
 }
 
 /* Feedback */

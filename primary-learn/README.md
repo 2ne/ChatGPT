@@ -15,7 +15,7 @@ Foundation release: profile onboarding, activity catalogue, shared interactive r
 - Asks for a child’s name and woodland avatar on first visit
 - Lists learning activities with subject, year group, ability band and type
 - Runs interactive question kinds (multiple choice, multi-select, fill blank, ordered, match pairs)
-- Retries missed questions in a calm mastery loop
+- Retries missed questions in a calm mastery loop, without changing the first-try mark
 - Saves best score and mastery per activity in localStorage
 
 ## Adding activities
@@ -66,11 +66,13 @@ npm run preview
 
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`
 - **UK framing** — year groups Reception–Year 6, British English, National Curriculum / EYFS references on each activity
-- **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid
+- **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
+- **Living logo** — Pip in the header, on welcome, and on the finish screen is a small Three.js scene (SVG if WebGL or reduced motion is unavailable). Question cards stay flat
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
 
 ## Limitations
 
 - Only one sample activity ships in this foundation
 - Progress does not sync across devices or browsers
-- Match-pairs uses a simple select UI (fine for now; richer drag-and-drop can come later)
+- Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
+- Ordered questions use up/down controls rather than drag

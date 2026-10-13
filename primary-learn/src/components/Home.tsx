@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { activities } from "../data/activities";
 import { getAvatar } from "../data/avatars";
 import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, YEAR_GROUP_LABELS, formatYearGroups } from "../data/labels";
 import type { Subject, YearGroup } from "../types/curriculum";
 import type { LearnerProfile, ProgressState } from "../types/progress";
+import { usePipMood } from "./PipMood";
 import { Pip } from "./mascot/Pip";
 
 type HomeProps = {
@@ -24,6 +25,15 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
       return subjectOk && yearOk;
     });
   }, [subjectFilter, yearFilter]);
+  const { setMood } = usePipMood();
+
+  useEffect(() => {
+    if (filtered.length === 0) {
+      setMood("think");
+      return () => setMood("happy");
+    }
+    setMood("happy");
+  }, [filtered.length, setMood]);
 
   return (
     <div className="page page-under-header">
@@ -42,7 +52,7 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
             width: 48,
             height: 48,
             borderRadius: "9999px",
-            background: "var(--off-black-8)",
+            background: "var(--blue-soft)",
             display: "grid",
             placeItems: "center",
             fontSize: 24,
@@ -54,7 +64,7 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
         <div>
           <h1 className="t-title-sm">Hi, {profile.name}</h1>
           <p className="t-body" style={{ marginTop: 4 }}>
-            Choose an activity to begin.
+            Pick something to practise.
           </p>
         </div>
       </section>
@@ -111,10 +121,13 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "var(--space-3)" }}>
             {filtered.map((activity) => {
               const activityProgress = progress.byActivity[activity.id];
+              const bestCorrect = activityProgress
+                ? Math.round((activityProgress.bestPercent / 100) * activity.questions.length)
+                : 0;
               const status = activityProgress?.mastered
                 ? "Done"
                 : activityProgress
-                  ? "In progress"
+                  ? `Best ${bestCorrect} of ${activity.questions.length}`
                   : null;
 
               return (

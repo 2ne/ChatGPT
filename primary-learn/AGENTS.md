@@ -111,6 +111,7 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 - Profile + progress keys live in `src/storage/localStore.ts`. Do not change key names casually (breaks existing browser data).
 - Record attempts with score, percentage, and mastery flag via the shared helpers.
 - Mastery = latest qualifying attempt reaches `masteryThreshold` **or** running accuracy across recent attempts meets the same bar (see `src/lib/mastery.ts`).
+- The runner scores the **first answer** to each question. Missed questions are practised again before the finish screen, and those retries do not change the mark.
 - Never store personal data beyond the child’s chosen display name and avatar id.
 
 ## UI expectations when adding activities

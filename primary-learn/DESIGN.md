@@ -31,15 +31,18 @@ Inspired by friendly geometric education mascots (big eyes, simple smile, orbit 
 | --- | --- |
 | `Pip` | Sticky header always; larger Pip only on onboarding + end summary |
 | Doodles | Optional, rare — not on every question card |
-| Confetti | Short burst when an answer is **correct** (and on mastered summary) |
-| Moods | `happy` default · `cheer` on celebration · `think` on empty states |
+| Confetti | Short canvas pop when an answer is **correct**. A fuller shower only when the first-try score reaches mastery |
+| Moods | `happy` default · `cheer` on a correct answer, welcome, and mastery · `think` on an empty catalogue |
 
 **Rules**
 
 - Sticky `AppHeader` on every screen: Pip + “Primary Path” (+ Exit/Reset on the right).
-- Do **not** repeat Pip next to progress, section titles, and cards on the same screen.
+- The header mark is a small Three.js Pip (gem + orbit ring). It cheers on a correct answer. Welcome and the finish screen use a larger Pip, with a face.
+- If WebGL is missing, or `prefers-reduced-motion` is set, use the SVG. The SVG ring may turn slowly; it does not bounce on a loop.
+- Do **not** put a Three.js scene on a question card. Text questions stay flat. A future spatial question kind can bring its own scene.
+- Do **not** repeat Pip next to progress, section titles, and cards on the same screen. The empty catalogue may show Pip once inside the empty card.
 - Question cards stay clean — celebration is the confetti + feedback pop, not corner clutter.
-- Respect `prefers-reduced-motion` (no confetti).
+- Respect `prefers-reduced-motion` (no confetti, no WebGL Pip, no question slide).
 
 ---
 
@@ -186,7 +189,7 @@ Stack options **vertically** with 16px gap. Prefer one column. Do not use emoji 
 ### Progress
 
 - Thin bar (8px), track `--off-black-8`, fill `--blue`
-- Counter meta on the right: `3 / 10` in 12–14px `--off-black-64`
+- Counter meta on the right: `3 of 10` in 12px `--off-black-50`. A retry round may add `· another go`
 - No cartoon trophies mid-question
 
 ### Home activity row (KA “Get started” pattern)
@@ -234,7 +237,7 @@ Do **not** show minutes, question counts, mastery %, ability, or curriculum refe
 ### Activity question (most important)
 
 ```
-[ Exit          3 / 10 ]
+[            3 of 10 ]
 [ ======progress====== ]
 [                      ]
 [ Question prompt      ]  ← Heading 24/32
@@ -250,7 +253,9 @@ Do **not** show minutes, question counts, mastery %, ability, or curriculum refe
 - Only the current question on screen
 - Hint is a text link, not a banner, until opened
 - After Check: feedback block, then button becomes “Continue”
-- Summary screen: big percent, one sentence, two actions (Try again / Home) — still flat
+- After Check, the chosen option (and the correct one, if they missed) takes the green or red treatment. Words still live in the feedback panel
+- Match pairs: tap a prompt, then tap its partner. Not a dropdown
+- Summary screen: first-try score as a large number, one sentence, two actions (Try again / Home). If they have not reached mastery, Try again is the primary button
 
 ---
 
@@ -261,16 +266,21 @@ Keep motion rare and purposeful (KA is restrained).
 Allowed:
 
 - 150–200ms fade/ease on feedback appear
-- Progress bar width transition
+- 180ms question card slide when the question changes
+- Progress bar width transition, with a small blue marker at the leading edge
+- Header Pip: slow orbit, a blink on the large face, one hop when the mood becomes `cheer`
+- Canvas confetti: a short pop on a correct answer (pointer-events none, brand colours only). A longer shower on the mastery summary
+- SVG fallback: slow ring turn and a blink. One hop, not a loop
 
 Forbidden on learning screens:
 
-- Continuous float/bounce on mascots
-- Confetti every correct answer
+- A WebGL canvas behind the question, options, or page background
+- Continuous bounce on the mascot
+- Confetti that covers the Check / Continue button (it must not capture taps)
 - Staggered list “rise-in” spam
 - Scale-pop on every tap
 
-`prefers-reduced-motion: reduce` disables the rest.
+`prefers-reduced-motion: reduce` disables the rest and shows the still SVG Pip.
 
 ---
 
