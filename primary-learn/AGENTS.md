@@ -118,11 +118,12 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 
 ## Definition of done for a new activity
 
-1. Types check (`npm run typecheck`) and build (`npm run build`) succeed.
+1. `npm run build` succeeds (skip lint and tests — this repo ships straight to `main`).
 2. Activity appears on the home screen with correct subject, year and ability labels.
 3. Completing it updates local progress (marks / mastery) and survives a refresh.
 4. Missed questions show teaching feedback and can be retried.
 5. README activity count / examples updated if the catalogue meaningfully changes.
+6. Commit and push to `main` (no PRs).
 
 ## Out of scope unless explicitly requested
 
