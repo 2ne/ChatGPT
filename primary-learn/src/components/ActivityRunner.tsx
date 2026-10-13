@@ -4,7 +4,7 @@ import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
 import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, formatYearGroups } from "../data/labels";
-import { DoodleCluster, DoodleStar } from "./mascot/Doodles";
+import { ConfettiBurst } from "./ConfettiBurst";
 import { Pip } from "./mascot/Pip";
 import { QuestionView } from "./QuestionView";
 
@@ -34,6 +34,7 @@ export function ActivityRunner({
   const [activeQueue, setActiveQueue] = useState<string[]>(queue);
   const [showHint, setShowHint] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
+  const [confettiBurst, setConfettiBurst] = useState(0);
 
   const currentId = activeQueue[index];
   const question = activity.questions.find((q) => q.id === currentId);
@@ -61,7 +62,9 @@ export function ActivityRunner({
     const correct = isAnswerCorrect(question, answer);
     setLastCorrect(correct);
     setResults((prev) => ({ ...prev, [question.id]: correct }));
-    if (!correct) {
+    if (correct) {
+      setConfettiBurst((n) => n + 1);
+    } else {
       setMissed((prev) => (prev.includes(question.id) ? prev : [...prev, question.id]));
       setRetryQueue((prev) => (prev.includes(question.id) ? prev : [...prev, question.id]));
     }
@@ -111,23 +114,14 @@ export function ActivityRunner({
   if (phase === "intro") {
     return (
       <main className="page page-narrow page-under-header">
-        <section
-          className="card card-with-doodle"
-          style={{ display: "grid", gap: "var(--space-4)" }}
-        >
-          <span className="card-doodle">
-            <DoodleCluster variant="b" />
-          </span>
-          <div className="pip-aside">
-            <Pip size={48} mood="cheer" />
-            <div style={{ display: "grid", gap: "var(--space-2)" }}>
-              <p className="t-meta">
-                {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
-                {formatYearGroups(activity.yearGroups)}
-              </p>
-              <h1 className="t-title-sm">{activity.title}</h1>
-              <p className="t-body">{activity.summary}</p>
-            </div>
+        <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
+          <p className="t-meta">
+            {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
+            {formatYearGroups(activity.yearGroups)}
+          </p>
+          <div style={{ display: "grid", gap: "var(--space-2)" }}>
+            <h1 className="t-title-sm">{activity.title}</h1>
+            <p className="t-body">{activity.summary}</p>
           </div>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
             Start
@@ -142,13 +136,11 @@ export function ActivityRunner({
     const mastered = percent / 100 >= activity.masteryThreshold;
     return (
       <main className="page page-narrow page-under-header">
+        {mastered ? <ConfettiBurst burstId={confettiBurst + 1} /> : null}
         <section
-          className="card card-with-doodle"
+          className="card"
           style={{ display: "grid", gap: "var(--space-4)", textAlign: "center" }}
         >
-          <span className="card-doodle">
-            <DoodleCluster variant="a" />
-          </span>
           <div style={{ display: "grid", justifyItems: "center", gap: "var(--space-3)" }}>
             <Pip size={64} mood={mastered ? "cheer" : "happy"} />
             <h1 className="t-title-sm">
@@ -187,25 +179,20 @@ export function ActivityRunner({
     );
   }
 
-  const doodleVariant = index % 3 === 0 ? "a" : index % 3 === 1 ? "b" : "c";
-
   return (
     <main className="page page-narrow page-under-header">
+      <ConfettiBurst burstId={confettiBurst} />
+
       <div
         style={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           marginBottom: "var(--space-3)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Pip size={28} mood={phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy"} />
-          <p className="t-meta">
-            {Math.min(index + 1, activeQueue.length)} / {activeQueue.length}
-          </p>
-        </div>
-        {phase === "feedback" && lastCorrect ? <DoodleStar size={18} /> : null}
+        <p className="t-meta">
+          {Math.min(index + 1, activeQueue.length)} / {activeQueue.length}
+        </p>
       </div>
 
       <div
@@ -219,16 +206,8 @@ export function ActivityRunner({
         <div className="progress-fill" style={{ transform: `scaleX(${progressRatio})` }} />
       </div>
 
-      <section
-        className="card card-with-doodle"
-        style={{ display: "grid", gap: "var(--space-4)" }}
-      >
-        <span className="card-doodle">
-          <DoodleCluster variant={doodleVariant} />
-        </span>
-        <h1 className="t-title-sm" style={{ paddingRight: 48 }}>
-          {question.prompt}
-        </h1>
+      <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
+        <h1 className="t-title-sm">{question.prompt}</h1>
 
         <QuestionView
           question={question}
@@ -254,7 +233,7 @@ export function ActivityRunner({
 
         {phase === "feedback" ? (
           <div
-            className={`feedback ${lastCorrect ? "is-correct" : "is-wrong"}`}
+            className={`feedback ${lastCorrect ? "is-correct pop-correct" : "is-wrong"}`}
             role="status"
             style={{ marginTop: 0 }}
           >

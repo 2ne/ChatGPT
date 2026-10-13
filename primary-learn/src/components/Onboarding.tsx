@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { AVATARS } from "../data/avatars";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
-import { DoodleCluster } from "./mascot/Doodles";
 import { Pip } from "./mascot/Pip";
 
 type OnboardingProps = {
@@ -37,10 +36,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <main className="page page-narrow page-under-header">
-      <section className="panel card-with-doodle" style={{ display: "grid", gap: "var(--space-5)" }}>
-        <span className="card-doodle">
-          <DoodleCluster variant="a" />
-        </span>
+      <section className="panel" style={{ display: "grid", gap: "var(--space-5)" }}>
         <div className="pip-aside">
           <Pip size={56} mood="cheer" />
           <header style={{ display: "grid", gap: "var(--space-2)" }}>

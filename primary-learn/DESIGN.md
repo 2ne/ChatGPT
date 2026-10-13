@@ -29,16 +29,17 @@ Inspired by friendly geometric education mascots (big eyes, simple smile, orbit 
 
 | Asset | Use |
 | --- | --- |
-| `Pip` | Sticky header always; beside greetings / Start / summary |
-| `DoodleStar` / `DoodleRocket` / `DoodleShape` | Tiny corner accents on cards; rotate sparingly on questions |
-| Moods | `happy` default · `cheer` after correct / celebration · `think` on “not quite” / empty |
+| `Pip` | Sticky header always; larger Pip only on onboarding + end summary |
+| Doodles | Optional, rare — not on every question card |
+| Confetti | Short burst when an answer is **correct** (and on mastered summary) |
+| Moods | `happy` default · `cheer` on celebration · `think` on empty states |
 
 **Rules**
 
 - Sticky `AppHeader` on every screen: Pip + “Primary Path” (+ Exit/Reset on the right).
-- At most **one** doodle cluster per card.
-- Do not cover answer options with decorations.
-- No continuous bounce animations on Pip during questions.
+- Do **not** repeat Pip next to progress, section titles, and cards on the same screen.
+- Question cards stay clean — celebration is the confetti + feedback pop, not corner clutter.
+- Respect `prefers-reduced-motion` (no confetti).
 
 ---
 

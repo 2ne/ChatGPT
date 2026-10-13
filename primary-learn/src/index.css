@@ -335,6 +335,64 @@ p {
   min-width: 0;
 }
 
+/* Confetti — short burst on correct answers only */
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -12px;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--confetti-drift, 20px), 105vh, 0)
+      rotate(var(--confetti-rotate, 180deg));
+    opacity: 0.85;
+  }
+}
+
+.feedback.is-correct.pop-correct {
+  animation: feedback-pop 0.35s ease;
+}
+
+@keyframes feedback-pop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.6;
+  }
+  60% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-layer {
+    display: none !important;
+  }
+
+  .feedback.is-correct.pop-correct {
+    animation: none !important;
+  }
+}
+
 /* Progress */
 .progress-track {
   height: 8px;

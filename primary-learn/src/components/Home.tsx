@@ -4,7 +4,6 @@ import { getAvatar } from "../data/avatars";
 import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, YEAR_GROUP_LABELS, formatYearGroups } from "../data/labels";
 import type { Subject, YearGroup } from "../types/curriculum";
 import type { LearnerProfile, ProgressState } from "../types/progress";
-import { DoodleCluster } from "./mascot/Doodles";
 import { Pip } from "./mascot/Pip";
 
 type HomeProps = {
@@ -29,7 +28,7 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
   return (
     <div className="page page-under-header">
       <section
-        className="card card-with-doodle"
+        className="card"
         style={{
           display: "flex",
           alignItems: "center",
@@ -37,9 +36,6 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
           marginBottom: "var(--space-5)",
         }}
       >
-        <span className="card-doodle">
-          <DoodleCluster variant="c" />
-        </span>
         <div
           aria-hidden
           style={{
@@ -97,18 +93,9 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
       </section>
 
       <section aria-live="polite">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "var(--space-3)",
-            marginBottom: "var(--space-3)",
-          }}
-        >
-          <h2 className="t-title-sm">Activities</h2>
-          <Pip size={28} mood="happy" />
-        </div>
+        <h2 className="t-title-sm" style={{ marginBottom: "var(--space-3)" }}>
+          Activities
+        </h2>
 
         {filtered.length === 0 ? (
           <div className="card" style={{ textAlign: "center" }}>
