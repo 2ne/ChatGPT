@@ -29,12 +29,16 @@ Follow **`AGENTS.md`** strictly. In short:
 
 Do not invent a parallel format or hard-code one-off activity screens in `App.tsx`.
 
+## Design
+
+Visual system is documented in **`DESIGN.md`** (Khan Academy / Wonder Blocks–inspired: Lato, blue actions, flat off-white surfaces, strict 8px spacing). Agents must follow it for all UI changes.
+
 ## Stack
 
 - React 19 + TypeScript
 - Vite
 - Tailwind CSS v4
-- lucide-react (available for icons as the catalogue grows)
+- Lato / Noto Sans
 
 ## Commands
 

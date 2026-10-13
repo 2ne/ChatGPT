@@ -18,9 +18,9 @@ export default function App() {
 
   if (!ready) {
     return (
-      <main className="grid min-h-screen place-items-center px-5">
-        <p className="font-bold text-[var(--brand-deep)]" role="status">
-          Loading Primary Path…
+      <main className="page page-narrow">
+        <p className="t-body" role="status">
+          Loading…
         </p>
       </main>
     );
@@ -34,15 +34,15 @@ export default function App() {
 
   if (activeActivityId && !activity) {
     return (
-      <main className="mx-auto grid min-h-screen max-w-lg content-center gap-4 px-5 text-center">
-        <h1 className="text-3xl text-[var(--brand-deep)]">Activity not found</h1>
-        <p className="text-[var(--muted)]">
-          That activity is missing from the catalogue. It may have been renamed.
+      <main className="page page-narrow">
+        <h1 className="t-heading">Activity not found</h1>
+        <p className="t-body" style={{ margin: "8px 0 16px" }}>
+          That activity is missing from the catalogue.
         </p>
         <button
           type="button"
           onClick={() => setActiveActivityId(null)}
-          className="mx-auto min-h-12 rounded-2xl bg-[var(--brand)] px-5 font-bold text-white"
+          className="btn btn-primary"
         >
           Back home
         </button>

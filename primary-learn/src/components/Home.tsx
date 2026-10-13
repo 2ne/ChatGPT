@@ -11,6 +11,7 @@ import {
 import { masteryLabel } from "../lib/mastery";
 import type { Subject, YearGroup } from "../types/curriculum";
 import type { LearnerProfile, ProgressState } from "../types/progress";
+import { BrandMark } from "./BrandMark";
 
 type HomeProps = {
   profile: LearnerProfile;
@@ -27,44 +28,28 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
   const filtered = useMemo(() => {
     return activities.filter((activity) => {
       const subjectOk = subjectFilter === "all" || activity.subject === subjectFilter;
-      const yearOk =
-        yearFilter === "all" || activity.yearGroups.includes(yearFilter);
+      const yearOk = yearFilter === "all" || activity.yearGroups.includes(yearFilter);
       return subjectOk && yearOk;
     });
   }, [subjectFilter, yearFilter]);
 
   const masteredCount = activities.filter((a) => progress.byActivity[a.id]?.mastered).length;
-  const attemptedCount = activities.filter(
-    (a) => (progress.byActivity[a.id]?.attempts.length ?? 0) > 0,
-  ).length;
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-5xl px-5 py-6 sm:py-10">
-      <header className="rise-in mb-8 grid gap-6 rounded-[28px] border border-[var(--line)] bg-white/90 p-5 shadow-[var(--shadow)] sm:grid-cols-[1fr_auto] sm:items-center sm:p-7">
-        <div className="flex items-center gap-4">
-          <div
-            className="grid h-20 w-20 shrink-0 place-items-center rounded-full text-4xl shadow-inner"
-            style={{ background: `${avatar.accent}22` }}
-            aria-hidden
-          >
-            {avatar.emoji}
-          </div>
-          <div>
-            <p className="font-[family-name:var(--font-display)] text-sm font-semibold tracking-[0.16em] text-[var(--brand)] uppercase">
-              Primary Path
-            </p>
-            <h1 className="text-3xl text-[var(--brand-deep)] sm:text-4xl">
-              Hello, {profile.name}!
-            </h1>
-            <p className="mt-1 text-[var(--muted)]">
-              {attemptedCount === 0
-                ? "Pick an activity to begin. Marks are saved on this device."
-                : `${masteredCount} mastered · ${attemptedCount} started`}
-            </p>
-          </div>
-        </div>
+    <div className="page">
+      <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "var(--space-3)",
+          marginBottom: "var(--space-5)",
+        }}
+      >
+        <BrandMark />
         <button
           type="button"
+          className="btn-text"
           onClick={() => {
             if (
               window.confirm(
@@ -74,19 +59,52 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
               onReset();
             }
           }}
-          className="justify-self-start rounded-full border border-[var(--line)] px-4 py-2 text-sm font-bold text-[var(--muted)] sm:justify-self-end"
         >
-          Reset profile
+          Reset
         </button>
       </header>
 
-      <section className="mb-6 grid gap-3 sm:grid-cols-2">
-        <label className="grid gap-1">
-          <span className="text-sm font-bold text-[var(--muted)]">Subject</span>
+      <section
+        className="card"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--space-3)",
+          marginBottom: "var(--space-5)",
+        }}
+      >
+        <div
+          aria-hidden
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: "9999px",
+            background: "var(--off-black-8)",
+            display: "grid",
+            placeItems: "center",
+            fontSize: 24,
+            flex: "none",
+          }}
+        >
+          {avatar.emoji}
+        </div>
+        <div>
+          <h1 className="t-heading">Hi, {profile.name}</h1>
+          <p className="t-meta" style={{ marginTop: 4 }}>
+            {masteredCount === 0
+              ? "Choose an activity to begin."
+              : `${masteredCount} activit${masteredCount === 1 ? "y" : "ies"} mastered`}
+          </p>
+        </div>
+      </section>
+
+      <section className="filters">
+        <label className="field">
+          <span className="t-meta">Subject</span>
           <select
+            className="select"
             value={subjectFilter}
             onChange={(event) => setSubjectFilter(event.target.value as Subject | "all")}
-            className="min-h-12 rounded-2xl border-2 border-[var(--line)] bg-white px-3 font-semibold"
           >
             <option value="all">All subjects</option>
             {Object.entries(SUBJECT_LABELS).map(([value, label]) => (
@@ -96,12 +114,12 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
             ))}
           </select>
         </label>
-        <label className="grid gap-1">
-          <span className="text-sm font-bold text-[var(--muted)]">Year group</span>
+        <label className="field">
+          <span className="t-meta">Year group</span>
           <select
+            className="select"
             value={yearFilter}
             onChange={(event) => setYearFilter(event.target.value as YearGroup | "all")}
-            className="min-h-12 rounded-2xl border-2 border-[var(--line)] bg-white px-3 font-semibold"
           >
             <option value="all">All years</option>
             {Object.entries(YEAR_GROUP_LABELS).map(([value, label]) => (
@@ -114,64 +132,72 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
       </section>
 
       <section aria-live="polite">
-        <div className="mb-4 flex items-end justify-between gap-3">
-          <h2 className="text-2xl text-[var(--brand-deep)]">Learning activities</h2>
-          <p className="text-sm font-semibold text-[var(--muted)]">
-            {filtered.length} shown
-          </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            marginBottom: "var(--space-3)",
+          }}
+        >
+          <h2 className="t-title-sm">Activities</h2>
+          <p className="t-meta">{filtered.length} shown</p>
         </div>
 
         {filtered.length === 0 ? (
-          <div className="rounded-[24px] border border-dashed border-[var(--line)] bg-white/70 px-6 py-12 text-center">
-            <p className="mb-2 text-xl font-bold text-[var(--brand-deep)]">No activities here yet</p>
-            <p className="text-[var(--muted)]">
-              Try another subject or year, or ask an agent to add one using AGENTS.md.
+          <div className="card" style={{ textAlign: "center" }}>
+            <p className="t-title-sm">No activities here yet</p>
+            <p className="t-body" style={{ marginTop: "var(--space-2)" }}>
+              Try another subject or year group.
             </p>
           </div>
         ) : (
-          <ul className="grid gap-4">
-            {filtered.map((activity, index) => {
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "var(--space-3)" }}>
+            {filtered.map((activity) => {
               const activityProgress = progress.byActivity[activity.id];
               const status = masteryLabel(activityProgress, activity.masteryThreshold);
+              const pillClass = activityProgress?.mastered
+                ? "pill is-mastered"
+                : activityProgress
+                  ? "pill is-progress"
+                  : "pill";
+
               return (
-                <li
-                  key={activity.id}
-                  className="rise-in"
-                  style={{ animationDelay: `${Math.min(index, 6) * 40}ms` }}
-                >
+                <li key={activity.id}>
                   <button
                     type="button"
+                    className="activity-row"
                     onClick={() => onOpenActivity(activity.id)}
-                    className="grid w-full gap-3 rounded-[24px] border border-[var(--line)] bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--brand)] hover:shadow-[var(--shadow)] sm:grid-cols-[1fr_auto] sm:items-center"
                   >
                     <div>
-                      <p className="mb-1 text-xs font-bold tracking-wide text-[var(--sky-deep)] uppercase">
+                      <p className="t-meta" style={{ marginBottom: 4 }}>
                         {SUBJECT_LABELS[activity.subject]} ·{" "}
                         {ACTIVITY_TYPE_LABELS[activity.type]}
                       </p>
-                      <h3 className="text-xl text-[var(--brand-deep)] sm:text-2xl">
-                        {activity.title}
-                      </h3>
-                      <p className="mt-1 text-[var(--muted)]">{activity.summary}</p>
-                      <p className="mt-3 text-sm font-semibold text-[var(--muted)]">
+                      <h3 className="t-title-sm">{activity.title}</h3>
+                      <p className="t-body" style={{ marginTop: 4 }}>
+                        {activity.summary}
+                      </p>
+                      <p className="t-meta" style={{ marginTop: "var(--space-2)" }}>
                         {formatYearGroups(activity.yearGroups)} ·{" "}
                         {ABILITY_LABELS[activity.ability]} · {activity.estimatedMinutes} min
                       </p>
                     </div>
-                    <div className="flex flex-col items-start gap-2 sm:items-end">
-                      <span
-                        className={`rounded-full px-3 py-1 text-sm font-extrabold ${
-                          activityProgress?.mastered
-                            ? "bg-[var(--brand-soft)] text-[var(--good)]"
-                            : activityProgress
-                              ? "bg-[var(--sun-soft)] text-[var(--warn)]"
-                              : "bg-[var(--paper)] text-[var(--muted)]"
-                        }`}
-                      >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: "var(--space-2)",
+                      }}
+                    >
+                      <span className={pillClass}>
                         {status}
                         {activityProgress ? ` · ${activityProgress.bestPercent}%` : ""}
                       </span>
-                      <span className="font-bold text-[var(--brand)]">Open →</span>
+                      <span className="t-label" style={{ color: "var(--blue)" }}>
+                        Open →
+                      </span>
                     </div>
                   </button>
                 </li>

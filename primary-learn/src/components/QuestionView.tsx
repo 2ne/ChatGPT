@@ -11,7 +11,7 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
   switch (question.kind) {
     case "multiple-choice":
       return (
-        <div className="grid gap-3" role="radiogroup" aria-label="Choose one answer">
+        <div className="option-stack" role="radiogroup" aria-label="Choose one answer">
           {question.options.map((option) => {
             const selected = answer === option.id;
             return (
@@ -22,11 +22,7 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
                 aria-checked={selected}
                 disabled={disabled}
                 onClick={() => onChange(option.id)}
-                className={`flex min-h-16 items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left font-bold transition ${
-                  selected
-                    ? "border-[var(--brand)] bg-[var(--brand-soft)]"
-                    : "border-[var(--line)] bg-white hover:border-[var(--sky)]"
-                }`}
+                className={`option${selected ? " is-selected" : ""}`}
               >
                 {option.visual ? <span aria-hidden>{option.visual}</span> : null}
                 <span>{option.label}</span>
@@ -39,8 +35,8 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
     case "multi-select": {
       const selected = Array.isArray(answer) ? (answer as string[]) : [];
       return (
-        <div className="grid gap-3" role="group" aria-label="Choose all that apply">
-          <p className="text-sm font-semibold text-[var(--muted)]">Choose all that apply</p>
+        <div className="option-stack" role="group" aria-label="Choose all that apply">
+          <p className="t-meta">Choose all that apply</p>
           {question.options.map((option) => {
             const isOn = selected.includes(option.id);
             return (
@@ -53,20 +49,9 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
                   if (isOn) onChange(selected.filter((id) => id !== option.id));
                   else onChange([...selected, option.id]);
                 }}
-                className={`flex min-h-16 items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left font-bold transition ${
-                  isOn
-                    ? "border-[var(--brand)] bg-[var(--brand-soft)]"
-                    : "border-[var(--line)] bg-white hover:border-[var(--sky)]"
-                }`}
+                className={`option${isOn ? " is-selected" : ""}`}
               >
-                <span
-                  aria-hidden
-                  className={`grid h-6 w-6 place-items-center rounded-md border-2 text-xs ${
-                    isOn
-                      ? "border-[var(--brand)] bg-[var(--brand)] text-white"
-                      : "border-[var(--line)]"
-                  }`}
-                >
+                <span className="option-check" aria-hidden>
                   {isOn ? "✓" : ""}
                 </span>
                 <span>{option.label}</span>
@@ -79,17 +64,46 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
 
     case "fill-blank":
       return (
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border-2 border-[var(--line)] bg-white px-4 py-5">
-          {question.prefix ? <span className="text-2xl font-bold">{question.prefix}</span> : null}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "var(--space-2)",
+            padding: "var(--space-4)",
+            border: "1px solid var(--off-black-16)",
+            borderRadius: "var(--radius-card)",
+            background: "var(--white)",
+          }}
+        >
+          {question.prefix ? (
+            <span className="t-heading" style={{ fontSize: 20, lineHeight: "28px" }}>
+              {question.prefix}
+            </span>
+          ) : null}
           <input
             value={typeof answer === "string" ? answer : ""}
             disabled={disabled}
             inputMode={question.inputMode === "text" ? "text" : "numeric"}
             aria-label="Your answer"
             onChange={(event) => onChange(event.target.value)}
-            className="min-h-14 w-28 rounded-xl border-2 border-[var(--brand)] bg-[var(--sun-soft)] px-3 text-center text-2xl font-extrabold outline-none"
+            style={{
+              minHeight: 48,
+              width: 96,
+              border: "1px solid var(--blue)",
+              borderRadius: "var(--radius-btn)",
+              background: "var(--blue-soft)",
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: 700,
+              padding: "0 8px",
+            }}
           />
-          {question.suffix ? <span className="text-2xl font-bold">{question.suffix}</span> : null}
+          {question.suffix ? (
+            <span className="t-heading" style={{ fontSize: 20, lineHeight: "28px" }}>
+              {question.suffix}
+            </span>
+          ) : null}
         </div>
       );
 
@@ -108,23 +122,27 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
       }
 
       return (
-        <ol className="grid gap-3">
+        <ol className="option-stack" style={{ listStyle: "none", margin: 0, padding: 0 }}>
           {order.map((id, index) => (
             <li
               key={id}
-              className="flex min-h-16 items-center justify-between gap-3 rounded-2xl border-2 border-[var(--line)] bg-white px-4 py-3"
+              className="option"
+              style={{ justifyContent: "space-between" }}
             >
-              <span className="font-bold">
-                <span className="mr-3 text-[var(--muted)]">{index + 1}.</span>
+              <span>
+                <span className="t-meta" style={{ marginRight: 8 }}>
+                  {index + 1}.
+                </span>
                 {labelFor(id)}
               </span>
-              <span className="flex gap-2">
+              <span style={{ display: "flex", gap: 8 }}>
                 <button
                   type="button"
                   disabled={disabled || index === 0}
                   aria-label={`Move ${labelFor(id)} up`}
                   onClick={() => move(index, -1)}
-                  className="min-h-11 min-w-11 rounded-xl border border-[var(--line)] bg-[var(--paper)] font-bold"
+                  className="btn btn-secondary"
+                  style={{ minHeight: 40, minWidth: 40, padding: 0 }}
                 >
                   ↑
                 </button>
@@ -133,7 +151,8 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
                   disabled={disabled || index === order.length - 1}
                   aria-label={`Move ${labelFor(id)} down`}
                   onClick={() => move(index, 1)}
-                  className="min-h-11 min-w-11 rounded-xl border border-[var(--line)] bg-[var(--paper)] font-bold"
+                  className="btn btn-secondary"
+                  style={{ minHeight: 40, minWidth: 40, padding: 0 }}
                 >
                   ↓
                 </button>
@@ -152,18 +171,24 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
       const rights = question.pairs.map((pair) => pair.right);
 
       return (
-        <div className="grid gap-4">
+        <div className="option-stack">
           {question.pairs.map((pair) => (
             <label
               key={pair.id}
-              className="grid gap-2 rounded-2xl border-2 border-[var(--line)] bg-white px-4 py-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:items-center"
+              className="field"
+              style={{
+                padding: "var(--space-3)",
+                border: "1px solid var(--off-black-16)",
+                borderRadius: "var(--radius-card)",
+                background: "var(--white)",
+              }}
             >
-              <span className="font-bold">{pair.left}</span>
+              <span className="t-label">{pair.left}</span>
               <select
                 disabled={disabled}
                 value={map[pair.id] ?? ""}
                 onChange={(event) => onChange({ ...map, [pair.id]: event.target.value })}
-                className="min-h-12 rounded-xl border-2 border-[var(--line)] bg-[var(--paper)] px-3 font-semibold"
+                className="select"
               >
                 <option value="">Choose…</option>
                 {rights.map((right) => (
@@ -179,6 +204,6 @@ export function QuestionView({ question, answer, disabled, onChange }: QuestionV
     }
 
     default:
-      return <p>This question type is not supported yet.</p>;
+      return <p className="t-body">This question type is not supported yet.</p>;
   }
 }

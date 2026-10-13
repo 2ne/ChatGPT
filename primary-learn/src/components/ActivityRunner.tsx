@@ -3,7 +3,12 @@ import type { Activity } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
-import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, formatYearGroups, ABILITY_LABELS } from "../data/labels";
+import {
+  ACTIVITY_TYPE_LABELS,
+  SUBJECT_LABELS,
+  formatYearGroups,
+  ABILITY_LABELS,
+} from "../data/labels";
 import { QuestionView } from "./QuestionView";
 
 type ActivityRunnerProps = {
@@ -35,10 +40,11 @@ export function ActivityRunner({
 
   const currentId = activeQueue[index];
   const question = activity.questions.find((q) => q.id === currentId);
-  const answeredCount = Object.keys(results).length;
   const correctCount = Object.values(results).filter(Boolean).length;
   const progressRatio =
-    activeQueue.length === 0 ? 0 : Math.min(1, (index + (phase === "feedback" ? 1 : 0)) / activeQueue.length);
+    activeQueue.length === 0
+      ? 0
+      : Math.min(1, (index + (phase === "feedback" ? 1 : 0)) / activeQueue.length);
 
   function begin() {
     const first = activity.questions[0];
@@ -107,45 +113,27 @@ export function ActivityRunner({
 
   if (phase === "intro") {
     return (
-      <main className="mx-auto grid min-h-screen w-full max-w-3xl content-start gap-6 px-5 py-8">
-        <button
-          type="button"
-          onClick={onExit}
-          className="w-fit rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm font-bold text-[var(--muted)]"
-        >
-          ← Back home
+      <main className="page page-narrow">
+        <button type="button" className="btn-text" onClick={onExit} style={{ marginBottom: 16 }}>
+          ← Back
         </button>
-        <section className="rise-in rounded-[28px] border border-[var(--line)] bg-white p-6 shadow-[var(--shadow)] sm:p-8">
-          <p className="mb-2 text-sm font-bold tracking-wide text-[var(--sky-deep)] uppercase">
-            {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]}
+        <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
+          <p className="t-meta">
+            {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
+            {formatYearGroups(activity.yearGroups)}
           </p>
-          <h1 className="mb-3 text-4xl text-[var(--brand-deep)]">{activity.title}</h1>
-          <p className="mb-6 text-[var(--muted)]">{activity.summary}</p>
-          <dl className="mb-8 grid gap-3 text-sm sm:grid-cols-2">
-            <div className="rounded-2xl bg-[var(--paper)] px-4 py-3">
-              <dt className="text-[var(--muted)]">Year</dt>
-              <dd className="font-bold">{formatYearGroups(activity.yearGroups)}</dd>
-            </div>
-            <div className="rounded-2xl bg-[var(--paper)] px-4 py-3">
-              <dt className="text-[var(--muted)]">Ability</dt>
-              <dd className="font-bold">{ABILITY_LABELS[activity.ability]}</dd>
-            </div>
-            <div className="rounded-2xl bg-[var(--paper)] px-4 py-3">
-              <dt className="text-[var(--muted)]">About</dt>
-              <dd className="font-bold">{activity.estimatedMinutes} minutes · {activity.questions.length} questions</dd>
-            </div>
-            <div className="rounded-2xl bg-[var(--paper)] px-4 py-3">
-              <dt className="text-[var(--muted)]">Mastery</dt>
-              <dd className="font-bold">{Math.round(activity.masteryThreshold * 100)}% to master</dd>
-            </div>
-          </dl>
-          <p className="mb-6 text-sm text-[var(--muted)]">{activity.curriculumRef}</p>
-          <button
-            type="button"
-            onClick={begin}
-            className="min-h-14 w-full rounded-2xl bg-[var(--brand)] px-6 text-lg font-extrabold text-white sm:w-auto"
-          >
-            Let’s go, {learnerName}!
+          <div style={{ display: "grid", gap: "var(--space-2)" }}>
+            <h1 className="t-title">{activity.title}</h1>
+            <p className="t-body">{activity.summary}</p>
+          </div>
+          <p className="t-meta">
+            {ABILITY_LABELS[activity.ability]} · {activity.estimatedMinutes} min ·{" "}
+            {activity.questions.length} questions · {Math.round(activity.masteryThreshold * 100)}%
+            to master
+          </p>
+          <p className="t-meta">{activity.curriculumRef}</p>
+          <button type="button" className="btn btn-primary btn-block" onClick={begin}>
+            Start
           </button>
         </section>
       </main>
@@ -156,33 +144,46 @@ export function ActivityRunner({
     const percent = Math.round((correctCount / activity.questions.length) * 100);
     const mastered = percent / 100 >= activity.masteryThreshold;
     return (
-      <main className="mx-auto grid min-h-screen w-full max-w-3xl content-center px-5 py-10">
-        <section className="rise-in rounded-[28px] border border-[var(--line)] bg-white p-6 text-center shadow-[var(--shadow)] sm:p-10">
-          <p className="mb-2 text-sm font-bold tracking-wide text-[var(--brand)] uppercase">
-            {mastered ? "Mastered" : "Nice practise"}
-          </p>
-          <h1 className="mb-3 text-4xl text-[var(--brand-deep)]">
-            {mastered ? `Brilliant work, ${learnerName}!` : `Good effort, ${learnerName}`}
+      <main className="page page-narrow">
+        <section
+          className="card"
+          style={{ display: "grid", gap: "var(--space-4)", textAlign: "center" }}
+        >
+          <p className="t-meta">{mastered ? "Mastered" : "Keep practising"}</p>
+          <h1 className="t-title">
+            {mastered ? `Great work, ${learnerName}` : `Nice try, ${learnerName}`}
           </h1>
-          <p className="mb-8 text-[var(--muted)]">
-            You got {correctCount} of {activity.questions.length} correct ({percent}%).
+          <p className="t-body">
+            {correctCount} of {activity.questions.length} correct ({percent}%).
           </p>
-          <div className="mx-auto mb-8 grid h-36 w-36 place-items-center rounded-full bg-[var(--brand-soft)] text-4xl font-extrabold text-[var(--brand-deep)]">
+          <div
+            aria-hidden
+            style={{
+              width: 96,
+              height: 96,
+              margin: "0 auto",
+              borderRadius: "9999px",
+              background: mastered ? "var(--green-soft)" : "var(--blue-soft)",
+              color: mastered ? "var(--green)" : "var(--blue)",
+              display: "grid",
+              placeItems: "center",
+              fontSize: 28,
+              fontWeight: 900,
+            }}
+          >
             {percent}%
           </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              type="button"
-              onClick={begin}
-              className="min-h-12 rounded-2xl border-2 border-[var(--brand)] px-5 font-bold text-[var(--brand-deep)]"
-            >
+          <div
+            style={{
+              display: "grid",
+              gap: "var(--space-3)",
+              gridTemplateColumns: "1fr",
+            }}
+          >
+            <button type="button" className="btn btn-secondary btn-block" onClick={begin}>
               Try again
             </button>
-            <button
-              type="button"
-              onClick={onExit}
-              className="min-h-12 rounded-2xl bg-[var(--brand)] px-5 font-bold text-white"
-            >
+            <button type="button" className="btn btn-primary btn-block" onClick={onExit}>
               Back home
             </button>
           </div>
@@ -193,9 +194,11 @@ export function ActivityRunner({
 
   if (!question) {
     return (
-      <main className="mx-auto grid min-h-screen place-items-center px-5">
-        <p role="alert">This activity has no questions yet.</p>
-        <button type="button" onClick={onExit} className="mt-4 font-bold text-[var(--brand)]">
+      <main className="page page-narrow">
+        <p className="t-body" role="alert">
+          This activity has no questions yet.
+        </p>
+        <button type="button" className="btn-text" onClick={onExit}>
           Back home
         </button>
       </main>
@@ -203,36 +206,37 @@ export function ActivityRunner({
   }
 
   return (
-    <main className="mx-auto grid min-h-screen w-full max-w-3xl content-start gap-5 px-5 py-6">
-      <div className="flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={onExit}
-          className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm font-bold text-[var(--muted)]"
-        >
+    <main className="page page-narrow">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "var(--space-3)",
+        }}
+      >
+        <button type="button" className="btn-text" onClick={onExit}>
           ← Exit
         </button>
-        <p className="text-sm font-bold text-[var(--muted)]">
+        <p className="t-meta">
           {Math.min(index + 1, activeQueue.length)} / {activeQueue.length}
-          {retryQueue.length === 0 && answeredCount >= activity.questions.length ? " · retry" : ""}
         </p>
       </div>
 
       <div
-        className="h-3 overflow-hidden rounded-full bg-white/80"
+        className="progress-track"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progressRatio * 100)}
+        style={{ marginBottom: "var(--space-4)" }}
       >
-        <div
-          className="h-full origin-left rounded-full bg-[var(--brand)] transition-transform duration-500"
-          style={{ transform: `scaleX(${progressRatio})` }}
-        />
+        <div className="progress-fill" style={{ transform: `scaleX(${progressRatio})` }} />
       </div>
 
-      <section className="rise-in rounded-[28px] border border-[var(--line)] bg-white p-5 shadow-[var(--shadow)] sm:p-8">
-        <h1 className="mb-6 text-2xl text-[var(--brand-deep)] sm:text-3xl">{question.prompt}</h1>
+      <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
+        <h1 className="t-heading">{question.prompt}</h1>
+
         <QuestionView
           question={question}
           answer={answer}
@@ -241,53 +245,40 @@ export function ActivityRunner({
         />
 
         {phase === "question" && question.hint ? (
-          <div className="mt-5">
-            {showHint ? (
-              <p className="rounded-xl bg-[var(--sun-soft)] px-4 py-3 text-[var(--muted)]">{question.hint}</p>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowHint(true)}
-                className="text-sm font-bold text-[var(--sky-deep)] underline-offset-2 hover:underline"
-              >
-                Need a hint?
-              </button>
-            )}
-          </div>
+          showHint ? (
+            <p className="t-body">{question.hint}</p>
+          ) : (
+            <button type="button" className="btn-text" onClick={() => setShowHint(true)} style={{ justifySelf: "start" }}>
+              Need a hint?
+            </button>
+          )
         ) : null}
 
         {phase === "feedback" ? (
           <div
-            className={`pop-in mt-6 rounded-2xl px-4 py-4 ${
-              lastCorrect ? "bg-[var(--brand-soft)] text-[var(--good)]" : "bg-[#fde8e5] text-[var(--bad)]"
-            }`}
+            className={`feedback ${lastCorrect ? "is-correct" : "is-wrong"}`}
             role="status"
+            style={{ marginTop: 0 }}
           >
-            <p className="mb-1 font-extrabold">{lastCorrect ? "Yes!" : "Not quite"}</p>
-            <p className="text-[var(--ink)]">{question.explanation}</p>
+            <p className="feedback-title">{lastCorrect ? "Correct" : "Not quite"}</p>
+            <p>{question.explanation}</p>
           </div>
         ) : null}
 
-        <div className="mt-7">
-          {phase === "question" ? (
-            <button
-              type="button"
-              disabled={!hasProvidedAnswer(question, answer)}
-              onClick={checkAnswer}
-              className="min-h-14 w-full rounded-2xl bg-[var(--brand)] px-6 text-lg font-extrabold text-white disabled:opacity-45"
-            >
-              Check
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={goNext}
-              className="min-h-14 w-full rounded-2xl bg-[var(--brand)] px-6 text-lg font-extrabold text-white"
-            >
-              Continue
-            </button>
-          )}
-        </div>
+        {phase === "question" ? (
+          <button
+            type="button"
+            className="btn btn-primary btn-block"
+            disabled={!hasProvidedAnswer(question, answer)}
+            onClick={checkAnswer}
+          >
+            Check
+          </button>
+        ) : (
+          <button type="button" className="btn btn-primary btn-block" onClick={goNext}>
+            Continue
+          </button>
+        )}
       </section>
     </main>
   );

@@ -4,6 +4,8 @@ This project is an interactive UK primary e-learning app for children. Progress 
 
 When asked to add or change a learning activity, follow this document strictly. Do not invent a parallel activity format.
 
+**UI:** Follow `DESIGN.md` for spacing, type, colour and activity layout (Khan Academy / Wonder Blocks–inspired). Do not invent a second visual system.
+
 ## Goals
 
 - Cover the UK primary curriculum over time (Reception → Year 6).
