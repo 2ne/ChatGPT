@@ -427,12 +427,10 @@ export function ActivityRunner({
             <span className="q-num" aria-hidden>
               {position}
             </span>
-            <div style={{ display: "grid", gap: 4, minWidth: 0 }}>
-              <span className="q-kind">{KIND_LABELS[question.kind] ?? "Question"}</span>
-              <h1 ref={promptRef} tabIndex={-1} className="q-prompt">
-                {question.prompt}
-              </h1>
-            </div>
+            <span className="q-kind">{KIND_LABELS[question.kind] ?? "Question"}</span>
+            <h1 ref={promptRef} tabIndex={-1} className="q-prompt">
+              {question.prompt}
+            </h1>
           </div>
 
           <QuestionView
@@ -450,7 +448,7 @@ export function ActivityRunner({
                   <span className="hint-icon" aria-hidden>
                     <Lightbulb size={17} />
                   </span>
-                  {question.hint}
+                  <span className="hint-text">{question.hint}</span>
                 </p>
               ) : (
                 <button type="button" className="btn-text" onClick={() => setShowHint(true)}>

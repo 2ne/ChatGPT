@@ -971,16 +971,20 @@ p {
 }
 
 .q-head {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
+  row-gap: 2px;
+  align-items: center;
   padding-top: 6px;
 }
 
 .q-num {
-  flex: none;
-  display: grid;
-  place-items: center;
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 46px;
   height: 46px;
   border-radius: 16px;
@@ -989,23 +993,29 @@ p {
   font-family: var(--font-display);
   font-size: 19px;
   font-weight: 800;
+  line-height: 1;
 }
 
 .q-prompt {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center;
   font-family: var(--font-display);
   font-size: clamp(22px, 3.4vw, 27px);
   font-weight: 800;
-  line-height: 1.28;
+  line-height: 1.2;
   color: var(--ink);
-  padding-top: 6px;
 }
 
 .q-kind {
-  display: inline-flex;
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
   align-items: center;
-  gap: 6px;
+  min-height: 16px;
   font-size: 12px;
   font-weight: 800;
+  line-height: 1;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -1257,7 +1267,7 @@ p {
 .hint-card {
   display: flex;
   gap: 10px;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   background: var(--sun-soft);
   border: 2px dashed #e3b93c;
@@ -1268,15 +1278,24 @@ p {
   color: #7a5b00;
 }
 
+.hint-text {
+  line-height: 1.35;
+}
+
 .hint-icon {
   flex: none;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background: var(--sun);
   color: #5c4500;
+}
+
+.hint-icon svg {
+  display: block;
 }
 
 .feedback {
