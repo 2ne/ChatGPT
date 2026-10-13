@@ -6,6 +6,8 @@ When asked to add or change a learning activity, follow this document strictly. 
 
 **UI:** Follow `DESIGN.md` for spacing, type, colour and activity layout (Khan Academy / Wonder Blocks–inspired). Do not invent a second visual system.
 
+**Curriculum:** Follow `curriculum/` (England EYFS + National Curriculum pathways). Prefer the earliest missing building block in `curriculum/coverage.md` over skipping ahead. Tag `curriculumRef` / `skills` to nodes in those files.
+
 ## Goals
 
 - Cover the UK primary curriculum over time (Reception → Year 6).

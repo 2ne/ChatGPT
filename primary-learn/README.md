@@ -33,6 +33,16 @@ Do not invent a parallel format or hard-code one-off activity screens in `App.ts
 
 Visual system is documented in **`DESIGN.md`** (Khan Academy / Wonder Blocks–inspired: Lato, blue actions, flat off-white surfaces, strict 8px spacing). Agents must follow it for all UI changes.
 
+## Curriculum map
+
+UK (England) pathways and gap tracking live in **`curriculum/`**:
+
+- `curriculum/overview.md` — stages and subjects  
+- `curriculum/maths.md` / `english.md` / `science.md` — building-block order  
+- `curriculum/coverage.md` — what the app already covers vs missing  
+
+Start from the earliest missing prerequisite, not the flashiest topic.
+
 ## Stack
 
 - React 19 + TypeScript
