@@ -223,7 +223,7 @@ export function ActivityRunner({
       </div>
 
       <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
-        <h1 className="t-heading">{question.prompt}</h1>
+        <h1 className="t-title-sm">{question.prompt}</h1>
 
         <QuestionView
           question={question}
