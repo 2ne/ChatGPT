@@ -85,9 +85,6 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
               </span>
             </div>
           </div>
-          <div className="hero-pip" aria-hidden>
-            <Pip size={92} mood="cheer" />
-          </div>
         </div>
       </section>
 

@@ -61,7 +61,7 @@ export function ActivityRunner({
   const [confettiBurst, setConfettiBurst] = useState(0);
   const [isRetry, setIsRetry] = useState(false);
   const [streak, setStreak] = useState(0);
-  const { mood, setMood } = usePipMood();
+  const { setMood } = usePipMood();
   const promptRef = useRef<HTMLHeadingElement>(null);
 
   const theme = subjectTheme(activity.subject);
@@ -216,7 +216,7 @@ export function ActivityRunner({
   /* ——— Intro ——— */
   if (phase === "intro") {
     return (
-      <main className="page page-narrow page-under-header">
+      <main className="page page-under-header">
         <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
           <button type="button" className="back-link" onClick={onExit}>
             <ArrowLeft size={17} aria-hidden /> All quests
@@ -272,7 +272,7 @@ export function ActivityRunner({
     const perfect = missed.length === 0;
     const stars = perfect ? 3 : mastered ? 2 : firstCorrect > 0 ? 1 : 0;
     return (
-      <main className="page page-narrow page-under-header">
+      <main className="page page-under-header">
         {mastered ? <ConfettiBurst burstId={1} intensity="shower" /> : null}
         <section className="card score-block">
           <Pip size={112} mood={mastered ? "cheer" : "happy"} />
@@ -330,7 +330,7 @@ export function ActivityRunner({
 
   if (!question) {
     return (
-      <main className="page page-narrow page-under-header">
+      <main className="page page-under-header">
         <p className="t-body" role="alert">
           This activity has no questions yet.
         </p>
@@ -355,19 +355,8 @@ export function ActivityRunner({
             : streak >= 2
               ? "You're on a roll!"
               : "Keep going!";
-  const sidekickMessage =
-    phase === "feedback"
-      ? lastCorrect
-        ? "Did you see that? Brilliant!"
-        : "Tricky one! Read the tip with me."
-      : isRetry
-        ? "Another go — I believe in you."
-        : streak >= 2
-          ? `${streak} in a row. Keep it up!`
-          : "Take your time. You've got this.";
-
   return (
-    <main className="page page-narrow page-under-header">
+    <main className="page page-under-header">
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       {/* Where am I? — activity context + segmented progress */}
@@ -515,14 +504,6 @@ export function ActivityRunner({
             </button>
           )}
         </section>
-
-        <aside className="sidekick" aria-hidden>
-          <Pip size={96} mood={mood} />
-          <p className="sidekick-bubble">{sidekickMessage}</p>
-          <p className="t-meta">
-            {firstCorrect} correct so far
-          </p>
-        </aside>
       </div>
     </main>
   );

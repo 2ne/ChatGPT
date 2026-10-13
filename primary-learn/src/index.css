@@ -504,9 +504,9 @@ p {
   border-radius: var(--radius-lg);
   border: 2px solid var(--primary-deep);
   background:
-    radial-gradient(circle at 88% 12%, rgba(255, 201, 60, 0.5) 0 44px, transparent 45px),
-    radial-gradient(circle at 78% 88%, rgba(255, 255, 255, 0.16) 0 70px, transparent 71px),
-    radial-gradient(rgba(255, 255, 255, 0.22) 1.6px, transparent 1.7px) 0 0 / 22px 22px,
+    radial-gradient(circle at 88% 12%, rgba(255, 201, 60, 0.28) 0 44px, transparent 45px),
+    radial-gradient(circle at 78% 88%, rgba(255, 255, 255, 0.08) 0 70px, transparent 71px),
+    radial-gradient(rgba(255, 255, 255, 0.07) 1.2px, transparent 1.4px) 0 0 / 28px 28px,
     linear-gradient(120deg, #4f46e5 0%, #7c3aed 70%, #9333ea 100%);
   color: #fff;
   padding: var(--space-5);
@@ -573,25 +573,9 @@ p {
   color: #fff;
 }
 
-.hero-pip {
-  flex: none;
-  width: 118px;
-  height: 118px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.16);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 32px;
-}
-
 @media (max-width: 560px) {
   .hero-inner {
     gap: var(--space-3);
-  }
-  .hero-pip {
-    width: 88px;
-    height: 88px;
-    border-radius: 24px;
   }
 }
 
@@ -1398,37 +1382,10 @@ p {
   margin-bottom: var(--space-3);
 }
 
-/* encourage sidekick (desktop) */
+/* Question stack stays the full content width on every screen. */
 .play-grid {
   display: grid;
   gap: var(--space-3);
-}
-
-@media (min-width: 860px) {
-  .play-grid {
-    grid-template-columns: 1fr 240px;
-    align-items: start;
-  }
-}
-
-.sidekick {
-  display: none;
-}
-
-@media (min-width: 860px) {
-  .sidekick {
-    display: grid;
-    gap: 10px;
-    justify-items: center;
-    text-align: center;
-    background: var(--card);
-    border: 2px solid var(--line);
-    border-radius: var(--radius);
-    padding: var(--space-4) var(--space-3);
-    box-shadow: var(--shadow-card);
-    position: sticky;
-    top: 88px;
-  }
 }
 
 .sidekick-bubble {

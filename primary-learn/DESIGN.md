@@ -30,7 +30,7 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 | Asset | Use |
 | --- | --- |
-| `Pip` | Header badge (42px in a white tile), hero panel, feedback reactions, finish screen (112px) |
+| `Pip` | Header badge (42px in a white tile), feedback reactions, finish screen (112px) |
 | Confetti | Short canvas pop on a correct answer; full shower on a mastered summary |
 | Moods | `happy` default · `cheer` on correct + mastery · `think` on wrong + empty states |
 
@@ -39,8 +39,9 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 - Sticky `AppHeader` on every screen: Pip tile + "Primary *Path*" wordmark
   (indigo gradient on "Path") + tagline, learner chip on the right, Exit pill
   during activities.
-- Question cards show a small Pip **only inside feedback** (reaction) and the
-  desktop sidekick. Never wallpaper Pip around the screen.
+- Question cards show a small Pip **only inside feedback** (reaction). Never
+  wallpaper Pip around the screen, and do not put Pip on the home greeting
+  banner — the learner's own buddy emoji is who they are.
 - Motion: blink (5s), sprout sway, star twinkle, one hop on `cheer`, tilt on
   `think`. All disabled under `prefers-reduced-motion`.
 - Finish screen: large Pip + animated 1–3 stars.
@@ -118,9 +119,9 @@ every question feels like part of the quest.
 
 ### Home
 
-1. **Hero** — indigo→violet gradient panel, dot texture, sun accent:
-   `Hi, {name}!` + buddy emoji, subline, stat pills (stars, quests done),
-   cheering Pip in a glass tile.
+1. **Hero** — indigo→violet gradient panel, very faint dot texture, sun accent:
+   `Hi, {name}!` + buddy emoji, subline, stat pills (stars, quests done).
+   No mascot on this banner.
 2. **Filter chips** — horizontally scrolling subject dots + year chips. Active
    chip is dark ink. No dropdown selects.
 3. **Quest cards** — icon tile (subject gradient) · subject + type/year pills ·
@@ -152,7 +153,6 @@ Back link → icon tile + meta + big title → summary sentence → fact pills
 │ ✅ Correct — nice! + tip + Pip │
 │ [ Check it ✓ / Next → ]       │
 └───────────────────────────────┘
-[desktop: Pip sidekick + bubble   ]
 ```
 
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
@@ -163,8 +163,8 @@ Back link → icon tile + meta + big title → summary sentence → fact pills
   teaching tip + mini Pip reaction.
 - Action button is full-width gradient: `Check it ✓` (disabled until answered)
   → `Next question →` → `See my stars` on the last one.
-- Desktop (≥860px): sticky Pip sidekick with speech bubble reacting to streaks
-  and answers + `X correct so far`.
+- Home, quest intro, questions and the stars screen all use the same content
+  width (`--max-wide`). Do not narrow the white card on later screens.
 
 ### Progress
 
