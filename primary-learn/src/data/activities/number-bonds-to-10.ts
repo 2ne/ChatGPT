@@ -86,17 +86,18 @@ export const numberBondsTo10: Activity = {
       explanation: "0 + 10 and 4 + 6 both equal 10. 2 + 9 = 11 and 7 + 2 = 9.",
     },
     {
-      kind: "ordered",
-      id: "nb10-ord-1",
-      prompt: "Put these bonds in order from the smallest first number to the largest.",
-      items: [
-        { id: "a", label: "7 + 3" },
-        { id: "b", label: "2 + 8" },
-        { id: "c", label: "9 + 1" },
-        { id: "d", label: "4 + 6" },
+      kind: "multiple-choice",
+      id: "nb10-mc-4",
+      prompt: "Which number is missing? 7 + ? = 10",
+      options: [
+        { id: "a", label: "2" },
+        { id: "b", label: "3" },
+        { id: "c", label: "4" },
+        { id: "d", label: "5" },
       ],
-      correctOrder: ["b", "d", "a", "c"],
-      explanation: "Ordered by the first number: 2, 4, 7, then 9.",
+      correctId: "b",
+      hint: "Count on from 7: 8, 9, 10.",
+      explanation: "7 + 3 = 10, so the missing number is 3.",
     },
     {
       kind: "match-pairs",
