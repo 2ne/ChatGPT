@@ -31,8 +31,8 @@ If a child skips bonds to 10, Year 2 facts to 20 and later column methods become
 
 ## Build order
 
-Follow the number pathway in `maths.md`, earliest missing prerequisite first. Do not jump to later topics, and do not add other subjects.
+The learner path is the numbered nodes in `maths.md`: 45 categories, 124 quests, one after another. A learner starts at `eyfs-count-5` and cannot open a later quest until the one before it is mastered. Audit that list with `audit.md` before writing quests. Do not add other subjects.
 
 ## Year flexibility note (from DfE)
 
-Schools must cover the mathematics programme of study by the **end of each key stage**, and may teach content earlier or later within a key stage. Quests still tag a **primary target year** in their data so the pathway stays clear, but the home screen does not show year or subject categories.
+Schools must cover the mathematics programme of study by the **end of each key stage**, and may teach content earlier or later within a key stage. This app still teaches the statements in the order in `maths.md`, one category after another.

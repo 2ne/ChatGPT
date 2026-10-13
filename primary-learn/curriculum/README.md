@@ -6,10 +6,10 @@ This app teaches **mathematics only**. Do not add English, science, or foundatio
 
 ## How to use these files
 
-1. Open `maths.md`.
-2. Find the earliest **building block** the learner still needs.
-3. Add a quest that teaches that block before anything that depends on it.
-4. Update `coverage.md` when a quest ships.
+1. Open `maths.md` and take the first node marked `missing`.
+2. Follow `audit.md` before and after writing that quest.
+3. Use that node’s id as `curriculumRef` and its title as the quest name.
+4. Update the node status in `maths.md` and the scoreboard in `coverage.md`.
 
 Agents: when creating quests, set `curriculumRef` and `skills` to match a node in these files. See also `../AGENTS.md`.
 
@@ -19,8 +19,9 @@ Agents: when creating quests, set `curriculumRef` and `skills` to match a node i
 | --- | --- |
 | [overview.md](./overview.md) | Stages and ages |
 | [eyfs.md](./eyfs.md) | Reception maths (before Year 1) |
-| [maths.md](./maths.md) | Number pathways Reception → Year 6 |
-| [coverage.md](./coverage.md) | What Primary Maths already teaches vs missing |
+| [maths.md](./maths.md) | The path: 45 categories, 124 quest nodes, Reception → Year 6 |
+| [audit.md](./audit.md) | How to check the path before creating quests |
+| [coverage.md](./coverage.md) | How many nodes are missing, partial or done |
 
 ## Jurisdiction
 

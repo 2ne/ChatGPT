@@ -38,10 +38,11 @@ Visual system is documented in **`DESIGN.md`** (Khan Academy / Wonder Blocks–i
 UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 
 - `curriculum/overview.md` — stages and ages  
-- `curriculum/maths.md` — building-block order  
-- `curriculum/coverage.md` — what the app already covers vs missing  
+- `curriculum/maths.md` — the path: 45 categories and 124 quest nodes, in order  
+- `curriculum/audit.md` — how to check that path before adding a quest  
+- `curriculum/coverage.md` — how many nodes are still missing  
 
-Start from the earliest missing maths prerequisite, not the flashiest topic.
+The next quest to build is the first `missing` node (`eyfs-count-5`). Do not skip ahead.
 
 ## Stack
 
@@ -65,7 +66,7 @@ npm run preview
 ## Key decisions
 
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`
-- **Maths only** — one quest list. No subject catalogue, year filters, or category pills
+- **Maths only** — the quest map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order, audited with `curriculum/audit.md`
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods in the header, feedback reactions, and the finish screen. No WebGL. Question cards carry a rainbow ribbon and a numbered prompt badge

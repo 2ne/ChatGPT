@@ -1,36 +1,25 @@
-# Coverage tracker — Primary Maths
+# Coverage scoreboard — Primary Maths
 
-Update this when quests ship.  
-Status: `done` · `partial` · `missing`
+The full path, names and statuses live in [maths.md](./maths.md). How to check a quest against that path is in [audit.md](./audit.md). Do not keep a second copy of the nodes here.
 
 ## Snapshot
 
-| Area | Status | Notes |
-| --- | --- | --- |
-| EYFS maths | missing | Need subitising / composition before expanding Y1 |
-| Y1 maths — bonds to 10 | **partial** | `number-bonds-to-10` quest live |
-| Y1 maths — rest | missing | Bonds to 20, counting, +/− problems… |
-| Y2+ maths | missing | |
+| | Count |
+| --- | --- |
+| Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
+| Nodes (future quests) | 124 |
+| Done | 0 |
+| Partial | 1 — `y1-bonds-10` |
+| Missing | 123 |
 
 ## Quests in the app
 
-| Activity id | Year | Curriculum node | Status |
-| --- | --- | --- | --- |
-| `number-bonds-to-10` | Year 1 | `y1-bonds-10` (also reinforces EYFS `eyfs-bonds-10-some`) | partial — deepen and add related subtraction |
+| Activity id | Node | Status |
+| --- | --- | --- |
+| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | partial — addition pairs that make 10 are in the quest; related subtraction facts are not |
 
-## Highest-value missing nodes (build next)
+## Next quest to build
 
-1. `eyfs-subitise-5`
-2. `eyfs-compose-10` / deepen `y1-bonds-10`
-3. `y1-bonds-20`
-4. `y1-add-sub-20` (missing number)
-5. `y1-count-100` + `y1-1-more-less`
-6. `y2-place-value-100`
-7. `y2-tables-2-5-10`
+`eyfs-count-5` — Count to 5. It is node 1. Nothing before it is open.
 
-## How to tick something off
-
-1. Ship a quest following `../AGENTS.md` and `../DESIGN.md`
-2. Point `curriculumRef` / `skills` at a skill ID from `maths.md`
-3. Move the row above from `missing` → `partial`/`done`
-4. Prefer finishing a prerequisite chain over scattering random topics
+Do not build `y1-bonds-20` or any later node while an earlier node is still `missing`.

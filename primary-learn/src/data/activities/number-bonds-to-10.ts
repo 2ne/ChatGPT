@@ -11,8 +11,8 @@ export const numberBondsTo10: Activity = {
   ability: "expected",
   estimatedMinutes: 6,
   masteryThreshold: 0.8,
-  curriculumRef: "KS1 Maths — Number: addition bonds within 10",
-  skills: ["addition-within-10", "number-bonds", "missing-addend"],
+  curriculumRef: "y1-bonds-10",
+  skills: ["y1-bonds-10", "addition-within-10", "number-bonds", "missing-addend"],
   questions: [
     {
       kind: "multiple-choice",

@@ -8,7 +8,7 @@ When asked to add or change a learning activity, follow this document strictly. 
 
 **UI:** Follow `DESIGN.md` for spacing, type, colour and activity layout (Khan Academy / Wonder Blocks–inspired). Do not invent a second visual system.
 
-**Curriculum:** Follow `curriculum/maths.md` (England EYFS number + National Curriculum mathematics). Prefer the earliest missing building block in `curriculum/coverage.md` over skipping ahead. Tag `curriculumRef` / `skills` to nodes in those files.
+**Curriculum:** The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one locked path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the start. Each later node stays locked until the previous node is mastered. Before adding a quest, follow `curriculum/audit.md` and take the first `missing` node. Set `curriculumRef` to that node id. Do not rename ids or invent a second set of categories.
 
 ## Goals
 
@@ -64,7 +64,7 @@ Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the sh
 | `ability` | `emerging` \| `expected` \| `greater-depth`. |
 | `estimatedMinutes` | Realistic 3–15 minute range for a child. |
 | `masteryThreshold` | Fraction `0–1`. Default **0.8** unless there is a strong reason. |
-| `curriculumRef` | Short UK National Curriculum / EYFS reference string. |
+| `curriculumRef` | The node id from `curriculum/maths.md` (for example `y1-bonds-10`). Not a free-text description. |
 | `skills` | 2–6 concrete skill tags (e.g. `addition-within-10`). |
 | `questions` | Interactive items using allowed `Question` variants. |
 
@@ -120,7 +120,9 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 
 ## UI expectations when adding activities
 
-- Home is one list of maths quests. Do not add subject chips, year chips, or category pills.
+- Home stays a list of quests that already exist until a path screen is explicitly requested.
+- When that screen is built, categories, titles, order and locks come only from `curriculum/maths.md`. A learner starts at node 1 and cannot open a later node until the previous one is mastered.
+- Do not add subject filters or a second set of category names.
 - Empty, loading, error and success states must remain useful (especially empty progress and “not mastered yet”).
 - Keep motion subtle and purposeful; do not add noisy celebration that blocks the next question.
 - Match the existing visual language in `src/index.css` (brand tokens, fonts). Do not introduce a second theme.
