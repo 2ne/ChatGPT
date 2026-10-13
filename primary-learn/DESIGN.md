@@ -1,324 +1,217 @@
-# Primary Path — design system
+# Primary Path — design system ("Sunny Path")
 
-Inspired by **Khan Academy / Wonder Blocks**.  
-Goal: calm, simple, kid-clear learning UI. Not a colourful playground. Not a dashboard.
+Playful, warm, premium kids' learning UI. Think Duolingo cheer meets Khan Kids
+clarity: big rounded shapes, a sunny paper background, one friendly mascot, and
+a quest metaphor everywhere ("quests", "stars", "buddies").
 
-Agents **must** follow this file when changing UI. If a change fights these rules, change the design — do not invent a second system.
-
-Reference live examples while building:
-
-- Home / marketing calm: [khanacademy.org](https://www.khanacademy.org/)
-- Learning catalogue density: [khanacademy.org/math](https://www.khanacademy.org/math)
-- Tokens source: [Khan Wonder Blocks](https://github.com/Khan/wonder-blocks) (`color`, `spacing`)
-
----
+Agents **must** follow this file when changing UI. If a change fights these
+rules, change the design — do not invent a second system.
 
 ## Design north star
 
-1. **One job per screen** — onboarding asks name; home picks an activity; activity asks one question.
-2. **Whitespace is the design** — if it feels cramped, add space; never add another widget.
-3. **Flat over fancy** — white / off-white surfaces, 1px borders, almost no shadow.
-4. **Obvious hierarchy** — few type sizes, big jumps between levels (not subtle).
-5. **One action colour** — blue means “do this”. Green = success. Red = try again. Gold = celebration only.
-6. **Touch-first for primary kids** — primary controls ≥ 48px tall; answer options ≥ 56px.
-7. **Friendly, not stale** — Pip (our mascot) and a few doodle SVGs add warmth; keep them sparse.
+1. **Always know where you are** — every activity screen shows the quest name,
+   subject, and `Question X of N`. Never a bare question on a blank page.
+2. **One job per screen** — onboarding asks name; home picks a quest; activity
+   asks one question.
+3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
+   Calm does not mean grey.
+4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
+   ≥ 64px with letter badges (A–D).
+5. **Celebrate constantly** — stars, streak flames, confetti pops, cheering Pip.
+   Kids should feel progress every 30 seconds.
+6. **Colour with meaning** — subjects have signature colours; green = correct,
+   red = try again, gold = stars only.
 
 ## Mascot: Pip
 
-Inspired by friendly geometric education mascots (big eyes, simple smile) but **original** to Primary Path — blue path-marker shape, not a third-party logo. No orbit ring.
+Pip is a round indigo "path-berry" blob with a leafy sprout (growth), rosy
+cheeks, big sparkle eyes and a sunny star badge. **Pure SVG + CSS motion.**
+No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 | Asset | Use |
 | --- | --- |
-| `Pip` | Sticky header always, with eyes big enough to read. A larger Pip only on the finish screen |
-| Doodles | Optional, rare — not on every question card |
-| Confetti | Short canvas pop when an answer is **correct**. A fuller shower only when the first-try score reaches mastery |
-| Moods | `happy` default · `cheer` on a correct answer and on mastery · `think` on an empty catalogue |
+| `Pip` | Header badge (42px in a white tile), hero panel, feedback reactions, finish screen (112px) |
+| Confetti | Short canvas pop on a correct answer; full shower on a mastered summary |
+| Moods | `happy` default · `cheer` on correct + mastery · `think` on wrong + empty states |
 
 **Rules**
 
-- Sticky `AppHeader` on every screen: Pip + “Primary Path” (+ Exit/Reset on the right).
-- The header mark is a small Three.js Pip: blue gem, two eyes, a smile. No ring or circle around it. It cheers on a correct answer.
-- Do **not** put Pip on the name screen. The picture there is the avatar the child picks.
-- The finish screen may show a larger Pip. Question cards stay clear of it.
-- If WebGL is missing, or `prefers-reduced-motion` is set, use the SVG. It may blink. It does not bounce on a loop.
-- Do **not** put a Three.js scene on a question card. Text questions stay flat. A future spatial question kind can bring its own scene.
-- Do **not** repeat Pip next to progress, section titles, and cards on the same screen. The empty catalogue may show Pip once inside the empty card.
-- Question cards stay clean — celebration is the confetti + feedback pop, not corner clutter.
-- Respect `prefers-reduced-motion` (no confetti, no WebGL Pip, no question slide).
+- Sticky `AppHeader` on every screen: Pip tile + "Primary *Path*" wordmark
+  (indigo gradient on "Path") + tagline, learner chip on the right, Exit pill
+  during activities.
+- Question cards show a small Pip **only inside feedback** (reaction) and the
+  desktop sidekick. Never wallpaper Pip around the screen.
+- Motion: blink (5s), sprout sway, star twinkle, one hop on `cheer`, tilt on
+  `think`. All disabled under `prefers-reduced-motion`.
+- Finish screen: large Pip + animated 1–3 stars.
 
----
+## Colour
 
-## Colour (Wonder Blocks–aligned)
-
-Use these CSS variables in `src/index.css`. Do not invent new brand colours per screen.
+CSS variables in `src/index.css`. Subject themes live in
+`src/data/subjects.tsx` (colour + soft tint + Lucide icon per subject).
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `--blue` | `#1865f2` | Primary buttons, links, selected answer border |
-| `--blue-soft` | `#e7f3ff` | Selected answer fill, soft info chips |
-| `--off-black` | `#21242c` | Primary text |
-| `--off-black-64` | `#63666f` | Secondary text |
-| `--off-black-50` | `#8b8d95` | Meta / captions |
-| `--off-black-16` | `#d6d8da` | Borders, dividers |
-| `--off-black-8` | `#ebecef` | Hairline / disabled wash |
-| `--off-white` | `#f7f8fa` | Page background |
-| `--white` | `#ffffff` | Cards, inputs, answer tiles |
-| `--green` | `#00a60e` | Correct feedback only |
-| `--green-soft` | `#e5f6e5` | Correct feedback background |
-| `--red` | `#d92916` | Incorrect feedback only |
-| `--red-soft` | `#fde8e5` | Incorrect feedback background |
-| `--gold` | `#ffb100` | Rare celebration (mastery badge) |
-| `--dark-blue` | `#0b2149` | Brand mark / optional hero band only |
-| `--teal` | `#14bf96` | Logo sprout accent (like KA leaf) — not for CTAs |
+| `--paper` / `--paper-deep` | `#FFF6E8` / `#FBEED3` | Page bg / sunken fills, dot texture |
+| `--ink` / `--ink-soft` / `--ink-faint` | `#232946` / `#5B5E7A` / `#9AA0B8` | Text tiers |
+| `--line` / `--line-strong` | `#ECE2CC` / `#DDCFB2` | Borders |
+| `--primary` → `--violet` | `#4F46E5` → `#7C3AED` | CTA gradient, selected states, progress |
+| `--sun` / `--sun-soft` | `#FFC93C` / `#FFF1C4` | Highlights, hints, star badges |
+| `--green` / `--green-soft` | `#0CA678` / `#DCF5E9` | Correct only |
+| `--red` / `--red-soft` | `#E03131` / `#FFE3E3` | Try-again only |
+| `--gold` | `#FFB100` | Stars only |
+
+Subject colours: maths `#F97316` · english `#0EA5E9` · science `#10B981` ·
+computing `#8B5CF6` · history `#D97706` · geography `#14B8A6` · art `#EC4899` ·
+music `#A855F7` · PE `#EF4444` · PSHE `#CA8A04`. Each has a `-soft` tint for
+tiles and pills.
 
 **Rules**
 
-- Page background is always `--off-white`. Content sits on `--white`.
-- Do **not** use multi-stop pastel gradients, floating orbs, or woodland green as the action colour.
-- Do **not** colour-code whole subjects on the learning screens (KA moved away from this — it looked like warnings).
+- Page background is warm paper with a subtle dot grid — never flat grey.
+- CTAs are the indigo→violet gradient with a 2px deep border + bottom `4px`
+  "squishy" shadow (Duolingo-style press). Disabled = 55% opacity, not grey.
 - Correct / incorrect colour appears **only after Check**.
-
----
+- Subject colour appears on icon tiles + pills only, never as full-page theme.
 
 ## Typography
 
-**Font:** `Lato, "Noto Sans", sans-serif`  
-Weights: **400** (body), **700** (emphasis / buttons), **900** (rare display).  
-Load from Google Fonts. No Fredoka, Nunito, comic fonts, or system UI stacks on learning screens.
+**Fonts:** `Baloo 2` (display: titles, buttons, options) + `Nunito` (body).
+Loaded from Google Fonts. Rounded letterforms read friendly at kid sizes.
 
-### Type scale (keep it tiny)
-
-Kids mostly see **two** sizes. Small is for metadata only.
-
-| Role | Size | Line-height | Weight | When to use |
-| --- | --- | --- | --- | --- |
-| **Big** (`.t-title-sm`) | 20px | 28px | 700 | Names, activity titles, question prompts |
-| **Normal** (`.t-body`) | 16px | 22px | 400 | Summaries, instructions, greetings under a name |
-| **Meta** (`.t-meta`) | 12px | 16px | 400 | One short label only — e.g. `Maths · Number bonds · Year 1` |
-| Button label | 14px | 20px | 700 | On buttons only |
-
-Avoid 32px titles and extra mid sizes on learning screens unless a rare celebration screen needs them.
-
-**Rules**
-
-- Default pattern: **Big title → Normal sentence → primary button**. Optional single Meta line above the title.
-- Do **not** stack multiple Meta lines. One is enough.
-- Supporting copy under a name/title must be **Normal (16px)**, not Meta.
-- Never show adult/teacher jargon to kids (mastery %, curriculum refs, ability bands, “expected”). Keep that in data for agents — not on the Start screen.
-- Body line length ≈ 40–70 characters.
-- Brand mark stays small in the header; the activity/question title is the hero.
-
----
-
-## Spacing (8px system)
-
-Wonder Blocks spacing we use:
-
-| Token | px | Typical use |
+| Role | Style | When to use |
 | --- | --- | --- |
-| `--space-1` | 4 | Icon gaps |
-| `--space-2` | 8 | Tight related items |
-| `--space-3` | 16 | List item gaps, option gaps |
-| `--space-4` | 24 | Inside-card section gaps |
-| `--space-5` | 32 | Card padding |
-| `--space-6` | 48 | Between major page blocks |
-| `--space-7` | 64 | Top/bottom page padding on desktop |
+| Display (`.t-display`) | Baloo 800, 30–40px | Celebration screens |
+| Title (`.t-title`) | Baloo 800, 24–30px | Quest titles, question prompts (`.q-prompt` 22–27px) |
+| Title-sm (`.t-title-sm`) | Baloo 700, 20px | Card titles, names |
+| Body (`.t-body`) | Nunito 500–600, 16px | Summaries, explanations |
+| Meta (`.t-meta`) | Nunito 800, 12.5px, caps, tracked | Breadcrumbs only: `Maths · Number bonds` |
 
 **Rules**
 
-- All padding/margin/gap values must be from this scale (6px/12px only if matching WB secondary — prefer the primary ladder).
-- Activity question card: **32px** padding mobile, **32–40px** desktop.
-- Gap between answer options: **16px** (never 8px — kids miss-tap).
-- Do not nest cards inside cards.
-- Progress bar sits in its own quiet row: 8px tall track, 16px below header, 24px above the question card.
-
----
+- Question prompts are always Baloo 800 ≥ 22px with a numbered badge (`Q3`).
+- Supporting copy under a name/title is Body, not Meta.
+- Never show adult jargon to kids (mastery %, curriculum refs, ability bands).
+- British English copy.
 
 ## Shape & elevation
 
 | Element | Radius | Border | Shadow |
 | --- | --- | --- | --- |
-| Buttons | 4px | none (filled) or 1px | none |
-| Answer options | 8px | 1px `--off-black-16` | none |
-| Content cards | 8px | 1px `--off-black-16` | none |
-| Inputs | 4px | 1px `--off-black-16` | none |
-| Avatar chips | 9999px | 1px | none |
-| Modals / onboarding panel | 12px | 1px | optional soft `0 8px 24px rgba(33,36,44,0.08)` |
+| Cards | 20px (`--radius`) | 2px `--line` | `0 10px 28px rgba(35,41,70,.09)` |
+| Hero / score | 28px | 2px deep | same + pattern fills |
+| Answer options | 18px | 2.5px `--line` | lift on hover; glow ring when selected |
+| CTA buttons | 16px | 2px deep | `0 4px 0` squishy press |
+| Pills / chips | 9999px | 1.5–2px | flat or soft |
+| Avatar / icon tiles | 18–20px (tiles), circle (faces) | 2px | soft indigo glow on brand tile |
 
-**Rules**
-
-- Learning UI: **flat**. If you want depth, use background contrast (`off-white` page vs `white` card), not drop shadows.
-- No 22–28px “blob” radii on answer tiles.
-- No multi-layer coloured shadows.
-
----
+Question cards carry an 8px rainbow ribbon on top (sun/coral/mint/sky) so
+every question feels like part of the quest.
 
 ## Components
 
-### Primary button
+### Header
 
-- Height ≥ 48px (kids), horizontal padding 24px
-- Background `--blue`, text white, weight 700, 16px
-- Full width on mobile in activities; auto width OK on desktop if right-aligned like KA Check
-- Disabled: 40% opacity, not a grey redesign
-
-### Secondary button / exit
-
-- Text or quiet outline; `--off-black-64`
-- Never compete with Check
-
-### Answer option (multiple choice)
-
-```
-[  16px pad  ]
-[  56px+ min height  ]
-[  1px border off-black-16, radius 8  ]
-[  Body 16/22, weight 700 for the label  ]
-Selected: border blue + background blue-soft
-Checked correct: border green + green-soft (only after Check)
-Checked wrong: border red + red-soft (only after Check)
-```
-
-Stack options **vertically** with 16px gap. Prefer one column. Do not use emoji as the main answer — numbers/words are enough; optional small leading visual only if it teaches.
-
-### Feedback panel
-
-- Appears **under** the options after Check, 16px gap
-- Correct: green-soft bg, green title “Correct”, body explanation in off-black
-- Incorrect: red-soft bg, red title “Not quite”, then explanation
-- Keep to 2–4 short sentences. Teach, don’t scold.
-
-### Progress
-
-- Thin bar (8px), track `--off-black-8`, fill `--blue`
-- Counter meta on the right: `3 of 10` in 12px `--off-black-50`. A retry round may add `· another go`
-- No cartoon trophies mid-question
-
-### Home activity row (KA “Get started” pattern)
-
-One row per activity:
-
-- White card, 1px border, 8px radius, 24–32px padding
-- Left: title (20/28 bold) + one body line + meta line
-- Right: status pill (meta) + chevron
-- Entire row is the hit target
-- No subject-coloured left rails, no big emoji headers
-
----
-
-## Screen recipes
-
-### Onboarding
-
-- Off-white page, single centered white panel (max-width ~480px)
-- Small teal/leaf brand mark + “Primary Path” in 14px label
-- One heading: “What’s your name?” (Title or Heading — pick one)
-- One short body line
-- Name field, then avatar row (simple circles), then one primary button “Continue”
-- No hero gradients, no floating avatar animation required
+72px sticky, blurred paper, 2px bottom border. Left: white Pip tile + wordmark
++ `Learn something every day` tagline (hidden on phones). Right: learner chip
+(avatar face + name) + Exit pill (dark) or Reset text.
 
 ### Home
 
-- Quiet top bar: avatar circle + “Hi, {name}” + optional reset as text link
-- Filters as simple selects or chips — secondary, not a control panel
-- Activity list as stacked rows (see above)
-- Empty state: one sentence + one hint. No illustrations required.
+1. **Hero** — indigo→violet gradient panel, dot texture, sun accent:
+   `Hi, {name}!` + buddy emoji, subline, stat pills (stars, quests done),
+   cheering Pip in a glass tile.
+2. **Filter chips** — horizontally scrolling subject dots + year chips. Active
+   chip is dark ink. No dropdown selects.
+3. **Quest cards** — icon tile (subject gradient) · subject + type/year pills ·
+   Baloo title · one-line summary · best-score micro-bar · status pill
+   (`New quest` / `Best X of N` / `Done!`) · dark `Play →` button that turns
+   gradient on hover. Whole card is the hit target.
 
 ### Activity intro
 
-Only this, in order:
-
-1. Back text link
-2. One Meta line: `Maths · Number bonds · Year 1`
-3. Big title
-4. One Normal summary sentence
-5. Primary button: “Start”
-
-Do **not** show minutes, question counts, mastery %, ability, or curriculum references on this screen.
+Back link → icon tile + meta + big title → summary sentence → fact pills
+(`10 questions`, `~6 min`, `3 stars`) → Pip + speech bubble
+(`You've got this, {name}!`) → gradient `Start quest →`.
 
 ### Activity question (most important)
 
 ```
-[            3 of 10 ]
-[ ======progress====== ]
-[                      ]
-[ Question prompt      ]  ← Heading 24/32
-[                      ]
-[ Option               ]  ← 16px gaps
-[ Option               ]
-[ Option               ]
-[                      ]
-[ (hint text link)     ]
-[ [     Check      ]   ]  ← primary, full width mobile
+[← Exit quest]              [avatar chip in header]
+[🎨 tile  Number bonds to 10      ]
+[Maths · Number bonds             ]
+[Question 3 of 10      Keep going!]
+[▰▰▰▱▱▱▱▱▱▱]  segmented progress
+[🔥 3 in a row!]           (streak)
+┌───────────────────────────────┐
+│ [3]  Which number…?  (Pick one)│  ← numbered badge + kind label
+│ [A] 2                         │
+│ [B] 3                         │
+│ [C] 4                    ✓    │
+│ 💡 Need a hint?               │
+│ ✅ Correct — nice! + tip + Pip │
+│ [ Check it ✓ / Next → ]       │
+└───────────────────────────────┘
+[desktop: Pip sidekick + bubble   ]
 ```
 
-- Only the current question on screen
-- Hint is a text link, not a banner, until opened
-- After Check: feedback block, then button becomes “Continue”
-- After Check, the chosen option (and the correct one, if they missed) takes the green or red treatment. Words still live in the feedback panel
-- Match pairs: tap a prompt, then tap its partner. Not a dropdown
-- Summary screen: first-try score as a large number, one sentence, two actions (Try again / Home). If they have not reached mastery, Try again is the primary button
+- Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
+  indigo ring + soft fill; correct = green + ✓ + wiggle; wrong = red + ✕ +
+  shake. Colour is never the only signal (icons + words too).
+- Hint is a `Need a hint?` button until opened, then a sunny dashed card.
+- Feedback appears under options: icon medallion + bold title + 1–2 sentence
+  teaching tip + mini Pip reaction.
+- Action button is full-width gradient: `Check it ✓` (disabled until answered)
+  → `Next question →` → `See my stars` on the last one.
+- Desktop (≥860px): sticky Pip sidekick with speech bubble reacting to streaks
+  and answers + `X correct so far`.
 
----
+### Progress
+
+**Segmented bar** — one capsule per question, 12px tall, paper fill. Done =
+gradient fill with pop; current = indigo outline + soft glow; retry rounds
+restart the bar with a `Practising the tricky ones` note. Counter reads
+`Question 3 of 10` (Baloo, number in indigo) + rotating cheer line. Streaks
+≥ 2 earn a `🔥 N in a row!` flame pill.
+
+### Summary
+
+Large Pip + 1–3 stars (pop in sequence: 3 = perfect first try, 2 = mastered,
+1 = finished). Big `X / N` figure, one warm sentence, `Quest complete` trophy
+pill when mastered, then `Back to quests` (primary) / `Play again` or
+`Try again` (primary when not mastered). Confetti shower on mastery.
+
+### Onboarding
+
+Centered card: `Your learning adventure starts here` badge + cheering Pip +
+`What's your name?` + one short line → big Baloo name field → `Choose your
+buddy` avatar grid (3 cols, soft tinted faces, selected = indigo ring + scale)
+→ gradient `Let's go →` → `Stays on this device` reassurance.
 
 ## Motion
 
-Keep motion rare and purposeful (KA is restrained).
+Cheerful but brief. 120–240ms easings; options lift on hover; cards lift on
+hover; stars pop in sequence; progress segments pop; feedback slides up;
+Pip blinks/sways/twinkles.
 
-Allowed:
-
-- 150–200ms fade/ease on feedback appear
-- 180ms question card slide when the question changes
-- Progress bar width transition, with a small blue marker at the leading edge
-- Header Pip: a blink, and one hop when the mood becomes `cheer`
-- Canvas confetti: a short pop on a correct answer (pointer-events none, brand colours only). A longer shower on the mastery summary
-- SVG fallback: a blink, and one hop. Not a loop
-
-Forbidden on learning screens:
-
-- A WebGL canvas behind the question, options, or page background
-- Continuous bounce on the mascot
-- Confetti that covers the Check / Continue button (it must not capture taps)
-- Staggered list “rise-in” spam
-- Scale-pop on every tap
-
-`prefers-reduced-motion: reduce` disables the rest and shows the still SVG Pip.
-
----
+`prefers-reduced-motion: reduce` disables all of it.
 
 ## Accessibility (kids + WCAG)
 
-- Text contrast: off-black on white / off-white (≥ 4.5:1)
-- Don’t use colour alone for correct/incorrect — include the word “Correct” / “Not quite”
-- Focus ring: 2px `--blue` offset 2px
-- Hit targets ≥ 48×48px
-- British English copy
-
----
+- Ink on paper/white ≥ 4.5:1. Colour never the only signal (✓/✕ + words).
+- Focus ring: 3px `--primary`.
+- Hit targets ≥ 48px (options 64px, CTAs 52px).
+- `role="progressbar"` with `aria-valuetext`; stars have `aria-label`;
+  live regions for feedback and quest lists.
 
 ## Anti-patterns (fix these)
 
-| Don’t | Do instead |
+| Don't | Do instead |
 | --- | --- |
-| Pastel full-page gradients | Flat `--off-white` |
-| Fredoka / chunky display fonts | Lato |
-| Green woodland CTA theme | `--blue` CTAs |
-| 22px+ rounded “pill cards” everywhere | 8px cards, 4px buttons |
-| Four stat tiles on activity intro | One meta row |
-| Emoji wallpaper answers | Clear text/number options |
-| Nested cards + shadows + borders | One surface |
-| Tiny 8px gaps between options | 16px |
-| Mixing 5+ font sizes on one screen | ≤ 3 roles |
-
----
-
-## Agent checklist before shipping UI
-
-1. Does the screen have **one** primary action?
-2. Are colours only from the table above?
-3. Is type only from the scale above (Lato)?
-4. Are all spacings on the 8px ladder?
-5. Is the activity question calm: prompt → options → check?
-6. Would this still look tidy on a phone held by a Year 1 child?
-
-If any answer is no, fix before pushing to `main`.
+| Bare question with no quest name | Context card with tile + title + count on every question |
+| Thin lonely progress line | Segmented per-question bar + count + cheer line |
+| Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
+| 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
+| Dropdown filters | Scrollable subject/year chips |
+| Emoji-only tiles | Lucide icon tiles in subject colours |
+| Identical Check/Continue | Labelled actions: `Check it` → `Next question` → `See my stars` |

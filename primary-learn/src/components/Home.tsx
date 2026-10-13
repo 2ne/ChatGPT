@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, PartyPopper, RotateCcw, Sparkles, Star } from "lucide-react";
 import { activities } from "../data/activities";
 import { getAvatar } from "../data/avatars";
-import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, YEAR_GROUP_LABELS, formatYearGroups } from "../data/labels";
+import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, formatYearGroups } from "../data/labels";
+import { subjectTheme } from "../data/subjects";
 import type { Subject, YearGroup } from "../types/curriculum";
 import type { LearnerProfile, ProgressState } from "../types/progress";
 import { usePipMood } from "./PipMood";
@@ -12,6 +14,20 @@ type HomeProps = {
   progress: ProgressState;
   onOpenActivity: (activityId: string) => void;
 };
+
+const SUBJECT_FILTERS: (Subject | "all")[] = [
+  "all",
+  "maths",
+  "english",
+  "science",
+  "computing",
+  "history",
+  "geography",
+  "art",
+  "music",
+  "pe",
+  "pshe",
+];
 
 export function Home({ profile, progress, onOpenActivity }: HomeProps) {
   const avatar = getAvatar(profile.avatarId);
@@ -25,6 +41,17 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
       return subjectOk && yearOk;
     });
   }, [subjectFilter, yearFilter]);
+
+  const doneCount = useMemo(
+    () => activities.filter((a) => progress.byActivity[a.id]?.mastered).length,
+    [progress],
+  );
+  const starCount = useMemo(
+    () =>
+      Object.values(progress.byActivity).filter((entry) => entry.mastered).length,
+    [progress],
+  );
+
   const { setMood } = usePipMood();
 
   useEffect(() => {
@@ -37,131 +64,168 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
 
   return (
     <div className="page page-under-header">
-      <section
-        className="card"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "var(--space-3)",
-          marginBottom: "var(--space-5)",
-        }}
-      >
-        <div
-          aria-hidden
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: "9999px",
-            background: "var(--blue-soft)",
-            display: "grid",
-            placeItems: "center",
-            fontSize: 24,
-            flex: "none",
-          }}
-        >
-          {avatar.emoji}
-        </div>
-        <div>
-          <h1 className="t-title-sm">Hi, {profile.name}</h1>
-          <p className="t-body" style={{ marginTop: 4 }}>
-            Pick something to practise.
-          </p>
+      {/* Hero greeting */}
+      <section className="hero" aria-label={`Welcome back, ${profile.name}`}>
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <span className="hero-kicker">
+              <Sparkles size={14} aria-hidden /> Ready when you are
+            </span>
+            <h1 className="hero-title">
+              Hi, {profile.name}!{" "}
+              <span aria-hidden>{avatar.emoji}</span>
+            </h1>
+            <p className="hero-sub">Pick a quest below and earn your stars.</p>
+            <div className="hero-stats">
+              <span className="hero-stat">
+                <Star size={15} aria-hidden /> {starCount} {starCount === 1 ? "star" : "stars"}
+              </span>
+              <span className="hero-stat">
+                <PartyPopper size={15} aria-hidden /> {doneCount} of {activities.length} quests done
+              </span>
+            </div>
+          </div>
+          <div className="hero-pip" aria-hidden>
+            <Pip size={92} mood="cheer" />
+          </div>
         </div>
       </section>
 
-      <section className="filters">
-        <label className="field">
-          <span className="t-meta">Subject</span>
-          <select
-            className="select"
-            value={subjectFilter}
-            onChange={(event) => setSubjectFilter(event.target.value as Subject | "all")}
-          >
-            <option value="all">All subjects</option>
-            {Object.entries(SUBJECT_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span className="t-meta">Year group</span>
-          <select
-            className="select"
-            value={yearFilter}
-            onChange={(event) => setYearFilter(event.target.value as YearGroup | "all")}
-          >
-            <option value="all">All years</option>
-            {Object.entries(YEAR_GROUP_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-      </section>
+      {/* Subject chips */}
+      <div className="filter-bar" role="group" aria-label="Filter by subject">
+        {SUBJECT_FILTERS.map((subject) => {
+          const isOn = subjectFilter === subject;
+          const dot =
+            subject === "all" ? (
+              <span className="chip-dot" style={{ background: "var(--sun)" }} />
+            ) : (
+              <span
+                className="chip-dot"
+                style={{ background: subjectTheme(subject).color }}
+              />
+            );
+          return (
+            <button
+              key={subject}
+              type="button"
+              className={`chip${isOn ? " is-on" : ""}`}
+              aria-pressed={isOn}
+              onClick={() => setSubjectFilter(subject)}
+            >
+              {dot}
+              {subject === "all" ? "Everything" : SUBJECT_LABELS[subject]}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Year chips */}
+      <div className="filter-bar" role="group" aria-label="Filter by year group">
+        {(["all", "Reception", "Year1", "Year2", "Year3", "Year4", "Year5", "Year6"] as const).map(
+          (year) => (
+            <button
+              key={year}
+              type="button"
+              className={`chip${yearFilter === year ? " is-on" : ""}`}
+              aria-pressed={yearFilter === year}
+              onClick={() => setYearFilter(year)}
+            >
+              {year === "all" ? "All years" : yearLabel(year)}
+            </button>
+          ),
+        )}
+      </div>
 
       <section aria-live="polite">
-        <h2 className="t-title-sm" style={{ marginBottom: "var(--space-3)" }}>
-          Activities
-        </h2>
+        <div className="section-head">
+          <h2 className="t-title-sm">
+            {subjectFilter === "all" ? "All quests" : `${SUBJECT_LABELS[subjectFilter]} quests`}
+          </h2>
+          <span className="t-meta">
+            {filtered.length} {filtered.length === 1 ? "quest" : "quests"}
+          </span>
+        </div>
 
         {filtered.length === 0 ? (
-          <div className="card" style={{ textAlign: "center" }}>
-            <Pip size={48} mood="think" />
-            <p className="t-title-sm" style={{ marginTop: "var(--space-3)" }}>
-              No activities here yet
+          <div className="card empty-card">
+            <Pip size={72} mood="think" />
+            <p className="t-title-sm" style={{ marginTop: 8 }}>
+              Nothing here yet
             </p>
-            <p className="t-body" style={{ marginTop: "var(--space-2)" }}>
-              Try another subject or year group.
-            </p>
+            <p className="t-body">Try a different subject or year group.</p>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => {
+                setSubjectFilter("all");
+                setYearFilter("all");
+              }}
+            >
+              <RotateCcw size={17} aria-hidden /> Show everything
+            </button>
           </div>
         ) : (
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "var(--space-3)" }}>
+          <ul className="activity-list">
             {filtered.map((activity) => {
-              const activityProgress = progress.byActivity[activity.id];
-              const bestCorrect = activityProgress
-                ? Math.round((activityProgress.bestPercent / 100) * activity.questions.length)
+              const theme = subjectTheme(activity.subject);
+              const Icon = theme.icon;
+              const record = progress.byActivity[activity.id];
+              const best = record
+                ? Math.round((record.bestPercent / 100) * activity.questions.length)
                 : 0;
-              const status = activityProgress?.mastered
-                ? "Done"
-                : activityProgress
-                  ? `Best ${bestCorrect} of ${activity.questions.length}`
-                  : null;
+              const status = record?.mastered ? (
+                <span className="status-pill is-done">
+                  <Star size={13} aria-hidden /> Done!
+                </span>
+              ) : record ? (
+                <span className="status-pill">
+                  Best {best} of {activity.questions.length}
+                </span>
+              ) : (
+                <span className="status-pill is-todo">New quest</span>
+              );
 
               return (
                 <li key={activity.id}>
                   <button
                     type="button"
-                    className="activity-row"
+                    className="activity-card"
                     onClick={() => onOpenActivity(activity.id)}
+                    aria-label={`Start ${activity.title}`}
                   >
-                    <div>
-                      <p className="t-meta" style={{ marginBottom: 4 }}>
-                        {SUBJECT_LABELS[activity.subject]} ·{" "}
-                        {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
-                        {formatYearGroups(activity.yearGroups)}
-                      </p>
-                      <h3 className="t-title-sm">{activity.title}</h3>
-                      <p className="t-body" style={{ marginTop: 4 }}>
-                        {activity.summary}
-                      </p>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                      {status ? (
+                    <span
+                      className="activity-tile"
+                      style={{ background: `linear-gradient(135deg, ${theme.color}, ${theme.color}CC)` }}
+                      aria-hidden
+                    >
+                      <Icon />
+                    </span>
+                    <span className="activity-main">
+                      <span className="activity-pills">
                         <span
-                          className={
-                            activityProgress?.mastered ? "pill is-mastered" : "pill is-progress"
-                          }
+                          className="mini-pill"
+                          style={{ background: theme.soft, color: theme.color }}
                         >
-                          {status}
+                          {SUBJECT_LABELS[activity.subject]}
+                        </span>
+                        <span className="mini-pill" style={{ background: "var(--paper-deep)", color: "var(--ink-soft)" }}>
+                          {ACTIVITY_TYPE_LABELS[activity.type]} · {formatYearGroups(activity.yearGroups)}
+                        </span>
+                      </span>
+                      <span className="activity-title">{activity.title}</span>
+                      <span className="activity-desc">{activity.summary}</span>
+                      {record ? (
+                        <span className="mini-progress" aria-hidden>
+                          <span style={{ width: `${Math.min(100, record.bestPercent)}%` }} />
                         </span>
                       ) : null}
-                      <span className="t-body" style={{ color: "var(--blue)", fontWeight: 700 }}>
-                        Open →
+                    </span>
+                    <span className="activity-side">
+                      {status}
+                      <span className="go-btn">
+                        Play <ArrowRight size={16} aria-hidden />
                       </span>
-                    </div>
+                    </span>
                   </button>
                 </li>
               );
@@ -171,4 +235,9 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
       </section>
     </div>
   );
+}
+
+function yearLabel(year: YearGroup): string {
+  if (year === "Reception") return "Reception";
+  return year.replace("Year", "Year ");
 }

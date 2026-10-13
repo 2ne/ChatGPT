@@ -22,7 +22,7 @@ export function QuestionView({
     case "multiple-choice":
       return (
         <div className="option-stack" role="radiogroup" aria-label="Choose one answer">
-          {question.options.map((option) => {
+          {question.options.map((option, slot) => {
             const selected = answer === option.id;
             const marked = markChoice(reveal, selected, option.id === question.correctId);
             return (
@@ -35,8 +35,20 @@ export function QuestionView({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked)}
               >
+                <span className="option-letter" aria-hidden>
+                  {"ABCD"[slot] ?? "•"}
+                </span>
                 {option.visual ? <span aria-hidden>{option.visual}</span> : null}
                 <span>{option.label}</span>
+                {marked === "correct" ? (
+                  <span className="option-check" aria-hidden>
+                    ✓
+                  </span>
+                ) : marked === "wrong" ? (
+                  <span className="option-cross" aria-hidden>
+                    ✕
+                  </span>
+                ) : null}
               </button>
             );
           })}
@@ -175,7 +187,7 @@ function MultiSelect({
   return (
     <div className="option-stack" role="group" aria-label="Choose all that apply">
       <p className="t-body">Choose all that apply.</p>
-      {options.map((option) => {
+      {options.map((option, slot) => {
         const isOn = selected.includes(option.id);
         const marked = markChoice(reveal, isOn, correctIds.includes(option.id));
         return (
@@ -187,10 +199,19 @@ function MultiSelect({
             onClick={() => toggle(option.id)}
             className={choiceClass(isOn, marked)}
           >
-            <span className="option-check" aria-hidden>
-              {isOn ? "✓" : ""}
+            <span className="option-letter" aria-hidden>
+              {"ABCD"[slot] ?? "✓"}
             </span>
             <span>{option.label}</span>
+            {marked === "correct" ? (
+              <span className="option-check" aria-hidden>
+                ✓
+              </span>
+            ) : marked === "wrong" ? (
+              <span className="option-cross" aria-hidden>
+                ✕
+              </span>
+            ) : null}
           </button>
         );
       })}

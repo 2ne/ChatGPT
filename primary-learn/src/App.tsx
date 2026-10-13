@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { LogOut } from "lucide-react";
 import { getActivity } from "./data/activities";
+import { getAvatar } from "./data/avatars";
 import { ActivityRunner } from "./components/ActivityRunner";
 import { AppHeader } from "./components/AppHeader";
 import { Home } from "./components/Home";
@@ -39,14 +41,15 @@ export default function App() {
     );
   }
 
+  const avatar = getAvatar(profile.avatarId);
   const activity = activeActivityId ? getActivity(activeActivityId) : undefined;
 
   if (activeActivityId && !activity) {
     return (
       <>
-        <AppHeader />
+        <AppHeader learnerName={profile.name} learnerEmoji={avatar.emoji} />
         <main className="page page-narrow page-under-header">
-          <h1 className="t-title-sm">Activity not found</h1>
+          <h1 className="t-title">Activity not found</h1>
           <p className="t-body" style={{ margin: "8px 0 16px" }}>
             That activity is missing from the catalogue.
           </p>
@@ -66,9 +69,15 @@ export default function App() {
     return (
       <>
         <AppHeader
+          learnerName={profile.name}
+          learnerEmoji={avatar.emoji}
           right={
-            <button type="button" className="btn-text" onClick={() => setActiveActivityId(null)}>
-              Exit
+            <button
+              type="button"
+              className="btn-exit"
+              onClick={() => setActiveActivityId(null)}
+            >
+              <LogOut size={15} aria-hidden /> Exit
             </button>
           }
         />
@@ -85,6 +94,8 @@ export default function App() {
   return (
     <>
       <AppHeader
+        learnerName={profile.name}
+        learnerEmoji={avatar.emoji}
         right={
           <button
             type="button"

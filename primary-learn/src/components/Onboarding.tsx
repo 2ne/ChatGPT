@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
+import { ArrowRight, PartyPopper, ShieldCheck } from "lucide-react";
 import { AVATARS } from "../data/avatars";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
+import { Pip } from "./mascot/Pip";
 
 type OnboardingProps = {
   onComplete: (profile: LearnerProfile) => void;
@@ -35,17 +37,25 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <main className="page page-narrow page-under-header">
-      <section className="panel" style={{ display: "grid", gap: "var(--space-5)" }}>
-        <header style={{ display: "grid", gap: "var(--space-2)" }}>
-          <h1 className="t-title-sm">What’s your name?</h1>
-          <p className="t-body">
-            Pick a name and an avatar. Your progress stays on this device — no sign-in.
-          </p>
-        </header>
+      <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
+        <div className="onboard-wrap">
+          <span className="onboard-badge">
+            <PartyPopper size={15} aria-hidden /> Your learning adventure starts here
+          </span>
+          <Pip size={104} mood="cheer" />
+          <div style={{ display: "grid", gap: 6 }}>
+            <h1 className="t-title">What’s your name?</h1>
+            <p className="t-body">
+              Pick a name and a buddy. Your stars stay on this device — no sign-in.
+            </p>
+          </div>
+        </div>
 
-        <form style={{ display: "grid", gap: "var(--space-5)" }} onSubmit={handleSubmit}>
+        <form style={{ display: "grid", gap: "var(--space-4)" }} onSubmit={handleSubmit}>
           <label className="field">
-            <span className="t-label">First name</span>
+            <span className="t-title-sm" style={{ fontSize: 17 }}>
+              First name
+            </span>
             <input
               value={name}
               onChange={(event) => {
@@ -55,20 +65,15 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               autoComplete="nickname"
               maxLength={20}
               placeholder="e.g. Ava"
+              aria-label="First name"
             />
           </label>
 
           <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
-            <legend className="t-label" style={{ marginBottom: "var(--space-3)" }}>
-              Choose an avatar
+            <legend className="t-title-sm" style={{ fontSize: 17, marginBottom: 12 }}>
+              Choose your buddy
             </legend>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                gap: "var(--space-3)",
-              }}
-            >
+            <div className="avatar-grid">
               {AVATARS.map((avatar) => {
                 const selected = avatar.id === avatarId;
                 return (
@@ -77,19 +82,16 @@ export function Onboarding({ onComplete }: OnboardingProps) {
                     type="button"
                     onClick={() => setAvatarId(avatar.id)}
                     aria-pressed={selected}
-                    className={`option${selected ? " is-selected" : ""}`}
-                    style={{
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      gap: "var(--space-1)",
-                      minHeight: 72,
-                      padding: "var(--space-2)",
-                    }}
+                    className={`avatar-pick${selected ? " is-selected" : ""}`}
                   >
-                    <span style={{ fontSize: 28 }} aria-hidden>
+                    <span
+                      className="avatar-face"
+                      style={{ background: `${avatar.accent}26` }}
+                      aria-hidden
+                    >
                       {avatar.emoji}
                     </span>
-                    <span className="t-meta" style={{ color: "var(--off-black)", fontWeight: 700 }}>
+                    <span className="t-meta" style={{ color: "var(--ink)", fontWeight: 800 }}>
                       {avatar.label}
                     </span>
                   </button>
@@ -99,17 +101,31 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           </fieldset>
 
           {error ? (
-            <p className="feedback is-wrong" role="alert" style={{ marginTop: 0 }}>
+            <p className="feedback is-wrong" role="alert" style={{ margin: 0 }}>
               <span className="feedback-title">Check your name</span>
-              <span className="t-body" style={{ color: "var(--off-black)" }}>
+              <span className="t-body" style={{ color: "var(--ink)" }}>
                 {error}
               </span>
             </p>
           ) : null}
 
           <button type="submit" className="btn btn-primary btn-block">
-            Continue
+            Let’s go <ArrowRight size={19} aria-hidden />
           </button>
+          <p
+            className="t-meta"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
+              textTransform: "none",
+              letterSpacing: 0,
+              fontSize: 13,
+            }}
+          >
+            <ShieldCheck size={14} aria-hidden /> Stays on this device. Nothing is uploaded.
+          </p>
         </form>
       </section>
     </main>

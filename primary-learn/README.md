@@ -67,7 +67,7 @@ npm run preview
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`
 - **UK framing** — year groups Reception–Year 6, British English, National Curriculum / EYFS references on each activity
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
-- **Living logo** — Pip in the header (and a larger one on the finish screen) is a small Three.js face with eyes and no ring. The name screen shows the child’s avatar, not Pip. SVG if WebGL or reduced motion is unavailable. Question cards stay flat
+- **Pip the path-berry** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods in the header, feedback reactions, hero and finish screen. No WebGL. Question cards carry a rainbow ribbon and a numbered prompt badge
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
 
 ## Limitations

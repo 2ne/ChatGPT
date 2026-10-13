@@ -8,7 +8,7 @@ type ConfettiBurstProps = {
   intensity?: "pop" | "shower";
 };
 
-const COLORS = ["#1865f2", "#14bf96", "#ffb100", "#5eb3d4", "#0b2149"];
+const COLORS = ["#4F46E5", "#7C3AED", "#FFC93C", "#FF6B6B", "#10B981", "#0EA5E9"];
 
 type Shape = "rect" | "square" | "circle";
 
