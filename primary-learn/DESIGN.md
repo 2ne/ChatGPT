@@ -36,7 +36,8 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 **Rules**
 
-- Sticky `AppHeader` on every screen: Pip tile + "Primary *Path*" wordmark
+- Sticky `AppHeader` on every screen: Pip tile + "Primary *Maths*" wordmark.
+  Once a learner has a name, the logo and wordmark are a button that returns home.
   (indigo gradient on "Path") + tagline, learner chip on the right, Exit pill
   during activities.
 - Question cards show a small Pip **only inside feedback** (reaction). Never
@@ -111,7 +112,8 @@ every question feels like part of the quest.
 ### Header
 
 72px sticky, blurred paper, 2px bottom border. Left: white Pip tile vertically
-centred with the "Primary Maths" wordmark (no tagline). Right: learner chip
+centred with the "Primary Maths" wordmark (no tagline). Clicking the logo or
+name returns to the quest list. Right: learner chip
 (avatar face centred in its circle + name) + Exit pill (dark) or Reset text.
 
 ### Home

@@ -47,7 +47,11 @@ export default function App() {
   if (activeActivityId && !activity) {
     return (
       <>
-        <AppHeader learnerName={profile.name} learnerEmoji={avatar.emoji} />
+        <AppHeader
+          learnerName={profile.name}
+          learnerEmoji={avatar.emoji}
+          onHome={() => setActiveActivityId(null)}
+        />
         <main className="page page-narrow page-under-header">
           <h1 className="t-title">Activity not found</h1>
           <p className="t-body" style={{ margin: "8px 0 16px" }}>
@@ -71,6 +75,7 @@ export default function App() {
         <AppHeader
           learnerName={profile.name}
           learnerEmoji={avatar.emoji}
+          onHome={() => setActiveActivityId(null)}
           right={
             <button
               type="button"
@@ -96,6 +101,7 @@ export default function App() {
       <AppHeader
         learnerName={profile.name}
         learnerEmoji={avatar.emoji}
+        onHome={() => setActiveActivityId(null)}
         right={
           <button
             type="button"
