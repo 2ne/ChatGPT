@@ -4,6 +4,8 @@ import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
 import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, formatYearGroups } from "../data/labels";
+import { DoodleCluster, DoodleStar } from "./mascot/Doodles";
+import { Pip } from "./mascot/Pip";
 import { QuestionView } from "./QuestionView";
 
 type ActivityRunnerProps = {
@@ -108,18 +110,24 @@ export function ActivityRunner({
 
   if (phase === "intro") {
     return (
-      <main className="page page-narrow">
-        <button type="button" className="btn-text" onClick={onExit} style={{ marginBottom: 16 }}>
-          ← Back
-        </button>
-        <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
-          <p className="t-meta">
-            {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
-            {formatYearGroups(activity.yearGroups)}
-          </p>
-          <div style={{ display: "grid", gap: "var(--space-2)" }}>
-            <h1 className="t-title-sm">{activity.title}</h1>
-            <p className="t-body">{activity.summary}</p>
+      <main className="page page-narrow page-under-header">
+        <section
+          className="card card-with-doodle"
+          style={{ display: "grid", gap: "var(--space-4)" }}
+        >
+          <span className="card-doodle">
+            <DoodleCluster variant="b" />
+          </span>
+          <div className="pip-aside">
+            <Pip size={48} mood="cheer" />
+            <div style={{ display: "grid", gap: "var(--space-2)" }}>
+              <p className="t-meta">
+                {SUBJECT_LABELS[activity.subject]} · {ACTIVITY_TYPE_LABELS[activity.type]} ·{" "}
+                {formatYearGroups(activity.yearGroups)}
+              </p>
+              <h1 className="t-title-sm">{activity.title}</h1>
+              <p className="t-body">{activity.summary}</p>
+            </div>
           </div>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
             Start
@@ -133,33 +141,22 @@ export function ActivityRunner({
     const percent = Math.round((correctCount / activity.questions.length) * 100);
     const mastered = percent / 100 >= activity.masteryThreshold;
     return (
-      <main className="page page-narrow">
+      <main className="page page-narrow page-under-header">
         <section
-          className="card"
+          className="card card-with-doodle"
           style={{ display: "grid", gap: "var(--space-4)", textAlign: "center" }}
         >
-          <h1 className="t-title-sm">
-            {mastered ? `Great work, ${learnerName}!` : `Nice try, ${learnerName}`}
-          </h1>
-          <p className="t-body">
-            You got {correctCount} out of {activity.questions.length} right.
-          </p>
-          <div
-            aria-hidden
-            style={{
-              width: 96,
-              height: 96,
-              margin: "0 auto",
-              borderRadius: "9999px",
-              background: mastered ? "var(--green-soft)" : "var(--blue-soft)",
-              color: mastered ? "var(--green)" : "var(--blue)",
-              display: "grid",
-              placeItems: "center",
-              fontSize: 28,
-              fontWeight: 900,
-            }}
-          >
-            {percent}%
+          <span className="card-doodle">
+            <DoodleCluster variant="a" />
+          </span>
+          <div style={{ display: "grid", justifyItems: "center", gap: "var(--space-3)" }}>
+            <Pip size={64} mood={mastered ? "cheer" : "happy"} />
+            <h1 className="t-title-sm">
+              {mastered ? `Great work, ${learnerName}!` : `Nice try, ${learnerName}`}
+            </h1>
+            <p className="t-body">
+              You got {correctCount} out of {activity.questions.length} right.
+            </p>
           </div>
           <div
             style={{
@@ -182,19 +179,18 @@ export function ActivityRunner({
 
   if (!question) {
     return (
-      <main className="page page-narrow">
+      <main className="page page-narrow page-under-header">
         <p className="t-body" role="alert">
           This activity has no questions yet.
         </p>
-        <button type="button" className="btn-text" onClick={onExit}>
-          Back home
-        </button>
       </main>
     );
   }
 
+  const doodleVariant = index % 3 === 0 ? "a" : index % 3 === 1 ? "b" : "c";
+
   return (
-    <main className="page page-narrow">
+    <main className="page page-narrow page-under-header">
       <div
         style={{
           display: "flex",
@@ -203,12 +199,13 @@ export function ActivityRunner({
           marginBottom: "var(--space-3)",
         }}
       >
-        <button type="button" className="btn-text" onClick={onExit}>
-          ← Exit
-        </button>
-        <p className="t-meta">
-          {Math.min(index + 1, activeQueue.length)} / {activeQueue.length}
-        </p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Pip size={28} mood={phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy"} />
+          <p className="t-meta">
+            {Math.min(index + 1, activeQueue.length)} / {activeQueue.length}
+          </p>
+        </div>
+        {phase === "feedback" && lastCorrect ? <DoodleStar size={18} /> : null}
       </div>
 
       <div
@@ -222,8 +219,16 @@ export function ActivityRunner({
         <div className="progress-fill" style={{ transform: `scaleX(${progressRatio})` }} />
       </div>
 
-      <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
-        <h1 className="t-title-sm">{question.prompt}</h1>
+      <section
+        className="card card-with-doodle"
+        style={{ display: "grid", gap: "var(--space-4)" }}
+      >
+        <span className="card-doodle">
+          <DoodleCluster variant={doodleVariant} />
+        </span>
+        <h1 className="t-title-sm" style={{ paddingRight: 48 }}>
+          {question.prompt}
+        </h1>
 
         <QuestionView
           question={question}
@@ -236,7 +241,12 @@ export function ActivityRunner({
           showHint ? (
             <p className="t-body">{question.hint}</p>
           ) : (
-            <button type="button" className="btn-text" onClick={() => setShowHint(true)} style={{ justifySelf: "start" }}>
+            <button
+              type="button"
+              className="btn-text"
+              onClick={() => setShowHint(true)}
+              style={{ justifySelf: "start" }}
+            >
               Need a hint?
             </button>
           )

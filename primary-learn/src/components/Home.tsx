@@ -4,16 +4,16 @@ import { getAvatar } from "../data/avatars";
 import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, YEAR_GROUP_LABELS, formatYearGroups } from "../data/labels";
 import type { Subject, YearGroup } from "../types/curriculum";
 import type { LearnerProfile, ProgressState } from "../types/progress";
-import { BrandMark } from "./BrandMark";
+import { DoodleCluster } from "./mascot/Doodles";
+import { Pip } from "./mascot/Pip";
 
 type HomeProps = {
   profile: LearnerProfile;
   progress: ProgressState;
   onOpenActivity: (activityId: string) => void;
-  onReset: () => void;
 };
 
-export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) {
+export function Home({ profile, progress, onOpenActivity }: HomeProps) {
   const avatar = getAvatar(profile.avatarId);
   const [subjectFilter, setSubjectFilter] = useState<Subject | "all">("all");
   const [yearFilter, setYearFilter] = useState<YearGroup | "all">("all");
@@ -27,36 +27,9 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
   }, [subjectFilter, yearFilter]);
 
   return (
-    <div className="page">
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "var(--space-3)",
-          marginBottom: "var(--space-5)",
-        }}
-      >
-        <BrandMark />
-        <button
-          type="button"
-          className="btn-text"
-          onClick={() => {
-            if (
-              window.confirm(
-                "Reset your name, avatar and all marks on this device? This cannot be undone.",
-              )
-            ) {
-              onReset();
-            }
-          }}
-        >
-          Reset
-        </button>
-      </header>
-
+    <div className="page page-under-header">
       <section
-        className="card"
+        className="card card-with-doodle"
         style={{
           display: "flex",
           alignItems: "center",
@@ -64,6 +37,9 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
           marginBottom: "var(--space-5)",
         }}
       >
+        <span className="card-doodle">
+          <DoodleCluster variant="c" />
+        </span>
         <div
           aria-hidden
           style={{
@@ -121,13 +97,25 @@ export function Home({ profile, progress, onOpenActivity, onReset }: HomeProps) 
       </section>
 
       <section aria-live="polite">
-        <h2 className="t-title-sm" style={{ marginBottom: "var(--space-3)" }}>
-          Activities
-        </h2>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "var(--space-3)",
+            marginBottom: "var(--space-3)",
+          }}
+        >
+          <h2 className="t-title-sm">Activities</h2>
+          <Pip size={28} mood="happy" />
+        </div>
 
         {filtered.length === 0 ? (
           <div className="card" style={{ textAlign: "center" }}>
-            <p className="t-title-sm">No activities here yet</p>
+            <Pip size={48} mood="think" />
+            <p className="t-title-sm" style={{ marginTop: "var(--space-3)" }}>
+              No activities here yet
+            </p>
             <p className="t-body" style={{ marginTop: "var(--space-2)" }}>
               Try another subject or year group.
             </p>

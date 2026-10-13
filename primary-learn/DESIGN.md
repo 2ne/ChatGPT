@@ -21,6 +21,24 @@ Reference live examples while building:
 4. **Obvious hierarchy** — few type sizes, big jumps between levels (not subtle).
 5. **One action colour** — blue means “do this”. Green = success. Red = try again. Gold = celebration only.
 6. **Touch-first for primary kids** — primary controls ≥ 48px tall; answer options ≥ 56px.
+7. **Friendly, not stale** — Pip (our mascot) and a few doodle SVGs add warmth; keep them sparse.
+
+## Mascot: Pip
+
+Inspired by friendly geometric education mascots (big eyes, simple smile, orbit ring) but **original** to Primary Path — blue path-marker shape, not a third-party logo.
+
+| Asset | Use |
+| --- | --- |
+| `Pip` | Sticky header always; beside greetings / Start / summary |
+| `DoodleStar` / `DoodleRocket` / `DoodleShape` | Tiny corner accents on cards; rotate sparingly on questions |
+| Moods | `happy` default · `cheer` after correct / celebration · `think` on “not quite” / empty |
+
+**Rules**
+
+- Sticky `AppHeader` on every screen: Pip + “Primary Path” (+ Exit/Reset on the right).
+- At most **one** doodle cluster per card.
+- Do not cover answer options with decorations.
+- No continuous bounce animations on Pip during questions.
 
 ---
 

@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { AVATARS } from "../data/avatars";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
-import { BrandMark } from "./BrandMark";
+import { DoodleCluster } from "./mascot/Doodles";
+import { Pip } from "./mascot/Pip";
 
 type OnboardingProps = {
   onComplete: (profile: LearnerProfile) => void;
@@ -35,15 +36,20 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   }
 
   return (
-    <main className="page page-narrow" style={{ paddingTop: "var(--space-6)" }}>
-      <section className="panel" style={{ display: "grid", gap: "var(--space-5)" }}>
-        <BrandMark />
-        <header style={{ display: "grid", gap: "var(--space-2)" }}>
-          <h1 className="t-title">What’s your name?</h1>
-          <p className="t-body">
-            Pick a name and an avatar. Your progress stays on this device — no sign-in.
-          </p>
-        </header>
+    <main className="page page-narrow page-under-header">
+      <section className="panel card-with-doodle" style={{ display: "grid", gap: "var(--space-5)" }}>
+        <span className="card-doodle">
+          <DoodleCluster variant="a" />
+        </span>
+        <div className="pip-aside">
+          <Pip size={56} mood="cheer" />
+          <header style={{ display: "grid", gap: "var(--space-2)" }}>
+            <h1 className="t-title-sm">What’s your name?</h1>
+            <p className="t-body">
+              Pick a name and an avatar. Your progress stays on this device — no sign-in.
+            </p>
+          </header>
+        </div>
 
         <form style={{ display: "grid", gap: "var(--space-5)" }} onSubmit={handleSubmit}>
           <label className="field">
