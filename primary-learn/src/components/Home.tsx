@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ArrowRight, PartyPopper, Sparkles, Star } from "lucide-react";
+import { ArrowRight, PartyPopper, Star } from "lucide-react";
 import { activities } from "../data/activities";
 import { getAvatar } from "../data/avatars";
 import { subjectTheme } from "../data/subjects";
@@ -31,9 +31,6 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
       <section className="hero" aria-label={`Welcome back, ${profile.name}`}>
         <div className="hero-inner">
           <div className="hero-copy">
-            <span className="hero-kicker">
-              <Sparkles size={14} aria-hidden /> Ready when you are
-            </span>
             <h1 className="hero-title">
               Hi, {profile.name}!{" "}
               <span aria-hidden>{avatar.emoji}</span>

@@ -515,17 +515,6 @@ button.brand-row:hover .brand-name {
   gap: 6px;
 }
 
-.hero-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--sun);
-}
-
 .hero-title {
   font-family: var(--font-display);
   font-weight: 800;
