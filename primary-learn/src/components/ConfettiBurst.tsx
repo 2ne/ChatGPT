@@ -5,17 +5,20 @@ type ConfettiBurstProps = {
   burstId: number;
 };
 
-const COLORS = ["#1865f2", "#14bf96", "#ffb100", "#f071a8", "#ff8a3d", "#5eb3d4"];
+const COLORS = ["#1865f2", "#14bf96", "#ffb100", "#f071a8", "#ff8a3d", "#5eb3d4", "#ffffff"];
 
 type Piece = {
   id: number;
-  left: string;
+  color: string;
+  size: number;
+  height: number;
   delay: string;
   duration: string;
-  color: string;
-  rotate: string;
-  size: number;
-  drift: string;
+  /** Launch angle in degrees (0 = right, 90 = down). */
+  angle: number;
+  distance: number;
+  spin: number;
+  shape: "rect" | "square" | "circle";
 };
 
 export function ConfettiBurst({ burstId }: ConfettiBurstProps) {
@@ -23,23 +26,32 @@ export function ConfettiBurst({ burstId }: ConfettiBurstProps) {
 
   const pieces = useMemo<Piece[]>(() => {
     if (burstId <= 0) return [];
-    return Array.from({ length: 28 }, (_, id) => ({
-      id,
-      left: `${6 + ((id * 17) % 88)}%`,
-      delay: `${(id % 8) * 0.03}s`,
-      duration: `${0.9 + (id % 5) * 0.08}s`,
-      color: COLORS[id % COLORS.length],
-      rotate: `${(id * 47) % 360}deg`,
-      size: 6 + (id % 5),
-      drift: `${(id % 2 === 0 ? -1 : 1) * (12 + (id % 6) * 6)}px`,
-    }));
+    return Array.from({ length: 36 }, (_, id) => {
+      // Prefer upward / outward burst (not straight down)
+      const base = -100 + (id / 35) * 200; // roughly -100° to +100° from up
+      const jitter = ((id * 37) % 25) - 12;
+      const angle = base + jitter;
+      const shapeRoll = id % 5;
+      return {
+        id,
+        color: COLORS[id % COLORS.length],
+        size: 7 + (id % 6),
+        height: shapeRoll === 0 ? 7 + (id % 6) : 4 + (id % 4),
+        delay: `${(id % 6) * 0.012}s`,
+        duration: `${0.75 + (id % 7) * 0.06}s`,
+        angle,
+        distance: 90 + ((id * 53) % 140),
+        spin: (id % 2 === 0 ? 1 : -1) * (280 + (id % 5) * 90),
+        shape: shapeRoll === 1 ? "circle" : shapeRoll === 2 ? "square" : "rect",
+      };
+    });
   }, [burstId]);
 
   useEffect(() => {
     if (burstId <= 0) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setVisible(true);
-    const timer = window.setTimeout(() => setVisible(false), 1400);
+    const timer = window.setTimeout(() => setVisible(false), 1100);
     return () => window.clearTimeout(timer);
   }, [burstId]);
 
@@ -47,22 +59,29 @@ export function ConfettiBurst({ burstId }: ConfettiBurstProps) {
 
   return (
     <div className="confetti-layer" aria-hidden>
-      {pieces.map((piece) => (
-        <span
-          key={`${burstId}-${piece.id}`}
-          className="confetti-piece"
-          style={{
-            left: piece.left,
-            width: piece.size,
-            height: piece.size * 0.55,
-            background: piece.color,
-            animationDelay: piece.delay,
-            animationDuration: piece.duration,
-            ["--confetti-rotate" as string]: piece.rotate,
-            ["--confetti-drift" as string]: piece.drift,
-          }}
-        />
-      ))}
+      <div className="confetti-origin">
+        {pieces.map((piece) => {
+          const rad = (piece.angle * Math.PI) / 180;
+          const x = Math.sin(rad) * piece.distance;
+          const y = -Math.cos(rad) * piece.distance;
+          return (
+            <span
+              key={`${burstId}-${piece.id}`}
+              className={`confetti-piece is-${piece.shape}`}
+              style={{
+                width: piece.size,
+                height: piece.height,
+                background: piece.color,
+                animationDelay: piece.delay,
+                animationDuration: piece.duration,
+                ["--burst-x" as string]: `${x}px`,
+                ["--burst-y" as string]: `${y}px`,
+                ["--burst-spin" as string]: `${piece.spin}deg`,
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

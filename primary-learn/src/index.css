@@ -335,7 +335,7 @@ p {
   min-width: 0;
 }
 
-/* Confetti — short burst on correct answers only */
+/* Confetti — radial pop from centre (not rain from the top) */
 .confetti-layer {
   position: fixed;
   inset: 0;
@@ -344,24 +344,57 @@ p {
   overflow: hidden;
 }
 
-.confetti-piece {
+.confetti-origin {
   position: absolute;
-  top: -12px;
-  border-radius: 2px;
-  animation-name: confetti-fall;
-  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
-  animation-fill-mode: forwards;
+  left: 50%;
+  top: 42%;
+  width: 0;
+  height: 0;
 }
 
-@keyframes confetti-fall {
+.confetti-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 1px;
+  box-shadow: 0 1px 2px rgba(33, 36, 44, 0.12);
+  animation-name: confetti-burst;
+  animation-timing-function: cubic-bezier(0.14, 0.85, 0.28, 1);
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}
+
+.confetti-piece.is-circle {
+  border-radius: 999px;
+}
+
+.confetti-piece.is-square {
+  border-radius: 2px;
+}
+
+@keyframes confetti-burst {
   0% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(0.4) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  55% {
+    /* shoot outward */
+    transform: translate3d(var(--burst-x), var(--burst-y), 0) scale(1)
+      rotate(calc(var(--burst-spin) * 0.55));
     opacity: 1;
   }
   100% {
-    transform: translate3d(var(--confetti-drift, 20px), 105vh, 0)
-      rotate(var(--confetti-rotate, 180deg));
-    opacity: 0.85;
+    /* soft settle with a little gravity */
+    transform: translate3d(
+        calc(var(--burst-x) * 1.08),
+        calc(var(--burst-y) * 0.75 + 48px),
+        0
+      )
+      scale(0.85) rotate(var(--burst-spin));
+    opacity: 0;
   }
 }
 
