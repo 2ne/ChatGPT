@@ -62,24 +62,27 @@ Use these CSS variables in `src/index.css`. Do not invent new brand colours per 
 Weights: **400** (body), **700** (emphasis / buttons), **900** (rare display).  
 Load from Google Fonts. No Fredoka, Nunito, comic fonts, or system UI stacks on learning screens.
 
-### Type scale (use only these)
+### Type scale (keep it tiny)
 
-| Role | Size | Line-height | Weight | Example |
+Kids mostly see **two** sizes. Small is for metadata only.
+
+| Role | Size | Line-height | Weight | When to use |
 | --- | --- | --- | --- | --- |
-| Title | 32px | 40px | 900 | Activity title on intro |
-| Heading | 24px | 32px | 700 | Question prompt |
-| Title small | 20px | 28px | 700 | Home card title |
-| Body | 16px | 22px | 400 | Summaries, explanations |
-| Label | 14px | 20px | 700 | Button text, filters |
-| Meta | 12px | 16px | 400 | “Year 1 · 6 min” |
+| **Big** (`.t-title-sm`) | 20px | 28px | 700 | Names, activity titles, question prompts |
+| **Normal** (`.t-body`) | 16px | 22px | 400 | Summaries, instructions, greetings under a name |
+| **Meta** (`.t-meta`) | 12px | 16px | 400 | One short label only — e.g. `Maths · Number bonds · Year 1` |
+| Button label | 14px | 20px | 700 | On buttons only |
+
+Avoid 32px titles and extra mid sizes on learning screens unless a rare celebration screen needs them.
 
 **Rules**
 
-- Max **three** type roles on any one viewport (e.g. Heading + Body + Meta).
-- Question prompts use **Heading** (24/32), not Title.
-- Body line length ≈ 40–70 characters. Don’t stretch prose full-bleed on desktop.
-- No ALL CAPS tracking banners except a single 12px meta label if needed.
-- Never stack a huge brand wordmark *and* a huge headline fighting each other on learning screens. Brand can be a small header mark; the question is the hero.
+- Default pattern: **Big title → Normal sentence → primary button**. Optional single Meta line above the title.
+- Do **not** stack multiple Meta lines. One is enough.
+- Supporting copy under a name/title must be **Normal (16px)**, not Meta.
+- Never show adult/teacher jargon to kids (mastery %, curriculum refs, ability bands, “expected”). Keep that in data for agents — not on the Start screen.
+- Body line length ≈ 40–70 characters.
+- Brand mark stays small in the header; the activity/question title is the hero.
 
 ---
 
@@ -199,12 +202,15 @@ One row per activity:
 
 ### Activity intro
 
-- Back text link
-- Meta line: `Maths · Number bonds · Year 1`
-- Title
-- One summary sentence
-- Compact facts in a simple definition list or single meta row (not four mini-cards)
-- One primary button: “Start”
+Only this, in order:
+
+1. Back text link
+2. One Meta line: `Maths · Number bonds · Year 1`
+3. Big title
+4. One Normal summary sentence
+5. Primary button: “Start”
+
+Do **not** show minutes, question counts, mastery %, ability, or curriculum references on this screen.
 
 ### Activity question (most important)
 

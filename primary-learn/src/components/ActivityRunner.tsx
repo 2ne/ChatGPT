@@ -3,12 +3,7 @@ import type { Activity } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
-import {
-  ACTIVITY_TYPE_LABELS,
-  SUBJECT_LABELS,
-  formatYearGroups,
-  ABILITY_LABELS,
-} from "../data/labels";
+import { ACTIVITY_TYPE_LABELS, SUBJECT_LABELS, formatYearGroups } from "../data/labels";
 import { QuestionView } from "./QuestionView";
 
 type ActivityRunnerProps = {
@@ -123,15 +118,9 @@ export function ActivityRunner({
             {formatYearGroups(activity.yearGroups)}
           </p>
           <div style={{ display: "grid", gap: "var(--space-2)" }}>
-            <h1 className="t-title">{activity.title}</h1>
+            <h1 className="t-title-sm">{activity.title}</h1>
             <p className="t-body">{activity.summary}</p>
           </div>
-          <p className="t-meta">
-            {ABILITY_LABELS[activity.ability]} · {activity.estimatedMinutes} min ·{" "}
-            {activity.questions.length} questions · {Math.round(activity.masteryThreshold * 100)}%
-            to master
-          </p>
-          <p className="t-meta">{activity.curriculumRef}</p>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
             Start
           </button>
@@ -149,12 +138,11 @@ export function ActivityRunner({
           className="card"
           style={{ display: "grid", gap: "var(--space-4)", textAlign: "center" }}
         >
-          <p className="t-meta">{mastered ? "Mastered" : "Keep practising"}</p>
-          <h1 className="t-title">
-            {mastered ? `Great work, ${learnerName}` : `Nice try, ${learnerName}`}
+          <h1 className="t-title-sm">
+            {mastered ? `Great work, ${learnerName}!` : `Nice try, ${learnerName}`}
           </h1>
           <p className="t-body">
-            {correctCount} of {activity.questions.length} correct ({percent}%).
+            You got {correctCount} out of {activity.questions.length} right.
           </p>
           <div
             aria-hidden
