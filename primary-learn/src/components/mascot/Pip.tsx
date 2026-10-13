@@ -26,18 +26,6 @@ export function Pip({ size = 40, mood = "happy", className }: PipProps) {
       <path d="M44 18h14M44 24h12M44 30h10" stroke="#d6d8da" strokeWidth="1.5" strokeLinecap="round" />
       {/* cream shard */}
       <path d="M8 40l18-26 6 10-16 22z" fill="#f3e6c8" opacity="0.9" />
-      <g className="pip-ring">
-        <ellipse
-          cx="30"
-          cy="34"
-          rx="22"
-          ry="9"
-          transform="rotate(-28 30 34)"
-          stroke="#5eb3d4"
-          strokeWidth="3.5"
-          fill="none"
-        />
-      </g>
       {/* body */}
       <path
         d="M30 10l14 8v16l-14 8-14-8V18l14-8z"

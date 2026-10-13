@@ -25,20 +25,22 @@ Reference live examples while building:
 
 ## Mascot: Pip
 
-Inspired by friendly geometric education mascots (big eyes, simple smile, orbit ring) but **original** to Primary Path — blue path-marker shape, not a third-party logo.
+Inspired by friendly geometric education mascots (big eyes, simple smile) but **original** to Primary Path — blue path-marker shape, not a third-party logo. No orbit ring.
 
 | Asset | Use |
 | --- | --- |
-| `Pip` | Sticky header always; larger Pip only on onboarding + end summary |
+| `Pip` | Sticky header always, with eyes big enough to read. A larger Pip only on the finish screen |
 | Doodles | Optional, rare — not on every question card |
 | Confetti | Short canvas pop when an answer is **correct**. A fuller shower only when the first-try score reaches mastery |
-| Moods | `happy` default · `cheer` on a correct answer, welcome, and mastery · `think` on an empty catalogue |
+| Moods | `happy` default · `cheer` on a correct answer and on mastery · `think` on an empty catalogue |
 
 **Rules**
 
 - Sticky `AppHeader` on every screen: Pip + “Primary Path” (+ Exit/Reset on the right).
-- The header mark is a small Three.js Pip (gem + orbit ring). It cheers on a correct answer. Welcome and the finish screen use a larger Pip, with a face.
-- If WebGL is missing, or `prefers-reduced-motion` is set, use the SVG. The SVG ring may turn slowly; it does not bounce on a loop.
+- The header mark is a small Three.js Pip: blue gem, two eyes, a smile. No ring or circle around it. It cheers on a correct answer.
+- Do **not** put Pip on the name screen. The picture there is the avatar the child picks.
+- The finish screen may show a larger Pip. Question cards stay clear of it.
+- If WebGL is missing, or `prefers-reduced-motion` is set, use the SVG. It may blink. It does not bounce on a loop.
 - Do **not** put a Three.js scene on a question card. Text questions stay flat. A future spatial question kind can bring its own scene.
 - Do **not** repeat Pip next to progress, section titles, and cards on the same screen. The empty catalogue may show Pip once inside the empty card.
 - Question cards stay clean — celebration is the confetti + feedback pop, not corner clutter.
@@ -268,9 +270,9 @@ Allowed:
 - 150–200ms fade/ease on feedback appear
 - 180ms question card slide when the question changes
 - Progress bar width transition, with a small blue marker at the leading edge
-- Header Pip: slow orbit, a blink on the large face, one hop when the mood becomes `cheer`
+- Header Pip: a blink, and one hop when the mood becomes `cheer`
 - Canvas confetti: a short pop on a correct answer (pointer-events none, brand colours only). A longer shower on the mastery summary
-- SVG fallback: slow ring turn and a blink. One hop, not a loop
+- SVG fallback: a blink, and one hop. Not a loop
 
 Forbidden on learning screens:
 

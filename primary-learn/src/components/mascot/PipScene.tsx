@@ -12,9 +12,9 @@ type PipSceneProps = {
 type ThreeModule = typeof import("three");
 
 /**
- * Living logo. A small WebGL Pip (gem, orbit ring, face) for the header,
- * welcome, and finish screen. Question cards stay flat — this canvas is the
- * mark, not a backdrop. Falls back to the SVG if WebGL or motion is unavailable.
+ * Living logo. A small WebGL Pip (gem and a face) for the header and the
+ * finish screen. Eyes are drawn at every size so the header mark still reads.
+ * Falls back to the SVG if WebGL or motion is unavailable.
  */
 export function PipScene({ size = 40, mood = "happy", className }: PipSceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -96,16 +96,13 @@ function mountPip(
   renderer.setClearColor(0x000000, 0);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 20);
-  camera.position.set(0, 0.05, 3.55);
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 20);
+  camera.position.set(0, 0.02, 2.35);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-  const key = new THREE.DirectionalLight(0xffffff, 1.7);
-  key.position.set(2.2, 3, 4);
+  scene.add(new THREE.AmbientLight(0xffffff, 1.15));
+  const key = new THREE.DirectionalLight(0xffffff, 1.35);
+  key.position.set(0.2, 1.4, 4);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x5eb3d4, 0.45);
-  rim.position.set(-2.5, -0.5, 2);
-  scene.add(rim);
 
   const geometries: BufferGeometry[] = [];
   const materials: Material[] = [];
@@ -118,60 +115,38 @@ function mountPip(
 
   const blue = new THREE.MeshStandardMaterial({
     color: 0x1865f2,
-    roughness: 0.38,
-    metalness: 0.04,
+    roughness: 0.42,
+    metalness: 0,
   });
-  const deep = new THREE.MeshStandardMaterial({
-    color: 0x2f6fed,
-    roughness: 0.5,
-    metalness: 0.02,
-  });
-  const ringMat = new THREE.MeshStandardMaterial({
-    color: 0x5eb3d4,
-    roughness: 0.25,
-    metalness: 0.12,
-  });
-  const white = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 });
-  const ink = new THREE.MeshStandardMaterial({ color: 0x0b2149, roughness: 0.45 });
+  const white = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const ink = new THREE.MeshBasicMaterial({ color: 0x21242c });
 
   const root = new THREE.Group();
   scene.add(root);
 
-  const ring = addMesh(new THREE.TorusGeometry(1.12, 0.045, 10, 56), ringMat);
-  ring.rotation.x = 1.15;
-  ring.rotation.y = -0.42;
-  root.add(ring);
-
   const body = new THREE.Group();
-  body.rotation.y = 0.42;
   root.add(body);
+  body.add(addMesh(gemGeometry(THREE, 0.82), blue));
 
-  const back = addMesh(gemGeometry(THREE, 0.78), deep);
-  back.position.z = -0.05;
-  body.add(back);
-  body.add(addMesh(gemGeometry(THREE, 0.68), blue));
-
-  const detailed = size >= 80;
   const eyePivots: Group[] = [];
-  if (detailed) {
-    for (const x of [-0.2, 0.2]) {
-      const pivot = new THREE.Group();
-      pivot.position.set(x, 0.08, 0.28);
-      const eye = addMesh(new THREE.SphereGeometry(0.12, 18, 18), white);
-      const pupil = addMesh(new THREE.SphereGeometry(0.05, 12, 12), ink);
-      pupil.position.set(0.03, -0.02, 0.1);
-      pivot.add(eye, pupil);
-      eyePivots.push(pivot);
-      body.add(pivot);
-    }
-    const smile = addMesh(
-      new THREE.TorusGeometry(0.15, 0.018, 6, 14, Math.PI * 0.7),
-      ink,
-    );
-    smile.rotation.z = Math.PI;
-    smile.position.set(0.01, -0.16, 0.32);
-    body.add(smile);
+  for (const x of [-0.28, 0.28]) {
+    const pivot = new THREE.Group();
+    pivot.position.set(x, 0.16, 0.2);
+    const eye = addMesh(new THREE.SphereGeometry(0.2, 18, 18), white);
+    const pupil = addMesh(new THREE.SphereGeometry(0.09, 14, 14), ink);
+    pupil.position.set(0.04, -0.02, 0.15);
+    pivot.add(eye, pupil);
+    eyePivots.push(pivot);
+    body.add(pivot);
   }
+
+  const smile = addMesh(
+    new THREE.TorusGeometry(0.22, 0.035, 8, 16, Math.PI * 0.72),
+    ink,
+  );
+  smile.rotation.z = Math.PI;
+  smile.position.set(0.02, -0.22, 0.28);
+  body.add(smile);
 
   let frame = 0;
   let pauseOffset = 0;
@@ -206,17 +181,12 @@ function mountPip(
     const drift = mood === "think" ? 0 : Math.sin(t * 1.4) * 0.02;
 
     root.position.y = hop + drift;
-    root.rotation.z = mood === "think" ? 0.22 : Math.sin(t * 0.45) * 0.04;
+    root.rotation.z = mood === "think" ? 0.12 : 0;
 
-    const ringSpeed = mood === "cheer" ? 0.9 : mood === "think" ? 0.18 : 0.4;
-    ring.rotation.z = t * ringSpeed;
-
-    if (detailed) {
-      const blink = Math.sin(t * 1.15) > 0.985 ? 0.08 : 1;
-      eyePivots.forEach((pivot) => {
-        pivot.scale.y = blink;
-      });
-    }
+    const blink = Math.sin(t * 1.15) > 0.985 ? 0.12 : 1;
+    eyePivots.forEach((pivot) => {
+      pivot.scale.y = blink;
+    });
 
     renderer.render(scene, camera);
     frame = window.requestAnimationFrame(tick);

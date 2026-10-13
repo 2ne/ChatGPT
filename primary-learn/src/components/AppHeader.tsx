@@ -13,7 +13,7 @@ export function AppHeader({ right }: AppHeaderProps) {
     <header className="app-header">
       <div className="app-header-inner">
         <div className="brand-row">
-          <PipScene size={40} mood={mood} />
+          <PipScene size={48} mood={mood} />
           <span className="brand-name">Primary Path</span>
         </div>
         {right ? <div className="app-header-right">{right}</div> : null}

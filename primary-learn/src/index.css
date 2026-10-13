@@ -347,11 +347,6 @@ p {
   grid-area: 1 / 1;
 }
 
-svg.pip-alive .pip-ring {
-  transform-origin: 30px 34px;
-  animation: pip-orbit 14s linear infinite;
-}
-
 svg.pip-alive .pip-eyes {
   transform-box: fill-box;
   transform-origin: center;
@@ -360,12 +355,6 @@ svg.pip-alive .pip-eyes {
 
 svg.pip-cheer {
   animation: pip-hop 0.6s ease;
-}
-
-@keyframes pip-orbit {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes pip-blink {
@@ -419,7 +408,6 @@ svg.pip-cheer {
 
 @media (prefers-reduced-motion: reduce) {
   .confetti-layer,
-  svg.pip-alive .pip-ring,
   svg.pip-alive .pip-eyes,
   svg.pip-cheer,
   .question-card {
