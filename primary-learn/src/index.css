@@ -1866,7 +1866,7 @@ button.brand-row:hover .brand-name {
 }
 
 .map-stop.is-soon .map-node {
-  border: 3px dashed var(--line-strong);
+  border: 3px solid var(--line-strong);
   background: #ffffff;
   color: var(--ink-soft);
   box-shadow: 0 4px 0 var(--line-strong), 0 6px 12px rgba(35, 41, 70, 0.1);
