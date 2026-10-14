@@ -496,10 +496,13 @@ export function ActivityRunner({
               </span>
             </div>
           ) : null}
+
+          {/* Desktop: CTA stays in the card. Mobile uses the fixed dock below. */}
+          <div className="quest-actions-inline">{primaryAction}</div>
         </section>
       </div>
 
-      {/* Always-visible Check / Next bar — fixed on mobile so kids never scroll to find it. */}
+      {/* Mobile only: fixed white Check / Next bar so kids never scroll to find it. */}
       <div className="quest-dock" role="region" aria-label="Answer actions">
         <div className="quest-dock-inner">{primaryAction}</div>
       </div>

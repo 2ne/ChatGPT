@@ -1400,7 +1400,12 @@ button.brand-row:hover .brand-name {
   gap: var(--space-3);
 }
 
-/* Check / Next dock — white bar pinned to the viewport bottom on mobile. */
+/* Desktop: Check / Next stays inside the question card (as before). */
+.quest-actions-inline {
+  display: none;
+}
+
+/* Mobile: white bar pinned to the viewport bottom so kids never scroll for it. */
 .quest-dock {
   position: fixed;
   bottom: 0;
@@ -1420,15 +1425,12 @@ button.brand-row:hover .brand-name {
 }
 
 @media (min-width: 769px) {
+  .quest-actions-inline {
+    display: block;
+  }
+
   .quest-dock {
-    position: static;
-    margin-top: var(--space-3);
-    border: 2px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-card);
-    padding: var(--space-3);
-    padding-bottom: var(--space-3);
-    max-width: var(--max-wide);
+    display: none;
   }
 }
 

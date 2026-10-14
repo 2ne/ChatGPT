@@ -150,8 +150,9 @@ Back link → icon tile + big title → summary sentence → fact pills
 │ [C] 4                    ✓    │
 │ 💡 Need a hint?               │
 │ ✅ Correct — nice! + tip + Pip │
+│ [ Check it ✓ / Next → ]       │  ← in-card on desktop
 └───────────────────────────────┘
-┌───────────────────────────────┐  ← white dock (fixed on mobile)
+┌───────────────────────────────┐  ← mobile only: fixed white dock
 │ [ Check it ✓ / Next → ]       │
 └───────────────────────────────┘
 ```
@@ -162,10 +163,10 @@ Back link → icon tile + big title → summary sentence → fact pills
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
   teaching tip + mini Pip reaction.
-- Action button lives in a **white dock** below the question card:
-  `Check it ✓` (disabled until answered) → `Next question →` → `See my stars`
-  on the last one. On mobile the dock is `position: fixed` to the viewport
-  bottom (with safe-area padding) so kids never have to scroll to find it.
+- Action button: `Check it ✓` (disabled until answered) → `Next question →` →
+  `See my stars` on the last one. On desktop it stays inside the question card.
+  On mobile it moves to a white `position: fixed` dock at the viewport bottom
+  (with safe-area padding) so kids never have to scroll to find it.
 - Home, quest intro, questions and the stars screen all use the same content
   width (`--max-wide`). Do not narrow the white card on later screens.
 
