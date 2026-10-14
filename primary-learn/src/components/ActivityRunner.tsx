@@ -336,20 +336,6 @@ export function ActivityRunner({
   /* ——— Question / feedback ——— */
   const reveal = phase === "feedback" ? (lastCorrect ? "correct" : "incorrect") : null;
   const position = Math.min(index + 1, activeQueue.length);
-  const cheer =
-    phase === "feedback"
-      ? lastCorrect
-        ? pick(["Brilliant!", "Super work!", "You nailed it!", "Yes! That's it!"])
-        : "Good try — the tip below helps."
-      : isRetry
-        ? "Second chances are superpowers."
-        : position === activeQueue.length
-          ? "Last one — finish strong!"
-          : position === 1
-            ? `Let's go, ${learnerName}!`
-            : streak >= 2
-              ? "You're on a roll!"
-              : "Keep going!";
   const primaryAction =
     phase === "question" ? (
       <button
@@ -375,9 +361,6 @@ export function ActivityRunner({
 
       {/* Where am I? — activity context + segmented progress */}
       <section className="context-card" aria-label="Quest progress">
-        <button type="button" className="back-link" onClick={onExit}>
-          <ArrowLeft size={16} aria-hidden /> Exit quest
-        </button>
         <div className="context-top">
           <span
             className="context-tile"
@@ -386,21 +369,21 @@ export function ActivityRunner({
           >
             <ThemeIcon />
           </span>
-          <div style={{ minWidth: 0 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <p className="context-title" style={{ fontSize: 21 }}>
               {activity.title}
             </p>
+            <p className="context-sub">
+              Question {position} of {activeQueue.length}
+              {isRetry ? " · another go" : ""}
+            </p>
           </div>
+          <button type="button" className="exit-btn" onClick={onExit} aria-label="Exit quest">
+            <X size={20} aria-hidden />
+          </button>
         </div>
 
         <div>
-          <div className="count-row">
-            <p className="count-now">
-              Question <strong>{position}</strong> of {activeQueue.length}
-              {isRetry ? " · another go" : ""}
-            </p>
-            <p className="cheer-msg">{cheer}</p>
-          </div>
           <div
             className="seg-bar"
             role="progressbar"
@@ -408,7 +391,6 @@ export function ActivityRunner({
             aria-valuemax={activeQueue.length}
             aria-valuenow={index + (phase === "feedback" ? 1 : 0)}
             aria-valuetext={`Question ${position} of ${activeQueue.length}`}
-            style={{ marginTop: 10 }}
           >
             {activeQueue.map((id, slot) => {
               const done = slot < index || (slot === index && phase === "feedback");
@@ -508,8 +490,4 @@ export function ActivityRunner({
       </div>
     </main>
   );
-}
-
-function pick(options: string[]): string {
-  return options[Math.floor(Math.random() * options.length)];
 }
