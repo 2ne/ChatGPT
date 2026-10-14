@@ -17,7 +17,7 @@ The aims that run through every quest are fluency, reasoning and problem solving
 - A quest’s `curriculumRef` must be exactly the node id it teaches.
 - **Status:** `missing` (no quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quest covers the bullets).
 
-The next quest to write is the first `missing` node: `eyfs-count-5`. The live quest `number-bonds-to-10` is node 13 (`y1-bonds-10`), not the start of the path.
+The next quest to write is the first `missing` node: `eyfs-subitise-5`. Live quests: `count-to-5` is node 1 (`eyfs-count-5`) and `number-bonds-to-10` is node 13 (`y1-bonds-10`).
 
 ## Category index
 
@@ -79,7 +79,7 @@ Reception. This category is open at the start.
 
 ### 1. `eyfs-count-5` — Count to 5
 
-Requires: none. Quest: none. Status: missing.
+Requires: none. Quest: `count-to-5`. Status: done.
 
 - Say the count sequence to 5
 - Recognise numerals 1 to 5

@@ -22,6 +22,7 @@ export const ABILITY_LABELS: Record<AbilityBand, string> = {
 };
 
 export const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = {
+  counting: "Counting",
   "number-bonds": "Number bonds",
   "times-tables": "Times tables",
   fractions: "Fractions",

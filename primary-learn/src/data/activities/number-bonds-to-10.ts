@@ -12,6 +12,8 @@ export const numberBondsTo10: Activity = {
   estimatedMinutes: 6,
   masteryThreshold: 0.8,
   curriculumRef: "y1-bonds-10",
+  pathNode: "y1-bonds-10",
+  difficulty: 1,
   skills: ["y1-bonds-10", "addition-within-10", "number-bonds", "missing-addend"],
   questions: [
     {

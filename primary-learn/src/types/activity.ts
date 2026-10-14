@@ -1,7 +1,9 @@
 import type { AbilityBand, Subject, YearGroup } from "./curriculum";
+import type { Difficulty } from "./path";
 
 /** Pedagogical activity kinds. Extend this union when introducing a new format. */
 export const ACTIVITY_TYPES = [
+  "counting",
   "number-bonds",
   "times-tables",
   "fractions",
@@ -92,6 +94,10 @@ export type Activity = {
   /** 0–1, typically 0.8 */
   masteryThreshold: number;
   curriculumRef: string;
+  /** Map level this quest belongs to: a node id from curriculum/maths.md. */
+  pathNode: string;
+  /** 1 easy, 2 medium, 3 hard. Each level has at most one quest per difficulty. */
+  difficulty: Difficulty;
   skills: string[];
   questions: Question[];
 };

@@ -42,7 +42,7 @@ UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 - `curriculum/audit.md` — how to check that path before adding a quest  
 - `curriculum/coverage.md` — how many nodes are still missing  
 
-The next quest to build is the first `missing` node (`eyfs-count-5`). Do not skip ahead.
+The next quest to build is the first `missing` node (`eyfs-subitise-5`). Do not skip ahead.
 
 ## Stack
 
@@ -74,7 +74,7 @@ npm run preview
 
 ## Limitations
 
-- Only one sample activity ships in this foundation
+- Only two quests ship so far: `count-to-5` (node 1) and `number-bonds-to-10` (node 13)
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag

@@ -85,7 +85,7 @@ If you need a new maths activity type:
 2. Update labels in `src/data/labels.ts`.
 3. Mention the addition in the project README “Key decisions” if it is consequential.
 
-Current types: `number-bonds`, `times-tables`, `fractions`, `place-value`, `reasoning`.
+Current types: `counting`, `number-bonds`, `times-tables`, `fractions`, `place-value`, `reasoning`.
 
 ## Question design rules
 
