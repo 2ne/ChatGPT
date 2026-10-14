@@ -181,8 +181,24 @@ p {
   padding-top: var(--space-4);
 }
 
+/* Quest screens omit the global header; keep the same top padding. */
+.page-quest {
+  padding-top: var(--space-4);
+}
+
 .page-narrow {
   max-width: var(--max-content);
+}
+
+/* Room for the fixed Check / Next dock on small screens. */
+.page-with-dock {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 769px) {
+  .page-with-dock {
+    padding-bottom: var(--space-6);
+  }
 }
 
 .card {
@@ -1382,6 +1398,38 @@ button.brand-row:hover .brand-name {
 .play-grid {
   display: grid;
   gap: var(--space-3);
+}
+
+/* Check / Next dock — white bar pinned to the viewport bottom on mobile. */
+.quest-dock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 35;
+  background: #fff;
+  border-top: 2px solid var(--line);
+  box-shadow: 0 -10px 28px rgba(35, 41, 70, 0.08);
+  padding: 12px var(--space-3) calc(12px + env(safe-area-inset-bottom, 0px));
+}
+
+.quest-dock-inner {
+  width: 100%;
+  max-width: var(--max-wide);
+  margin: 0 auto;
+}
+
+@media (min-width: 769px) {
+  .quest-dock {
+    position: static;
+    margin-top: var(--space-3);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-3);
+    padding-bottom: var(--space-3);
+    max-width: var(--max-wide);
+  }
 }
 
 .sidekick-bubble {

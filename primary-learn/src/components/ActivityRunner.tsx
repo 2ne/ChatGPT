@@ -215,7 +215,7 @@ export function ActivityRunner({
   /* ——— Intro ——— */
   if (phase === "intro") {
     return (
-      <main className="page page-under-header">
+      <main className="page page-quest">
         <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
           <button type="button" className="back-link" onClick={onExit}>
             <ArrowLeft size={17} aria-hidden /> All quests
@@ -267,7 +267,7 @@ export function ActivityRunner({
     const perfect = missed.length === 0;
     const stars = perfect ? 3 : mastered ? 2 : firstCorrect > 0 ? 1 : 0;
     return (
-      <main className="page page-under-header">
+      <main className="page page-quest">
         {mastered ? <ConfettiBurst burstId={1} intensity="shower" /> : null}
         <section className="card score-block">
           <Pip size={112} mood={mastered ? "cheer" : "happy"} />
@@ -325,7 +325,7 @@ export function ActivityRunner({
 
   if (!question) {
     return (
-      <main className="page page-under-header">
+      <main className="page page-quest">
         <p className="t-body" role="alert">
           This activity has no questions yet.
         </p>
@@ -350,8 +350,27 @@ export function ActivityRunner({
             : streak >= 2
               ? "You're on a roll!"
               : "Keep going!";
+  const primaryAction =
+    phase === "question" ? (
+      <button
+        type="button"
+        className="btn btn-primary btn-block"
+        disabled={!hasProvidedAnswer(question, answer)}
+        onClick={checkAnswer}
+      >
+        Check it <Check size={19} aria-hidden />
+      </button>
+    ) : (
+      <button type="button" className="btn btn-primary btn-block" onClick={goNext}>
+        {position === activeQueue.length && retryQueue.length === 0
+          ? "See my stars"
+          : "Next question"}{" "}
+        <ArrowRight size={19} aria-hidden />
+      </button>
+    );
+
   return (
-    <main className="page page-under-header">
+    <main className="page page-quest page-with-dock">
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       {/* Where am I? — activity context + segmented progress */}
@@ -477,23 +496,12 @@ export function ActivityRunner({
               </span>
             </div>
           ) : null}
-
-          {phase === "question" ? (
-            <button
-              type="button"
-              className="btn btn-primary btn-block"
-              disabled={!hasProvidedAnswer(question, answer)}
-              onClick={checkAnswer}
-            >
-              Check it <Check size={19} aria-hidden />
-            </button>
-          ) : (
-            <button type="button" className="btn btn-primary btn-block" onClick={goNext}>
-              {position === activeQueue.length && retryQueue.length === 0 ? "See my stars" : "Next question"}{" "}
-              <ArrowRight size={19} aria-hidden />
-            </button>
-          )}
         </section>
+      </div>
+
+      {/* Always-visible Check / Next bar — fixed on mobile so kids never scroll to find it. */}
+      <div className="quest-dock" role="region" aria-label="Answer actions">
+        <div className="quest-dock-inner">{primaryAction}</div>
       </div>
     </main>
   );

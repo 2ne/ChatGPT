@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LogOut } from "lucide-react";
 import { getActivity } from "./data/activities";
 import { getAvatar } from "./data/avatars";
 import { ActivityRunner } from "./components/ActivityRunner";
@@ -70,29 +69,14 @@ export default function App() {
   }
 
   if (activity) {
+    // No global header during a quest — Exit quest / All quests / Back to quests cover leaving.
     return (
-      <>
-        <AppHeader
-          learnerName={profile.name}
-          learnerEmoji={avatar.emoji}
-          onHome={() => setActiveActivityId(null)}
-          right={
-            <button
-              type="button"
-              className="btn-exit"
-              onClick={() => setActiveActivityId(null)}
-            >
-              <LogOut size={15} aria-hidden /> Exit
-            </button>
-          }
-        />
-        <ActivityRunner
-          activity={activity}
-          learnerName={profile.name}
-          onExit={() => setActiveActivityId(null)}
-          onComplete={recordAttempt}
-        />
-      </>
+      <ActivityRunner
+        activity={activity}
+        learnerName={profile.name}
+        onExit={() => setActiveActivityId(null)}
+        onComplete={recordAttempt}
+      />
     );
   }
 

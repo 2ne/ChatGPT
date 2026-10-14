@@ -36,7 +36,7 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 **Rules**
 
-- Sticky `AppHeader` on every screen: Pip tile + "Primary *Maths*" wordmark.
+- Sticky `AppHeader` on home / onboarding (hidden during a quest): Pip tile + "Primary *Maths*" wordmark.
   Once a learner has a name, the logo and wordmark are a button that returns home.
   (indigo gradient on "Path") + tagline, learner chip on the right, Exit pill
   during activities.
@@ -114,7 +114,10 @@ every question feels like part of the quest.
 72px sticky, blurred paper, 2px bottom border. Left: white Pip tile vertically
 centred with the "Primary Maths" wordmark (no tagline). Clicking the logo or
 name returns to the quest list. Right: learner chip
-(avatar face centred in its circle + name) + Exit pill (dark) or Reset text.
+(avatar face centred in its circle + name) + Reset text on the home screen.
+
+**Hidden during a quest.** Intro, questions and summary use in-page exits
+(`All quests` / `Exit quest` / `Back to quests`) instead of the global header.
 
 ### Home
 
@@ -135,7 +138,7 @@ Back link → icon tile + big title → summary sentence → fact pills
 ### Activity question (most important)
 
 ```
-[← Exit quest]              [avatar chip in header]
+[← Exit quest]
 [🎨 tile  Number bonds to 10      ]
 [Question 3 of 10      Keep going!]
 [▰▰▰▱▱▱▱▱▱▱]  segmented progress
@@ -147,6 +150,8 @@ Back link → icon tile + big title → summary sentence → fact pills
 │ [C] 4                    ✓    │
 │ 💡 Need a hint?               │
 │ ✅ Correct — nice! + tip + Pip │
+└───────────────────────────────┘
+┌───────────────────────────────┐  ← white dock (fixed on mobile)
 │ [ Check it ✓ / Next → ]       │
 └───────────────────────────────┘
 ```
@@ -157,8 +162,10 @@ Back link → icon tile + big title → summary sentence → fact pills
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
   teaching tip + mini Pip reaction.
-- Action button is full-width gradient: `Check it ✓` (disabled until answered)
-  → `Next question →` → `See my stars` on the last one.
+- Action button lives in a **white dock** below the question card:
+  `Check it ✓` (disabled until answered) → `Next question →` → `See my stars`
+  on the last one. On mobile the dock is `position: fixed` to the viewport
+  bottom (with safe-area padding) so kids never have to scroll to find it.
 - Home, quest intro, questions and the stars screen all use the same content
   width (`--max-wide`). Do not narrow the white card on later screens.
 
