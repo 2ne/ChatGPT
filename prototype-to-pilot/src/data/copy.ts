@@ -1,10 +1,10 @@
 import type { Suggestion } from "../types";
 
 export const repoSummary =
-  "Here’s what I’ve found in this repository. Matter Brief lets lawyers upload documents and generates a client-ready summary. It’s a Vite/React app. There’s no authentication, and src/api/summarise.ts sends the full document text to an external model API.";
+  "Matter Brief: lawyers upload documents, get a client-ready summary. Vite/React, no auth. summarise.ts posts the full text to OpenAI.";
 
 export const firstFinding =
-  "The code tells me summarise.ts posts the full document to an external model. It can’t tell me whether this is meant to see real client matter data.\n\nWill this see real client matter data in production?";
+  "That’s the first stop. Will this see real client matter data in production?";
 
 export const dataSuggestions: Suggestion[] = [
   {
@@ -17,19 +17,15 @@ export const dataSuggestions: Suggestion[] = [
 ];
 
 export const approvedReply =
-  "Understood. I’ll treat external model access as prototype-only and redesign the production architecture around an approved internal model.";
-
-export const approvedFollowOn =
-  "The important change is the boundary. Document text never leaves the approved environment. That also unlocks the questions that were waiting on it — who owns this, and what InfoSec and Risk will need.";
+  "I’ll pull it off OpenAI and put it on the internal model. SSO and an audit line come with that.";
 
 export const dummyReply =
-  "Then the external path is less of a confidentiality issue today — but I would still draw production as if matter data is coming, so you don’t have to unpick it later. I’ll keep the prototype API out of that design.";
+  "Dummy data today — I’ll still route production through the internal model so you don’t unpick this later.";
 
 export const unsureReply =
-  "I’ll record that as needing an owner rather than guessing. I’ll still design production around an approved internal model, so InfoSec’s question doesn’t arrive as a surprise.";
+  "I’ll mark that as needing an owner, and still move generation inside the approved boundary.";
 
-export const ownershipFinding =
-  "The code tells me there’s no owner in this checkout — nothing in package.json, no CODEOWNERS. It can’t tell me who takes this after the hackathon.\n\nWho owns this after the hackathon?";
+export const ownershipFinding = "Nothing in the repo says who owns this after the hackathon. Who does?";
 
 export const ownershipSuggestions: Suggestion[] = [
   { id: "practice", label: "The disputes practice.", primary: true },
@@ -37,17 +33,15 @@ export const ownershipSuggestions: Suggestion[] = [
   { id: "innovation", label: "Keep it in Innovation." },
 ];
 
-export const practiceOwnerReply =
-  "Good. Disputes owns the users and the stop conditions. Innovation can still host the tooling.";
+export const practiceOwnerReply = "Disputes. Next is the brief itself.";
 
-export const unknownOwnerReply =
-  "That’s a real answer. I’ll leave a pilot owner as needs someone, and keep drafting as if a practice will take it.";
+export const unknownOwnerReply = "I’ll leave a pilot owner open and keep going.";
 
 export const innovationOwnerReply =
-  "I wouldn’t park a live pilot in Innovation alone — they can sponsor the tooling, but a practice has to own the users and what stops the trial. I’ll record Innovation as sponsor and still ask disputes to nominate a pilot owner.";
+  "Innovation can sponsor the tooling. A practice still has to own the users. I’ll record that and move on.";
 
 export const citationFinding =
-  "The code tells me Brief.tsx renders a summary with no source pointers. It can’t tell me whether a lawyer would send that to a client.\n\nFor legal work, I’d make every material claim traceable. Do we add citations before a pilot?";
+  "Brief.tsx prints a fluent summary with no sources. Add citations before a pilot?";
 
 export const citationSuggestions: Suggestion[] = [
   { id: "add", label: "Yes. Add citations.", primary: true },
@@ -55,17 +49,17 @@ export const citationSuggestions: Suggestion[] = [
   { id: "undecided", label: "Not decided." },
 ];
 
-export const addCitationsReply =
-  "Good. Here’s a sketch of how the summary should behave — claims stay in the brief, evidence sits one click away.";
+export const addCitationsReply = "Doing it now — markers in the brief, passage one click away.";
 
-export const skipCitationsReply =
-  "You can ship a pilot without them, but I wouldn’t. I’ll leave citations as a proposed default that still needs a pilot owner, and show the sketch so you can judge the weight of it.";
+export const skipCitationsReply = "I’ll leave it open. I still wouldn’t send that brief as-is.";
 
-export const undecidedCitationsReply =
-  "I’ll mark that as needing an owner rather than dropping it. Here’s the sketch I’d put in front of them — claims in the brief, evidence one click away.";
+export const undecidedCitationsReply = "Needs an owner. I’ll keep going.";
+
+export const lowConfidenceNote =
+  "That £240k figure is thinner than it looks. I’ll flag low confidence rather than let it read finished.";
 
 export const uxFinding =
-  "The code tells me the flow is one file at a time. It can’t tell me whether lawyers actually work that way — and this one can’t be settled by talking. We’d need to watch lawyers use it.\n\nI wouldn’t redesign that yet. I’d validate it first.";
+  "Upload is one file at a time. I can’t tell if lawyers work that way — and I can’t code my way out of it. Validate with three lawyers first?";
 
 export const uxSuggestions: Suggestion[] = [
   { id: "validate", label: "Validate it first.", primary: true },
@@ -74,51 +68,40 @@ export const uxSuggestions: Suggestion[] = [
 ];
 
 export const validateReply =
-  "This isn’t a research programme. It’s the smallest check that would tell us whether the upload model survives contact with real lawyers.";
-
-export const validationSuggestions: Suggestion[] = [
-  { id: "continue", label: "Show me the pilot material.", primary: true },
-  { id: "remaining", label: "What still needs a person?" },
-];
+  "I’ll drop a flag that records whether they pick documents or the whole matter. That’s the test, not a redesign.";
 
 export const redesignReply =
-  "I wouldn’t. We’d be guessing about how lawyers group work. A three-person test will tell us whether the upload model is wrong — that’s cheaper than a redesign based on my hunch.";
+  "I wouldn’t guess. A three-person test is cheaper than a redesign based on my hunch. I’ll still add the flag.";
 
-export const undecidedUxReply =
-  "I’ll leave it open. The test is still the smallest way to close it — three lawyers, not another conversation.";
+export const undecidedUxReply = "I’ll leave the test open and still instrument source choice.";
 
 export const whyUxReply =
-  "If they think in matters, the prototype trains a habit that production will have to undo. Better to learn that on three lawyers than on a pilot cohort.";
+  "If they think in matters, this trains a habit production will have to undo. Three lawyers, not another conversation.";
 
 export const readinessReply =
-  "You’re in much better shape for a pilot now. I’ve drafted the pack Risk, InfoSec and the pilot owner will actually need. None of this is an approval — it’s the material they use to make their own.";
+  "pilot-ready is up. InfoSec and Risk still have to review — I can’t sign those.";
 
 export const readinessSuggestions: Suggestion[] = [
   { id: "pack", label: "Prepare pilot pack.", primary: true },
   { id: "remaining", label: "What still needs a person?" },
-  { id: "risks", label: "Walk me through the risks." },
 ];
 
-export const packReply =
-  "Here is a draft pack. Treat it as a starting note for people, not a decision. Risk, InfoSec and legal still have to say yes — or no.";
+export const packReply = "Drafts for people. The branch is the other half of the pack.";
 
 export const remainingReply =
-  "The leftover questions are the ones a person has to own: InfoSec on the internal-model path, Risk on data-use, and someone in the practice to run the three-lawyer test. I can draft; I can’t sign.";
+  "InfoSec on the internal-model path, Risk on data-use, and someone to run the three-lawyer test. I can draft; I can’t sign.";
 
 export const risksReply =
-  "The live ones are confidentiality (text leaving the firm), unsupported claims in a client-ready document, and an untested upload model. The first two have proposed mitigations. The third needs three lawyers, not another conversation.";
+  "Confidential text leaving the firm, unsupported claims, untested upload model. The first two are now in the prototype. The third needs three lawyers.";
 
-export const steerInspecting =
-  "I’ll take that in. Let me finish this first pass on how data leaves the firm — that’s the piece that usually stops these cold.";
+export const steerInspecting = "Give me a moment — I’m still on how data leaves the firm.";
 
-export const steerGeneric =
-  "Noted. I’ll keep going with the decision in front of us, and fold that in where it changes the design.";
+export const steerGeneric = "Noted. The useful move is still the decision in front of us.";
 
-export const tooEarlyPack =
-  "I can, but the pack will be honest only once we’ve settled what the code can’t: data, ownership, and citations. Let’s finish those first.";
+export const tooEarlyPack = "Not yet — let me finish the things the code can’t answer.";
 
 export const infosecReopen =
-  "The code can’t close InfoSec for us. Someone has to own the review of the internal-model path — and that person still decides.\n\nWho should own the InfoSec review?";
+  "I can’t close InfoSec. Someone has to own the review of the internal-model path. Who?";
 
 export const infosecSuggestions: Suggestion[] = [
   { id: "priya", label: "Priya Chen, InfoSec.", primary: true },
@@ -126,8 +109,7 @@ export const infosecSuggestions: Suggestion[] = [
   { id: "undecided", label: "Not decided." },
 ];
 
-export const riskReopen =
-  "Same constraint for Risk. I can draft the data-use note; I can’t sign it.\n\nWho should own the Risk review?";
+export const riskReopen = "Same for Risk. I can draft the data-use note; I can’t sign it. Who owns it?";
 
 export const riskSuggestions: Suggestion[] = [
   { id: "james", label: "James Okonkwo, Risk.", primary: true },
@@ -135,8 +117,7 @@ export const riskSuggestions: Suggestion[] = [
   { id: "undecided", label: "Not decided." },
 ];
 
-export const uxOwnerReopen =
-  "Watching lawyers is still the only way to settle the upload model. Who runs that three-person test?";
+export const uxOwnerReopen = "Who runs the three-lawyer test?";
 
 export const uxOwnerSuggestions: Suggestion[] = [
   { id: "alex", label: "Alex Reed in disputes.", primary: true },
@@ -144,33 +125,22 @@ export const uxOwnerSuggestions: Suggestion[] = [
   { id: "undecided", label: "Not decided." },
 ];
 
-export const recordedGeneric = "Recorded. It’s in the pack — still not an approval.";
+export const recordedGeneric = "Recorded. Still not an approval.";
 
-export const recordedInfosecNamed =
-  "Priya is listed as owner of the review. That doesn’t approve the path — InfoSec still has to say yes or no.";
+export const recordedInfosecNamed = "Priya owns the review. InfoSec still has to say yes or no.";
 
-export const recordedInfosecQueue =
-  "It’s on the InfoSec queue. Ownership is named; the decision is still theirs.";
+export const recordedInfosecQueue = "On the InfoSec queue. Still their decision.";
 
-export const recordedRiskNamed =
-  "James is listed for the data-use note. Risk still has to review it.";
+export const recordedRiskNamed = "James owns the data-use note. Risk still reviews it.";
 
-export const recordedRiskQueue =
-  "It’s on the Risk queue. Still a human review, not a sign-off.";
+export const recordedRiskQueue = "On the Risk queue. Still a human review.";
 
-export const recordedUxRunner =
-  "Alex will run the three-lawyer test. That’s an owner for the plan, not a result.";
+export const recordedUxRunner = "Alex will run the three-lawyer test. That’s an owner, not a result.";
 
-export const recordedUxSelf =
-  "You’re on the hook for the three-lawyer test. I’ll mark the plan as having an owner.";
+export const recordedUxSelf = "You’re on the hook for the three-lawyer test.";
 
 export const backToPackSuggestions: Suggestion[] = [
   { id: "back", label: "Back to the pack.", primary: true },
 ];
 
-export const backToDraftsSuggestions: Suggestion[] = [
-  { id: "back", label: "Back to the drafts.", primary: true },
-];
-
-export const returnedToPack =
-  "It’s in front of you. Approvals remain human.";
+export const returnedToPack = "In front of you. Approvals remain human.";

@@ -2,7 +2,7 @@
 
 A working front-end prototype of the missing layer between a vibe-coded demo and something a law firm could actually take to Risk, InfoSec, Technology and users.
 
-It is not a governance dashboard. It behaves like an experienced internal product and technology colleague: inspect a prototype, keep working, interrupt only when a real decision is needed, and change the interface to match the conversation.
+It is not a governance dashboard. It behaves like an experienced colleague: inspect a prototype, keep working, interrupt only when a real decision is needed, and **change the prototype itself** as you talk.
 
 ## Live prototype
 
@@ -10,18 +10,19 @@ https://2ne.github.io/ChatGPT/prototype-to-pilot/
 
 ## Status
 
-Presentable hackathon demo. Scripted Matter Brief walkthrough with working free-text handling. No backend.
+Presentable hackathon demo. Scripted Matter Brief walkthrough with a live in-browser mock of the app. No backend.
 
 ## Demo path (~3 minutes)
 
-1. **This repository** — `matter-brief` is already the working tree. Click *Analyse this repository*.
-2. **First finding** — the code posts document text externally; it can’t tell intent. Reply *Yes, but only within firm-approved infrastructure.* That unlocks ownership, InfoSec and Risk.
-3. **Architecture**, then **ownership** — reply *The disputes practice.* (or push back with *Keep it in Innovation.*)
-4. **Citations** — reply *Yes. Add citations.* Open a citation in the sample brief.
-5. **UX assumption** — can’t be settled by talking. Reply *Validate it first.* Then *Show me the pilot material.*
-6. **Pilot pack** — *Prepare pilot pack.* Drafts only; no automated approval. Open questions in the document are still clickable.
+1. **This repository** — click *Analyse this repository*.
+2. **Scan, then the app** — Matter Brief boots at `localhost:5173`. Generate a brief; Network shows `api.openai.com` in red.
+3. **Data** — *Yes, but only within firm-approved infrastructure.* Watch summarise.ts rewrite, SSO appear, Network flip to `models.internal.firm`.
+4. **Ownership** — *The disputes practice.*
+5. **Citations** — *Yes. Add citations.* Click a marker in the preview. A thin claim is flagged low-confidence.
+6. **UX** — can’t be coded away. *Validate it first.* A source-choice flag appears.
+7. **Pack** — *Prepare pilot pack.* Branch `pilot-ready`, Hackathon/Pilot toggle, InfoSec and Risk still need a human.
 
-Use the filled suggestion to stay on the short path, or type freely. **Start again** is in the header.
+**Start again** is in the header.
 
 ## Stack
 
@@ -46,10 +47,8 @@ Vite `base` is `./` so the built app works under GitHub Pages at `/ChatGPT/proto
 
 ## Key decisions
 
-- Framed as a tool run inside the prototype’s own checkout (`npx prototype-to-pilot` in `matter-brief`). There is no real package.
-- Always two columns at demo width: the Matter Brief document on the left (the decision spine that becomes the pack), conversation on the right as the steering voice. Architecture, citations and the validation plan appear inline on the current decision only.
-- The right-hand conversation column is reserved from intake so the layout does not jump when the chat starts.
-- The AI continues a quiet analysis in the background and only asks what the code cannot answer, in dependency order. Open items in the pack can be reopened and resolved in place. InfoSec/Risk can gain an owner and still need human review.
-- Outputs are drafts for humans. Risk, InfoSec and legal approval remain people.
-- Demo replies are seeded; unmatched free text still advances with a sensible recommendation so a live walkthrough cannot stall.
+- The left pane is the live Matter Brief prototype (Preview / Code / Network), not a document. Conversation stays on the right.
+- Each decision lands as a short animated diff and a commit on `pilot-ready`.
+- InfoSec and Risk drafts never auto-approve.
+- Demo replies are seeded; unmatched free text still advances so a live walkthrough cannot stall.
 - Fictional matter: *Northharbour Logistics v Pellam Components*.

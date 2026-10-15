@@ -2,12 +2,9 @@ export type Stage =
   | "intake"
   | "inspecting"
   | "data-leaving"
-  | "architecture"
   | "ownership"
   | "citations"
-  | "evidence"
   | "ux-assumption"
-  | "validation"
   | "readiness"
   | "pack";
 
@@ -32,6 +29,47 @@ export type WorkItem = {
 };
 
 export type PrototypeId = "matter-brief" | "clause-lens" | "conflicts-sketch";
+
+export type StudioTab = "preview" | "code" | "network" | "pack";
+
+export type CompareMode = "live" | "hackathon";
+
+export type ProtoFeatures = {
+  sso: boolean;
+  internalModel: boolean;
+  citations: boolean;
+  lowConfidence: boolean;
+  analytics: boolean;
+};
+
+export type DiffLine = {
+  kind: "ctx" | "add" | "del";
+  text: string;
+};
+
+export type DiffHunk = {
+  path: string;
+  lines: DiffLine[];
+};
+
+export type CommitRecord = {
+  id: string;
+  hash: string;
+  message: string;
+  file: string;
+};
+
+export type NetCall = {
+  id: string;
+  method: string;
+  host: string;
+  path: string;
+  status: number;
+  ms: number;
+  external: boolean;
+  auth?: boolean;
+  audit?: string;
+};
 
 export type Intent =
   | "reset"

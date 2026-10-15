@@ -44,14 +44,8 @@ export function interpret(input: string, stage: Stage): Intent {
     return "validate";
   }
 
-  if (stage === "validation") {
-    if (/(what still|needs a person|human|owner)/.test(t)) return "ask-remaining";
-    if (/(risk)/.test(t)) return "ask-risks";
-    return "continue-readiness";
-  }
-
   if (stage === "readiness") {
-    if (/(back to|return to|drafts)/.test(t)) return "return-view";
+    if (/(back to|return to|drafts|pack)/.test(t) && /back/.test(t)) return "return-view";
     if (/(what still|needs a person|human|owner)/.test(t)) return "ask-remaining";
     if (/(risk)/.test(t)) return "ask-risks";
     if (/(pack|prepare|generate)/.test(t)) return "prepare-pack";

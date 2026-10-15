@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import {
   addCitationsReply,
-  approvedFollowOn,
-  approvedReply,
-  backToDraftsSuggestions,
-  backToPackSuggestions,
   citationFinding,
   citationSuggestions,
   dataSuggestions,
@@ -46,15 +42,45 @@ import {
   uxOwnerSuggestions,
   uxSuggestions,
   validateReply,
-  validationSuggestions,
   whyUxReply,
+  approvedReply,
+  backToPackSuggestions,
+  lowConfidenceNote,
 } from "./data/copy";
+import {
+  diffAnalytics,
+  diffAuth,
+  diffBrief,
+  diffConfidence,
+  diffSummarise,
+} from "./data/code";
 import { createTrail, settleTrail, type DecisionId, type DecisionRecord } from "./data/decisions";
 import { workItemsSeed } from "./data/inspection";
 import { scanFiles } from "./data/scan";
 import { uid } from "./lib/ids";
 import { interpret, interpretDecision } from "./lib/interpret";
-import type { Intent, Message, PrototypeId, Stage, Suggestion, WorkItem } from "./types";
+import type {
+  CommitRecord,
+  CompareMode,
+  DiffHunk,
+  Intent,
+  Message,
+  NetCall,
+  ProtoFeatures,
+  PrototypeId,
+  Stage,
+  StudioTab,
+  Suggestion,
+  WorkItem,
+} from "./types";
+
+const emptyFeatures: ProtoFeatures = {
+  sso: false,
+  internalModel: false,
+  citations: false,
+  lowConfidence: false,
+  analytics: false,
+};
 
 export type SessionState = {
   stage: Stage;
@@ -64,12 +90,25 @@ export type SessionState = {
   awaiting: boolean;
   typing: boolean;
   work: WorkItem[];
+  busy: string | null;
   visibleInspect: number;
   visibleFiles: number;
   selectedCitation: string | null;
   trail: DecisionRecord[];
   focusId: DecisionId | null;
   returnView: "readiness" | "pack" | null;
+  tab: StudioTab;
+  compare: CompareMode;
+  features: ProtoFeatures;
+  commits: CommitRecord[];
+  activeDiff: DiffHunk | null;
+  revealed: number;
+  networkLog: NetCall[];
+  selectedDocIds: string[];
+  sourceMode: "documents" | "matter";
+  briefReady: boolean;
+  generating: boolean;
+  studioReady: boolean;
 };
 
 type Action =
@@ -89,6 +128,7 @@ type Action =
   | { type: "FILES"; count: number }
   | { type: "INSPECT"; count: number }
   | { type: "WORK"; id: string; status: WorkItem["status"] }
+  | { type: "BUSY"; label: string | null }
   | { type: "CITATION"; id: string | null }
   | {
       type: "SETTLE";
@@ -98,7 +138,19 @@ type Action =
       owner?: string;
     }
   | { type: "SUGGESTIONS"; suggestions: Suggestion[] }
-  | { type: "FOCUS"; id: DecisionId | null; returnView?: "readiness" | "pack" | null };
+  | { type: "FOCUS"; id: DecisionId | null; returnView?: "readiness" | "pack" | null }
+  | { type: "TAB"; tab: StudioTab }
+  | { type: "COMPARE"; compare: CompareMode }
+  | { type: "DIFF"; diff: DiffHunk | null }
+  | { type: "REVEAL"; count: number }
+  | { type: "COMMIT"; commit: CommitRecord }
+  | { type: "FEATURE"; patch: Partial<ProtoFeatures> }
+  | { type: "NET"; call: NetCall }
+  | { type: "DOCS"; ids: string[] }
+  | { type: "SOURCE"; mode: "documents" | "matter" }
+  | { type: "GENERATING"; value: boolean }
+  | { type: "BRIEF"; ready: boolean }
+  | { type: "STUDIO" };
 
 const initialWork: WorkItem[] = workItemsSeed.map((item) => ({
   id: item.id,
@@ -115,12 +167,25 @@ function initial(): SessionState {
     awaiting: false,
     typing: false,
     work: initialWork,
+    busy: null,
     visibleInspect: 0,
     visibleFiles: 0,
     selectedCitation: null,
     trail: createTrail(),
     focusId: null,
     returnView: null,
+    tab: "preview",
+    compare: "live",
+    features: emptyFeatures,
+    commits: [],
+    activeDiff: null,
+    revealed: 0,
+    networkLog: [],
+    selectedDocIds: ["d1", "d2", "d3"],
+    sourceMode: "documents",
+    briefReady: false,
+    generating: false,
+    studioReady: false,
   };
 }
 
@@ -172,6 +237,8 @@ function reducer(state: SessionState, action: Action): SessionState {
           item.id === action.id ? { ...item, status: action.status } : item,
         ),
       };
+    case "BUSY":
+      return { ...state, busy: action.label };
     case "CITATION":
       return { ...state, selectedCitation: action.id };
     case "SETTLE":
@@ -187,6 +254,30 @@ function reducer(state: SessionState, action: Action): SessionState {
       };
     case "SUGGESTIONS":
       return { ...state, suggestions: action.suggestions, awaiting: true };
+    case "TAB":
+      return { ...state, tab: action.tab };
+    case "COMPARE":
+      return { ...state, compare: action.compare };
+    case "DIFF":
+      return { ...state, activeDiff: action.diff, revealed: action.diff ? 1 : 0, tab: action.diff ? "code" : state.tab };
+    case "REVEAL":
+      return { ...state, revealed: action.count };
+    case "COMMIT":
+      return { ...state, commits: [...state.commits, action.commit] };
+    case "FEATURE":
+      return { ...state, features: { ...state.features, ...action.patch } };
+    case "NET":
+      return { ...state, networkLog: [...state.networkLog, action.call] };
+    case "DOCS":
+      return { ...state, selectedDocIds: action.ids };
+    case "SOURCE":
+      return { ...state, sourceMode: action.mode };
+    case "GENERATING":
+      return { ...state, generating: action.value };
+    case "BRIEF":
+      return { ...state, briefReady: action.ready, generating: false };
+    case "STUDIO":
+      return { ...state, studioReady: true, tab: "preview" };
     default:
       return state;
   }
@@ -199,15 +290,63 @@ function delayForMotion(ms: number) {
   return ms;
 }
 
+function openaiCall(): NetCall {
+  return {
+    id: uid("n"),
+    method: "POST",
+    host: "api.openai.com",
+    path: "/v1/chat/completions",
+    status: 200,
+    ms: 1840,
+    external: true,
+  };
+}
+
+function internalCall(): NetCall {
+  return {
+    id: uid("n"),
+    method: "POST",
+    host: "models.internal.firm",
+    path: "/v1/summarise",
+    status: 200,
+    ms: 412,
+    external: false,
+    auth: true,
+    audit: "audit.log  actor=a.patel  action=summarise  boundary=approved",
+  };
+}
+
+function trackCall(mode: "documents" | "matter"): NetCall {
+  return {
+    id: uid("n"),
+    method: "POST",
+    host: "localhost:5173",
+    path: "/pilot/track",
+    status: 204,
+    ms: 18,
+    external: false,
+    audit: `source_choice=${mode}`,
+  };
+}
+
+const hashes = ["a3f19c2", "8c2e441", "b71d0e8", "e4a92c1", "19f6bb0"];
+
 export function useSession() {
   const [state, dispatch] = useReducer(reducer, undefined, initial);
   const timers = useRef<number[]>([]);
   const stageRef = useRef(state.stage);
   const focusRef = useRef<DecisionId | null>(null);
   const returnRef = useRef<"readiness" | "pack" | null>(null);
+  const featuresRef = useRef(state.features);
+  const sourceRef = useRef(state.sourceMode);
+  const compareRef = useRef(state.compare);
+  const commitCount = useRef(0);
   stageRef.current = state.stage;
   focusRef.current = state.focusId;
   returnRef.current = state.returnView;
+  featuresRef.current = state.features;
+  sourceRef.current = state.sourceMode;
+  compareRef.current = state.compare;
 
   const clearTimers = useCallback(() => {
     timers.current.forEach((id) => window.clearTimeout(id));
@@ -230,7 +369,7 @@ export function useSession() {
       },
     ) => {
       dispatch({ type: "TYPING", value: true });
-      later(options?.wait ?? 320, () => {
+      later(options?.wait ?? 280, () => {
         dispatch({
           type: "ASSISTANT",
           text,
@@ -243,15 +382,55 @@ export function useSession() {
     [later],
   );
 
+  const playDiff = useCallback(
+    (diff: DiffHunk, label: string, commit: { message: string; file: string }, onDone: () => void) => {
+      dispatch({ type: "BUSY", label });
+      dispatch({ type: "DIFF", diff });
+      diff.lines.forEach((_, index) => {
+        later(70 + index * 55, () => dispatch({ type: "REVEAL", count: index + 1 }));
+      });
+      const doneAt = 70 + diff.lines.length * 55 + 280;
+      later(doneAt, () => {
+        const hash = hashes[commitCount.current] ?? uid("h").slice(0, 7);
+        commitCount.current += 1;
+        dispatch({
+          type: "COMMIT",
+          commit: { id: uid("c"), hash, message: commit.message, file: commit.file },
+        });
+        onDone();
+      });
+    },
+    [later],
+  );
+
+  const runGenerate = useCallback(
+    (fromSeed = false) => {
+      dispatch({ type: "GENERATING", value: true });
+      dispatch({ type: "CITATION", id: null });
+      later(fromSeed ? 900 : 700, () => {
+        const internal =
+          compareRef.current !== "hackathon" && featuresRef.current.internalModel;
+        dispatch({ type: "NET", call: internal ? internalCall() : openaiCall() });
+        if (compareRef.current !== "hackathon" && featuresRef.current.analytics) {
+          dispatch({ type: "NET", call: trackCall(sourceRef.current) });
+        }
+        dispatch({ type: "BRIEF", ready: true });
+        if (!fromSeed) dispatch({ type: "TAB", tab: "network" });
+      });
+    },
+    [later],
+  );
+
   const analyseRepository = useCallback(() => {
     if (stageRef.current !== "intake") return;
     dispatch({ type: "START" });
+    commitCount.current = 0;
 
     scanFiles.forEach((_, index) => {
-      later(140 + index * 320, () => dispatch({ type: "FILES", count: index + 1 }));
+      later(140 + index * 300, () => dispatch({ type: "FILES", count: index + 1 }));
     });
 
-    const inspectAt = [380, 700, 1020, 1340, 1660, 2050];
+    const inspectAt = [360, 680, 980, 1280, 1580, 1900];
     inspectAt.forEach((ms, index) => {
       later(ms, () => dispatch({ type: "INSPECT", count: index + 1 }));
     });
@@ -268,10 +447,8 @@ export function useSession() {
       });
     });
 
-    later(2600, () => {
-      dispatch({ type: "TYPING", value: true });
-    });
-    later(3000, () => {
+    later(2500, () => dispatch({ type: "TYPING", value: true }));
+    later(2900, () => {
       dispatch({
         type: "ASSISTANT",
         text: repoSummary,
@@ -279,10 +456,9 @@ export function useSession() {
         awaiting: false,
       });
     });
-    later(4000, () => {
-      dispatch({ type: "TYPING", value: true });
-    });
-    later(4300, () => {
+    later(3800, () => dispatch({ type: "TYPING", value: true }));
+    later(4100, () => {
+      dispatch({ type: "STUDIO" });
       dispatch({
         type: "ASSISTANT",
         text: firstFinding,
@@ -290,76 +466,128 @@ export function useSession() {
         suggestions: dataSuggestions,
         awaiting: true,
       });
+      runGenerate(true);
     });
-  }, [later]);
+  }, [later, runGenerate]);
 
-  const afterArchitecture = useCallback(
+  const applyDataChange = useCallback(
     (openingText: string) => {
-      dispatch({ type: "STAGE", stage: "architecture" });
-      speak(openingText, { wait: 280, stage: "architecture", awaiting: false });
-      later(1100, () => {
-        speak(approvedFollowOn, { wait: 240, stage: "architecture", awaiting: false });
-      });
-      later(2100, () => {
-        speak(ownershipFinding, {
-          wait: 260,
-          stage: "ownership",
-          suggestions: ownershipSuggestions,
+      speak(openingText, { wait: 240, awaiting: false });
+      later(700, () => {
+        playDiff(diffSummarise, "Rewriting summarise.ts", {
+          message: "route generation through internal model",
+          file: "src/api/summarise.ts",
+        }, () => {
+          dispatch({ type: "FEATURE", patch: { internalModel: true } });
+          later(350, () => {
+            playDiff(diffAuth, "Adding SSO middleware", {
+              message: "require SSO before summarise",
+              file: "src/middleware/auth.ts",
+            }, () => {
+              dispatch({ type: "FEATURE", patch: { sso: true } });
+              dispatch({ type: "NET", call: internalCall() });
+              dispatch({ type: "TAB", tab: "network" });
+              dispatch({ type: "BUSY", label: null });
+              later(900, () => dispatch({ type: "TAB", tab: "preview" }));
+              later(1200, () => {
+                speak(ownershipFinding, {
+                  wait: 240,
+                  stage: "ownership",
+                  suggestions: ownershipSuggestions,
+                });
+              });
+            });
+          });
         });
       });
     },
-    [later, speak],
+    [later, playDiff, speak],
   );
 
-  const afterOwnership = useCallback(
-    (openingText: string) => {
-      speak(openingText, { wait: 280, stage: "ownership", awaiting: false });
-      later(1100, () => {
-        speak(citationFinding, {
-          wait: 260,
-          stage: "citations",
-          suggestions: citationSuggestions,
+  const applyCitations = useCallback(
+    (openingText: string, add: boolean) => {
+      speak(openingText, { wait: 240, awaiting: false });
+      if (!add) {
+        later(900, () => {
+          speak(uxFinding, { wait: 260, stage: "ux-assumption", suggestions: uxSuggestions });
+        });
+        return;
+      }
+      later(600, () => {
+        playDiff(diffBrief, "Citing claims in Brief.tsx", {
+          message: "cite material claims in the brief",
+          file: "src/components/Brief.tsx",
+        }, () => {
+          dispatch({ type: "FEATURE", patch: { citations: true } });
+          dispatch({ type: "TAB", tab: "preview" });
+          later(800, () => {
+            speak(lowConfidenceNote, { wait: 240, awaiting: false });
+            later(500, () => {
+              playDiff(diffConfidence, "Flagging a thin claim", {
+                message: "surface low-confidence claims",
+                file: "src/components/Brief.tsx",
+              }, () => {
+                dispatch({ type: "FEATURE", patch: { lowConfidence: true } });
+                dispatch({ type: "TAB", tab: "preview" });
+                dispatch({ type: "BUSY", label: null });
+                later(900, () => {
+                  speak(uxFinding, {
+                    wait: 260,
+                    stage: "ux-assumption",
+                    suggestions: uxSuggestions,
+                  });
+                });
+              });
+            });
+          });
         });
       });
     },
-    [later, speak],
+    [later, playDiff, speak],
   );
 
-  const afterEvidence = useCallback(
+  const applyUx = useCallback(
     (openingText: string) => {
-      dispatch({ type: "STAGE", stage: "evidence" });
-      speak(openingText, { wait: 280, stage: "evidence", awaiting: false });
-      later(1400, () => {
-        speak(uxFinding, {
-          wait: 300,
-          stage: "ux-assumption",
-          suggestions: uxSuggestions,
+      speak(openingText, { wait: 240, awaiting: false });
+      later(600, () => {
+        playDiff(diffAnalytics, "Instrumenting source choice", {
+          message: "track document vs matter source choice",
+          file: "src/lib/pilot.ts",
+        }, () => {
+          dispatch({ type: "FEATURE", patch: { analytics: true } });
+          dispatch({ type: "TAB", tab: "preview" });
+          dispatch({ type: "BUSY", label: null });
+          later(1000, () => {
+            speak(readinessReply, {
+              wait: 280,
+              stage: "readiness",
+              suggestions: readinessSuggestions,
+            });
+          });
         });
       });
     },
-    [later, speak],
+    [later, playDiff, speak],
   );
-
-  const backSuggestions = useCallback(() => {
-    return returnRef.current === "readiness" ? backToDraftsSuggestions : backToPackSuggestions;
-  }, []);
 
   const finishFocus = useCallback(
     (text: string) => {
       dispatch({ type: "FOCUS", id: null });
+      dispatch({ type: "TAB", tab: "pack" });
       speak(text, {
-        wait: 260,
+        wait: 240,
         stage: returnRef.current ?? undefined,
-        suggestions: backSuggestions(),
+        suggestions: backToPackSuggestions,
       });
     },
-    [backSuggestions, speak],
+    [speak],
   );
 
   const handleFocusIntent = useCallback(
     (intent: Intent, id: DecisionId) => {
       if (intent === "return-view") {
         dispatch({ type: "FOCUS", id: null });
+        dispatch({ type: "TAB", tab: "pack" });
         speak(returnedToPack, {
           wait: 220,
           stage: returnRef.current ?? undefined,
@@ -454,7 +682,7 @@ export function useSession() {
             line: "InfoSec review of the production path",
             owner: "InfoSec",
           });
-          finishFocus("Still waiting on an InfoSec owner. I’ll leave it open.");
+          finishFocus("Still waiting on an InfoSec owner.");
           return;
         }
         if (intent === "infosec-queue") {
@@ -488,7 +716,7 @@ export function useSession() {
             line: "Risk / data-use assessment",
             owner: "Risk",
           });
-          finishFocus("Still waiting on a Risk owner. I’ll leave it open.");
+          finishFocus("Still waiting on a Risk owner.");
           return;
         }
         if (intent === "risk-queue") {
@@ -552,27 +780,17 @@ export function useSession() {
     [finishFocus, speak],
   );
 
-  const returnToPack = useCallback(() => {
-    if (!focusRef.current) return;
-    dispatch({ type: "FOCUS", id: null });
-    speak(returnedToPack, {
-      wait: 220,
-      stage: returnRef.current ?? undefined,
-      suggestions: [],
-    });
-  }, [speak]);
-
   const reopenDecision = useCallback(
     (id: DecisionId) => {
       const item = state.trail.find((row) => row.id === id);
-      if (!item || item.status === "locked") return;
-      if (item.status === "settled") return;
+      if (!item || item.status === "locked" || item.status === "settled") return;
 
       const view =
         stageRef.current === "pack" || stageRef.current === "readiness"
           ? stageRef.current
           : "pack";
       dispatch({ type: "FOCUS", id, returnView: view });
+      dispatch({ type: "TAB", tab: "pack" });
       if (stageRef.current !== "readiness" && stageRef.current !== "pack") {
         dispatch({ type: "STAGE", stage: view });
       }
@@ -590,21 +808,9 @@ export function useSession() {
                   ? { text: citationFinding, suggestions: citationSuggestions }
                   : { text: firstFinding, suggestions: dataSuggestions };
 
-      speak(prompt.text, { wait: 240, suggestions: prompt.suggestions });
+      speak(prompt.text, { wait: 220, suggestions: prompt.suggestions });
     },
     [speak, state.trail],
-  );
-
-  const afterValidation = useCallback(
-    (openingText: string) => {
-      dispatch({ type: "STAGE", stage: "validation" });
-      speak(openingText, {
-        wait: 280,
-        stage: "validation",
-        suggestions: validationSuggestions,
-      });
-    },
-    [speak],
   );
 
   const handleIntent = useCallback(
@@ -613,6 +819,7 @@ export function useSession() {
 
       if (intent === "reset") {
         clearTimers();
+        commitCount.current = 0;
         dispatch({ type: "RESET" });
         return;
       }
@@ -625,12 +832,13 @@ export function useSession() {
       if (intent === "return-view") {
         const view = returnRef.current ?? (stage === "readiness" ? "readiness" : "pack");
         dispatch({ type: "STAGE", stage: view });
+        dispatch({ type: "TAB", tab: "pack" });
         speak(returnedToPack, { wait: 220, stage: view, suggestions: [] });
         return;
       }
 
       if (stage === "inspecting") {
-        speak(steerInspecting, { wait: 240, awaiting: false });
+        speak(steerInspecting, { wait: 220, awaiting: false });
         return;
       }
 
@@ -640,12 +848,10 @@ export function useSession() {
           stage === "data-leaving" ||
           stage === "ownership" ||
           stage === "citations" ||
-          stage === "ux-assumption" ||
-          stage === "architecture" ||
-          stage === "evidence")
+          stage === "ux-assumption")
       ) {
         speak(tooEarlyPack, {
-          wait: 260,
+          wait: 240,
           suggestions:
             stage === "data-leaving"
               ? dataSuggestions
@@ -668,7 +874,7 @@ export function useSession() {
             status: "settled",
             line: "Pilot stays on dummy data; production still assumes an approved model",
           });
-          afterArchitecture(dummyReply);
+          applyDataChange(dummyReply);
           return;
         }
         if (intent === "unsure") {
@@ -679,7 +885,7 @@ export function useSession() {
             line: "Whether production uses real matter data",
             owner: "Practice",
           });
-          afterArchitecture(unsureReply);
+          applyDataChange(unsureReply);
           return;
         }
         dispatch({
@@ -688,7 +894,7 @@ export function useSession() {
           status: "settled",
           line: "Production uses firm-approved model only",
         });
-        afterArchitecture(approvedReply);
+        applyDataChange(approvedReply);
         return;
       }
 
@@ -700,10 +906,8 @@ export function useSession() {
             status: "settled",
             line: "Innovation sponsors; disputes still nominates a pilot owner",
           });
-          afterOwnership(innovationOwnerReply);
-          return;
-        }
-        if (intent === "unknown-owner") {
+          speak(innovationOwnerReply, { wait: 240, awaiting: false });
+        } else if (intent === "unknown-owner") {
           dispatch({
             type: "SETTLE",
             id: "ownership",
@@ -711,16 +915,23 @@ export function useSession() {
             line: "Pilot owner after the hackathon",
             owner: "Practice",
           });
-          afterOwnership(unknownOwnerReply);
-          return;
+          speak(unknownOwnerReply, { wait: 240, awaiting: false });
+        } else {
+          dispatch({
+            type: "SETTLE",
+            id: "ownership",
+            status: "settled",
+            line: "Disputes practice owns the pilot",
+          });
+          speak(practiceOwnerReply, { wait: 240, awaiting: false });
         }
-        dispatch({
-          type: "SETTLE",
-          id: "ownership",
-          status: "settled",
-          line: "Disputes practice owns the pilot",
+        later(900, () => {
+          speak(citationFinding, {
+            wait: 240,
+            stage: "citations",
+            suggestions: citationSuggestions,
+          });
         });
-        afterOwnership(practiceOwnerReply);
         return;
       }
 
@@ -733,7 +944,10 @@ export function useSession() {
             line: "Whether material claims must cite a source",
             owner: "Pilot owner",
           });
-          afterEvidence(intent === "skip-citations" ? skipCitationsReply : undecidedCitationsReply);
+          applyCitations(
+            intent === "skip-citations" ? skipCitationsReply : undecidedCitationsReply,
+            false,
+          );
           return;
         }
         dispatch({
@@ -742,7 +956,7 @@ export function useSession() {
           status: "settled",
           line: "Every material claim cites a source",
         });
-        afterEvidence(addCitationsReply);
+        applyCitations(addCitationsReply, true);
         return;
       }
 
@@ -755,7 +969,7 @@ export function useSession() {
             line: "How lawyers choose source material — watch them use it",
             owner: "Practice",
           });
-          afterValidation(redesignReply);
+          applyUx(redesignReply);
           return;
         }
         if (intent === "why-ux") {
@@ -766,7 +980,7 @@ export function useSession() {
             line: "How lawyers choose source material — watch them use it",
             owner: "Practice",
           });
-          afterValidation(whyUxReply);
+          applyUx(whyUxReply);
           return;
         }
         if (intent === "undecided-ux") {
@@ -777,7 +991,7 @@ export function useSession() {
             line: "How lawyers choose source material — watch them use it",
             owner: "Practice",
           });
-          afterValidation(undecidedUxReply);
+          applyUx(undecidedUxReply);
           return;
         }
         dispatch({
@@ -787,78 +1001,28 @@ export function useSession() {
           line: "How lawyers choose source material — watch them use it",
           owner: "Practice",
         });
-        afterValidation(validateReply);
-        return;
-      }
-
-      if (stage === "validation") {
-        if (intent === "ask-remaining") {
-          speak(remainingReply, {
-            wait: 260,
-            suggestions: validationSuggestions,
-          });
-          return;
-        }
-        if (intent === "ask-risks") {
-          speak(risksReply, {
-            wait: 260,
-            suggestions: validationSuggestions,
-          });
-          return;
-        }
-        dispatch({ type: "STAGE", stage: "readiness" });
-        speak(readinessReply, {
-          wait: 280,
-          stage: "readiness",
-          suggestions: readinessSuggestions,
-        });
+        applyUx(validateReply);
         return;
       }
 
       if (stage === "readiness" || stage === "pack") {
         if (intent === "ask-remaining") {
           speak(remainingReply, {
-            wait: 260,
+            wait: 240,
             suggestions: readinessSuggestions,
           });
           return;
         }
         if (intent === "ask-risks") {
           speak(risksReply, {
-            wait: 260,
+            wait: 240,
             suggestions: readinessSuggestions,
           });
           return;
         }
         dispatch({ type: "STAGE", stage: "pack" });
-        speak(packReply, { wait: 280, stage: "pack", suggestions: [] });
-        return;
-      }
-
-      if (stage === "architecture") {
-        speak("That’s the production path I’d take. Next is who owns it after the hackathon — the code can’t tell me.", {
-          wait: 260,
-          awaiting: false,
-        });
-        later(900, () => {
-          speak(ownershipFinding, {
-            wait: 240,
-            stage: "ownership",
-            suggestions: ownershipSuggestions,
-          });
-        });
-        return;
-      }
-
-      if (stage === "evidence") {
-        speak(steerGeneric, { wait: 240, awaiting: false });
-        later(800, () => {
-          speak(uxFinding, {
-            wait: 240,
-            stage: "ux-assumption",
-            suggestions: uxSuggestions,
-          });
-        });
+        dispatch({ type: "TAB", tab: "pack" });
+        speak(packReply, { wait: 260, stage: "pack", suggestions: [] });
         return;
       }
 
@@ -867,16 +1031,15 @@ export function useSession() {
           ? steerGeneric
           : "I can work with that. The useful move is still the decision in front of us.",
         {
-          wait: 260,
+          wait: 240,
           suggestions: stage === "intake" ? [] : state.suggestions,
         },
       );
     },
     [
-      afterArchitecture,
-      afterEvidence,
-      afterOwnership,
-      afterValidation,
+      applyCitations,
+      applyDataChange,
+      applyUx,
       clearTimers,
       handleFocusIntent,
       later,
@@ -903,6 +1066,7 @@ export function useSession() {
 
   const reset = useCallback(() => {
     clearTimers();
+    commitCount.current = 0;
     dispatch({ type: "RESET" });
   }, [clearTimers]);
 
@@ -910,17 +1074,60 @@ export function useSession() {
     dispatch({ type: "CITATION", id });
   }, []);
 
+  const setTab = useCallback((tab: StudioTab) => {
+    dispatch({ type: "TAB", tab });
+  }, []);
+
+  const setCompare = useCallback((compare: CompareMode) => {
+    dispatch({ type: "COMPARE", compare });
+  }, []);
+
+  const toggleDoc = useCallback((id: string) => {
+    dispatch({
+      type: "DOCS",
+      ids: state.selectedDocIds.includes(id)
+        ? state.selectedDocIds.filter((item) => item !== id)
+        : [...state.selectedDocIds, id],
+    });
+  }, [state.selectedDocIds]);
+
+  const setSourceMode = useCallback((mode: "documents" | "matter") => {
+    dispatch({ type: "SOURCE", mode });
+  }, []);
+
+  const generateBrief = useCallback(() => {
+    if (state.generating) return;
+    runGenerate(false);
+  }, [runGenerate, state.generating]);
+
   const preparePack = useCallback(() => {
-    if (stageRef.current === "pack") return;
+    if (stageRef.current === "pack") {
+      dispatch({ type: "TAB", tab: "pack" });
+      return;
+    }
     dispatch({ type: "USER", text: "Prepare pilot pack." });
     dispatch({ type: "STAGE", stage: "pack" });
-    speak(packReply, { wait: 280, stage: "pack", suggestions: [] });
+    dispatch({ type: "TAB", tab: "pack" });
+    speak(packReply, { wait: 260, stage: "pack", suggestions: [] });
+  }, [speak]);
+
+  const returnToPack = useCallback(() => {
+    if (!focusRef.current) return;
+    dispatch({ type: "FOCUS", id: null });
+    dispatch({ type: "TAB", tab: "pack" });
+    speak(returnedToPack, {
+      wait: 220,
+      stage: returnRef.current ?? undefined,
+      suggestions: [],
+    });
   }, [speak]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
 
-  const activeWork = state.work.find((item) => item.status === "working") ?? null;
-  const workDone = state.work.every((item) => item.status === "done");
+  const activeWork = state.busy
+    ? { id: "busy", label: state.busy, status: "working" as const }
+    : (state.work.find((item) => item.status === "working") ?? null);
+  const workDone = state.work.every((item) => item.status === "done") && !state.busy;
 
   return {
     ...state,
@@ -930,6 +1137,11 @@ export function useSession() {
     returnToPack,
     reset,
     setCitation,
+    setTab,
+    setCompare,
+    toggleDoc,
+    setSourceMode,
+    generateBrief,
     preparePack,
     activeWork,
     workDone,
