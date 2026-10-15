@@ -1,7 +1,7 @@
 import type { AbilityBand, Subject, YearGroup } from "./curriculum";
 import type { Difficulty } from "./path";
 
-/** Pedagogical activity kinds. Extend this union when introducing a new format. */
+/** Pedagogical activity kinds (topic), not question UI. */
 export const ACTIVITY_TYPES = [
   "counting",
   "number-bonds",
@@ -13,11 +13,42 @@ export const ACTIVITY_TYPES = [
 
 export type ActivityType = (typeof ACTIVITY_TYPES)[number];
 
+/** Interaction kinds. One reusable component each. Content never embeds UI. */
+export const QUESTION_KINDS = [
+  "count-objects",
+  "multiple-choice",
+  "multi-select",
+  "fill-blank",
+  "ordered",
+  "match-pairs",
+] as const;
+
+export type QuestionKind = (typeof QUESTION_KINDS)[number];
+
+/** Named picture used by the object renderer. Glyphs live in the UI, not in content. */
+export const OBJECT_ITEMS = [
+  "apple",
+  "star",
+  "balloon",
+  "duck",
+  "ladybird",
+  "frog",
+  "fish",
+  "strawberry",
+  "sparkle",
+] as const;
+
+export type ObjectItem = (typeof OBJECT_ITEMS)[number];
+
+export type ObjectAsset = {
+  item: ObjectItem;
+  count: number;
+};
+
 export type QuestionOption = {
   id: string;
-  label: string;
-  /** Optional emoji or short visual cue shown beside the label. */
-  visual?: string;
+  label?: string;
+  visual?: ObjectAsset;
 };
 
 /**
@@ -26,11 +57,6 @@ export type QuestionOption = {
  */
 export type NarrationLine = string | { text: string; audioSrc?: string };
 
-/**
- * Optional spoken versions of on-screen copy.
- * The runner falls back to the visible `prompt` / option labels / hint / explanation.
- * Write numbers, operators and emoji as words so a pre-reader hears the question.
- */
 export type QuestionNarration = {
   prompt?: NarrationLine;
   options?: Record<string, NarrationLine>;
@@ -48,6 +74,15 @@ type QuestionCore = {
   explanation: string;
   hint?: string;
   narration?: QuestionNarration;
+  /** Optional object picture above the answers (also required on count-objects). */
+  visual?: ObjectAsset;
+};
+
+export type CountObjectsQuestion = QuestionCore & {
+  kind: "count-objects";
+  visual: ObjectAsset;
+  options: QuestionOption[];
+  correctId: string;
 };
 
 export type MultipleChoiceQuestion = QuestionCore & {
@@ -64,11 +99,8 @@ export type MultiSelectQuestion = QuestionCore & {
 
 export type FillBlankQuestion = QuestionCore & {
   kind: "fill-blank";
-  /** Shown before the blank, e.g. "3 + 7 =" */
   prefix?: string;
-  /** Shown after the blank */
   suffix?: string;
-  /** Accepted answers after trim + lower-case (and numeric normalisation). */
   acceptedAnswers: string[];
   inputMode?: "numeric" | "text";
 };
@@ -76,27 +108,27 @@ export type FillBlankQuestion = QuestionCore & {
 export type OrderedQuestion = QuestionCore & {
   kind: "ordered";
   items: QuestionOption[];
-  /** Correct order of option ids. */
   correctOrder: string[];
 };
 
+/** A match side is a label, or a picture, or both. */
+export type MatchSide = string | { label?: string; visual?: ObjectAsset };
+
 export type MatchPairsQuestion = QuestionCore & {
   kind: "match-pairs";
-  pairs: Array<{ id: string; left: string; right: string }>;
+  pairs: Array<{ id: string; left: MatchSide; right: MatchSide }>;
 };
 
 export type Question =
+  | CountObjectsQuestion
   | MultipleChoiceQuestion
   | MultiSelectQuestion
   | FillBlankQuestion
   | OrderedQuestion
   | MatchPairsQuestion;
 
-/** How this quest sits on Easy / Medium / Hard, and how its own questions climb. */
 export type DifficultyRamp = {
-  /** First question → last question inside this quest. Must climb with no spikes. */
   within: string;
-  /** How Easy / Medium / Hard differ on this same node. Write the missing levels as intent. */
   versus: string;
 };
 
@@ -109,14 +141,13 @@ export type Activity = {
   yearGroups: YearGroup[];
   ability: AbilityBand;
   estimatedMinutes: number;
-  /** 0–1, typically 0.8 */
   masteryThreshold: number;
   curriculumRef: string;
-  /** Map level this quest belongs to: a node id from curriculum/maths.md. */
   pathNode: string;
-  /** 1 easy, 2 medium, 3 hard. Each level has at most one quest per difficulty. */
+  /** 1 easy, 2 medium, 3 hard. */
   difficulty: Difficulty;
-  /** Required. Agents must describe the ramp before writing questions. */
+  /** Must equal `questions.length`. Listed so a catalogue edit is obvious. */
+  questionCount: number;
   difficultyRamp: DifficultyRamp;
   skills: string[];
   questions: Question[];

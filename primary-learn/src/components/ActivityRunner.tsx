@@ -17,6 +17,7 @@ import type { Activity } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
+import { copy, KIND_LABELS } from "../data/copy";
 import { spokenChoices, spokenExplanation, spokenHint, spokenPrompt } from "../lib/narration";
 import { subjectTheme } from "../data/subjects";
 import { useNarration } from "../hooks/useNarration";
@@ -24,7 +25,7 @@ import { ConfettiBurst } from "./ConfettiBurst";
 import { HearButton, SpokenWords } from "./ReadAloud";
 import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
-import { QuestionView } from "./QuestionView";
+import { QuestionView } from "./questions/QuestionView";
 
 type ActivityRunnerProps = {
   activity: Activity;
@@ -34,14 +35,6 @@ type ActivityRunnerProps = {
 };
 
 type Phase = "intro" | "question" | "feedback" | "summary";
-
-const KIND_LABELS: Record<string, string> = {
-  "multiple-choice": "Pick one",
-  "multi-select": "Pick them all",
-  "fill-blank": "Type it in",
-  ordered: "Put in order",
-  "match-pairs": "Match them up",
-};
 
 export function ActivityRunner({
   activity,
@@ -208,7 +201,11 @@ export function ActivityRunner({
         return;
       }
 
-      if (typing || currentPhase !== "question" || currentQuestion?.kind !== "multiple-choice") {
+      if (
+        typing ||
+        currentPhase !== "question" ||
+        (currentQuestion?.kind !== "multiple-choice" && currentQuestion?.kind !== "count-objects")
+      ) {
         return;
       }
       const choice = Number(event.key) - 1;
@@ -227,7 +224,7 @@ export function ActivityRunner({
       <main className="page page-quest">
         <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
           <button type="button" className="back-link" onClick={onExit}>
-            <ArrowLeft size={17} aria-hidden /> All quests
+            <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
           </button>
           <div className="intro-tile-row">
             <span
@@ -246,13 +243,13 @@ export function ActivityRunner({
           </p>
           <div className="intro-facts">
             <span className="fact-pill">
-              <ListChecks size={15} aria-hidden /> {total} questions
+              <ListChecks size={15} aria-hidden /> {copy.questionsFact(total)}
             </span>
             <span className="fact-pill">
-              <Clock size={15} aria-hidden /> About {activity.estimatedMinutes} min
+              <Clock size={15} aria-hidden /> {copy.minutesFact(activity.estimatedMinutes)}
             </span>
             <span className="fact-pill">
-              <Star size={15} aria-hidden /> Earn up to 3 stars
+              <Star size={15} aria-hidden /> {copy.starsFact}
             </span>
           </div>
           <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
@@ -260,11 +257,11 @@ export function ActivityRunner({
               <Pip size={64} mood="cheer" />
             </span>
             <p className="sidekick-bubble" style={{ flex: 1 }}>
-              {`You've got this, ${learnerName}! Miss one and we'll practise it again.`}
+              {copy.introCheer(learnerName)}
             </p>
           </div>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
-            Start quest <ArrowRight size={19} aria-hidden />
+            {copy.startQuest} <ArrowRight size={19} aria-hidden />
           </button>
         </section>
       </main>
@@ -280,7 +277,7 @@ export function ActivityRunner({
         {mastered ? <ConfettiBurst burstId={1} intensity="shower" /> : null}
         <section className="card score-block">
           <Pip size={112} mood={mastered ? "cheer" : "happy"} />
-          <div className="stars-row" role="img" aria-label={`${stars} out of 3 stars`}>
+          <div className="stars-row" role="img" aria-label={copy.starsAria(stars)}>
             {[0, 1, 2].map((slot) => (
               <span key={slot} className={`star${slot < stars ? " is-lit" : ""}`}>
                 <Star size={30} fill={slot < stars ? "currentColor" : "none"} aria-hidden />
@@ -288,7 +285,7 @@ export function ActivityRunner({
             ))}
           </div>
           <h1 className="t-title">
-            {mastered ? `Amazing, ${learnerName}!` : `Good effort, ${learnerName}!`}
+            {copy.summaryTitle(learnerName, mastered)}
           </h1>
           <p className="score-figure">
             {firstCorrect}
@@ -297,32 +294,32 @@ export function ActivityRunner({
           <p className="t-body">
             {mastered
               ? perfect
-                ? "Every single one right first time. Superstar!"
-                : "You stuck with the tricky ones until they clicked."
-              : "Every try makes your brain stronger. Have another go!"}
+                ? copy.summaryPerfect
+                : copy.summaryMastered
+              : copy.summaryAgain}
           </p>
           {mastered ? (
             <p className="status-pill is-done">
-              <Trophy size={14} aria-hidden /> Quest complete
+              <Trophy size={14} aria-hidden /> {copy.questComplete}
             </p>
           ) : null}
           <div className="score-actions">
             {mastered ? (
               <>
                 <button type="button" className="btn btn-primary btn-block" onClick={onExit}>
-                  <Home size={18} aria-hidden /> Back to quests
+                  <Home size={18} aria-hidden /> {copy.backToQuests}
                 </button>
                 <button type="button" className="btn btn-secondary btn-block" onClick={begin}>
-                  <RotateCcw size={17} aria-hidden /> Play again
+                  <RotateCcw size={17} aria-hidden /> {copy.playAgain}
                 </button>
               </>
             ) : (
               <>
                 <button type="button" className="btn btn-primary btn-block" onClick={begin}>
-                  <RotateCcw size={17} aria-hidden /> Try again
+                  <RotateCcw size={17} aria-hidden /> {copy.tryAgain}
                 </button>
                 <button type="button" className="btn btn-secondary btn-block" onClick={onExit}>
-                  <Home size={18} aria-hidden /> Back to quests
+                  <Home size={18} aria-hidden /> {copy.backToQuests}
                 </button>
               </>
             )}
@@ -336,7 +333,7 @@ export function ActivityRunner({
     return (
       <main className="page page-quest">
         <p className="t-body" role="alert">
-          This activity has no questions yet.
+          {copy.emptyActivity}
         </p>
       </main>
     );
@@ -353,13 +350,13 @@ export function ActivityRunner({
         disabled={!hasProvidedAnswer(question, answer)}
         onClick={checkAnswer}
       >
-        Check it <Check size={19} aria-hidden />
+        {copy.checkIt} <Check size={19} aria-hidden />
       </button>
     ) : (
       <button type="button" className="btn btn-primary btn-block" onClick={goNext}>
         {position === activeQueue.length && retryQueue.length === 0
-          ? "See my stars"
-          : "Next question"}{" "}
+          ? copy.seeMyStars
+          : copy.nextQuestion}{" "}
         <ArrowRight size={19} aria-hidden />
       </button>
     );
@@ -369,7 +366,7 @@ export function ActivityRunner({
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       {/* Where am I? — activity context + segmented progress */}
-      <section className="context-card" aria-label="Quest progress">
+      <section className="context-card" aria-label={copy.progressLabel}>
         <div className="context-top">
           <span
             className="context-tile"
@@ -383,11 +380,11 @@ export function ActivityRunner({
               {activity.title}
             </p>
             <p className="context-sub">
-              Question {position} of {activeQueue.length}
-              {isRetry ? " · another go" : ""}
+              {copy.questionOf(position, activeQueue.length)}
+              {isRetry ? copy.anotherGo : ""}
             </p>
           </div>
-          <button type="button" className="exit-btn" onClick={onExit} aria-label="Exit quest">
+          <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
             <X size={20} aria-hidden />
           </button>
         </div>
@@ -399,7 +396,7 @@ export function ActivityRunner({
             aria-valuemin={0}
             aria-valuemax={activeQueue.length}
             aria-valuenow={index + (phase === "feedback" ? 1 : 0)}
-            aria-valuetext={`Question ${position} of ${activeQueue.length}`}
+            aria-valuetext={copy.questionOf(position, activeQueue.length)}
           >
             {activeQueue.map((id, slot) => {
               const done = slot < index || (slot === index && phase === "feedback");
@@ -419,7 +416,7 @@ export function ActivityRunner({
         {streak >= 2 && phase !== "feedback" ? (
           <div className="streak-row">
             <span className="streak-fire">
-              <Flame size={15} aria-hidden /> {streak} in a row!
+              <Flame size={15} aria-hidden /> {copy.streak(streak)}
             </span>
           </div>
         ) : null}
@@ -427,7 +424,7 @@ export function ActivityRunner({
 
       {isRetry && phase === "question" ? (
         <p className="retry-note" role="status">
-          <RotateCcw size={15} aria-hidden /> Practising the tricky ones once more
+          <RotateCcw size={15} aria-hidden /> {copy.retryNote}
         </p>
       ) : null}
 
@@ -437,7 +434,7 @@ export function ActivityRunner({
             <span className="q-num" aria-hidden>
               {position}
             </span>
-            <span className="q-kind">{KIND_LABELS[question.kind] ?? "Question"}</span>
+            <span className="q-kind">{KIND_LABELS[question.kind] ?? copy.kindFallback}</span>
             {speech.available ? (
               <HearButton
                 playing={speech.playing && speechClip === "prompt"}
@@ -493,7 +490,7 @@ export function ActivityRunner({
                 </p>
               ) : (
                 <button type="button" className="btn-text" onClick={() => setShowHint(true)}>
-                  <Lightbulb size={16} aria-hidden /> Need a hint?
+                  <Lightbulb size={16} aria-hidden /> {copy.needHint}
                 </button>
               )}
             </div>
@@ -509,7 +506,7 @@ export function ActivityRunner({
               </span>
               <div style={{ display: "grid", gap: 4, minWidth: 0 }}>
                 <p className="feedback-title">
-                  {lastCorrect ? "Correct — nice!" : "Not quite — good try!"}
+                  {lastCorrect ? copy.feedbackCorrect : copy.feedbackWrong}
                 </p>
                 <p>
                   <SpokenWords
@@ -529,7 +526,7 @@ export function ActivityRunner({
                       }
                       setSpeechClip("feedback");
                       speech.play(
-                        `${lastCorrect ? "Correct. Nice!" : "Not quite. Good try!"} ${spokenExplanation(question)}`,
+                        `${lastCorrect ? copy.feedbackCorrectSpoken : copy.feedbackWrongSpoken} ${spokenExplanation(question)}`,
                       );
                     }}
                   />

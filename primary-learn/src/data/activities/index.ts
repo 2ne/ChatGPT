@@ -1,12 +1,18 @@
+import { validateActivity } from "../../lib/validateActivity";
 import type { Activity } from "../../types/activity";
-import { countTo5 } from "./count-to-5";
-import { numberBondsTo10 } from "./number-bonds-to-10";
+import countTo5 from "./count-to-5.json" with { type: "json" };
+import numberBondsTo10 from "./number-bonds-to-10.json" with { type: "json" };
 
 /**
- * Master activity registry.
- * Agents: add new activities here after creating `./<id>.ts`. See AGENTS.md.
+ * Master activity registry. Content is JSON only.
+ * Agents: add `./<id>.json`, import it here, pass it through validateActivity.
  */
-export const activities: Activity[] = [countTo5, numberBondsTo10];
+const files = [
+  { name: "count-to-5.json", data: countTo5 },
+  { name: "number-bonds-to-10.json", data: numberBondsTo10 },
+] as const;
+
+export const activities: Activity[] = files.map((file) => validateActivity(file.data, file.name));
 
 export const activitiesById: Record<string, Activity> = Object.fromEntries(
   activities.map((activity) => [activity.id, activity]),

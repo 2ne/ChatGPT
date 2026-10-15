@@ -1,4 +1,5 @@
 import { Volume2, VolumeX } from "lucide-react";
+import { copy } from "../data/copy";
 import { tokenizeSpoken, wordIndexAt } from "../lib/speech";
 
 type SpokenWordsProps = {
@@ -36,17 +37,17 @@ type HearButtonProps = {
   compact?: boolean;
 };
 
-export function HearButton({ playing, onClick, label = "Hear it", compact }: HearButtonProps) {
+export function HearButton({ playing, onClick, label = copy.hearIt, compact }: HearButtonProps) {
   return (
     <button
       type="button"
       className={`hear-btn${compact ? " is-compact" : ""}${playing ? " is-on" : ""}`}
       onClick={onClick}
       aria-pressed={playing}
-      aria-label={playing ? "Stop reading" : label}
+      aria-label={playing ? copy.stopReadingAria : label}
     >
       {playing ? <VolumeX size={compact ? 16 : 18} aria-hidden /> : <Volume2 size={compact ? 16 : 18} aria-hidden />}
-      <span>{playing ? "Stop" : label}</span>
+      <span>{playing ? copy.stopReading : label}</span>
     </button>
   );
 }

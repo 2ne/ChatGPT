@@ -1078,6 +1078,31 @@ button.brand-row:hover .brand-name {
   gap: 12px;
 }
 
+.object-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  justify-content: center;
+  font-size: 36px;
+  line-height: 1;
+  padding: 8px 4px 4px;
+}
+
+.object-group.is-compact {
+  display: inline-flex;
+  font-size: 26px;
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.option-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
 .option {
   display: flex;
   align-items: center;

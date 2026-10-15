@@ -1,4 +1,5 @@
 import type { Question } from "../types/activity";
+import { matchSideKey } from "./matchSide";
 
 function normaliseText(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, " ");
@@ -14,6 +15,7 @@ function normaliseNumeric(value: string): string {
 
 export function isAnswerCorrect(question: Question, answer: unknown): boolean {
   switch (question.kind) {
+    case "count-objects":
     case "multiple-choice":
       return answer === question.correctId;
     case "multi-select": {
@@ -49,7 +51,7 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
     case "match-pairs": {
       if (!answer || typeof answer !== "object") return false;
       const map = answer as Record<string, string>;
-      return question.pairs.every((pair) => map[pair.id] === pair.right);
+      return question.pairs.every((pair) => map[pair.id] === matchSideKey(pair.right));
     }
     default:
       return false;
@@ -58,6 +60,7 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
 
 export function emptyAnswerFor(question: Question): unknown {
   switch (question.kind) {
+    case "count-objects":
     case "multiple-choice":
       return null;
     case "multi-select":
@@ -78,6 +81,7 @@ export function emptyAnswerFor(question: Question): unknown {
 
 export function hasProvidedAnswer(question: Question, answer: unknown): boolean {
   switch (question.kind) {
+    case "count-objects":
     case "multiple-choice":
       return typeof answer === "string" && answer.length > 0;
     case "multi-select":
