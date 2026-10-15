@@ -1,7 +1,7 @@
 export function ArchitectureView() {
   return (
     <div className="flow">
-      <section className="flow-block">
+      <section>
         <h2 className="flow-title">Current prototype</h2>
         <div className="nodes">
           <div className="node">
@@ -25,7 +25,7 @@ export function ArchitectureView() {
         </div>
       </section>
 
-      <section className="flow-block">
+      <section>
         <h2 className="flow-title">Proposed production</h2>
         <div className="boundary">
           <p className="boundary-label">Approved boundary · confidential matter data</p>

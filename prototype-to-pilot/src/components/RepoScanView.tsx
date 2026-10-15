@@ -11,6 +11,8 @@ type Props = {
 export function RepoScanView({ visibleFiles, visibleFacts, highlightRisk, scanning }: Props) {
   const files = scanFiles.slice(0, visibleFiles);
   const facts = inspectCards.slice(0, visibleFacts);
+  const notes = facts.filter((card) => !card.risk);
+  const risk = facts.find((card) => card.risk);
 
   return (
     <div className="scan-layout">
@@ -40,26 +42,27 @@ export function RepoScanView({ visibleFiles, visibleFacts, highlightRisk, scanni
       </section>
 
       <section aria-label="Detected facts">
-        <h2 className="flow-title">Detected</h2>
-        {facts.length === 0 ? (
+        <h2 className="flow-title">From the files</h2>
+        {notes.length === 0 && !risk ? (
           <p className="note" style={{ margin: 0 }}>
             Waiting on the first files…
           </p>
         ) : (
-          <div className="inspect-grid">
-            {facts.map((card) => (
-              <article
-                key={card.id}
-                className={`inspect-card${card.span === 2 ? " span-2" : ""}${
-                  card.risk && highlightRisk ? " risk" : ""
-                }`}
-              >
-                <h3>{card.title}</h3>
-                <p>{card.body}</p>
-              </article>
+          <dl className="finding-list">
+            {notes.map((card) => (
+              <div key={card.id} className="finding-row">
+                <dt>{card.title}</dt>
+                <dd>{card.body}</dd>
+              </div>
             ))}
-          </div>
+          </dl>
         )}
+        {risk ? (
+          <aside className={`finding-risk${highlightRisk ? " is-live" : ""}`}>
+            <h3>{risk.title}</h3>
+            <p>{risk.body}</p>
+          </aside>
+        ) : null}
       </section>
     </div>
   );

@@ -24,23 +24,6 @@ export function App() {
       </header>
 
       <div className="app-body">
-        <div className={`steer-slot${chatReady ? "" : " idle"}`}>
-          {chatReady ? (
-            <ChatPane
-              messages={session.messages}
-              suggestions={session.suggestions}
-              awaiting={session.awaiting}
-              typing={session.typing}
-              activeWork={session.activeWork}
-              workDone={session.workDone}
-              started
-              stage={session.stage}
-              onSend={session.send}
-            />
-          ) : (
-            <div className="steer-idle" aria-hidden="true" />
-          )}
-        </div>
         <main className="workspace" aria-live="polite">
           {session.stage === "intake" ? (
             <IntakeView onAnalyse={session.analyseRepository} />
@@ -59,6 +42,27 @@ export function App() {
             />
           )}
         </main>
+        <div className={`steer-slot${chatReady ? "" : " idle"}`}>
+          {chatReady ? (
+            <ChatPane
+              messages={session.messages}
+              suggestions={session.suggestions}
+              awaiting={session.awaiting}
+              typing={session.typing}
+              activeWork={session.activeWork}
+              workDone={session.workDone}
+              started
+              stage={session.stage}
+              onSend={session.send}
+            />
+          ) : (
+            <section className="chat-pane chat-idle" aria-hidden="true">
+              <header className="chat-head">
+                <span>Conversation</span>
+              </header>
+            </section>
+          )}
+        </div>
       </div>
     </div>
   );

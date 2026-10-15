@@ -47,8 +47,8 @@ Vite `base` is `./` so the built app works under GitHub Pages at `/ChatGPT/proto
 ## Key decisions
 
 - Framed as a tool run inside the prototype’s own checkout (`npx prototype-to-pilot` in `matter-brief`). There is no real package.
-- Always two columns at demo width: conversation on the left (steering voice), a single Matter Brief document on the right. The document is the decision spine and becomes the pilot pack; architecture, citations and the validation plan appear inline on the current decision only.
-- The left column is reserved from intake so the document does not jump when the conversation starts.
+- Always two columns at demo width: the Matter Brief document on the left (the decision spine that becomes the pack), conversation on the right as the steering voice. Architecture, citations and the validation plan appear inline on the current decision only.
+- The right-hand conversation column is reserved from intake so the layout does not jump when the chat starts.
 - The AI continues a quiet analysis in the background and only asks what the code cannot answer, in dependency order. Open items in the pack can be reopened and resolved in place. InfoSec/Risk can gain an owner and still need human review.
 - Outputs are drafts for humans. Risk, InfoSec and legal approval remain people.
 - Demo replies are seeded; unmatched free text still advances with a sensible recommendation so a live walkthrough cannot stall.

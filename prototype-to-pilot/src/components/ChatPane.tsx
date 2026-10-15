@@ -41,20 +41,29 @@ export function ChatPane({
     setDraft("");
   }
 
-  const workingLabel = !started
+  const headStatus = activeWork && !typing ? activeWork.label : null;
+  const footStatus = !started
     ? null
     : typing
       ? "Thinking it through"
-      : activeWork
-        ? activeWork.label
-        : workDone && (stage === "readiness" || stage === "pack")
-          ? "First pass finished. Remaining judgements are human."
-          : awaiting
-            ? "Waiting for your view on this one"
-            : null;
+      : workDone && (stage === "readiness" || stage === "pack")
+        ? "First pass finished. Remaining judgements are human."
+        : awaiting
+          ? "Waiting for your view on this one"
+          : null;
 
   return (
     <section className="chat-pane" aria-label="Conversation">
+      <header className="chat-head">
+        <span>Conversation</span>
+        {headStatus ? (
+          <span className="chat-head-status">
+            <span className="working-dot" />
+            {headStatus}
+          </span>
+        ) : null}
+      </header>
+
       <div className="chat-scroll" ref={scrollRef}>
         {messages.map((message, index) => {
           const showLabel = index === 0 || messages[index - 1].role !== message.role;
@@ -68,9 +77,9 @@ export function ChatPane({
           );
         })}
         {typing ? (
-          <p className="working" aria-live="polite">
+          <p className="chat-typing" aria-live="polite">
             <span className="working-dot" />
-            Working
+            <span>Working</span>
           </p>
         ) : null}
       </div>
@@ -104,12 +113,10 @@ export function ChatPane({
           </button>
         </div>
 
-        {workingLabel ? (
-          <p className="working" aria-live="polite">
-            {activeWork || typing ? <span className="working-dot" /> : null}
-            {workingLabel}
-          </p>
-        ) : null}
+        <p className={`composer-status${footStatus ? "" : " is-empty"}`} aria-live="polite">
+          {footStatus && (typing || awaiting) ? <span className="working-dot" /> : null}
+          {footStatus}
+        </p>
       </form>
     </section>
   );
