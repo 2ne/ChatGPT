@@ -318,7 +318,7 @@ p {
   max-width: var(--max-wide);
   margin: 0 auto;
   min-height: 72px;
-  padding: 8px var(--space-3);
+  padding: 8px var(--space-4);
   display: flex;
   align-items: center;
   justify-content: space-between;
