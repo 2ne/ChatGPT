@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 14,
   "difficultyRamp": {
-    "within": "Questions 1–5 count visible objects from 1 to 5 (one-to-one). Questions 6–10 say the count sequence (next, before, missing number, then order). Questions 11–14 recognise numerals and match amounts. No return to a trivial 1-object count after sequence work.",
+    "within": "Questions 1 to 5 count visible objects from 1 to 5 (one-to-one). Questions 6 to 10 say the count sequence (next, before, missing number, then order). Questions 11 to 14 recognise numerals and match amounts. No return to a trivial 1-object count after sequence work.",
     "versus": "Easy: objects and numerals to 5, one step, hints on early items. Medium should use mixed arrangements and fewer hints. Hard should hide objects or use two groups to combine, still within 5."
   },
   "skills": [

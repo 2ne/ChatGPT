@@ -50,7 +50,7 @@ Reading age follows the year group, not the adult who is coding.
 
 **Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages).
 
-Use British English: *maths*, *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2* (not 2nd grade).
+Use British English: *maths*, *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2* (not 2nd grade). Follow **Writing for children** in `AGENTS.md`: short sentences, no em or en dashes as punctuation, no semicolons, one idea per sentence.
 
 ### Stem templates (copy these)
 
@@ -169,7 +169,8 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
-- [ ] No shared phrases (“Correct — nice!”, “Need a hint?”) copied into the JSON — those live in `src/data/copy.ts`
+- [ ] No shared phrases (“Correct. Nice!”, “Need a hint?”) copied into the JSON. Those live in `src/data/copy.ts`
+- [ ] Child-facing wording follows **Writing for children** in `AGENTS.md` (UK English, short sentences, no em/en dashes as punctuation)
 - [ ] `npm run build` in `primary-learn/` succeeds
 - [ ] You opened the quest in the app: the speaker after the question reads the question only, a miss shows the explanation, the map row is correct
 

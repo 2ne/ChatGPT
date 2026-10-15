@@ -96,7 +96,9 @@ Do not switch back to Lato / Noto Sans.
 - Question prompts are always Baloo 800 ≥ 22px with a numbered badge (`Q3`).
 - Supporting copy under a name/title is Body, not Meta.
 - Never show adult jargon to kids (mastery %, curriculum refs, ability bands).
-- British English copy.
+- British English copy. Child-facing words follow **Writing for children** in
+  `AGENTS.md`: short sentences, everyday words, one idea per sentence, no em
+  dashes or en dashes as punctuation, no semicolons.
 
 ## Shape & elevation
 
@@ -162,7 +164,7 @@ Back link → icon tile + big title → summary sentence → fact pills
 │ [B] 3                         │
 │ [C] 4                    ✓    │
 │ 💡 Need a hint?               │
-│ ✅ Correct — nice! + tip + Pip │
+│ ✅ Correct. Nice! + tip + Pip  │
 │ [ Check it ✓ / Next → ]       │  ← in-card on desktop
 └───────────────────────────────┘
 ┌───────────────────────────────┐  ← mobile only: fixed white dock
@@ -183,7 +185,7 @@ Back link → icon tile + big title → summary sentence → fact pills
   prompt highlight as they are spoken (`--sun-soft`). Hide the button if the
   browser has no speech API. Spoken copy is `question.narration.prompt`
   (fallback: visible prompt). Do not add a second speaker system.
-- Shared phrases (Check it, Hear the question, Correct — nice!) live in `src/data/copy.ts`.
+- Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
@@ -212,9 +214,9 @@ pill when mastered, then `Back to quests` (primary) / `Play again` or
 
 No app header. Full-page setup on the dotted paper:
 
-1. **Hero** — sun badge (`Your learning adventure starts here`) → **large Pip**
-   (follows the pointer; idle bob + blink) → speech bubble (`Hi — I'm Pip…`) →
-   display title **`Set up your Primary Maths account`** → one short body line.
+1. **Hero** — **large Pip** (follows the pointer; idle bob + blink) → speech
+   bubble (`Hi, I'm Pip! Let's learn together.`) → display title
+   **`Set up your Primary Maths account`** → one short body line. No top badge.
 2. **Card** — big Baloo name field → `Choose your buddy` avatar grid (3 cols,
    soft tinted faces, selected = indigo ring + scale) → gradient `Let's go →`
    → `Stays on this device` reassurance.

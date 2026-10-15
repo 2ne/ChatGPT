@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { ArrowRight, PartyPopper, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { AVATARS } from "../data/avatars";
 import { copy } from "../data/copy";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
@@ -18,11 +18,11 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     event.preventDefault();
     const trimmed = name.trim();
     if (trimmed.length < 2) {
-      setError("Please type your first name (at least 2 letters).");
+      setError(copy.nameTooShort);
       return;
     }
     if (trimmed.length > 20) {
-      setError("Keep your name to 20 letters or fewer.");
+      setError(copy.nameTooLong);
       return;
     }
 
@@ -39,9 +39,6 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   return (
     <main className="onboard-page">
       <section className="onboard-hero" aria-label={copy.setupTitle}>
-        <span className="onboard-badge">
-          <PartyPopper size={16} aria-hidden /> {copy.setupBadge}
-        </span>
         <div className="onboard-pip">
           <Pip size={220} mood="cheer" followPointer />
         </div>
@@ -96,7 +93,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
           {error ? (
             <p className="feedback is-wrong" role="alert">
-              <span className="feedback-title">Check your name</span>
+              <span className="feedback-title">{copy.checkYourName}</span>
               <span className="t-body" style={{ color: "var(--ink)" }}>
                 {error}
               </span>

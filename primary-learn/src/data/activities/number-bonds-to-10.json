@@ -14,7 +14,7 @@
   "pathNode": "y1-bonds-10",
   "difficulty": 1,
   "difficultyRamp": {
-    "within": "Starts with a supported missing addend (6 + ?), then recognise a pair, then fill-blanks including the double 5 + 5, then multi-select, then a word problem and a related subtraction fact. Range stays 0–10. Later items add a second step (subtract using a bond) rather than bigger numbers.",
+    "within": "Starts with a supported missing addend (6 + ?), then recognise a pair, then fill-blanks including the double 5 + 5, then multi-select, then a word problem and a related subtraction fact. Range stays 0 to 10. Later items add a second step (subtract using a bond) rather than bigger numbers.",
     "versus": "Easy: bonds to 10 with numerals and one-step missing addends. Medium should mix order (10 = 3 + ?) and more subtraction. Hard should use two-step stories still totalling 10."
   },
   "skills": [

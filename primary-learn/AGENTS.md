@@ -8,6 +8,8 @@ When asked to add or change a learning activity, follow this document and `QUALI
 
 **UI:** Follow `DESIGN.md`. Do not invent a second visual system.
 
+**Writing:** Follow **Writing for children** below for every child-facing string.
+
 **Curriculum (current phase):** The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one locked path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the start. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
 
 ## Rapid prototype
@@ -95,11 +97,33 @@ Educational content is **pure data**. Presentation is **one generic runner** plu
 
 | Layer | Lives in | May contain | Must not contain |
 | --- | --- | --- | --- |
-| Content | `src/data/activities/<id>.json` | Metadata, prompts, answers, hints, narration, `visual` assets (`{ item, count }`) | JSX, CSS, React, scoring, shared phrases like “Correct — nice!” |
+| Content | `src/data/activities/<id>.json` | Metadata, prompts, answers, hints, narration, `visual` assets (`{ item, count }`) | JSX, CSS, React, scoring, shared phrases like “Correct. Nice!” |
 | Shared wording | `src/data/copy.ts` | Instructions, feedback titles, buttons, kind labels | Per-quest stems |
 | UI | `ActivityRunner` + `components/questions/*` | Layout, objects pictures, speaker icon, marking | Quest-specific copy or one-off screens |
 
 Do not put emoji strings in JSON. Use `"visual": { "item": "apple", "count": 3 }`. The `ObjectGroup` component draws the picture. To change how apples look, edit that component once.
+
+## Writing for children
+
+Every string a child (or parent helper) can read on screen must follow this. That means `src/data/copy.ts`, activity JSON (`prompt`, `hint`, `explanation`, `narration`, `summary`, `title`), and any words in components. Agent-only docs may still use dashes.
+
+**UK English.** *maths* not math. *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2* not 2nd grade.
+
+**Low reading age.** Write for primary children, especially Reception and Year 1. Short sentences. Everyday words. One idea per sentence. Prefer 4 to 8 words when you can. Present tense. Do not stack clauses.
+
+**No fancy punctuation.** Do not use em dashes (`—`) or en dashes (`–`) as punctuation. Do not use semicolons. Do not use colons to glue two ideas. A full stop or a new sentence is enough. Hyphens in normal words are fine (*one-to-one*, *fill-blank*). Maths minus is the minus sign in an equation, not a dash in a sentence.
+
+**Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages).
+
+| Bad | Good |
+| --- | --- |
+| Hi — I'm Pip. Let's get you on the path! | Hi, I'm Pip! Let's learn together. |
+| Correct — nice! | Correct. Nice! |
+| Your stars stay on this device — no sign-in. | Your stars stay on this device. |
+| Pick a name; then choose a buddy. | Pick a name. Then choose a buddy. |
+| Can you figure out how many apples there are? | How many apples? |
+
+If a line needs a pause, use a full stop or split it. If two ideas fight in one sentence, make two sentences.
 
 ## How to add an activity (data only)
 
@@ -254,7 +278,7 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 - `ordered` — put items in the right sequence.
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
 
-Shared phrases (“Choose all that apply.”, “Correct — nice!”) live in `src/data/copy.ts`, not in JSON.
+Shared phrases (“Choose all that apply.”, “Correct. Nice!”) live in `src/data/copy.ts`, not in JSON. Follow **Writing for children**.
 
 ## Optional randomisation
 
