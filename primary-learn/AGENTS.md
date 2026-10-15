@@ -77,35 +77,65 @@ primary-learn/
 ├── DESIGN.md
 ├── curriculum/               ← maths.md path, audit, coverage
 ├── src/
-│   ├── types/                ← shared contracts (do not break lightly)
-│   ├── data/activities/      ← one file per quest + registry
-│   ├── data/path.generated.ts
-│   ├── storage/              ← localStorage profile + progress
-│   ├── components/           ← Home, PathMap, LevelSheet, runner
-│   └── lib/path.ts           ← buildLevels / questFor (map placement)
+│   ├── types/activity.ts     ← Activity + question schema (TS)
+│   ├── data/activities/      ← JSON quests + registry + JSON Schema
+│   ├── data/copy.ts          ← shared child-facing phrases (change once)
+│   ├── data/objects.ts       ← object-item names (pictures live in UI)
+│   ├── components/ActivityRunner.tsx
+│   ├── components/questions/ ← one component per question kind
+│   └── lib/validateActivity.ts
 └── ...
 ```
 
 - Prefer React, TypeScript and Tailwind already used here.
 
-## Activity creation checklist (required)
+## Content and UI stay separate
+
+Educational content is **pure data**. Presentation is **one generic runner** plus **one component per question kind**. If 124 quests exist and a phrase or a picture style needs changing, we change it once in the UI/copy layer — not in every JSON file.
+
+| Layer | Lives in | May contain | Must not contain |
+| --- | --- | --- | --- |
+| Content | `src/data/activities/<id>.json` | Metadata, prompts, answers, hints, narration, `visual` assets (`{ item, count }`) | JSX, CSS, React, scoring, shared phrases like “Correct — nice!” |
+| Shared wording | `src/data/copy.ts` | Instructions, feedback titles, buttons, kind labels | Per-quest stems |
+| UI | `ActivityRunner` + `components/questions/*` | Layout, objects pictures, Hear it, marking | Quest-specific copy or one-off screens |
+
+Do not put emoji strings in JSON. Use `"visual": { "item": "apple", "count": 3 }`. The `ObjectGroup` component draws the picture. To change how apples look, edit that component once.
+
+## How to add an activity (data only)
+
+1. Copy `src/data/activities/count-to-5.json` (gold standard) to `src/data/activities/<kebab-id>.json`.
+2. Fill metadata + `questions`. Set `questionCount` to `questions.length` (the loader checks they match).
+3. Import the JSON in `src/data/activities/index.ts` and pass it through `validateActivity(...)`. Invalid JSON fails the build.
+4. Do **not** create a `.tsx` for the quest. Do **not** edit `ActivityRunner` unless you are changing all quests.
 
 Every new activity **must**:
 
-1. Live in `src/data/activities/<kebab-id>.ts` as a typed `Activity` export.
-2. Be registered in `src/data/activities/index.ts` (alphabetical by `id` is fine).
-3. Declare **all** metadata below — no optional gaps for the core fields.
-4. Set `pathNode` + `difficulty` so it appears on the correct map stop and Easy / Medium / Hard row.
-5. Include enough questions for a meaningful practice set (minimum **8**, prefer 10–16).
-6. Use only question types defined in `src/types/activity.ts`.
-7. Target a clear UK year group (and ability band) — not “all ages”.
-8. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
-9. Encourage mastery: clear feedback, retry of missed items, and a `masteryThreshold`.
-10. Write `narration` wherever the voice would mangle the stem (emoji, `+`, `−`, pictures).
-11. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
-12. Run the self-review checklist in `QUALITY.md` before you push.
+1. Be that JSON file + registry line. No JSX.
+2. Declare **all** metadata below — no optional gaps for the core fields.
+3. Set `pathNode` + `difficulty` so it appears on the correct map stop and Easy / Medium / Hard row.
+4. Include enough questions for a meaningful practice set (minimum **8**, prefer 10–16).
+5. Use only question kinds in `QUESTION_KINDS` (`src/types/activity.ts`).
+6. Target a clear UK year group (and ability band) — not “all ages”.
+7. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
+8. Encourage mastery: per-question `explanation`, retry of missed items, and a `masteryThreshold`.
+9. Write `narration` wherever the voice would mangle the stem (`+`, `−`, pictures).
+10. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
+11. Run the self-review checklist in `QUALITY.md` before you push.
 
-Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the shared runner.
+## How to add a question type
+
+Content never embeds a new UI. Adding a kind is a schema + component change:
+
+1. Add the kind to `QUESTION_KINDS` and the discriminated union in `src/types/activity.ts`.
+2. Teach `src/lib/answers.ts` (`isAnswerCorrect`, `emptyAnswerFor`, `hasProvidedAnswer`).
+3. Teach `src/lib/narration.ts` if it has extra spoken parts.
+4. Add a component in `src/components/questions/<Kind>.tsx` (data in, answers out — no quest-specific copy).
+5. Register it in `QUESTION_VIEWS` in `src/components/questions/QuestionView.tsx`.
+6. Add a kind label in `src/data/copy.ts` (`KIND_LABELS`).
+7. Extend `src/lib/validateActivity.ts` (and `activity.schema.json` if the top-level shape changes).
+8. Mention it in `QUALITY.md` stem templates if agents will write that kind.
+
+Until those steps are done, `validateActivity` will reject JSON that uses the new kind.
 
 **What to write next:** prefer Medium / Hard for a node that already has Easy (`eyfs-count-5` first) over a brand-new node. When expanding the path, take the first `missing` node in `curriculum/maths.md` (`eyfs-subitise-5`) and start with Easy.
 
@@ -125,9 +155,10 @@ Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the sh
 | `curriculumRef` | The node id from `curriculum/maths.md` (for example `eyfs-count-5`). Same id as `pathNode`. |
 | `pathNode` | **Required for the map.** Same node id. `buildLevels` looks this up. |
 | `difficulty` | **Required for the map.** `1` Easy, `2` Medium, `3` Hard. |
+| `questionCount` | Must equal `questions.length`. |
 | `difficultyRamp` | **Required.** `{ within, versus }` — how this quest climbs, and how Easy < Medium < Hard on this node. |
 | `skills` | 2–6 concrete skill tags (e.g. `addition-within-10`). |
-| `questions` | Interactive items using allowed `Question` variants. Each item may include `narration`. |
+| `questions` | Interactive items using allowed `Question` variants. Pictures are `visual: { item, count }`, not emoji. |
 
 ### Year groups, ability, and Easy / Medium / Hard
 
@@ -142,10 +173,10 @@ Easy must be clearly easier than Medium, and Medium clearly easier than Hard. Ma
 
 Write `difficultyRamp` **before** the questions:
 
-```ts
-difficultyRamp: {
-  within: "How questions 1…N climb. Name the steps. No spikes.",
-  versus: "How Easy / Medium / Hard differ on this node. Describe levels you have not written yet.",
+```json
+"difficultyRamp": {
+  "within": "How questions 1…N climb. Name the steps. No spikes.",
+  "versus": "How Easy / Medium / Hard differ on this node. Describe levels you have not written yet."
 }
 ```
 
@@ -161,19 +192,19 @@ Use these dimensions. Change one or two at a time, never all at once:
 
 **Inside one quest** the list must ramp from easiest to hardest with **no spikes** (no very hard item next to a trivial one, no drop back to “how many? ⭐” after sequence work). First 2–3 items are the easiest legal version of the skill; last 2–3 stretch *within this level*.
 
-Copy the gold-standard ramp and first item in `QUALITY.md` / `count-to-5.ts`.
+Copy the gold-standard ramp and first item in `QUALITY.md` / `count-to-5.json`.
 
 ### Activity types
 
 Current phase is maths only. Do not add another subject until asked.
 
-If you need a new maths activity type:
+If you need a new maths **topic** type (`Activity.type`, not a question kind):
 
-1. Add it to `src/types/activity.ts`.
+1. Add it to `ACTIVITY_TYPES` in `src/types/activity.ts`.
 2. Update labels in `src/data/labels.ts`.
 3. Mention the addition in the project README “Key decisions” if it is consequential.
 
-Current types: `counting`, `number-bonds`, `times-tables`, `fractions`, `place-value`, `reasoning`.
+Current topic types: `counting`, `number-bonds`, `times-tables`, `fractions`, `place-value`, `reasoning`. Question kinds are separate — see “How to add a question type”.
 
 ## Question design rules
 
@@ -211,15 +242,16 @@ Shipped now: Hear it + word highlighting. Later ideas (do not build unless asked
 
 ### Allowed question kinds
 
-Defined in `src/types/activity.ts`:
+Defined in `src/types/activity.ts`. Each has one component under `src/components/questions/`:
 
-- `multiple-choice` — single correct option.
+- `count-objects` — how many pictures? Requires `visual: { item, count }` plus multiple-choice options.
+- `multiple-choice` — single correct option. Options may use `visual` instead of a label.
 - `multi-select` — all correct options required.
-- `fill-blank` — exact normalised answer (number or short word).
+- `fill-blank` — exact normalised answer (number or short word). May include `visual`.
 - `ordered` — put items in the right sequence.
-- `match-pairs` — match left prompts to right targets.
+- `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
 
-If you need a new kind, extend the discriminated union **and** teach `QuestionView` / scoring how to render and mark it before shipping content that uses it.
+Shared phrases (“Choose all that apply.”, “Correct — nice!”) live in `src/data/copy.ts`, not in JSON.
 
 ## Progress and marks
 

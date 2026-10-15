@@ -10,7 +10,7 @@ Each node has **three levels** (Easy / Medium / Hard). Prefer finishing those on
 
 1. Prefer a missing Medium or Hard on a node that already has Easy. When expanding, open `maths.md` and take the first node marked `missing`.
 2. Follow `audit.md` before and after writing that quest.
-3. Use that node’s id as `pathNode` and `curriculumRef`, set `difficulty` to `1` / `2` / `3`, and use its title as the quest name. The map looks up `pathNode` + `difficulty`.
+3. Use that node’s id as `pathNode` and `curriculumRef`, set `difficulty` to `1` / `2` / `3`, and use its title as the quest name. Write the quest as JSON in `src/data/activities/`. The map looks up `pathNode` + `difficulty`.
 4. Update the node status in `maths.md` and the scoreboard in `coverage.md`.
 
 Agents: when creating quests, set `pathNode`, `difficulty`, `curriculumRef` and `skills` to match a node in these files.

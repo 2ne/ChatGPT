@@ -174,6 +174,9 @@ Back link → icon tile + big title → summary sentence → fact pills
   the prompt highlight as they are spoken (`--sun-soft`). Hide the button if
   the browser has no speech API. Spoken copy comes from `question.narration`
   (fallback: visible prompt). Do not add a second speaker system.
+- Shared phrases (Check it, Hear it, Correct — nice!) live in `src/data/copy.ts`.
+  Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
+  Do not restyle a single quest.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. On desktop it stays inside the question card.
   On mobile it moves to a white `position: fixed` dock at the viewport bottom

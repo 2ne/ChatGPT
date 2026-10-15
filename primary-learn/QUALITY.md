@@ -2,7 +2,7 @@
 
 **Each activity is built once and must be right first time.** The owner will not rework your questions. Follow this file and `AGENTS.md` before you write a single stem.
 
-Gold-standard quest to copy: `src/data/activities/count-to-5.ts` (Easy, node `eyfs-count-5`).
+Gold-standard quest to copy: `src/data/activities/count-to-5.json` (Easy, node `eyfs-count-5`). Content is JSON only — no JSX.
 
 ## Before you write questions
 
@@ -123,28 +123,29 @@ Write `narration` whenever the stem has emoji, operators, or symbols a voice wil
 
 ## Gold-standard example
 
-Copy the shape of this item from `count-to-5.ts`. It is Easy, first third of the ramp, one step, objects, a hint, a teaching explanation, spoken copy, and an off-by-one distractor set.
+Copy the shape of this item from `count-to-5.json`. It is Easy, first third of the ramp, one step, objects as data (not emoji in the prompt), a hint, a teaching explanation, spoken copy, and an off-by-one distractor set.
 
-```ts
+```json
 {
-  kind: "multiple-choice",
-  id: "c5-mc-apples",
-  prompt: "How many apples? 🍎🍎🍎",
-  options: [
-    { id: "a", label: "2" }, // off by one
-    { id: "b", label: "3" },
-    { id: "c", label: "4" }, // off by one
-    { id: "d", label: "5" }, // end of the taught range
+  "kind": "count-objects",
+  "id": "c5-mc-apples",
+  "prompt": "How many apples?",
+  "visual": { "item": "apple", "count": 3 },
+  "options": [
+    { "id": "a", "label": "2" },
+    { "id": "b", "label": "3" },
+    { "id": "c", "label": "4" },
+    { "id": "d", "label": "5" }
   ],
-  correctId: "b",
-  hint: "Point to each apple and say a number: 1, 2, 3.",
-  explanation: "Touch each apple once and count: 1, 2, 3. There are 3 apples.",
-  narration: {
-    prompt: "How many apples? Count the three apple pictures.",
-    options: { a: "2", b: "3", c: "4", d: "5" },
-    hint: "Point to each apple and say a number. One, two, three.",
-    explanation: "Touch each apple once and count. One, two, three. There are 3 apples.",
-  },
+  "correctId": "b",
+  "hint": "Point to each apple and say a number: 1, 2, 3.",
+  "explanation": "Touch each apple once and count: 1, 2, 3. There are 3 apples.",
+  "narration": {
+    "prompt": "How many apples? Count the three apple pictures.",
+    "options": { "a": "2", "b": "3", "c": "4", "d": "5" },
+    "hint": "Point to each apple and say a number. One, two, three.",
+    "explanation": "Touch each apple once and count. One, two, three. There are 3 apples."
+  }
 }
 ```
 
@@ -166,7 +167,9 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] At least three question kinds in a 10+ quest; same kind not overused
 - [ ] `narration` written for emoji, `+`, `−`, `=`, `?` and picture-only options
 - [ ] 8–16 questions; `masteryThreshold` 0.8 unless there is a real reason
-- [ ] Registered in `src/data/activities/index.ts`
+- [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
+- [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
+- [ ] No shared phrases (“Correct — nice!”, “Need a hint?”) copied into the JSON — those live in `src/data/copy.ts`
 - [ ] `npm run build` in `primary-learn/` succeeds
 - [ ] You opened the quest in the app: Hear it reads the first question, a miss shows the explanation, the map row is correct
 

@@ -34,13 +34,13 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 Follow **`AGENTS.md`** and **`QUALITY.md`** strictly. Each activity is built once — write `difficultyRamp` first, climb Easy < Medium < Hard, and run the self-review checklist before you push.
 
-1. Add `src/data/activities/<kebab-id>.ts` exporting a typed `Activity`
-2. Register it in `src/data/activities/index.ts`
+1. Add `src/data/activities/<kebab-id>.json` (pure data — no JSX). See `activity.schema.json`.
+2. Import it in `src/data/activities/index.ts` and run `validateActivity` (invalid JSON fails the build).
 3. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
-4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, skills, and `difficultyRamp`
-5. Prefer 10–16 interactive questions that ramp with no spikes, with explanations, UK wording, and `narration` wherever a voice would mangle the stem
+4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, `questionCount`, skills, and `difficultyRamp`
+5. Prefer 10–16 interactive questions that ramp with no spikes. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`.
 
-Do not invent a parallel format or hard-code one-off activity screens in `App.tsx`. Prefer filling Medium / Hard on shipped nodes before adding a new node.
+A new **question kind** is a new component under `src/components/questions/` plus a schema entry — never UI inside a JSON file. Prefer filling Medium / Hard on shipped nodes before adding a new node.
 
 ## Design
 
@@ -86,6 +86,7 @@ npm run preview
 - **Hear it** — Web Speech API, en-GB, optional `narration` per question (string or `{ text, audioSrc }`)
 - **Improve before expanding** — finish and tighten shipped quests before adding new nodes
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
+- **Content ≠ UI** — quests are JSON; one `ActivityRunner`; one component per question kind; shared wording in `copy.ts`. Change a phrase or an apple picture once, not 124 times
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
