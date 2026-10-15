@@ -13,10 +13,11 @@ import {
   Trophy,
   X,
 } from "lucide-react";
-import type { Activity } from "../types/activity";
+import type { Activity, Question } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
+import { realizeActivity } from "../lib/realize";
 import { copy, KIND_LABELS } from "../data/copy";
 import { spokenChoices, spokenExplanation, spokenHint, spokenPrompt } from "../lib/narration";
 import { subjectTheme } from "../data/subjects";
@@ -42,7 +43,7 @@ export function ActivityRunner({
   onExit,
   onComplete,
 }: ActivityRunnerProps) {
-  const queue = activity.questions.map((question) => question.id);
+  const [playQuestions, setPlayQuestions] = useState<Question[]>(activity.questions);
   const [phase, setPhase] = useState<Phase>("intro");
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
@@ -50,7 +51,9 @@ export function ActivityRunner({
   const [firstResults, setFirstResults] = useState<Record<string, boolean>>({});
   const [missed, setMissed] = useState<string[]>([]);
   const [retryQueue, setRetryQueue] = useState<string[]>([]);
-  const [activeQueue, setActiveQueue] = useState<string[]>(queue);
+  const [activeQueue, setActiveQueue] = useState<string[]>(() =>
+    activity.questions.map((question) => question.id),
+  );
   const [showHint, setShowHint] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
   const [confettiBurst, setConfettiBurst] = useState(0);
@@ -63,14 +66,14 @@ export function ActivityRunner({
   const ThemeIcon = theme.icon;
 
   const currentId = activeQueue[index];
-  const question = activity.questions.find((item) => item.id === currentId);
+  const question = playQuestions.find((item) => item.id === currentId);
   const speech = useNarration(`${currentId ?? "none"}:${phase}`);
   const [speechClip, setSpeechClip] = useState<"prompt" | "hint" | "feedback" | null>(null);
 
   useEffect(() => {
     if (!speech.playing) setSpeechClip(null);
   }, [speech.playing]);
-  const total = activity.questions.length;
+  const total = playQuestions.length;
   const firstCorrect = Object.values(firstResults).filter(Boolean).length;
   const mastered = total > 0 && firstCorrect / total >= activity.masteryThreshold;
 
@@ -78,8 +81,10 @@ export function ActivityRunner({
   view.current = { phase, question, answer, mastered, onExit };
 
   function begin() {
-    const first = activity.questions[0];
-    setActiveQueue(queue);
+    const realized = realizeActivity(activity);
+    const first = realized.questions[0];
+    setPlayQuestions(realized.questions);
+    setActiveQueue(realized.questions.map((item) => item.id));
     setIndex(0);
     setAnswer(first ? emptyAnswerFor(first) : null);
     setFirstResults({});
@@ -115,7 +120,7 @@ export function ActivityRunner({
     if (!question) return;
     const nextIndex = index + 1;
     if (nextIndex < activeQueue.length) {
-      const nextQuestion = activity.questions.find((item) => item.id === activeQueue[nextIndex]);
+      const nextQuestion = playQuestions.find((item) => item.id === activeQueue[nextIndex]);
       setIndex(nextIndex);
       setAnswer(nextQuestion ? emptyAnswerFor(nextQuestion) : null);
       setShowHint(false);
@@ -126,7 +131,7 @@ export function ActivityRunner({
 
     if (retryQueue.length > 0) {
       const retryIds = [...retryQueue];
-      const firstRetry = activity.questions.find((item) => item.id === retryIds[0]);
+      const firstRetry = playQuestions.find((item) => item.id === retryIds[0]);
       setActiveQueue(retryIds);
       setRetryQueue([]);
       setIndex(0);

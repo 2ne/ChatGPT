@@ -4,6 +4,58 @@
   "title": "Primary Maths activity",
   "type": "object",
   "additionalProperties": false,
+  "$defs": {
+    "objectItem": {
+      "enum": [
+        "apple",
+        "banana",
+        "star",
+        "balloon",
+        "car",
+        "duck",
+        "ladybird",
+        "frog",
+        "fish",
+        "strawberry",
+        "sparkle"
+      ]
+    },
+    "randomiseSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-question opt-in. Must not widen the difficulty band.",
+      "properties": {
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/objectItem" }
+        },
+        "count": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "type": "integer", "minimum": 1, "maximum": 12 },
+            "max": { "type": "integer", "minimum": 1, "maximum": 12 }
+          }
+        },
+        "shuffleOptions": { "type": "boolean" }
+      }
+    },
+    "activityRandomise": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "enum": ["attempt", "seeded"] },
+        "seed": { "type": "string" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/objectItem" }
+        }
+      }
+    }
+  },
   "required": [
     "id",
     "title",
@@ -53,6 +105,7 @@
       }
     },
     "skills": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "type": "string" } },
+    "randomise": { "$ref": "#/$defs/activityRandomise" },
     "questions": { "type": "array", "minItems": 8 }
   }
 }

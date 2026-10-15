@@ -83,7 +83,7 @@ primary-learn/
 │   ├── data/objects.ts       ← object-item names (pictures live in UI)
 │   ├── components/ActivityRunner.tsx
 │   ├── components/questions/ ← one component per question kind
-│   └── lib/validateActivity.ts
+│   └── lib/                  ← validateActivity.ts, realize.ts (optional randomise)
 └── ...
 ```
 
@@ -159,6 +159,7 @@ Until those steps are done, `validateActivity` will reject JSON that uses the ne
 | `difficultyRamp` | **Required.** `{ within, versus }` — how this quest climbs, and how Easy < Medium < Hard on this node. |
 | `skills` | 2–6 concrete skill tags (e.g. `addition-within-10`). |
 | `questions` | Interactive items using allowed `Question` variants. Pictures are `visual: { item, count }`, not emoji. |
+| `randomise` | **Optional.** Fresh pictures / option order / count-in-band per play. See below. Must not make Easy into Hard. |
 
 ### Year groups, ability, and Easy / Medium / Hard
 
@@ -252,6 +253,100 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
 
 Shared phrases (“Choose all that apply.”, “Correct — nice!”) live in `src/data/copy.ts`, not in JSON.
+
+## Optional randomisation
+
+Kids learn better when the same skill shows up as slightly different pictures or a shuffled choice list — not a new harder puzzle. Randomisation is **opt-in** and **must stay inside the difficulty band**.
+
+The runner calls `realizeActivity` on **Start quest / Play again / Try again**. Missed-question retries reuse that draw, so the child is not marked on a different picture.
+
+### When to use it
+
+| Use | Do not use |
+| --- | --- |
+| Swap objects on `count-objects`, fill-blank counts, match-amount, “which group” | Randomise the **count** on Easy Count to 5 (the 3→1→2→4→5 ramp is the lesson) |
+| `{item}` / `{items}` in stems so “apples” can become bananas, stars, cars | A count range wider than this level (Easy to 5 must not draw 8) |
+| `shuffleOptions` on multiple-choice / multi-select so the tap target moves | Shuffle `ordered` items or match-pair order (those kinds have their own pedagogy) |
+| A **tight** `count: { min, max }` on Medium/Hard counting, still inside the node | Randomise number-bond totals or missing addends (that changes the fact being taught) |
+
+Questions **opt in**. An activity-level pool is only used by questions that set `"randomise": {}` (or their own `items` / `count` / `shuffleOptions`). Sequence and numeral items stay fixed unless you opt them in.
+
+### Activity field
+
+```json
+"randomise": {
+  "mode": "attempt",
+  "items": ["apple", "banana", "star", "balloon", "car", "duck"]
+}
+```
+
+- `mode: "attempt"` (default) — new draws every Start / Play again.
+- `mode: "seeded"` — same draws every time (`seed` or the activity `id`). Use when you need a stable classroom demo.
+- `items` — default object pool for questions that opt in without their own `items`.
+
+### Question field
+
+```json
+"randomise": {
+  "items": ["apple", "banana", "star"],
+  "count": { "min": 3, "max": 5 },
+  "shuffleOptions": true
+}
+```
+
+All three keys are optional. `"randomise": {}` means “use the activity pool, keep the written count”.
+
+- `items` — pool for this question (else activity `items`). Distinct original pictures map to distinct picks (`strawberry` + `sparkle` → two different things).
+- `count` — inclusive range. Replaces `visual.count`. Nearby numeric options and fill-blank answers (`"4"`, `"four"`) are rebuilt **inside `min`…`max`**. Omit on Easy Count to 5.
+- `shuffleOptions` — shuffle multiple-choice / multi-select / count-objects option order.
+
+### Templates
+
+Write stems with tokens. The runner fills them after it picks items / count:
+
+| Token | Example |
+| --- | --- |
+| `{item}` / `{items}` | apple / apples (first mapped picture) |
+| `{Item}` / `{Items}` | Apple / Apples |
+| `{item2}` / `{items2}` | second distinct picture on the same question |
+| `{count}` / `{word}` | `3` / `three` (written count, or the draw if `count` is set) |
+| `{seq}` | `1, 2, 3` for that count |
+
+If the question has no picture but sets `items` (a story), `{item}` / `{items}` still resolve from the pool.
+
+### Count to 5 (shipped, light)
+
+Item pool only. Counts stay 3, 1, 2, 4, 5 so the Easy ramp does not wobble. Sequence / numeral questions have no `randomise`.
+
+```json
+"randomise": { "mode": "attempt", "items": ["apple", "banana", "star", "balloon", "car"] },
+"questions": [
+  {
+    "kind": "count-objects",
+    "id": "c5-mc-apples",
+    "prompt": "How many {items}?",
+    "visual": { "item": "apple", "count": 3 },
+    "randomise": {},
+    "hint": "Point to each {item} and say a number: 1, 2, 3.",
+    "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}."
+  }
+]
+```
+
+### Number bonds to 10 (shipped, light)
+
+`shuffleOptions` on choice questions. The story uses a small item pool (`apples` → bananas / stars / cars) but the numbers stay 10 and 2.
+
+### Medium counting (not shipped — pattern only)
+
+A later Easy-to-5 Medium quest may vary the count **inside 1–5** and rebuild off-by-one distractors:
+
+```json
+"visual": { "item": "apple", "count": 4 },
+"randomise": { "count": { "min": 3, "max": 5 } }
+```
+
+Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 
 ## Progress and marks
 

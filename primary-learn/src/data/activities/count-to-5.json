@@ -22,12 +22,28 @@
     "numerals-1-to-5",
     "one-to-one-counting"
   ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
   "questions": [
     {
       "kind": "count-objects",
       "id": "c5-mc-apples",
-      "prompt": "How many apples?",
+      "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 3 },
+      "randomise": {},
       "options": [
         { "id": "a", "label": "2" },
         { "id": "b", "label": "3" },
@@ -35,20 +51,21 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "b",
-      "hint": "Point to each apple and say a number: 1, 2, 3.",
-      "explanation": "Touch each apple once and count: 1, 2, 3. There are 3 apples.",
+      "hint": "Point to each {item} and say a number: 1, 2, 3.",
+      "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
       "narration": {
-        "prompt": "How many apples? Count the three apple pictures.",
+        "prompt": "How many {items}? Count the three {item} pictures.",
         "options": { "a": "2", "b": "3", "c": "4", "d": "5" },
-        "hint": "Point to each apple and say a number. One, two, three.",
-        "explanation": "Touch each apple once and count. One, two, three. There are 3 apples."
+        "hint": "Point to each {item} and say a number. One, two, three.",
+        "explanation": "Touch each {item} once and count. One, two, three. There are 3 {items}."
       }
     },
     {
       "kind": "count-objects",
       "id": "c5-mc-star",
-      "prompt": "How many stars?",
+      "prompt": "How many {items}?",
       "visual": { "item": "star", "count": 1 },
+      "randomise": {},
       "options": [
         { "id": "a", "label": "1" },
         { "id": "b", "label": "2" },
@@ -56,18 +73,19 @@
         { "id": "d", "label": "4" }
       ],
       "correctId": "a",
-      "explanation": "There is just 1 star. One thing counts as 1.",
+      "explanation": "There is just 1 {item}. One thing counts as 1.",
       "narration": {
-        "prompt": "How many stars? There is one star picture.",
+        "prompt": "How many {items}? There is one {item} picture.",
         "options": { "a": "1", "b": "2", "c": "3", "d": "4" },
-        "explanation": "There is just 1 star. One thing counts as 1."
+        "explanation": "There is just 1 {item}. One thing counts as 1."
       }
     },
     {
       "kind": "count-objects",
       "id": "c5-mc-balloons",
-      "prompt": "How many balloons?",
+      "prompt": "How many {items}?",
       "visual": { "item": "balloon", "count": 2 },
+      "randomise": {},
       "options": [
         { "id": "a", "label": "1" },
         { "id": "b", "label": "2" },
@@ -75,49 +93,51 @@
         { "id": "d", "label": "4" }
       ],
       "correctId": "b",
-      "hint": "Count one balloon at a time.",
-      "explanation": "1, 2. There are 2 balloons.",
+      "hint": "Count one {item} at a time.",
+      "explanation": "1, 2. There are 2 {items}.",
       "narration": {
-        "prompt": "How many balloons? Count the two balloon pictures.",
+        "prompt": "How many {items}? Count the two {item} pictures.",
         "options": { "a": "1", "b": "2", "c": "3", "d": "4" },
-        "hint": "Count one balloon at a time.",
-        "explanation": "One, two. There are 2 balloons."
+        "hint": "Count one {item} at a time.",
+        "explanation": "One, two. There are 2 {items}."
       }
     },
     {
       "kind": "fill-blank",
       "id": "c5-fb-ducks",
-      "prompt": "Count the ducks.",
+      "prompt": "Count the {items}.",
       "visual": { "item": "duck", "count": 4 },
+      "randomise": {},
       "prefix": "There are",
-      "suffix": "ducks.",
+      "suffix": "{items}.",
       "acceptedAnswers": ["4", "four"],
       "inputMode": "numeric",
-      "hint": "Say a number for each duck: 1, 2, 3 …",
-      "explanation": "1, 2, 3, 4. There are 4 ducks.",
+      "hint": "Say a number for each {item}: 1, 2, 3 …",
+      "explanation": "1, 2, 3, 4. There are 4 {items}.",
       "narration": {
-        "prompt": "Count the ducks. There are four duck pictures.",
+        "prompt": "Count the {items}. There are four {item} pictures.",
         "prefix": "There are",
-        "suffix": "ducks.",
-        "hint": "Say a number for each duck. One, two, three…",
-        "explanation": "One, two, three, four. There are 4 ducks."
+        "suffix": "{items}.",
+        "hint": "Say a number for each {item}. One, two, three…",
+        "explanation": "One, two, three, four. There are 4 {items}."
       }
     },
     {
       "kind": "fill-blank",
       "id": "c5-fb-ladybirds",
-      "prompt": "Count the ladybirds.",
+      "prompt": "Count the {items}.",
       "visual": { "item": "ladybird", "count": 5 },
+      "randomise": {},
       "prefix": "There are",
-      "suffix": "ladybirds.",
+      "suffix": "{items}.",
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
-      "explanation": "1, 2, 3, 4, 5. There are 5 ladybirds.",
+      "explanation": "1, 2, 3, 4, 5. There are 5 {items}.",
       "narration": {
-        "prompt": "Count the ladybirds. There are five ladybird pictures.",
+        "prompt": "Count the {items}. There are five {item} pictures.",
         "prefix": "There are",
-        "suffix": "ladybirds.",
-        "explanation": "One, two, three, four, five. There are 5 ladybirds."
+        "suffix": "{items}.",
+        "explanation": "One, two, three, four, five. There are 5 {items}."
       }
     },
     {
@@ -238,31 +258,33 @@
     {
       "kind": "match-pairs",
       "id": "c5-mp-numerals",
-      "prompt": "Match each number to the same amount of fish.",
+      "prompt": "Match each number to the same amount of {items}.",
+      "randomise": {},
       "pairs": [
         { "id": "p1", "left": "1", "right": { "visual": { "item": "fish", "count": 1 } } },
         { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 } } },
         { "id": "p3", "left": "4", "right": { "visual": { "item": "fish", "count": 4 } } },
         { "id": "p4", "left": "5", "right": { "visual": { "item": "fish", "count": 5 } } }
       ],
-      "hint": "Count the fish, then find the number that says how many.",
-      "explanation": "The numeral tells us how many: 1 fish, 2 fish, 4 fish and 5 fish.",
+      "hint": "Count the {items}, then find the number that says how many.",
+      "explanation": "The numeral tells us how many: 1 {item}, 2 {items}, 4 {items} and 5 {items}.",
       "narration": {
-        "prompt": "Match each number to the same amount of fish.",
+        "prompt": "Match each number to the same amount of {items}.",
         "pairs": {
-          "p1": { "left": "1", "right": "1 fish" },
-          "p2": { "left": "2", "right": "2 fish" },
-          "p3": { "left": "4", "right": "4 fish" },
-          "p4": { "left": "5", "right": "5 fish" }
+          "p1": { "left": "1", "right": "1 {item}" },
+          "p2": { "left": "2", "right": "2 {items}" },
+          "p3": { "left": "4", "right": "4 {items}" },
+          "p4": { "left": "5", "right": "5 {items}" }
         },
-        "hint": "Count the fish, then find the number that says how many.",
-        "explanation": "The numeral tells us how many. 1 fish, 2 fish, 4 fish and 5 fish."
+        "hint": "Count the {items}, then find the number that says how many.",
+        "explanation": "The numeral tells us how many. 1 {item}, 2 {items}, 4 {items} and 5 {items}."
       }
     },
     {
       "kind": "multiple-choice",
       "id": "c5-mc-group-5",
-      "prompt": "Which group has 5 frogs?",
+      "prompt": "Which group has 5 {items}?",
+      "randomise": {},
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 4 } },
         { "id": "b", "visual": { "item": "frog", "count": 3 } },
@@ -270,19 +292,20 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "hint": "Count the frogs in each group.",
-      "explanation": "The group of 5 frogs: 1, 2, 3, 4, 5.",
+      "hint": "Count the {items} in each group.",
+      "explanation": "The group of 5 {items}: 1, 2, 3, 4, 5.",
       "narration": {
-        "prompt": "Which group has 5 frogs?",
-        "options": { "a": "4 frogs", "b": "3 frogs", "c": "5 frogs", "d": "2 frogs" },
-        "hint": "Count the frogs in each group.",
-        "explanation": "The group of 5 frogs. One, two, three, four, five."
+        "prompt": "Which group has 5 {items}?",
+        "options": { "a": "4 {items}", "b": "3 {items}", "c": "5 {items}", "d": "2 {items}" },
+        "hint": "Count the {items} in each group.",
+        "explanation": "The group of 5 {items}. One, two, three, four, five."
       }
     },
     {
       "kind": "multi-select",
       "id": "c5-ms-groups-3",
       "prompt": "Tap every group that has 3 things.",
+      "randomise": {},
       "options": [
         { "id": "a", "visual": { "item": "strawberry", "count": 3 } },
         { "id": "b", "visual": { "item": "strawberry", "count": 2 } },
@@ -291,17 +314,17 @@
       ],
       "correctIds": ["a", "c"],
       "hint": "Count each group. You are looking for 3.",
-      "explanation": "3 strawberries and 3 stars make 3 each. The other groups have 2 and 4.",
+      "explanation": "3 {items} and 3 {items2} make 3 each. The other groups have 2 and 4.",
       "narration": {
         "prompt": "Tap every group that has 3 things.",
         "options": {
-          "a": "3 strawberries",
-          "b": "2 strawberries",
-          "c": "3 stars",
-          "d": "4 stars"
+          "a": "3 {items}",
+          "b": "2 {items}",
+          "c": "3 {items2}",
+          "d": "4 {items2}"
         },
         "hint": "Count each group. You are looking for 3.",
-        "explanation": "3 strawberries and 3 stars make 3 each. The other groups have 2 and 4."
+        "explanation": "3 {items} and 3 {items2} make 3 each. The other groups have 2 and 4."
       }
     }
   ]

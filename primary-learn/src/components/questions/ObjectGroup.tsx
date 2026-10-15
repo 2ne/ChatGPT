@@ -3,8 +3,10 @@ import type { ObjectAsset, ObjectItem } from "../../types/activity";
 
 const GLYPH: Record<ObjectItem, string> = {
   apple: "🍎",
+  banana: "🍌",
   star: "⭐",
   balloon: "🎈",
+  car: "🚗",
   duck: "🦆",
   ladybird: "🐞",
   frog: "🐸",

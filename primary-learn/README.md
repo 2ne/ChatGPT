@@ -38,7 +38,7 @@ Follow **`AGENTS.md`** and **`QUALITY.md`** strictly. Each activity is built onc
 2. Import it in `src/data/activities/index.ts` and run `validateActivity` (invalid JSON fails the build).
 3. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
 4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, `questionCount`, skills, and `difficultyRamp`
-5. Prefer 10–16 interactive questions that ramp with no spikes. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`.
+5. Prefer 10–16 interactive questions that ramp with no spikes. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`. Optional `randomise` (item pools, tight count ranges, shuffled choices) is documented in `AGENTS.md` — never use it to leave the difficulty band.
 
 A new **question kind** is a new component under `src/components/questions/` plus a schema entry — never UI inside a JSON file. Prefer filling Medium / Hard on shipped nodes before adding a new node.
 
@@ -87,6 +87,7 @@ npm run preview
 - **Improve before expanding** — finish and tighten shipped quests before adding new nodes
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
 - **Content ≠ UI** — quests are JSON; one `ActivityRunner`; one component per question kind; shared wording in `copy.ts`. Change a phrase or an apple picture once, not 124 times
+- **Optional randomise** — playthroughs can swap objects or shuffle choices (`realize.ts`). Counts stay inside the written band; retries reuse the same draw
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)

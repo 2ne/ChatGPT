@@ -58,7 +58,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 
 | Kind | Template |
 | --- | --- |
-| multiple-choice count | `How many {things}?` + picture |
+| multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects) |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `Which number goes with {n} to make {total}?` |
 | fill-blank bond | Prompt: `Complete the number bond.` Prefix/suffix: `{a} +` / `= {total}` |
@@ -129,8 +129,9 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
 {
   "kind": "count-objects",
   "id": "c5-mc-apples",
-  "prompt": "How many apples?",
+  "prompt": "How many {items}?",
   "visual": { "item": "apple", "count": 3 },
+  "randomise": {},
   "options": [
     { "id": "a", "label": "2" },
     { "id": "b", "label": "3" },
@@ -138,16 +139,18 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
     { "id": "d", "label": "5" }
   ],
   "correctId": "b",
-  "hint": "Point to each apple and say a number: 1, 2, 3.",
-  "explanation": "Touch each apple once and count: 1, 2, 3. There are 3 apples.",
+  "hint": "Point to each {item} and say a number: 1, 2, 3.",
+  "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
   "narration": {
-    "prompt": "How many apples? Count the three apple pictures.",
+    "prompt": "How many {items}? Count the three {item} pictures.",
     "options": { "a": "2", "b": "3", "c": "4", "d": "5" },
-    "hint": "Point to each apple and say a number. One, two, three.",
-    "explanation": "Touch each apple once and count. One, two, three. There are 3 apples."
+    "hint": "Point to each {item} and say a number. One, two, three.",
+    "explanation": "Touch each {item} once and count. One, two, three. There are 3 {items}."
   }
 }
 ```
+
+`randomise: {}` on this Easy item swaps the picture (apples → bananas / stars / cars) from the activity pool. The **count stays 3**. Do not add `"count": { "min", "max" }` here — that would wobble the 3-1-2-4-5 ramp. See **Optional randomisation** in `AGENTS.md`.
 
 The rest of that quest then moves to 1 and 2 objects, then 4 and 5 as fill-blanks, then the count sequence, then numerals — see `difficultyRamp.within` at the top of the file.
 
@@ -169,6 +172,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] 8–16 questions; `masteryThreshold` 0.8 unless there is a real reason
 - [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
+- [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
 - [ ] No shared phrases (“Correct — nice!”, “Need a hint?”) copied into the JSON — those live in `src/data/copy.ts`
 - [ ] `npm run build` in `primary-learn/` succeeds
 - [ ] You opened the quest in the app: Hear it reads the first question, a miss shows the explanation, the map row is correct

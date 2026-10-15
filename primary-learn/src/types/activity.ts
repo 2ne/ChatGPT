@@ -28,8 +28,10 @@ export type QuestionKind = (typeof QUESTION_KINDS)[number];
 /** Named picture used by the object renderer. Glyphs live in the UI, not in content. */
 export const OBJECT_ITEMS = [
   "apple",
+  "banana",
   "star",
   "balloon",
+  "car",
   "duck",
   "ladybird",
   "frog",
@@ -68,6 +70,27 @@ export type QuestionNarration = {
   explanation?: NarrationLine;
 };
 
+/**
+ * Optional per-question (or activity-default) freshness.
+ * Must not widen the difficulty band — counts stay inside `count.min`…`count.max`.
+ */
+export type RandomiseSpec = {
+  /** Object pool. One item is picked per play (or mapped per original item). */
+  items?: ObjectItem[];
+  /** Inclusive count range. Omit to keep the written `visual.count`. */
+  count?: { min: number; max: number };
+  /** Shuffle multiple-choice / multi-select option order. */
+  shuffleOptions?: boolean;
+};
+
+export type ActivityRandomise = {
+  /** attempt = new draws each Start quest. seeded = stable (activity.seed or id). */
+  mode?: "attempt" | "seeded";
+  seed?: string;
+  /** Default object pool for questions that set `randomise` without their own `items`. */
+  items?: ObjectItem[];
+};
+
 type QuestionCore = {
   id: string;
   prompt: string;
@@ -76,6 +99,7 @@ type QuestionCore = {
   narration?: QuestionNarration;
   /** Optional object picture above the answers (also required on count-objects). */
   visual?: ObjectAsset;
+  randomise?: RandomiseSpec;
 };
 
 export type CountObjectsQuestion = QuestionCore & {
@@ -150,5 +174,6 @@ export type Activity = {
   questionCount: number;
   difficultyRamp: DifficultyRamp;
   skills: string[];
+  randomise?: ActivityRandomise;
   questions: Question[];
 };

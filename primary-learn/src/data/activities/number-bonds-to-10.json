@@ -23,10 +23,14 @@
     "number-bonds",
     "missing-addend"
   ],
+  "randomise": {
+    "mode": "attempt"
+  },
   "questions": [
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-1",
+      "randomise": { "shuffleOptions": true },
       "prompt": "Which number goes with 6 to make 10?",
       "options": [
         {
@@ -64,6 +68,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-2",
+      "randomise": { "shuffleOptions": true },
       "prompt": "Which pair adds up to 10?",
       "options": [
         {
@@ -155,6 +160,7 @@
     {
       "kind": "multi-select",
       "id": "nb10-ms-1",
+      "randomise": { "shuffleOptions": true },
       "prompt": "Tap every pair that makes 10.",
       "options": [
         {
@@ -193,6 +199,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-4",
+      "randomise": { "shuffleOptions": true },
       "prompt": "Which number is missing? 7 + ? = 10",
       "options": [
         {
@@ -280,7 +287,11 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-3",
-      "prompt": "Sam has 10 apples and eats 2. How many are left?",
+      "randomise": {
+        "items": ["apple", "banana", "star", "balloon", "car"],
+        "shuffleOptions": true
+      },
+      "prompt": "Sam has 10 {items} and eats 2. How many are left?",
       "options": [
         {
           "id": "a",
@@ -302,7 +313,7 @@
       "correctId": "c",
       "explanation": "10 − 2 = 8. That uses the bond 2 + 8 = 10.",
       "narration": {
-        "prompt": "Sam has 10 apples and eats 2. How many are left?",
+        "prompt": "Sam has 10 {items} and eats 2. How many are left?",
         "options": {
           "a": "6",
           "b": "7",

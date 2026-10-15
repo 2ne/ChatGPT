@@ -3,8 +3,10 @@ import { OBJECT_ITEMS, type ObjectAsset, type ObjectItem } from "../types/activi
 /** Grammar for object assets. Pictures are drawn by ObjectGroup, not stored in quest JSON. */
 export const OBJECT_WORDS: Record<ObjectItem, { singular: string; plural: string }> = {
   apple: { singular: "apple", plural: "apples" },
+  banana: { singular: "banana", plural: "bananas" },
   star: { singular: "star", plural: "stars" },
   balloon: { singular: "balloon", plural: "balloons" },
+  car: { singular: "car", plural: "cars" },
   duck: { singular: "duck", plural: "ducks" },
   ladybird: { singular: "ladybird", plural: "ladybirds" },
   frog: { singular: "frog", plural: "frogs" },
@@ -12,6 +14,26 @@ export const OBJECT_WORDS: Record<ObjectItem, { singular: string; plural: string
   strawberry: { singular: "strawberry", plural: "strawberries" },
   sparkle: { singular: "star", plural: "stars" },
 };
+
+export const NUMBER_WORDS = [
+  "",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+] as const;
+
+export function numberWord(count: number): string {
+  return NUMBER_WORDS[count] ?? String(count);
+}
 
 export function isObjectItem(value: string): value is ObjectItem {
   return (OBJECT_ITEMS as readonly string[]).includes(value);

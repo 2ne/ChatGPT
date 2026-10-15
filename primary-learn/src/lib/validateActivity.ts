@@ -4,10 +4,13 @@ import {
   OBJECT_ITEMS,
   QUESTION_KINDS,
   type Activity,
+  type ActivityRandomise,
   type MatchSide,
   type ObjectAsset,
+  type ObjectItem,
   type Question,
   type QuestionOption,
+  type RandomiseSpec,
 } from "../types/activity";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -85,6 +88,54 @@ function parseNarration(value: unknown, path: string): Question["narration"] {
   return value as Question["narration"];
 }
 
+function parseObjectItems(value: unknown, path: string): ObjectItem[] {
+  if (!Array.isArray(value) || value.length === 0) {
+    fail(path, "items must be a non-empty array of object names");
+  }
+  for (const item of value) {
+    if (!isString(item) || !(OBJECT_ITEMS as readonly string[]).includes(item)) {
+      fail(path, `unknown item "${String(item)}". Use one of ${OBJECT_ITEMS.join(", ")}`);
+    }
+  }
+  return value as ObjectItem[];
+}
+
+function parseRandomiseSpec(value: unknown, path: string): RandomiseSpec | undefined {
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "randomise must be an object");
+  const spec: RandomiseSpec = {};
+  if (value.items != null) spec.items = parseObjectItems(value.items, `${path}.items`);
+  if (value.count != null) {
+    if (!isRecord(value.count)) fail(`${path}.count`, "must be { min, max }");
+    const min = expectNumber(value.count, "min", `${path}.count`);
+    const max = expectNumber(value.count, "max", `${path}.count`);
+    if (!Number.isInteger(min) || !Number.isInteger(max) || min < 1 || max > 12 || min > max) {
+      fail(`${path}.count`, "min and max must be whole numbers 1–12 with min ≤ max");
+    }
+    spec.count = { min, max };
+  }
+  if (value.shuffleOptions != null) {
+    if (typeof value.shuffleOptions !== "boolean") fail(path, "shuffleOptions must be true or false");
+    spec.shuffleOptions = value.shuffleOptions;
+  }
+  return spec;
+}
+
+function parseActivityRandomise(value: unknown, path: string): ActivityRandomise | undefined {
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "randomise must be an object");
+  const spec: ActivityRandomise = {};
+  if (value.mode != null) {
+    if (value.mode !== "attempt" && value.mode !== "seeded") {
+      fail(path, "mode must be attempt or seeded");
+    }
+    spec.mode = value.mode;
+  }
+  if (value.seed != null) spec.seed = expectString(value, "seed", path);
+  if (value.items != null) spec.items = parseObjectItems(value.items, `${path}.items`);
+  return spec;
+}
+
 function parseQuestion(value: unknown, path: string): Question {
   if (!isRecord(value)) fail(path, "question must be an object");
   const kind = expectString(value, "kind", path);
@@ -97,7 +148,8 @@ function parseQuestion(value: unknown, path: string): Question {
   const hint = value.hint == null ? undefined : expectString(value, "hint", path);
   const narration = parseNarration(value.narration, `${path}.narration`);
   const visual = optionalVisual(value, path);
-  const core = { id, prompt, explanation, hint, narration, visual };
+  const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
+  const core = { id, prompt, explanation, hint, narration, visual, randomise };
 
   switch (kind) {
     case "count-objects": {
@@ -217,6 +269,7 @@ export function validateActivity(raw: unknown, file: string): Activity {
   if (!skills.every(isString) || skills.length < 2 || skills.length > 6) {
     fail(file, "skills must be 2–6 strings");
   }
+  const randomise = parseActivityRandomise(raw.randomise, `${file}.randomise`);
   const questions = expectArray(raw, "questions", file).map((question, i) =>
     parseQuestion(question, `${file}.questions[${i}]`),
   );
@@ -243,6 +296,7 @@ export function validateActivity(raw: unknown, file: string): Activity {
     questionCount,
     difficultyRamp: { within, versus },
     skills: skills as string[],
+    randomise,
     questions,
   };
 }
