@@ -14,7 +14,7 @@ Foundation release: profile onboarding, a locked path map (`PathMap` + `LevelShe
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes or subjects.
 
-Agent instructions in `AGENTS.md` define how to add quests so they appear on the map.
+Agent instructions in `AGENTS.md` plus the quality guide in `QUALITY.md` define how to add quests so they appear on the map and are right first time.
 
 ## Rapid prototype
 
@@ -26,18 +26,19 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
 - Each level opens a sheet with Easy / Medium / Hard; later levels stay locked until the previous Easy is mastered
 - Runs interactive question kinds (multiple choice, multi-select, fill blank, ordered, match pairs)
+- **Hear it** reads the question, choices and feedback (browser `speechSynthesis`, en-GB) and highlights words as they are spoken
 - Retries missed questions in a calm mastery loop, without changing the first-try mark
 - Saves best score and mastery per activity in localStorage
 
 ## Adding activities
 
-Follow **`AGENTS.md`** strictly. In short:
+Follow **`AGENTS.md`** and **`QUALITY.md`** strictly. Each activity is built once — write `difficultyRamp` first, climb Easy < Medium < Hard, and run the self-review checklist before you push.
 
 1. Add `src/data/activities/<kebab-id>.ts` exporting a typed `Activity`
 2. Register it in `src/data/activities/index.ts`
 3. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
-4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, skills
-5. Prefer 10–16 interactive questions with explanations aimed at mastery. Harder levels should be more demanding, not a copy of Easy
+4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, skills, and `difficultyRamp`
+5. Prefer 10–16 interactive questions that ramp with no spikes, with explanations, UK wording, and `narration` wherever a voice would mangle the stem
 
 Do not invent a parallel format or hard-code one-off activity screens in `App.tsx`. Prefer filling Medium / Hard on shipped nodes before adding a new node.
 
@@ -81,6 +82,8 @@ npm run preview
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`. localStorage only, on purpose
 - **Maths first** — the current map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order. Other subjects are a later phase
 - **Three levels** — every node has Easy / Medium / Hard. The map uses `pathNode` + `difficulty`. Mastering all three means the child can do it
+- **Right first time** — `QUALITY.md` is required. Activities are not rewritten after they ship
+- **Hear it** — Web Speech API, en-GB, optional `narration` per question (string or `{ text, audioSrc }`)
 - **Improve before expanding** — finish and tighten shipped quests before adding new nodes
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try

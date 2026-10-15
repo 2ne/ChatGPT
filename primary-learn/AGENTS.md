@@ -2,7 +2,9 @@
 
 This project is a rapid prototype of an interactive UK primary learning app for children. The product title is **Primary Maths**. Progress and profile data live in **browser localStorage only** (no auth, no backend). That is intentional during prototyping — reset is a button, not a migration.
 
-When asked to add or change a learning activity, follow this document strictly. Do not invent a parallel activity format.
+When asked to add or change a learning activity, follow this document and `QUALITY.md` strictly. Do not invent a parallel activity format.
+
+**Build once.** Each activity must be right first time. The owner will not rewrite your questions. If the ramp, wording, distractors, narration or checklist would fail, do not push.
 
 **UI:** Follow `DESIGN.md`. Do not invent a second visual system.
 
@@ -70,6 +72,7 @@ Shipped examples: `count-to-5` is `pathNode: "eyfs-count-5"`, `difficulty: 1`. `
 ```text
 primary-learn/
 ├── AGENTS.md                 ← you are here
+├── QUALITY.md                ← required quality guide + gold-standard item
 ├── README.md
 ├── DESIGN.md
 ├── curriculum/               ← maths.md path, audit, coverage
@@ -96,8 +99,11 @@ Every new activity **must**:
 5. Include enough questions for a meaningful practice set (minimum **8**, prefer 10–16).
 6. Use only question types defined in `src/types/activity.ts`.
 7. Target a clear UK year group (and ability band) — not “all ages”.
-8. Encourage mastery: clear feedback, retry of missed items, and a `masteryThreshold`.
-9. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
+8. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
+9. Encourage mastery: clear feedback, retry of missed items, and a `masteryThreshold`.
+10. Write `narration` wherever the voice would mangle the stem (emoji, `+`, `−`, pictures).
+11. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
+12. Run the self-review checklist in `QUALITY.md` before you push.
 
 Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the shared runner.
 
@@ -119,8 +125,9 @@ Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the sh
 | `curriculumRef` | The node id from `curriculum/maths.md` (for example `eyfs-count-5`). Same id as `pathNode`. |
 | `pathNode` | **Required for the map.** Same node id. `buildLevels` looks this up. |
 | `difficulty` | **Required for the map.** `1` Easy, `2` Medium, `3` Hard. |
+| `difficultyRamp` | **Required.** `{ within, versus }` — how this quest climbs, and how Easy < Medium < Hard on this node. |
 | `skills` | 2–6 concrete skill tags (e.g. `addition-within-10`). |
-| `questions` | Interactive items using allowed `Question` variants. Harder levels should be more demanding, not a copy of Easy. |
+| `questions` | Interactive items using allowed `Question` variants. Each item may include `narration`. |
 
 ### Year groups, ability, and Easy / Medium / Hard
 
@@ -128,6 +135,33 @@ Do **not** embed one-off activity UIs in `App.tsx`. New content is data + the sh
 - Prefer a **single** year group. Use two adjacent years only when the same skill is taught across both (document why in `summary`).
 - `ability` is metadata. `difficulty` is the playable level on the map. Kids see Easy / Medium / Hard, not ability bands.
 - Easy must exist before Medium or Hard can be played on that node. Write Easy first for a new node.
+
+## Difficulty progression (required)
+
+Easy must be clearly easier than Medium, and Medium clearly easier than Hard. Mastering all three means the child can do the skill.
+
+Write `difficultyRamp` **before** the questions:
+
+```ts
+difficultyRamp: {
+  within: "How questions 1…N climb. Name the steps. No spikes.",
+  versus: "How Easy / Medium / Hard differ on this node. Describe levels you have not written yet.",
+}
+```
+
+Use these dimensions. Change one or two at a time, never all at once:
+
+| Dimension | Easy | Medium | Hard |
+| --- | --- | --- | --- |
+| Number range | Smallest range that still teaches the node | Slightly wider or less tidy numbers | Full range the node allows |
+| Steps | One step | One step + a small extra (reversed order, picture then numeral) | Two steps the node actually teaches |
+| Representation | Objects / pictures | Mix of pictures and numerals | Numerals, words, or a short story |
+| Scaffolding | Hints on the first third; stem names the strategy | Hints only late, or none | No hints unless the representation is new |
+| Question kind | Mostly multiple-choice or fill-blank | Two or three kinds | Include multi-select, ordered, match, or a one-step story |
+
+**Inside one quest** the list must ramp from easiest to hardest with **no spikes** (no very hard item next to a trivial one, no drop back to “how many? ⭐” after sequence work). First 2–3 items are the easiest legal version of the skill; last 2–3 stretch *within this level*.
+
+Copy the gold-standard ramp and first item in `QUALITY.md` / `count-to-5.ts`.
 
 ### Activity types
 
@@ -143,14 +177,37 @@ Current types: `counting`, `number-bonds`, `times-tables`, `fractions`, `place-v
 
 ## Question design rules
 
+Follow `QUALITY.md` for the full wording templates, distractor rules, variety rules and the self-review checklist. The short form:
+
 - Prefer **doing** over reading walls of text. Keep stems short; use visuals/options kids can tap.
+- Match the year-group reading age. Reception: one short sentence + a picture. Reuse the stem templates in `QUALITY.md`.
 - One concept per question. Avoid trick questions and ambiguous distractors.
-- Wrong answers should be plausible misconceptions for that year group.
-- Always provide `explanation` (or `hint` + explanation) so the runner can teach after a miss.
-- Mark exactly what is correct in the typed fields (`correctId`, `correctIds`, `answer`, etc.).
-- Support mastery loops: the runner may re-ask missed questions until threshold or a calm exit — design stems that still make sense on retry.
+- Wrong answers must be plausible misconceptions (off by one, wrong operation, number from the stem) — not random or joke options.
+- Always provide `explanation`. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.
+- Mark exactly what is correct in the typed fields (`correctId`, `correctIds`, `acceptedAnswers`, `correctOrder`).
+- Use at least three question kinds in a quest of 10+. Do not run the same kind more than three times in a row unless it is fluency practice.
+- Support mastery loops: the runner may re-ask missed questions — stems must still make sense on retry.
 - Avoid timers that punish slower readers unless the activity type is explicitly fluency-focused and labelled as such.
 - Accessibility: do not rely on colour alone; keep tap targets large; include `ariaLabel` / alt text where images or emoji stand in for meaning.
+
+## Narration (read aloud)
+
+Every question screen has a **Hear it** button. It uses the browser Web Speech API (`speechSynthesis`): free, no AI service, works offline. The helper in `src/lib/speech.ts` picks the best **en-GB** voice it can find (prefer natural / neural / “Google UK English” / “Microsoft … Online (Natural)”) at a calm child-friendly rate.
+
+Spoken text comes from optional `question.narration`, then falls back to the visible prompt / labels / hint / explanation. A line may be a string or `{ text, audioSrc }` so we can later swap in a pre-generated file. Do not add audio files unless asked.
+
+Write narration-friendly copy:
+
+- Say numbers and symbols in words: “7 plus what equals 10?”, not “7 + ? = 10”.
+- Describe pictures: “Count the three apple pictures”, not a string of emoji.
+- Keep the same meaning as the screen. Do not hide the answer in the spoken prompt.
+- Always fill `narration` when the stem has emoji, `+`, `−`, `=`, `?`, or picture-only options.
+
+While speech plays, the runner highlights words in the prompt (and feedback) as they are read. If you want that highlight to stay lined up, keep the first words of `narration.prompt` the same as the visible `prompt`.
+
+### Elevating written sentences (later)
+
+Shipped now: Hear it + word highlighting. Later ideas (do not build unless asked): illustrated stems beside the words, stricter shared sentence templates, neater karaoke wrapping, `audioSrc` files. See `QUALITY.md`.
 
 ### Allowed question kinds
 
@@ -183,12 +240,13 @@ If you need a new kind, extend the discriminated union **and** teach `QuestionVi
 
 ## Definition of done for a new activity
 
-1. `npm run build` succeeds in `primary-learn/` (no lint, no tests).
-2. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable when that row should be unlocked.
-3. Completing it updates local progress (marks / mastery / stars) and survives a refresh.
-4. Missed questions show teaching feedback and can be retried.
-5. README / `curriculum/coverage.md` / the node status in `maths.md` updated if the catalogue meaningfully changes.
-6. Commit and push to `main` (no PRs).
+1. `QUALITY.md` self-review checklist is all ticks.
+2. `npm run build` succeeds in `primary-learn/` (no lint, no tests).
+3. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable when that row should be unlocked.
+4. Hear it reads the prompt (and choices). A miss shows teaching feedback.
+5. Completing it updates local progress (marks / mastery / stars) and survives a refresh.
+6. README / `curriculum/coverage.md` / the node status in `maths.md` updated if the catalogue meaningfully changes.
+7. Commit and push to `main` (no PRs).
 
 ## Out of scope unless explicitly requested
 

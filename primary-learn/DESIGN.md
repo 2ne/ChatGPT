@@ -149,7 +149,7 @@ Back link → icon tile + big title → summary sentence → fact pills
 [▰▰▰▱▱▱▱▱▱▱]  segmented progress
 [🔥 3 in a row!]           (streak)
 ┌───────────────────────────────┐
-│ [3]  Which number…?  (Pick one)│  ← numbered badge + kind label
+│ [3]  Which number…?  Hear it  │  ← numbered badge + kind + read-aloud
 │ [A] 2                         │
 │ [B] 3                         │
 │ [C] 4                    ✓    │
@@ -165,9 +165,15 @@ Back link → icon tile + big title → summary sentence → fact pills
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
   indigo ring + soft fill; correct = green + ✓ + wiggle; wrong = red + ✕ +
   shake. Colour is never the only signal (icons + words too).
-- Hint is a `Need a hint?` button until opened, then a sunny dashed card.
+- Hint is a `Need a hint?` button until opened, then a sunny dashed card
+  with its own compact Hear it.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
-  teaching tip + mini Pip reaction.
+  teaching tip + mini Pip reaction + compact Hear it.
+- **Hear it** (pill, speaker icon) sits on the question header. It reads the
+  prompt then the choices using `speechSynthesis` (en-GB, calm rate). Words in
+  the prompt highlight as they are spoken (`--sun-soft`). Hide the button if
+  the browser has no speech API. Spoken copy comes from `question.narration`
+  (fallback: visible prompt). Do not add a second speaker system.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. On desktop it stays inside the question card.
   On mobile it moves to a white `position: fixed` dock at the viewport bottom
@@ -209,9 +215,14 @@ Pip blinks/sways/twinkles.
 
 - Ink on paper/white ≥ 4.5:1. Colour never the only signal (✓/✕ + words).
 - Focus ring: 3px `--primary`.
-- Hit targets ≥ 48px (options 64px, CTAs 52px).
+- Hit targets ≥ 48px (options 64px, CTAs 52px). Hear it ≥ 36px tall.
 - `role="progressbar"` with `aria-valuetext`; stars have `aria-label`;
   live regions for feedback and the path map.
+- Pre-readers: Hear it on the prompt, hint and feedback. Word highlighting
+  is a reading aid, not decoration — keep it even when motion is reduced.
+
+Later (do not build unless asked): illustrated stems beside the words,
+stronger sentence templates, neater karaoke wrapping, `audioSrc` files.
 
 ## Anti-patterns (fix these)
 
