@@ -65,7 +65,13 @@
 }
 
 html {
-  background: var(--paper);
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 201, 60, 0.16) 0 90px, transparent 91px),
+    radial-gradient(circle at 88% 4%, rgba(124, 58, 237, 0.1) 0 110px, transparent 111px),
+    radial-gradient(var(--line) 1.3px, transparent 1.4px) 0 0 / 26px 26px,
+    linear-gradient(var(--paper), var(--paper));
+  background-attachment: fixed;
 }
 
 body {
@@ -79,11 +85,7 @@ body {
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(255, 201, 60, 0.16) 0 90px, transparent 91px),
-    radial-gradient(circle at 88% 4%, rgba(124, 58, 237, 0.1) 0 110px, transparent 111px),
-    radial-gradient(var(--line) 1.3px, transparent 1.4px) 0 0 / 26px 26px,
-    linear-gradient(var(--paper), var(--paper));
+  background: transparent;
 }
 
 button,
@@ -308,9 +310,7 @@ p {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(255, 250, 238, 0.92);
-  border-bottom: 2px solid var(--line);
-  backdrop-filter: blur(10px);
+  background: transparent;
 }
 
 .app-header-inner {
@@ -334,10 +334,6 @@ p {
   text-align: left;
 }
 
-button.brand-row:hover .brand-name {
-  color: var(--primary-deep);
-}
-
 .brand-pip {
   display: grid;
   place-items: center;
@@ -347,7 +343,7 @@ button.brand-row:hover .brand-name {
   background: #fff;
   border: 2px solid var(--line);
   border-radius: 18px;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.16);
+  box-shadow: 0 4px 12px rgba(35, 41, 70, 0.08);
 }
 
 .brand-text {
@@ -368,10 +364,6 @@ button.brand-row:hover .brand-name {
 
 .brand-name em {
   font-style: normal;
-  background: linear-gradient(135deg, var(--primary), var(--violet));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 .app-header-right {

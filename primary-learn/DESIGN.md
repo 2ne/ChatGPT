@@ -67,6 +67,7 @@ Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
 **Rules**
 
 - Page background is warm paper with a subtle dot grid — never flat grey.
+  Dots cover the full viewport, including behind the sticky header.
 - CTAs are the indigo→violet gradient with a 2px deep border + bottom `4px`
   "squishy" shadow (Duolingo-style press). Disabled = 55% opacity, not grey.
 - Correct / incorrect colour appears **only after Check**.
@@ -111,9 +112,10 @@ every question feels like part of the quest.
 
 ### Header
 
-72px sticky, blurred paper, 2px bottom border. Left: white Pip tile vertically
-centred with the "Primary Maths" wordmark (no tagline). Clicking the logo or
-name returns to the path map. Right: learner chip
+72px sticky, **no fill**. No blur, no bottom bar, no indigo wash — the dotted
+paper runs behind it to the top of the page. Left: white Pip tile vertically
+centred with the "Primary Maths" wordmark in ink (no tagline, no gradient on
+*Maths*). Clicking the logo or name returns to the path map. Right: learner chip
 (avatar face centred in its circle + name) + Reset text on the home screen.
 
 **Hidden during a quest.** Intro, questions and summary use in-page exits
