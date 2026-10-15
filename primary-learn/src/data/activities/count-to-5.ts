@@ -14,6 +14,12 @@ export const countTo5: Activity = {
   curriculumRef: "eyfs-count-5",
   pathNode: "eyfs-count-5",
   difficulty: 1,
+  difficultyRamp: {
+    within:
+      "Questions 1–5 count visible objects from 1 to 5 (one-to-one). Questions 6–10 say the count sequence (next, before, missing number, then order). Questions 11–14 recognise numerals and match amounts. No return to a trivial 1-object count after sequence work.",
+    versus:
+      "Easy: objects and numerals to 5, one step, hints on early items. Medium should use mixed arrangements and fewer hints. Hard should hide objects or use two groups to combine, still within 5.",
+  },
   skills: [
     "eyfs-count-5",
     "count-sequence-to-5",
@@ -35,6 +41,12 @@ export const countTo5: Activity = {
       correctId: "b",
       hint: "Point to each apple and say a number: 1, 2, 3.",
       explanation: "Touch each apple once and count: 1, 2, 3. There are 3 apples.",
+      narration: {
+        prompt: "How many apples? Count the three apple pictures.",
+        options: { a: "2", b: "3", c: "4", d: "5" },
+        hint: "Point to each apple and say a number. One, two, three.",
+        explanation: "Touch each apple once and count. One, two, three. There are 3 apples.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -48,6 +60,11 @@ export const countTo5: Activity = {
       ],
       correctId: "a",
       explanation: "There is just 1 star. One thing counts as 1.",
+      narration: {
+        prompt: "How many stars? There is one star picture.",
+        options: { a: "1", b: "2", c: "3", d: "4" },
+        explanation: "There is just 1 star. One thing counts as 1.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -62,6 +79,12 @@ export const countTo5: Activity = {
       correctId: "b",
       hint: "Count one balloon at a time.",
       explanation: "1, 2. There are 2 balloons.",
+      narration: {
+        prompt: "How many balloons? Count the two balloon pictures.",
+        options: { a: "1", b: "2", c: "3", d: "4" },
+        hint: "Count one balloon at a time.",
+        explanation: "One, two. There are 2 balloons.",
+      },
     },
     {
       kind: "fill-blank",
@@ -73,6 +96,13 @@ export const countTo5: Activity = {
       inputMode: "numeric",
       hint: "Say a number for each duck: 1, 2, 3 …",
       explanation: "1, 2, 3, 4. There are 4 ducks.",
+      narration: {
+        prompt: "Count the ducks. There are four duck pictures.",
+        prefix: "There are",
+        suffix: "ducks.",
+        hint: "Say a number for each duck. One, two, three…",
+        explanation: "One, two, three, four. There are 4 ducks.",
+      },
     },
     {
       kind: "fill-blank",
@@ -83,6 +113,12 @@ export const countTo5: Activity = {
       acceptedAnswers: ["5", "five"],
       inputMode: "numeric",
       explanation: "1, 2, 3, 4, 5. There are 5 ladybirds.",
+      narration: {
+        prompt: "Count the ladybirds. There are five ladybird pictures.",
+        prefix: "There are",
+        suffix: "ladybirds.",
+        explanation: "One, two, three, four, five. There are 5 ladybirds.",
+      },
     },
 
     // Say the count sequence to 5.
@@ -99,6 +135,12 @@ export const countTo5: Activity = {
       correctId: "c",
       hint: "Say it out loud: one, two, three, …",
       explanation: "We count 1, 2, 3, 4. The next number is 4.",
+      narration: {
+        prompt: "What comes next? One, two, three, …",
+        options: { a: "1", b: "2", c: "4", d: "5" },
+        hint: "Say it out loud. One, two, three, …",
+        explanation: "We count 1, 2, 3, 4. The next number is 4.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -113,6 +155,12 @@ export const countTo5: Activity = {
       correctId: "c",
       hint: "Count: 1, 2, 3, 4, …",
       explanation: "After 4 comes 5. We count 1, 2, 3, 4, 5.",
+      narration: {
+        prompt: "Which number comes after 4?",
+        options: { a: "3", b: "4", c: "5", d: "1" },
+        hint: "Count. One, two, three, four, …",
+        explanation: "After 4 comes 5. We count 1, 2, 3, 4, 5.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -127,6 +175,12 @@ export const countTo5: Activity = {
       correctId: "b",
       hint: "Count from 1 and stop when you reach 3.",
       explanation: "We say 1, 2, 3. So 2 comes just before 3.",
+      narration: {
+        prompt: "Which number comes just before 3?",
+        options: { a: "1", b: "2", c: "4", d: "5" },
+        hint: "Count from 1 and stop when you reach 3.",
+        explanation: "We say 1, 2, 3. So 2 comes just before 3.",
+      },
     },
     {
       kind: "fill-blank",
@@ -138,6 +192,13 @@ export const countTo5: Activity = {
       inputMode: "numeric",
       hint: "Count along: 1, 2, … then 4.",
       explanation: "The count goes 1, 2, 3, 4, 5. The missing number is 3.",
+      narration: {
+        prompt: "Fill the gap in the count.",
+        prefix: "1, 2,",
+        suffix: "4, 5",
+        hint: "Count along. One, two, then 4.",
+        explanation: "The count goes 1, 2, 3, 4, 5. The missing number is 3.",
+      },
     },
     {
       kind: "ordered",
@@ -151,6 +212,12 @@ export const countTo5: Activity = {
       correctOrder: ["n1", "n2", "n3"],
       hint: "Which number do we say first when we count?",
       explanation: "We count 1, then 2, then 3.",
+      narration: {
+        prompt: "Put the numbers in counting order. Start with the smallest.",
+        items: { n3: "3", n1: "1", n2: "2" },
+        hint: "Which number do we say first when we count?",
+        explanation: "We count 1, then 2, then 3.",
+      },
     },
 
     // Recognise numerals 1 to 5.
@@ -166,6 +233,11 @@ export const countTo5: Activity = {
       ],
       correctId: "b",
       explanation: "This is the numeral 4. It means four things.",
+      narration: {
+        prompt: "Tap the number 4.",
+        options: { a: "2", b: "4", c: "5", d: "3" },
+        explanation: "This is the numeral 4. It means four things.",
+      },
     },
     {
       kind: "match-pairs",
@@ -179,6 +251,17 @@ export const countTo5: Activity = {
       ],
       hint: "Count the fish, then find the number that says how many.",
       explanation: "The numeral tells us how many: 1 fish, 2 fish, 4 fish and 5 fish.",
+      narration: {
+        prompt: "Match each number to the same amount of fish.",
+        pairs: {
+          p1: { left: "1", right: "1 fish" },
+          p2: { left: "2", right: "2 fish" },
+          p3: { left: "4", right: "4 fish" },
+          p4: { left: "5", right: "5 fish" },
+        },
+        hint: "Count the fish, then find the number that says how many.",
+        explanation: "The numeral tells us how many. 1 fish, 2 fish, 4 fish and 5 fish.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -193,6 +276,17 @@ export const countTo5: Activity = {
       correctId: "c",
       hint: "Count the frogs in each group.",
       explanation: "The group of 5 frogs: 1, 2, 3, 4, 5.",
+      narration: {
+        prompt: "Which group has 5 frogs?",
+        options: {
+          a: "4 frogs",
+          b: "3 frogs",
+          c: "5 frogs",
+          d: "2 frogs",
+        },
+        hint: "Count the frogs in each group.",
+        explanation: "The group of 5 frogs. One, two, three, four, five.",
+      },
     },
     {
       kind: "multi-select",
@@ -207,6 +301,17 @@ export const countTo5: Activity = {
       correctIds: ["a", "c"],
       hint: "Count each group. You are looking for 3.",
       explanation: "3 strawberries and 3 stars make 3 each. The other groups have 2 and 4.",
+      narration: {
+        prompt: "Tap every group that has 3 things.",
+        options: {
+          a: "3 strawberries",
+          b: "2 strawberries",
+          c: "3 stars",
+          d: "4 stars",
+        },
+        hint: "Count each group. You are looking for 3.",
+        explanation: "3 strawberries and 3 stars make 3 each. The other groups have 2 and 4.",
+      },
     },
   ],
 };

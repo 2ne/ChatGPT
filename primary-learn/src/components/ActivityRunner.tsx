@@ -17,8 +17,11 @@ import type { Activity } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
+import { spokenChoices, spokenExplanation, spokenHint, spokenPrompt } from "../lib/narration";
 import { subjectTheme } from "../data/subjects";
+import { useNarration } from "../hooks/useNarration";
 import { ConfettiBurst } from "./ConfettiBurst";
+import { HearButton, SpokenWords } from "./ReadAloud";
 import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
 import { QuestionView } from "./QuestionView";
@@ -68,6 +71,12 @@ export function ActivityRunner({
 
   const currentId = activeQueue[index];
   const question = activity.questions.find((item) => item.id === currentId);
+  const speech = useNarration(`${currentId ?? "none"}:${phase}`);
+  const [speechClip, setSpeechClip] = useState<"prompt" | "hint" | "feedback" | null>(null);
+
+  useEffect(() => {
+    if (!speech.playing) setSpeechClip(null);
+  }, [speech.playing]);
   const total = activity.questions.length;
   const firstCorrect = Object.values(firstResults).filter(Boolean).length;
   const mastered = total > 0 && firstCorrect / total >= activity.masteryThreshold;
@@ -429,8 +438,25 @@ export function ActivityRunner({
               {position}
             </span>
             <span className="q-kind">{KIND_LABELS[question.kind] ?? "Question"}</span>
+            {speech.available ? (
+              <HearButton
+                playing={speech.playing && speechClip === "prompt"}
+                onClick={() => {
+                  if (speech.playing && speechClip === "prompt") {
+                    speech.stop();
+                    return;
+                  }
+                  setSpeechClip("prompt");
+                  speech.play(spokenPrompt(question), spokenChoices(question));
+                }}
+              />
+            ) : null}
             <h1 ref={promptRef} tabIndex={-1} className="q-prompt">
-              {question.prompt}
+              <SpokenWords
+                display={question.prompt}
+                spoken={spokenPrompt(question)}
+                charIndex={speechClip === "prompt" ? speech.charIndex : -1}
+              />
             </h1>
           </div>
 
@@ -450,6 +476,20 @@ export function ActivityRunner({
                     <Lightbulb size={17} />
                   </span>
                   <span className="hint-text">{question.hint}</span>
+                  {speech.available && spokenHint(question) ? (
+                    <HearButton
+                      compact
+                      playing={speech.playing && speechClip === "hint"}
+                      onClick={() => {
+                        if (speech.playing && speechClip === "hint") {
+                          speech.stop();
+                          return;
+                        }
+                        setSpeechClip("hint");
+                        speech.play(spokenHint(question));
+                      }}
+                    />
+                  ) : null}
                 </p>
               ) : (
                 <button type="button" className="btn-text" onClick={() => setShowHint(true)}>
@@ -471,7 +511,29 @@ export function ActivityRunner({
                 <p className="feedback-title">
                   {lastCorrect ? "Correct — nice!" : "Not quite — good try!"}
                 </p>
-                <p>{question.explanation}</p>
+                <p>
+                  <SpokenWords
+                    display={question.explanation}
+                    spoken={spokenExplanation(question)}
+                    charIndex={speechClip === "feedback" ? speech.charIndex : -1}
+                  />
+                </p>
+                {speech.available ? (
+                  <HearButton
+                    compact
+                    playing={speech.playing && speechClip === "feedback"}
+                    onClick={() => {
+                      if (speech.playing && speechClip === "feedback") {
+                        speech.stop();
+                        return;
+                      }
+                      setSpeechClip("feedback");
+                      speech.play(
+                        `${lastCorrect ? "Correct. Nice!" : "Not quite. Good try!"} ${spokenExplanation(question)}`,
+                      );
+                    }}
+                  />
+                ) : null}
               </div>
               <span className="feedback-pip" aria-hidden>
                 <Pip size={56} mood={lastCorrect ? "cheer" : "think"} />

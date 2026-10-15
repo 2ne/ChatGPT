@@ -14,6 +14,12 @@ export const numberBondsTo10: Activity = {
   curriculumRef: "y1-bonds-10",
   pathNode: "y1-bonds-10",
   difficulty: 1,
+  difficultyRamp: {
+    within:
+      "Starts with a supported missing addend (6 + ?), then recognise a pair, then fill-blanks including the double 5 + 5, then multi-select, then a word problem and a related subtraction fact. Range stays 0–10. Later items add a second step (subtract using a bond) rather than bigger numbers.",
+    versus:
+      "Easy: bonds to 10 with numerals and one-step missing addends. Medium should mix order (10 = 3 + ?) and more subtraction. Hard should use two-step stories still totalling 10.",
+  },
   skills: ["y1-bonds-10", "addition-within-10", "number-bonds", "missing-addend"],
   questions: [
     {
@@ -29,6 +35,12 @@ export const numberBondsTo10: Activity = {
       correctId: "c",
       hint: "Count on from 6 until you reach 10.",
       explanation: "6 + 4 = 10, so 4 is the bond partner for 6.",
+      narration: {
+        prompt: "Which number goes with 6 to make 10?",
+        options: { a: "2", b: "3", c: "4", d: "5" },
+        hint: "Count on from 6 until you reach 10.",
+        explanation: "6 plus 4 equals 10, so 4 is the bond partner for 6.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -42,6 +54,11 @@ export const numberBondsTo10: Activity = {
       ],
       correctId: "b",
       explanation: "3 + 7 = 10. The others make 9 or 11.",
+      narration: {
+        prompt: "Which pair adds up to 10?",
+        options: { a: "2 and 7", b: "3 and 7", c: "4 and 7", d: "1 and 8" },
+        explanation: "3 plus 7 equals 10. The others make 9 or 11.",
+      },
     },
     {
       kind: "fill-blank",
@@ -53,6 +70,13 @@ export const numberBondsTo10: Activity = {
       inputMode: "numeric",
       hint: "How many more to get from 8 to 10?",
       explanation: "8 + 2 = 10.",
+      narration: {
+        prompt: "Complete the number bond.",
+        prefix: "8 plus",
+        suffix: "equals 10",
+        hint: "How many more to get from 8 to 10?",
+        explanation: "8 plus 2 equals 10.",
+      },
     },
     {
       kind: "fill-blank",
@@ -63,6 +87,12 @@ export const numberBondsTo10: Activity = {
       acceptedAnswers: ["9"],
       inputMode: "numeric",
       explanation: "1 + 9 = 10.",
+      narration: {
+        prompt: "Complete the number bond.",
+        prefix: "1 plus",
+        suffix: "equals 10",
+        explanation: "1 plus 9 equals 10.",
+      },
     },
     {
       kind: "fill-blank",
@@ -73,6 +103,12 @@ export const numberBondsTo10: Activity = {
       acceptedAnswers: ["5"],
       inputMode: "numeric",
       explanation: "5 + 5 = 10. This is a double!",
+      narration: {
+        prompt: "Complete the number bond.",
+        prefix: "5 plus",
+        suffix: "equals 10",
+        explanation: "5 plus 5 equals 10. This is a double!",
+      },
     },
     {
       kind: "multi-select",
@@ -86,6 +122,16 @@ export const numberBondsTo10: Activity = {
       ],
       correctIds: ["a", "c"],
       explanation: "0 + 10 and 4 + 6 both equal 10. 2 + 9 = 11 and 7 + 2 = 9.",
+      narration: {
+        prompt: "Tap every pair that makes 10.",
+        options: {
+          a: "0 plus 10",
+          b: "2 plus 9",
+          c: "4 plus 6",
+          d: "7 plus 2",
+        },
+        explanation: "0 plus 10 and 4 plus 6 both equal 10. 2 plus 9 is 11 and 7 plus 2 is 9.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -100,6 +146,12 @@ export const numberBondsTo10: Activity = {
       correctId: "b",
       hint: "Count on from 7: 8, 9, 10.",
       explanation: "7 + 3 = 10, so the missing number is 3.",
+      narration: {
+        prompt: "Which number is missing? 7 plus what equals 10?",
+        options: { a: "2", b: "3", c: "4", d: "5" },
+        hint: "Count on from 7. 8, 9, 10.",
+        explanation: "7 plus 3 equals 10, so the missing number is 3.",
+      },
     },
     {
       kind: "match-pairs",
@@ -112,6 +164,16 @@ export const numberBondsTo10: Activity = {
         { id: "p4", left: "6", right: "4" },
       ],
       explanation: "3+7, 9+1, 0+10 and 6+4 are all bonds to 10.",
+      narration: {
+        prompt: "Match each number to its partner that makes 10.",
+        pairs: {
+          p1: { left: "3", right: "7" },
+          p2: { left: "9", right: "1" },
+          p3: { left: "0", right: "10" },
+          p4: { left: "6", right: "4" },
+        },
+        explanation: "3 plus 7, 9 plus 1, 0 plus 10 and 6 plus 4 are all bonds to 10.",
+      },
     },
     {
       kind: "multiple-choice",
@@ -125,6 +187,11 @@ export const numberBondsTo10: Activity = {
       ],
       correctId: "c",
       explanation: "10 − 2 = 8. That uses the bond 2 + 8 = 10.",
+      narration: {
+        prompt: "Sam has 10 apples and eats 2. How many are left?",
+        options: { a: "6", b: "7", c: "8", d: "9" },
+        explanation: "10 take away 2 equals 8. That uses the bond 2 plus 8 equals 10.",
+      },
     },
     {
       kind: "fill-blank",
@@ -134,6 +201,11 @@ export const numberBondsTo10: Activity = {
       acceptedAnswers: ["6"],
       inputMode: "numeric",
       explanation: "Because 4 + 6 = 10, 10 − 4 = 6.",
+      narration: {
+        prompt: "What is the missing number?",
+        prefix: "10 take away 4 equals",
+        explanation: "Because 4 plus 6 equals 10, 10 take away 4 equals 6.",
+      },
     },
   ],
 };
