@@ -60,8 +60,8 @@ export function ChatPane({
           const showLabel = index === 0 || messages[index - 1].role !== message.role;
           return (
             <article key={message.id} className={`msg msg-${message.role}`}>
-              {showLabel ? (
-                <span className="msg-label">{message.role === "assistant" ? "Alongside" : "You"}</span>
+              {message.role === "user" && showLabel ? (
+                <span className="msg-label">You</span>
               ) : null}
               <div className="msg-body">{message.text}</div>
             </article>

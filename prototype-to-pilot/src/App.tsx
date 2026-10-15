@@ -16,9 +16,9 @@ export function App() {
       <header className="app-header">
         <div className="mark">
           <span className="mark-title">Prototype to pilot</span>
-          <span className="mark-sub">
-            {session.prototypeId === "matter-brief" ? "Matter Brief" : "Internal · alongside you"}
-          </span>
+          {session.prototypeId === "matter-brief" ? (
+            <span className="mark-sub">Matter Brief</span>
+          ) : null}
         </div>
         <div className="header-actions">
           {session.stage !== "intake" ? (
