@@ -552,6 +552,16 @@ export function useSession() {
     [finishFocus, speak],
   );
 
+  const returnToPack = useCallback(() => {
+    if (!focusRef.current) return;
+    dispatch({ type: "FOCUS", id: null });
+    speak(returnedToPack, {
+      wait: 220,
+      stage: returnRef.current ?? undefined,
+      suggestions: [],
+    });
+  }, [speak]);
+
   const reopenDecision = useCallback(
     (id: DecisionId) => {
       const item = state.trail.find((row) => row.id === id);
@@ -917,6 +927,7 @@ export function useSession() {
     send,
     analyseRepository,
     reopenDecision,
+    returnToPack,
     reset,
     setCitation,
     preparePack,

@@ -19,7 +19,7 @@ Presentable hackathon demo. Scripted Matter Brief walkthrough with working free-
 3. **Architecture**, then **ownership** — reply *The disputes practice.* (or push back with *Keep it in Innovation.*)
 4. **Citations** — reply *Yes. Add citations.* Open a citation in the sample brief.
 5. **UX assumption** — can’t be settled by talking. Reply *Validate it first.* Then *Show me the pilot material.*
-6. **Pilot pack** — *Prepare pilot pack.* Drafts only; no automated approval. Open questions carry through.
+6. **Pilot pack** — *Prepare pilot pack.* Drafts only; no automated approval. Open questions in the document are still clickable.
 
 Use the filled suggestion to stay on the short path, or type freely. **Start again** is in the header.
 
@@ -47,8 +47,9 @@ Vite `base` is `./` so the built app works under GitHub Pages at `/ChatGPT/proto
 ## Key decisions
 
 - Framed as a tool run inside the prototype’s own checkout (`npx prototype-to-pilot` in `matter-brief`). There is no real package.
-- After analyse, the conversation stays visible; the workspace changes with the current question (scan, architecture, evidence, validation, readiness, pack).
-- The AI continues a quiet analysis in the background and only asks what the code cannot answer, in dependency order. A fixed Decisions rail records what is settled; open items in readiness and the pack can be reopened and resolved. InfoSec/Risk can gain an owner and still need human review.
+- Always two columns at demo width: conversation on the left (steering voice), a single Matter Brief document on the right. The document is the decision spine and becomes the pilot pack; architecture, citations and the validation plan appear inline on the current decision only.
+- The left column is reserved from intake so the document does not jump when the conversation starts.
+- The AI continues a quiet analysis in the background and only asks what the code cannot answer, in dependency order. Open items in the pack can be reopened and resolved in place. InfoSec/Risk can gain an owner and still need human review.
 - Outputs are drafts for humans. Risk, InfoSec and legal approval remain people.
 - Demo replies are seeded; unmatched free text still advances with a sensible recommendation so a live walkthrough cannot stall.
 - Fictional matter: *Northharbour Logistics v Pellam Components*.
