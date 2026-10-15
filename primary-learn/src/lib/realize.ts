@@ -141,37 +141,7 @@ function applyNarration(
   vars: Record<string, string>,
 ): QuestionNarration | undefined {
   if (!narration) return narration;
-  const options = narration.options
-    ? Object.fromEntries(
-        Object.entries(narration.options).map(([id, line]) => [id, applyLine(line, vars) ?? line]),
-      )
-    : undefined;
-  const items = narration.items
-    ? Object.fromEntries(
-        Object.entries(narration.items).map(([id, line]) => [id, applyLine(line, vars) ?? line]),
-      )
-    : undefined;
-  const pairs = narration.pairs
-    ? Object.fromEntries(
-        Object.entries(narration.pairs).map(([id, pair]) => [
-          id,
-          {
-            left: applyLine(pair.left, vars),
-            right: applyLine(pair.right, vars),
-          },
-        ]),
-      )
-    : undefined;
-  return {
-    prompt: applyLine(narration.prompt, vars),
-    options,
-    items,
-    pairs,
-    prefix: applyLine(narration.prefix, vars),
-    suffix: applyLine(narration.suffix, vars),
-    hint: applyLine(narration.hint, vars),
-    explanation: applyLine(narration.explanation, vars),
-  };
+  return { prompt: applyLine(narration.prompt, vars) };
 }
 
 function templateVars(
@@ -342,14 +312,6 @@ function realizeQuestion(
     const min = spec.count?.min ?? 1;
     const max = spec.count?.max ?? 12;
     next.options = retargetNumericOptions(next.options, next.correctId, count, min, max);
-    if (next.narration?.options) {
-      next.narration = {
-        ...next.narration,
-        options: Object.fromEntries(
-          next.options.map((option) => [option.id, option.label ?? String(count)]),
-        ),
-      };
-    }
   }
 
   if (countChanged && count != null && next.kind === "fill-blank") {

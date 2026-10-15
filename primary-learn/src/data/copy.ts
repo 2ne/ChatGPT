@@ -5,8 +5,7 @@ import type { QuestionKind } from "../types/activity";
  * Do not put these strings in activity JSON.
  */
 export const copy = {
-  hearIt: "Hear it",
-  stopReading: "Stop",
+  hearIt: "Hear the question",
   stopReadingAria: "Stop reading",
   needHint: "Need a hint?",
   checkIt: "Check it",
@@ -43,16 +42,10 @@ export const copy = {
   summaryAgain: "Every try makes your brain stronger. Have another go!",
   feedbackCorrect: "Correct — nice!",
   feedbackWrong: "Not quite — good try!",
-  feedbackCorrectSpoken: "Correct. Nice!",
-  feedbackWrongSpoken: "Not quite. Good try!",
   kindFallback: "Question",
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",
-  spokenChoicesLead: "The choices are.",
-  spokenPiecesLead: "The pieces are.",
-  spokenMatchLead: "Match each one.",
-  spokenBlank: "blank",
 } as const;
 
 export const KIND_LABELS: Record<QuestionKind, string> = {

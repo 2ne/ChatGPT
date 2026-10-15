@@ -1021,20 +1021,20 @@ button.brand-row:hover .brand-name {
 }
 
 .hear-btn {
-  grid-column: 3;
-  grid-row: 1;
   display: inline-flex;
+  vertical-align: -0.15em;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
   min-height: 36px;
-  padding: 0 12px;
-  border-radius: var(--radius-pill);
+  margin-left: 8px;
+  padding: 0;
+  border-radius: 9999px;
   border: 2px solid var(--line-strong);
   background: var(--card);
   color: var(--ink-soft);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
   box-shadow: 0 2px 0 rgba(35, 41, 70, 0.1);
 }
 
@@ -1047,15 +1047,6 @@ button.brand-row:hover .brand-name {
   background: var(--primary-soft);
   border-color: var(--primary);
   color: var(--primary);
-}
-
-.hear-btn.is-compact {
-  grid-column: auto;
-  grid-row: auto;
-  min-height: 32px;
-  padding: 0 10px;
-  font-size: 13px;
-  margin-top: 4px;
 }
 
 .q-kind {

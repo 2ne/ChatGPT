@@ -55,19 +55,14 @@ export type QuestionOption = {
 
 /**
  * Spoken copy for the Web Speech API.
+ * Only `prompt` is read aloud — never answers, options, pictured counts, or feedback.
  * A string is the spoken text. An object lets us later attach a pre-generated audio file.
  */
 export type NarrationLine = string | { text: string; audioSrc?: string };
 
 export type QuestionNarration = {
+  /** Spoken question only. Same meaning as `prompt`; say `+` / `−` in words. Must not hint the answer. */
   prompt?: NarrationLine;
-  options?: Record<string, NarrationLine>;
-  items?: Record<string, NarrationLine>;
-  pairs?: Record<string, { left?: NarrationLine; right?: NarrationLine }>;
-  prefix?: NarrationLine;
-  suffix?: NarrationLine;
-  hint?: NarrationLine;
-  explanation?: NarrationLine;
 };
 
 /**

@@ -149,7 +149,7 @@ Back link → icon tile + big title → summary sentence → fact pills
 [▰▰▰▱▱▱▱▱▱▱]  segmented progress
 [🔥 3 in a row!]           (streak)
 ┌───────────────────────────────┐
-│ [3]  Which number…?  Hear it  │  ← numbered badge + kind + read-aloud
+│ [3]  Which number…?  🔊       │  ← numbered badge + kind + speaker after text
 │ [A] 2                         │
 │ [B] 3                         │
 │ [C] 4                    ✓    │
@@ -165,16 +165,17 @@ Back link → icon tile + big title → summary sentence → fact pills
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
   indigo ring + soft fill; correct = green + ✓ + wiggle; wrong = red + ✕ +
   shake. Colour is never the only signal (icons + words too).
-- Hint is a `Need a hint?` button until opened, then a sunny dashed card
-  with its own compact Hear it.
+- Hint is a `Need a hint?` button until opened, then a sunny dashed card.
+  Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
-  teaching tip + mini Pip reaction + compact Hear it.
-- **Hear it** (pill, speaker icon) sits on the question header. It reads the
-  prompt then the choices using `speechSynthesis` (en-GB, calm rate). Words in
-  the prompt highlight as they are spoken (`--sun-soft`). Hide the button if
-  the browser has no speech API. Spoken copy comes from `question.narration`
+  teaching tip + mini Pip reaction. No speaker on feedback (it states the answer).
+- **Speaker** (small round icon, 36px) sits **inline right after the question
+  text**. It reads **the question only** via `speechSynthesis` (en-GB, calm
+  rate) — never options, pictured counts, hints, or explanations. Words in the
+  prompt highlight as they are spoken (`--sun-soft`). Hide the button if the
+  browser has no speech API. Spoken copy is `question.narration.prompt`
   (fallback: visible prompt). Do not add a second speaker system.
-- Shared phrases (Check it, Hear it, Correct — nice!) live in `src/data/copy.ts`.
+- Shared phrases (Check it, Hear the question, Correct — nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
@@ -218,11 +219,11 @@ Pip blinks/sways/twinkles.
 
 - Ink on paper/white ≥ 4.5:1. Colour never the only signal (✓/✕ + words).
 - Focus ring: 3px `--primary`.
-- Hit targets ≥ 48px (options 64px, CTAs 52px). Hear it ≥ 36px tall.
+- Hit targets ≥ 48px (options 64px, CTAs 52px). Speaker icon 36px, inline after the prompt.
 - `role="progressbar"` with `aria-valuetext`; stars have `aria-label`;
   live regions for feedback and the path map.
-- Pre-readers: Hear it on the prompt, hint and feedback. Word highlighting
-  is a reading aid, not decoration — keep it even when motion is reduced.
+- Pre-readers: speaker on the **question only**. Word highlighting on the
+  prompt is a reading aid, not decoration — keep it even when motion is reduced.
 
 Later (do not build unless asked): illustrated stems beside the words,
 stronger sentence templates, neater karaoke wrapping, `audioSrc` files.

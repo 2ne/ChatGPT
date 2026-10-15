@@ -97,7 +97,7 @@ Educational content is **pure data**. Presentation is **one generic runner** plu
 | --- | --- | --- | --- |
 | Content | `src/data/activities/<id>.json` | Metadata, prompts, answers, hints, narration, `visual` assets (`{ item, count }`) | JSX, CSS, React, scoring, shared phrases like “Correct — nice!” |
 | Shared wording | `src/data/copy.ts` | Instructions, feedback titles, buttons, kind labels | Per-quest stems |
-| UI | `ActivityRunner` + `components/questions/*` | Layout, objects pictures, Hear it, marking | Quest-specific copy or one-off screens |
+| UI | `ActivityRunner` + `components/questions/*` | Layout, objects pictures, speaker icon, marking | Quest-specific copy or one-off screens |
 
 Do not put emoji strings in JSON. Use `"visual": { "item": "apple", "count": 3 }`. The `ObjectGroup` component draws the picture. To change how apples look, edit that component once.
 
@@ -118,7 +118,7 @@ Every new activity **must**:
 6. Target a clear UK year group (and ability band) — not “all ages”.
 7. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
 8. Encourage mastery: per-question `explanation`, retry of missed items, and a `masteryThreshold`.
-9. Write `narration` wherever the voice would mangle the stem (`+`, `−`, pictures).
+9. Write `narration.prompt` wherever the voice would mangle the stem (`+`, `−`). Spoken text is the **question only** — never the answer.
 10. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
 11. Run the self-review checklist in `QUALITY.md` before you push.
 
@@ -128,7 +128,7 @@ Content never embeds a new UI. Adding a kind is a schema + component change:
 
 1. Add the kind to `QUESTION_KINDS` and the discriminated union in `src/types/activity.ts`.
 2. Teach `src/lib/answers.ts` (`isAnswerCorrect`, `emptyAnswerFor`, `hasProvidedAnswer`).
-3. Teach `src/lib/narration.ts` if it has extra spoken parts.
+3. Spoken read-aloud is the question prompt only (`spokenPrompt` in `src/lib/narration.ts`). Do not add a path that reads options or answers.
 4. Add a component in `src/components/questions/<Kind>.tsx` (data in, answers out — no quest-specific copy).
 5. Register it in `QUESTION_VIEWS` in `src/components/questions/QuestionView.tsx`.
 6. Add a kind label in `src/data/copy.ts` (`KIND_LABELS`).
@@ -224,22 +224,24 @@ Follow `QUALITY.md` for the full wording templates, distractor rules, variety ru
 
 ## Narration (read aloud)
 
-Every question screen has a **Hear it** button. It uses the browser Web Speech API (`speechSynthesis`): free, no AI service, works offline. The helper in `src/lib/speech.ts` picks the best **en-GB** voice it can find (prefer natural / neural / “Google UK English” / “Microsoft … Online (Natural)”) at a calm child-friendly rate.
+A small **speaker icon** sits inline, immediately after the question text. It uses the browser Web Speech API (`speechSynthesis`): free, no AI service, works offline. The helper in `src/lib/speech.ts` picks the best **en-GB** voice it can find (prefer natural / neural / “Google UK English” / “Microsoft … Online (Natural)”) at a calm child-friendly rate.
 
-Spoken text comes from optional `question.narration`, then falls back to the visible prompt / labels / hint / explanation. A line may be a string or `{ text, audioSrc }` so we can later swap in a pre-generated file. Do not add audio files unless asked.
+**Narration is the question only.** It must never reveal or hint the answer. Do not read options, pictured object counts, fill-blank answers, hints, or teaching feedback.
+
+Spoken text is `question.narration.prompt`, falling back to the visible `prompt`. A line may be a string or `{ text, audioSrc }` so we can later swap in a pre-generated file. Do not add audio files unless asked.
 
 Write narration-friendly copy:
 
 - Say numbers and symbols in words: “7 plus what equals 10?”, not “7 + ? = 10”.
-- Describe pictures: “Count the three apple pictures”, not a string of emoji.
-- Keep the same meaning as the screen. Do not hide the answer in the spoken prompt.
-- Always fill `narration` when the stem has emoji, `+`, `−`, `=`, `?`, or picture-only options.
+- Ask the question. Never add “there are three pictures”, option lists, or the explanation.
+- Keep the same meaning as the on-screen prompt. Do not hide the answer, and do not give it away.
+- Always fill `narration.prompt` when the stem has `+`, `−`, `=`, or `?` the voice would mangle.
 
-While speech plays, the runner highlights words in the prompt (and feedback) as they are read. If you want that highlight to stay lined up, keep the first words of `narration.prompt` the same as the visible `prompt`.
+While speech plays, the runner highlights words in the prompt as they are read. If you want that highlight to stay lined up, keep the first words of `narration.prompt` the same as the visible `prompt`.
 
 ### Elevating written sentences (later)
 
-Shipped now: Hear it + word highlighting. Later ideas (do not build unless asked): illustrated stems beside the words, stricter shared sentence templates, neater karaoke wrapping, `audioSrc` files. See `QUALITY.md`.
+Shipped now: speaker icon after the question + word highlighting. Later ideas (do not build unless asked): illustrated stems beside the words, stricter shared sentence templates, neater karaoke wrapping, `audioSrc` files. See `QUALITY.md`.
 
 ### Allowed question kinds
 
@@ -370,7 +372,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 1. `QUALITY.md` self-review checklist is all ticks.
 2. `npm run build` succeeds in `primary-learn/` (no lint, no tests).
 3. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable when that row should be unlocked.
-4. Hear it reads the prompt (and choices). A miss shows teaching feedback.
+4. The speaker reads the question only (no options, counts, or answers). A miss shows teaching feedback on screen.
 5. Completing it updates local progress (marks / mastery / stars) and survives a refresh.
 6. README / `curriculum/coverage.md` / the node status in `maths.md` updated if the catalogue meaningfully changes.
 7. Commit and push to `main` (no PRs).

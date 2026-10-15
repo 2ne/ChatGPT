@@ -30,7 +30,9 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-1",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "prompt": "Which number goes with 6 to make 10?",
       "options": [
         {
@@ -54,21 +56,15 @@
       "hint": "Count on from 6 until you reach 10.",
       "explanation": "6 + 4 = 10, so 4 is the bond partner for 6.",
       "narration": {
-        "prompt": "Which number goes with 6 to make 10?",
-        "options": {
-          "a": "2",
-          "b": "3",
-          "c": "4",
-          "d": "5"
-        },
-        "hint": "Count on from 6 until you reach 10.",
-        "explanation": "6 plus 4 equals 10, so 4 is the bond partner for 6."
+        "prompt": "Which number goes with 6 to make 10?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-2",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "prompt": "Which pair adds up to 10?",
       "options": [
         {
@@ -91,14 +87,7 @@
       "correctId": "b",
       "explanation": "3 + 7 = 10. The others make 9 or 11.",
       "narration": {
-        "prompt": "Which pair adds up to 10?",
-        "options": {
-          "a": "2 and 7",
-          "b": "3 and 7",
-          "c": "4 and 7",
-          "d": "1 and 8"
-        },
-        "explanation": "3 plus 7 equals 10. The others make 9 or 11."
+        "prompt": "Which pair adds up to 10?"
       }
     },
     {
@@ -114,11 +103,7 @@
       "hint": "How many more to get from 8 to 10?",
       "explanation": "8 + 2 = 10.",
       "narration": {
-        "prompt": "Complete the number bond.",
-        "prefix": "8 plus",
-        "suffix": "equals 10",
-        "hint": "How many more to get from 8 to 10?",
-        "explanation": "8 plus 2 equals 10."
+        "prompt": "Complete the number bond. 8 plus what equals 10?"
       }
     },
     {
@@ -133,10 +118,7 @@
       "inputMode": "numeric",
       "explanation": "1 + 9 = 10.",
       "narration": {
-        "prompt": "Complete the number bond.",
-        "prefix": "1 plus",
-        "suffix": "equals 10",
-        "explanation": "1 plus 9 equals 10."
+        "prompt": "Complete the number bond. 1 plus what equals 10?"
       }
     },
     {
@@ -151,16 +133,15 @@
       "inputMode": "numeric",
       "explanation": "5 + 5 = 10. This is a double!",
       "narration": {
-        "prompt": "Complete the number bond.",
-        "prefix": "5 plus",
-        "suffix": "equals 10",
-        "explanation": "5 plus 5 equals 10. This is a double!"
+        "prompt": "Complete the number bond. 5 plus what equals 10?"
       }
     },
     {
       "kind": "multi-select",
       "id": "nb10-ms-1",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "prompt": "Tap every pair that makes 10.",
       "options": [
         {
@@ -186,20 +167,15 @@
       ],
       "explanation": "0 + 10 and 4 + 6 both equal 10. 2 + 9 = 11 and 7 + 2 = 9.",
       "narration": {
-        "prompt": "Tap every pair that makes 10.",
-        "options": {
-          "a": "0 plus 10",
-          "b": "2 plus 9",
-          "c": "4 plus 6",
-          "d": "7 plus 2"
-        },
-        "explanation": "0 plus 10 and 4 plus 6 both equal 10. 2 plus 9 is 11 and 7 plus 2 is 9."
+        "prompt": "Tap every pair that makes 10."
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-4",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "prompt": "Which number is missing? 7 + ? = 10",
       "options": [
         {
@@ -223,15 +199,7 @@
       "hint": "Count on from 7: 8, 9, 10.",
       "explanation": "7 + 3 = 10, so the missing number is 3.",
       "narration": {
-        "prompt": "Which number is missing? 7 plus what equals 10?",
-        "options": {
-          "a": "2",
-          "b": "3",
-          "c": "4",
-          "d": "5"
-        },
-        "hint": "Count on from 7. 8, 9, 10.",
-        "explanation": "7 plus 3 equals 10, so the missing number is 3."
+        "prompt": "Which number is missing? 7 plus what equals 10?"
       }
     },
     {
@@ -262,33 +230,20 @@
       ],
       "explanation": "3+7, 9+1, 0+10 and 6+4 are all bonds to 10.",
       "narration": {
-        "prompt": "Match each number to its partner that makes 10.",
-        "pairs": {
-          "p1": {
-            "left": "3",
-            "right": "7"
-          },
-          "p2": {
-            "left": "9",
-            "right": "1"
-          },
-          "p3": {
-            "left": "0",
-            "right": "10"
-          },
-          "p4": {
-            "left": "6",
-            "right": "4"
-          }
-        },
-        "explanation": "3 plus 7, 9 plus 1, 0 plus 10 and 6 plus 4 are all bonds to 10."
+        "prompt": "Match each number to its partner that makes 10."
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10-mc-3",
       "randomise": {
-        "items": ["apple", "banana", "star", "balloon", "car"],
+        "items": [
+          "apple",
+          "banana",
+          "star",
+          "balloon",
+          "car"
+        ],
         "shuffleOptions": true
       },
       "prompt": "Sam has 10 {items} and eats 2. How many are left?",
@@ -313,14 +268,7 @@
       "correctId": "c",
       "explanation": "10 − 2 = 8. That uses the bond 2 + 8 = 10.",
       "narration": {
-        "prompt": "Sam has 10 {items} and eats 2. How many are left?",
-        "options": {
-          "a": "6",
-          "b": "7",
-          "c": "8",
-          "d": "9"
-        },
-        "explanation": "10 take away 2 equals 8. That uses the bond 2 plus 8 equals 10."
+        "prompt": "Sam has 10 {items} and eats 2. How many are left?"
       }
     },
     {
@@ -334,9 +282,7 @@
       "inputMode": "numeric",
       "explanation": "Because 4 + 6 = 10, 10 − 4 = 6.",
       "narration": {
-        "prompt": "What is the missing number?",
-        "prefix": "10 take away 4 equals",
-        "explanation": "Because 4 plus 6 equals 10, 10 take away 4 equals 6."
+        "prompt": "What is the missing number? 10 take away 4 equals what?"
       }
     }
   ],

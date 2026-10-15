@@ -112,18 +112,19 @@ Every question needs `explanation`. Hints are optional and must follow the scaff
 
 ## Narration (read aloud)
 
-Pre-readers tap **Hear it**. Speech uses `question.narration` and falls back to the visible text.
+Pre-readers tap the **speaker icon** after the question. Speech uses `question.narration.prompt` and falls back to the visible prompt.
 
-Write `narration` whenever the stem has emoji, operators, or symbols a voice will mangle (`🍎🍎🍎`, `7 + ? = 10`, `10 − 4 =`).
+**Question only.** Never read the answer, answer options, how many pictures are on screen, a hint, or the explanation. Those leak the mark to a child who cannot yet read.
 
-- Say numbers and signs in words: “7 plus what equals 10?”, “three apple pictures”, “10 take away 4 equals”.
-- Keep the same meaning as the screen. Do not add hints in the spoken prompt.
-- Options that are only emoji need a spoken label (`"5 frogs"`).
+Write `narration.prompt` whenever the stem has operators or symbols a voice will mangle (`7 + ? = 10`, `10 − 4 =`).
+
+- Say numbers and signs in words: “7 plus what equals 10?”, “10 take away 4 equals what?”
+- Same meaning as the on-screen prompt. Do not add “count the three pictures” or option lists.
 - `narration.prompt` may be a string, or `{ text, audioSrc }` for a later audio file. Do not invent audio files.
 
 ## Gold-standard example
 
-Copy the shape of this item from `count-to-5.json`. It is Easy, first third of the ramp, one step, objects as data (not emoji in the prompt), a hint, a teaching explanation, spoken copy, and an off-by-one distractor set.
+Copy the shape of this item from `count-to-5.json`. It is Easy, first third of the ramp, one step, objects as data (not emoji in the prompt), a hint, a teaching explanation, question-only narration, and an off-by-one distractor set.
 
 ```json
 {
@@ -141,12 +142,7 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
   "correctId": "b",
   "hint": "Point to each {item} and say a number: 1, 2, 3.",
   "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
-  "narration": {
-    "prompt": "How many {items}? Count the three {item} pictures.",
-    "options": { "a": "2", "b": "3", "c": "4", "d": "5" },
-    "hint": "Point to each {item} and say a number. One, two, three.",
-    "explanation": "Touch each {item} once and count. One, two, three. There are 3 {items}."
-  }
+  "narration": { "prompt": "How many {items}?" }
 }
 ```
 
@@ -168,18 +164,18 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] Distractors are named misconceptions, not random
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed
 - [ ] At least three question kinds in a 10+ quest; same kind not overused
-- [ ] `narration` written for emoji, `+`, `−`, `=`, `?` and picture-only options
+- [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
 - [ ] 8–16 questions; `masteryThreshold` 0.8 unless there is a real reason
 - [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
 - [ ] No shared phrases (“Correct — nice!”, “Need a hint?”) copied into the JSON — those live in `src/data/copy.ts`
 - [ ] `npm run build` in `primary-learn/` succeeds
-- [ ] You opened the quest in the app: Hear it reads the first question, a miss shows the explanation, the map row is correct
+- [ ] You opened the quest in the app: the speaker after the question reads the question only, a miss shows the explanation, the map row is correct
 
 ## Elevating written sentences (later)
 
-Already shipped: **Hear it** and **word highlighting** as the sentence is read.
+Already shipped: **speaker icon** after the question and **word highlighting** as it is read.
 
 Ideas to add later — do not build them unless asked:
 
