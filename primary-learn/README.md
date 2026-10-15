@@ -1,6 +1,8 @@
 # Primary Maths
 
-Interactive UK primary maths for children. Learners pick a name and avatar, practise maths quests, and build mastery — with marks stored in **localStorage** on this device (no accounts). Other subjects are out of scope.
+Rapid prototype of an interactive UK primary learning pathway for children. The long-term vision is **every UK curriculum subject**, start to finish. **Maths is the current phase** — it is where we started, not a permanent limit.
+
+Learners pick a name and avatar, follow a locked path of levels, and play **Easy / Medium / Hard** on each node. Mastering all three means the child can do that skill. Marks live in **localStorage** on this device (no accounts). Browser-only storage is intentional while prototyping — reset is easy.
 
 ## Live prototype
 
@@ -8,12 +10,21 @@ https://2ne.github.io/ChatGPT/primary-learn/
 
 ## Status
 
-Foundation release: profile onboarding, a single maths quest list (no subject or year filters), shared interactive runner, progress/mastery tracking, and a sample **Year 1 number bonds to 10** quest. Agent instructions in `AGENTS.md` define how to add further maths quests.
+Foundation release: profile onboarding, a locked path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, and two Easy quests (`count-to-5` on node 1, `number-bonds-to-10` on node 13). Medium and Hard are not written yet.
+
+**Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes or subjects.
+
+Agent instructions in `AGENTS.md` define how to add quests so they appear on the map.
+
+## Rapid prototype
+
+Agents work directly on `main`. No pull requests. No test suites. No linting required. `npm run build` in this folder is the check.
 
 ## What it does
 
 - Asks for a child’s name and woodland avatar on first visit
-- Lists maths quests by title, with stars and a best score
+- Shows the maths path as a winding road of numbered levels (not a free-choice list)
+- Each level opens a sheet with Easy / Medium / Hard; later levels stay locked until the previous Easy is mastered
 - Runs interactive question kinds (multiple choice, multi-select, fill blank, ordered, match pairs)
 - Retries missed questions in a calm mastery loop, without changing the first-try mark
 - Saves best score and mastery per activity in localStorage
@@ -24,32 +35,33 @@ Follow **`AGENTS.md`** strictly. In short:
 
 1. Add `src/data/activities/<kebab-id>.ts` exporting a typed `Activity`
 2. Register it in `src/data/activities/index.ts`
-3. Fill required metadata: year group(s), ability, subject, type, curriculum ref, mastery threshold, skills
-4. Prefer 10–16 interactive questions with explanations aimed at mastery
+3. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
+4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, skills
+5. Prefer 10–16 interactive questions with explanations aimed at mastery. Harder levels should be more demanding, not a copy of Easy
 
-Do not invent a parallel format or hard-code one-off activity screens in `App.tsx`.
+Do not invent a parallel format or hard-code one-off activity screens in `App.tsx`. Prefer filling Medium / Hard on shipped nodes before adding a new node.
 
 ## Design
 
-Visual system is documented in **`DESIGN.md`** (Khan Academy / Wonder Blocks–inspired: Lato, blue actions, flat off-white surfaces, strict 8px spacing). Agents must follow it for all UI changes.
+Visual system is documented in **`DESIGN.md`** (Baloo 2 + Nunito, indigo actions, warm paper, path-map home). Agents must follow it for all UI changes.
 
 ## Curriculum map
 
 UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 
-- `curriculum/overview.md` — stages and ages  
-- `curriculum/maths.md` — the path: 45 categories and 124 quest nodes, in order  
-- `curriculum/audit.md` — how to check that path before adding a quest  
-- `curriculum/coverage.md` — how many nodes are still missing  
+- `curriculum/overview.md` — stages, ages, and product vision
+- `curriculum/maths.md` — the path: 45 categories and 124 nodes, in order
+- `curriculum/audit.md` — how to check that path before adding a quest
+- `curriculum/coverage.md` — how many nodes are still missing
 
-The next quest to build is the first `missing` node (`eyfs-subitise-5`). Do not skip ahead.
+Each node can hold three quests (Easy / Medium / Hard). The next *new* node is the first `missing` one (`eyfs-subitise-5`), but write Medium / Hard for `eyfs-count-5` first.
 
 ## Stack
 
 - React 19 + TypeScript
 - Vite
 - Tailwind CSS v4
-- Lato / Noto Sans
+- Baloo 2 / Nunito
 
 ## Commands
 
@@ -65,16 +77,19 @@ npm run preview
 
 ## Key decisions
 
-- **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`
-- **Maths only** — the quest map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order, audited with `curriculum/audit.md`
+- **Rapid prototype** — push to `main`, no PRs, no tests, no lint required; build is the check
+- **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`. localStorage only, on purpose
+- **Maths first** — the current map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order. Other subjects are a later phase
+- **Three levels** — every node has Easy / Medium / Hard. The map uses `pathNode` + `difficulty`. Mastering all three means the child can do it
+- **Improve before expanding** — finish and tighten shipped quests before adding new nodes
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
-- **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods in the header, feedback reactions, and the finish screen. No WebGL. Question cards carry a rainbow ribbon and a numbered prompt badge
+- **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
 
 ## Limitations
 
-- Only two quests ship so far: `count-to-5` (node 1) and `number-bonds-to-10` (node 13)
+- Only two Easy quests ship so far: `count-to-5` (node 1) and `number-bonds-to-10` (node 13). No Medium or Hard yet
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag

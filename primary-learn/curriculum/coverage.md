@@ -2,6 +2,8 @@
 
 The full path, names and statuses live in [maths.md](./maths.md). How to check a quest against that path is in [audit.md](./audit.md). Do not keep a second copy of the nodes here.
 
+Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bullets. Map stars are separate: one star per mastered difficulty.
+
 ## Snapshot
 
 | | Count |
@@ -21,6 +23,8 @@ The full path, names and statuses live in [maths.md](./maths.md). How to check a
 
 ## Next quest to build
 
-`eyfs-subitise-5` — See numbers to 5. It is node 2, and it follows node 1 (`eyfs-count-5`).
+Improve first: Medium, then Hard, for `eyfs-count-5` (`count-to-5` is Easy only). Then Medium / Hard for `y1-bonds-10` if that node is still being tightened.
 
-Do not build `y1-bonds-20` or any later node while an earlier node is still `missing`.
+When expanding the path, the first `missing` node is `eyfs-subitise-5` — See numbers to 5 (node 2, after `eyfs-count-5`). Start that node with Easy.
+
+Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.

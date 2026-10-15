@@ -6,18 +6,21 @@ Sources: [EYFS statutory framework](https://www.gov.uk/government/publications/e
 
 The aims that run through every quest are fluency, reasoning and problem solving. They are not separate categories.
 
+Maths is the **current phase** of a longer product that should eventually cover every UK curriculum subject. Do not add other subjects in this file until asked.
+
 ## How the path works
 
 - **Categories** are the chapters a learner will see, in the order below.
-- **Nodes** are the quests inside a category, also in order. One quest per node.
-- A new learner starts at node 1 only. Every later node stays locked until the node before it is mastered.
-- Finishing the last node of a category is what opens the next category. There is no second route.
+- **Nodes** are the levels inside a category, also in order. The home path map (`PathMap`) shows one stop per node.
+- **Each node has three quests:** Easy (`difficulty: 1`), Medium (`2`), Hard (`3`). Mastering all three means the child can do that skill. The map shows up to three stars per node.
+- Place a quest with `pathNode` = this node’s id and `difficulty` = `1` | `2` | `3`. Also set `curriculumRef` to the same id (audit only; the map does not read it).
+- A new learner starts at node 1 only. Every later node stays locked until the **previous node’s Easy** is mastered. On an open node, Medium needs Easy mastered and Hard needs Medium mastered.
+- Finishing Easy on the last node of a category is what opens the next category. There is no second route.
 - **Ids are permanent.** Category ids (`cat-…`) and node ids (`eyfs-…`, `y1-…`) are the names the app and quests must use. Do not rename them. Do not reuse a retired id.
 - Child-facing titles in this file are the titles to show. Do not invent a parallel set of names.
-- A quest’s `curriculumRef` must be exactly the node id it teaches.
-- **Status:** `missing` (no quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quest covers the bullets).
+- **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-The next quest to write is the first `missing` node: `eyfs-subitise-5`. Live quests: `count-to-5` is node 1 (`eyfs-count-5`) and `number-bonds-to-10` is node 13 (`y1-bonds-10`).
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Live Easy quests: `count-to-5` is node 1 (`eyfs-count-5`) and `number-bonds-to-10` is node 13 (`y1-bonds-10`). The first `missing` node is still `eyfs-subitise-5`.
 
 ## Category index
 

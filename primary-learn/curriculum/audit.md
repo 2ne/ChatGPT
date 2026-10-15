@@ -2,6 +2,14 @@
 
 Use this before writing a quest, and again after it ships. The path in [maths.md](./maths.md) is the source of names. Do not invent a second list of categories or quest titles.
 
+The home screen **is** the path map (`PathMap` + `LevelSheet`, driven by `buildLevels` in `src/lib/path.ts`). Categories, order and locks come from `maths.md` via `src/data/path.generated.ts`.
+
+## Vision for this file
+
+Maths is the **current phase** of a longer pathway that should eventually cover every UK curriculum subject. Do not add other subjects here until asked.
+
+Every node has **three levels**: Easy (`difficulty: 1`), Medium (`2`), Hard (`3`). Mastering all three means the child can do that skill. Prefer writing the missing Medium / Hard quests on shipped nodes before adding a new node.
+
 ## What “covered” means
 
 The England primary maths curriculum here is:
@@ -15,27 +23,47 @@ A node is:
 
 | Status | Meaning |
 | --- | --- |
-| `missing` | No quest yet |
-| `partial` | A quest exists, but at least one bullet under that node is still untaught |
-| `done` | The quest teaches every bullet under that node, and mastery is recorded |
+| `missing` | No Easy quest yet |
+| `partial` | At least one quest exists, but at least one bullet under that node is still untaught |
+| `done` | A quest teaches every bullet under that node, and mastery is recorded |
+
+Node status in this file is about **curriculum coverage**, not map stars. The map treats a node as playable-complete (`done` in `buildLevels`) once **Easy** is mastered; Medium and Hard still earn the second and third stars.
 
 Run `node curriculum/check-path.mjs` from the `primary-learn` folder. It checks that there are 124 nodes and 45 categories, that the numbers run 1 to 124, and that each node requires the one before it.
 
+## How the map finds a quest
+
+`buildLevels` looks up `${activity.pathNode}:${activity.difficulty}`.
+
+- Set `pathNode` to the node id (for example `eyfs-count-5`).
+- Set `difficulty` to `1`, `2`, or `3`.
+- Set `curriculumRef` to the same node id (audit / coverage). The map does not read `curriculumRef`.
+
+If those two map fields are missing, the quest will not appear even if it is registered.
+
+Locks in the product:
+
+- Only node 1 starts unlocked, and only if it has an Easy quest.
+- Unlock node *n* when node *n − 1* Easy is mastered.
+- On an open node, Medium needs Easy mastered; Hard needs Medium mastered.
+- A node with no Easy quest shows as coming soon.
+
 ## Checks before creating quests
 
-1. Open `maths.md` and find the first node whose status is `missing`. That is the only quest to build next. Do not skip to a later category.
-2. Copy the node id and the child-facing title. The quest `curriculumRef` must be that id. The quest title should be that title, unless a shorter child-facing line is already written there.
-3. Read the **Covers** bullets. The quest has to teach those, not a neighbouring topic.
-4. Confirm the node’s **Requires** id is the previous node in the file. If it is not, the path is broken — fix `maths.md` before writing the quest.
-5. Do not add a category, rename an id, or insert a node in the middle without updating the numbers, the requires chain, and the category index.
+1. Prefer a missing Medium or Hard on a node that already has Easy. Today that is `eyfs-count-5` (then `y1-bonds-10`). Do not skip ahead to a later category when the job is to improve what exists.
+2. When expanding, open `maths.md` and find the first node whose status is `missing`. That is the only *new* node to build, and you should start with Easy. Do not skip to a later category.
+3. Copy the node id and the child-facing title. `pathNode` and `curriculumRef` must be that id. The quest title should be that title, unless a shorter child-facing line is already written there.
+4. Read the **Covers** bullets. The Easy / Medium / Hard set for that node has to teach those, not a neighbouring topic. Harder levels go deeper on the same bullets.
+5. Confirm the node’s **Requires** id is the previous node in the file. If it is not, the path is broken — fix `maths.md` before writing the quest.
+6. Do not add a category, rename an id, or insert a node in the middle without updating the numbers, the requires chain, and the category index.
 
 ## Checks after a quest ships
 
-1. Set the node status to `partial` or `done` in `maths.md`.
+1. Set the node status to `partial` or `done` in `maths.md` when Easy exists. Note which difficulties exist on the **Quest** line.
 2. Put the activity id on that node’s **Quest** line.
 3. Update the scoreboard in [coverage.md](./coverage.md).
-4. Confirm `curriculumRef` on the activity equals the node id.
-5. Leave later nodes locked in the product. A learner may open a node only after the previous node is mastered. The path screen that enforces this is not built yet; do not ship quests as a free-choice catalogue that ignores the order.
+4. Confirm `pathNode` and `curriculumRef` equal the node id, and `difficulty` is `1`, `2`, or `3`.
+5. Confirm the quest appears on the path map in the right Easy / Medium / Hard row, and that later nodes stay locked until the previous Easy is mastered.
 
 ## Domain checklist
 
@@ -95,14 +123,8 @@ Use this to see which categories hold each official block. If a programme-of-stu
 
 Year 1 has no statistics programme, and position and direction returns in Year 4. That matches the statutory programmes, so those are not gaps.
 
-## What the next build should do with this
+## What the path screen already does
 
-When the path screen is built:
+Home shows categories in index order, using the category id and title from `maths.md`. Inside a category, nodes appear in number order. Only node 1 (`eyfs-count-5`) starts unlocked. Node *n* unlocks when node *n − 1* Easy is mastered. There is no jump to a later category.
 
-- Show the categories in the index order, using the category id and title from `maths.md`.
-- Inside a category, show nodes in number order, using the node id and title.
-- Only node 1 (`eyfs-count-5`) starts unlocked.
-- Unlock node *n* only when node *n − 1* is mastered.
-- Do not offer a way to jump to a later category.
-
-Until that screen exists, shipped quests can still appear on the home list. `number-bonds-to-10` is node 13. It is not the start of the path.
+`number-bonds-to-10` is node 13. It stays locked on the map until the Easy quests before it are mastered. That is expected.

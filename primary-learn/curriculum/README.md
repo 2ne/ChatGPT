@@ -2,16 +2,18 @@
 
 Working notes for **Primary Maths**, distilled from official DfE sources so we can build quests in the right order and see gaps.
 
-This app teaches **mathematics only**. Do not add English, science, or foundation-subject pathways.
+**Current phase:** mathematics only. The long-term product is a pathway for every UK curriculum subject — do not add English, science, or foundation-subject pathways until asked.
+
+Each node has **three levels** (Easy / Medium / Hard). Prefer finishing those on shipped nodes before adding a new node. See `../AGENTS.md`.
 
 ## How to use these files
 
-1. Open `maths.md` and take the first node marked `missing`.
+1. Prefer a missing Medium or Hard on a node that already has Easy. When expanding, open `maths.md` and take the first node marked `missing`.
 2. Follow `audit.md` before and after writing that quest.
-3. Use that node’s id as `curriculumRef` and its title as the quest name.
+3. Use that node’s id as `pathNode` and `curriculumRef`, set `difficulty` to `1` / `2` / `3`, and use its title as the quest name. The map looks up `pathNode` + `difficulty`.
 4. Update the node status in `maths.md` and the scoreboard in `coverage.md`.
 
-Agents: when creating quests, set `curriculumRef` and `skills` to match a node in these files. See also `../AGENTS.md`.
+Agents: when creating quests, set `pathNode`, `difficulty`, `curriculumRef` and `skills` to match a node in these files.
 
 ## Files
 

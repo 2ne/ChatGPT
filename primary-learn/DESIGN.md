@@ -11,8 +11,9 @@ rules, change the design — do not invent a second system.
 
 1. **Always know where you are** — every activity screen shows the quest name
    and `Question X of N`. Never a bare question on a blank page.
-2. **One job per screen** — onboarding asks name; home picks a quest; activity
-   asks one question.
+2. **One job per screen** — onboarding asks name; home follows the path and
+   opens a level; the level sheet picks Easy / Medium / Hard; activity asks
+   one question.
 3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
@@ -37,9 +38,7 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 **Rules**
 
 - Sticky `AppHeader` on home / onboarding (hidden during a quest): Pip tile + "Primary *Maths*" wordmark.
-  Once a learner has a name, the logo and wordmark are a button that returns home.
-  (indigo gradient on "Path") + tagline, learner chip on the right, Exit pill
-  during activities.
+  Once a learner has a name, the logo and wordmark are a button that returns to the path map.
 - Question cards show a small Pip **only inside feedback** (reaction). Never
   wallpaper Pip around the screen, and do not put Pip on the home greeting
   banner — the learner's own buddy emoji is who they are.
@@ -77,6 +76,7 @@ Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
 
 **Fonts:** `Baloo 2` (display: titles, buttons, options) + `Nunito` (body).
 Loaded from Google Fonts. Rounded letterforms read friendly at kid sizes.
+Do not switch back to Lato / Noto Sans.
 
 | Role | Style | When to use |
 | --- | --- | --- |
@@ -113,7 +113,7 @@ every question feels like part of the quest.
 
 72px sticky, blurred paper, 2px bottom border. Left: white Pip tile vertically
 centred with the "Primary Maths" wordmark (no tagline). Clicking the logo or
-name returns to the quest list. Right: learner chip
+name returns to the path map. Right: learner chip
 (avatar face centred in its circle + name) + Reset text on the home screen.
 
 **Hidden during a quest.** Intro, questions and summary use in-page exits
@@ -122,12 +122,17 @@ name returns to the quest list. Right: learner chip
 ### Home
 
 1. **Hero** — indigo→violet gradient panel, very faint dot texture, sun accent:
-   `Hi, {name}!` + buddy emoji, subline, stat pills (stars, quests done).
-   No mascot on this banner.
-2. **Quest list** — one list, no subject chips, year chips, or category pills.
-3. **Quest cards** — orange calculator tile · Baloo title · one-line summary ·
-   best-score micro-bar · status pill (`New quest` / `Best X of N` / `Done!`) ·
-   dark `Play →` button that turns gradient on hover. Whole card is the hit target.
+   `Hi, {name}!` + buddy emoji, subline (`Follow the path and earn your stars.`),
+   stat pills (stars out of levels × 3, levels done). No mascot on this banner.
+2. **Path map** (`PathMap`) — a winding road of numbered stops, grouped by
+   category signs from `curriculum/maths.md`. No subject chips, year chips, or
+   a free-choice quest list. Locked stops show a lock; the current stop carries
+   the learner’s buddy face. Up to three small stars sit under a stop (one per
+   mastered Easy / Medium / Hard).
+3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
+   rows. Play only when that row is unlocked. Coming-soon nodes (no Easy quest
+   yet) and locked nodes get a calm Pip / lock note instead of play buttons.
+4. **Find me** — `Go to my level` scrolls the page to the current stop.
 
 ### Activity intro
 
@@ -206,7 +211,7 @@ Pip blinks/sways/twinkles.
 - Focus ring: 3px `--primary`.
 - Hit targets ≥ 48px (options 64px, CTAs 52px).
 - `role="progressbar"` with `aria-valuetext`; stars have `aria-label`;
-  live regions for feedback and quest lists.
+  live regions for feedback and the path map.
 
 ## Anti-patterns (fix these)
 
@@ -216,6 +221,6 @@ Pip blinks/sways/twinkles.
 | Thin lonely progress line | Segmented per-question bar + count + cheer line |
 | Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
 | 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
-| Subject or year filter chips | One maths quest list |
+| Subject or year filter chips | One maths path map (other subjects are a later phase) |
 | Emoji-only tiles | Lucide calculator tile in maths orange |
 | Identical Check/Continue | Labelled actions: `Check it` → `Next question` → `See my stars` |
