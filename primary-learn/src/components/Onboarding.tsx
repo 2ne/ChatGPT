@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { ArrowRight, PartyPopper, ShieldCheck } from "lucide-react";
 import { AVATARS } from "../data/avatars";
+import { copy } from "../data/copy";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
 import { Pip } from "./mascot/Pip";
 
@@ -36,26 +37,23 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   }
 
   return (
-    <main className="page page-narrow page-under-header">
-      <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
-        <div className="onboard-wrap">
-          <span className="onboard-badge">
-            <PartyPopper size={15} aria-hidden /> Your learning adventure starts here
-          </span>
-          <Pip size={104} mood="cheer" />
-          <div style={{ display: "grid", gap: 6 }}>
-            <h1 className="t-title">What’s your name?</h1>
-            <p className="t-body">
-              Pick a name and a buddy. Your stars stay on this device — no sign-in.
-            </p>
-          </div>
+    <main className="onboard-page">
+      <section className="onboard-hero" aria-label={copy.setupTitle}>
+        <span className="onboard-badge">
+          <PartyPopper size={16} aria-hidden /> {copy.setupBadge}
+        </span>
+        <div className="onboard-pip">
+          <Pip size={220} mood="cheer" followPointer />
         </div>
+        <p className="sidekick-bubble onboard-hello">{copy.pipHello}</p>
+        <h1 className="t-display onboard-title">{copy.setupTitle}</h1>
+        <p className="t-body onboard-lead">{copy.setupSub}</p>
+      </section>
 
-        <form style={{ display: "grid", gap: "var(--space-4)" }} onSubmit={handleSubmit}>
+      <section className="card onboard-panel">
+        <form className="onboard-form" onSubmit={handleSubmit}>
           <label className="field">
-            <span className="t-title-sm" style={{ fontSize: 17 }}>
-              First name
-            </span>
+            <span className="t-title-sm">{copy.firstName}</span>
             <input
               value={name}
               onChange={(event) => {
@@ -65,14 +63,12 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               autoComplete="nickname"
               maxLength={20}
               placeholder="e.g. Ava"
-              aria-label="First name"
+              aria-label={copy.firstName}
             />
           </label>
 
-          <fieldset style={{ border: 0, margin: 0, padding: 0 }}>
-            <legend className="t-title-sm" style={{ fontSize: 17, marginBottom: 12 }}>
-              Choose your buddy
-            </legend>
+          <fieldset className="onboard-buddies">
+            <legend className="t-title-sm">{copy.chooseBuddy}</legend>
             <div className="avatar-grid">
               {AVATARS.map((avatar) => {
                 const selected = avatar.id === avatarId;
@@ -91,9 +87,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
                     >
                       {avatar.emoji}
                     </span>
-                    <span className="t-meta" style={{ color: "var(--ink)", fontWeight: 800 }}>
-                      {avatar.label}
-                    </span>
+                    <span className="t-meta avatar-label">{avatar.label}</span>
                   </button>
                 );
               })}
@@ -101,7 +95,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           </fieldset>
 
           {error ? (
-            <p className="feedback is-wrong" role="alert" style={{ margin: 0 }}>
+            <p className="feedback is-wrong" role="alert">
               <span className="feedback-title">Check your name</span>
               <span className="t-body" style={{ color: "var(--ink)" }}>
                 {error}
@@ -110,21 +104,10 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           ) : null}
 
           <button type="submit" className="btn btn-primary btn-block">
-            Let’s go <ArrowRight size={19} aria-hidden />
+            {copy.letsGo} <ArrowRight size={19} aria-hidden />
           </button>
-          <p
-            className="t-meta"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-              textTransform: "none",
-              letterSpacing: 0,
-              fontSize: 13,
-            }}
-          >
-            <ShieldCheck size={14} aria-hidden /> Stays on this device. Nothing is uploaded.
+          <p className="onboard-privacy">
+            <ShieldCheck size={15} aria-hidden /> {copy.staysOnDevice}
           </p>
         </form>
       </section>

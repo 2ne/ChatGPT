@@ -11,9 +11,9 @@ rules, change the design — do not invent a second system.
 
 1. **Always know where you are** — every activity screen shows the quest name
    and `Question X of N`. Never a bare question on a blank page.
-2. **One job per screen** — onboarding asks name; home follows the path and
-   opens a level; the level sheet picks Easy / Medium / Hard; activity asks
-   one question.
+2. **One job per screen** — onboarding sets up the account; home follows the
+   path and opens a level; the level sheet picks Easy / Medium / Hard; activity
+   asks one question.
 3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
@@ -31,14 +31,18 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 | Asset | Use |
 | --- | --- |
-| `Pip` | Header badge (42px in a white tile), feedback reactions, finish screen (112px) |
+| `Pip` | Header badge (42px in a white tile), **onboarding hero** (large, pointer-follow), feedback reactions, finish screen (112px) |
 | Confetti | Short canvas pop on a correct answer; full shower on a mastered summary |
 | Moods | `happy` default · `cheer` on correct + mastery · `think` on wrong + empty states |
 
 **Rules**
 
-- Sticky `AppHeader` on home / onboarding (hidden during a quest): Pip tile + "Primary *Maths*" wordmark.
-  Once a learner has a name, the logo and wordmark are a button that returns to the path map.
+- `AppHeader` on the home path (hidden during onboarding and during a quest):
+  Pip tile + "Primary *Maths*" wordmark. Once a learner has a name, the logo
+  and wordmark are a button that returns to the path map.
+- **Onboarding** shows a **large** Pip (not the header badge). Eyes, head and
+  body tilt toward the pointer (mouse or touch). Idle: gentle bob/breathe plus
+  blink. SVG/CSS only — no WebGL. Off under `prefers-reduced-motion`.
 - Question cards show a small Pip **only inside feedback** (reaction). Never
   wallpaper Pip around the screen, and do not put Pip on the home greeting
   banner — the learner's own buddy emoji is who they are.
@@ -67,7 +71,7 @@ Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
 **Rules**
 
 - Page background is warm paper with a subtle dot grid — never flat grey.
-  Dots cover the full viewport, including behind the sticky header.
+  Dots cover the full viewport, including behind the header.
 - CTAs are the indigo→violet gradient with a 2px deep border + bottom `4px`
   "squishy" shadow (Duolingo-style press). Disabled = 55% opacity, not grey.
 - Correct / incorrect colour appears **only after Check**.
@@ -112,14 +116,16 @@ every question feels like part of the quest.
 
 ### Header
 
-72px sticky, **no fill**. No blur, no bottom bar, no indigo wash — the dotted
-paper runs behind it to the top of the page. Left: white Pip tile vertically
-centred with the "Primary Maths" wordmark in ink (no tagline, no gradient on
-*Maths*). Clicking the logo or name returns to the path map. Right: learner chip
-(avatar face centred in its circle + name) + Reset text on the home screen.
+72px, `position: relative` — **scrolls with the page**, not sticky. **No fill**.
+No blur, no bottom bar, no indigo wash — the dotted paper runs behind it.
+Left: white Pip tile vertically centred with the "Primary Maths" wordmark in
+ink (no tagline, no gradient on *Maths*). Clicking the logo or name returns to
+the path map. Right: learner chip (avatar face centred in its circle + name) +
+Reset text on the home screen.
 
-**Hidden during a quest.** Intro, questions and summary use in-page exits
-(`All quests` / `Exit quest` / `Back to quests`) instead of the global header.
+**Hidden on onboarding and during a quest.** Setup is a full-page welcome.
+Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
+`Back to quests`) instead of the global header.
 
 ### Home
 
@@ -204,18 +210,26 @@ pill when mastered, then `Back to quests` (primary) / `Play again` or
 
 ### Onboarding
 
-Centered card: `Your learning adventure starts here` badge + cheering Pip +
-`What's your name?` + one short line → big Baloo name field → `Choose your
-buddy` avatar grid (3 cols, soft tinted faces, selected = indigo ring + scale)
-→ gradient `Let's go →` → `Stays on this device` reassurance.
+No app header. Full-page setup on the dotted paper:
+
+1. **Hero** — sun badge (`Your learning adventure starts here`) → **large Pip**
+   (follows the pointer; idle bob + blink) → speech bubble (`Hi — I'm Pip…`) →
+   display title **`Set up your Primary Maths account`** → one short body line.
+2. **Card** — big Baloo name field → `Choose your buddy` avatar grid (3 cols,
+   soft tinted faces, selected = indigo ring + scale) → gradient `Let's go →`
+   → `Stays on this device` reassurance.
+
+Touch-first: name field ≥ 64px, buddy tiles ≥ 108px. Same Sunny Path tokens —
+no second visual system.
 
 ## Motion
 
 Cheerful but brief. 120–240ms easings; options lift on hover; cards lift on
 hover; stars pop in sequence; progress segments pop; feedback slides up;
-Pip blinks/sways/twinkles.
+Pip blinks/sways/twinkles. Onboarding Pip also bobs and looks toward the
+pointer (mouse or touch).
 
-`prefers-reduced-motion: reduce` disables all of it.
+`prefers-reduced-motion: reduce` disables all of it (including pointer-follow).
 
 ## Accessibility (kids + WCAG)
 

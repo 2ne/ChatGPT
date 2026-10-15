@@ -307,8 +307,7 @@ p {
 
 /* ——— Header ——— */
 .app-header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 40;
   background: transparent;
 }
@@ -471,15 +470,57 @@ p {
   50% { transform: scale(1.22) rotate(12deg); opacity: 0.85; }
 }
 
+.pip-hero {
+  --look-x: 0;
+  --look-y: 0;
+  overflow: visible;
+}
+
+.pip-hero.pip-cheer {
+  animation: none;
+}
+
+.pip-hero .pip-idle {
+  transform-box: view-box;
+  transform-origin: 48px 90px;
+  animation: pip-breathe 3.4s ease-in-out infinite;
+}
+
+.pip-hero .pip-look {
+  transform-box: view-box;
+  transform-origin: 48px 80px;
+  transform: rotate(calc(var(--look-x) * 8deg)) translate(calc(var(--look-x) * 2px), calc(var(--look-y) * 2px));
+  transition: transform 140ms linear;
+}
+
+.pip-hero .pip-pupils {
+  transform-box: view-box;
+  transform-origin: 48px 44px;
+  transform: translate(calc(var(--look-x) * 5px), calc(var(--look-y) * 4px));
+  transition: transform 90ms linear;
+}
+
+@keyframes pip-breathe {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(-6px) scale(1.035, 0.97); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pip .pip-eyes,
   .pip-cheer,
   .pip-sprout,
   .pip-spark,
+  .pip-hero .pip-idle,
   .question-card,
   .feedback,
   .seg-fill {
     animation: none !important;
+  }
+
+  .pip-hero .pip-look,
+  .pip-hero .pip-pupils {
+    transform: none !important;
+    transition: none !important;
   }
 }
 
@@ -1584,11 +1625,94 @@ p {
 }
 
 /* ——— Onboarding ——— */
-.onboard-wrap {
+.onboard-page {
+  width: 100%;
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-7);
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-5);
+}
+
+.onboard-hero {
+  display: grid;
   justify-items: center;
   text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0 var(--space-2);
+}
+
+.onboard-pip {
+  display: grid;
+  place-items: center;
+  width: min(72vw, 240px);
+  height: min(72vw, 240px);
+}
+
+.onboard-pip .pip-hero {
+  width: 100%;
+  height: 100%;
+}
+
+.onboard-hello {
+  max-width: 28ch;
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 17px;
+  color: var(--ink);
+  background: var(--card);
+  box-shadow: var(--shadow-card);
+}
+
+.onboard-title {
+  margin: 4px 0 0;
+  max-width: 14ch;
+}
+
+.onboard-lead {
+  margin: 0;
+  max-width: 36ch;
+  font-size: 17px;
+}
+
+.onboard-panel {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--max-content);
+  width: 100%;
+  justify-self: center;
+}
+
+.onboard-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.onboard-buddies {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.onboard-buddies legend {
+  margin-bottom: 12px;
+}
+
+.onboard-panel .field input {
+  min-height: 64px;
+  font-size: 22px;
+}
+
+.onboard-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-body);
 }
 
 .onboard-badge {
@@ -1599,9 +1723,9 @@ p {
   border: 2px solid #eed88f;
   color: #7a5b00;
   border-radius: var(--radius-pill);
-  padding: 6px 14px;
+  padding: 8px 16px;
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -1617,7 +1741,7 @@ p {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  min-height: 96px;
+  min-height: 108px;
   padding: 12px 6px 10px;
   border: 2.5px solid var(--line);
   border-radius: 18px;
@@ -1640,10 +1764,18 @@ p {
 .avatar-face {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  font-size: 30px;
+  font-size: 32px;
+}
+
+.avatar-label {
+  color: var(--ink);
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
 }
 
 .field {
@@ -2243,6 +2375,17 @@ p {
   from {
     transform: translateY(24px);
     opacity: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .onboard-page {
+    padding: var(--space-4) var(--space-3) var(--space-6);
+    gap: var(--space-4);
+  }
+
+  .onboard-title {
+    max-width: 12ch;
   }
 }
 

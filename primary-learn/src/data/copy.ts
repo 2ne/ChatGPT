@@ -46,6 +46,14 @@ export const copy = {
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",
+  setupBadge: "Your learning adventure starts here",
+  setupTitle: "Set up your Primary Maths account",
+  setupSub: "Pick a name and a woodland buddy. Your stars stay on this device — no sign-in.",
+  pipHello: "Hi — I'm Pip. Let's get you on the path!",
+  firstName: "First name",
+  chooseBuddy: "Choose your buddy",
+  letsGo: "Let's go",
+  staysOnDevice: "Stays on this device. Nothing is uploaded.",
 } as const;
 
 export const KIND_LABELS: Record<QuestionKind, string> = {

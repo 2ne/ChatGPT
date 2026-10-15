@@ -32,12 +32,7 @@ export default function App() {
   }
 
   if (!profile) {
-    return (
-      <>
-        <AppHeader />
-        <Onboarding onComplete={completeOnboarding} />
-      </>
-    );
+    return <Onboarding onComplete={completeOnboarding} />;
   }
 
   const avatar = getAvatar(profile.avatarId);
