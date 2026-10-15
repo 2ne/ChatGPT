@@ -137,6 +137,10 @@ button {
   min-width: 0;
 }
 
+.app-body-solo {
+  grid-template-columns: 1fr;
+}
+
 .chat-pane {
   display: grid;
   grid-template-rows: 1fr auto;
@@ -306,35 +310,6 @@ button {
   max-width: 42rem;
 }
 
-.proto-list {
-  display: grid;
-  gap: 0.7rem;
-}
-
-.proto-card {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
-  align-items: center;
-  width: 100%;
-  text-align: left;
-  border: 1px solid var(--color-line);
-  background: var(--color-surface);
-  padding: 1.05rem 1.15rem;
-  border-radius: 2px;
-  transition: border-color 160ms ease, transform 160ms ease;
-}
-
-.proto-card:hover:not(:disabled) {
-  border-color: var(--color-accent);
-  transform: translateY(-1px);
-}
-
-.proto-card:disabled {
-  cursor: default;
-  opacity: 0.72;
-}
-
 .proto-name {
   font-family: var(--font-serif);
   font-size: 1.2rem;
@@ -347,10 +322,90 @@ button {
   margin: 0;
 }
 
-.proto-cta {
-  color: var(--color-accent);
+.repo-start-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+}
+
+.repo-start {
+  max-width: 28rem;
+}
+
+.repo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  margin: 0 0 1.25rem;
+  color: var(--color-muted);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.84rem;
+}
+
+.repo-dot {
+  color: var(--color-line-strong);
+}
+
+.repo-cmd {
+  margin: 0 0 1.5rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-ink-soft);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   font-size: 0.88rem;
+}
+
+.repo-prompt {
+  color: var(--color-muted);
+}
+
+.repo-go {
+  margin-top: 0;
+}
+
+.scan-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.file-list {
+  border-top: 1px solid var(--color-line);
+}
+
+.file-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--color-line);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  animation: rise 280ms ease both;
+}
+
+.file-path {
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.file-status {
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.file-row.reading .file-status {
+  color: var(--color-accent-2);
+}
+
+.file-row.missing .file-status {
+  color: var(--color-warn);
 }
 
 .note {
@@ -813,7 +868,8 @@ button {
   .inspect-grid,
   .brief,
   .sub-nodes,
-  .plan-row {
+  .plan-row,
+  .scan-layout {
     grid-template-columns: 1fr;
   }
 

@@ -1,36 +1,29 @@
-import { prototypes } from "../data/prototypes";
-import type { PrototypeId } from "../types";
+import { repoContext } from "../data/scan";
 
 type Props = {
-  onSelect: (id: PrototypeId, available: boolean) => void;
+  onAnalyse: () => void;
 };
 
-export function IntakeView({ onSelect }: Props) {
+export function IntakeView({ onAnalyse }: Props) {
   return (
-    <div className="workspace-inner">
-      <p className="eyebrow">Intake</p>
-      <h1 className="display text-[2.05rem]">Show me what you built.</h1>
-      <p className="lede">
-        I’ll work through it the way I would if we were taking it towards a pilot — purpose, data,
-        architecture, and the decisions that tend to stall these things.
-      </p>
-      <div className="proto-list">
-        {prototypes.map((prototype) => (
-          <button
-            key={prototype.id}
-            type="button"
-            className="proto-card"
-            onClick={() => onSelect(prototype.id, prototype.available)}
-          >
-            <span>
-              <span className="proto-name">{prototype.name}</span>
-              <p className="proto-meta">{prototype.meta}</p>
-            </span>
-            <span className="proto-cta">{prototype.available ? "Look at this" : "Later"}</span>
-          </button>
-        ))}
+    <div className="workspace-inner repo-start-wrap">
+      <div className="repo-start">
+        <p className="eyebrow">This repository</p>
+        <h1 className="display text-[2.05rem]">{repoContext.name}</h1>
+        <p className="repo-meta">
+          <span>{repoContext.path}</span>
+          <span className="repo-dot" aria-hidden>
+            ·
+          </span>
+          <span>{repoContext.branch}</span>
+        </p>
+        <p className="repo-cmd">
+          <span className="repo-prompt">$</span> {repoContext.command}
+        </p>
+        <button type="button" className="primary-btn repo-go" onClick={onAnalyse}>
+          Analyse this repository
+        </button>
       </div>
-      <p className="note">A link or a folder works in the real product. This walkthrough starts with Matter Brief.</p>
     </div>
   );
 }

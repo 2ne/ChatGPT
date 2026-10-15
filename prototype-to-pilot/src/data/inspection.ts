@@ -23,7 +23,7 @@ export const inspectCards: InspectCard[] = [
   {
     id: "tech",
     title: "How it runs",
-    body: "A browser app calling an external LLM HTTP API with the raw document text.",
+    body: "Vite and React. src/api/summarise.ts posts raw document text to an external LLM API.",
     appearAt: 460,
   },
   {

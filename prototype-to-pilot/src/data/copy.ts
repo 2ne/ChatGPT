@@ -1,13 +1,10 @@
 import type { Suggestion } from "../types";
 
-export const opening =
-  "Show me what you built. I’ll look at how it actually works — users, data, and the bits that tend to become blockers — rather than treating it as a demo.";
-
-export const afterSelect =
-  "Matter Brief. I’ll start with how data moves, then the product assumptions underneath the polish.";
+export const repoSummary =
+  "Here’s what I’ve found in this repository. Matter Brief lets lawyers upload documents and generates a client-ready summary. It’s a Vite/React app. There’s no authentication, and src/api/summarise.ts sends the full document text to an external model API.";
 
 export const firstFinding =
-  "I’ve found the first thing I’d change before this goes any further. Matter Brief currently sends document text directly to an external model provider. If this is intended for real matter data, that will probably be a blocker for InfoSec and confidentiality review.\n\nIs the intention to use client matter data in production?";
+  "I’ve found the first thing I’d change before this goes any further. That summarise call sends document text directly to an external model provider. If this is intended for real matter data, that will probably be a blocker for InfoSec and confidentiality review.\n\nIs the intention to use client matter data in production?";
 
 export const dataSuggestions: Suggestion[] = [
   {
@@ -92,9 +89,6 @@ export const risksReply =
 
 export const steerInspecting =
   "I’ll take that in. Let me finish this first pass on how data leaves the firm — that’s the piece that usually stops these cold.";
-
-export const unavailablePrototype =
-  "I can look at that later. Matter Brief is the one with real momentum — shall we start there?";
 
 export const steerGeneric =
   "Noted. I’ll keep going with the decision in front of us, and fold that in where it changes the design.";

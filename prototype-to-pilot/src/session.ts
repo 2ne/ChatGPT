@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import {
   addCitationsReply,
-  afterSelect,
   approvedFollowOn,
   approvedReply,
   citationFinding,
@@ -10,18 +9,17 @@ import {
   dummyReply,
   explainCitationsReply,
   firstFinding,
-  opening,
   packReply,
   readinessReply,
   readinessSuggestions,
   redesignReply,
   remainingReply,
+  repoSummary,
   risksReply,
   skipCitationsReply,
   steerGeneric,
   steerInspecting,
   tooEarlyPack,
-  unavailablePrototype,
   unsureReply,
   uxFinding,
   uxSuggestions,
@@ -30,6 +28,7 @@ import {
   whyUxReply,
 } from "./data/copy";
 import { workItemsSeed } from "./data/inspection";
+import { scanFiles } from "./data/scan";
 import { uid } from "./lib/ids";
 import { interpret } from "./lib/interpret";
 import type {
@@ -51,6 +50,7 @@ export type SessionState = {
   typing: boolean;
   work: WorkItem[];
   visibleInspect: number;
+  visibleFiles: number;
   selectedCitation: string | null;
   decisions: Decisions;
 };
@@ -68,7 +68,8 @@ type Action =
       awaiting?: boolean;
     }
   | { type: "STAGE"; stage: Stage }
-  | { type: "SELECT"; id: PrototypeId }
+  | { type: "START" }
+  | { type: "FILES"; count: number }
   | { type: "INSPECT"; count: number }
   | { type: "WORK"; id: string; status: WorkItem["status"] }
   | { type: "CITATION"; id: string | null }
@@ -85,12 +86,13 @@ function initial(): SessionState {
   return {
     stage: "intake",
     prototypeId: null,
-    messages: [{ id: uid("m"), role: "assistant", text: opening }],
+    messages: [],
     suggestions: [],
-    awaiting: true,
+    awaiting: false,
     typing: false,
     work: initialWork,
     visibleInspect: 0,
+    visibleFiles: 0,
     selectedCitation: null,
     decisions: { matterData: null, citations: null, ux: null },
   };
@@ -122,10 +124,10 @@ function reducer(state: SessionState, action: Action): SessionState {
       };
     case "STAGE":
       return { ...state, stage: action.stage };
-    case "SELECT":
+    case "START":
       return {
         ...state,
-        prototypeId: action.id,
+        prototypeId: "matter-brief",
         stage: "inspecting",
         awaiting: false,
         suggestions: [],
@@ -133,6 +135,8 @@ function reducer(state: SessionState, action: Action): SessionState {
           index === 0 ? { ...item, status: "working" } : item,
         ),
       };
+    case "FILES":
+      return { ...state, visibleFiles: Math.max(state.visibleFiles, action.count) };
     case "INSPECT":
       return { ...state, visibleInspect: Math.max(state.visibleInspect, action.count) };
     case "WORK":
@@ -200,25 +204,17 @@ export function useSession() {
     [later],
   );
 
-  const startInspection = useCallback((userText = "Matter Brief — the hackathon prototype.") => {
+  const analyseRepository = useCallback(() => {
     if (stageRef.current !== "intake") return;
-    dispatch({
-      type: "USER",
-      text: userText,
-    });
-    dispatch({ type: "SELECT", id: "matter-brief" });
-    later(220, () => {
-      dispatch({
-        type: "ASSISTANT",
-        text: afterSelect,
-        stage: "inspecting",
-        awaiting: false,
-      });
+    dispatch({ type: "START" });
+
+    scanFiles.forEach((_, index) => {
+      later(140 + index * 320, () => dispatch({ type: "FILES", count: index + 1 }));
     });
 
-    const inspectAt = [180, 320, 460, 600, 740, 900];
+    const inspectAt = [380, 700, 1020, 1340, 1660, 2050];
     inspectAt.forEach((ms, index) => {
-      later(ms + 280, () => dispatch({ type: "INSPECT", count: index + 1 }));
+      later(ms, () => dispatch({ type: "INSPECT", count: index + 1 }));
     });
 
     workItemsSeed.forEach((item, index) => {
@@ -233,10 +229,21 @@ export function useSession() {
       });
     });
 
-    later(1480, () => {
+    later(2600, () => {
       dispatch({ type: "TYPING", value: true });
     });
-    later(1760, () => {
+    later(3000, () => {
+      dispatch({
+        type: "ASSISTANT",
+        text: repoSummary,
+        stage: "inspecting",
+        awaiting: false,
+      });
+    });
+    later(4000, () => {
+      dispatch({ type: "TYPING", value: true });
+    });
+    later(4300, () => {
       dispatch({
         type: "ASSISTANT",
         text: firstFinding,
@@ -455,26 +462,14 @@ export function useSession() {
       const trimmed = text.trim();
       if (!trimmed) return;
       const stage = stageRef.current;
-      if (stage === "intake" && /matter brief/i.test(trimmed)) {
-        startInspection(trimmed);
+      if (stage === "intake") {
+        analyseRepository();
         return;
       }
       dispatch({ type: "USER", text: trimmed });
       handleIntent(interpret(trimmed, stage), trimmed);
     },
-    [handleIntent, startInspection],
-  );
-
-  const selectPrototype = useCallback(
-    (id: PrototypeId, available: boolean) => {
-      if (!available) {
-        dispatch({ type: "USER", text: id === "clause-lens" ? "Clause Lens" : "Conflicts sketch" });
-        speak(unavailablePrototype, { wait: 280 });
-        return;
-      }
-      startInspection();
-    },
-    [speak, startInspection],
+    [analyseRepository, handleIntent],
   );
 
   const reset = useCallback(() => {
@@ -501,7 +496,7 @@ export function useSession() {
   return {
     ...state,
     send,
-    selectPrototype,
+    analyseRepository,
     reset,
     setCitation,
     preparePack,

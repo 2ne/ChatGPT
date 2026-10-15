@@ -14,8 +14,8 @@ Presentable hackathon demo. Scripted Matter Brief walkthrough with working free-
 
 ## Demo path (~3 minutes)
 
-1. **Show me what you built** — select Matter Brief.
-2. **First finding** — document text currently leaves the firm. Reply *Yes, but only within firm-approved infrastructure.*
+1. **This repository** — `matter-brief` is already the working tree. Click *Analyse this repository*.
+2. **First finding** — after a short scan of the files, the chat opens with what it found. Reply *Yes, but only within firm-approved infrastructure.*
 3. **Architecture** — prototype path versus proposed approved production path.
 4. **Citations** — reply *Yes. Add citations.* Open a citation in the sample brief.
 5. **UX assumption** — reply *Validate it first.* Read the lean validation plan, then *Show me the pilot material.*
@@ -46,7 +46,8 @@ Vite `base` is `./` so the built app works under GitHub Pages at `/ChatGPT/proto
 
 ## Key decisions
 
-- Conversation stays visible; the workspace changes with the current question (inspection, architecture, evidence, validation, readiness, pack).
+- Framed as a tool run inside the prototype’s own checkout (`npx prototype-to-pilot` in `matter-brief`). There is no real package.
+- After analyse, the conversation stays visible; the workspace changes with the current question (scan, architecture, evidence, validation, readiness, pack).
 - The AI continues a quiet analysis in the background and only asks when judgement is required.
 - Outputs are drafts for humans. Risk, InfoSec and legal approval remain people.
 - Demo replies are seeded; unmatched free text still advances with a sensible recommendation so a live walkthrough cannot stall.

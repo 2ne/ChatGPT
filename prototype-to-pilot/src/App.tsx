@@ -1,24 +1,23 @@
 import { ArchitectureView } from "./components/ArchitectureView";
 import { ChatPane } from "./components/ChatPane";
 import { EvidenceView } from "./components/EvidenceView";
-import { InspectionView } from "./components/InspectionView";
 import { IntakeView } from "./components/IntakeView";
 import { PilotPackView } from "./components/PilotPackView";
 import { ReadinessView } from "./components/ReadinessView";
+import { RepoScanView } from "./components/RepoScanView";
 import { ValidationView } from "./components/ValidationView";
 import { useSession } from "./session";
 
 export function App() {
   const session = useSession();
+  const chatOpen = session.messages.length > 0;
 
   return (
     <div className="app-shell">
       <header className="app-header">
         <div className="mark">
           <span className="mark-title">Prototype to pilot</span>
-          {session.prototypeId === "matter-brief" ? (
-            <span className="mark-sub">Matter Brief</span>
-          ) : null}
+          <span className="mark-sub">matter-brief</span>
         </div>
         <div className="header-actions">
           {session.stage !== "intake" ? (
@@ -29,26 +28,28 @@ export function App() {
         </div>
       </header>
 
-      <div className="app-body">
-        <ChatPane
-          messages={session.messages}
-          suggestions={session.suggestions}
-          awaiting={session.awaiting}
-          typing={session.typing}
-          activeWork={session.activeWork}
-          workDone={session.workDone}
-          started={session.stage !== "intake"}
-          stage={session.stage}
-          onSend={session.send}
-        />
+      <div className={`app-body${chatOpen ? "" : " app-body-solo"}`}>
+        {chatOpen ? (
+          <ChatPane
+            messages={session.messages}
+            suggestions={session.suggestions}
+            awaiting={session.awaiting}
+            typing={session.typing}
+            activeWork={session.activeWork}
+            workDone={session.workDone}
+            started
+            stage={session.stage}
+            onSend={session.send}
+          />
+        ) : null}
         <main className="workspace" aria-live="polite">
-          {session.stage === "intake" ? (
-            <IntakeView onSelect={session.selectPrototype} />
-          ) : null}
+          {session.stage === "intake" ? <IntakeView onAnalyse={session.analyseRepository} /> : null}
           {session.stage === "inspecting" || session.stage === "data-leaving" ? (
-            <InspectionView
-              visible={session.visibleInspect}
+            <RepoScanView
+              visibleFiles={session.visibleFiles}
+              visibleFacts={session.visibleInspect}
               highlightRisk={session.stage === "data-leaving"}
+              scanning={session.stage === "inspecting"}
             />
           ) : null}
           {session.stage === "architecture" || session.stage === "citations" ? (
