@@ -1,3 +1,5 @@
+import type { DecisionRecord } from "./decisions";
+
 export type Citation = {
   id: string;
   n: number;
@@ -38,40 +40,61 @@ export const matter = {
   ] satisfies Citation[],
 };
 
-export const outputs = [
-  {
-    id: "architecture",
-    title: "Proposed production architecture",
-    note: "Approved internal model; external provider marked prototype-only.",
-    status: "Draft ready" as const,
-    tone: "ready" as const,
-  },
-  {
-    id: "infosec",
-    title: "Draft InfoSec summary",
-    note: "What data moves, where, and which controls are still missing.",
-    status: "Draft ready" as const,
-    tone: "ready" as const,
-  },
-  {
-    id: "risk",
-    title: "Draft Risk / data-use assessment",
-    note: "Confidentiality, hallucination and client-ready output. A person still has to own this.",
-    status: "Needs human review" as const,
-    tone: "review" as const,
-  },
-  {
-    id: "ux",
-    title: "UX validation plan",
-    note: "Three lawyers, one assumption, a clear stop/go signal.",
-    status: "Needs owner" as const,
-    tone: "owner" as const,
-  },
-  {
-    id: "checklist",
-    title: "Pilot checklist",
-    note: "Who uses it, what is measured, and what stops the pilot.",
-    status: "Draft ready" as const,
-    tone: "ready" as const,
-  },
-];
+export type OutputTone = "ready" | "review" | "owner";
+
+export type ReadinessOutput = {
+  id: string;
+  title: string;
+  note: string;
+  status: string;
+  tone: OutputTone;
+};
+
+export function outputsFromTrail(trail: DecisionRecord[]): ReadinessOutput[] {
+  const byId = Object.fromEntries(trail.map((item) => [item.id, item]));
+  const named = (id: string) => byId[id]?.status === "settled";
+
+  return [
+    {
+      id: "architecture",
+      title: "Proposed production architecture",
+      note: "Approved internal model; external provider marked prototype-only.",
+      status: "Draft ready",
+      tone: "ready",
+    },
+    {
+      id: "infosec",
+      title: "Draft InfoSec summary",
+      note: named("infosec")
+        ? "Owner named. InfoSec still has to review — this is not an approval."
+        : "What data moves, where, and which controls are still missing.",
+      status: named("infosec") ? "Needs human review" : "Needs owner",
+      tone: named("infosec") ? "review" : "owner",
+    },
+    {
+      id: "risk",
+      title: "Draft Risk / data-use assessment",
+      note: named("risk")
+        ? "Owner named. Risk still has to review the data-use note."
+        : "Confidentiality, hallucination and client-ready output. A person still has to own this.",
+      status: named("risk") ? "Needs human review" : "Needs owner",
+      tone: named("risk") ? "review" : "owner",
+    },
+    {
+      id: "ux",
+      title: "UX validation plan",
+      note: named("ux")
+        ? "Someone will run the three-lawyer test. The result is still outstanding."
+        : "Three lawyers, one assumption, a clear stop/go signal.",
+      status: named("ux") ? "Draft ready" : "Needs owner",
+      tone: named("ux") ? "ready" : "owner",
+    },
+    {
+      id: "checklist",
+      title: "Pilot checklist",
+      note: "Who uses it, what is measured, and what stops the pilot.",
+      status: named("ownership") ? "Draft ready" : "Needs owner",
+      tone: named("ownership") ? "ready" : "owner",
+    },
+  ];
+}

@@ -1,14 +1,16 @@
-import { openItems, settledItems, type DecisionRecord } from "../data/decisions";
-import { outputs } from "../data/matter";
+import { openItems, settledItems, type DecisionId, type DecisionRecord } from "../data/decisions";
+import { outputsFromTrail } from "../data/matter";
 
 type Props = {
   trail: DecisionRecord[];
   onPrepare: () => void;
+  onOpenItem: (id: DecisionId) => void;
 };
 
-export function ReadinessView({ trail, onPrepare }: Props) {
+export function ReadinessView({ trail, onPrepare, onOpenItem }: Props) {
   const open = openItems(trail);
   const settled = settledItems(trail);
+  const outputs = outputsFromTrail(trail);
 
   return (
     <div className="workspace-inner">
@@ -16,7 +18,7 @@ export function ReadinessView({ trail, onPrepare }: Props) {
       <h1 className="display text-[1.85rem]">You’re in much better shape for a pilot now.</h1>
       <p className="lede">
         These are drafts for people to use. Nothing here is an approval. Risk, InfoSec and legal
-        still decide.
+        still decide. Open items can be settled in the conversation.
       </p>
 
       {settled.length > 0 ? (
@@ -35,11 +37,13 @@ export function ReadinessView({ trail, onPrepare }: Props) {
           <h2 className="flow-title" style={{ marginTop: "1.15rem" }}>
             Still open
           </h2>
-          <ul className="ready-list">
+          <ul className="ready-actions">
             {open.map((item) => (
               <li key={item.id}>
-                {item.line}
-                {item.owner ? ` — ${item.owner}` : null}
+                <button type="button" className="open-action" onClick={() => onOpenItem(item.id)}>
+                  {item.line}
+                  {item.owner ? ` — ${item.owner}` : null}
+                </button>
               </li>
             ))}
           </ul>

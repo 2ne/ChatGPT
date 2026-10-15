@@ -48,7 +48,7 @@ Vite `base` is `./` so the built app works under GitHub Pages at `/ChatGPT/proto
 
 - Framed as a tool run inside the prototype’s own checkout (`npx prototype-to-pilot` in `matter-brief`). There is no real package.
 - After analyse, the conversation stays visible; the workspace changes with the current question (scan, architecture, evidence, validation, readiness, pack).
-- The AI continues a quiet analysis in the background and only asks what the code cannot answer, in dependency order. A Decisions trail records what is settled; “Not decided” becomes a needs-owner item rather than a blocker.
+- The AI continues a quiet analysis in the background and only asks what the code cannot answer, in dependency order. A fixed Decisions rail records what is settled; open items in readiness and the pack can be reopened and resolved. InfoSec/Risk can gain an owner and still need human review.
 - Outputs are drafts for humans. Risk, InfoSec and legal approval remain people.
 - Demo replies are seeded; unmatched free text still advances with a sensible recommendation so a live walkthrough cannot stall.
 - Fictional matter: *Northharbour Logistics v Pellam Components*.

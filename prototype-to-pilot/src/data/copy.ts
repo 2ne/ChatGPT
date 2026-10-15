@@ -116,3 +116,61 @@ export const steerGeneric =
 
 export const tooEarlyPack =
   "I can, but the pack will be honest only once we’ve settled what the code can’t: data, ownership, and citations. Let’s finish those first.";
+
+export const infosecReopen =
+  "The code can’t close InfoSec for us. Someone has to own the review of the internal-model path — and that person still decides.\n\nWho should own the InfoSec review?";
+
+export const infosecSuggestions: Suggestion[] = [
+  { id: "priya", label: "Priya Chen, InfoSec.", primary: true },
+  { id: "queue", label: "Put it on the InfoSec queue." },
+  { id: "undecided", label: "Not decided." },
+];
+
+export const riskReopen =
+  "Same constraint for Risk. I can draft the data-use note; I can’t sign it.\n\nWho should own the Risk review?";
+
+export const riskSuggestions: Suggestion[] = [
+  { id: "james", label: "James Okonkwo, Risk.", primary: true },
+  { id: "queue", label: "Put it on the Risk queue." },
+  { id: "undecided", label: "Not decided." },
+];
+
+export const uxOwnerReopen =
+  "Watching lawyers is still the only way to settle the upload model. Who runs that three-person test?";
+
+export const uxOwnerSuggestions: Suggestion[] = [
+  { id: "alex", label: "Alex Reed in disputes.", primary: true },
+  { id: "self", label: "I’ll run it myself." },
+  { id: "undecided", label: "Not decided." },
+];
+
+export const recordedGeneric = "Recorded. It’s in the pack — still not an approval.";
+
+export const recordedInfosecNamed =
+  "Priya is listed as owner of the review. That doesn’t approve the path — InfoSec still has to say yes or no.";
+
+export const recordedInfosecQueue =
+  "It’s on the InfoSec queue. Ownership is named; the decision is still theirs.";
+
+export const recordedRiskNamed =
+  "James is listed for the data-use note. Risk still has to review it.";
+
+export const recordedRiskQueue =
+  "It’s on the Risk queue. Still a human review, not a sign-off.";
+
+export const recordedUxRunner =
+  "Alex will run the three-lawyer test. That’s an owner for the plan, not a result.";
+
+export const recordedUxSelf =
+  "You’re on the hook for the three-lawyer test. I’ll mark the plan as having an owner.";
+
+export const backToPackSuggestions: Suggestion[] = [
+  { id: "back", label: "Back to the pack.", primary: true },
+];
+
+export const backToDraftsSuggestions: Suggestion[] = [
+  { id: "back", label: "Back to the drafts.", primary: true },
+];
+
+export const returnedToPack =
+  "It’s in front of you. Approvals remain human.";

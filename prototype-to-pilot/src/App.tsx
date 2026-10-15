@@ -1,5 +1,6 @@
 import { ArchitectureView } from "./components/ArchitectureView";
 import { ChatPane } from "./components/ChatPane";
+import { DecisionsTrail } from "./components/DecisionsTrail";
 import { EvidenceView } from "./components/EvidenceView";
 import { IntakeView } from "./components/IntakeView";
 import { PilotPackView } from "./components/PilotPackView";
@@ -11,6 +12,16 @@ import { useSession } from "./session";
 export function App() {
   const session = useSession();
   const chatOpen = session.messages.length > 0;
+  const showRail = session.stage !== "intake";
+  const railInteractive = session.stage === "readiness" || session.stage === "pack";
+
+  const bodyClass = [
+    "app-body",
+    chatOpen ? "" : "app-body-solo",
+    showRail ? "app-body-rail" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="app-shell">
@@ -28,7 +39,7 @@ export function App() {
         </div>
       </header>
 
-      <div className={`app-body${chatOpen ? "" : " app-body-solo"}`}>
+      <div className={bodyClass}>
         {chatOpen ? (
           <ChatPane
             messages={session.messages}
@@ -39,7 +50,6 @@ export function App() {
             workDone={session.workDone}
             started
             stage={session.stage}
-            trail={session.trail}
             onSend={session.send}
           />
         ) : null}
@@ -63,10 +73,23 @@ export function App() {
           ) : null}
           {session.stage === "validation" ? <ValidationView /> : null}
           {session.stage === "readiness" ? (
-            <ReadinessView trail={session.trail} onPrepare={session.preparePack} />
+            <ReadinessView
+              trail={session.trail}
+              onPrepare={session.preparePack}
+              onOpenItem={session.reopenDecision}
+            />
           ) : null}
-          {session.stage === "pack" ? <PilotPackView trail={session.trail} /> : null}
+          {session.stage === "pack" ? (
+            <PilotPackView trail={session.trail} onOpenItem={session.reopenDecision} />
+          ) : null}
         </main>
+        {showRail ? (
+          <DecisionsTrail
+            trail={session.trail}
+            interactive={railInteractive}
+            onOpenItem={session.reopenDecision}
+          />
+        ) : null}
       </div>
     </div>
   );

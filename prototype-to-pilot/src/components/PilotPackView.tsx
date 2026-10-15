@@ -1,10 +1,11 @@
-import { openItems, settledItems, type DecisionRecord } from "../data/decisions";
+import { openItems, settledItems, type DecisionId, type DecisionRecord } from "../data/decisions";
 
 type Props = {
   trail: DecisionRecord[];
+  onOpenItem: (id: DecisionId) => void;
 };
 
-export function PilotPackView({ trail }: Props) {
+export function PilotPackView({ trail, onOpenItem }: Props) {
   const settled = settledItems(trail);
   const open = openItems(trail);
 
@@ -34,11 +35,13 @@ export function PilotPackView({ trail }: Props) {
         <section>
           <h3>Open questions / owners</h3>
           {open.length > 0 ? (
-            <ul>
+            <ul className="pack-actions">
               {open.map((item) => (
                 <li key={item.id}>
-                  {item.line}
-                  {item.owner ? ` — ${item.owner}` : " — needs an owner"}
+                  <button type="button" className="open-action" onClick={() => onOpenItem(item.id)}>
+                    {item.line}
+                    {item.owner ? ` — ${item.owner}` : " — needs an owner"}
+                  </button>
                 </li>
               ))}
             </ul>

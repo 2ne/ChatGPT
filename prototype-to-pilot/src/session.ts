@@ -3,11 +3,15 @@ import {
   addCitationsReply,
   approvedFollowOn,
   approvedReply,
+  backToDraftsSuggestions,
+  backToPackSuggestions,
   citationFinding,
   citationSuggestions,
   dataSuggestions,
   dummyReply,
   firstFinding,
+  infosecReopen,
+  infosecSuggestions,
   innovationOwnerReply,
   ownershipFinding,
   ownershipSuggestions,
@@ -15,9 +19,19 @@ import {
   practiceOwnerReply,
   readinessReply,
   readinessSuggestions,
+  recordedGeneric,
+  recordedInfosecNamed,
+  recordedInfosecQueue,
+  recordedRiskNamed,
+  recordedRiskQueue,
+  recordedUxRunner,
+  recordedUxSelf,
   redesignReply,
   remainingReply,
   repoSummary,
+  returnedToPack,
+  riskReopen,
+  riskSuggestions,
   risksReply,
   skipCitationsReply,
   steerGeneric,
@@ -28,6 +42,8 @@ import {
   unknownOwnerReply,
   unsureReply,
   uxFinding,
+  uxOwnerReopen,
+  uxOwnerSuggestions,
   uxSuggestions,
   validateReply,
   validationSuggestions,
@@ -37,7 +53,7 @@ import { createTrail, settleTrail, type DecisionId, type DecisionRecord } from "
 import { workItemsSeed } from "./data/inspection";
 import { scanFiles } from "./data/scan";
 import { uid } from "./lib/ids";
-import { interpret } from "./lib/interpret";
+import { interpret, interpretDecision } from "./lib/interpret";
 import type { Intent, Message, PrototypeId, Stage, Suggestion, WorkItem } from "./types";
 
 export type SessionState = {
@@ -52,6 +68,8 @@ export type SessionState = {
   visibleFiles: number;
   selectedCitation: string | null;
   trail: DecisionRecord[];
+  focusId: DecisionId | null;
+  returnView: "readiness" | "pack" | null;
 };
 
 type Action =
@@ -79,7 +97,8 @@ type Action =
       line: string;
       owner?: string;
     }
-  | { type: "SUGGESTIONS"; suggestions: Suggestion[] };
+  | { type: "SUGGESTIONS"; suggestions: Suggestion[] }
+  | { type: "FOCUS"; id: DecisionId | null; returnView?: "readiness" | "pack" | null };
 
 const initialWork: WorkItem[] = workItemsSeed.map((item) => ({
   id: item.id,
@@ -100,6 +119,8 @@ function initial(): SessionState {
     visibleFiles: 0,
     selectedCitation: null,
     trail: createTrail(),
+    focusId: null,
+    returnView: null,
   };
 }
 
@@ -158,6 +179,12 @@ function reducer(state: SessionState, action: Action): SessionState {
         ...state,
         trail: settleTrail(state.trail, action.id, action.status, action.line, action.owner),
       };
+    case "FOCUS":
+      return {
+        ...state,
+        focusId: action.id,
+        returnView: action.returnView === undefined ? state.returnView : action.returnView,
+      };
     case "SUGGESTIONS":
       return { ...state, suggestions: action.suggestions, awaiting: true };
     default:
@@ -176,7 +203,11 @@ export function useSession() {
   const [state, dispatch] = useReducer(reducer, undefined, initial);
   const timers = useRef<number[]>([]);
   const stageRef = useRef(state.stage);
+  const focusRef = useRef<DecisionId | null>(null);
+  const returnRef = useRef<"readiness" | "pack" | null>(null);
   stageRef.current = state.stage;
+  focusRef.current = state.focusId;
+  returnRef.current = state.returnView;
 
   const clearTimers = useCallback(() => {
     timers.current.forEach((id) => window.clearTimeout(id));
@@ -309,6 +340,251 @@ export function useSession() {
     [later, speak],
   );
 
+  const backSuggestions = useCallback(() => {
+    return returnRef.current === "readiness" ? backToDraftsSuggestions : backToPackSuggestions;
+  }, []);
+
+  const finishFocus = useCallback(
+    (text: string) => {
+      dispatch({ type: "FOCUS", id: null });
+      speak(text, {
+        wait: 260,
+        stage: returnRef.current ?? undefined,
+        suggestions: backSuggestions(),
+      });
+    },
+    [backSuggestions, speak],
+  );
+
+  const handleFocusIntent = useCallback(
+    (intent: Intent, id: DecisionId) => {
+      if (intent === "return-view") {
+        dispatch({ type: "FOCUS", id: null });
+        speak(returnedToPack, {
+          wait: 220,
+          stage: returnRef.current ?? undefined,
+          suggestions: [],
+        });
+        return;
+      }
+
+      if (id === "data") {
+        if (intent === "dummy") {
+          dispatch({
+            type: "SETTLE",
+            id: "data",
+            status: "settled",
+            line: "Pilot stays on dummy data; production still assumes an approved model",
+          });
+        } else if (intent === "unsure") {
+          dispatch({
+            type: "SETTLE",
+            id: "data",
+            status: "needs-owner",
+            line: "Whether production uses real matter data",
+            owner: "Practice",
+          });
+        } else {
+          dispatch({
+            type: "SETTLE",
+            id: "data",
+            status: "settled",
+            line: "Production uses firm-approved model only",
+          });
+        }
+        finishFocus(recordedGeneric);
+        return;
+      }
+
+      if (id === "ownership") {
+        if (intent === "innovation-owner") {
+          dispatch({
+            type: "SETTLE",
+            id: "ownership",
+            status: "settled",
+            line: "Innovation sponsors; disputes still nominates a pilot owner",
+          });
+        } else if (intent === "unknown-owner") {
+          dispatch({
+            type: "SETTLE",
+            id: "ownership",
+            status: "needs-owner",
+            line: "Pilot owner after the hackathon",
+            owner: "Practice",
+          });
+        } else {
+          dispatch({
+            type: "SETTLE",
+            id: "ownership",
+            status: "settled",
+            line: "Disputes practice owns the pilot",
+          });
+        }
+        finishFocus(practiceOwnerReply);
+        return;
+      }
+
+      if (id === "citations") {
+        if (intent === "skip-citations" || intent === "undecided-citations") {
+          dispatch({
+            type: "SETTLE",
+            id: "citations",
+            status: "needs-owner",
+            line: "Whether material claims must cite a source",
+            owner: "Pilot owner",
+          });
+        } else {
+          dispatch({
+            type: "SETTLE",
+            id: "citations",
+            status: "settled",
+            line: "Every material claim cites a source",
+          });
+        }
+        finishFocus(recordedGeneric);
+        return;
+      }
+
+      if (id === "infosec") {
+        if (intent === "infosec-undecided") {
+          dispatch({
+            type: "SETTLE",
+            id: "infosec",
+            status: "needs-owner",
+            line: "InfoSec review of the production path",
+            owner: "InfoSec",
+          });
+          finishFocus("Still waiting on an InfoSec owner. I’ll leave it open.");
+          return;
+        }
+        if (intent === "infosec-queue") {
+          dispatch({
+            type: "SETTLE",
+            id: "infosec",
+            status: "settled",
+            line: "InfoSec queue owns the review — still a human decision",
+            owner: "InfoSec",
+          });
+          finishFocus(recordedInfosecQueue);
+          return;
+        }
+        dispatch({
+          type: "SETTLE",
+          id: "infosec",
+          status: "settled",
+          line: "InfoSec review owned by Priya Chen — still a human decision",
+          owner: "Priya Chen",
+        });
+        finishFocus(recordedInfosecNamed);
+        return;
+      }
+
+      if (id === "risk") {
+        if (intent === "risk-undecided") {
+          dispatch({
+            type: "SETTLE",
+            id: "risk",
+            status: "needs-owner",
+            line: "Risk / data-use assessment",
+            owner: "Risk",
+          });
+          finishFocus("Still waiting on a Risk owner. I’ll leave it open.");
+          return;
+        }
+        if (intent === "risk-queue") {
+          dispatch({
+            type: "SETTLE",
+            id: "risk",
+            status: "settled",
+            line: "Risk queue owns the data-use note — still a human decision",
+            owner: "Risk",
+          });
+          finishFocus(recordedRiskQueue);
+          return;
+        }
+        dispatch({
+          type: "SETTLE",
+          id: "risk",
+          status: "settled",
+          line: "Risk review owned by James Okonkwo — still a human decision",
+          owner: "James Okonkwo",
+        });
+        finishFocus(recordedRiskNamed);
+        return;
+      }
+
+      if (id === "ux") {
+        if (intent === "undecided-ux") {
+          dispatch({
+            type: "SETTLE",
+            id: "ux",
+            status: "needs-owner",
+            line: "How lawyers choose source material — watch them use it",
+            owner: "Practice",
+          });
+          finishFocus("I’ll leave the test without a named owner.");
+          return;
+        }
+        if (intent === "ux-self") {
+          dispatch({
+            type: "SETTLE",
+            id: "ux",
+            status: "settled",
+            line: "Builder will run the three-lawyer test",
+            owner: "Builder",
+          });
+          finishFocus(recordedUxSelf);
+          return;
+        }
+        dispatch({
+          type: "SETTLE",
+          id: "ux",
+          status: "settled",
+          line: "Alex Reed will run the three-lawyer test",
+          owner: "Alex Reed",
+        });
+        finishFocus(recordedUxRunner);
+        return;
+      }
+
+      finishFocus(recordedGeneric);
+    },
+    [finishFocus, speak],
+  );
+
+  const reopenDecision = useCallback(
+    (id: DecisionId) => {
+      const item = state.trail.find((row) => row.id === id);
+      if (!item || item.status === "locked") return;
+      if (item.status === "settled") return;
+
+      const view =
+        stageRef.current === "pack" || stageRef.current === "readiness"
+          ? stageRef.current
+          : "pack";
+      dispatch({ type: "FOCUS", id, returnView: view });
+      if (stageRef.current !== "readiness" && stageRef.current !== "pack") {
+        dispatch({ type: "STAGE", stage: view });
+      }
+
+      const prompt =
+        id === "infosec"
+          ? { text: infosecReopen, suggestions: infosecSuggestions }
+          : id === "risk"
+            ? { text: riskReopen, suggestions: riskSuggestions }
+            : id === "ux"
+              ? { text: uxOwnerReopen, suggestions: uxOwnerSuggestions }
+              : id === "ownership"
+                ? { text: ownershipFinding, suggestions: ownershipSuggestions }
+                : id === "citations"
+                  ? { text: citationFinding, suggestions: citationSuggestions }
+                  : { text: firstFinding, suggestions: dataSuggestions };
+
+      speak(prompt.text, { wait: 240, suggestions: prompt.suggestions });
+    },
+    [speak, state.trail],
+  );
+
   const afterValidation = useCallback(
     (openingText: string) => {
       dispatch({ type: "STAGE", stage: "validation" });
@@ -328,6 +604,18 @@ export function useSession() {
       if (intent === "reset") {
         clearTimers();
         dispatch({ type: "RESET" });
+        return;
+      }
+
+      if (focusRef.current) {
+        handleFocusIntent(intent, focusRef.current);
+        return;
+      }
+
+      if (intent === "return-view") {
+        const view = returnRef.current ?? (stage === "readiness" ? "readiness" : "pack");
+        dispatch({ type: "STAGE", stage: view });
+        speak(returnedToPack, { wait: 220, stage: view, suggestions: [] });
         return;
       }
 
@@ -580,6 +868,7 @@ export function useSession() {
       afterOwnership,
       afterValidation,
       clearTimers,
+      handleFocusIntent,
       later,
       speak,
       state.suggestions,
@@ -596,7 +885,8 @@ export function useSession() {
         return;
       }
       dispatch({ type: "USER", text: trimmed });
-      handleIntent(interpret(trimmed, stage), trimmed);
+      const focused = focusRef.current;
+      handleIntent(focused ? interpretDecision(trimmed, focused) : interpret(trimmed, stage), trimmed);
     },
     [analyseRepository, handleIntent],
   );
@@ -626,6 +916,7 @@ export function useSession() {
     ...state,
     send,
     analyseRepository,
+    reopenDecision,
     reset,
     setCitation,
     preparePack,
