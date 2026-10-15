@@ -7,9 +7,12 @@ import {
   citationSuggestions,
   dataSuggestions,
   dummyReply,
-  explainCitationsReply,
   firstFinding,
+  innovationOwnerReply,
+  ownershipFinding,
+  ownershipSuggestions,
   packReply,
+  practiceOwnerReply,
   readinessReply,
   readinessSuggestions,
   redesignReply,
@@ -20,6 +23,9 @@ import {
   steerGeneric,
   steerInspecting,
   tooEarlyPack,
+  undecidedCitationsReply,
+  undecidedUxReply,
+  unknownOwnerReply,
   unsureReply,
   uxFinding,
   uxSuggestions,
@@ -27,19 +33,12 @@ import {
   validationSuggestions,
   whyUxReply,
 } from "./data/copy";
+import { createTrail, settleTrail, type DecisionId, type DecisionRecord } from "./data/decisions";
 import { workItemsSeed } from "./data/inspection";
 import { scanFiles } from "./data/scan";
 import { uid } from "./lib/ids";
 import { interpret } from "./lib/interpret";
-import type {
-  Decisions,
-  Intent,
-  Message,
-  PrototypeId,
-  Stage,
-  Suggestion,
-  WorkItem,
-} from "./types";
+import type { Intent, Message, PrototypeId, Stage, Suggestion, WorkItem } from "./types";
 
 export type SessionState = {
   stage: Stage;
@@ -52,7 +51,7 @@ export type SessionState = {
   visibleInspect: number;
   visibleFiles: number;
   selectedCitation: string | null;
-  decisions: Decisions;
+  trail: DecisionRecord[];
 };
 
 type Action =
@@ -73,7 +72,13 @@ type Action =
   | { type: "INSPECT"; count: number }
   | { type: "WORK"; id: string; status: WorkItem["status"] }
   | { type: "CITATION"; id: string | null }
-  | { type: "DECISION"; key: keyof Decisions; value: Decisions[keyof Decisions] }
+  | {
+      type: "SETTLE";
+      id: DecisionId;
+      status: "settled" | "needs-owner";
+      line: string;
+      owner?: string;
+    }
   | { type: "SUGGESTIONS"; suggestions: Suggestion[] };
 
 const initialWork: WorkItem[] = workItemsSeed.map((item) => ({
@@ -94,7 +99,7 @@ function initial(): SessionState {
     visibleInspect: 0,
     visibleFiles: 0,
     selectedCitation: null,
-    decisions: { matterData: null, citations: null, ux: null },
+    trail: createTrail(),
   };
 }
 
@@ -148,8 +153,11 @@ function reducer(state: SessionState, action: Action): SessionState {
       };
     case "CITATION":
       return { ...state, selectedCitation: action.id };
-    case "DECISION":
-      return { ...state, decisions: { ...state.decisions, [action.key]: action.value } };
+    case "SETTLE":
+      return {
+        ...state,
+        trail: settleTrail(state.trail, action.id, action.status, action.line, action.owner),
+      };
     case "SUGGESTIONS":
       return { ...state, suggestions: action.suggestions, awaiting: true };
     default:
@@ -261,9 +269,23 @@ export function useSession() {
       later(1100, () => {
         speak(approvedFollowOn, { wait: 240, stage: "architecture", awaiting: false });
       });
-      later(2400, () => {
+      later(2100, () => {
+        speak(ownershipFinding, {
+          wait: 260,
+          stage: "ownership",
+          suggestions: ownershipSuggestions,
+        });
+      });
+    },
+    [later, speak],
+  );
+
+  const afterOwnership = useCallback(
+    (openingText: string) => {
+      speak(openingText, { wait: 280, stage: "ownership", awaiting: false });
+      later(1100, () => {
         speak(citationFinding, {
-          wait: 280,
+          wait: 260,
           stage: "citations",
           suggestions: citationSuggestions,
         });
@@ -314,58 +336,159 @@ export function useSession() {
         return;
       }
 
-      if (intent === "prepare-pack" && (stage === "intake" || stage === "data-leaving" || stage === "citations" || stage === "ux-assumption" || stage === "architecture" || stage === "evidence")) {
+      if (
+        intent === "prepare-pack" &&
+        (stage === "intake" ||
+          stage === "data-leaving" ||
+          stage === "ownership" ||
+          stage === "citations" ||
+          stage === "ux-assumption" ||
+          stage === "architecture" ||
+          stage === "evidence")
+      ) {
         speak(tooEarlyPack, {
           wait: 260,
-          suggestions: stage === "data-leaving" ? dataSuggestions : stage === "citations" ? citationSuggestions : stage === "ux-assumption" ? uxSuggestions : [],
+          suggestions:
+            stage === "data-leaving"
+              ? dataSuggestions
+              : stage === "ownership"
+                ? ownershipSuggestions
+                : stage === "citations"
+                  ? citationSuggestions
+                  : stage === "ux-assumption"
+                    ? uxSuggestions
+                    : [],
         });
         return;
       }
 
       if (stage === "data-leaving") {
         if (intent === "dummy") {
-          dispatch({ type: "DECISION", key: "matterData", value: "dummy" });
+          dispatch({
+            type: "SETTLE",
+            id: "data",
+            status: "settled",
+            line: "Pilot stays on dummy data; production still assumes an approved model",
+          });
           afterArchitecture(dummyReply);
           return;
         }
         if (intent === "unsure") {
-          dispatch({ type: "DECISION", key: "matterData", value: "unsure" });
+          dispatch({
+            type: "SETTLE",
+            id: "data",
+            status: "needs-owner",
+            line: "Whether production uses real matter data",
+            owner: "Practice",
+          });
           afterArchitecture(unsureReply);
           return;
         }
-        dispatch({ type: "DECISION", key: "matterData", value: "approved" });
+        dispatch({
+          type: "SETTLE",
+          id: "data",
+          status: "settled",
+          line: "Production uses firm-approved model only",
+        });
         afterArchitecture(approvedReply);
         return;
       }
 
+      if (stage === "ownership") {
+        if (intent === "innovation-owner") {
+          dispatch({
+            type: "SETTLE",
+            id: "ownership",
+            status: "settled",
+            line: "Innovation sponsors; disputes still nominates a pilot owner",
+          });
+          afterOwnership(innovationOwnerReply);
+          return;
+        }
+        if (intent === "unknown-owner") {
+          dispatch({
+            type: "SETTLE",
+            id: "ownership",
+            status: "needs-owner",
+            line: "Pilot owner after the hackathon",
+            owner: "Practice",
+          });
+          afterOwnership(unknownOwnerReply);
+          return;
+        }
+        dispatch({
+          type: "SETTLE",
+          id: "ownership",
+          status: "settled",
+          line: "Disputes practice owns the pilot",
+        });
+        afterOwnership(practiceOwnerReply);
+        return;
+      }
+
       if (stage === "citations") {
-        if (intent === "skip-citations") {
-          dispatch({ type: "DECISION", key: "citations", value: "skip" });
-          afterEvidence(skipCitationsReply);
+        if (intent === "skip-citations" || intent === "undecided-citations") {
+          dispatch({
+            type: "SETTLE",
+            id: "citations",
+            status: "needs-owner",
+            line: "Whether material claims must cite a source",
+            owner: "Pilot owner",
+          });
+          afterEvidence(intent === "skip-citations" ? skipCitationsReply : undecidedCitationsReply);
           return;
         }
-        if (intent === "explain-citations") {
-          dispatch({ type: "DECISION", key: "citations", value: "explain" });
-          afterEvidence(explainCitationsReply);
-          return;
-        }
-        dispatch({ type: "DECISION", key: "citations", value: "add" });
+        dispatch({
+          type: "SETTLE",
+          id: "citations",
+          status: "settled",
+          line: "Every material claim cites a source",
+        });
         afterEvidence(addCitationsReply);
         return;
       }
 
       if (stage === "ux-assumption") {
         if (intent === "redesign") {
-          dispatch({ type: "DECISION", key: "ux", value: "redesign" });
+          dispatch({
+            type: "SETTLE",
+            id: "ux",
+            status: "needs-owner",
+            line: "How lawyers choose source material — watch them use it",
+            owner: "Practice",
+          });
           afterValidation(redesignReply);
           return;
         }
         if (intent === "why-ux") {
-          dispatch({ type: "DECISION", key: "ux", value: "why" });
+          dispatch({
+            type: "SETTLE",
+            id: "ux",
+            status: "needs-owner",
+            line: "How lawyers choose source material — watch them use it",
+            owner: "Practice",
+          });
           afterValidation(whyUxReply);
           return;
         }
-        dispatch({ type: "DECISION", key: "ux", value: "validate" });
+        if (intent === "undecided-ux") {
+          dispatch({
+            type: "SETTLE",
+            id: "ux",
+            status: "needs-owner",
+            line: "How lawyers choose source material — watch them use it",
+            owner: "Practice",
+          });
+          afterValidation(undecidedUxReply);
+          return;
+        }
+        dispatch({
+          type: "SETTLE",
+          id: "ux",
+          status: "needs-owner",
+          line: "How lawyers choose source material — watch them use it",
+          owner: "Practice",
+        });
         afterValidation(validateReply);
         return;
       }
@@ -415,15 +538,15 @@ export function useSession() {
       }
 
       if (stage === "architecture") {
-        speak("That’s the production path I’d take. The next problem is the brief itself — claims with no source.", {
+        speak("That’s the production path I’d take. Next is who owns it after the hackathon — the code can’t tell me.", {
           wait: 260,
           awaiting: false,
         });
         later(900, () => {
-          speak(citationFinding, {
+          speak(ownershipFinding, {
             wait: 240,
-            stage: "citations",
-            suggestions: citationSuggestions,
+            stage: "ownership",
+            suggestions: ownershipSuggestions,
           });
         });
         return;
@@ -447,14 +570,20 @@ export function useSession() {
           : "I can work with that. The useful move is still the decision in front of us.",
         {
           wait: 260,
-          suggestions:
-            stage === "intake"
-              ? []
-              : state.suggestions,
+          suggestions: stage === "intake" ? [] : state.suggestions,
         },
       );
     },
-    [afterArchitecture, afterEvidence, afterValidation, clearTimers, later, speak, state.suggestions],
+    [
+      afterArchitecture,
+      afterEvidence,
+      afterOwnership,
+      afterValidation,
+      clearTimers,
+      later,
+      speak,
+      state.suggestions,
+    ],
   );
 
   const send = useCallback(

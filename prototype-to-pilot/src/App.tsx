@@ -39,6 +39,7 @@ export function App() {
             workDone={session.workDone}
             started
             stage={session.stage}
+            trail={session.trail}
             onSend={session.send}
           />
         ) : null}
@@ -52,7 +53,9 @@ export function App() {
               scanning={session.stage === "inspecting"}
             />
           ) : null}
-          {session.stage === "architecture" || session.stage === "citations" ? (
+          {session.stage === "architecture" ||
+          session.stage === "ownership" ||
+          session.stage === "citations" ? (
             <ArchitectureView />
           ) : null}
           {session.stage === "evidence" || session.stage === "ux-assumption" ? (
@@ -60,9 +63,9 @@ export function App() {
           ) : null}
           {session.stage === "validation" ? <ValidationView /> : null}
           {session.stage === "readiness" ? (
-            <ReadinessView onPrepare={session.preparePack} />
+            <ReadinessView trail={session.trail} onPrepare={session.preparePack} />
           ) : null}
-          {session.stage === "pack" ? <PilotPackView /> : null}
+          {session.stage === "pack" ? <PilotPackView trail={session.trail} /> : null}
         </main>
       </div>
     </div>

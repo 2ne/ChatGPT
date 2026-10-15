@@ -3,6 +3,7 @@ export type Stage =
   | "inspecting"
   | "data-leaving"
   | "architecture"
+  | "ownership"
   | "citations"
   | "evidence"
   | "ux-assumption"
@@ -32,25 +33,22 @@ export type WorkItem = {
 
 export type PrototypeId = "matter-brief" | "clause-lens" | "conflicts-sketch";
 
-export type DecisionKey = "matterData" | "citations" | "ux";
-
-export type Decisions = {
-  matterData: "approved" | "dummy" | "unsure" | null;
-  citations: "add" | "skip" | "explain" | null;
-  ux: "validate" | "redesign" | "why" | null;
-};
-
 export type Intent =
   | "reset"
   | "approved"
   | "dummy"
   | "unsure"
+  | "practice-owner"
+  | "innovation-owner"
+  | "unknown-owner"
   | "add-citations"
   | "skip-citations"
   | "explain-citations"
+  | "undecided-citations"
   | "validate"
   | "redesign"
   | "why-ux"
+  | "undecided-ux"
   | "continue-readiness"
   | "prepare-pack"
   | "ask-remaining"

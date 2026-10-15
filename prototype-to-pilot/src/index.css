@@ -143,7 +143,7 @@ button {
 
 .chat-pane {
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr auto auto;
   min-height: 0;
   border-right: 1px solid var(--color-line);
   background: var(--color-paper);
@@ -286,6 +286,70 @@ button {
   border-radius: 50%;
   background: var(--color-accent-2);
   animation: pulse 1.6s ease-in-out infinite;
+}
+
+.decisions-trail {
+  padding: 0.7rem 1.2rem 0.75rem;
+  border-top: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-paper) 70%, white);
+}
+
+.trail-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.trail-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trail-item {
+  position: relative;
+  padding: 0.18rem 0 0.18rem 0.85rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--color-ink-soft);
+}
+
+.trail-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-line-strong);
+}
+
+.trail-item.settled {
+  color: var(--color-ink);
+}
+
+.trail-item.settled::before {
+  background: var(--color-accent-2);
+}
+
+.trail-item.open {
+  color: var(--color-muted);
+}
+
+.trail-item.owner::before {
+  background: var(--color-warn);
+}
+
+.trail-waiting {
+  margin: 0.35rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
 }
 
 .eyebrow {
@@ -662,6 +726,24 @@ button {
 .plan-body ul {
   margin: 0.35rem 0 0;
   padding-left: 1.1rem;
+}
+
+.ready-list {
+  margin: 0 0 0.35rem;
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+.ready-list li {
+  color: var(--color-ink-soft);
+}
+
+.ready-list li + li {
+  margin-top: 0.28rem;
+}
+
+.ready-list li::marker {
+  color: var(--color-muted);
 }
 
 .outputs {

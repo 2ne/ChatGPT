@@ -1,4 +1,13 @@
-export function PilotPackView() {
+import { openItems, settledItems, type DecisionRecord } from "../data/decisions";
+
+type Props = {
+  trail: DecisionRecord[];
+};
+
+export function PilotPackView({ trail }: Props) {
+  const settled = settledItems(trail);
+  const open = openItems(trail);
+
   return (
     <div className="workspace-inner">
       <article className="pack">
@@ -8,6 +17,35 @@ export function PilotPackView() {
           Prepared from the prototype and the decisions taken in this conversation. For the pilot
           owner, InfoSec and Risk — to accept, amend or stop.
         </p>
+
+        <section>
+          <h3>Decisions made</h3>
+          {settled.length > 0 ? (
+            <ul>
+              {settled.map((item) => (
+                <li key={item.id}>{item.line}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>None settled in this conversation.</p>
+          )}
+        </section>
+
+        <section>
+          <h3>Open questions / owners</h3>
+          {open.length > 0 ? (
+            <ul>
+              {open.map((item) => (
+                <li key={item.id}>
+                  {item.line}
+                  {item.owner ? ` — ${item.owner}` : " — needs an owner"}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Nothing left open in this pass. Approvals remain human.</p>
+          )}
+        </section>
 
         <section>
           <h3>Product summary</h3>
@@ -64,9 +102,9 @@ export function PilotPackView() {
         <section>
           <h3>UX assumptions</h3>
           <p>
-            The prototype assumes lawyers upload individual documents. That may be wrong; they may
-            think in matters or sets. Do not redesign yet. Test with three lawyers. Success: two of
-            three complete the task without explanation and trust the cited evidence.
+            The prototype assumes lawyers upload individual documents. That cannot be settled by
+            talking. Do not redesign yet. Test with three lawyers. Success: two of three complete
+            the task without explanation and trust the cited evidence.
           </p>
         </section>
 

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import type { DecisionRecord } from "../data/decisions";
 import type { Message, Suggestion, WorkItem } from "../types";
+import { DecisionsTrail } from "./DecisionsTrail";
 
 type Props = {
   messages: Message[];
@@ -10,6 +12,7 @@ type Props = {
   workDone: boolean;
   started: boolean;
   stage: string;
+  trail: DecisionRecord[];
   onSend: (text: string) => void;
 };
 
@@ -22,6 +25,7 @@ export function ChatPane({
   workDone,
   started,
   stage,
+  trail,
   onSend,
 }: Props) {
   const [draft, setDraft] = useState("");
@@ -74,6 +78,8 @@ export function ChatPane({
           </p>
         ) : null}
       </div>
+
+      <DecisionsTrail trail={trail} />
 
       <form className="composer" onSubmit={submit}>
         {suggestions.length > 0 ? (

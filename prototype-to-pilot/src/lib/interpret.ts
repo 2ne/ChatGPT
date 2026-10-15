@@ -13,14 +13,22 @@ export function interpret(input: string, stage: Stage): Intent {
 
   if (stage === "data-leaving") {
     if (/(dummy|synthetic|not yet|test data|no matter|sandbox)/.test(t)) return "dummy";
-    if (/(not sure|unsure|don'?t know|no idea)/.test(t)) return "unsure";
+    if (/(not sure|unsure|don'?t know|no idea|not decided)/.test(t)) return "unsure";
     if (/(yes|internal|approved|infra|firm|production|matter data|only within)/.test(t)) {
       return "approved";
     }
     return "approved";
   }
 
+  if (stage === "ownership") {
+    if (/(innovat|central|platform|keep it in|sponsor)/.test(t)) return "innovation-owner";
+    if (/(not decided|don'?t know|unsure|no idea|not sure)/.test(t)) return "unknown-owner";
+    if (/(dispute|practice|yes|we will|our team)/.test(t)) return "practice-owner";
+    return "practice-owner";
+  }
+
   if (stage === "citations") {
+    if (/(not decided|don'?t know|unsure)/.test(t)) return "undecided-citations";
     if (/(not for|skip|later|without citation|no citation)/.test(t)) return "skip-citations";
     if (/(show me|what you mean|explain|example|how would)/.test(t)) return "explain-citations";
     if (/(yes|add|citation|source|trace|agree)/.test(t)) return "add-citations";
@@ -28,6 +36,7 @@ export function interpret(input: string, stage: Stage): Intent {
   }
 
   if (stage === "ux-assumption") {
+    if (/(not decided|don'?t know|unsure|leave it open)/.test(t)) return "undecided-ux";
     if (/(redesign|matters now|change (it|the ux|the flow)|rebuild)/.test(t)) return "redesign";
     if (/(why|matter for the pilot|does this matter)/.test(t)) return "why-ux";
     if (/(validate|test first|don'?t redesign|agreed|yes)/.test(t)) return "validate";
