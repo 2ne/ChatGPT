@@ -387,7 +387,7 @@ export function ActivityRunner({
             </button>
           </div>
 
-          <div>
+          <div className="context-progress">
             <div
               className="seg-bar"
               role="progressbar"

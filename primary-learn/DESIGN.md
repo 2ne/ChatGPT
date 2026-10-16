@@ -112,7 +112,8 @@ Do not switch back to Lato / Noto Sans.
 | Avatar / icon tiles | 18–20px (tiles), circle (faces) | 2px | soft indigo glow on brand tile |
 
 An 8px rainbow strip (sun/coral/mint/sky) sits between the flush header and
-the white activity column. It is the divider, not a card border.
+the white activity column. It spans the **full viewport width**, edge to edge,
+on every screen size. It is the divider, not a card border.
 
 ## Components
 
@@ -162,9 +163,11 @@ the sandy tag colour) → gradient `Start quest →`.
 The quest runner is **full-bleed white**. Kids know they are in an activity
 because the dotted sandy paper is gone. Header and activity touch the top and
 both sides. Square corners. No card chrome. Keep the header snug to the top
-(small top padding) and give the rainbow air: more padding under the progress
-bar, then more padding above the question. Inner words stay padded and, on
-wide screens, centred (`--max-wide`) while the white still goes edge to edge.
+(small top padding). Leave extra space between the title / question-count
+row and the segment bar, then more space between the bar and the rainbow,
+then more padding above the question. Inner words stay padded and, on wide
+screens, centred (`--max-wide`) while the white still goes edge to edge. The
+rainbow itself is never inset.
 
 ```
 ┌─────────────────────────────────┐  flush header, no radius
@@ -210,6 +213,7 @@ wide screens, centred (`--max-wide`) while the white still goes edge to edge.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. Sticky white dock at the viewport bottom on
   every width (with safe-area padding) so kids never have to scroll to find it.
+  The dock button has **no 2px border** (gradient fill + squishy shadow only).
 - Home and onboarding keep the dotted paper. Once a quest is open, the screen
   is white edge to edge. Inner content still uses `--max-wide`.
 
