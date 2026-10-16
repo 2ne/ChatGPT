@@ -3,6 +3,9 @@ import type { Activity } from "../../types/activity";
 import countTo5 from "./count-to-5.json" with { type: "json" };
 import countTo5Hard from "./count-to-5-hard.json" with { type: "json" };
 import countTo5Medium from "./count-to-5-medium.json" with { type: "json" };
+import makeNumbersTo5 from "./make-numbers-to-5.json" with { type: "json" };
+import makeNumbersTo5Hard from "./make-numbers-to-5-hard.json" with { type: "json" };
+import makeNumbersTo5Medium from "./make-numbers-to-5-medium.json" with { type: "json" };
 import numberBondsTo10 from "./number-bonds-to-10.json" with { type: "json" };
 import seeNumbersTo5 from "./see-numbers-to-5.json" with { type: "json" };
 import seeNumbersTo5Hard from "./see-numbers-to-5-hard.json" with { type: "json" };
@@ -19,6 +22,9 @@ const files = [
   { name: "see-numbers-to-5.json", data: seeNumbersTo5 },
   { name: "see-numbers-to-5-medium.json", data: seeNumbersTo5Medium },
   { name: "see-numbers-to-5-hard.json", data: seeNumbersTo5Hard },
+  { name: "make-numbers-to-5.json", data: makeNumbersTo5 },
+  { name: "make-numbers-to-5-medium.json", data: makeNumbersTo5Medium },
+  { name: "make-numbers-to-5-hard.json", data: makeNumbersTo5Hard },
   { name: "number-bonds-to-10.json", data: numberBondsTo10 },
 ] as const;
 

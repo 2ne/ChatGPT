@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 2 — `eyfs-count-5`, `eyfs-subitise-5` |
+| Done | 3 — `eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5` |
 | Partial | 1 — `y1-bonds-10` |
-| Missing | 121 |
+| Missing | 120 |
 
 ## Quests in the app
 
@@ -24,13 +24,16 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `see-numbers-to-5` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Easy: dice glance 1 to 5, match amounts, no tap-to-count |
 | `see-numbers-to-5-medium` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Medium: dice and messy groups 3 to 5 |
 | `see-numbers-to-5-hard` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Hard: 4 and 5 in different patterns, number words |
+| `make-numbers-to-5` | `eyfs-compose-5` (node 3, category `cat-r-to-5`) | done — Easy: pictured parts 1 and 1 up to 2 and 3, build 4 |
+| `make-numbers-to-5-medium` | `eyfs-compose-5` (node 3, category `cat-r-to-5`) | done — Medium: 4 and 5, including 0 and 5 |
+| `make-numbers-to-5-hard` | `eyfs-compose-5` (node 3, category `cat-r-to-5`) | done — Hard: 0, reverse parts, number words, hidden part |
 | `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | partial — addition pairs that make 10 are in the quest; related subtraction facts are not |
 
 ## Next quest to build
 
 Improve first: Medium, then Hard, for `y1-bonds-10` (`number-bonds-to-10` is Easy only).
 
-When expanding the path, the first `missing` node is `eyfs-compose-5` — Make numbers to 5 (node 3, after `eyfs-subitise-5`). Start that node with Easy.
+When expanding the path, the first `missing` node is `eyfs-bonds-5` — Bonds to 5 (node 4, after `eyfs-compose-5`). Start that node with Easy.
 
 Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.
 

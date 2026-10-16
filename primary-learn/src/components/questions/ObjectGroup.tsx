@@ -152,10 +152,31 @@ export function ObjectGroup({
         </span>
       );
     }
+    const extraLabel =
+      extras?.length ? extras.map((asset) => describeVisual(asset)).join(" and ") : "";
+    const label = extraLabel ? `${describeVisual(visual)} and ${extraLabel}` : describeVisual(visual);
+
+    if (mixed && !scatter) {
+      const parts = [visual, ...(extras ?? [])];
+      return (
+        <span className="object-group is-parts" aria-label={label}>
+          {parts.map((asset, partIndex) => (
+            <span key={`${asset.item}-${partIndex}`} className="object-part" aria-hidden>
+              {Array.from({ length: asset.count }, (_, index) => (
+                <span key={index} className="object-glyph">
+                  {OBJECT_GLYPH[asset.item]}
+                </span>
+              ))}
+            </span>
+          ))}
+        </span>
+      );
+    }
+
     return (
       <span
         className={`object-group${scatter ? " is-scatter" : ""}`}
-        aria-label={describeVisual(visual)}
+        aria-label={label}
       >
         {tokens.map((token) => (
           <span key={token.key} className="object-glyph" aria-hidden>

@@ -1196,6 +1196,21 @@ button.learner-chip:focus-visible {
   margin-inline: auto;
 }
 
+.object-group.is-parts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 28px;
+}
+
+.object-part {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
 .object-group.is-dice {
   display: grid;
   grid-template-columns: repeat(3, 40px);
