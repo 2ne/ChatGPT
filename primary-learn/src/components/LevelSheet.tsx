@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import { Check, Lock, Play, RotateCcw, Star, X } from "lucide-react";
+import { Lock, Play, RotateCcw, Star, Trophy, X } from "lucide-react";
+import { copy } from "../data/copy";
+import { STARS_PER_NODE } from "../lib/mastery";
 import { DIFFICULTY_LABELS, type LevelState } from "../lib/path";
 import { Pip } from "./mascot/Pip";
 
@@ -62,6 +64,13 @@ export function LevelSheet({ level, learnerName, currentLevel, onClose, onPlay }
           <span className="sheet-level">Level {node.number}</span>
           {node.title}
         </h2>
+        {status === "soon" || status === "locked" ? null : (
+          <p className={`sheet-cup-line${level.cup ? " is-gold" : ""}`}>
+            <Trophy size={18} aria-hidden />
+            {copy.cupMark(level.stars, STARS_PER_NODE)}
+            {level.cup ? " Gold cup!" : " stars"}
+          </p>
+        )}
 
         {status === "soon" ? (
           <div className="sheet-note">
@@ -84,26 +93,41 @@ export function LevelSheet({ level, learnerName, currentLevel, onClose, onPlay }
             {difficulties.map((entry) => {
               const label = DIFFICULTY_LABELS[entry.difficulty];
               const previous = entry.difficulty > 1 ? DIFFICULTY_LABELS[(entry.difficulty - 1) as 1 | 2] : "";
+              const hasScore = entry.bestTotalCount > 0;
               const note = !entry.activity
                 ? "Coming soon"
                 : entry.done
-                  ? "Done!"
-                  : entry.playable
-                    ? entry.difficulty === 1
-                      ? `Ready when you are, ${learnerName}`
-                      : "Ready to play"
-                    : `Finish ${previous} first`;
+                  ? copy.levelPassed
+                  : hasScore
+                    ? copy.levelRetry
+                    : entry.playable
+                      ? entry.difficulty === 1
+                        ? `Ready when you are, ${learnerName}`
+                        : "Ready to play"
+                      : `Finish ${previous} first`;
 
               return (
                 <li
                   key={entry.difficulty}
                   className={`sheet-row${entry.done ? " is-done" : ""}${entry.playable ? "" : " is-closed"}`}
                 >
-                  <span className="sheet-star" aria-hidden>
-                    <Star size={22} fill={entry.done ? "currentColor" : "none"} />
+                  <span className="sheet-star-row" aria-hidden>
+                    {[0, 1, 2].map((slot) => (
+                      <Star
+                        key={slot}
+                        size={18}
+                        className={slot < entry.bestStars ? "is-lit" : undefined}
+                        fill={slot < entry.bestStars ? "currentColor" : "none"}
+                      />
+                    ))}
                   </span>
                   <span className="sheet-row-text">
-                    <span className="sheet-row-title">{label}</span>
+                    <span className="sheet-row-title">
+                      {label}
+                      {hasScore ? (
+                        <span className="sheet-score">{copy.scoreMark(entry.bestCorrectCount, entry.bestTotalCount)}</span>
+                      ) : null}
+                    </span>
                     <span className="sheet-row-note">{note}</span>
                   </span>
                   {entry.playable && entry.activity ? (
@@ -122,10 +146,6 @@ export function LevelSheet({ level, learnerName, currentLevel, onClose, onPlay }
                         </>
                       )}
                     </button>
-                  ) : entry.done ? (
-                    <span className="sheet-tick" aria-hidden>
-                      <Check size={16} />
-                    </span>
                   ) : null}
                 </li>
               );

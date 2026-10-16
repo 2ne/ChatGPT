@@ -94,7 +94,7 @@ Every question needs `explanation`. Hints are optional and must follow the scaff
 
 - **Hint:** a strategy, never the answer. “Point to each apple and say a number.”
 - **Explanation:** state the correct idea in one or two short sentences. Include the count or the bond. “Touch each apple once and count: 1, 2, 3. There are 3 apples.”
-- After a miss the child will hear this. Write it so it teaches, not scolds. No “you forgot”.
+- After a miss the child sees this on screen, after “It was 4.” Write it so it teaches, not scolds. No “you forgot”.
 
 ## Variety
 
@@ -165,7 +165,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed
 - [ ] At least three question kinds in a 10-question quest; same kind not overused
 - [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
-- [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set; `masteryThreshold` 0.8 unless there is a real reason
+- [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set. Stars use `STAR_SCORE` (6–7 / 8–9 / 10). No retry loop.
 - [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many

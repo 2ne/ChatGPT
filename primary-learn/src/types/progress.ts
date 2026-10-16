@@ -22,6 +22,7 @@ export type ActivityAttempt = {
   correctCount: number;
   totalCount: number;
   percent: number;
+  stars: number;
   mastered: boolean;
   missedQuestionIds: string[];
 };
@@ -30,6 +31,10 @@ export type ActivityProgress = {
   activityId: string;
   attempts: ActivityAttempt[];
   bestPercent: number;
+  bestCorrectCount: number;
+  bestTotalCount: number;
+  bestStars: number;
+  /** True once the best score has earned at least one star. */
   mastered: boolean;
   lastAttemptAt: string | null;
 };

@@ -1,5 +1,6 @@
 import { activities } from "../data/activities";
 import { PATH_CATEGORIES } from "../data/path.generated";
+import { STARS_PER_NODE, type StarCount } from "./mastery";
 import type { Activity } from "../types/activity";
 import type { Difficulty, PathCategory, PathNode } from "../types/path";
 import type { ProgressState } from "../types/progress";
@@ -13,7 +14,7 @@ export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
 };
 
 /**
- * done: easy is mastered. current: the one level to play next.
+ * done: easy has at least one star. current: the one level to play next.
  * locked: has a quest, but an earlier level is not done.
  * soon: no easy quest written for this level yet.
  */
@@ -25,6 +26,9 @@ export type DifficultyState = {
   done: boolean;
   /** Can be started now. Medium needs easy done; hard needs medium done. */
   playable: boolean;
+  bestCorrectCount: number;
+  bestTotalCount: number;
+  bestStars: StarCount;
 };
 
 export type LevelState = {
@@ -32,7 +36,10 @@ export type LevelState = {
   category: PathCategory;
   categoryIndex: number;
   status: LevelStatus;
+  /** Stars earned across Easy / Medium / Hard, out of 9. */
   stars: number;
+  /** All 9 stars. This node gets a gold cup. */
+  cup: boolean;
   difficulties: DifficultyState[];
 };
 
@@ -53,8 +60,16 @@ export function buildLevels(progress: ProgressState): LevelState[] {
     for (const node of category.nodes) {
       const raw = DIFFICULTIES.map((difficulty) => {
         const activity = questFor(node.id, difficulty);
-        const done = activity ? Boolean(progress.byActivity[activity.id]?.mastered) : false;
-        return { difficulty, activity, done };
+        const mark = activity ? progress.byActivity[activity.id] : undefined;
+        const bestStars = (mark?.bestStars ?? 0) as StarCount;
+        return {
+          difficulty,
+          activity,
+          done: bestStars >= 1,
+          bestCorrectCount: mark?.bestCorrectCount ?? 0,
+          bestTotalCount: mark?.bestTotalCount ?? 0,
+          bestStars,
+        };
       });
 
       const easy = raw[0];
@@ -73,16 +88,18 @@ export function buildLevels(progress: ProgressState): LevelState[] {
       const open = status === "done" || status === "current";
       const difficulties = raw.map((entry, i) => ({
         ...entry,
-        playable:
-          open && Boolean(entry.activity) && (i === 0 || raw[i - 1].done),
+        playable: open && Boolean(entry.activity) && (i === 0 || raw[i - 1].done),
       }));
+
+      const stars = difficulties.reduce((sum, entry) => sum + entry.bestStars, 0);
 
       levels.push({
         node,
         category,
         categoryIndex,
         status,
-        stars: difficulties.filter((d) => d.done).length,
+        stars,
+        cup: stars >= STARS_PER_NODE,
         difficulties,
       });
     }

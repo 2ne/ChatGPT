@@ -48,7 +48,7 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
   banner — the learner's own buddy emoji is who they are.
 - Motion: blink (5s), sprout sway, star twinkle, one hop on `cheer`, tilt on
   `think`. All disabled under `prefers-reduced-motion`.
-- Finish screen: large Pip + animated 1–3 stars.
+- Finish screen: Pip bounces in, then 1–3 stars pop in one by one.
 
 ## Colour
 
@@ -134,15 +134,17 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
 
 1. **Hero** — indigo→violet gradient panel, very faint dot texture, sun accent:
    `Hi, {name}!` + buddy emoji, subline (`Follow the path and earn your stars.`),
-   stat pills (stars out of levels × 3, levels done). No mascot on this banner.
+   stat pills (stars on shipped quests, gold cups). No mascot on this banner.
 2. **Path map** (`PathMap`) — a winding road of numbered stops, grouped by
    category signs from `curriculum/maths.md`. No subject chips, year chips, or
    a free-choice quest list. Locked stops show a lock; the current stop carries
-   the learner’s buddy face. Up to three small stars sit under a stop (one per
-   mastered Easy / Medium / Hard).
+   the learner’s buddy face. Under each stop: a cup with `7/9` and three
+   groups of three tiny stars (Easy / Medium / Hard). All 9 stars turn the
+   cup gold and put a trophy on the node.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
-   rows. Play only when that row is unlocked. Coming-soon nodes (no Easy quest
-   yet) and locked nodes get a calm Pip / lock note instead of play buttons.
+   rows, each with three stars and the best mark (`7/10`). Play only when that
+   row is unlocked. Coming-soon nodes (no Easy quest yet) and locked nodes get
+   a calm Pip / lock note instead of play buttons.
 4. **Find me** — `Go to my level` scrolls the page to the current stop.
    Major screen changes (onboarding, pathway, activity) scroll to the top so
    the name and avatar stay in view. Do not auto-jump down the path on entry.
@@ -220,17 +222,24 @@ rainbow itself is never inset.
 ### Progress
 
 **Segmented bar** — one capsule per question, 12px tall, paper fill. Done =
-gradient fill with pop; current = indigo outline + soft glow; retry rounds
-restart the bar with a `Practising the tricky ones` note. Counter reads
-`Question 3 of 10` (Baloo, number in indigo) + rotating cheer line. Streaks
-≥ 2 earn a `🔥 N in a row!` flame pill.
+gradient fill with pop; current = indigo outline + soft glow. Each question
+is asked once. Counter reads `Question 3 of 10` (Baloo, number in indigo).
+Streaks ≥ 2 earn a `🔥 N in a row!` flame pill. A miss shows a short
+correction (`It was 4.` plus the explanation) then **Next question**.
 
-### Summary
+### Summary (end screen)
 
-Large Pip + 1–3 stars (pop in sequence: 3 = perfect first try, 2 = mastered,
-1 = finished). Big `X / N` figure, one warm sentence, `Quest complete` trophy
-pill when mastered, then `Back to quests` (primary) / `Play again` or
-`Try again` (primary when not mastered). Confetti shower on mastery.
+Joyful result, like a lesson-complete or star-reveal screen. CSS/SVG only.
+
+1. Pip bounces in.
+2. Three star tiles sit empty, then the earned ones fill **one by one** with
+   a pop (1 star = 6–7, 2 = 8–9, 3 = 10). A small confetti burst on 3 stars.
+3. Big text: `You got 7 out of 10!`
+4. One short line: `Two stars! Great work.` (or a try-again nudge at 0 stars).
+5. Buttons: `Try again` and `Next` (Next goes back to the path).
+
+No percentages. Off under `prefers-reduced-motion` (final stars, no pop,
+no confetti). 0 stars does not unlock the next level.
 
 ### Onboarding
 

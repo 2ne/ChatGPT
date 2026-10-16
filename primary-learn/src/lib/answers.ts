@@ -79,6 +79,25 @@ export function emptyAnswerFor(question: Question): unknown {
   }
 }
 
+/** Short child-facing correct answer, for “It was 4.” */
+export function correctAnswerLabel(question: Question): string | null {
+  switch (question.kind) {
+    case "count-objects":
+    case "multiple-choice":
+      return question.options.find((option) => option.id === question.correctId)?.label ?? null;
+    case "fill-blank":
+      return question.acceptedAnswers[0] ?? null;
+    case "multi-select": {
+      const labels = question.correctIds
+        .map((id) => question.options.find((option) => option.id === id)?.label)
+        .filter((label): label is string => Boolean(label));
+      return labels.length ? labels.join(", ") : null;
+    }
+    default:
+      return null;
+  }
+}
+
 export function hasProvidedAnswer(question: Question, answer: unknown): boolean {
   switch (question.kind) {
     case "count-objects":

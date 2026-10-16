@@ -5,18 +5,17 @@ import {
   Check,
   Clock,
   Flame,
-  Home,
   Lightbulb,
   ListChecks,
   RotateCcw,
   Star,
-  Trophy,
   X,
 } from "lucide-react";
 import type { Activity, Question } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
-import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
-import { scoreAttempt } from "../lib/mastery";
+import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
+import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
 import { spokenPrompt } from "../lib/narration";
@@ -48,19 +47,17 @@ export function ActivityRunner({
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
   const [startedAt, setStartedAt] = useState(() => new Date().toISOString());
-  const [firstResults, setFirstResults] = useState<Record<string, boolean>>({});
-  const [missed, setMissed] = useState<string[]>([]);
-  const [retryQueue, setRetryQueue] = useState<string[]>([]);
+  const [results, setResults] = useState<Record<string, boolean>>({});
   const [activeQueue, setActiveQueue] = useState<string[]>(() =>
     activity.questions.map((question) => question.id),
   );
   const [showHint, setShowHint] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
   const [confettiBurst, setConfettiBurst] = useState(0);
-  const [isRetry, setIsRetry] = useState(false);
   const [streak, setStreak] = useState(0);
   const { setMood } = usePipMood();
   const promptRef = useRef<HTMLHeadingElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   const theme = subjectTheme(activity.subject);
   const ThemeIcon = theme.icon;
@@ -69,8 +66,8 @@ export function ActivityRunner({
   const question = playQuestions.find((item) => item.id === currentId);
   const speech = useNarration(`${currentId ?? "none"}:${phase}`);
   const total = playQuestions.length;
-  const firstCorrect = Object.values(firstResults).filter(Boolean).length;
-  const mastered = total > 0 && firstCorrect / total >= activity.masteryThreshold;
+  const correctCount = Object.values(results).filter(Boolean).length;
+  const mastered = passedScore(correctCount, total);
 
   const view = useRef({ phase, question, answer, mastered, onExit });
   view.current = { phase, question, answer, mastered, onExit };
@@ -82,13 +79,10 @@ export function ActivityRunner({
     setActiveQueue(realized.questions.map((item) => item.id));
     setIndex(0);
     setAnswer(first ? emptyAnswerFor(first) : null);
-    setFirstResults({});
-    setMissed([]);
-    setRetryQueue([]);
+    setResults({});
     setShowHint(false);
     setLastCorrect(null);
     setConfettiBurst(0);
-    setIsRetry(false);
     setStreak(0);
     setStartedAt(new Date().toISOString());
     setPhase("question");
@@ -99,15 +93,8 @@ export function ActivityRunner({
     const correct = isAnswerCorrect(question, answer);
     setLastCorrect(correct);
     setStreak((prev) => (correct ? prev + 1 : 0));
-    setFirstResults((prev) =>
-      question.id in prev ? prev : { ...prev, [question.id]: correct },
-    );
-    if (correct) {
-      setConfettiBurst((count) => count + 1);
-    } else {
-      setMissed((prev) => (prev.includes(question.id) ? prev : [...prev, question.id]));
-      setRetryQueue((prev) => (prev.includes(question.id) ? prev : [...prev, question.id]));
-    }
+    setResults((prev) => (question.id in prev ? prev : { ...prev, [question.id]: correct }));
+    if (correct) setConfettiBurst((count) => count + 1);
     setPhase("feedback");
   }
 
@@ -124,24 +111,13 @@ export function ActivityRunner({
       return;
     }
 
-    if (retryQueue.length > 0) {
-      const retryIds = [...retryQueue];
-      const firstRetry = playQuestions.find((item) => item.id === retryIds[0]);
-      setActiveQueue(retryIds);
-      setRetryQueue([]);
-      setIndex(0);
-      setAnswer(firstRetry ? emptyAnswerFor(firstRetry) : null);
-      setShowHint(false);
-      setLastCorrect(null);
-      setIsRetry(true);
-      setPhase("question");
-      return;
-    }
-
+    const missed = Object.entries(results)
+      .filter(([, ok]) => !ok)
+      .map(([id]) => id);
     const finishedAt = new Date().toISOString();
     const attempt = scoreAttempt(
-      activity,
-      firstCorrect,
+      activity.id,
+      correctCount,
       total,
       missed,
       startedAt,
@@ -267,62 +243,16 @@ export function ActivityRunner({
 
   /* ——— Summary ——— */
   if (phase === "summary") {
-    const perfect = missed.length === 0;
-    const stars = perfect ? 3 : mastered ? 2 : firstCorrect > 0 ? 1 : 0;
+    const stars = attemptStars(correctCount, total);
     return (
-      <main className="page page-quest">
-        {mastered ? <ConfettiBurst burstId={1} intensity="shower" /> : null}
-        <section className="card score-block">
-          <Pip size={112} mood={mastered ? "cheer" : "happy"} />
-          <div className="stars-row" role="img" aria-label={copy.starsAria(stars)}>
-            {[0, 1, 2].map((slot) => (
-              <span key={slot} className={`star${slot < stars ? " is-lit" : ""}`}>
-                <Star size={30} fill={slot < stars ? "currentColor" : "none"} aria-hidden />
-              </span>
-            ))}
-          </div>
-          <h1 className="t-title">
-            {copy.summaryTitle(learnerName, mastered)}
-          </h1>
-          <p className="score-figure">
-            {firstCorrect}
-            <small> / {total}</small>
-          </p>
-          <p className="t-body">
-            {mastered
-              ? perfect
-                ? copy.summaryPerfect
-                : copy.summaryMastered
-              : copy.summaryAgain}
-          </p>
-          {mastered ? (
-            <p className="status-pill is-done">
-              <Trophy size={14} aria-hidden /> {copy.questComplete}
-            </p>
-          ) : null}
-          <div className="score-actions">
-            {mastered ? (
-              <>
-                <button type="button" className="btn btn-primary btn-block" onClick={onExit}>
-                  <Home size={18} aria-hidden /> {copy.backToQuests}
-                </button>
-                <button type="button" className="btn btn-secondary btn-block" onClick={begin}>
-                  <RotateCcw size={17} aria-hidden /> {copy.playAgain}
-                </button>
-              </>
-            ) : (
-              <>
-                <button type="button" className="btn btn-primary btn-block" onClick={begin}>
-                  <RotateCcw size={17} aria-hidden /> {copy.tryAgain}
-                </button>
-                <button type="button" className="btn btn-secondary btn-block" onClick={onExit}>
-                  <Home size={18} aria-hidden /> {copy.backToQuests}
-                </button>
-              </>
-            )}
-          </div>
-        </section>
-      </main>
+      <ResultScreen
+        correctCount={correctCount}
+        total={total}
+        stars={stars}
+        reducedMotion={reducedMotion}
+        onTryAgain={begin}
+        onNext={onExit}
+      />
     );
   }
 
@@ -337,6 +267,7 @@ export function ActivityRunner({
   }
 
   /* ——— Question / feedback ——— */
+  const rightLabel = lastCorrect === false ? correctAnswerLabel(question) : null;
   const reveal = phase === "feedback" ? (lastCorrect ? "correct" : "incorrect") : null;
   const position = Math.min(index + 1, activeQueue.length);
   const primaryAction =
@@ -351,9 +282,7 @@ export function ActivityRunner({
       </button>
     ) : (
       <button type="button" className="btn btn-primary btn-block" onClick={goNext}>
-        {position === activeQueue.length && retryQueue.length === 0
-          ? copy.seeMyStars
-          : copy.nextQuestion}{" "}
+        {position === activeQueue.length ? copy.seeMyStars : copy.nextQuestion}{" "}
         <ArrowRight size={19} aria-hidden />
       </button>
     );
@@ -377,10 +306,7 @@ export function ActivityRunner({
               <p className="context-title" style={{ fontSize: 21 }}>
                 {activity.title}
               </p>
-              <p className="context-sub">
-                {copy.questionOf(position, activeQueue.length)}
-                {isRetry ? copy.anotherGo : ""}
-              </p>
+              <p className="context-sub">{copy.questionOf(position, activeQueue.length)}</p>
             </div>
             <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
               <X size={20} aria-hidden />
@@ -422,12 +348,6 @@ export function ActivityRunner({
       </section>
 
       <div className="quest-rainbow" aria-hidden />
-
-      {isRetry && phase === "question" ? (
-        <p className="retry-note" role="status">
-          <RotateCcw size={15} aria-hidden /> {copy.retryNote}
-        </p>
-      ) : null}
 
       <div className="play-grid">
         <section key={question.id} className="card question-card" aria-label={`Question ${position}`}>
@@ -494,7 +414,14 @@ export function ActivityRunner({
                 <p className="feedback-title">
                   {lastCorrect ? copy.feedbackCorrect : copy.feedbackWrong}
                 </p>
-                <p>{question.explanation}</p>
+                {lastCorrect ? (
+                  <p>{question.explanation}</p>
+                ) : (
+                  <p>
+                    {rightLabel ? `${copy.itWas(rightLabel)} ` : null}
+                    {question.explanation}
+                  </p>
+                )}
               </div>
               <span className="feedback-pip" aria-hidden>
                 <Pip size={56} mood={lastCorrect ? "cheer" : "think"} />
@@ -510,6 +437,62 @@ export function ActivityRunner({
       <div className="quest-dock" role="region" aria-label="Answer actions">
         <div className="quest-dock-inner">{primaryAction}</div>
       </div>
+    </main>
+  );
+}
+
+function ResultScreen({
+  correctCount,
+  total,
+  stars,
+  reducedMotion,
+  onTryAgain,
+  onNext,
+}: {
+  correctCount: number;
+  total: number;
+  stars: number;
+  reducedMotion: boolean;
+  onTryAgain: () => void;
+  onNext: () => void;
+}) {
+  const [confetti, setConfetti] = useState(0);
+
+  useEffect(() => {
+    if (stars < 3 || reducedMotion) return;
+    const timer = window.setTimeout(() => setConfetti(1), 1100);
+    return () => window.clearTimeout(timer);
+  }, [stars, reducedMotion]);
+
+  return (
+    <main className="page page-quest result-page">
+      <ConfettiBurst burstId={confetti} intensity="pop" />
+      <section className={`result-card${reducedMotion ? " is-still" : ""}`} aria-live="polite">
+        <div className="result-pip" aria-hidden>
+          <Pip size={120} mood={stars > 0 ? "cheer" : "happy"} />
+        </div>
+        <div className="result-stars" role="img" aria-label={copy.starsAria(stars)}>
+          {[0, 1, 2].map((slot) => (
+            <span
+              key={slot}
+              className={`result-star${slot < stars ? " is-lit" : ""}`}
+              style={{ animationDelay: reducedMotion ? "0s" : `${0.4 + slot * 0.28}s` }}
+            >
+              <Star size={slot === 1 ? 44 : 36} fill={slot < stars ? "currentColor" : "none"} aria-hidden />
+            </span>
+          ))}
+        </div>
+        <h1 className="result-score">{copy.youGot(correctCount, total)}</h1>
+        <p className="result-line">{copy.starLine(stars)}</p>
+        <div className="result-actions">
+          <button type="button" className="btn btn-secondary btn-block" onClick={onTryAgain}>
+            <RotateCcw size={17} aria-hidden /> {copy.tryAgain}
+          </button>
+          <button type="button" className="btn btn-primary btn-block" onClick={onNext}>
+            {copy.next} <ArrowRight size={19} aria-hidden />
+          </button>
+        </div>
+      </section>
     </main>
   );
 }

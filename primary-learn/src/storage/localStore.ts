@@ -1,4 +1,5 @@
 import type { LearnerProfile, ProgressState } from "../types/progress";
+import { normalizeProgress } from "../lib/mastery";
 
 const PROFILE_KEY = "primary-path:profile:v1";
 const PROGRESS_KEY = "primary-path:progress:v1";
@@ -41,7 +42,7 @@ export function clearProfile(): void {
 }
 
 export function loadProgress(): ProgressState {
-  return readJson<ProgressState>(PROGRESS_KEY) ?? { byActivity: {} };
+  return normalizeProgress(readJson<ProgressState>(PROGRESS_KEY));
 }
 
 export function saveProgress(progress: ProgressState): void {

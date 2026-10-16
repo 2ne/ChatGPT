@@ -14,6 +14,7 @@ export const copy = {
   backToQuests: "Back to quests",
   playAgain: "Play again",
   tryAgain: "Try again",
+  next: "Next",
   exitQuest: "Exit quest",
   questComplete: "Quest complete",
   emptyActivity: "This activity has no questions yet.",
@@ -22,8 +23,6 @@ export const copy = {
   tapThenPartner: "Tap one, then tap its partner.",
   matchChoose: "Choose",
   matchPartners: "Partners",
-  anotherGo: " · another go",
-  retryNote: "Practising the tricky ones once more",
   questionsFact: (n: number) => `${n} questions`,
   minutesFact: (n: number) => `About ${n} min`,
   starsFact: "Earn up to 3 stars",
@@ -31,15 +30,23 @@ export const copy = {
   questionOf: (position: number, total: number) => `Question ${position} of ${total}`,
   streak: (n: number) => `${n} in a row!`,
   starsAria: (n: number) => `${n} out of 3 stars`,
-  introCheer: (name: string) =>
-    `You've got this, ${name}! Miss one and we'll practise it again.`,
-  summaryTitle: (name: string, mastered: boolean) =>
-    mastered ? `Amazing, ${name}!` : `Good effort, ${name}!`,
-  summaryPerfect: "Every single one right first time. Superstar!",
-  summaryMastered: "You stuck with the tricky ones until they clicked.",
-  summaryAgain: "Every try makes your brain stronger. Have another go!",
+  introCheer: (name: string) => `You've got this, ${name}! Ten questions. Let's go.`,
+  youGot: (correct: number, total: number) => `You got ${correct} out of ${total}!`,
+  starLine: (stars: number) =>
+    stars >= 3
+      ? "Three stars! Superstar!"
+      : stars === 2
+        ? "Two stars! Great work."
+        : stars === 1
+          ? "One star! Great work."
+          : "No stars this time. Have another go!",
+  scoreMark: (correct: number, total: number) => `${correct}/${total}`,
+  cupMark: (stars: number, max: number) => `${stars}/${max}`,
+  levelPassed: "You did it!",
+  levelRetry: "Have another go",
   feedbackCorrect: "Correct. Nice!",
-  feedbackWrong: "Not quite. Good try!",
+  feedbackWrong: "Not quite.",
+  itWas: (answer: string) => `It was ${answer}.`,
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",

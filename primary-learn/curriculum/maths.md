@@ -12,7 +12,7 @@ Maths is the **current phase** of a longer product that should eventually cover 
 
 - **Categories** are the chapters a learner will see, in the order below.
 - **Nodes** are the levels inside a category, also in order. The home path map (`PathMap`) shows one stop per node.
-- **Each node has three quests:** Easy (`difficulty: 1`), Medium (`2`), Hard (`3`). Mastering all three means the child can do that skill. The map shows up to three stars per node.
+- **Each node has three quests:** Easy (`difficulty: 1`), Medium (`2`), Hard (`3`). Each can earn up to three stars (nine in total). All nine awards a gold cup.
 - Place a quest with `pathNode` = this node’s id and `difficulty` = `1` | `2` | `3`. Also set `curriculumRef` to the same id (audit only; the map does not read it).
 - A new learner starts at node 1 only. Every later node stays locked until the **previous node’s Easy** is mastered. On an open node, Medium needs Easy mastered and Hard needs Medium mastered.
 - Finishing Easy on the last node of a category is what opens the next category. There is no second route.

@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState, type CSSProperties } from "react";
-import { Lock, LocateFixed, Star } from "lucide-react";
+import { Lock, LocateFixed, Star, Trophy } from "lucide-react";
+import { copy } from "../data/copy";
+import { STARS_PER_NODE } from "../lib/mastery";
 import type { LevelState } from "../lib/path";
 import { DoodleShape, DoodleStar } from "./mascot/Doodles";
 import { LevelSheet } from "./LevelSheet";
@@ -14,7 +16,7 @@ type PathMapProps = {
 const VIEW_W = 400;
 const STEP = 96;
 const SIGN_GAP = 140; // extra road length between sections (the sign sits in it)
-const PAD_BOTTOM = 96;
+const PAD_BOTTOM = 120;
 const SIGN_NEAR = 104; // sign centre to the first level below it
 const SIGN_FAR = 148; // same, when the "you are here" badge sits on that level
 const SIGN_HALF_H = 40; // how far above and below its centre a sign can reach
@@ -258,7 +260,8 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                 level.node.title,
                 level.status === "soon"
                   ? "coming soon"
-                  : `${level.stars} of 3 stars`,
+                  : `${level.stars} of ${STARS_PER_NODE} stars`,
+                level.cup ? "gold cup" : null,
                 level.status === "locked" ? "locked" : null,
                 isCurrent ? "play next" : null,
               ]
@@ -268,7 +271,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
               return (
                 <div
                   key={level.node.id}
-                  className={`map-stop is-${level.status}${isCurrent ? " is-here" : ""}`}
+                  className={`map-stop is-${level.status}${isCurrent ? " is-here" : ""}${level.cup ? " is-cup" : ""}`}
                   style={{ left: `${(point.x / VIEW_W) * 100}%`, top: point.y }}
                 >
                   {isCurrent ? (
@@ -284,20 +287,32 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                   >
                     {level.status === "locked" ? (
                       <Lock size={20} aria-hidden />
+                    ) : level.cup ? (
+                      <Trophy size={22} aria-hidden />
                     ) : (
                       <span className="map-node-num">{level.node.number}</span>
                     )}
                   </button>
                   {level.status !== "soon" ? (
-                    <span className="map-stars" aria-hidden>
-                      {[0, 1, 2].map((slot) => (
-                        <Star
-                          key={slot}
-                          size={13}
-                          className={slot < level.stars ? "is-lit" : undefined}
-                          fill={slot < level.stars ? "currentColor" : "none"}
-                        />
-                      ))}
+                    <span className="map-progress" aria-hidden>
+                      <span className={`map-cup${level.cup ? " is-gold" : ""}`}>
+                        <Trophy size={12} />
+                        {copy.cupMark(level.stars, STARS_PER_NODE)}
+                      </span>
+                      <span className="map-nines">
+                        {level.difficulties.map((entry) => (
+                          <span key={entry.difficulty} className="map-star-group">
+                            {[0, 1, 2].map((slot) => (
+                              <Star
+                                key={slot}
+                                size={9}
+                                className={slot < entry.bestStars ? "is-lit" : undefined}
+                                fill={slot < entry.bestStars ? "currentColor" : "none"}
+                              />
+                            ))}
+                          </span>
+                        ))}
+                      </span>
                     </span>
                   ) : null}
                 </div>

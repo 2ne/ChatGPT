@@ -44,7 +44,7 @@ If those two map fields are missing, the quest will not appear even if it is reg
 Locks in the product:
 
 - Only node 1 starts unlocked, and only if it has an Easy quest.
-- Unlock node *n* when node *n − 1* Easy is mastered.
+- Unlock node *n* when node *n − 1* Easy has at least one star (6/10 by default, `STAR_SCORE` in `src/lib/mastery.ts`).
 - On an open node, Medium needs Easy mastered; Hard needs Medium mastered.
 - A node with no Easy quest shows as coming soon.
 

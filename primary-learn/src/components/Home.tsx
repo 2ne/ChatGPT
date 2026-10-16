@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { Flag, Star } from "lucide-react";
+import { Star, Trophy } from "lucide-react";
 import { getAvatar } from "../data/avatars";
+import { STARS_PER_NODE } from "../lib/mastery";
 import { buildLevels } from "../lib/path";
 import type { LearnerProfile, ProgressState } from "../types/progress";
 import { PathMap } from "./PathMap";
@@ -15,8 +16,10 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
   const avatar = getAvatar(profile.avatarId);
   const levels = useMemo(() => buildLevels(progress), [progress]);
 
-  const starCount = levels.reduce((sum, level) => sum + level.stars, 0);
-  const doneCount = levels.filter((level) => level.status === "done").length;
+  const questNodes = levels.filter((level) => level.difficulties.some((entry) => entry.activity));
+  const starCount = questNodes.reduce((sum, level) => sum + level.stars, 0);
+  const starMax = questNodes.length * STARS_PER_NODE;
+  const cupCount = questNodes.filter((level) => level.cup).length;
 
   return (
     <div className="page page-under-header">
@@ -30,10 +33,10 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
             <p className="hero-sub">Follow the path and earn your stars.</p>
             <div className="hero-stats">
               <span className="hero-stat">
-                <Star size={15} aria-hidden /> {starCount} of {levels.length * 3} stars
+                <Star size={15} aria-hidden /> {starCount} of {starMax} stars
               </span>
               <span className="hero-stat">
-                <Flag size={15} aria-hidden /> {doneCount} of {levels.length} levels done
+                <Trophy size={15} aria-hidden /> {cupCount} gold {cupCount === 1 ? "cup" : "cups"}
               </span>
             </div>
           </div>

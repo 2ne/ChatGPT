@@ -42,7 +42,7 @@ Every path change scrolls to the top so the name and avatar stay in view. PathMa
 
 Long term this is a **start-to-finish pathway covering every UK curriculum subject**. Maths is where we started and is the **current phase**, not a permanent product rule. Do not add English, science, or foundation subjects until asked.
 
-**Three levels per activity is a core concept.** Every path node has Easy / Medium / Hard. Mastering all three means the child can do that skill. The map shows up to three stars per node (one per mastered level).
+**Three levels per node is a core concept.** Every path node has Easy / Medium / Hard. Each can earn 0–3 stars (9 stars in total). All 9 awards a gold cup and the node is done.
 
 **Priority now:** nail the foundations and **improve existing activities** (especially missing Medium and Hard levels) **before expanding** to new nodes or subjects.
 
@@ -71,10 +71,10 @@ Also register the activity in `src/data/activities/index.ts`. Then:
 ### Locks (actual `buildLevels` behaviour)
 
 - A node with **no Easy quest** is `soon` (coming soon).
-- The first node whose Easy exists but is not mastered is `current`.
-- Later nodes with an Easy quest stay `locked` until the **previous node's Easy** is mastered.
-- On an open node (`current` or `done`): Easy is playable; Medium needs Easy mastered; Hard needs Medium mastered.
-- Node status `done` means Easy is mastered. Medium and Hard can still be unplayed. Stars = how many of the three difficulties are mastered.
+- The first node whose Easy exists but is not **passed** is `current`.
+- Later nodes with an Easy quest stay `locked` until the **previous node's Easy** is passed.
+- On an open node (`current` or `done`): Easy is playable; Medium needs Easy passed; Hard needs Medium passed.
+- Node status `done` means Easy is passed. Medium and Hard can still be unplayed. Map stars = how many of the three difficulties are passed.
 
 Shipped examples: `count-to-5` is `pathNode: "eyfs-count-5"`, `difficulty: 1`. `number-bonds-to-10` is `pathNode: "y1-bonds-10"`, `difficulty: 1`. Neither node has Medium or Hard yet.
 
@@ -157,7 +157,7 @@ Every new activity **must**:
 5. Use only question kinds in `QUESTION_KINDS` (`src/types/activity.ts`).
 6. Target a clear UK year group (and ability band) — not “all ages”.
 7. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
-8. Encourage mastery: per-question `explanation`, retry of missed items, and a `masteryThreshold`.
+8. Write a short teaching `explanation`. After a wrong answer the runner shows it (and “It was …”) then moves on. There is **no** retry loop.
 9. Write `narration.prompt` wherever the voice would mangle the stem (`+`, `−`). Spoken text is the **question only** — never the answer.
 10. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
 11. Run the self-review checklist in `QUALITY.md` before you push.
@@ -190,7 +190,7 @@ Until those steps are done, `validateActivity` will reject JSON that uses the ne
 | `yearGroups` | Non-empty list of `YearGroup` values (`Reception` … `Year6`). |
 | `ability` | `emerging` \| `expected` \| `greater-depth`. Pedagogical band; typically Easy → emerging, Medium → expected, Hard → greater-depth. |
 | `estimatedMinutes` | Realistic 3–15 minute range for a child. |
-| `masteryThreshold` | Fraction `0–1`. Default **0.8** unless there is a strong reason. |
+| `masteryThreshold` | Still in the JSON schema. Unlock does **not** read this. Stars come from `STAR_SCORE` in `src/lib/mastery.ts`. |
 | `curriculumRef` | The node id from `curriculum/maths.md` (for example `eyfs-count-5`). Same id as `pathNode`. |
 | `pathNode` | **Required for the map.** Same node id. `buildLevels` looks this up. |
 | `difficulty` | **Required for the map.** `1` Easy, `2` Medium, `3` Hard. |
@@ -258,7 +258,7 @@ Follow `QUALITY.md` for the full wording templates, distractor rules, variety ru
 - Always provide `explanation`. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.
 - Mark exactly what is correct in the typed fields (`correctId`, `correctIds`, `acceptedAnswers`, `correctOrder`).
 - Use at least three question kinds in a 10-question quest. Do not run the same kind more than three times in a row unless it is fluency practice.
-- Support mastery loops: the runner may re-ask missed questions — stems must still make sense on retry.
+- There is no retry loop. Each question is asked once. A miss shows a short correction, then the child moves on.
 - Avoid timers that punish slower readers unless the activity type is explicitly fluency-focused and labelled as such.
 - Accessibility: do not rely on colour alone; keep tap targets large; include `ariaLabel` / alt text where images or emoji stand in for meaning.
 
@@ -300,7 +300,7 @@ Shared phrases (“Choose all that apply.”, “Correct. Nice!”) live in `src
 
 Kids learn better when the same skill shows up as slightly different pictures or a shuffled choice list — not a new harder puzzle. Randomisation is **opt-in** and **must stay inside the difficulty band**.
 
-The runner calls `realizeActivity` on **Start quest / Play again / Try again**. Missed-question retries reuse that draw, so the child is not marked on a different picture.
+The runner calls `realizeActivity` on **Start quest / Play again / Try again**. The draw stays for that play. There is no miss-retry loop.
 
 ### When to use it
 
@@ -393,15 +393,19 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 ## Progress and marks
 
 - Profile + progress keys live in `src/storage/localStore.ts`. Do not change key names casually (breaks existing browser data). Do not replace localStorage with another store.
-- Record attempts with score, percentage, and mastery flag via the shared helpers.
-- Mastery = latest qualifying attempt reaches `masteryThreshold` **or** running accuracy across recent attempts meets the same bar (see `src/lib/mastery.ts`).
-- The runner scores the **first answer** to each question. Missed questions are practised again before the finish screen, and those retries do not change the mark.
+- A quest is **exactly 10 questions** (unless `extraQuestions`). Score = how many were right. No retry of misses.
+- After a wrong answer, show a short correction (`It was 4.` plus the `explanation`) and move on.
+- Stars and unlock live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.
+- **1 or more stars passes** and unlocks the next Easy / Medium / Hard / node. 0 stars: try again, next stays locked.
+- Store **best stars** and **best score** per Easy / Medium / Hard in localStorage (`bestStars`, `bestCorrectCount`, `bestTotalCount`).
+- Each node can earn **9 stars** (3 per difficulty). **9/9 = gold cup** (that node is done). The map shows `7/9` and a cup outline that turns gold.
+- Do not show percentages to children. Do not say "mastery".
 - Never store personal data beyond the child’s chosen display name and avatar id.
 
 ## UI expectations when adding activities
 
 - Home **is** the path map. Categories, titles, order and locks come from `curriculum/maths.md` via `src/data/path.generated.ts` and `buildLevels`.
-- A learner starts at node 1. Later nodes stay locked until the previous node's Easy is mastered.
+- A learner starts at node 1. Later nodes stay locked until the previous node's Easy has at least one star.
 - Do not add subject filters or a second set of category names.
 - Empty, loading, error and success states must remain useful (especially empty progress, locked nodes, and “coming soon” Medium / Hard).
 - Keep motion subtle and purposeful; do not add noisy celebration that blocks the next question.
@@ -413,7 +417,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 2. `npm run build` succeeds in `primary-learn/` (no lint, no tests).
 3. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable when that row should be unlocked.
 4. The speaker reads the question only (no options, counts, or answers). A miss shows teaching feedback on screen.
-5. Completing it updates local progress (marks / mastery / stars) and survives a refresh.
+5. Completing it updates local progress (best score / stars / cup) and survives a refresh.
 6. README / `curriculum/coverage.md` / the node status in `maths.md` updated if the catalogue meaningfully changes.
 7. Commit and push to `main` (no PRs).
 
