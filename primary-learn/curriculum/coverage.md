@@ -30,3 +30,5 @@ Improve first: Medium, then Hard, for `y1-bonds-10` (`number-bonds-to-10` is Eas
 When expanding the path, the first `missing` node is `eyfs-subitise-5` — See numbers to 5 (node 2, after `eyfs-count-5`). Start that node with Easy.
 
 Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.
+
+The October 2026 path audit did not add or remove nodes. Reception now compares quantities before composing numbers to 10. Year 1 does shape before counting to 100. Year 2 does money and measures before the 2, 5 and 10 tables. `y1-bonds-10` is still node 13.

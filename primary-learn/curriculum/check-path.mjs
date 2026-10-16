@@ -6,7 +6,7 @@ const nodes = [...text.matchAll(/^### (\d+)\. `([^`]+)` — (.+)$/gm)].map((m) =
   id: m[2],
   title: m[3],
 }));
-const reqs = [...text.matchAll(/^Requires: (.+)\. Quest:/gm)].map((m) =>
+const reqs = [...text.matchAll(/^Requires: (.+)\. Quests?:/gm)].map((m) =>
   m[1].replaceAll("`", "").trim(),
 );
 const cats = [...text.matchAll(/^## (\d+)\. `([^`]+)` — /gm)];

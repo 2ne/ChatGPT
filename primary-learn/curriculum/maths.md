@@ -18,6 +18,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - Easy, Medium and Hard on a node are all playable in any order.
 - **Ids are permanent.** Category ids (`cat-…`) and node ids (`eyfs-…`, `y1-…`) are the names the app and quests must use. Do not rename them. Do not reuse a retired id.
 - Child-facing titles in this file are the titles to show. Do not invent a parallel set of names.
+- Within each year, number work comes first, then a practical topic (shape or measures), then the next number strand. That mixes the year rather than saving all shape and measures for the end.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
 **Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Node 1 (`eyfs-count-5`) has Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is still `eyfs-subitise-5`.
@@ -30,15 +31,15 @@ This file is the **primary maths** path only. English or other subjects might co
 | 2 | `cat-r-to-10` | Numbers to 10 | Reception | 5–9 |
 | 3 | `cat-r-count-on` | Counting on | Reception | 10 |
 | 4 | `cat-y1-to-20` | Numbers to 20 | Year 1 | 11–15 |
-| 5 | `cat-y1-to-100` | Counting to 100 | Year 1 | 16–18 |
-| 6 | `cat-y1-groups` | Groups and fractions | Year 1 | 19–20 |
-| 7 | `cat-y1-measures` | Measures, money and time | Year 1 | 21–23 |
-| 8 | `cat-y1-shape` | Shape and turns | Year 1 | 24–25 |
+| 5 | `cat-y1-shape` | Shape and turns | Year 1 | 16–17 |
+| 6 | `cat-y1-to-100` | Counting to 100 | Year 1 | 18–20 |
+| 7 | `cat-y1-groups` | Groups and fractions | Year 1 | 21–22 |
+| 8 | `cat-y1-measures` | Measures, money and time | Year 1 | 23–25 |
 | 9 | `cat-y2-place` | Place value to 100 | Year 2 | 26–28 |
 | 10 | `cat-y2-add` | Adding two-digit numbers | Year 2 | 29–30 |
-| 11 | `cat-y2-tables` | The 2, 5 and 10 times tables | Year 2 | 31–32 |
-| 12 | `cat-y2-fractions` | Fractions | Year 2 | 33 |
-| 13 | `cat-y2-measures` | Measures, money and time | Year 2 | 34–36 |
+| 11 | `cat-y2-measures` | Measures, money and time | Year 2 | 31–33 |
+| 12 | `cat-y2-tables` | The 2, 5 and 10 times tables | Year 2 | 34–35 |
+| 13 | `cat-y2-fractions` | Fractions | Year 2 | 36 |
 | 14 | `cat-y2-shape` | Shape, position and charts | Year 2 | 37–39 |
 | 15 | `cat-y3-place` | Numbers to 1,000 | Year 3 | 40–41 |
 | 16 | `cat-y3-add` | Column addition and subtraction | Year 3 | 42–43 |
@@ -117,33 +118,32 @@ Requires: `eyfs-bonds-5`. Quest: none. Status: missing.
 
 - Count reliably within 10
 - Recognise numerals to 10
-- Build a deep understanding of each number to 10
 
-### 6. `eyfs-compose-10` — Make numbers to 10
+### 6. `eyfs-compare-10` — More, less or the same
 
 Requires: `eyfs-count-10`. Quest: none. Status: missing.
 
-- Know the composition of each number to 10
+- Compare quantities up to 10 using more than, less than and the same, in different contexts
 
-### 7. `eyfs-compare-10` — More, less or the same
-
-Requires: `eyfs-compose-10`. Quest: none. Status: missing.
-
-- Compare quantities within 10 using more than, less than and the same
-
-### 8. `eyfs-bonds-10-some` — Bonds towards 10
+### 7. `eyfs-compose-10` — Make numbers to 10
 
 Requires: `eyfs-compare-10`. Quest: none. Status: missing.
 
-- Recall some number bonds to 10
-- Recall double facts within 10
+- Know the composition of each number to 10
+
+### 8. `eyfs-bonds-10-some` — Doubles and bonds
+
+Requires: `eyfs-compose-10`. Quest: none. Status: missing.
+
+- Automatically recall some number bonds to 10
+- Automatically recall double facts within 10
 
 ### 9. `eyfs-patterns-10` — Patterns to 10
 
 Requires: `eyfs-bonds-10-some`. Quest: none. Status: missing.
 
-- Explore odds and evens within 10
-- Explore equal sharing within 10
+- Explore and represent odds and evens within 10
+- Explore how quantities to 10 can be shared equally
 
 ## 3. `cat-r-count-on` — Counting on
 
@@ -160,11 +160,12 @@ Requires: `eyfs-patterns-10`. Quest: none. Status: missing.
 
 Year 1.
 
-### 11. `y1-read-write-20` — Numbers to 20 in words
+### 11. `y1-read-write-20` — Numbers to 20
 
 Requires: `eyfs-count-20plus`. Quest: none. Status: missing.
 
 - Read and write numbers from 1 to 20 in numerals and in words
+- Notice ten and a bit in the teen numbers (for example 14 is 10 and 4)
 
 ### 12. `y1-1-more-less` — One more, one less
 
@@ -197,89 +198,90 @@ Requires: `y1-bonds-20`. Quest: none. Status: missing.
 - Solve one-step addition and subtraction problems
 - Solve missing-number problems such as 7 = ? − 9
 
-## 5. `cat-y1-to-100` — Counting to 100
+## 5. `cat-y1-shape` — Shape and turns
+
+Year 1. A practical break after numbers to 20, before counting on to 100.
+
+### 16. `y1-shapes` — Everyday shapes
+
+Requires: `y1-add-sub-20`. Quest: none. Status: missing.
+
+- Recognise and name common 2-D shapes, including rectangles (including squares), circles and triangles
+- Recognise and name common 3-D shapes, including cuboids (including cubes), pyramids and spheres
+
+### 17. `y1-turns` — Whole, half and quarter turns
+
+Requires: `y1-shapes`. Quest: none. Status: missing.
+
+- Describe position, direction and movement, including whole, half, quarter and three-quarter turns
+- Use position words such as left, right, in front, behind, above and below
+
+## 6. `cat-y1-to-100` — Counting to 100
 
 Year 1.
 
-### 16. `y1-count-100` — Count to 100
+### 18. `y1-count-100` — Count to 100
 
-Requires: `y1-add-sub-20`. Quest: none. Status: missing.
+Requires: `y1-turns`. Quest: none. Status: missing.
 
 - Count to and across 100, forwards and backwards, beginning with 0 or 1, or from any given number
 - Count, read and write numbers to 100 in numerals
 
-### 17. `y1-count-2-5-10` — Count in 2s, 5s and 10s
+### 19. `y1-represent-100` — Show and compare numbers
 
 Requires: `y1-count-100`. Quest: none. Status: missing.
 
-- Count in multiples of twos, fives and tens
-
-### 18. `y1-represent-100` — Show and compare numbers
-
-Requires: `y1-count-2-5-10`. Quest: none. Status: missing.
-
 - Identify and represent numbers using objects and pictorial representations, including the number line
-- Use the language equal to, more than, less than, most and least
+- Use the language equal to, more than, less than (fewer), most and least
 
-## 6. `cat-y1-groups` — Groups and fractions
-
-Year 1.
-
-### 19. `y1-groups-arrays` — Groups and arrays
+### 20. `y1-count-2-5-10` — Count in 2s, 5s and 10s
 
 Requires: `y1-represent-100`. Quest: none. Status: missing.
 
+- Count in multiples of twos, fives and tens
+
+## 7. `cat-y1-groups` — Groups and fractions
+
+Year 1.
+
+### 21. `y1-groups-arrays` — Groups and arrays
+
+Requires: `y1-count-2-5-10`. Quest: none. Status: missing.
+
 - Solve one-step multiplication and division problems using concrete objects, pictorial representations and arrays, with the support of the teacher
 
-### 20. `y1-halves-quarters` — Halves and quarters
+### 22. `y1-halves-quarters` — Halves and quarters
 
 Requires: `y1-groups-arrays`. Quest: none. Status: missing.
 
 - Recognise, find and name a half as one of two equal parts of an object, shape or quantity
 - Recognise, find and name a quarter as one of four equal parts of an object, shape or quantity
 
-## 7. `cat-y1-measures` — Measures, money and time
+## 8. `cat-y1-measures` — Measures, money and time
 
 Year 1.
 
-### 21. `y1-compare-measures` — Longer, heavier, fuller
+### 23. `y1-compare-measures` — Longer, heavier, fuller
 
 Requires: `y1-halves-quarters`. Quest: none. Status: missing.
 
-- Compare, describe and solve practical problems for lengths and heights, mass/weight, and capacity/volume
+- Compare, describe and solve practical problems for lengths and heights, mass/weight, capacity/volume, and time (quicker, slower, earlier, later)
 - Measure and begin to record lengths and heights, mass/weight, and capacity/volume
 
-### 22. `y1-coins` — Coins and notes
+### 24. `y1-coins` — Coins and notes
 
 Requires: `y1-compare-measures`. Quest: none. Status: missing.
 
 - Recognise and know the value of different denominations of coins and notes
 
-### 23. `y1-time-hour` — O’clock and half past
+### 25. `y1-time-hour` — O’clock and half past
 
 Requires: `y1-coins`. Quest: none. Status: missing.
 
-- Measure and begin to record time (hours, minutes, seconds)
 - Sequence events in chronological order using language such as before, after, next, first, today, yesterday, tomorrow, morning, afternoon and evening
 - Recognise and use language relating to dates, including days of the week, weeks, months and years
+- Measure and begin to record time (hours, minutes, seconds)
 - Tell the time to the hour and half past the hour and draw the hands on a clock face to show these times
-
-## 8. `cat-y1-shape` — Shape and turns
-
-Year 1.
-
-### 24. `y1-shapes` — Everyday shapes
-
-Requires: `y1-time-hour`. Quest: none. Status: missing.
-
-- Recognise and name common 2-D shapes, including rectangles (including squares), circles and triangles
-- Recognise and name common 3-D shapes, including cuboids (including cubes), pyramids and spheres
-
-### 25. `y1-turns` — Whole, half and quarter turns
-
-Requires: `y1-shapes`. Quest: none. Status: missing.
-
-- Describe position, direction and movement, including whole, half, quarter and three-quarter turns
 
 ## 9. `cat-y2-place` — Place value to 100
 
@@ -287,7 +289,7 @@ Year 2.
 
 ### 26. `y2-count-steps` — Count in steps
 
-Requires: `y1-turns`. Quest: none. Status: missing.
+Requires: `y1-time-hour`. Quest: none. Status: missing.
 
 - Count in steps of 2, 3 and 5 from 0, and in tens from any number, forward and backward
 
@@ -327,17 +329,44 @@ Requires: `y2-bonds-20-fluent`. Quest: none. Status: missing.
 - Show that addition of two numbers can be done in any order, and subtraction of one number from another cannot
 - Recognise and use the inverse relationship between addition and subtraction to check calculations and solve missing-number problems
 
-## 11. `cat-y2-tables` — The 2, 5 and 10 times tables
+## 11. `cat-y2-measures` — Measures, money and time
 
-Year 2.
+Year 2. Money sits here so two-digit add and subtract is already in place.
 
-### 31. `y2-odd-even` — Odd and even
+### 31. `y2-money` — Pounds and pence
 
 Requires: `y2-add-sub-mental`. Quest: none. Status: missing.
 
-- Recognise odd and even numbers
+- Recognise and use symbols for pounds (£) and pence (p); combine amounts to make a particular value
+- Find different combinations of coins that equal the same amounts of money
+- Solve simple problems in a practical context involving addition and subtraction of money of the same unit, including giving change
 
-### 32. `y2-tables-2-5-10` — 2, 5 and 10 times tables
+### 32. `y2-standard-units` — Metres, grams and litres
+
+Requires: `y2-money`. Quest: none. Status: missing.
+
+- Choose and use appropriate standard units to estimate and measure length/height in any direction (m/cm), mass (kg/g), temperature (°C) and capacity (litres/ml) to the nearest appropriate unit, using rulers, scales, thermometers and measuring vessels
+- Compare and order lengths, mass, volume/capacity and record the results using >, < and =
+
+### 33. `y2-time-5-min` — Time to five minutes
+
+Requires: `y2-standard-units`. Quest: none. Status: missing.
+
+- Compare and sequence intervals of time
+- Tell and write the time to five minutes, including quarter past/to the hour, and draw the hands on a clock face to show these times
+- Know the number of minutes in an hour and the number of hours in a day
+
+## 12. `cat-y2-tables` — The 2, 5 and 10 times tables
+
+Year 2.
+
+### 34. `y2-odd-even` — Odd and even
+
+Requires: `y2-time-5-min`. Quest: none. Status: missing.
+
+- Recognise odd and even numbers, including from the 2 times table
+
+### 35. `y2-tables-2-5-10` — 2, 5 and 10 times tables
 
 Requires: `y2-odd-even`. Quest: none. Status: missing.
 
@@ -346,43 +375,17 @@ Requires: `y2-odd-even`. Quest: none. Status: missing.
 - Show that multiplication of two numbers can be done in any order, and division of one number by another cannot
 - Solve problems involving multiplication and division, using materials, arrays, repeated addition, mental methods, and multiplication and division facts, including problems in contexts
 
-## 12. `cat-y2-fractions` — Fractions
+## 13. `cat-y2-fractions` — Fractions
 
 Year 2.
 
-### 33. `y2-fractions-unit` — Fractions of amounts
+### 36. `y2-fractions-unit` — Fractions of amounts
 
 Requires: `y2-tables-2-5-10`. Quest: none. Status: missing.
 
 - Recognise, find, name and write fractions ⅓, ¼, ²⁄₄ and ¾ of a length, shape, set of objects or quantity
 - Write simple fractions, for example ½ of 6 = 3, and recognise the equivalence of ²⁄₄ and ½
-
-## 13. `cat-y2-measures` — Measures, money and time
-
-Year 2.
-
-### 34. `y2-standard-units` — Metres, grams and litres
-
-Requires: `y2-fractions-unit`. Quest: none. Status: missing.
-
-- Choose and use appropriate standard units to estimate and measure length/height in any direction (m/cm), mass (kg/g), temperature (°C) and capacity (litres/ml) to the nearest appropriate unit, using rulers, scales, thermometers and measuring vessels
-- Compare and order lengths, mass, volume/capacity and record the results using >, < and =
-
-### 35. `y2-money` — Pounds and pence
-
-Requires: `y2-standard-units`. Quest: none. Status: missing.
-
-- Recognise and use symbols for pounds (£) and pence (p); combine amounts to make a particular value
-- Find different combinations of coins that equal the same amounts of money
-- Solve simple problems in a practical context involving addition and subtraction of money of the same unit, including giving change
-
-### 36. `y2-time-5-min` — Time to five minutes
-
-Requires: `y2-money`. Quest: none. Status: missing.
-
-- Compare and sequence intervals of time
-- Tell and write the time to five minutes, including quarter past/to the hour, and draw the hands on a clock face to show these times
-- Know the number of minutes in an hour and the number of hours in a day
+- Count in halves and quarters up to 10, using the number line
 
 ## 14. `cat-y2-shape` — Shape, position and charts
 
@@ -390,7 +393,7 @@ Year 2.
 
 ### 37. `y2-shape-properties` — Sides, faces and symmetry
 
-Requires: `y2-time-5-min`. Quest: none. Status: missing.
+Requires: `y2-fractions-unit`. Quest: none. Status: missing.
 
 - Identify and describe the properties of 2-D shapes, including the number of sides and line symmetry in a vertical line
 - Identify and describe the properties of 3-D shapes, including the number of edges, vertices and faces
@@ -543,6 +546,7 @@ Requires: `y3-time`. Quest: none. Status: missing.
 
 - Draw 2-D shapes and make 3-D shapes using modelling materials
 - Recognise 3-D shapes in different orientations and describe them
+- Identify horizontal and vertical lines and pairs of perpendicular and parallel lines
 
 ### 55. `y3-angles` — Right angles
 
@@ -551,7 +555,6 @@ Requires: `y3-draw-shapes`. Quest: none. Status: missing.
 - Recognise angles as a property of shape or a description of a turn
 - Identify right angles, and recognise that two right angles make a half-turn, three make three quarters of a turn and four a complete turn
 - Identify whether angles are greater than or less than a right angle
-- Identify horizontal and vertical lines and pairs of perpendicular and parallel lines
 
 ### 56. `y3-statistics` — Bar charts and pictograms
 
@@ -571,7 +574,7 @@ Requires: `y3-statistics`. Quest: none. Status: missing.
 - Count in multiples of 6, 7, 9, 25 and 1,000
 - Find 1,000 more or less than a given number
 
-### 58. `y4-place-value-10000` — Four-digit place value
+### 58. `y4-place-value-10000` — Thousands
 
 Requires: `y4-count-6-7-9-25-1000`. Quest: none. Status: missing.
 
@@ -666,7 +669,6 @@ Requires: `y4-fraction-quantities`. Quest: none. Status: missing.
 - Find the effect of dividing a one- or two-digit number by 10 and 100, identifying the value of the digits in the answer as ones, tenths and hundredths
 - Round decimals with one decimal place to the nearest whole number
 - Compare numbers with the same number of decimal places up to two decimal places
-- Solve simple measure and money problems involving fractions and decimals to two decimal places
 
 ## 26. `cat-y4-measures` — Measures, area and time
 
@@ -690,6 +692,7 @@ Requires: `y4-convert-units`. Quest: none. Status: missing.
 Requires: `y4-perimeter-area`. Quest: none. Status: missing.
 
 - Estimate, compare and calculate different measures, including money in pounds and pence
+- Solve simple measure and money problems involving fractions and decimals to two decimal places
 
 ### 72. `y4-time-convert` — Analogue and digital time
 
@@ -806,7 +809,6 @@ Year 5.
 Requires: `y5-squares-cubes`. Quest: none. Status: missing.
 
 - Multiply numbers up to 4 digits by a one- or two-digit number using a formal written method, including long multiplication for two-digit numbers
-- Multiply and divide numbers mentally, drawing upon known facts
 
 ### 85. `y5-divide` — Short division
 
@@ -818,6 +820,7 @@ Requires: `y5-multiply`. Quest: none. Status: missing.
 
 Requires: `y5-divide`. Quest: none. Status: missing.
 
+- Multiply and divide numbers mentally, drawing upon known facts
 - Multiply and divide whole numbers and those involving decimals by 10, 100 and 1,000
 
 ### 87. `y5-mixed-problems` — Mixed problems
@@ -1067,7 +1070,7 @@ Requires: `y6-ratio`. Quest: none. Status: missing.
 
 Year 6.
 
-### 116. `y6-algebra` — Formulae, sequences and missing numbers
+### 116. `y6-algebra` — Formulae and sequences
 
 Requires: `y6-percentage-problems`. Quest: none. Status: missing.
 
@@ -1081,7 +1084,7 @@ Requires: `y6-percentage-problems`. Quest: none. Status: missing.
 
 Year 6.
 
-### 117. `y6-convert-units` — Convert units, including miles and kilometres
+### 117. `y6-convert-units` — Miles, kilometres and units
 
 Requires: `y6-algebra`. Quest: none. Status: missing.
 

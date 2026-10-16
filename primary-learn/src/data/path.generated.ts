@@ -41,18 +41,18 @@ export const PATH_CATEGORIES: PathCategory[] = [
       },
       {
         "number": 6,
-        "id": "eyfs-compose-10",
-        "title": "Make numbers to 10"
-      },
-      {
-        "number": 7,
         "id": "eyfs-compare-10",
         "title": "More, less or the same"
       },
       {
+        "number": 7,
+        "id": "eyfs-compose-10",
+        "title": "Make numbers to 10"
+      },
+      {
         "number": 8,
         "id": "eyfs-bonds-10-some",
-        "title": "Bonds towards 10"
+        "title": "Doubles and bonds"
       },
       {
         "number": 9,
@@ -81,7 +81,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
       {
         "number": 11,
         "id": "y1-read-write-20",
-        "title": "Numbers to 20 in words"
+        "title": "Numbers to 20"
       },
       {
         "number": 12,
@@ -106,24 +106,41 @@ export const PATH_CATEGORIES: PathCategory[] = [
     ]
   },
   {
+    "id": "cat-y1-shape",
+    "title": "Shape and turns",
+    "year": "Year 1",
+    "nodes": [
+      {
+        "number": 16,
+        "id": "y1-shapes",
+        "title": "Everyday shapes"
+      },
+      {
+        "number": 17,
+        "id": "y1-turns",
+        "title": "Whole, half and quarter turns"
+      }
+    ]
+  },
+  {
     "id": "cat-y1-to-100",
     "title": "Counting to 100",
     "year": "Year 1",
     "nodes": [
       {
-        "number": 16,
+        "number": 18,
         "id": "y1-count-100",
         "title": "Count to 100"
       },
       {
-        "number": 17,
-        "id": "y1-count-2-5-10",
-        "title": "Count in 2s, 5s and 10s"
-      },
-      {
-        "number": 18,
+        "number": 19,
         "id": "y1-represent-100",
         "title": "Show and compare numbers"
+      },
+      {
+        "number": 20,
+        "id": "y1-count-2-5-10",
+        "title": "Count in 2s, 5s and 10s"
       }
     ]
   },
@@ -133,12 +150,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 1",
     "nodes": [
       {
-        "number": 19,
+        "number": 21,
         "id": "y1-groups-arrays",
         "title": "Groups and arrays"
       },
       {
-        "number": 20,
+        "number": 22,
         "id": "y1-halves-quarters",
         "title": "Halves and quarters"
       }
@@ -150,36 +167,19 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 1",
     "nodes": [
       {
-        "number": 21,
+        "number": 23,
         "id": "y1-compare-measures",
         "title": "Longer, heavier, fuller"
       },
       {
-        "number": 22,
+        "number": 24,
         "id": "y1-coins",
         "title": "Coins and notes"
       },
       {
-        "number": 23,
+        "number": 25,
         "id": "y1-time-hour",
         "title": "O’clock and half past"
-      }
-    ]
-  },
-  {
-    "id": "cat-y1-shape",
-    "title": "Shape and turns",
-    "year": "Year 1",
-    "nodes": [
-      {
-        "number": 24,
-        "id": "y1-shapes",
-        "title": "Everyday shapes"
-      },
-      {
-        "number": 25,
-        "id": "y1-turns",
-        "title": "Whole, half and quarter turns"
       }
     ]
   },
@@ -223,17 +223,39 @@ export const PATH_CATEGORIES: PathCategory[] = [
     ]
   },
   {
+    "id": "cat-y2-measures",
+    "title": "Measures, money and time",
+    "year": "Year 2",
+    "nodes": [
+      {
+        "number": 31,
+        "id": "y2-money",
+        "title": "Pounds and pence"
+      },
+      {
+        "number": 32,
+        "id": "y2-standard-units",
+        "title": "Metres, grams and litres"
+      },
+      {
+        "number": 33,
+        "id": "y2-time-5-min",
+        "title": "Time to five minutes"
+      }
+    ]
+  },
+  {
     "id": "cat-y2-tables",
     "title": "The 2, 5 and 10 times tables",
     "year": "Year 2",
     "nodes": [
       {
-        "number": 31,
+        "number": 34,
         "id": "y2-odd-even",
         "title": "Odd and even"
       },
       {
-        "number": 32,
+        "number": 35,
         "id": "y2-tables-2-5-10",
         "title": "2, 5 and 10 times tables"
       }
@@ -245,31 +267,9 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 33,
+        "number": 36,
         "id": "y2-fractions-unit",
         "title": "Fractions of amounts"
-      }
-    ]
-  },
-  {
-    "id": "cat-y2-measures",
-    "title": "Measures, money and time",
-    "year": "Year 2",
-    "nodes": [
-      {
-        "number": 34,
-        "id": "y2-standard-units",
-        "title": "Metres, grams and litres"
-      },
-      {
-        "number": 35,
-        "id": "y2-money",
-        "title": "Pounds and pence"
-      },
-      {
-        "number": 36,
-        "id": "y2-time-5-min",
-        "title": "Time to five minutes"
       }
     ]
   },
@@ -435,7 +435,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
       {
         "number": 58,
         "id": "y4-place-value-10000",
-        "title": "Four-digit place value"
+        "title": "Thousands"
       },
       {
         "number": 59,
@@ -872,7 +872,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
       {
         "number": 116,
         "id": "y6-algebra",
-        "title": "Formulae, sequences and missing numbers"
+        "title": "Formulae and sequences"
       }
     ]
   },
@@ -884,7 +884,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
       {
         "number": 117,
         "id": "y6-convert-units",
-        "title": "Convert units, including miles and kilometres"
+        "title": "Miles, kilometres and units"
       },
       {
         "number": 118,

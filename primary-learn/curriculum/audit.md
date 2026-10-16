@@ -122,6 +122,21 @@ Use this to see which categories hold each official block. If a programme-of-stu
 
 Year 1 has no statistics programme, and position and direction returns in Year 4. That matches the statutory programmes, so those are not gaps.
 
+Shape and measures sit after the first number block of the year, not in one dump at the end. Year 1 does shape before counting to 100. Year 2 does money and measures after two-digit add, before the 2, 5 and 10 tables.
+
+## Path audit notes
+
+Checked against the EYFS mathematics ELGs (Number and Numerical patterns) and the Y1–Y6 statutory programmes of study, plus a few non-statutory steps that make a quest teachable.
+
+Still fat for one Easy / Medium / Hard set (do not split until James wants more than 124 nodes):
+
+- `y1-time-hour` — calendar language and telling the time
+- `y3-time` — analogue/digital, duration, calendar facts
+- `y5-decimals` and `y6-decimals` — several decimal skills on one stop
+- `y6-algebra` — formulae, sequences and two-unknowns together
+
+Reception has no shape, repeating pattern or measures nodes. Those sit in Development Matters, not in the mathematics ELGs. Adding them would grow the path past 124 stops.
+
 ## What the path screen already does
 
 Home shows categories in index order, using the category id and title from `maths.md`. Inside a category, nodes appear in number order. Everything is open. You are here starts on node 1. A Year 4 child can jump to a later category at once.
