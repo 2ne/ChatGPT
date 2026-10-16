@@ -136,14 +136,16 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
 
 1. **Hero** — indigo→violet gradient panel, very faint dot texture, sun accent:
    `Hi, {name}!` + buddy emoji, subline (`Follow the path and earn your stars.`),
-   stat pills (stars on shipped quests, gold cups). No mascot on this banner.
+   stat pills (one star per Easy / Medium / Hard with 3 stars on shipped
+   quests, gold cups). No mascot on this banner.
 2. **Path map** (`PathMap`) — a winding road of numbered stops, grouped by
    category signs from `curriculum/maths.md`. No subject chips, year chips, or
    a free-choice quest list. Every stop is open. The next suggested stop
    carries the learner’s buddy face (You are here). Untouched stops are just
    a number. Won
    stars sit in a small indigo cluster hugging the bottom of the node
-   (best of Easy / Medium / Hard, up to three, no empty stars). Star
+   (one star per Easy / Medium / Hard that has all three stars, max three;
+   1 or 2 stars on a level do not appear on the map). Star
    rows live in the level sheet. When all three levels have three
    stars, the node turns gold and a cup replaces the number.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard

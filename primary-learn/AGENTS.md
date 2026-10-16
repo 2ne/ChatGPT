@@ -75,7 +75,7 @@ Everything is open. The path suggests an order but never blocks. A Year 4 child 
 - A node with **no Easy quest** is `soon` (coming soon). The stop is still tappable. Rows without a quest say coming soon.
 - The first node whose Easy exists but is not yet passed is `current` (You are here).
 - Later nodes with a quest are `open` and playable at once. Easy, Medium and Hard on a node are all playable. Stars show progress. They do not gate anything.
-- Node status `done` means Easy has at least one star. Medium and Hard can still be unplayed. Map stars show the best of Easy / Medium / Hard (up to three). They do not gate anything.
+- Node status `done` means Easy has at least one star. Medium and Hard can still be unplayed. Map stars: one star per Easy / Medium / Hard that has all three stars (max three). 1 or 2 stars on a level stay in the sheet. They do not gate anything.
 
 Shipped examples: `count-to-5` / `count-to-5-medium` / `count-to-5-hard` are `pathNode: "eyfs-count-5"` at difficulty 1, 2 and 3. `number-bonds-to-10` is `pathNode: "y1-bonds-10"`, `difficulty: 1` (Easy only).
 
@@ -414,7 +414,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 - Stars live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.
 - Stars show progress. They do not gate the path. Everything is open. The path suggests an order but never blocks.
 - Store **best stars** and **best score** per Easy / Medium / Hard in localStorage (`bestStars`, `bestCorrectCount`, `bestTotalCount`).
-- Each node can earn **9 stars** (3 per difficulty). Untouched map stops are just a number. Won stars (best of Easy / Medium / Hard, max 3) hug the node like Candy Crush. No empty stars, pips or fractions on the map. All 9 stars: gold cup replaces the number. Star rows live in the level sheet.
+- Each node can earn **9 stars** (3 per difficulty). Untouched map stops are just a number. The map shows **one star per Easy / Medium / Hard with 3 stars** (max 3). A level with 1 or 2 stars shows nothing on the map; the sheet still shows those stars. All three levels with 3 stars: gold cup replaces the number. Star rows live in the level sheet. The welcome pill counts the same map stars (cleared levels), not the raw 0–9 total.
 - Do not show percentages to children. Do not say "mastery".
 - Never store personal data beyond the child’s chosen display name and avatar id.
 

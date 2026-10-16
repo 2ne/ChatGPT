@@ -37,9 +37,9 @@ export type LevelState = {
   category: PathCategory;
   categoryIndex: number;
   status: LevelStatus;
-  /** Stars earned across Easy / Medium / Hard, out of 9. */
+  /** Stars earned across Easy / Medium / Hard, out of 9. Detail for the level sheet. */
   stars: number;
-  /** How many of Easy / Medium / Hard have all three stars. */
+  /** How many of Easy / Medium / Hard have all three stars. This is what the map node shows (max 3). */
   cleared: number;
   /** All three levels have three stars. This node gets a gold cup. */
   cup: boolean;

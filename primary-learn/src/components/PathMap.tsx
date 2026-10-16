@@ -33,9 +33,10 @@ const YEAR_COLOURS: Record<string, { ink: string; soft: string }> = {
   "Year 6": { ink: "#ea580c", soft: "#ffead7" },
 };
 
+/** One map star per Easy / Medium / Hard that has all three stars. Partial scores stay in the sheet. */
 function wonStarsOnMap(level: LevelState): number {
   if (level.cup || level.status === "soon") return 0;
-  return Math.max(0, ...level.difficulties.map((entry) => entry.bestStars));
+  return level.cleared;
 }
 
 type Point = { x: number; y: number };
@@ -187,7 +188,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
           year: levels[band.first].category.year,
           title: levels[band.first].category.title,
           signY: band.signY,
-          stars: slice.reduce((sum, level) => sum + level.stars, 0),
+          stars: slice.reduce((sum, level) => sum + level.cleared, 0),
           cup: slice.some((level) => level.cup),
           hasYou: currentIndex >= band.first && currentIndex <= band.last,
         };

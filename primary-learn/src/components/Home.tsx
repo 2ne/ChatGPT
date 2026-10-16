@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Star, Trophy } from "lucide-react";
 import { getAvatar } from "../data/avatars";
-import { STARS_PER_NODE } from "../lib/mastery";
+import { LEVELS_PER_NODE } from "../lib/mastery";
 import { buildLevels } from "../lib/path";
 import type { LearnerProfile, ProgressState } from "../types/progress";
 import { PathMap } from "./PathMap";
@@ -17,8 +17,8 @@ export function Home({ profile, progress, onOpenActivity }: HomeProps) {
   const levels = useMemo(() => buildLevels(progress), [progress]);
 
   const questNodes = levels.filter((level) => level.difficulties.some((entry) => entry.activity));
-  const starCount = questNodes.reduce((sum, level) => sum + level.stars, 0);
-  const starMax = questNodes.length * STARS_PER_NODE;
+  const starCount = questNodes.reduce((sum, level) => sum + level.cleared, 0);
+  const starMax = questNodes.length * LEVELS_PER_NODE;
   const cupCount = questNodes.filter((level) => level.cup).length;
 
   return (
