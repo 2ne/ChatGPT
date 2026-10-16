@@ -138,10 +138,12 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
 2. **Path map** (`PathMap`) — a winding road of numbered stops, grouped by
    category signs from `curriculum/maths.md`. No subject chips, year chips, or
    a free-choice quest list. Locked stops show a lock; the current stop carries
-   the learner’s buddy face. Under each stop: `0/3` (how many of Easy /
-   Medium / Hard have all three stars) and three groups of three tiny
-   stars. No cup beside that count. When all three levels have three
-   stars (`3/3`, 9 stars), a gold cup sits on the node.
+   the learner’s buddy face. Untouched stops are just a number. After a
+   child starts a stop, three small pips sit under it (Easy / Medium /
+   Hard): empty, half gold if started, full gold at three stars. No
+   counts or nine-star rows on the map. Star detail lives in the level
+   sheet. When all three levels have three stars, the node turns gold
+   and a cup replaces the number.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
    rows, each with three stars and the best mark (`7/10`). Play only when that
    row is unlocked. Coming-soon nodes (no Easy quest yet) and locked nodes get

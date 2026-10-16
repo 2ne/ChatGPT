@@ -1,8 +1,6 @@
 import { useMemo, useRef, useState, type CSSProperties } from "react";
-import { Lock, LocateFixed, Star, Trophy } from "lucide-react";
-import { copy } from "../data/copy";
-import { LEVELS_PER_NODE } from "../lib/mastery";
-import type { LevelState } from "../lib/path";
+import { Lock, LocateFixed, Trophy } from "lucide-react";
+import type { DifficultyState, LevelState } from "../lib/path";
 import { DoodleShape, DoodleStar } from "./mascot/Doodles";
 import { LevelSheet } from "./LevelSheet";
 
@@ -33,6 +31,14 @@ const YEAR_COLOURS: Record<string, { ink: string; soft: string }> = {
   "Year 5": { ink: "#db2777", soft: "#fbdff0" },
   "Year 6": { ink: "#ea580c", soft: "#ffead7" },
 };
+
+type PipFill = "empty" | "soft" | "gold";
+
+function pipFill(entry: DifficultyState): PipFill {
+  if (entry.bestStars >= 3) return "gold";
+  if (entry.bestStars > 0 || entry.bestTotalCount > 0) return "soft";
+  return "empty";
+}
 
 type Point = { x: number; y: number };
 
@@ -255,13 +261,17 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
             {levels.map((level, index) => {
               const point = layout.points[index];
               const isCurrent = index === currentIndex && level.status === "current";
+              const started = level.difficulties.some(
+                (entry) => entry.bestStars > 0 || entry.bestTotalCount > 0,
+              );
+              const showPips =
+                started && !level.cup && level.status !== "soon" && level.status !== "locked";
               const label = [
                 `Level ${level.node.number}`,
                 level.node.title,
-                level.status === "soon"
-                  ? "coming soon"
-                  : `${level.cleared} of ${LEVELS_PER_NODE} levels with three stars`,
+                level.status === "soon" ? "coming soon" : null,
                 level.cup ? "gold cup" : null,
+                showPips ? "in progress" : null,
                 level.status === "locked" ? "locked" : null,
                 isCurrent ? "play next" : null,
               ]
@@ -293,25 +303,14 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                       <span className="map-node-num">{level.node.number}</span>
                     )}
                   </button>
-                  {level.status !== "soon" ? (
-                    <span className="map-progress" aria-hidden>
-                      <span className="map-levels">
-                        {copy.levelsMark(level.cleared, LEVELS_PER_NODE)}
-                      </span>
-                      <span className="map-nines">
-                        {level.difficulties.map((entry) => (
-                          <span key={entry.difficulty} className="map-star-group">
-                            {[0, 1, 2].map((slot) => (
-                              <Star
-                                key={slot}
-                                size={9}
-                                className={slot < entry.bestStars ? "is-lit" : undefined}
-                                fill={slot < entry.bestStars ? "currentColor" : "none"}
-                              />
-                            ))}
-                          </span>
-                        ))}
-                      </span>
+                  {showPips ? (
+                    <span className="map-pips" aria-hidden>
+                      {level.difficulties.map((entry) => (
+                        <span
+                          key={entry.difficulty}
+                          className={`map-pip is-${pipFill(entry)}`}
+                        />
+                      ))}
                     </span>
                   ) : null}
                 </div>
