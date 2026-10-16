@@ -123,8 +123,10 @@ on every screen size. It is the divider, not a card border.
 No blur, no bottom bar, no indigo wash — the dotted paper runs behind it.
 Left: white Pip tile vertically centred with the "Primary Maths" wordmark in
 ink (no tagline, no gradient on *Maths*). Clicking the logo or name returns to
-`/pathway`. Right: learner chip (avatar face centred in its circle + name) +
-Reset text on the home screen.
+`/pathway`. Right: learner chip (avatar face centred in its circle + name).
+Tap the avatar to open Settings (sound on/off, and Start again with a
+confirm step). Sound and reset are not shown on the path, onboarding, or
+quest screens.
 
 **Hidden on onboarding and during a quest.** Setup is a full-page welcome.
 Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
@@ -220,9 +222,8 @@ rainbow itself is never inset.
 - **Sound effects** are Web Audio only (`src/lib/sound.ts`). No files. Soft
   tap on buttons and answers, ding on correct, a gentle low tone on wrong,
   a short fanfare on the end screen (bigger at 3 stars). Play on
-  `pointerdown` so iOS is instant. Mute is a small speaker in the header
-  (and on quest screens) and stays in localStorage. SFX must not stop
-  narration.
+  `pointerdown` so iOS is instant. Mute lives in Settings behind the
+  avatar chip and stays in localStorage. SFX must not stop narration.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.

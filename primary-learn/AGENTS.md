@@ -285,7 +285,7 @@ Shipped now: speaker icon after the question + word highlighting. Later ideas (d
 
 ## Sound effects
 
-All SFX are synthesised in `src/lib/sound.ts` with the **Web Audio API**. No audio files. One shared `AudioContext`, unlocked and resumed on the first `pointerdown` / `touchstart`. Play on **pointerdown** (and `touchstart` where pointer events are missing), never on click or touch-up, so iOS is instant. Schedule at `currentTime`. Do not use `setTimeout` for audio. Mute is a small speaker toggle and lives in localStorage (`primary-path:sound-muted:v1`). Do not pause or cancel `speechSynthesis` when playing SFX. Cues: soft tap (buttons and answers), ding (correct), gentle low tone (wrong), short fanfare on the end screen (bigger at 3 stars).
+All SFX are synthesised in `src/lib/sound.ts` with the **Web Audio API**. No audio files. One shared `AudioContext`, unlocked and resumed on the first `pointerdown` / `touchstart`. Play on **pointerdown** (and `touchstart` where pointer events are missing), never on click or touch-up, so iOS is instant. Schedule at `currentTime`. Do not use `setTimeout` for audio. Mute lives in Settings (tap the avatar on the path) and in localStorage (`primary-path:sound-muted:v1`). Do not pause or cancel `speechSynthesis` when playing SFX. Cues: soft tap (buttons and answers), ding (correct), gentle low tone (wrong), short fanfare on the end screen (bigger at 3 stars).
 
 ## Allowed question kinds
 

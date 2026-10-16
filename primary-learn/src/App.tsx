@@ -121,24 +121,10 @@ function PathwayRoute({
         learnerName={profile.name}
         learnerEmoji={avatar.emoji}
         onHome={() => navigate("/pathway")}
-        right={
-          <button
-            type="button"
-            className="btn-text"
-            onClick={() => {
-              if (
-                window.confirm(
-                  "Reset your name, avatar and all marks on this device? This cannot be undone.",
-                )
-              ) {
-                resetAll();
-                navigate("/onboarding");
-              }
-            }}
-          >
-            Reset
-          </button>
-        }
+        onReset={() => {
+          resetAll();
+          navigate("/onboarding");
+        }}
       />
       {noticeText ? (
         <p className="route-notice" role="status">

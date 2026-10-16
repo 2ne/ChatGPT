@@ -16,7 +16,6 @@ import type { ActivityAttempt } from "../types/progress";
 import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
 import { playSound } from "../lib/sound";
-import { MuteToggle } from "./MuteToggle";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
@@ -209,12 +208,9 @@ export function ActivityRunner({
     return (
       <main className="page page-quest quest-intro-page">
         <section className="quest-intro">
-          <div className="quest-intro-bar">
-            <button type="button" className="back-link" onClick={onExit}>
-              <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
-            </button>
-            <MuteToggle />
-          </div>
+          <button type="button" className="back-link" onClick={onExit}>
+            <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
+          </button>
           <div className="intro-tile-row">
             <span
               className="context-tile"
@@ -326,12 +322,9 @@ export function ActivityRunner({
               </p>
               <p className="context-sub">{copy.questionOf(position, activeQueue.length)}</p>
             </div>
-            <div className="context-tools">
-              <MuteToggle />
-              <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
-                <X size={20} aria-hidden />
-              </button>
-            </div>
+            <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
+              <X size={20} aria-hidden />
+            </button>
           </div>
 
           <div className="context-progress">
@@ -494,7 +487,6 @@ function ResultScreen({
 
   return (
     <main className="page page-quest result-page">
-      <MuteToggle className="result-mute" />
       <ConfettiBurst burstId={confetti} intensity="pop" />
       <section className={`result-card${reducedMotion ? " is-still" : ""}`} aria-live="polite">
         <div className="result-pip" aria-hidden>

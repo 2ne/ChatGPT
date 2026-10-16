@@ -411,38 +411,6 @@ p {
   gap: 10px;
 }
 
-.app-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.mute-btn {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--ink-soft);
-  cursor: pointer;
-}
-
-.mute-btn:hover {
-  background: var(--primary-soft);
-  color: var(--primary);
-}
-
-.mute-btn:focus-visible {
-  outline: 3px solid var(--sky);
-  outline-offset: 2px;
-}
-
-.mute-btn[aria-pressed="true"] {
-  color: var(--ink-faint);
-}
-
 .learner-chip {
   display: inline-flex;
   align-items: center;
@@ -457,6 +425,17 @@ p {
   font-size: 15px;
   line-height: 1;
   color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+button.learner-chip:hover {
+  border-color: var(--primary);
+}
+
+button.learner-chip:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
 }
 
 .learner-name {
@@ -997,13 +976,6 @@ p {
 .exit-btn:focus-visible {
   outline: 3px solid var(--sky);
   outline-offset: 2px;
-}
-
-.context-tools {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  gap: 2px;
 }
 
 .context-progress {
@@ -1652,16 +1624,9 @@ p {
 }
 
 .result-page {
-  position: relative;
   display: grid;
   place-items: center;
   padding: var(--space-5) var(--space-4) var(--space-6);
-}
-
-.result-mute {
-  position: absolute;
-  top: 12px;
-  right: 12px;
 }
 
 .result-card {
@@ -1783,13 +1748,6 @@ p {
   padding: var(--space-6) var(--space-4) var(--space-7);
   display: grid;
   gap: var(--space-5);
-}
-
-.onboard-mute {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
 }
 
 .onboard-hero {
@@ -1960,14 +1918,6 @@ p {
 }
 
 .quest-intro .back-link {
-  margin-bottom: 0;
-}
-
-.quest-intro-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
   margin-bottom: 4px;
 }
 
@@ -2461,6 +2411,20 @@ p {
 .toc-row:focus-visible {
   outline: 3px solid var(--sky);
   outline-offset: 2px;
+}
+
+.settings-hello {
+  margin: -8px 48px 16px 0;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.settings-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
 }
 
 @keyframes map-pulse {

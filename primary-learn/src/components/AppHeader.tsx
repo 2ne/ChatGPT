@@ -1,17 +1,19 @@
-import type { ReactNode } from "react";
-import { MuteToggle } from "./MuteToggle";
+import { useState } from "react";
+import { copy } from "../data/copy";
 import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
+import { SettingsSheet } from "./SettingsSheet";
 
 type AppHeaderProps = {
-  right?: ReactNode;
   learnerName?: string;
   learnerEmoji?: string;
   onHome?: () => void;
+  onReset?: () => void;
 };
 
-export function AppHeader({ right, learnerName, learnerEmoji, onHome }: AppHeaderProps) {
+export function AppHeader({ learnerName, learnerEmoji, onHome, onReset }: AppHeaderProps) {
   const { mood } = usePipMood();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const brand = (
     <>
@@ -26,6 +28,15 @@ export function AppHeader({ right, learnerName, learnerEmoji, onHome }: AppHeade
     </>
   );
 
+  const chip = learnerName ? (
+    <>
+      <span className="learner-emoji" aria-hidden>
+        {learnerEmoji ?? "🦊"}
+      </span>
+      <span className="learner-name">{learnerName}</span>
+    </>
+  ) : null;
+
   return (
     <header className="app-header">
       <div className="app-header-inner">
@@ -37,20 +48,35 @@ export function AppHeader({ right, learnerName, learnerEmoji, onHome }: AppHeade
           <div className="brand-row">{brand}</div>
         )}
         <div className="app-header-right">
-          {learnerName ? (
+          {learnerName && onReset ? (
+            <button
+              type="button"
+              className="learner-chip"
+              aria-haspopup="dialog"
+              aria-expanded={settingsOpen}
+              aria-label={copy.settingsAria(learnerName)}
+              onClick={() => setSettingsOpen(true)}
+            >
+              {chip}
+            </button>
+          ) : learnerName ? (
             <span className="learner-chip" title={`Signed in as ${learnerName}`}>
-              <span className="learner-emoji" aria-hidden>
-                {learnerEmoji ?? "🦊"}
-              </span>
-              <span className="learner-name">{learnerName}</span>
+              {chip}
             </span>
           ) : null}
-          <div className="app-header-actions">
-            <MuteToggle />
-            {right}
-          </div>
         </div>
       </div>
+      {onReset ? (
+        <SettingsSheet
+          open={settingsOpen}
+          learnerName={learnerName ?? ""}
+          onClose={() => setSettingsOpen(false)}
+          onReset={() => {
+            setSettingsOpen(false);
+            onReset();
+          }}
+        />
+      ) : null}
     </header>
   );
 }
