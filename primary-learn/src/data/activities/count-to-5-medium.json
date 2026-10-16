@@ -97,7 +97,6 @@
       "id": "c5m-build",
       "prompt": "Make a group of {count} {items}.",
       "visual": { "item": "duck", "count": 4 },
-      "bank": 6,
       "randomise": { "count": { "min": 3, "max": 4 } },
       "explanation": "Add {items} one by one. Stop at {count}. Do not use every {item} in the tray.",
       "narration": { "prompt": "Make a group of {count} {items}." }

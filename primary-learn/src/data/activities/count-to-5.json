@@ -107,7 +107,6 @@
       "id": "c5e-build-5",
       "prompt": "Make a group of 5 {items}.",
       "visual": { "item": "ladybird", "count": 5 },
-      "bank": 7,
       "randomise": {},
       "explanation": "Stop when the group has 5. 1, 2, 3, 4, 5. There are 5 {items}.",
       "narration": { "prompt": "Make a group of 5 {items}." }

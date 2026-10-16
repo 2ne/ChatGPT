@@ -167,7 +167,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] At least three question kinds in a 10-question quest; same kind not overused
 - [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
 - [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set. Stars use `STAR_SCORE` (6–7 / 8–9 / 10). No retry loop.
-- [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
+- [ ] JSON only (no JSX, no per-activity component). Registered in `src/data/activities/index.ts` via `validateActivity`. New behaviour went into a shared question kind with defaults, not a one-off field
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
 - [ ] No shared phrases (“Correct. Nice!”, “Need a hint?”) copied into the JSON. Those live in `src/data/copy.ts`

@@ -9,7 +9,6 @@ type MultipleChoiceProps = {
   disabled?: boolean;
   reveal: Reveal;
   onChange: (value: unknown) => void;
-  hideVisual?: boolean;
 };
 
 export function MultipleChoice({
@@ -18,11 +17,11 @@ export function MultipleChoice({
   disabled,
   reveal,
   onChange,
-  hideVisual = false,
 }: MultipleChoiceProps) {
+  const showStem = question.kind !== "count-objects" && Boolean(question.visual);
   return (
     <div className="option-stack">
-      {!hideVisual && question.visual ? (
+      {showStem && question.visual ? (
         <ObjectGroup
           visual={question.visual}
           extras={question.extras}

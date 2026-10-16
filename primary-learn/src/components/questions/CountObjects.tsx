@@ -22,7 +22,7 @@ export function CountObjects(props: CountObjectsProps) {
         layout={question.layout}
         interactive
       />
-      <MultipleChoice {...props} hideVisual />
+      <MultipleChoice {...props} />
     </div>
   );
 }

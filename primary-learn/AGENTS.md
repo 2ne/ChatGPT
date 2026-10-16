@@ -119,6 +119,14 @@ Educational content is **pure data**. Presentation is **one generic runner** plu
 
 Do not put emoji strings in JSON. Use `"visual": { "item": "apple", "count": 3 }`. The `ObjectGroup` component draws the picture. To change how apples look, edit that component once.
 
+## Maintainability
+
+Two of us build this whole product. Keep it easy to change.
+
+- **Activities are simple JSON.** No per-activity components, CSS, or scoring. A quest is a data file plus a registry line.
+- **Behaviour lives in a few shared question kinds.** Name them clearly (`count-objects`, `build-set`). Give each kind sensible defaults so JSON stays short. Improving one component upgrades every current and future activity at once.
+- **Keep the schema small and readable.** Do not add a field, flag, or kind that only one quest needs. If the existing kinds cannot teach the skill well, upgrade a shared component or add one reusable kind the next node can use too.
+
 ## Writing for children
 
 Every string a child (or parent helper) can read on screen must follow this. That means `src/data/copy.ts`, activity JSON (`prompt`, `hint`, `explanation`, `narration`, `summary`, `title`), and any words in components. Agent-only docs may still use dashes.
@@ -164,7 +172,7 @@ Every new activity **must**:
 
 ## How to add a question type
 
-Content never embeds a new UI. Adding a kind is a schema + component change:
+Content never embeds a new UI. Prefer upgrading an existing kind. A new kind must be reusable, with defaults that keep JSON small. Adding a kind is a schema + component change:
 
 1. Add the kind to `QUESTION_KINDS` and the discriminated union in `src/types/activity.ts`.
 2. Teach `src/lib/answers.ts` (`isAnswerCorrect`, `emptyAnswerFor`, `hasProvidedAnswer`).
@@ -292,7 +300,7 @@ All SFX are synthesised in `src/lib/sound.ts` with the **Web Audio API**. No aud
 Defined in `src/types/activity.ts`. Each has one component under `src/components/questions/`:
 
 - `count-objects` — how many pictures? Requires `visual: { item, count }` plus multiple-choice options. Objects are tappable: each tap lights up and says the next number. Optional `extras` (other objects to ignore) and `layout: "scatter"`.
-- `build-set` — tap objects from a tray to build a group of `visual.count`. Optional `bank` (tray size, default count + 2, must be ≥ the target). Correct when the group size matches. Teaches cardinality (stop at the right number).
+- `build-set` — tap objects from a tray to build a group of `visual.count`. Tray size defaults to count + 2. Omit `bank` unless you need a different tray. Correct when the group size matches. Teaches cardinality (stop at the right number).
 - `multiple-choice` — single correct option. Options may use `visual` instead of a label.
 - `multi-select` — all correct options required.
 - `fill-blank` — exact normalised answer (number or short word). May include `visual`. Stem pictures are tappable to count, same as count-objects.

@@ -113,7 +113,6 @@
       "id": "c5h-build-5",
       "prompt": "Make a group of 5 {items}.",
       "visual": { "item": "ladybird", "count": 5 },
-      "bank": 8,
       "randomise": {},
       "explanation": "A group of 5 has 5 {items}. Leave the extra {items} in the tray.",
       "narration": { "prompt": "Make a group of 5 {items}." }
