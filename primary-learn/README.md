@@ -26,7 +26,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
 - Each level opens a sheet with Easy / Medium / Hard; later levels stay locked until the previous Easy is mastered
 - Runs interactive question kinds (multiple choice, multi-select, fill blank, ordered, match pairs)
-- A **speaker** after the question reads the question only (browser `speechSynthesis`, en-GB) and highlights words as they are spoken
+- A **speaker** after the question reads the question only (Web Speech API, UK female teacher voice) and highlights words as they are spoken
 - Retries missed questions in a calm mastery loop, without changing the first-try mark
 - Saves best score and mastery per activity in localStorage
 
@@ -83,7 +83,7 @@ npm run preview
 - **Maths first** — the current map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order. Other subjects are a later phase
 - **Three levels** — every node has Easy / Medium / Hard. The map uses `pathNode` + `difficulty`. Mastering all three means the child can do it
 - **Right first time** — `QUALITY.md` is required. Activities are not rewritten after they ship
-- **Speaker** — Web Speech API, en-GB; `narration.prompt` is the question only and must never reveal the answer
+- **Speaker** — Web Speech API only (no generated audio); UK female teacher voice; `narration.prompt` is the question only and must never reveal the answer
 - **Improve before expanding** — finish and tighten shipped quests before adding new nodes
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
 - **Content ≠ UI** — quests are JSON; one `ActivityRunner`; one component per question kind; shared wording in `copy.ts`. Change a phrase or an apple picture once, not 124 times

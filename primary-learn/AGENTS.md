@@ -249,11 +249,11 @@ Follow `QUALITY.md` for the full wording templates, distractor rules, variety ru
 
 ## Narration (read aloud)
 
-A small **speaker icon** sits inline, immediately after the question text. It uses the browser Web Speech API (`speechSynthesis`): free, no AI service, works offline. The helper in `src/lib/speech.ts` picks the best **en-GB** voice it can find (prefer natural / neural / “Google UK English” / “Microsoft … Online (Natural)”) at a calm child-friendly rate.
+A small **speaker icon** sits inline, immediately after the question text. Narration is **Web Speech API only** (`speechSynthesis`): free, no paid API, no generated audio files. There are too many questions to record or synthesise offline. The helper in `src/lib/speech.ts` picks a young, warm, happy **UK female** primary-teacher voice: prefer en-GB female natural voices (Microsoft Sonia / Libby / Maisie Online (Natural), Google UK English Female, Apple Serena / Kate / Stephanie / Martha), then other female English, and never prefer known male voices (Daniel, Arthur, George, Ryan, Thomas, Oliver, Google UK English Male). Pitch about 1.1. Rate about 0.95.
 
 **Narration is the question only.** It must never reveal or hint the answer. Do not read options, pictured object counts, fill-blank answers, hints, or teaching feedback.
 
-Spoken text is `question.narration.prompt`, falling back to the visible `prompt`. A line may be a string or `{ text, audioSrc }` so we can later swap in a pre-generated file. Do not add audio files unless asked.
+Spoken text is `question.narration.prompt`, falling back to the visible `prompt`. Do not add `audioSrc` files.
 
 Write narration-friendly copy:
 
@@ -266,7 +266,7 @@ While speech plays, the runner highlights words in the prompt as they are read. 
 
 ### Elevating written sentences (later)
 
-Shipped now: speaker icon after the question + word highlighting. Later ideas (do not build unless asked): illustrated stems beside the words, stricter shared sentence templates, neater karaoke wrapping, `audioSrc` files. See `QUALITY.md`.
+Shipped now: speaker icon after the question + word highlighting. Later ideas (do not build unless asked): illustrated stems beside the words, stricter shared sentence templates, neater karaoke wrapping. Do not generate audio files. See `QUALITY.md`.
 
 ### Allowed question kinds
 

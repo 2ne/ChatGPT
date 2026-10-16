@@ -180,11 +180,14 @@ Back link → icon tile + big title → summary sentence → fact pills
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
   teaching tip + mini Pip reaction. No speaker on feedback (it states the answer).
 - **Speaker** (small round icon, 36px) sits **inline right after the question
-  text**. It reads **the question only** via `speechSynthesis` (en-GB, calm
-  rate) — never options, pictured counts, hints, or explanations. Words in the
-  prompt highlight as they are spoken (`--sun-soft`). Hide the button if the
-  browser has no speech API. Spoken copy is `question.narration.prompt`
-  (fallback: visible prompt). Do not add a second speaker system.
+  text**. It reads **the question only** via Web Speech (`speechSynthesis`).
+  Pick a young, warm, happy UK female teacher voice (en-GB female natural
+  first). Pitch about 1.1. Rate about 0.95. Never options, pictured counts,
+  hints, or explanations. No generated audio files and no paid voice API.
+  Words in the prompt highlight as they are spoken (`--sun-soft`). Hide the
+  button if the browser has no speech API. Spoken copy is
+  `question.narration.prompt` (fallback: visible prompt). Do not add a second
+  speaker system.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.
@@ -244,7 +247,8 @@ pointer (mouse or touch).
   prompt is a reading aid, not decoration — keep it even when motion is reduced.
 
 Later (do not build unless asked): illustrated stems beside the words,
-stronger sentence templates, neater karaoke wrapping, `audioSrc` files.
+stronger sentence templates, neater karaoke wrapping. Do not generate
+audio files. Scale is too large.
 
 ## Anti-patterns (fix these)
 

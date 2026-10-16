@@ -1,7 +1,12 @@
-/** Browser speechSynthesis helper. No network. Cancel on every new play. */
+/** Browser speechSynthesis helper. Web Speech only. No generated audio. Cancel on every new play. */
 
-const CHILD_RATE = 0.9;
-const CHILD_PITCH = 1.05;
+const CHILD_RATE = 0.95;
+const CHILD_PITCH = 1.1;
+
+const FEMALE_NAMES =
+  /\b(Sonia|Libby|Maisie|Serena|Kate|Stephanie|Martha)\b/i;
+const MALE_NAMES =
+  /\b(Daniel|Arthur|George|Ryan|Thomas|Oliver)\b/i;
 
 let voices: SpeechSynthesisVoice[] = [];
 let voicesBound = false;
@@ -25,20 +30,49 @@ export function loadVoices(): SpeechSynthesisVoice[] {
   return voices;
 }
 
+function isFemaleVoice(name: string): boolean {
+  if (/\bfemale\b/i.test(name)) return true;
+  return FEMALE_NAMES.test(name);
+}
+
+function isMaleVoice(name: string): boolean {
+  if (isFemaleVoice(name)) return false;
+  if (/\bmale\b/i.test(name)) return true;
+  return MALE_NAMES.test(name);
+}
+
 function scoreVoice(voice: SpeechSynthesisVoice): number {
   const lang = voice.lang.replaceAll("_", "-");
   const name = voice.name;
+  const hay = `${name} ${lang}`;
+  const uk = lang === "en-GB" || lang.startsWith("en-GB") || /UK English|United Kingdom/i.test(hay);
+  const female = isFemaleVoice(name);
+  const male = isMaleVoice(name);
   let score = 0;
+
   if (lang === "en-GB") score += 100;
   else if (lang.startsWith("en-GB")) score += 90;
   else if (lang === "en-AU" || lang === "en-IE") score += 35;
   else if (lang.startsWith("en")) score += 15;
   else score -= 50;
-  if (/Google UK English/i.test(name)) score += 55;
-  if (/Microsoft .+\(Natural\)/i.test(name) && /en-GB/i.test(`${name} ${lang}`)) score += 50;
-  if (/Online \(Natural\)/i.test(name)) score += 35;
-  if (/neural|natural/i.test(name)) score += 25;
-  if (/UK English Female|en-GB-.*Female|Daniel|Kate|Serena/i.test(name)) score += 8;
+
+  if (male) {
+    score -= 250;
+    return score;
+  }
+
+  if (female) {
+    score += 80;
+    if (uk) score += 50;
+  } else {
+    score -= 25;
+  }
+
+  if (/Google UK English Female/i.test(name)) score += 60;
+  if (female && /Microsoft .+\(Natural\)/i.test(name) && uk) score += 55;
+  if (female && /Online \(Natural\)/i.test(name) && uk) score += 40;
+  if (female && /neural|natural/i.test(name)) score += 25;
+  if (FEMALE_NAMES.test(name) && uk) score += 20;
   return score;
 }
 

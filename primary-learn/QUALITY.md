@@ -120,7 +120,7 @@ Write `narration.prompt` whenever the stem has operators or symbols a voice will
 
 - Say numbers and signs in words: “7 plus what equals 10?”, “10 take away 4 equals what?”
 - Same meaning as the on-screen prompt. Do not add “count the three pictures” or option lists.
-- `narration.prompt` may be a string, or `{ text, audioSrc }` for a later audio file. Do not invent audio files.
+- `narration.prompt` is Web Speech text only. Do not add audio files.
 
 ## Gold-standard example
 
@@ -183,4 +183,3 @@ Ideas to add later — do not build them unless asked:
 - Illustrated stems (a picture slot beside the words, not only emoji in the prompt)
 - Stronger shared templates so every count / bond / story stem looks the same
 - Karaoke highlighting that wraps lines more neatly on small screens
-- Pre-generated `audioSrc` files instead of live speechSynthesis
