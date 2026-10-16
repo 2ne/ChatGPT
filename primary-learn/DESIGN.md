@@ -111,8 +111,8 @@ Do not switch back to Lato / Noto Sans.
 | Pills / chips | 9999px | 1.5–2px | flat or soft |
 | Avatar / icon tiles | 18–20px (tiles), circle (faces) | 2px | soft indigo glow on brand tile |
 
-Question cards carry an 8px rainbow ribbon on top (sun/coral/mint/sky) so
-every question feels like part of the quest.
+An 8px rainbow strip (sun/coral/mint/sky) sits between the flush header and
+the white activity column. It is the divider, not a card border.
 
 ## Components
 
@@ -152,24 +152,28 @@ Back link → icon tile + big title → summary sentence → fact pills
 
 ### Activity question (most important)
 
+The quest runner is **full-bleed white**. Kids know they are in an activity
+because the dotted sandy paper is gone. Header and activity touch the top and
+both sides. Square corners. No card chrome. Inner words stay padded and, on
+wide screens, centred (`--max-wide`) while the white still goes edge to edge.
+
 ```
-[← Exit quest]
-[🎨 tile  Number bonds to 10      ]
-[Question 3 of 10      Keep going!]
-[▰▰▰▱▱▱▱▱▱▱]  segmented progress
-[🔥 3 in a row!]           (streak)
-┌───────────────────────────────┐
-│ [3]  Which number…?  🔊       │  ← numbered badge + kind + speaker after text
-│ [A] 2                         │
-│ [B] 3                         │
-│ [C] 4                    ✓    │
-│ 💡 Need a hint?               │
-│ ✅ Correct. Nice! + tip + Pip  │
-│ [ Check it ✓ / Next → ]       │  ← in-card on desktop
-└───────────────────────────────┘
-┌───────────────────────────────┐  ← mobile only: fixed white dock
-│ [ Check it ✓ / Next → ]       │
-└───────────────────────────────┘
+┌─────────────────────────────────┐  flush header, no radius
+│ 🎨  Count to 5            ✕    │
+│ Question 5 of 10                │
+│ ▰▰▰▰▰▱▱▱▱▱                      │
+├─────────────────────────────────┤  rainbow strip (divider)
+│                                 │
+│ [3]  Which number…?  🔊         │  white fills down to the dock
+│ [A] 2                           │
+│ [B] 3                           │
+│ [C] 4                      ✓    │
+│ 💡 Need a hint?                 │
+│ ✅ Correct. Nice! + tip + Pip    │
+│                                 │
+├─────────────────────────────────┤
+│ [ Check it ✓ / Next question → ]│  sticky dock, every width
+└─────────────────────────────────┘
 ```
 
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
@@ -192,11 +196,10 @@ Back link → icon tile + big title → summary sentence → fact pills
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
-  `See my stars` on the last one. On desktop it stays inside the question card.
-  On mobile it moves to a white `position: fixed` dock at the viewport bottom
-  (with safe-area padding) so kids never have to scroll to find it.
-- Home, quest intro, questions and the stars screen all use the same content
-  width (`--max-wide`). Do not narrow the white card on later screens.
+  `See my stars` on the last one. Sticky white dock at the viewport bottom on
+  every width (with safe-area padding) so kids never have to scroll to find it.
+- Home and onboarding keep the dotted paper. Once a quest is open, the screen
+  is white edge to edge. Inner content still uses `--max-wide`.
 
 ### Progress
 

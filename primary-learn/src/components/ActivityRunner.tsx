@@ -367,60 +367,64 @@ export function ActivityRunner({
 
       {/* Where am I? — activity context + segmented progress */}
       <section className="context-card" aria-label={copy.progressLabel}>
-        <div className="context-top">
-          <span
-            className="context-tile"
-            style={{ background: `linear-gradient(135deg, ${theme.color}, ${theme.color}CC)` }}
-            aria-hidden
-          >
-            <ThemeIcon />
-          </span>
-          <div style={{ minWidth: 0, flex: 1 }}>
-            <p className="context-title" style={{ fontSize: 21 }}>
-              {activity.title}
-            </p>
-            <p className="context-sub">
-              {copy.questionOf(position, activeQueue.length)}
-              {isRetry ? copy.anotherGo : ""}
-            </p>
-          </div>
-          <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
-            <X size={20} aria-hidden />
-          </button>
-        </div>
-
-        <div>
-          <div
-            className="seg-bar"
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={activeQueue.length}
-            aria-valuenow={index + (phase === "feedback" ? 1 : 0)}
-            aria-valuetext={copy.questionOf(position, activeQueue.length)}
-          >
-            {activeQueue.map((id, slot) => {
-              const done = slot < index || (slot === index && phase === "feedback");
-              const current = slot === index && phase !== "feedback";
-              return (
-                <span
-                  key={id}
-                  className={`seg${done ? " is-done" : ""}${current ? " is-current" : ""}`}
-                >
-                  {done ? <span className="seg-fill" /> : null}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-
-        {streak >= 2 && phase !== "feedback" ? (
-          <div className="streak-row">
-            <span className="streak-fire">
-              <Flame size={15} aria-hidden /> {copy.streak(streak)}
+        <div className="quest-inner">
+          <div className="context-top">
+            <span
+              className="context-tile"
+              style={{ background: `linear-gradient(135deg, ${theme.color}, ${theme.color}CC)` }}
+              aria-hidden
+            >
+              <ThemeIcon />
             </span>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <p className="context-title" style={{ fontSize: 21 }}>
+                {activity.title}
+              </p>
+              <p className="context-sub">
+                {copy.questionOf(position, activeQueue.length)}
+                {isRetry ? copy.anotherGo : ""}
+              </p>
+            </div>
+            <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
+              <X size={20} aria-hidden />
+            </button>
           </div>
-        ) : null}
+
+          <div>
+            <div
+              className="seg-bar"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={activeQueue.length}
+              aria-valuenow={index + (phase === "feedback" ? 1 : 0)}
+              aria-valuetext={copy.questionOf(position, activeQueue.length)}
+            >
+              {activeQueue.map((id, slot) => {
+                const done = slot < index || (slot === index && phase === "feedback");
+                const current = slot === index && phase !== "feedback";
+                return (
+                  <span
+                    key={id}
+                    className={`seg${done ? " is-done" : ""}${current ? " is-current" : ""}`}
+                  >
+                    {done ? <span className="seg-fill" /> : null}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+
+          {streak >= 2 && phase !== "feedback" ? (
+            <div className="streak-row">
+              <span className="streak-fire">
+                <Flame size={15} aria-hidden /> {copy.streak(streak)}
+              </span>
+            </div>
+          ) : null}
+        </div>
       </section>
+
+      <div className="quest-rainbow" aria-hidden />
 
       {isRetry && phase === "question" ? (
         <p className="retry-note" role="status">
@@ -430,6 +434,7 @@ export function ActivityRunner({
 
       <div className="play-grid">
         <section key={question.id} className="card question-card" aria-label={`Question ${position}`}>
+          <div className="quest-inner">
           <div className="q-head">
             <span className="q-num" aria-hidden>
               {position}
@@ -501,12 +506,11 @@ export function ActivityRunner({
             </div>
           ) : null}
 
-          {/* Desktop: CTA stays in the card. Mobile uses the fixed dock below. */}
           <div className="quest-actions-inline">{primaryAction}</div>
+          </div>
         </section>
       </div>
 
-      {/* Mobile only: fixed white Check / Next bar so kids never scroll to find it. */}
       <div className="quest-dock" role="region" aria-label="Answer actions">
         <div className="quest-dock-inner">{primaryAction}</div>
       </div>

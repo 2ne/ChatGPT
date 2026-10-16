@@ -183,24 +183,46 @@ p {
   padding-top: var(--space-4);
 }
 
-/* Quest screens omit the global header; keep the same top padding. */
+/* Quest screens: full-bleed white so the sandy dots never show. */
 .page-quest {
-  padding-top: var(--space-4);
+  max-width: none;
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: var(--space-5) var(--space-4) var(--space-6);
+  background: #fff;
 }
 
 .page-narrow {
   max-width: var(--max-content);
 }
 
-/* Room for the fixed Check / Next dock on small screens. */
+/* Question play: flush header, white column, room for the sticky dock. */
 .page-with-dock {
-  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
-@media (min-width: 769px) {
-  .page-with-dock {
-    padding-bottom: var(--space-6);
-  }
+.page-quest .card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.quest-inner {
+  width: 100%;
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  display: grid;
+  gap: inherit;
+}
+
+.quest-rainbow {
+  flex: none;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(90deg, var(--sun) 0 25%, var(--coral) 25% 50%, var(--mint) 50% 75%, var(--sky) 75% 100%);
 }
 
 .card {
@@ -836,12 +858,13 @@ p {
 
 /* ——— Activity context banner ——— */
 .context-card {
-  background: var(--card);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-  padding: var(--space-4);
-  margin-bottom: var(--space-3);
+  flex: none;
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  margin: 0;
   display: grid;
   gap: 12px;
 }
@@ -991,17 +1014,16 @@ p {
   animation: question-in 220ms ease;
   position: relative;
   overflow: hidden;
+  flex: 1 1 auto;
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-5) var(--space-4) var(--space-4);
 }
 
 .question-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 8px;
-  background: linear-gradient(90deg, var(--sun) 0 25%, var(--coral) 25% 50%, var(--mint) 50% 75%, var(--sky) 75% 100%);
-  opacity: 0.9;
+  display: none;
 }
 
 @keyframes question-in {
@@ -1483,21 +1505,22 @@ p {
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 700;
-  margin-bottom: var(--space-3);
+  margin: var(--space-3) auto 0;
 }
 
-/* Question stack stays the full content width on every screen. */
+/* White activity column fills down to the sticky Check / Next dock. */
 .play-grid {
-  display: grid;
-  gap: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #fff;
 }
 
-/* Desktop: Check / Next stays inside the question card (as before). */
 .quest-actions-inline {
   display: none;
 }
 
-/* Mobile: white bar pinned to the viewport bottom so kids never scroll for it. */
 .quest-dock {
   position: fixed;
   bottom: 0;
@@ -1514,16 +1537,6 @@ p {
   width: 100%;
   max-width: var(--max-wide);
   margin: 0 auto;
-}
-
-@media (min-width: 769px) {
-  .quest-actions-inline {
-    display: block;
-  }
-
-  .quest-dock {
-    display: none;
-  }
 }
 
 .sidekick-bubble {
