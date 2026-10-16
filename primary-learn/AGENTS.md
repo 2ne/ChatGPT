@@ -300,7 +300,7 @@ All SFX are synthesised in `src/lib/sound.ts` with the **Web Audio API**. No aud
 
 Defined in `src/types/activity.ts`. Each has one component under `src/components/questions/`:
 
-- `count-objects` — how many pictures? Requires `visual: { item, count }` plus multiple-choice options. Objects are tappable: each tap lights up and says the next number. Optional `extras` (other objects to ignore) and `layout: "scatter"`.
+- `count-objects` — how many pictures? Requires `visual: { item, count }` plus multiple-choice options. Objects are tappable: each tap lights up and says the next number. Optional `extras` (other objects to ignore) and `layout` (`row`, `scatter`, or `dice` for a glance pattern to 6). Multiple-choice stem pictures are look-only so subitising does not turn into tap-counting.
 - `build-set` — tap objects from a tray to build a group of `visual.count`. Tray size defaults to count + 2. Omit `bank` unless you need a different tray. Correct when the group size matches. Teaches cardinality (stop at the right number).
 - `multiple-choice` — single correct option. Options may use `visual` instead of a label.
 - `multi-select` — all correct options required.
@@ -308,7 +308,7 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 - `ordered` — put items in the right sequence.
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
 
-Optional on any pictured stem: `extras` (mixed-in objects that are not the counted set; `extras.item` must differ from `visual.item`) and `layout` (`row` default, or `scatter`).
+Optional on any pictured stem: `extras` (a second kind of object; `extras.item` must differ from `visual.item`) and `layout` (`row` default, `scatter`, or `dice`). For mixed counting, the child counts `visual` and ignores extras. For composition, keep `layout` as `row` so the two kinds stay in groups (first `visual`, then extras). `scatter` shuffles them together. `dice` is a glance pattern to 6 and ignores extras.
 
 Shared phrases (“Choose all that apply.”, “Correct. Nice!”) live in `src/data/copy.ts`, not in JSON. Follow **Writing for children**.
 

@@ -1,0 +1,185 @@
+{
+  "id": "see-numbers-to-5",
+  "title": "See numbers to 5",
+  "summary": "Know how many without counting, for groups of 1 to 5.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": ["Reception"],
+  "ability": "emerging",
+  "estimatedMinutes": 4,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-subitise-5",
+  "pathNode": "eyfs-subitise-5",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 glance a dice pattern of 1, then 2, then 3. Question 4 matches 1 to 3 to pictures. Question 5 glances 4. Question 6 picks the group of 4. Question 7 glances 5. Question 8 taps every group of 5. Question 9 matches 4 and 5. Question 10 picks the group of 5. Amounts climb 1 to 5. No tap-to-count.",
+    "versus": "Easy: tidy dice faces, 1 to 5 in order, hints on the first three. Medium uses a mix of dice and messy groups, amounts 2 to 5. Hard uses 4 and 5 in different patterns, number words, and two groups to compare. Still see how many, not bonds."
+  },
+  "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns"],
+  "randomise": {
+    "mode": "attempt",
+    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-1",
+      "prompt": "Look. How many {items}?",
+      "visual": { "item": "star", "count": 1 },
+      "layout": "dice",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1" },
+        { "id": "b", "label": "2" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "4" }
+      ],
+      "correctId": "a",
+      "hint": "Just look. Do not count one by one.",
+      "explanation": "There is 1 {item}. You can see it in one look.",
+      "narration": { "prompt": "Look. How many {items}?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-2",
+      "prompt": "Look. How many {items}?",
+      "visual": { "item": "balloon", "count": 2 },
+      "layout": "dice",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1" },
+        { "id": "b", "label": "2" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "4" }
+      ],
+      "correctId": "b",
+      "hint": "See both {items} at once.",
+      "explanation": "There are 2 {items}. Two dots sit opposite on the dice.",
+      "narration": { "prompt": "Look. How many {items}?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-3",
+      "prompt": "Look. How many {items}?",
+      "visual": { "item": "apple", "count": 3 },
+      "layout": "dice",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
+      ],
+      "correctId": "b",
+      "hint": "See the whole group in one look.",
+      "explanation": "There are 3 {items}. Three sits on a diagonal.",
+      "narration": { "prompt": "Look. How many {items}?" }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "s5e-match-123",
+      "prompt": "Match each number to the group.",
+      "randomise": {},
+      "pairs": [
+        { "id": "p1", "left": "1", "right": { "visual": { "item": "fish", "count": 1 } } },
+        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 } } },
+        { "id": "p3", "left": "3", "right": { "visual": { "item": "fish", "count": 3 } } }
+      ],
+      "explanation": "1 is one {item}. 2 is two {items}. 3 is three {items}.",
+      "narration": { "prompt": "Match each number to the group." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-4",
+      "prompt": "Look. How many {items}?",
+      "visual": { "item": "duck", "count": 4 },
+      "layout": "dice",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
+      ],
+      "correctId": "c",
+      "explanation": "There are 4 {items}. Four sits at the corners.",
+      "narration": { "prompt": "Look. How many {items}?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-group-2",
+      "prompt": "Which group has 4 {items}?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "frog", "count": 3 } },
+        { "id": "b", "visual": { "item": "frog", "count": 5 } },
+        { "id": "c", "visual": { "item": "frog", "count": 4 } },
+        { "id": "d", "visual": { "item": "frog", "count": 2 } }
+      ],
+      "correctId": "c",
+      "explanation": "Look for 4. That group has 4 {items}.",
+      "narration": { "prompt": "Which group has 4 {items}?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-5",
+      "prompt": "Look. How many {items}?",
+      "visual": { "item": "ladybird", "count": 5 },
+      "layout": "dice",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "c",
+      "explanation": "There are 5 {items}. Four corners and one in the middle.",
+      "narration": { "prompt": "Look. How many {items}?" }
+    },
+    {
+      "kind": "multi-select",
+      "id": "s5e-every-5",
+      "prompt": "Tap every group of 5 {items}.",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "star", "count": 5 } },
+        { "id": "b", "visual": { "item": "star", "count": 4 } },
+        { "id": "c", "visual": { "item": "star", "count": 3 } },
+        { "id": "d", "visual": { "item": "star", "count": 5 } }
+      ],
+      "correctIds": ["a", "d"],
+      "explanation": "Two groups show 5 {items}. Skip 4 and 3.",
+      "narration": { "prompt": "Tap every group of 5 {items}." }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "s5e-match-45",
+      "prompt": "Match each number to the group.",
+      "randomise": {},
+      "pairs": [
+        { "id": "p4", "left": "4", "right": { "visual": { "item": "car", "count": 4 } } },
+        { "id": "p5", "left": "5", "right": { "visual": { "item": "car", "count": 5 } } },
+        { "id": "p2", "left": "2", "right": { "visual": { "item": "car", "count": 2 } } }
+      ],
+      "explanation": "4 is four {items}. 5 is five {items}. 2 is two {items}.",
+      "narration": { "prompt": "Match each number to the group." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5e-group-5",
+      "prompt": "Which group has 5 {items}?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "strawberry", "count": 4 } },
+        { "id": "b", "visual": { "item": "strawberry", "count": 3 } },
+        { "id": "c", "visual": { "item": "strawberry", "count": 5 } },
+        { "id": "d", "visual": { "item": "strawberry", "count": 2 } }
+      ],
+      "correctId": "c",
+      "explanation": "Look for the full 5. That group has 5 {items}.",
+      "narration": { "prompt": "Which group has 5 {items}?" }
+    }
+  ]
+}

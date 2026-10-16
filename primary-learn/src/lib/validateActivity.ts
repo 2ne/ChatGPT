@@ -72,7 +72,7 @@ function parseExtras(record: Record<string, unknown>, path: string): ObjectAsset
 function parseLayout(record: Record<string, unknown>, path: string): Question["layout"] {
   if (record.layout == null) return undefined;
   if (typeof record.layout !== "string" || !(OBJECT_LAYOUTS as readonly string[]).includes(record.layout)) {
-    fail(path, "layout must be row or scatter");
+    fail(path, "layout must be row, scatter or dice");
   }
   return record.layout as Question["layout"];
 }

@@ -48,8 +48,8 @@ export type ObjectAsset = {
   count: number;
 };
 
-/** How object pictures are laid out. `row` is tidy one-to-one; `scatter` is a messier group. */
-export const OBJECT_LAYOUTS = ["row", "scatter"] as const;
+/** How object pictures are laid out. `row` is tidy one-to-one; `scatter` is a messier group; `dice` is a glance pattern to 6. */
+export const OBJECT_LAYOUTS = ["row", "scatter", "dice"] as const;
 export type ObjectLayout = (typeof OBJECT_LAYOUTS)[number];
 
 export type QuestionOption = {

@@ -26,7 +26,6 @@ export function MultipleChoice({
           visual={question.visual}
           extras={question.extras}
           layout={question.layout}
-          interactive
         />
       ) : null}
       <div role="radiogroup" aria-label={copy.pickOne} className="option-stack">

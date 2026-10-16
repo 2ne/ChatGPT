@@ -23,7 +23,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - **When those nodes are built:** split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` into smaller stops. Leave them whole until then.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Node 1 (`eyfs-count-5`) has Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is still `eyfs-subitise-5`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 2 (`eyfs-count-5`, `eyfs-subitise-5`) have Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is `eyfs-compose-5`.
 
 ## Category index
 
@@ -93,7 +93,7 @@ Requires: none. Quests: `count-to-5` (Easy), `count-to-5-medium`, `count-to-5-ha
 
 ### 2. `eyfs-subitise-5` — See numbers to 5
 
-Requires: `eyfs-count-5`. Quest: none. Status: missing.
+Requires: `eyfs-count-5`. Quests: `see-numbers-to-5` (Easy), `see-numbers-to-5-medium`, `see-numbers-to-5-hard`. Status: done.
 
 - Subitise (recognise a quantity without counting) up to 5
 

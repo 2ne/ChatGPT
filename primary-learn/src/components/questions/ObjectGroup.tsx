@@ -19,6 +19,16 @@ type ObjectGroupProps = {
   layout?: ObjectLayout;
 };
 
+/** Dice-face slots on a 3×3 grid (0–8). Used to glance a quantity without counting in a line. */
+const DICE_SLOTS: Record<number, number[]> = {
+  1: [4],
+  2: [0, 8],
+  3: [0, 4, 8],
+  4: [0, 2, 6, 8],
+  5: [0, 2, 4, 6, 8],
+  6: [0, 2, 3, 5, 6, 8],
+};
+
 function sceneKey(visual: ObjectAsset, extras: ObjectAsset[] | undefined, layout: ObjectLayout | undefined) {
   const extra = (extras ?? []).map((asset) => `${asset.item}:${asset.count}`).join(",");
   return `${visual.item}:${visual.count}:${layout ?? "row"}:${extra}`;
@@ -76,8 +86,9 @@ export function ObjectGroup({
   const tokens = useMemo(() => {
     const raw = tokensFor(visual, extras);
     if (!mixed) return raw;
-    return shuffleTokens(raw, key);
-  }, [visual, extras, mixed, key]);
+    if (layout === "scatter") return shuffleTokens(raw, key);
+    return raw;
+  }, [visual, extras, mixed, key, layout]);
 
   const [lit, setLit] = useState<Record<string, number>>({});
   const [miss, setMiss] = useState<string | null>(null);
@@ -125,8 +136,22 @@ export function ObjectGroup({
 
   const counted = Object.keys(lit).length;
   const scatter = layout === "scatter";
+  const dice = layout === "dice" && visual.count >= 1 && visual.count <= 6 && !mixed;
 
   if (!interactive) {
+    if (dice) {
+      const slots = DICE_SLOTS[visual.count] ?? [];
+      const glyph = OBJECT_GLYPH[visual.item];
+      return (
+        <span className="object-group is-dice" aria-label={describeVisual(visual)}>
+          {Array.from({ length: 9 }, (_, cell) => (
+            <span key={cell} className="object-dice-cell" aria-hidden>
+              {slots.includes(cell) ? glyph : null}
+            </span>
+          ))}
+        </span>
+      );
+    }
     return (
       <span
         className={`object-group${scatter ? " is-scatter" : ""}`}
