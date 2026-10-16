@@ -41,7 +41,7 @@ export const copy = {
           ? "One star! Great work."
           : "No stars this time. Have another go!",
   scoreMark: (correct: number, total: number) => `${correct}/${total}`,
-  cupMark: (stars: number, max: number) => `${stars}/${max}`,
+  levelsMark: (cleared: number, total: number) => `${cleared}/${total}`,
   levelPassed: "You did it!",
   levelRetry: "Have another go",
   feedbackCorrect: "Correct. Nice!",

@@ -2197,10 +2197,9 @@ p {
   color: var(--line-strong);
 }
 
-.map-cup {
+.map-levels {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   padding: 2px 8px;
   border-radius: var(--radius-pill);
   background: #ffffff;
@@ -2210,11 +2209,6 @@ p {
   font-weight: 800;
   color: var(--ink);
   white-space: nowrap;
-}
-
-.map-cup.is-gold {
-  background: linear-gradient(135deg, var(--sun), #ff9d2e);
-  color: #7a4300;
 }
 
 .map-nines {

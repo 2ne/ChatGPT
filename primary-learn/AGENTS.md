@@ -398,7 +398,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 - Stars and unlock live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.
 - **1 or more stars passes** and unlocks the next Easy / Medium / Hard / node. 0 stars: try again, next stays locked.
 - Store **best stars** and **best score** per Easy / Medium / Hard in localStorage (`bestStars`, `bestCorrectCount`, `bestTotalCount`).
-- Each node can earn **9 stars** (3 per difficulty). **9/9 = gold cup** (that node is done). The map shows `7/9` and a cup outline that turns gold.
+- Each node can earn **9 stars** (3 per difficulty). The map shows `0/3` (Easy / Medium / Hard with all three stars). **3/3 = gold cup** on the node. No cup icon beside the count.
 - Do not show percentages to children. Do not say "mastery".
 - Never store personal data beyond the child’s chosen display name and avatar id.
 

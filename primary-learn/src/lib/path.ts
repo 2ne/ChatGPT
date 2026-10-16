@@ -1,6 +1,6 @@
 import { activities } from "../data/activities";
 import { PATH_CATEGORIES } from "../data/path.generated";
-import { STARS_PER_NODE, type StarCount } from "./mastery";
+import { LEVELS_PER_NODE, STARS_PER_DIFFICULTY, type StarCount } from "./mastery";
 import type { Activity } from "../types/activity";
 import type { Difficulty, PathCategory, PathNode } from "../types/path";
 import type { ProgressState } from "../types/progress";
@@ -38,7 +38,9 @@ export type LevelState = {
   status: LevelStatus;
   /** Stars earned across Easy / Medium / Hard, out of 9. */
   stars: number;
-  /** All 9 stars. This node gets a gold cup. */
+  /** How many of Easy / Medium / Hard have all three stars. */
+  cleared: number;
+  /** All three levels have three stars. This node gets a gold cup. */
   cup: boolean;
   difficulties: DifficultyState[];
 };
@@ -92,6 +94,7 @@ export function buildLevels(progress: ProgressState): LevelState[] {
       }));
 
       const stars = difficulties.reduce((sum, entry) => sum + entry.bestStars, 0);
+      const cleared = difficulties.filter((entry) => entry.bestStars >= STARS_PER_DIFFICULTY).length;
 
       levels.push({
         node,
@@ -99,7 +102,8 @@ export function buildLevels(progress: ProgressState): LevelState[] {
         categoryIndex,
         status,
         stars,
-        cup: stars >= STARS_PER_NODE,
+        cleared,
+        cup: cleared >= LEVELS_PER_NODE,
         difficulties,
       });
     }

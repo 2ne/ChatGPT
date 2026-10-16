@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Lock, Play, RotateCcw, Star, Trophy, X } from "lucide-react";
 import { copy } from "../data/copy";
-import { STARS_PER_NODE } from "../lib/mastery";
+import { LEVELS_PER_NODE } from "../lib/mastery";
 import { DIFFICULTY_LABELS, type LevelState } from "../lib/path";
 import { Pip } from "./mascot/Pip";
 
@@ -66,9 +66,9 @@ export function LevelSheet({ level, learnerName, currentLevel, onClose, onPlay }
         </h2>
         {status === "soon" || status === "locked" ? null : (
           <p className={`sheet-cup-line${level.cup ? " is-gold" : ""}`}>
-            <Trophy size={18} aria-hidden />
-            {copy.cupMark(level.stars, STARS_PER_NODE)}
-            {level.cup ? " Gold cup!" : " stars"}
+            {level.cup ? <Trophy size={18} aria-hidden /> : null}
+            {copy.levelsMark(level.cleared, LEVELS_PER_NODE)}
+            {level.cup ? " Gold cup!" : null}
           </p>
         )}
 

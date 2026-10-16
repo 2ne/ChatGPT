@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { Lock, LocateFixed, Star, Trophy } from "lucide-react";
 import { copy } from "../data/copy";
-import { STARS_PER_NODE } from "../lib/mastery";
+import { LEVELS_PER_NODE } from "../lib/mastery";
 import type { LevelState } from "../lib/path";
 import { DoodleShape, DoodleStar } from "./mascot/Doodles";
 import { LevelSheet } from "./LevelSheet";
@@ -260,7 +260,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                 level.node.title,
                 level.status === "soon"
                   ? "coming soon"
-                  : `${level.stars} of ${STARS_PER_NODE} stars`,
+                  : `${level.cleared} of ${LEVELS_PER_NODE} levels with three stars`,
                 level.cup ? "gold cup" : null,
                 level.status === "locked" ? "locked" : null,
                 isCurrent ? "play next" : null,
@@ -295,9 +295,8 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                   </button>
                   {level.status !== "soon" ? (
                     <span className="map-progress" aria-hidden>
-                      <span className={`map-cup${level.cup ? " is-gold" : ""}`}>
-                        <Trophy size={12} />
-                        {copy.cupMark(level.stars, STARS_PER_NODE)}
+                      <span className="map-levels">
+                        {copy.levelsMark(level.cleared, LEVELS_PER_NODE)}
                       </span>
                       <span className="map-nines">
                         {level.difficulties.map((entry) => (

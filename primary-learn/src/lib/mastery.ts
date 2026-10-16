@@ -12,6 +12,7 @@ export const STAR_SCORE = {
 } as const;
 
 export const STARS_PER_DIFFICULTY = 3;
+export const LEVELS_PER_NODE = 3;
 export const STARS_PER_NODE = 9;
 
 export type StarCount = 0 | 1 | 2 | 3;
