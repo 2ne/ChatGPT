@@ -147,7 +147,13 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
    rows, each with three stars and the best mark (`7/10`). Play only when that
    row is unlocked. Coming-soon nodes (no Easy quest yet) and locked nodes get
    a calm Pip / lock note instead of play buttons.
-4. **Find me** — `Go to my level` scrolls the page to the current stop.
+4. **Topic pill** — a floating pill at the bottom of the path shows the
+   section on screen (`Reception · Numbers to 5`), updated live with
+   IntersectionObserver. Tap it (menu icon) to open a sheet of every
+   topic, grouped by year. The topic on screen is highlighted; a tiny
+   star or cup marks progress; the learner's buddy sits on their
+   section. Tap a topic to scroll there and close the menu. No
+   `Go to my level` button.
    Major screen changes (onboarding, pathway, activity) scroll to the top so
    the name and avatar stay in view. Do not auto-jump down the path on entry.
 

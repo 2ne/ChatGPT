@@ -1,8 +1,9 @@
-import { useMemo, useRef, useState, type CSSProperties } from "react";
-import { Lock, LocateFixed, Star, Trophy } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { Lock, Star, Trophy } from "lucide-react";
 import type { LevelState } from "../lib/path";
 import { DoodleShape, DoodleStar } from "./mascot/Doodles";
 import { LevelSheet } from "./LevelSheet";
+import { TopicNav, type TopicSection } from "./TopicNav";
 
 type PathMapProps = {
   levels: LevelState[];
@@ -114,6 +115,7 @@ function placeSign(samples: Point[], signY: number): SignPlacement {
 export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [openLevel, setOpenLevel] = useState<LevelState | null>(null);
+  const [visibleId, setVisibleId] = useState(levels[0]?.category.id ?? "");
 
   const currentIndex = useMemo(() => {
     const current = levels.findIndex((level) => level.status === "current");
@@ -176,13 +178,64 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
     [layout.points, currentIndex],
   );
 
-  // The map is part of the page, so the page itself scrolls to the learner's level.
-  function scrollToCurrent(smooth: boolean) {
+  const sections = useMemo<TopicSection[]>(
+    () =>
+      layout.bands.map((band) => {
+        const slice = levels.slice(band.first, band.last + 1);
+        return {
+          id: levels[band.first].category.id,
+          year: levels[band.first].category.year,
+          title: levels[band.first].category.title,
+          signY: band.signY,
+          stars: slice.reduce((sum, level) => sum + level.stars, 0),
+          cup: slice.some((level) => level.cup),
+          hasYou: currentIndex >= band.first && currentIndex <= band.last,
+        };
+      }),
+    [layout.bands, layout.points, levels, currentIndex],
+  );
+
+  useEffect(() => {
+    const zones = frameRef.current?.querySelectorAll<HTMLElement>("[data-map-zone]");
+    if (!zones?.length) return;
+    const ratios = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = entry.target.getAttribute("data-map-zone");
+          if (id) ratios.set(id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        }
+        let bestId = "";
+        let bestRatio = -1;
+        for (const [id, ratio] of ratios) {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
+        }
+        if (bestId && bestRatio > 0) setVisibleId(bestId);
+      },
+      {
+        root: null,
+        rootMargin: "-12% 0px -55% 0px",
+        threshold: [0, 0.08, 0.16, 0.28, 0.4, 0.55, 0.75, 1],
+      },
+    );
+    zones.forEach((zone) => observer.observe(zone));
+    return () => observer.disconnect();
+  }, [layout.bands]);
+
+  function jumpToSection(section: TopicSection) {
     const frame = frameRef.current;
     if (!frame) return;
+    setVisibleId(section.id);
     const frameTop = frame.getBoundingClientRect().top + window.scrollY;
-    const target = frameTop + layout.points[currentIndex].y - window.innerHeight / 2;
-    window.scrollTo({ top: Math.max(0, target), behavior: smooth ? "smooth" : "auto" });
+    const y = section.hasYou ? layout.points[currentIndex].y : section.signY;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({
+      top: Math.max(0, frameTop + y - (section.hasYou ? window.innerHeight * 0.38 : 28)),
+      behavior: reduce ? "auto" : "smooth",
+    });
   }
 
   const currentLevel = levels[currentIndex];
@@ -198,6 +251,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
               <div
                 key={category.id}
                 className="map-zone"
+                data-map-zone={category.id}
                 style={{ top: band.top, height: band.height, background: colours.soft }}
                 aria-hidden
               />
@@ -312,13 +366,12 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
         </div>
       </div>
 
-      <button
-        type="button"
-        className="map-jump"
-        onClick={() => scrollToCurrent(true)}
-      >
-        <LocateFixed size={16} aria-hidden /> Go to my level
-      </button>
+      <TopicNav
+        sections={sections}
+        visibleId={visibleId}
+        learnerEmoji={learnerEmoji}
+        onJump={jumpToSection}
+      />
 
       <LevelSheet
         level={openLevel}

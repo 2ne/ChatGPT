@@ -60,4 +60,7 @@ export const copy = {
   checkYourName: "Check your name",
   activityMissing: "That quest is not here. Pick one from the path.",
   activityLocked: "That quest is not open yet. Keep going on the path.",
+  pickATopic: "Pick a topic",
+  youAreHere: "You are here",
+  sectionLabel: (year: string, title: string) => `${year} · ${title}`,
 } as const;
