@@ -1,6 +1,24 @@
 import { OBJECT_ITEMS, type ObjectAsset, type ObjectItem } from "../types/activity";
 
 /** Grammar for object assets. Pictures are drawn by ObjectGroup, not stored in quest JSON. */
+export const OBJECT_GLYPH: Record<ObjectItem, string> = {
+  apple: "🍎",
+  banana: "🍌",
+  star: "⭐",
+  balloon: "🎈",
+  car: "🚗",
+  duck: "🦆",
+  ladybird: "🐞",
+  frog: "🐸",
+  fish: "🐟",
+  strawberry: "🍓",
+  sparkle: "🌟",
+};
+
+export function objectGlyph(item: ObjectItem): string {
+  return OBJECT_GLYPH[item];
+}
+
 export const OBJECT_WORDS: Record<ObjectItem, { singular: string; plural: string }> = {
   apple: { singular: "apple", plural: "apples" },
   banana: { singular: "banana", plural: "bananas" },

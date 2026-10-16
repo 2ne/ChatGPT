@@ -10,7 +10,7 @@ https://2ne.github.io/ChatGPT/primary-learn/
 
 ## Status
 
-Foundation release: profile onboarding, a locked path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, and two Easy quests (`count-to-5` on node 1, `number-bonds-to-10` on node 13). Medium and Hard are not written yet.
+Foundation release: profile onboarding, a locked path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, Count to 5 Easy / Medium / Hard on node 1, and Easy number bonds to 10 on node 13.
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
@@ -25,7 +25,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Asks for a child’s name and woodland avatar on first visit
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
 - Each level opens a sheet with Easy / Medium / Hard. 6 out of 10 earns a star and unlocks the next row or node
-- Runs interactive question kinds (multiple choice, multi-select, fill blank, ordered, match pairs)
+- Runs interactive question kinds (tap-to-count, build a set, multiple choice, multi-select, fill blank, ordered, match pairs)
 - A **speaker** after the question reads the question only (Web Speech API, UK female teacher voice) and highlights words as they are spoken
 - Ten questions, then a star result. A miss shows a short correction and moves on. No retry loop
 - Saves best stars and best score per Easy / Medium / Hard. Nine stars on a node awards a gold cup
@@ -55,7 +55,7 @@ UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 - `curriculum/audit.md` — how to check that path before adding a quest
 - `curriculum/coverage.md` — how many nodes are still missing
 
-Each node can hold three quests (Easy / Medium / Hard). The next *new* node is the first `missing` one (`eyfs-subitise-5`), but write Medium / Hard for `eyfs-count-5` first.
+Each node can hold three quests (Easy / Medium / Hard). The next *new* node is the first `missing` one (`eyfs-subitise-5`). Next improvement is Medium / Hard for `y1-bonds-10`.
 
 ## Stack
 
@@ -96,7 +96,7 @@ npm run preview
 
 ## Limitations
 
-- Only two Easy quests ship so far: `count-to-5` (node 1) and `number-bonds-to-10` (node 13). No Medium or Hard yet
+- Count to 5 ships Easy / Medium / Hard on node 1. Number bonds to 10 is Easy only on node 13.
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag

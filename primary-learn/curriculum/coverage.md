@@ -18,12 +18,14 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 
 | Activity id | Node | Status |
 | --- | --- | --- |
-| `count-to-5` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — count sequence to 5, numerals 1 to 5 and counting up to 5 objects (Easy) |
+| `count-to-5` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Easy: tidy tap-count 1 to 5, sequence and numerals |
+| `count-to-5-medium` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Medium: scattered groups, build a set, last-number cardinality |
+| `count-to-5-hard` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Hard: count one kind among mixed objects, number words, full 1 to 5 order |
 | `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | partial — addition pairs that make 10 are in the quest; related subtraction facts are not |
 
 ## Next quest to build
 
-Improve first: Medium, then Hard, for `eyfs-count-5` (`count-to-5` is Easy only). Then Medium / Hard for `y1-bonds-10` if that node is still being tightened.
+Improve first: Medium, then Hard, for `y1-bonds-10` (`number-bonds-to-10` is Easy only).
 
 When expanding the path, the first `missing` node is `eyfs-subitise-5` — See numbers to 5 (node 2, after `eyfs-count-5`). Start that node with Easy.
 

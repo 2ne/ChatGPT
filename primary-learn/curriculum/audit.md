@@ -50,7 +50,7 @@ Locks in the product:
 
 ## Checks before creating quests
 
-1. Prefer a missing Medium or Hard on a node that already has Easy. Today that is `eyfs-count-5` (then `y1-bonds-10`). Do not skip ahead to a later category when the job is to improve what exists.
+1. Prefer a missing Medium or Hard on a node that already has Easy. Today that is `y1-bonds-10`. Do not skip ahead to a later category when the job is to improve what exists.
 2. When expanding, open `maths.md` and find the first node whose status is `missing`. That is the only *new* node to build, and you should start with Easy. Do not skip to a later category.
 3. Copy the node id and the child-facing title. `pathNode` and `curriculumRef` must be that id. The quest title should be that title, unless a shorter child-facing line is already written there.
 4. Read the **Covers** bullets. The Easy / Medium / Hard set for that node has to teach those, not a neighbouring topic. Harder levels go deeper on the same bullets.

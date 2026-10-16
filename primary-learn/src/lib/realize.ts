@@ -72,6 +72,9 @@ export function collectItems(question: Question): ObjectItem[] {
     if (item && !found.includes(item)) found.push(item);
   };
   if (question.visual) add(question.visual.item);
+  if (question.extras) {
+    for (const extra of question.extras) add(extra.item);
+  }
   if ("options" in question) {
     for (const option of question.options) add(option.visual?.item);
   }
@@ -282,6 +285,9 @@ function realizeQuestion(
 
   let next = structuredClone(question);
   next.visual = remapVisual(next.visual, itemMap, count);
+  if (next.extras) {
+    next.extras = next.extras.map((asset) => remapVisual(asset, itemMap) ?? asset);
+  }
 
   if ("options" in next) {
     next.options = next.options.map((option) => ({
@@ -317,6 +323,12 @@ function realizeQuestion(
   if (countChanged && count != null && next.kind === "fill-blank") {
     const word = numberWord(count);
     next.acceptedAnswers = word && word !== String(count) ? [String(count), word] : [String(count)];
+  }
+
+  if (countChanged && count != null && next.kind === "build-set") {
+    const written = question.visual?.count ?? count;
+    const extraSlots = (next.bank ?? Math.min(12, written + 2)) - written;
+    next.bank = Math.min(12, Math.max(count, count + extraSlots));
   }
 
   const vars = templateVars(primary, secondary, count);

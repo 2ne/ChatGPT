@@ -1,3 +1,5 @@
+import { numberWord } from "../data/objects";
+
 /** Browser speechSynthesis helper. Web Speech only. No generated audio. Cancel on every new play. */
 
 const CHILD_RATE = 0.95;
@@ -91,6 +93,13 @@ export type SpeakOptions = {
   onBoundary?: (charIndex: number) => void;
   onEnd?: () => void;
 };
+
+/** Spoken count word for tap-to-count. Does not read the pictured total up front. */
+export function speakCount(count: number) {
+  const text = numberWord(count);
+  if (!text) return;
+  speak({ text });
+}
 
 export function speak(options: SpeakOptions) {
   if (!speechSupported() || !options.text.trim()) {

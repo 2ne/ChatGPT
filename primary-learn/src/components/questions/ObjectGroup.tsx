@@ -1,38 +1,201 @@
-import { describeVisual } from "../../data/objects";
-import type { ObjectAsset, ObjectItem } from "../../types/activity";
+import { useEffect, useMemo, useState, type MouseEvent, type PointerEvent } from "react";
+import { copy } from "../../data/copy";
+import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
+import { hashString, mulberry32 } from "../../lib/realize";
+import { speakCount } from "../../lib/speech";
+import type { ObjectAsset, ObjectItem, ObjectLayout } from "../../types/activity";
 
-const GLYPH: Record<ObjectItem, string> = {
-  apple: "🍎",
-  banana: "🍌",
-  star: "⭐",
-  balloon: "🎈",
-  car: "🚗",
-  duck: "🦆",
-  ladybird: "🐞",
-  frog: "🐸",
-  fish: "🐟",
-  strawberry: "🍓",
-  sparkle: "🌟",
+type Token = {
+  key: string;
+  item: ObjectItem;
+  countable: boolean;
 };
 
 type ObjectGroupProps = {
   visual: ObjectAsset;
+  extras?: ObjectAsset[];
   compact?: boolean;
+  interactive?: boolean;
+  layout?: ObjectLayout;
 };
 
-export function ObjectGroup({ visual, compact }: ObjectGroupProps) {
-  const glyph = GLYPH[visual.item];
+function sceneKey(visual: ObjectAsset, extras: ObjectAsset[] | undefined, layout: ObjectLayout | undefined) {
+  const extra = (extras ?? []).map((asset) => `${asset.item}:${asset.count}`).join(",");
+  return `${visual.item}:${visual.count}:${layout ?? "row"}:${extra}`;
+}
+
+function tokensFor(visual: ObjectAsset, extras: ObjectAsset[] | undefined): Token[] {
+  const tokens: Token[] = [];
+  for (let index = 0; index < visual.count; index += 1) {
+    tokens.push({ key: `c-${index}`, item: visual.item, countable: true });
+  }
+  (extras ?? []).forEach((asset, extraIndex) => {
+    for (let index = 0; index < asset.count; index += 1) {
+      tokens.push({
+        key: `e-${extraIndex}-${index}`,
+        item: asset.item,
+        countable: false,
+      });
+    }
+  });
+  return tokens;
+}
+
+function shuffleTokens(list: Token[], salt: string): Token[] {
+  const rng = mulberry32(hashString(salt));
+  const next = [...list];
+  for (let i = next.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    const a = next[i];
+    const b = next[j];
+    if (a === undefined || b === undefined) continue;
+    next[i] = b;
+    next[j] = a;
+  }
+  return next;
+}
+
+function groupLabel(visual: ObjectAsset, extras: ObjectAsset[] | undefined, interactive: boolean): string {
+  const words = OBJECT_WORDS[visual.item];
+  if (!interactive) return describeVisual(visual);
+  if (extras && extras.length > 0) {
+    return `${words.plural}. Tap each ${words.singular} to count.`;
+  }
+  return `${words.plural}. Tap each one to count.`;
+}
+
+export function ObjectGroup({
+  visual,
+  extras,
+  compact,
+  interactive = false,
+  layout,
+}: ObjectGroupProps) {
+  const key = sceneKey(visual, extras, layout);
+  const mixed = Boolean(extras && extras.length > 0);
+  const tokens = useMemo(() => {
+    const raw = tokensFor(visual, extras);
+    if (!mixed) return raw;
+    return shuffleTokens(raw, key);
+  }, [visual, extras, mixed, key]);
+
+  const [lit, setLit] = useState<Record<string, number>>({});
+  const [miss, setMiss] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLit({});
+    setMiss(null);
+  }, [key]);
+
+  function tapToken(token: Token) {
+    if (!token.countable) {
+      setMiss(token.key);
+      return;
+    }
+    const already = lit[token.key];
+    if (already != null) {
+      speakCount(already);
+      return;
+    }
+    const nextNumber = Object.keys(lit).length + 1;
+    speakCount(nextNumber);
+    setLit({ ...lit, [token.key]: nextNumber });
+  }
+
+  function activate(token: Token, event: PointerEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) {
+    if ("button" in event && event.button !== 0 && event.button !== undefined) {
+      if (event.type === "pointerdown") return;
+    }
+    if (event.type === "pointerdown") event.preventDefault();
+    tapToken(token);
+  }
+
+  if (compact) {
+    const glyph = OBJECT_GLYPH[visual.item];
+    return (
+      <span className="object-group is-compact" aria-label={describeVisual(visual)}>
+        {Array.from({ length: visual.count }, (_, index) => (
+          <span key={index} aria-hidden>
+            {glyph}
+          </span>
+        ))}
+      </span>
+    );
+  }
+
+  const counted = Object.keys(lit).length;
+  const scatter = layout === "scatter";
+
+  if (!interactive) {
+    return (
+      <span
+        className={`object-group${scatter ? " is-scatter" : ""}`}
+        aria-label={describeVisual(visual)}
+      >
+        {tokens.map((token) => (
+          <span key={token.key} className="object-glyph" aria-hidden>
+            {OBJECT_GLYPH[token.item]}
+          </span>
+        ))}
+      </span>
+    );
+  }
+
   return (
-    <span
-      className={`object-group${compact ? " is-compact" : ""}`}
-      aria-label={describeVisual(visual)}
-    >
-      {Array.from({ length: visual.count }, (_, index) => (
-        <span key={index} aria-hidden>
-          {glyph}
-        </span>
-      ))}
-    </span>
+    <div className="count-scene">
+      <div
+        className={`object-group is-tappable${scatter ? " is-scatter" : ""}`}
+        role="group"
+        aria-label={groupLabel(visual, extras, true)}
+      >
+        {tokens.map((token) => {
+          const order = lit[token.key];
+          const isLit = order != null;
+          return (
+            <button
+              key={token.key}
+              type="button"
+              className={`object-token${isLit ? " is-lit" : ""}${
+                !token.countable ? " is-extra" : ""
+              }${miss === token.key ? " is-miss" : ""}`}
+              aria-label={
+                token.countable
+                  ? isLit
+                    ? `${OBJECT_WORDS[token.item].singular}, ${order}`
+                    : OBJECT_WORDS[token.item].singular
+                  : `Not a ${OBJECT_WORDS[visual.item].singular}`
+              }
+              aria-pressed={isLit}
+              onPointerDown={(event) => activate(token, event)}
+              onClick={(event) => {
+                if (event.detail === 0) activate(token, event);
+              }}
+              onAnimationEnd={() => {
+                if (miss === token.key) setMiss(null);
+              }}
+            >
+              <span className="object-glyph" aria-hidden>
+                {OBJECT_GLYPH[token.item]}
+              </span>
+              {order != null ? (
+                <span className="object-num" aria-hidden>
+                  {order}
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+      <p className="visually-hidden" aria-live="polite">
+        {counted > 0 ? String(counted) : ""}
+      </p>
+      {counted === 0 ? <p className="object-coach t-meta">{copy.tapEachToCount}</p> : null}
+      {counted > 0 ? (
+        <button type="button" className="btn-text" onClick={() => setLit({})}>
+          {copy.countAgain}
+        </button>
+      ) : null}
+    </div>
   );
 }
 

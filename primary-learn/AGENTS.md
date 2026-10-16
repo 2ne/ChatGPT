@@ -76,7 +76,7 @@ Also register the activity in `src/data/activities/index.ts`. Then:
 - On an open node (`current` or `done`): Easy is playable; Medium needs Easy passed; Hard needs Medium passed.
 - Node status `done` means Easy is passed. Medium and Hard can still be unplayed. Map stars = how many of the three difficulties are passed.
 
-Shipped examples: `count-to-5` is `pathNode: "eyfs-count-5"`, `difficulty: 1`. `number-bonds-to-10` is `pathNode: "y1-bonds-10"`, `difficulty: 1`. Neither node has Medium or Hard yet.
+Shipped examples: `count-to-5` / `count-to-5-medium` / `count-to-5-hard` are `pathNode: "eyfs-count-5"` at difficulty 1, 2 and 3. `number-bonds-to-10` is `pathNode: "y1-bonds-10"`, `difficulty: 1` (Easy only).
 
 ## Goals
 
@@ -176,7 +176,7 @@ Content never embeds a new UI. Adding a kind is a schema + component change:
 
 Until those steps are done, `validateActivity` will reject JSON that uses the new kind.
 
-**What to write next:** prefer Medium / Hard for a node that already has Easy (`eyfs-count-5` first) over a brand-new node. When expanding the path, take the first `missing` node in `curriculum/maths.md` (`eyfs-subitise-5`) and start with Easy.
+**What to write next:** prefer Medium / Hard for a node that already has Easy (`y1-bonds-10` next) over a brand-new node. When expanding the path, take the first `missing` node in `curriculum/maths.md` (`eyfs-subitise-5`) and start with Easy.
 
 ## Required activity metadata
 
@@ -229,7 +229,7 @@ Use these dimensions. Change one or two at a time, never all at once:
 | Steps | One step | One step + a small extra (reversed order, picture then numeral) | Two steps the node actually teaches |
 | Representation | Objects / pictures | Mix of pictures and numerals | Numerals, words, or a short story |
 | Scaffolding | Hints on the first third; stem names the strategy | Hints only late, or none | No hints unless the representation is new |
-| Question kind | Mostly multiple-choice or fill-blank | Two or three kinds | Include multi-select, ordered, match, or a one-step story |
+| Question kind | Tap-to-count, build-set, multiple-choice or fill-blank | Two or three kinds | Include multi-select, ordered, match, build-set, or a one-step story |
 
 **Inside one quest** the list must ramp from easiest to hardest with **no spikes** (no very hard item next to a trivial one, no drop back to “how many? ⭐” after sequence work). First 2–3 items are the easiest legal version of the skill; last 2–3 stretch *within this level*.
 
@@ -291,12 +291,15 @@ All SFX are synthesised in `src/lib/sound.ts` with the **Web Audio API**. No aud
 
 Defined in `src/types/activity.ts`. Each has one component under `src/components/questions/`:
 
-- `count-objects` — how many pictures? Requires `visual: { item, count }` plus multiple-choice options.
+- `count-objects` — how many pictures? Requires `visual: { item, count }` plus multiple-choice options. Objects are tappable: each tap lights up and says the next number. Optional `extras` (other objects to ignore) and `layout: "scatter"`.
+- `build-set` — tap objects from a tray to build a group of `visual.count`. Optional `bank` (tray size, default count + 2, must be ≥ the target). Correct when the group size matches. Teaches cardinality (stop at the right number).
 - `multiple-choice` — single correct option. Options may use `visual` instead of a label.
 - `multi-select` — all correct options required.
-- `fill-blank` — exact normalised answer (number or short word). May include `visual`.
+- `fill-blank` — exact normalised answer (number or short word). May include `visual`. Stem pictures are tappable to count, same as count-objects.
 - `ordered` — put items in the right sequence.
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
+
+Optional on any pictured stem: `extras` (mixed-in objects that are not the counted set; `extras.item` must differ from `visual.item`) and `layout` (`row` default, or `scatter`).
 
 Shared phrases (“Choose all that apply.”, “Correct. Nice!”) live in `src/data/copy.ts`, not in JSON. Follow **Writing for children**.
 
@@ -310,7 +313,7 @@ The runner calls `realizeActivity` on **Start quest / Play again / Try again**. 
 
 | Use | Do not use |
 | --- | --- |
-| Swap objects on `count-objects`, fill-blank counts, match-amount, “which group” | Randomise the **count** on Easy Count to 5 (the 3→1→2→4→5 ramp is the lesson) |
+| Swap objects on `count-objects`, fill-blank counts, match-amount, “which group”, `build-set` | Randomise the **count** on Easy Count to 5 (the 1→2→3→4→5 ramp is the lesson) |
 | `{item}` / `{items}` in stems so “apples” can become bananas, stars, cars | A count range wider than this level (Easy to 5 must not draw 8) |
 | `shuffleOptions` on multiple-choice / multi-select so the tap target moves | Shuffle `ordered` items or match-pair order (those kinds have their own pedagogy) |
 | A **tight** `count: { min, max }` on Medium/Hard counting, still inside the node | Randomise number-bond totals or missing addends (that changes the fact being taught) |
@@ -360,21 +363,21 @@ Write stems with tokens. The runner fills them after it picks items / count:
 
 If the question has no picture but sets `items` (a story), `{item}` / `{items}` still resolve from the pool.
 
-### Count to 5 (shipped, light)
+### Count to 5 (shipped)
 
-Item pool only. Counts stay 3, 1, 2, 4, 5 so the Easy ramp does not wobble. Sequence / numeral questions have no `randomise`.
+Easy item pool only. Counts stay 1, 2, 3, 4, 5 so the ramp does not wobble. Sequence / numeral questions have no `randomise`. Medium may draw a tight count on fill-blank / build-set inside 3–5. Hard uses `extras` (count only one kind) and does not randomise the mixed counts.
 
 ```json
 "randomise": { "mode": "attempt", "items": ["apple", "banana", "star", "balloon", "car"] },
 "questions": [
   {
     "kind": "count-objects",
-    "id": "c5-mc-apples",
+    "id": "c5e-count-1",
     "prompt": "How many {items}?",
-    "visual": { "item": "apple", "count": 3 },
-    "randomise": {},
-    "hint": "Point to each {item} and say a number: 1, 2, 3.",
-    "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}."
+    "visual": { "item": "star", "count": 1 },
+    "randomise": { "shuffleOptions": true },
+    "hint": "Tap the {item} and say one.",
+    "explanation": "Tap the {item} once. One thing counts as 1."
   }
 ]
 ```
@@ -383,13 +386,13 @@ Item pool only. Counts stay 3, 1, 2, 4, 5 so the Easy ramp does not wobble. Sequ
 
 `shuffleOptions` on choice questions. The story uses a small item pool (`apples` → bananas / stars / cars) but the numbers stay 10 and 2.
 
-### Medium counting (not shipped — pattern only)
+### Medium counting (pattern)
 
-A later Easy-to-5 Medium quest may vary the count **inside 1–5** and rebuild off-by-one distractors:
+Vary the count **inside this level** on fill-blank or build-set, and rebuild fill-blank answers. Keep four numeric multiple-choice options on a band wide enough for off-by-one distractors, or leave those counts fixed.
 
 ```json
 "visual": { "item": "apple", "count": 4 },
-"randomise": { "count": { "min": 3, "max": 5 } }
+"randomise": { "count": { "min": 3, "max": 4 } }
 ```
 
 Do not set `{ "min": 1, "max": 12 }` on a to-5 node.

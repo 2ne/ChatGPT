@@ -53,6 +53,10 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
       const map = answer as Record<string, string>;
       return question.pairs.every((pair) => map[pair.id] === matchSideKey(pair.right));
     }
+    case "build-set": {
+      if (!Array.isArray(answer)) return false;
+      return answer.length === question.visual.count;
+    }
     default:
       return false;
   }
@@ -74,6 +78,8 @@ export function emptyAnswerFor(question: Question): unknown {
         string,
         string
       >;
+    case "build-set":
+      return [] as string[];
     default:
       return null;
   }
@@ -93,6 +99,8 @@ export function correctAnswerLabel(question: Question): string | null {
         .filter((label): label is string => Boolean(label));
       return labels.length ? labels.join(", ") : null;
     }
+    case "build-set":
+      return String(question.visual.count);
     default:
       return null;
   }
@@ -114,6 +122,8 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
       const map = answer as Record<string, string>;
       return question.pairs.every((pair) => Boolean(map[pair.id]));
     }
+    case "build-set":
+      return Array.isArray(answer) && answer.length > 0;
     default:
       return false;
   }

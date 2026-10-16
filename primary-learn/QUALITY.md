@@ -21,7 +21,7 @@ Change **one or two** dimensions at a time. Never jump all of them at once.
 | Steps | One step, one idea | One step plus a tiny extra (order reversed, picture then numeral) | Two steps the node actually teaches — not a new topic |
 | Representation | Objects / emoji groups the child can touch-count | Mix of pictures and numerals | Numerals, words, or a short story. No count-all objects unless the node is counting |
 | Scaffolding | Hint on the first third of items; stem names the strategy (“count each one”) | Hints only on the last third, or none | No hints unless the item is a new representation |
-| Question kind | Mostly multiple-choice or fill-blank | Mix two or three kinds | Include multi-select, ordered, match, or a one-step story if the node supports it |
+| Question kind | Tap-to-count, build-set, multiple-choice or fill-blank | Mix two or three kinds | Include multi-select, ordered, match, build-set, or a one-step story if the node supports it |
 
 **Easy < Medium < Hard** on the same node must be obvious if you put the three quests side by side. Medium is not “Easy plus one trick question”. Hard is not a different topic.
 
@@ -59,6 +59,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | Kind | Template |
 | --- | --- |
 | multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects) |
+| build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `Which number goes with {n} to make {total}?` |
 | fill-blank bond | Prompt: `Complete the number bond.` Prefix/suffix: `{a} +` / `= {total}` |
@@ -129,26 +130,26 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
 ```json
 {
   "kind": "count-objects",
-  "id": "c5-mc-apples",
+  "id": "c5e-count-1",
   "prompt": "How many {items}?",
-  "visual": { "item": "apple", "count": 3 },
-  "randomise": {},
+  "visual": { "item": "star", "count": 1 },
+  "randomise": { "shuffleOptions": true },
   "options": [
-    { "id": "a", "label": "2" },
-    { "id": "b", "label": "3" },
-    { "id": "c", "label": "4" },
-    { "id": "d", "label": "5" }
+    { "id": "a", "label": "1" },
+    { "id": "b", "label": "2" },
+    { "id": "c", "label": "3" },
+    { "id": "d", "label": "4" }
   ],
-  "correctId": "b",
-  "hint": "Point to each {item} and say a number: 1, 2, 3.",
-  "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
+  "correctId": "a",
+  "hint": "Tap the {item} and say one.",
+  "explanation": "Tap the {item} once. One thing counts as 1.",
   "narration": { "prompt": "How many {items}?" }
 }
 ```
 
-`randomise: {}` on this Easy item swaps the picture (apples → bananas / stars / cars) from the activity pool. The **count stays 3**. Do not add `"count": { "min", "max" }` here — that would wobble the 3-1-2-4-5 ramp. See **Optional randomisation** in `AGENTS.md`.
+`randomise` on this Easy item swaps the picture (stars → bananas / apples / cars) from the activity pool and shuffles the tap targets. The **count stays 1**. Do not add `"count": { "min", "max" }` here — that would wobble the 1-2-3-4-5 ramp. Pictures light up and say the next number when tapped. See **Optional randomisation** in `AGENTS.md`.
 
-The rest of that quest then moves to 1 and 2 objects, then 4 and 5 as fill-blanks, then the count sequence, then numerals — see `difficultyRamp.within` at the top of the file.
+The rest of that quest then moves to 2 and 3 objects, types 4, builds a group of 5, then the count sequence, then numerals — see `difficultyRamp.within` at the top of the file.
 
 ## Self-review checklist (run before you push)
 

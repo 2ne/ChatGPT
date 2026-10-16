@@ -2,6 +2,7 @@ import { ABILITY_BANDS, SUBJECTS, YEAR_GROUPS } from "../types/curriculum";
 import {
   ACTIVITY_TYPES,
   OBJECT_ITEMS,
+  OBJECT_LAYOUTS,
   QUESTION_KINDS,
   type Activity,
   type ActivityRandomise,
@@ -59,6 +60,21 @@ function expectVisual(value: unknown, path: string): ObjectAsset {
 function optionalVisual(record: Record<string, unknown>, path: string): ObjectAsset | undefined {
   if (record.visual == null) return undefined;
   return expectVisual(record.visual, `${path}.visual`);
+}
+
+function parseExtras(record: Record<string, unknown>, path: string): ObjectAsset[] | undefined {
+  if (record.extras == null) return undefined;
+  const list = expectArray(record, "extras", path);
+  if (list.length === 0) fail(path, "extras must not be empty if set");
+  return list.map((asset, index) => expectVisual(asset, `${path}.extras[${index}]`));
+}
+
+function parseLayout(record: Record<string, unknown>, path: string): Question["layout"] {
+  if (record.layout == null) return undefined;
+  if (typeof record.layout !== "string" || !(OBJECT_LAYOUTS as readonly string[]).includes(record.layout)) {
+    fail(path, "layout must be row or scatter");
+  }
+  return record.layout as Question["layout"];
 }
 
 function parseOption(value: unknown, path: string): QuestionOption {
@@ -148,8 +164,17 @@ function parseQuestion(value: unknown, path: string): Question {
   const hint = value.hint == null ? undefined : expectString(value, "hint", path);
   const narration = parseNarration(value.narration, `${path}.narration`);
   const visual = optionalVisual(value, path);
+  const extras = parseExtras(value, path);
+  const layout = parseLayout(value, path);
+  if (visual && extras) {
+    for (const extra of extras) {
+      if (extra.item === visual.item) {
+        fail(path, "extras.item must be a different object from visual.item");
+      }
+    }
+  }
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
-  const core = { id, prompt, explanation, hint, narration, visual, randomise };
+  const core = { id, prompt, explanation, hint, narration, visual, extras, layout, randomise };
 
   switch (kind) {
     case "count-objects": {
@@ -162,6 +187,17 @@ function parseQuestion(value: unknown, path: string): Question {
         fail(path, "correctId must match an option id");
       }
       return { ...core, kind, visual, options, correctId };
+    }
+    case "build-set": {
+      if (!visual) fail(path, "build-set needs visual { item, count }");
+      let bank: number | undefined;
+      if (value.bank != null) {
+        bank = expectNumber(value, "bank", path);
+        if (!Number.isInteger(bank) || bank < visual.count || bank > 12) {
+          fail(path, "bank must be a whole number from visual.count to 12");
+        }
+      }
+      return { ...core, kind, visual, bank };
     }
     case "multiple-choice": {
       const options = expectArray(value, "options", path).map((option, i) =>

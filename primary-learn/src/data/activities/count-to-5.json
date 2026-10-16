@@ -13,8 +13,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 5 count visible objects from 1 to 5 (one-to-one). Questions 6 to 8 say the count sequence (next, missing number, then order). Questions 9 to 10 match numerals to amounts and pick a group of 5. No return to a trivial 1-object count after sequence work.",
-    "versus": "Easy: objects and numerals to 5, one step, hints on early items. Medium should use mixed arrangements and fewer hints. Hard should hide objects or use two groups to combine, still within 5."
+    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Questions 6 to 8 say the count sequence (next, missing number, then order). Questions 9 to 10 match numerals to amounts and pick a group of 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
+    "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, number words, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
   },
   "skills": [
     "eyfs-count-5",
@@ -40,10 +40,44 @@
   "questions": [
     {
       "kind": "count-objects",
-      "id": "c5-mc-apples",
+      "id": "c5e-count-1",
+      "prompt": "How many {items}?",
+      "visual": { "item": "star", "count": 1 },
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1" },
+        { "id": "b", "label": "2" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "4" }
+      ],
+      "correctId": "a",
+      "hint": "Tap the {item} and say one.",
+      "explanation": "Tap the {item} once. One thing counts as 1.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c5e-count-2",
+      "prompt": "How many {items}?",
+      "visual": { "item": "balloon", "count": 2 },
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1" },
+        { "id": "b", "label": "2" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "4" }
+      ],
+      "correctId": "b",
+      "hint": "Tap each {item} and say a number.",
+      "explanation": "Tap each {item} once: 1, 2. There are 2 {items}.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c5e-count-3",
       "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 3 },
-      "randomise": {},
+      "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "2" },
         { "id": "b", "label": "3" },
@@ -56,41 +90,8 @@
       "narration": { "prompt": "How many {items}?" }
     },
     {
-      "kind": "count-objects",
-      "id": "c5-mc-star",
-      "prompt": "How many {items}?",
-      "visual": { "item": "star", "count": 1 },
-      "randomise": {},
-      "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
-      ],
-      "correctId": "a",
-      "explanation": "There is just 1 {item}. One thing counts as 1.",
-      "narration": { "prompt": "How many {items}?" }
-    },
-    {
-      "kind": "count-objects",
-      "id": "c5-mc-balloons",
-      "prompt": "How many {items}?",
-      "visual": { "item": "balloon", "count": 2 },
-      "randomise": {},
-      "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
-      ],
-      "correctId": "b",
-      "hint": "Count one {item} at a time.",
-      "explanation": "1, 2. There are 2 {items}.",
-      "narration": { "prompt": "How many {items}?" }
-    },
-    {
       "kind": "fill-blank",
-      "id": "c5-fb-ducks",
+      "id": "c5e-fb-4",
       "prompt": "Count the {items}.",
       "visual": { "item": "duck", "count": 4 },
       "randomise": {},
@@ -98,27 +99,24 @@
       "suffix": "{items}.",
       "acceptedAnswers": ["4", "four"],
       "inputMode": "numeric",
-      "hint": "Say a number for each {item}: 1, 2, 3 …",
       "explanation": "1, 2, 3, 4. There are 4 {items}.",
       "narration": { "prompt": "Count the {items}." }
     },
     {
-      "kind": "fill-blank",
-      "id": "c5-fb-ladybirds",
-      "prompt": "Count the {items}.",
+      "kind": "build-set",
+      "id": "c5e-build-5",
+      "prompt": "Make a group of 5 {items}.",
       "visual": { "item": "ladybird", "count": 5 },
+      "bank": 7,
       "randomise": {},
-      "prefix": "There are",
-      "suffix": "{items}.",
-      "acceptedAnswers": ["5", "five"],
-      "inputMode": "numeric",
-      "explanation": "1, 2, 3, 4, 5. There are 5 {items}.",
-      "narration": { "prompt": "Count the {items}." }
+      "explanation": "Stop when the group has 5. 1, 2, 3, 4, 5. There are 5 {items}.",
+      "narration": { "prompt": "Make a group of 5 {items}." }
     },
     {
       "kind": "multiple-choice",
-      "id": "c5-mc-next-3",
+      "id": "c5e-next",
       "prompt": "What comes next? 1, 2, 3, …",
+      "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "1" },
         { "id": "b", "label": "2" },
@@ -126,25 +124,23 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "c",
-      "hint": "Say it out loud: one, two, three, …",
       "explanation": "We count 1, 2, 3, 4. The next number is 4.",
       "narration": { "prompt": "What comes next? One, two, three, …" }
     },
     {
       "kind": "fill-blank",
-      "id": "c5-fb-gap",
+      "id": "c5e-gap",
       "prompt": "Fill the gap in the count.",
       "prefix": "1, 2,",
       "suffix": ", 4, 5",
       "acceptedAnswers": ["3", "three"],
       "inputMode": "numeric",
-      "hint": "Count along: 1, 2, … then 4.",
       "explanation": "The count goes 1, 2, 3, 4, 5. The missing number is 3.",
       "narration": { "prompt": "Fill the gap in the count. 1, 2, blank, 4, 5." }
     },
     {
       "kind": "ordered",
-      "id": "c5-or-order",
+      "id": "c5e-order",
       "prompt": "Put the numbers in counting order. Start with the smallest.",
       "items": [
         { "id": "n3", "label": "3" },
@@ -152,13 +148,12 @@
         { "id": "n2", "label": "2" }
       ],
       "correctOrder": ["n1", "n2", "n3"],
-      "hint": "Which number do we say first when we count?",
       "explanation": "We count 1, then 2, then 3.",
       "narration": { "prompt": "Put the numbers in counting order. Start with the smallest." }
     },
     {
       "kind": "match-pairs",
-      "id": "c5-mp-numerals",
+      "id": "c5e-match",
       "prompt": "Match each number to the same amount of {items}.",
       "randomise": {},
       "pairs": [
@@ -167,15 +162,14 @@
         { "id": "p3", "left": "4", "right": { "visual": { "item": "fish", "count": 4 } } },
         { "id": "p4", "left": "5", "right": { "visual": { "item": "fish", "count": 5 } } }
       ],
-      "hint": "Count the {items}, then find the number that says how many.",
       "explanation": "The numeral tells us how many: 1 {item}, 2 {items}, 4 {items} and 5 {items}.",
       "narration": { "prompt": "Match each number to the same amount of {items}." }
     },
     {
       "kind": "multiple-choice",
-      "id": "c5-mc-group-5",
+      "id": "c5e-group-5",
       "prompt": "Which group has 5 {items}?",
-      "randomise": {},
+      "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 4 } },
         { "id": "b", "visual": { "item": "frog", "count": 3 } },
@@ -183,7 +177,6 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "hint": "Count the {items} in each group.",
       "explanation": "The group of 5 {items}: 1, 2, 3, 4, 5.",
       "narration": { "prompt": "Which group has 5 {items}?" }
     }

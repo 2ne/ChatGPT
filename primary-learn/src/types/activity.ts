@@ -16,6 +16,7 @@ export type ActivityType = (typeof ACTIVITY_TYPES)[number];
 /** Interaction kinds. One reusable component each. Content never embeds UI. */
 export const QUESTION_KINDS = [
   "count-objects",
+  "build-set",
   "multiple-choice",
   "multi-select",
   "fill-blank",
@@ -46,6 +47,10 @@ export type ObjectAsset = {
   item: ObjectItem;
   count: number;
 };
+
+/** How object pictures are laid out. `row` is tidy one-to-one; `scatter` is a messier group. */
+export const OBJECT_LAYOUTS = ["row", "scatter"] as const;
+export type ObjectLayout = (typeof OBJECT_LAYOUTS)[number];
 
 export type QuestionOption = {
   id: string;
@@ -94,6 +99,10 @@ type QuestionCore = {
   narration?: QuestionNarration;
   /** Optional object picture above the answers (also required on count-objects). */
   visual?: ObjectAsset;
+  /** Extra pictures mixed in. The child counts `visual`, not these. */
+  extras?: ObjectAsset[];
+  /** Object layout. Omit for a tidy row. */
+  layout?: ObjectLayout;
   randomise?: RandomiseSpec;
 };
 
@@ -102,6 +111,14 @@ export type CountObjectsQuestion = QuestionCore & {
   visual: ObjectAsset;
   options: QuestionOption[];
   correctId: string;
+};
+
+/** Tap objects from a tray to build a group of `visual.count`. */
+export type BuildSetQuestion = QuestionCore & {
+  kind: "build-set";
+  visual: ObjectAsset;
+  /** How many objects sit in the tray. Must be >= visual.count. Default is count + 2. */
+  bank?: number;
 };
 
 export type MultipleChoiceQuestion = QuestionCore & {
@@ -140,6 +157,7 @@ export type MatchPairsQuestion = QuestionCore & {
 
 export type Question =
   | CountObjectsQuestion
+  | BuildSetQuestion
   | MultipleChoiceQuestion
   | MultiSelectQuestion
   | FillBlankQuestion

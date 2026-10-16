@@ -20,7 +20,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - Child-facing titles in this file are the titles to show. Do not invent a parallel set of names.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Live Easy quests: `count-to-5` is node 1 (`eyfs-count-5`) and `number-bonds-to-10` is node 13 (`y1-bonds-10`). The first `missing` node is still `eyfs-subitise-5`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Node 1 (`eyfs-count-5`) has Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is still `eyfs-subitise-5`.
 
 ## Category index
 
@@ -82,7 +82,7 @@ Reception. This category is open at the start.
 
 ### 1. `eyfs-count-5` — Count to 5
 
-Requires: none. Quest: `count-to-5`. Status: done.
+Requires: none. Quests: `count-to-5` (Easy), `count-to-5-medium`, `count-to-5-hard`. Status: done.
 
 - Say the count sequence to 5
 - Recognise numerals 1 to 5

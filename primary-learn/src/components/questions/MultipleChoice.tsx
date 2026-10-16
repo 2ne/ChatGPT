@@ -9,6 +9,7 @@ type MultipleChoiceProps = {
   disabled?: boolean;
   reveal: Reveal;
   onChange: (value: unknown) => void;
+  hideVisual?: boolean;
 };
 
 export function MultipleChoice({
@@ -17,10 +18,18 @@ export function MultipleChoice({
   disabled,
   reveal,
   onChange,
+  hideVisual = false,
 }: MultipleChoiceProps) {
   return (
     <div className="option-stack">
-      {question.visual ? <ObjectGroup visual={question.visual} /> : null}
+      {!hideVisual && question.visual ? (
+        <ObjectGroup
+          visual={question.visual}
+          extras={question.extras}
+          layout={question.layout}
+          interactive
+        />
+      ) : null}
       <div role="radiogroup" aria-label={copy.pickOne} className="option-stack">
         {question.options.map((option, slot) => {
           const selected = answer === option.id;

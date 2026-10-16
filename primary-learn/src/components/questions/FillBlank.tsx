@@ -15,7 +15,14 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
   const tone = reveal === "correct" ? "is-correct" : reveal === "incorrect" ? "is-wrong" : "";
   return (
     <div className="option-stack">
-      {question.visual ? <ObjectGroup visual={question.visual} /> : null}
+      {question.visual ? (
+        <ObjectGroup
+          visual={question.visual}
+          extras={question.extras}
+          layout={question.layout}
+          interactive
+        />
+      ) : null}
       <div className={`equation ${tone}`.trim()}>
         {question.prefix ? <span className="t-title-sm">{question.prefix}</span> : null}
         <input

@@ -1,0 +1,193 @@
+{
+  "id": "count-to-5-hard",
+  "title": "Count to 5",
+  "summary": "Count one kind among mixed things, build 5, and use number words. Still within 5.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": ["Reception"],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-count-5",
+  "pathNode": "eyfs-count-5",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 matches number words to amounts. Question 8 orders 1 to 5. Question 9 asks which number you got to after counting 4. Question 10 fills the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
+    "versus": "Easy is tidy 1 to 5 with tap-count and early hints. Medium is scattered groups of the same object, counts 2 to 5. Hard adds extra objects to ignore, number words, a full 1 to 5 sequence, and a large build-set. Still the same node: count sequence, numerals and one-to-one to 5."
+  },
+  "skills": [
+    "eyfs-count-5",
+    "count-sequence-to-5",
+    "numerals-1-to-5",
+    "one-to-one-counting"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "count-objects",
+      "id": "c5h-mix-2",
+      "prompt": "How many {items}?",
+      "visual": { "item": "duck", "count": 2 },
+      "extras": [{ "item": "frog", "count": 2 }],
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "1" }
+      ],
+      "correctId": "a",
+      "hint": "Count only the {items}. Leave the {items2}.",
+      "explanation": "Count only the {items}. Tap each {item}: {seq}. Do not count the {items2}.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c5h-mix-3",
+      "prompt": "How many {items}?",
+      "visual": { "item": "apple", "count": 3 },
+      "extras": [{ "item": "banana", "count": 2 }],
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
+      ],
+      "correctId": "b",
+      "explanation": "Count only the {items}, not the {items2}. There are {count} {items}.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c5h-mix-4",
+      "prompt": "How many {items}?",
+      "visual": { "item": "star", "count": 4 },
+      "extras": [{ "item": "balloon", "count": 1 }],
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "b",
+      "explanation": "Tap each {item}. Skip the {item2}. There are {count} {items}.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "c5h-mix-5",
+      "prompt": "Count the {items}.",
+      "visual": { "item": "fish", "count": 5 },
+      "extras": [{ "item": "car", "count": 2 }],
+      "layout": "scatter",
+      "randomise": {},
+      "prefix": "There are",
+      "suffix": "{items}.",
+      "acceptedAnswers": ["5", "five"],
+      "inputMode": "numeric",
+      "explanation": "There are 5 {items}. The {items2} are not part of the count.",
+      "narration": { "prompt": "Count the {items}." }
+    },
+    {
+      "kind": "build-set",
+      "id": "c5h-build-5",
+      "prompt": "Make a group of 5 {items}.",
+      "visual": { "item": "ladybird", "count": 5 },
+      "bank": 8,
+      "randomise": {},
+      "explanation": "A group of 5 has 5 {items}. Leave the extra {items} in the tray.",
+      "narration": { "prompt": "Make a group of 5 {items}." }
+    },
+    {
+      "kind": "multi-select",
+      "id": "c5h-every-5",
+      "prompt": "Tap every group that has 5 {items}.",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "frog", "count": 5 } },
+        { "id": "b", "visual": { "item": "frog", "count": 4 } },
+        { "id": "c", "visual": { "item": "frog", "count": 5 } },
+        { "id": "d", "visual": { "item": "frog", "count": 3 } }
+      ],
+      "correctIds": ["a", "c"],
+      "explanation": "Two groups have 5 {items}. The others have 4 and 3.",
+      "narration": { "prompt": "Tap every group that has 5 {items}." }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c5h-words",
+      "prompt": "Match each word to the same amount of {items}.",
+      "randomise": {},
+      "pairs": [
+        { "id": "p1", "left": "one", "right": { "visual": { "item": "strawberry", "count": 1 } } },
+        { "id": "p2", "left": "two", "right": { "visual": { "item": "strawberry", "count": 2 } } },
+        { "id": "p4", "left": "four", "right": { "visual": { "item": "strawberry", "count": 4 } } },
+        { "id": "p5", "left": "five", "right": { "visual": { "item": "strawberry", "count": 5 } } }
+      ],
+      "explanation": "One means 1, two means 2, four means 4 and five means 5.",
+      "narration": { "prompt": "Match each word to the same amount of {items}." }
+    },
+    {
+      "kind": "ordered",
+      "id": "c5h-order",
+      "prompt": "Put the numbers in counting order. Start with the smallest.",
+      "items": [
+        { "id": "n5", "label": "5" },
+        { "id": "n1", "label": "1" },
+        { "id": "n4", "label": "4" },
+        { "id": "n2", "label": "2" },
+        { "id": "n3", "label": "3" }
+      ],
+      "correctOrder": ["n1", "n2", "n3", "n4", "n5"],
+      "explanation": "We count 1, 2, 3, 4, 5.",
+      "narration": { "prompt": "Put the numbers in counting order. Start with the smallest." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c5h-last",
+      "prompt": "What number did you get to?",
+      "visual": { "item": "balloon", "count": 4 },
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "1" }
+      ],
+      "correctId": "b",
+      "explanation": "Tap each {item}: 1, 2, 3, 4. The last number you say is 4. That is how many there are.",
+      "narration": { "prompt": "What number did you get to?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "c5h-gap",
+      "prompt": "Fill the gap in the count.",
+      "prefix": "1, 2, 3, 4,",
+      "acceptedAnswers": ["5", "five"],
+      "inputMode": "numeric",
+      "explanation": "The count goes 1, 2, 3, 4, 5. The last number is 5.",
+      "narration": { "prompt": "Fill the gap in the count. 1, 2, 3, 4, blank." }
+    }
+  ]
+}

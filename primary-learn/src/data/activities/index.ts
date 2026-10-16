@@ -1,6 +1,8 @@
 import { validateActivity } from "../../lib/validateActivity";
 import type { Activity } from "../../types/activity";
 import countTo5 from "./count-to-5.json" with { type: "json" };
+import countTo5Hard from "./count-to-5-hard.json" with { type: "json" };
+import countTo5Medium from "./count-to-5-medium.json" with { type: "json" };
 import numberBondsTo10 from "./number-bonds-to-10.json" with { type: "json" };
 
 /**
@@ -9,6 +11,8 @@ import numberBondsTo10 from "./number-bonds-to-10.json" with { type: "json" };
  */
 const files = [
   { name: "count-to-5.json", data: countTo5 },
+  { name: "count-to-5-medium.json", data: countTo5Medium },
+  { name: "count-to-5-hard.json", data: countTo5Hard },
   { name: "number-bonds-to-10.json", data: numberBondsTo10 },
 ] as const;
 

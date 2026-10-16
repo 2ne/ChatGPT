@@ -26,7 +26,14 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
 
   return (
     <div className="option-stack" role="group" aria-label={copy.chooseAll}>
-      {question.visual ? <ObjectGroup visual={question.visual} /> : null}
+      {question.visual ? (
+        <ObjectGroup
+          visual={question.visual}
+          extras={question.extras}
+          layout={question.layout}
+          interactive
+        />
+      ) : null}
       <p className="t-body">{copy.chooseAll}</p>
       {question.options.map((option, slot) => {
         const isOn = selected.includes(option.id);

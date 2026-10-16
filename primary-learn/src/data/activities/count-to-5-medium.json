@@ -1,0 +1,195 @@
+{
+  "id": "count-to-5-medium",
+  "title": "Count to 5",
+  "summary": "Count messy groups to 5, build a set, and match numerals to amounts.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": ["Reception"],
+  "ability": "expected",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-count-5",
+  "pathNode": "eyfs-count-5",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 types the count of a messy group of 4 or 5. Question 6 picks the group of 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 matches 2 to 5 with pictures. Question 10 asks which number you got to after counting 5. No return to a 1-object count.",
+    "versus": "Easy: tidy rows, counts 1 to 5 in order, hints on items 1 to 3. Medium: scattered layouts, mixed pictures and numerals, build and type counts can move inside 3 to 5, hints only on 1 to 3. Hard: extra objects to ignore, number words, a full 1 to 5 order, and almost no hints. Still counting to 5, not bonds."
+  },
+  "skills": [
+    "eyfs-count-5",
+    "count-sequence-to-5",
+    "numerals-1-to-5",
+    "one-to-one-counting"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "count-objects",
+      "id": "c5m-count-3",
+      "prompt": "How many {items}?",
+      "visual": { "item": "apple", "count": 3 },
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1" },
+        { "id": "b", "label": "2" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "4" }
+      ],
+      "correctId": "c",
+      "hint": "Tap each {item}, even if they look messy.",
+      "explanation": "Tap each {item} once. The last number you say is how many.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c5m-count-4",
+      "prompt": "How many {items}?",
+      "visual": { "item": "car", "count": 4 },
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
+      ],
+      "correctId": "c",
+      "hint": "Say a new number for each tap.",
+      "explanation": "Count one {item} at a time. Do not skip. Do not count one twice.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c5m-count-5",
+      "prompt": "How many {items}?",
+      "visual": { "item": "star", "count": 5 },
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "c",
+      "hint": "Keep going until every {item} has a number.",
+      "explanation": "When every {item} has been tapped, the last number is how many there are.",
+      "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "build-set",
+      "id": "c5m-build",
+      "prompt": "Make a group of {count} {items}.",
+      "visual": { "item": "duck", "count": 4 },
+      "bank": 6,
+      "randomise": { "count": { "min": 3, "max": 4 } },
+      "explanation": "Add {items} one by one. Stop at {count}. Do not use every {item} in the tray.",
+      "narration": { "prompt": "Make a group of {count} {items}." }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "c5m-fb",
+      "prompt": "Count the {items}.",
+      "visual": { "item": "balloon", "count": 5 },
+      "layout": "scatter",
+      "randomise": { "count": { "min": 4, "max": 5 } },
+      "prefix": "There are",
+      "suffix": "{items}.",
+      "acceptedAnswers": ["5", "five"],
+      "inputMode": "numeric",
+      "explanation": "Tap each {item}. The last number you say is the answer.",
+      "narration": { "prompt": "Count the {items}." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c5m-group-4",
+      "prompt": "Which group has 4 {items}?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "frog", "count": 3 } },
+        { "id": "b", "visual": { "item": "frog", "count": 5 } },
+        { "id": "c", "visual": { "item": "frog", "count": 4 } },
+        { "id": "d", "visual": { "item": "frog", "count": 2 } }
+      ],
+      "correctId": "c",
+      "explanation": "Count each group. The group of 4 is 1, 2, 3, 4.",
+      "narration": { "prompt": "Which group has 4 {items}?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c5m-next",
+      "prompt": "What comes next? 1, 2, 3, 4, …",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "c",
+      "explanation": "We count 1, 2, 3, 4, 5. The next number is 5.",
+      "narration": { "prompt": "What comes next? One, two, three, four, …" }
+    },
+    {
+      "kind": "ordered",
+      "id": "c5m-order",
+      "prompt": "Put the numbers in counting order. Start with the smallest.",
+      "items": [
+        { "id": "n3", "label": "3" },
+        { "id": "n1", "label": "1" },
+        { "id": "n4", "label": "4" },
+        { "id": "n2", "label": "2" }
+      ],
+      "correctOrder": ["n1", "n2", "n3", "n4"],
+      "explanation": "We count 1, then 2, then 3, then 4.",
+      "narration": { "prompt": "Put the numbers in counting order. Start with the smallest." }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c5m-match",
+      "prompt": "Match each number to the same amount of {items}.",
+      "randomise": {},
+      "pairs": [
+        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 } } },
+        { "id": "p3", "left": "3", "right": { "visual": { "item": "fish", "count": 3 } } },
+        { "id": "p4", "left": "4", "right": { "visual": { "item": "fish", "count": 4 } } },
+        { "id": "p5", "left": "5", "right": { "visual": { "item": "fish", "count": 5 } } }
+      ],
+      "explanation": "Count the {items} in each picture, then find that numeral.",
+      "narration": { "prompt": "Match each number to the same amount of {items}." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c5m-last",
+      "prompt": "What number did you get to?",
+      "visual": { "item": "strawberry", "count": 5 },
+      "layout": "scatter",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "4" },
+        { "id": "b", "label": "5" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "1" }
+      ],
+      "correctId": "b",
+      "explanation": "Tap each {item}: 1, 2, 3, 4, 5. The last number you say is 5. That is how many there are.",
+      "narration": { "prompt": "What number did you get to?" }
+    }
+  ]
+}
