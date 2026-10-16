@@ -21,7 +21,7 @@ rules, change the design — do not invent a second system.
 5. **Celebrate constantly** — stars, streak flames, confetti pops, cheering Pip.
    Kids should feel progress every 30 seconds.
 6. **Colour with meaning** — maths tiles are orange; green = correct,
-   red = try again, gold = stars only.
+   red = try again, indigo = earned stars, gold = cups and path nodes.
 
 ## Mascot: Pip
 
@@ -61,10 +61,10 @@ CSS variables in `src/index.css`. The maths tile colour lives in
 | `--ink` / `--ink-soft` / `--ink-faint` | `#232946` / `#5B5E7A` / `#9AA0B8` | Text tiers |
 | `--line` / `--line-strong` | `#ECE2CC` / `#DDCFB2` | Borders |
 | `--primary` → `--violet` | `#4F46E5` → `#7C3AED` | CTA gradient, selected states, progress |
-| `--sun` / `--sun-soft` | `#FFC93C` / `#FFF1C4` | Highlights, hints, star badges |
+| `--sun` / `--sun-soft` | `#FFC93C` / `#FFF1C4` | Highlights, hints |
 | `--green` / `--green-soft` | `#0CA678` / `#DCF5E9` | Correct only |
 | `--red` / `--red-soft` | `#E03131` / `#FFE3E3` | Try-again only |
-| `--gold` | `#FFB100` | Stars only |
+| `--gold` | `#FFB100` | Cups and gold path nodes |
 
 Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
 
@@ -139,7 +139,7 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
    category signs from `curriculum/maths.md`. No subject chips, year chips, or
    a free-choice quest list. Locked stops show a lock; the current stop carries
    the learner’s buddy face. Untouched stops are just a number. Won
-   stars sit in a small gold cluster hugging the bottom of the node
+   stars sit in a small indigo cluster hugging the bottom of the node
    (best of Easy / Medium / Hard, up to three, no empty stars). Star
    rows live in the level sheet. When all three levels have three
    stars, the node turns gold and a cup replaces the number.

@@ -1590,10 +1590,10 @@ p {
 }
 
 .star.is-lit {
-  background: linear-gradient(135deg, var(--sun), #ff9d2e);
-  border-color: #d98a00;
+  background: linear-gradient(135deg, var(--primary), var(--violet));
+  border-color: var(--primary-deep);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(255, 177, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
 }
 
 .star:nth-child(2) {
@@ -1659,10 +1659,10 @@ p {
 
 .result-star.is-lit {
   opacity: 1;
-  background: linear-gradient(135deg, var(--sun), #ff9d2e);
-  border-color: #d98a00;
+  background: linear-gradient(135deg, var(--primary), var(--violet));
+  border-color: var(--primary-deep);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(255, 177, 0, 0.45);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.45);
   animation: result-star-pop 0.5s cubic-bezier(0.2, 1.4, 0.32, 1) both;
 }
 
@@ -2191,7 +2191,7 @@ p {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  color: var(--gold);
+  color: var(--primary);
 }
 
 .map-star {
@@ -2479,7 +2479,7 @@ p {
 }
 
 .sheet-star-row .is-lit {
-  color: var(--gold);
+  color: var(--primary);
 }
 
 .sheet-row-text {
