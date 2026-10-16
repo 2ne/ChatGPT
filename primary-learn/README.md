@@ -61,6 +61,7 @@ Each node can hold three quests (Easy / Medium / Hard). The next *new* node is t
 
 - React 19 + TypeScript
 - Vite
+- React Router (`HashRouter`, so GitHub Pages deep links work)
 - Tailwind CSS v4
 - Baloo 2 / Nunito
 
@@ -91,6 +92,7 @@ npm run preview
 - **Shared runner** — new content is data; the runner teaches after misses and re-asks until the set is solid. The saved mark is the first try
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
+- **Routes** — `/onboarding`, `/pathway`, `/activity/:id` via `HashRouter` (e.g. `https://2ne.github.io/ChatGPT/primary-learn/#/activity/count-to-5`). Hash routing is the Pages strategy: this repo hosts several apps, so a nested `404.html` would not catch `/primary-learn/pathway`. No profile goes to onboarding. Locked or unknown quests go back to the path with a short notice. Path changes scroll to the top.
 
 ## Limitations
 

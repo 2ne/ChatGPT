@@ -11,9 +11,9 @@ rules, change the design — do not invent a second system.
 
 1. **Always know where you are** — every activity screen shows the quest name
    and `Question X of N`. Never a bare question on a blank page.
-2. **One job per screen** — onboarding sets up the account; home follows the
-   path and opens a level; the level sheet picks Easy / Medium / Hard; activity
-   asks one question.
+2. **One job per screen** — `/onboarding` sets up the account; `/pathway`
+   follows the path and opens a level; the level sheet picks Easy / Medium /
+   Hard; `/activity/:id` asks one question.
 3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
@@ -122,7 +122,7 @@ the white activity column. It is the divider, not a card border.
 No blur, no bottom bar, no indigo wash — the dotted paper runs behind it.
 Left: white Pip tile vertically centred with the "Primary Maths" wordmark in
 ink (no tagline, no gradient on *Maths*). Clicking the logo or name returns to
-the path map. Right: learner chip (avatar face centred in its circle + name) +
+`/pathway`. Right: learner chip (avatar face centred in its circle + name) +
 Reset text on the home screen.
 
 **Hidden on onboarding and during a quest.** Setup is a full-page welcome.
@@ -143,6 +143,8 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
    rows. Play only when that row is unlocked. Coming-soon nodes (no Easy quest
    yet) and locked nodes get a calm Pip / lock note instead of play buttons.
 4. **Find me** — `Go to my level` scrolls the page to the current stop.
+   Major screen changes (onboarding, pathway, activity) scroll to the top so
+   the name and avatar stay in view. Do not auto-jump down the path on entry.
 
 ### Activity intro
 

@@ -1,24 +1,21 @@
-import { useState } from "react";
+import type { ReactNode } from "react";
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getActivity } from "./data/activities";
+import { copy } from "./data/copy";
 import { getAvatar } from "./data/avatars";
 import { ActivityRunner } from "./components/ActivityRunner";
 import { AppHeader } from "./components/AppHeader";
 import { Home } from "./components/Home";
 import { Onboarding } from "./components/Onboarding";
+import { ScrollToTop } from "./components/ScrollToTop";
 import { useLearner } from "./hooks/useLearner";
+import { isActivityPlayable } from "./lib/path";
+import type { ActivityAttempt, LearnerProfile, ProgressState } from "./types/progress";
 
 export default function App() {
-  const {
-    ready,
-    profile,
-    progress,
-    completeOnboarding,
-    recordAttempt,
-    resetAll,
-  } = useLearner();
-  const [activeActivityId, setActiveActivityId] = useState<string | null>(null);
+  const learner = useLearner();
 
-  if (!ready) {
+  if (!learner.ready) {
     return (
       <>
         <AppHeader />
@@ -31,56 +28,99 @@ export default function App() {
     );
   }
 
-  if (!profile) {
-    return <Onboarding onComplete={completeOnboarding} />;
-  }
-
-  const avatar = getAvatar(profile.avatarId);
-  const activity = activeActivityId ? getActivity(activeActivityId) : undefined;
-
-  if (activeActivityId && !activity) {
-    return (
-      <>
-        <AppHeader
-          learnerName={profile.name}
-          learnerEmoji={avatar.emoji}
-          onHome={() => setActiveActivityId(null)}
+  return (
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route
+          path="/onboarding"
+          element={<OnboardingRoute profile={learner.profile} onComplete={learner.completeOnboarding} />}
         />
-        <main className="page page-narrow page-under-header">
-          <h1 className="t-title">Activity not found</h1>
-          <p className="t-body" style={{ margin: "8px 0 16px" }}>
-            That activity is missing from the catalogue.
-          </p>
-          <button
-            type="button"
-            onClick={() => setActiveActivityId(null)}
-            className="btn btn-primary"
-          >
-            Back home
-          </button>
-        </main>
-      </>
-    );
+        <Route
+          path="/pathway"
+          element={
+            <RequireProfile profile={learner.profile}>
+              <PathwayRoute
+                profile={learner.profile!}
+                progress={learner.progress}
+                resetAll={learner.resetAll}
+              />
+            </RequireProfile>
+          }
+        />
+        <Route
+          path="/activity/:id"
+          element={
+            <RequireProfile profile={learner.profile}>
+              <ActivityRoute
+                profile={learner.profile!}
+                progress={learner.progress}
+                onComplete={learner.recordAttempt}
+              />
+            </RequireProfile>
+          }
+        />
+        <Route
+          path="/"
+          element={<Navigate to={learner.profile ? "/pathway" : "/onboarding"} replace />}
+        />
+        <Route path="*" element={<Navigate to={learner.profile ? "/pathway" : "/onboarding"} replace />} />
+      </Routes>
+    </>
+  );
+}
+
+function RequireProfile({
+  profile,
+  children,
+}: {
+  profile: LearnerProfile | null;
+  children: ReactNode;
+}) {
+  if (!profile) return <Navigate to="/onboarding" replace />;
+  return children;
+}
+
+function OnboardingRoute({
+  profile,
+  onComplete,
+}: {
+  profile: LearnerProfile | null;
+  onComplete: (next: LearnerProfile) => void;
+}) {
+  const navigate = useNavigate();
+  if (profile) return <Navigate to="/pathway" replace />;
+
+  function handleComplete(next: LearnerProfile) {
+    onComplete(next);
+    navigate("/pathway");
   }
 
-  if (activity) {
-    // No global header during a quest — Exit quest / All quests / Back to quests cover leaving.
-    return (
-      <ActivityRunner
-        activity={activity}
-        learnerName={profile.name}
-        onExit={() => setActiveActivityId(null)}
-        onComplete={recordAttempt}
-      />
-    );
-  }
+  return <Onboarding onComplete={handleComplete} />;
+}
+
+function PathwayRoute({
+  profile,
+  progress,
+  resetAll,
+}: {
+  profile: LearnerProfile;
+  progress: ProgressState;
+  resetAll: () => void;
+}) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const avatar = getAvatar(profile.avatarId);
+  const notice = (location.state as { notice?: string } | null)?.notice;
+  const noticeText =
+    notice === "locked" ? copy.activityLocked : notice === "missing" ? copy.activityMissing : null;
 
   return (
     <>
       <AppHeader
         learnerName={profile.name}
         learnerEmoji={avatar.emoji}
-        onHome={() => setActiveActivityId(null)}
+        onHome={() => navigate("/pathway")}
         right={
           <button
             type="button"
@@ -92,6 +132,7 @@ export default function App() {
                 )
               ) {
                 resetAll();
+                navigate("/onboarding");
               }
             }}
           >
@@ -99,7 +140,46 @@ export default function App() {
           </button>
         }
       />
-      <Home profile={profile} progress={progress} onOpenActivity={setActiveActivityId} />
+      {noticeText ? (
+        <p className="route-notice" role="status">
+          {noticeText}
+        </p>
+      ) : null}
+      <Home
+        profile={profile}
+        progress={progress}
+        onOpenActivity={(activityId) => navigate(`/activity/${activityId}`)}
+      />
     </>
+  );
+}
+
+function ActivityRoute({
+  profile,
+  progress,
+  onComplete,
+}: {
+  profile: LearnerProfile;
+  progress: ProgressState;
+  onComplete: (attempt: ActivityAttempt) => void;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const activity = id ? getActivity(id) : undefined;
+
+  if (!activity) {
+    return <Navigate to="/pathway" replace state={{ notice: "missing" }} />;
+  }
+  if (!isActivityPlayable(activity.id, progress)) {
+    return <Navigate to="/pathway" replace state={{ notice: "locked" }} />;
+  }
+
+  return (
+    <ActivityRunner
+      activity={activity}
+      learnerName={profile.name}
+      onExit={() => navigate("/pathway")}
+      onComplete={onComplete}
+    />
   );
 }

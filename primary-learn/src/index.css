@@ -183,6 +183,17 @@ p {
   padding-top: var(--space-4);
 }
 
+.route-notice {
+  width: 100%;
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  padding: 10px var(--space-4) 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
 /* Quest screens: full-bleed white so the sandy dots never show. */
 .page-quest {
   max-width: none;

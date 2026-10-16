@@ -22,6 +22,22 @@ Agents work directly on `main`. This is a fast vibe / prototype repo.
 - Keep learner data in localStorage. Do not add auth, accounts, or remote APIs for learner data.
 - Keep changes inside `primary-learn/` unless the deploy workflow needs updating.
 
+## Routes
+
+Client-side `HashRouter` (not `BrowserRouter`). Hash routes work on GitHub Pages under `/ChatGPT/primary-learn/` without a server rewrite. This repo hosts several apps on one Pages site, so a nested `404.html` would not catch `/primary-learn/pathway`. Shareable URLs look like `https://2ne.github.io/ChatGPT/primary-learn/#/activity/count-to-5`.
+
+| Path | Screen |
+| --- | --- |
+| `/onboarding` | Name and buddy. No profile required. |
+| `/pathway` | Path map. Needs a profile. |
+| `/activity/:id` | Quest runner. Needs a profile and a playable quest. |
+
+`/` and unknown paths send you to `/pathway` if there is a profile, else `/onboarding`. No profile on a protected route sends you to `/onboarding`. A missing or locked activity sends you to `/pathway` with a short notice.
+
+Do not add generated audio files.
+
+Every path change scrolls to the top so the name and avatar stay in view. PathMap must not auto-scroll on mount.
+
 ## Vision
 
 Long term this is a **start-to-finish pathway covering every UK curriculum subject**. Maths is where we started and is the **current phase**, not a permanent product rule. Do not add English, science, or foundation subjects until asked.

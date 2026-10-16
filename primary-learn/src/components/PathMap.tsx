@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { Lock, LocateFixed, Star } from "lucide-react";
 import type { LevelState } from "../lib/path";
 import { DoodleShape, DoodleStar } from "./mascot/Doodles";
@@ -179,13 +179,6 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
     const target = frameTop + layout.points[currentIndex].y - window.innerHeight / 2;
     window.scrollTo({ top: Math.max(0, target), behavior: smooth ? "smooth" : "auto" });
   }
-
-  useEffect(() => {
-    // Returning learners land on their level; brand-new learners start at the top.
-    if (currentIndex > 0) scrollToCurrent(false);
-    // Only on first paint; later scrolling is the learner's.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const currentLevel = levels[currentIndex];
 

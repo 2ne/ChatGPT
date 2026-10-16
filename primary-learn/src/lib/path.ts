@@ -90,3 +90,9 @@ export function buildLevels(progress: ProgressState): LevelState[] {
 
   return levels;
 }
+
+export function isActivityPlayable(activityId: string, progress: ProgressState): boolean {
+  return buildLevels(progress).some((level) =>
+    level.difficulties.some((entry) => entry.activity?.id === activityId && entry.playable),
+  );
+}

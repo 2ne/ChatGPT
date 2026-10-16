@@ -165,6 +165,7 @@ export function ActivityRunner({
   }, [setMood]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (phase === "question") {
       promptRef.current?.focus({ preventScroll: true });
     }

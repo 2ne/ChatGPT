@@ -55,6 +55,8 @@ export const copy = {
   nameTooShort: "Type a name with 2 letters or more.",
   nameTooLong: "Keep your name to 20 letters.",
   checkYourName: "Check your name",
+  activityMissing: "That quest is not here. Pick one from the path.",
+  activityLocked: "That quest is not open yet. Keep going on the path.",
 } as const;
 
 export const KIND_LABELS: Record<QuestionKind, string> = {
