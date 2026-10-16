@@ -146,15 +146,22 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
 
 ### Activity intro
 
-Back link → icon tile + big title → summary sentence → fact pills
-(`10 questions`, `~6 min`, `3 stars`) → Pip + speech bubble
-(`You've got this, {name}!`) → gradient `Start quest →`.
+Compact column, max-width **40rem**, centred on a full-bleed white page.
+Tight gaps around title, summary and fact pills. Do not stretch this block
+across the desktop viewport.
+
+Back link → icon tile + title → summary → fact pills (`10 questions`,
+`About 4 min`, `Earn up to 3 stars`) → Pip + **white speech bubble**
+(same as onboarding: white card, line border, soft shadow, ink text; not
+the sandy tag colour) → gradient `Start quest →`.
 
 ### Activity question (most important)
 
 The quest runner is **full-bleed white**. Kids know they are in an activity
 because the dotted sandy paper is gone. Header and activity touch the top and
-both sides. Square corners. No card chrome. Inner words stay padded and, on
+both sides. Square corners. No card chrome. Keep the header snug to the top
+(small top padding) and give the rainbow air: more padding under the progress
+bar, then more padding above the question. Inner words stay padded and, on
 wide screens, centred (`--max-wide`) while the white still goes edge to edge.
 
 ```

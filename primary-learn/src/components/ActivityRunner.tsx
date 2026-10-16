@@ -221,8 +221,8 @@ export function ActivityRunner({
   /* ——— Intro ——— */
   if (phase === "intro") {
     return (
-      <main className="page page-quest">
-        <section className="card" style={{ display: "grid", gap: "var(--space-4)" }}>
+      <main className="page page-quest quest-intro-page">
+        <section className="quest-intro">
           <button type="button" className="back-link" onClick={onExit}>
             <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
           </button>
@@ -234,13 +234,11 @@ export function ActivityRunner({
             >
               <ThemeIcon />
             </span>
-            <div style={{ display: "grid", gap: 4 }}>
+            <div>
               <h1 className="t-title">{activity.title}</h1>
             </div>
           </div>
-          <p className="t-body" style={{ fontSize: 17 }}>
-            {activity.summary}
-          </p>
+          <p className="t-body quest-intro-summary">{activity.summary}</p>
           <div className="intro-facts">
             <span className="fact-pill">
               <ListChecks size={15} aria-hidden /> {copy.questionsFact(total)}
@@ -252,13 +250,11 @@ export function ActivityRunner({
               <Star size={15} aria-hidden /> {copy.starsFact}
             </span>
           </div>
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <div className="quest-intro-pip">
             <span aria-hidden>
-              <Pip size={64} mood="cheer" />
+              <Pip size={72} mood="cheer" />
             </span>
-            <p className="sidekick-bubble" style={{ flex: 1 }}>
-              {copy.introCheer(learnerName)}
-            </p>
+            <p className="sidekick-bubble">{copy.introCheer(learnerName)}</p>
           </div>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
             {copy.startQuest} <ArrowRight size={19} aria-hidden />
