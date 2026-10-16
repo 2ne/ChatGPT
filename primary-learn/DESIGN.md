@@ -173,7 +173,7 @@ wide screens, centred (`--max-wide`) while the white still goes edge to edge.
 │ ▰▰▰▰▰▱▱▱▱▱                      │
 ├─────────────────────────────────┤  rainbow strip (divider)
 │                                 │
-│ [3]  Which number…?  🔊         │  white fills down to the dock
+│ [3]  Which number…?  🔊         │  number + prompt only; no kind label
 │ [A] 2                           │
 │ [B] 3                           │
 │ [C] 4                      ✓    │
@@ -185,6 +185,9 @@ wide screens, centred (`--max-wide`) while the white still goes edge to edge.
 └─────────────────────────────────┘
 ```
 
+- Prompt row is the numbered badge plus the question text and speaker. Do
+  **not** show a grey uppercase kind label above it (`HOW MANY?`, `TYPE IT IN`,
+  `PICK ONE`, and the rest). Kids already see what to do from the question.
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
   indigo ring + soft fill; correct = green + ✓ + wiggle; wrong = red + ✕ +
   shake. Colour is never the only signal (icons + words too).

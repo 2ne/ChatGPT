@@ -1,5 +1,3 @@
-import type { QuestionKind } from "../types/activity";
-
 /**
  * Shared child-facing wording. Change a phrase here and every quest updates.
  * Do not put these strings in activity JSON.
@@ -42,7 +40,6 @@ export const copy = {
   summaryAgain: "Every try makes your brain stronger. Have another go!",
   feedbackCorrect: "Correct. Nice!",
   feedbackWrong: "Not quite. Good try!",
-  kindFallback: "Question",
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",
@@ -58,12 +55,3 @@ export const copy = {
   activityMissing: "That quest is not here. Pick one from the path.",
   activityLocked: "That quest is not open yet. Keep going on the path.",
 } as const;
-
-export const KIND_LABELS: Record<QuestionKind, string> = {
-  "count-objects": "How many?",
-  "multiple-choice": "Pick one",
-  "multi-select": "Pick them all",
-  "fill-blank": "Type it in",
-  ordered: "Put in order",
-  "match-pairs": "Match them up",
-};

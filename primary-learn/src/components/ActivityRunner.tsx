@@ -18,7 +18,7 @@ import type { ActivityAttempt } from "../types/progress";
 import { emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { scoreAttempt } from "../lib/mastery";
 import { realizeActivity } from "../lib/realize";
-import { copy, KIND_LABELS } from "../data/copy";
+import { copy } from "../data/copy";
 import { spokenPrompt } from "../lib/narration";
 import { subjectTheme } from "../data/subjects";
 import { useNarration } from "../hooks/useNarration";
@@ -436,7 +436,6 @@ export function ActivityRunner({
             <span className="q-num" aria-hidden>
               {position}
             </span>
-            <span className="q-kind">{KIND_LABELS[question.kind] ?? copy.kindFallback}</span>
             <h1 ref={promptRef} tabIndex={-1} className="q-prompt">
               <SpokenWords
                 display={question.prompt}

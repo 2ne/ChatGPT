@@ -1043,17 +1043,13 @@ p {
 }
 
 .q-head {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  column-gap: 12px;
-  row-gap: 2px;
+  display: flex;
   align-items: center;
-  padding-top: 4px;
+  gap: 12px;
 }
 
 .q-num {
-  grid-column: 1;
-  grid-row: 2;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1069,9 +1065,8 @@ p {
 }
 
 .q-prompt {
-  grid-column: 2 / -1;
-  grid-row: 2;
-  align-self: center;
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-display);
   font-size: clamp(22px, 3.4vw, 27px);
   font-weight: 800;
@@ -1113,20 +1108,6 @@ p {
   background: var(--primary-soft);
   border-color: var(--primary);
   color: var(--primary);
-}
-
-.q-kind {
-  grid-column: 2;
-  grid-row: 1;
-  display: flex;
-  align-items: center;
-  min-height: 16px;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
 }
 
 /* ——— Answer options ——— */

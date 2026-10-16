@@ -114,7 +114,7 @@ Educational content is **pure data**. Presentation is **one generic runner** plu
 | Layer | Lives in | May contain | Must not contain |
 | --- | --- | --- | --- |
 | Content | `src/data/activities/<id>.json` | Metadata, prompts, answers, hints, narration, `visual` assets (`{ item, count }`) | JSX, CSS, React, scoring, shared phrases like “Correct. Nice!” |
-| Shared wording | `src/data/copy.ts` | Instructions, feedback titles, buttons, kind labels | Per-quest stems |
+| Shared wording | `src/data/copy.ts` | Instructions, feedback titles, buttons | Per-quest stems |
 | UI | `ActivityRunner` + `components/questions/*` | Layout, objects pictures, speaker icon, marking | Quest-specific copy or one-off screens |
 
 Do not put emoji strings in JSON. Use `"visual": { "item": "apple", "count": 3 }`. The `ObjectGroup` component draws the picture. To change how apples look, edit that component once.
@@ -171,9 +171,8 @@ Content never embeds a new UI. Adding a kind is a schema + component change:
 3. Spoken read-aloud is the question prompt only (`spokenPrompt` in `src/lib/narration.ts`). Do not add a path that reads options or answers.
 4. Add a component in `src/components/questions/<Kind>.tsx` (data in, answers out — no quest-specific copy).
 5. Register it in `QUESTION_VIEWS` in `src/components/questions/QuestionView.tsx`.
-6. Add a kind label in `src/data/copy.ts` (`KIND_LABELS`).
-7. Extend `src/lib/validateActivity.ts` (and `activity.schema.json` if the top-level shape changes).
-8. Mention it in `QUALITY.md` stem templates if agents will write that kind.
+6. Extend `src/lib/validateActivity.ts` (and `activity.schema.json` if the top-level shape changes).
+7. Mention it in `QUALITY.md` stem templates if agents will write that kind.
 
 Until those steps are done, `validateActivity` will reject JSON that uses the new kind.
 
