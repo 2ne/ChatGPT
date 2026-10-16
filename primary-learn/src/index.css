@@ -58,6 +58,7 @@
 
   --max-content: 760px;
   --max-wide: 960px;
+  --page-gutter: var(--space-3);
 }
 
 * {
@@ -176,7 +177,7 @@ p {
   width: 100%;
   max-width: var(--max-wide);
   margin: 0 auto;
-  padding: var(--space-4) var(--space-3) var(--space-6);
+  padding: var(--space-4) var(--page-gutter) var(--space-6);
 }
 
 .page-under-header {
@@ -357,7 +358,7 @@ p {
   max-width: var(--max-wide);
   margin: 0 auto;
   min-height: 72px;
-  padding: 8px var(--space-4);
+  padding: 8px var(--page-gutter);
   display: flex;
   align-items: center;
   justify-content: space-between;
