@@ -283,7 +283,11 @@ While speech plays, the runner highlights words in the prompt as they are read. 
 
 Shipped now: speaker icon after the question + word highlighting. Later ideas (do not build unless asked): illustrated stems beside the words, stricter shared sentence templates, neater karaoke wrapping. Do not generate audio files. See `QUALITY.md`.
 
-### Allowed question kinds
+## Sound effects
+
+All SFX are synthesised in `src/lib/sound.ts` with the **Web Audio API**. No audio files. One shared `AudioContext`, unlocked and resumed on the first `pointerdown` / `touchstart`. Play on **pointerdown** (and `touchstart` where pointer events are missing), never on click or touch-up, so iOS is instant. Schedule at `currentTime`. Do not use `setTimeout` for audio. Mute is a small speaker toggle and lives in localStorage (`primary-path:sound-muted:v1`). Do not pause or cancel `speechSynthesis` when playing SFX. Cues: soft tap (buttons and answers), ding (correct), gentle low tone (wrong), short fanfare on the end screen (bigger at 3 stars).
+
+## Allowed question kinds
 
 Defined in `src/types/activity.ts`. Each has one component under `src/components/questions/`:
 
@@ -392,7 +396,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 
 ## Progress and marks
 
-- Profile + progress keys live in `src/storage/localStore.ts`. Do not change key names casually (breaks existing browser data). Do not replace localStorage with another store.
+- Profile + progress keys live in `src/storage/localStore.ts`. Mute is `primary-path:sound-muted:v1`. Do not change key names casually (breaks existing browser data). Do not replace localStorage with another store.
 - A quest is **exactly 10 questions** (unless `extraQuestions`). Score = how many were right. No retry of misses.
 - After a wrong answer, show a short correction (`It was 4.` plus the `explanation`) and move on.
 - Stars and unlock live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.

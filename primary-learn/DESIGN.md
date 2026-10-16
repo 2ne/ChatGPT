@@ -217,6 +217,12 @@ rainbow itself is never inset.
   button if the browser has no speech API. Spoken copy is
   `question.narration.prompt` (fallback: visible prompt). Do not add a second
   speaker system.
+- **Sound effects** are Web Audio only (`src/lib/sound.ts`). No files. Soft
+  tap on buttons and answers, ding on correct, a gentle low tone on wrong,
+  a short fanfare on the end screen (bigger at 3 stars). Play on
+  `pointerdown` so iOS is instant. Mute is a small speaker in the header
+  (and on quest screens) and stays in localStorage. SFX must not stop
+  narration.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.

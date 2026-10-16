@@ -3,6 +3,7 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import { AVATARS } from "../data/avatars";
 import { copy } from "../data/copy";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
+import { MuteToggle } from "./MuteToggle";
 import { Pip } from "./mascot/Pip";
 
 type OnboardingProps = {
@@ -38,6 +39,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <main className="onboard-page">
+      <MuteToggle className="onboard-mute" />
       <section className="onboard-hero" aria-label={copy.setupTitle}>
         <div className="onboard-pip">
           <Pip size={220} mood="cheer" followPointer />

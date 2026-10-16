@@ -15,6 +15,8 @@ import type { Activity, Question } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
+import { playSound } from "../lib/sound";
+import { MuteToggle } from "./MuteToggle";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
@@ -88,9 +90,15 @@ export function ActivityRunner({
     setPhase("question");
   }
 
+  function markSound() {
+    if (!question || !hasProvidedAnswer(question, answer)) return;
+    playSound(isAnswerCorrect(question, answer) ? "correct" : "wrong");
+  }
+
   function checkAnswer() {
     if (!question) return;
     const correct = isAnswerCorrect(question, answer);
+    playSound(correct ? "correct" : "wrong");
     setLastCorrect(correct);
     setStreak((prev) => (correct ? prev + 1 : 0));
     setResults((prev) => (question.id in prev ? prev : { ...prev, [question.id]: correct }));
@@ -187,6 +195,7 @@ export function ActivityRunner({
       }
       const choice = Number(event.key) - 1;
       if (choice >= 0 && choice < currentQuestion.options.length) {
+        playSound("tap");
         setAnswer(currentQuestion.options[choice].id);
       }
     }
@@ -200,9 +209,12 @@ export function ActivityRunner({
     return (
       <main className="page page-quest quest-intro-page">
         <section className="quest-intro">
-          <button type="button" className="back-link" onClick={onExit}>
-            <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
-          </button>
+          <div className="quest-intro-bar">
+            <button type="button" className="back-link" onClick={onExit}>
+              <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
+            </button>
+            <MuteToggle />
+          </div>
           <div className="intro-tile-row">
             <span
               className="context-tile"
@@ -275,7 +287,13 @@ export function ActivityRunner({
       <button
         type="button"
         className="btn btn-primary btn-block"
+        data-sfx="off"
         disabled={!hasProvidedAnswer(question, answer)}
+        onPointerDown={(event) => {
+          if (event.button !== 0) return;
+          markSound();
+        }}
+        onTouchStart={markSound}
         onClick={checkAnswer}
       >
         {copy.checkIt} <Check size={19} aria-hidden />
@@ -308,9 +326,12 @@ export function ActivityRunner({
               </p>
               <p className="context-sub">{copy.questionOf(position, activeQueue.length)}</p>
             </div>
-            <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
-              <X size={20} aria-hidden />
-            </button>
+            <div className="context-tools">
+              <MuteToggle />
+              <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
+                <X size={20} aria-hidden />
+              </button>
+            </div>
           </div>
 
           <div className="context-progress">
@@ -457,6 +478,13 @@ function ResultScreen({
   onNext: () => void;
 }) {
   const [confetti, setConfetti] = useState(0);
+  const fanfarePlayed = useRef(false);
+
+  useEffect(() => {
+    if (fanfarePlayed.current) return;
+    fanfarePlayed.current = true;
+    playSound(stars >= 3 ? "fanfareBig" : "fanfare");
+  }, [stars]);
 
   useEffect(() => {
     if (stars < 3 || reducedMotion) return;
@@ -466,6 +494,7 @@ function ResultScreen({
 
   return (
     <main className="page page-quest result-page">
+      <MuteToggle className="result-mute" />
       <ConfettiBurst burstId={confetti} intensity="pop" />
       <section className={`result-card${reducedMotion ? " is-still" : ""}`} aria-live="polite">
         <div className="result-pip" aria-hidden>

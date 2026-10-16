@@ -3,6 +3,7 @@ import { normalizeProgress } from "../lib/mastery";
 
 const PROFILE_KEY = "primary-path:profile:v1";
 const PROGRESS_KEY = "primary-path:progress:v1";
+const SOUND_MUTE_KEY = "primary-path:sound-muted:v1";
 
 function canUseStorage(): boolean {
   try {
@@ -52,4 +53,14 @@ export function saveProgress(progress: ProgressState): void {
 export function clearProgress(): void {
   if (!canUseStorage()) return;
   window.localStorage.removeItem(PROGRESS_KEY);
+}
+
+export function loadSoundMuted(): boolean {
+  if (!canUseStorage()) return false;
+  return window.localStorage.getItem(SOUND_MUTE_KEY) === "1";
+}
+
+export function saveSoundMuted(muted: boolean): void {
+  if (!canUseStorage()) return;
+  window.localStorage.setItem(SOUND_MUTE_KEY, muted ? "1" : "0");
 }

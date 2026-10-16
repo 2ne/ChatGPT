@@ -5,6 +5,8 @@
 export const copy = {
   hearIt: "Hear the question",
   stopReadingAria: "Stop reading",
+  soundOn: "Sound on",
+  soundOff: "Sound off",
   needHint: "Need a hint?",
   checkIt: "Check it",
   nextQuestion: "Next question",

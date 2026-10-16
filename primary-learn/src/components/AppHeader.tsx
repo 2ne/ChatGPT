@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { MuteToggle } from "./MuteToggle";
 import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
 
@@ -44,7 +45,10 @@ export function AppHeader({ right, learnerName, learnerEmoji, onHome }: AppHeade
               <span className="learner-name">{learnerName}</span>
             </span>
           ) : null}
-          {right ? <div className="app-header-actions">{right}</div> : null}
+          <div className="app-header-actions">
+            <MuteToggle />
+            {right}
+          </div>
         </div>
       </div>
     </header>
