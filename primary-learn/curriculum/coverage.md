@@ -31,4 +31,6 @@ When expanding the path, the first `missing` node is `eyfs-subitise-5` — See n
 
 Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.
 
-The October 2026 path audit did not add or remove nodes. Reception now compares quantities before composing numbers to 10. Year 1 does shape before counting to 100. Year 2 does money and measures before the 2, 5 and 10 tables. `y1-bonds-10` is still node 13.
+The October 2026 path audit did not add or remove nodes. Reception now compares quantities before composing numbers to 10. Years 1 to 6 interleave a practical topic after the first number block. `y1-bonds-10` is still node 13.
+
+Later, not now: 2 or 3 extra Reception nodes for shape, repeating patterns and measures. Split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` when those nodes are built.

@@ -330,17 +330,44 @@ export const PATH_CATEGORIES: PathCategory[] = [
     ]
   },
   {
+    "id": "cat-y3-measures",
+    "title": "Measures, perimeter and time",
+    "year": "Year 3",
+    "nodes": [
+      {
+        "number": 44,
+        "id": "y3-measures",
+        "title": "Length, mass and capacity"
+      },
+      {
+        "number": 45,
+        "id": "y3-perimeter",
+        "title": "Perimeter"
+      },
+      {
+        "number": 46,
+        "id": "y3-money",
+        "title": "Giving change"
+      },
+      {
+        "number": 47,
+        "id": "y3-time",
+        "title": "Time to the minute"
+      }
+    ]
+  },
+  {
     "id": "cat-y3-tables",
     "title": "The 3, 4 and 8 times tables",
     "year": "Year 3",
     "nodes": [
       {
-        "number": 44,
+        "number": 48,
         "id": "y3-tables-3-4-8",
         "title": "3, 4 and 8 times tables"
       },
       {
-        "number": 45,
+        "number": 49,
         "id": "y3-multiply-2-digit",
         "title": "Multiply a two-digit number"
       }
@@ -352,51 +379,24 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 46,
+        "number": 50,
         "id": "y3-tenths",
         "title": "Tenths"
       },
       {
-        "number": 47,
+        "number": 51,
         "id": "y3-fractions-of-sets",
         "title": "Fractions of a set"
       },
       {
-        "number": 48,
+        "number": 52,
         "id": "y3-equivalent-fractions",
         "title": "Equivalent fractions"
       },
       {
-        "number": 49,
+        "number": 53,
         "id": "y3-add-fractions",
         "title": "Add and subtract fractions"
-      }
-    ]
-  },
-  {
-    "id": "cat-y3-measures",
-    "title": "Measures, perimeter and time",
-    "year": "Year 3",
-    "nodes": [
-      {
-        "number": 50,
-        "id": "y3-measures",
-        "title": "Length, mass and capacity"
-      },
-      {
-        "number": 51,
-        "id": "y3-perimeter",
-        "title": "Perimeter"
-      },
-      {
-        "number": 52,
-        "id": "y3-money",
-        "title": "Giving change"
-      },
-      {
-        "number": 53,
-        "id": "y3-time",
-        "title": "Time to the minute"
       }
     ]
   },
@@ -462,17 +462,44 @@ export const PATH_CATEGORIES: PathCategory[] = [
     ]
   },
   {
+    "id": "cat-y4-measures",
+    "title": "Measures, area and time",
+    "year": "Year 4",
+    "nodes": [
+      {
+        "number": 62,
+        "id": "y4-convert-units",
+        "title": "Convert units"
+      },
+      {
+        "number": 63,
+        "id": "y4-perimeter-area",
+        "title": "Perimeter and area"
+      },
+      {
+        "number": 64,
+        "id": "y4-money-measures",
+        "title": "Money and other measures"
+      },
+      {
+        "number": 65,
+        "id": "y4-time-convert",
+        "title": "Analogue and digital time"
+      }
+    ]
+  },
+  {
     "id": "cat-y4-tables",
     "title": "All times tables",
     "year": "Year 4",
     "nodes": [
       {
-        "number": 62,
+        "number": 66,
         "id": "y4-tables-to-12",
         "title": "Times tables to 12 × 12"
       },
       {
-        "number": 63,
+        "number": 67,
         "id": "y4-mental-multiply",
         "title": "Multiply in your head"
       }
@@ -484,7 +511,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 64,
+        "number": 68,
         "id": "y4-written-multiply",
         "title": "Short multiplication"
       }
@@ -496,51 +523,24 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 65,
+        "number": 69,
         "id": "y4-equivalent-fractions",
         "title": "Families of equivalent fractions"
       },
       {
-        "number": 66,
+        "number": 70,
         "id": "y4-hundredths",
         "title": "Hundredths"
       },
       {
-        "number": 67,
+        "number": 71,
         "id": "y4-fraction-quantities",
         "title": "Fractions of quantities"
       },
       {
-        "number": 68,
+        "number": 72,
         "id": "y4-decimals",
         "title": "Tenths and hundredths as decimals"
-      }
-    ]
-  },
-  {
-    "id": "cat-y4-measures",
-    "title": "Measures, area and time",
-    "year": "Year 4",
-    "nodes": [
-      {
-        "number": 69,
-        "id": "y4-convert-units",
-        "title": "Convert units"
-      },
-      {
-        "number": 70,
-        "id": "y4-perimeter-area",
-        "title": "Perimeter and area"
-      },
-      {
-        "number": 71,
-        "id": "y4-money-measures",
-        "title": "Money and other measures"
-      },
-      {
-        "number": 72,
-        "id": "y4-time-convert",
-        "title": "Analogue and digital time"
       }
     ]
   },
@@ -662,27 +662,54 @@ export const PATH_CATEGORIES: PathCategory[] = [
     ]
   },
   {
+    "id": "cat-y5-measures",
+    "title": "Measures, area and volume",
+    "year": "Year 5",
+    "nodes": [
+      {
+        "number": 88,
+        "id": "y5-convert-units",
+        "title": "Metric and imperial units"
+      },
+      {
+        "number": 89,
+        "id": "y5-perimeter-area",
+        "title": "Perimeter and area of rectangles"
+      },
+      {
+        "number": 90,
+        "id": "y5-volume",
+        "title": "Volume and capacity"
+      },
+      {
+        "number": 91,
+        "id": "y5-time-measure-problems",
+        "title": "Time and measure problems"
+      }
+    ]
+  },
+  {
     "id": "cat-y5-fractions",
     "title": "Fractions",
     "year": "Year 5",
     "nodes": [
       {
-        "number": 88,
+        "number": 92,
         "id": "y5-compare-fractions",
         "title": "Compare and match fractions"
       },
       {
-        "number": 89,
+        "number": 93,
         "id": "y5-mixed-numbers",
         "title": "Mixed numbers"
       },
       {
-        "number": 90,
+        "number": 94,
         "id": "y5-add-fractions",
         "title": "Add and subtract fractions"
       },
       {
-        "number": 91,
+        "number": 95,
         "id": "y5-multiply-fractions",
         "title": "Multiply fractions by whole numbers"
       }
@@ -694,41 +721,14 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 92,
+        "number": 96,
         "id": "y5-decimals",
         "title": "Decimals to three places"
       },
       {
-        "number": 93,
+        "number": 97,
         "id": "y5-percentages",
         "title": "Percentages"
-      }
-    ]
-  },
-  {
-    "id": "cat-y5-measures",
-    "title": "Measures, area and volume",
-    "year": "Year 5",
-    "nodes": [
-      {
-        "number": 94,
-        "id": "y5-convert-units",
-        "title": "Metric and imperial units"
-      },
-      {
-        "number": 95,
-        "id": "y5-perimeter-area",
-        "title": "Perimeter and area of rectangles"
-      },
-      {
-        "number": 96,
-        "id": "y5-volume",
-        "title": "Volume and capacity"
-      },
-      {
-        "number": 97,
-        "id": "y5-time-measure-problems",
-        "title": "Time and measure problems"
       }
     ]
   },
@@ -816,32 +816,54 @@ export const PATH_CATEGORIES: PathCategory[] = [
     ]
   },
   {
+    "id": "cat-y6-measures",
+    "title": "Measures, area and volume",
+    "year": "Year 6",
+    "nodes": [
+      {
+        "number": 109,
+        "id": "y6-convert-units",
+        "title": "Miles, kilometres and units"
+      },
+      {
+        "number": 110,
+        "id": "y6-area",
+        "title": "Area of parallelograms and triangles"
+      },
+      {
+        "number": 111,
+        "id": "y6-volume",
+        "title": "Volume of cubes and cuboids"
+      }
+    ]
+  },
+  {
     "id": "cat-y6-fractions",
     "title": "Fractions, decimals and percentages",
     "year": "Year 6",
     "nodes": [
       {
-        "number": 109,
+        "number": 112,
         "id": "y6-simplify-fractions",
         "title": "Simplify and order fractions"
       },
       {
-        "number": 110,
+        "number": 113,
         "id": "y6-add-fractions",
         "title": "Add and subtract fractions"
       },
       {
-        "number": 111,
+        "number": 114,
         "id": "y6-multiply-divide-fractions",
         "title": "Multiply and divide fractions"
       },
       {
-        "number": 112,
+        "number": 115,
         "id": "y6-decimals",
         "title": "Decimals to three places"
       },
       {
-        "number": 113,
+        "number": 116,
         "id": "y6-fdp-equivalence",
         "title": "Fraction, decimal and percentage equivalents"
       }
@@ -853,12 +875,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 114,
+        "number": 117,
         "id": "y6-ratio",
         "title": "Ratio and scale"
       },
       {
-        "number": 115,
+        "number": 118,
         "id": "y6-percentage-problems",
         "title": "Percentage problems"
       }
@@ -870,31 +892,9 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 116,
+        "number": 119,
         "id": "y6-algebra",
         "title": "Formulae and sequences"
-      }
-    ]
-  },
-  {
-    "id": "cat-y6-measures",
-    "title": "Measures, area and volume",
-    "year": "Year 6",
-    "nodes": [
-      {
-        "number": 117,
-        "id": "y6-convert-units",
-        "title": "Miles, kilometres and units"
-      },
-      {
-        "number": 118,
-        "id": "y6-area",
-        "title": "Area of parallelograms and triangles"
-      },
-      {
-        "number": 119,
-        "id": "y6-volume",
-        "title": "Volume of cubes and cuboids"
       }
     ]
   },
