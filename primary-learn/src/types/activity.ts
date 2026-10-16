@@ -165,8 +165,10 @@ export type Activity = {
   pathNode: string;
   /** 1 easy, 2 medium, 3 hard. */
   difficulty: Difficulty;
-  /** Must equal `questions.length`. Listed so a catalogue edit is obvious. */
+  /** Must equal `questions.length`. Default length is 10. */
   questionCount: number;
+  /** Required to ship more than 10 questions. Say why the extra items are needed. */
+  extraQuestions?: { reason: string };
   difficultyRamp: DifficultyRamp;
   skills: string[];
   randomise?: ActivityRandomise;

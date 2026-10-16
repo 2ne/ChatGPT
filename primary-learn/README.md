@@ -38,7 +38,7 @@ Follow **`AGENTS.md`** and **`QUALITY.md`** strictly. Each activity is built onc
 2. Import it in `src/data/activities/index.ts` and run `validateActivity` (invalid JSON fails the build).
 3. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
 4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, `questionCount`, skills, and `difficultyRamp`
-5. Prefer 10–16 interactive questions that ramp with no spikes. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`. Optional `randomise` (item pools, tight count ranges, shuffled choices) is documented in `AGENTS.md` — never use it to leave the difficulty band.
+5. Default is **10** questions that ramp with no spikes. Longer sets need `extraQuestions.reason`. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`. Optional `randomise` (item pools, tight count ranges, shuffled choices) is documented in `AGENTS.md` — never use it to leave the difficulty band.
 
 A new **question kind** is a new component under `src/components/questions/` plus a schema entry — never UI inside a JSON file. Prefer filling Medium / Hard on shipped nodes before adding a new node.
 

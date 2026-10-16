@@ -95,7 +95,16 @@
     "curriculumRef": { "type": "string" },
     "pathNode": { "type": "string" },
     "difficulty": { "enum": [1, 2, 3] },
-    "questionCount": { "type": "integer", "minimum": 8 },
+    "questionCount": { "type": "integer", "minimum": 10, "maximum": 20 },
+    "extraQuestions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason"],
+      "description": "Set this to ship more than 10 questions. reason must say why.",
+      "properties": {
+        "reason": { "type": "string", "minLength": 12 }
+      }
+    },
     "difficultyRamp": {
       "type": "object",
       "required": ["within", "versus"],
@@ -106,6 +115,6 @@
     },
     "skills": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "type": "string" } },
     "randomise": { "$ref": "#/$defs/activityRandomise" },
-    "questions": { "type": "array", "minItems": 8 }
+    "questions": { "type": "array", "minItems": 10, "maxItems": 20 }
   }
 }

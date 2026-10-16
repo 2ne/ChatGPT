@@ -11,9 +11,9 @@
   "curriculumRef": "eyfs-count-5",
   "pathNode": "eyfs-count-5",
   "difficulty": 1,
-  "questionCount": 14,
+  "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 5 count visible objects from 1 to 5 (one-to-one). Questions 6 to 10 say the count sequence (next, before, missing number, then order). Questions 11 to 14 recognise numerals and match amounts. No return to a trivial 1-object count after sequence work.",
+    "within": "Questions 1 to 5 count visible objects from 1 to 5 (one-to-one). Questions 6 to 8 say the count sequence (next, missing number, then order). Questions 9 to 10 match numerals to amounts and pick a group of 5. No return to a trivial 1-object count after sequence work.",
     "versus": "Easy: objects and numerals to 5, one step, hints on early items. Medium should use mixed arrangements and fewer hints. Hard should hide objects or use two groups to combine, still within 5."
   },
   "skills": [
@@ -131,36 +131,6 @@
       "narration": { "prompt": "What comes next? One, two, three, …" }
     },
     {
-      "kind": "multiple-choice",
-      "id": "c5-mc-after-4",
-      "prompt": "Which number comes after 4?",
-      "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "1" }
-      ],
-      "correctId": "c",
-      "hint": "Count: 1, 2, 3, 4, …",
-      "explanation": "After 4 comes 5. We count 1, 2, 3, 4, 5.",
-      "narration": { "prompt": "Which number comes after 4?" }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c5-mc-before-3",
-      "prompt": "Which number comes just before 3?",
-      "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
-      ],
-      "correctId": "b",
-      "hint": "Count from 1 and stop when you reach 3.",
-      "explanation": "We say 1, 2, 3. So 2 comes just before 3.",
-      "narration": { "prompt": "Which number comes just before 3?" }
-    },
-    {
       "kind": "fill-blank",
       "id": "c5-fb-gap",
       "prompt": "Fill the gap in the count.",
@@ -185,20 +155,6 @@
       "hint": "Which number do we say first when we count?",
       "explanation": "We count 1, then 2, then 3.",
       "narration": { "prompt": "Put the numbers in counting order. Start with the smallest." }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c5-mc-numeral-4",
-      "prompt": "Tap the number 4.",
-      "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "3" }
-      ],
-      "correctId": "b",
-      "explanation": "This is the numeral 4. It means four things.",
-      "narration": { "prompt": "Tap the number 4." }
     },
     {
       "kind": "match-pairs",
@@ -230,22 +186,6 @@
       "hint": "Count the {items} in each group.",
       "explanation": "The group of 5 {items}: 1, 2, 3, 4, 5.",
       "narration": { "prompt": "Which group has 5 {items}?" }
-    },
-    {
-      "kind": "multi-select",
-      "id": "c5-ms-groups-3",
-      "prompt": "Tap every group that has 3 things.",
-      "randomise": {},
-      "options": [
-        { "id": "a", "visual": { "item": "strawberry", "count": 3 } },
-        { "id": "b", "visual": { "item": "strawberry", "count": 2 } },
-        { "id": "c", "visual": { "item": "sparkle", "count": 3 } },
-        { "id": "d", "visual": { "item": "sparkle", "count": 4 } }
-      ],
-      "correctIds": ["a", "c"],
-      "hint": "Count each group. You are looking for 3.",
-      "explanation": "3 {items} and 3 {items2} make 3 each. The other groups have 2 and 4.",
-      "narration": { "prompt": "Tap every group that has 3 things." }
     }
   ]
 }

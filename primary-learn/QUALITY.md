@@ -8,7 +8,7 @@ Gold-standard quest to copy: `src/data/activities/count-to-5.json` (Easy, node `
 
 1. Open `curriculum/maths.md` for the node. Teach those **Covers** bullets only.
 2. Write `difficultyRamp.within` and `difficultyRamp.versus` **first**. If you cannot say how Easy < Medium < Hard, you are not ready to write items.
-3. List the 8–16 question jobs in order (one line each). Check the list for spikes before you draft stems.
+3. List the **10** question jobs in order (one line each). Check the list for spikes before you draft stems. Only go longer with `extraQuestions.reason`.
 4. Then write the data file.
 
 ## Difficulty dimensions (use all of these)
@@ -98,7 +98,7 @@ Every question needs `explanation`. Hints are optional and must follow the scaff
 
 ## Variety
 
-- Use at least **three question kinds** in a quest of 10+ items.
+- Use at least **three question kinds** in a 10-question quest.
 - Do not run the same kind more than three times in a row unless the ramp is deliberately fluency (times tables).
 - Mix pictures and numerals as the ramp says — do not hide all the pictures at the back as a surprise.
 - Names, objects and stories should feel like the same classroom, not a new theme every item.
@@ -163,9 +163,9 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] Every item has a teaching `explanation`; hints match the scaffolding plan
 - [ ] Distractors are named misconceptions, not random
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed
-- [ ] At least three question kinds in a 10+ quest; same kind not overused
+- [ ] At least three question kinds in a 10-question quest; same kind not overused
 - [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
-- [ ] 8–16 questions; `masteryThreshold` 0.8 unless there is a real reason
+- [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set; `masteryThreshold` 0.8 unless there is a real reason
 - [ ] JSON only (no JSX). Registered in `src/data/activities/index.ts` via `validateActivity`
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many

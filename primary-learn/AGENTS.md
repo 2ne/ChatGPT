@@ -137,7 +137,7 @@ Every new activity **must**:
 1. Be that JSON file + registry line. No JSX.
 2. Declare **all** metadata below — no optional gaps for the core fields.
 3. Set `pathNode` + `difficulty` so it appears on the correct map stop and Easy / Medium / Hard row.
-4. Include enough questions for a meaningful practice set (minimum **8**, prefer 10–16).
+4. Write **exactly 10 questions** unless the quest is unusually complex. Then set `extraQuestions: { reason }` and you may go up to 20.
 5. Use only question kinds in `QUESTION_KINDS` (`src/types/activity.ts`).
 6. Target a clear UK year group (and ability band) — not “all ages”.
 7. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
@@ -179,7 +179,8 @@ Until those steps are done, `validateActivity` will reject JSON that uses the ne
 | `curriculumRef` | The node id from `curriculum/maths.md` (for example `eyfs-count-5`). Same id as `pathNode`. |
 | `pathNode` | **Required for the map.** Same node id. `buildLevels` looks this up. |
 | `difficulty` | **Required for the map.** `1` Easy, `2` Medium, `3` Hard. |
-| `questionCount` | Must equal `questions.length`. |
+| `questionCount` | Must equal `questions.length`. Default **10**. |
+| `extraQuestions` | **Optional.** `{ reason }` only. Required to ship more than 10 questions. Say why the extra items are needed (e.g. a full times-table set). Never use it to go under 10. |
 | `difficultyRamp` | **Required.** `{ within, versus }` — how this quest climbs, and how Easy < Medium < Hard on this node. |
 | `skills` | 2–6 concrete skill tags (e.g. `addition-within-10`). |
 | `questions` | Interactive items using allowed `Question` variants. Pictures are `visual: { item, count }`, not emoji. |
@@ -241,7 +242,7 @@ Follow `QUALITY.md` for the full wording templates, distractor rules, variety ru
 - Wrong answers must be plausible misconceptions (off by one, wrong operation, number from the stem) — not random or joke options.
 - Always provide `explanation`. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.
 - Mark exactly what is correct in the typed fields (`correctId`, `correctIds`, `acceptedAnswers`, `correctOrder`).
-- Use at least three question kinds in a quest of 10+. Do not run the same kind more than three times in a row unless it is fluency practice.
+- Use at least three question kinds in a 10-question quest. Do not run the same kind more than three times in a row unless it is fluency practice.
 - Support mastery loops: the runner may re-ask missed questions — stems must still make sense on retry.
 - Avoid timers that punish slower readers unless the activity type is explicitly fluency-focused and labelled as such.
 - Accessibility: do not rely on colour alone; keep tap targets large; include `ariaLabel` / alt text where images or emoji stand in for meaning.

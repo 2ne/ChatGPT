@@ -262,6 +262,15 @@ export function validateActivity(raw: unknown, file: string): Activity {
     fail(file, "difficulty must be 1, 2 or 3");
   }
   const questionCount = expectNumber(raw, "questionCount", file);
+  let extraQuestions: Activity["extraQuestions"];
+  if (raw.extraQuestions != null) {
+    if (!isRecord(raw.extraQuestions)) fail(file, "extraQuestions must be { reason }");
+    const reason = expectString(raw.extraQuestions, "reason", `${file}.extraQuestions`);
+    if (reason.trim().length < 12) {
+      fail(file, "extraQuestions.reason must say why this quest needs more than 10 items");
+    }
+    extraQuestions = { reason };
+  }
   if (!isRecord(raw.difficultyRamp)) fail(file, "difficultyRamp must be { within, versus }");
   const within = expectString(raw.difficultyRamp, "within", `${file}.difficultyRamp`);
   const versus = expectString(raw.difficultyRamp, "versus", `${file}.difficultyRamp`);
@@ -276,7 +285,14 @@ export function validateActivity(raw: unknown, file: string): Activity {
   if (questions.length !== questionCount) {
     fail(file, `questionCount is ${questionCount} but questions.length is ${questions.length}`);
   }
-  if (questions.length < 8) fail(file, "need at least 8 questions");
+  if (extraQuestions) {
+    if (questions.length <= 10) {
+      fail(file, "extraQuestions is only for sets longer than 10");
+    }
+    if (questions.length > 20) fail(file, "even with extraQuestions, 20 questions is the max");
+  } else if (questions.length !== 10) {
+    fail(file, "need exactly 10 questions (or set extraQuestions.reason to go longer)");
+  }
   const ids = questions.map((question) => question.id);
   if (new Set(ids).size !== ids.length) fail(file, "duplicate question ids");
 
@@ -294,6 +310,7 @@ export function validateActivity(raw: unknown, file: string): Activity {
     pathNode,
     difficulty: difficulty as Activity["difficulty"],
     questionCount,
+    extraQuestions,
     difficultyRamp: { within, versus },
     skills: skills as string[],
     randomise,
