@@ -1,0 +1,160 @@
+{
+  "id": "bonds-to-5",
+  "title": "Bonds to 5",
+  "summary": "Know the pairs that make 5, and the take-away facts that go with them.",
+  "subject": "maths",
+  "type": "number-bonds",
+  "yearGroups": ["Reception"],
+  "ability": "emerging",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-bonds-5",
+  "pathNode": "eyfs-bonds-5",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 2 find a partner for 2, then pick a pair that makes 5. Questions 3 to 5 fill 3 +, 4 + and 1 + to make 5. Question 6 matches 0, 1 and 2 to their partners. Question 7 reads 5 = 2 + blank. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways 5 take away 1 and 5 − 2. Hints on the first three. Totals stay 5.",
+    "versus": "Easy uses numerals with one pictured start, early hints, and simple take-aways. Medium adds 0, reverse 5 = blank + n, and more take-aways. Hard mixes plus and take away, uses number words, and has no hints. Same node: recall bonds to 5 and related subtraction. Not composition pictures."
+  },
+  "skills": ["eyfs-bonds-5", "number-bonds-to-5", "subtraction-within-5"],
+  "randomise": {
+    "mode": "attempt",
+    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "b5e-with-2",
+      "prompt": "Which number goes with 2 to make 5?",
+      "visual": { "item": "star", "count": 2 },
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "1" }
+      ],
+      "correctId": "b",
+      "hint": "Count on from 2 until you get to 5.",
+      "explanation": "2 and 3 make 5. 2 + 3 = 5.",
+      "narration": { "prompt": "Which number goes with 2 to make 5?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "b5e-pair",
+      "prompt": "Which pair makes 5?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1 and 3" },
+        { "id": "b", "label": "1 and 4" },
+        { "id": "c", "label": "2 and 2" },
+        { "id": "d", "label": "3 and 3" }
+      ],
+      "correctId": "b",
+      "hint": "Find two numbers that add to 5.",
+      "explanation": "1 and 4 make 5. 1 and 3 make 4. 2 and 2 make 4.",
+      "narration": { "prompt": "Which pair makes 5?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "b5e-3-plus",
+      "prompt": "Complete the number bond.",
+      "prefix": "3 +",
+      "suffix": "= 5",
+      "acceptedAnswers": ["2", "two"],
+      "inputMode": "numeric",
+      "hint": "How many more from 3 to 5?",
+      "explanation": "3 + 2 = 5.",
+      "narration": { "prompt": "Complete the number bond. 3 plus what equals 5?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "b5e-4-plus",
+      "prompt": "Complete the number bond.",
+      "prefix": "4 +",
+      "suffix": "= 5",
+      "acceptedAnswers": ["1", "one"],
+      "inputMode": "numeric",
+      "explanation": "4 + 1 = 5.",
+      "narration": { "prompt": "Complete the number bond. 4 plus what equals 5?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "b5e-1-plus",
+      "prompt": "Complete the number bond.",
+      "prefix": "1 +",
+      "suffix": "= 5",
+      "acceptedAnswers": ["4", "four"],
+      "inputMode": "numeric",
+      "explanation": "1 + 4 = 5.",
+      "narration": { "prompt": "Complete the number bond. 1 plus what equals 5?" }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "b5e-match",
+      "prompt": "Match each number to its partner that makes 5.",
+      "pairs": [
+        { "id": "p2", "left": "2", "right": "3" },
+        { "id": "p1", "left": "1", "right": "4" },
+        { "id": "p0", "left": "0", "right": "5" }
+      ],
+      "explanation": "2 + 3 = 5. 1 + 4 = 5. 0 + 5 = 5.",
+      "narration": { "prompt": "Match each number to its partner that makes 5." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "b5e-5-eq",
+      "prompt": "5 = 2 + ?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "1" }
+      ],
+      "correctId": "b",
+      "explanation": "5 = 2 + 3.",
+      "narration": { "prompt": "5 equals 2 plus what?" }
+    },
+    {
+      "kind": "multi-select",
+      "id": "b5e-every",
+      "prompt": "Tap every pair that makes 5.",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2 + 3" },
+        { "id": "b", "label": "4 + 2" },
+        { "id": "c", "label": "1 + 4" },
+        { "id": "d", "label": "3 + 3" }
+      ],
+      "correctIds": ["a", "c"],
+      "explanation": "2 + 3 = 5 and 1 + 4 = 5. 4 + 2 = 6. 3 + 3 = 6.",
+      "narration": { "prompt": "Tap every pair that makes 5." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "b5e-take-1",
+      "prompt": "5 take away 1. How many left?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "b",
+      "explanation": "Because 1 + 4 = 5, 5 take away 1 is 4.",
+      "narration": { "prompt": "5 take away 1. How many left?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "b5e-minus-2",
+      "prompt": "What is the missing number?",
+      "prefix": "5 − 2 =",
+      "acceptedAnswers": ["3", "three"],
+      "inputMode": "numeric",
+      "explanation": "Because 2 + 3 = 5, 5 − 2 = 3.",
+      "narration": { "prompt": "What is the missing number? 5 take away 2 equals what?" }
+    }
+  ]
+}

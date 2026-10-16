@@ -1,5 +1,8 @@
 import { validateActivity } from "../../lib/validateActivity";
 import type { Activity } from "../../types/activity";
+import bondsTo5 from "./bonds-to-5.json" with { type: "json" };
+import bondsTo5Hard from "./bonds-to-5-hard.json" with { type: "json" };
+import bondsTo5Medium from "./bonds-to-5-medium.json" with { type: "json" };
 import countTo5 from "./count-to-5.json" with { type: "json" };
 import countTo5Hard from "./count-to-5-hard.json" with { type: "json" };
 import countTo5Medium from "./count-to-5-medium.json" with { type: "json" };
@@ -25,6 +28,9 @@ const files = [
   { name: "make-numbers-to-5.json", data: makeNumbersTo5 },
   { name: "make-numbers-to-5-medium.json", data: makeNumbersTo5Medium },
   { name: "make-numbers-to-5-hard.json", data: makeNumbersTo5Hard },
+  { name: "bonds-to-5.json", data: bondsTo5 },
+  { name: "bonds-to-5-medium.json", data: bondsTo5Medium },
+  { name: "bonds-to-5-hard.json", data: bondsTo5Hard },
   { name: "number-bonds-to-10.json", data: numberBondsTo10 },
 ] as const;
 

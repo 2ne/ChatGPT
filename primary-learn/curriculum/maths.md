@@ -23,7 +23,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - **When those nodes are built:** split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` into smaller stops. Leave them whole until then.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 3 (`eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5`) have Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is `eyfs-bonds-5`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 4 (`eyfs-count-5` to `eyfs-bonds-5`) have Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is `eyfs-count-10`.
 
 ## Category index
 
@@ -105,7 +105,7 @@ Requires: `eyfs-subitise-5`. Quests: `make-numbers-to-5` (Easy), `make-numbers-t
 
 ### 4. `eyfs-bonds-5` — Bonds to 5
 
-Requires: `eyfs-compose-5`. Quest: none. Status: missing.
+Requires: `eyfs-compose-5`. Quests: `bonds-to-5` (Easy), `bonds-to-5-medium`, `bonds-to-5-hard`. Status: done.
 
 - Automatically recall number bonds to 5
 - Recall the related subtraction facts within 5
