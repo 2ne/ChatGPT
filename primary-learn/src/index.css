@@ -2154,8 +2154,11 @@ button.learner-chip:focus-visible {
 }
 
 @media (min-width: 640px) {
+  :root {
+    --page-gutter: var(--space-4);
+  }
   .page {
-    padding: var(--space-5) var(--space-4) var(--space-7);
+    padding: var(--space-5) var(--page-gutter) var(--space-7);
   }
 }
 
