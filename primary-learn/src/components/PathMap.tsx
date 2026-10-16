@@ -300,7 +300,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                     <span className={`map-stars is-${wonStars}`} aria-hidden>
                       {Array.from({ length: wonStars }, (_, slot) => (
                         <span key={slot} className="map-star">
-                          <Star size={15} fill="currentColor" />
+                          <Star size={18} fill="currentColor" />
                         </span>
                       ))}
                     </span>
