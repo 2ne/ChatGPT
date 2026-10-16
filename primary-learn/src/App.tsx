@@ -9,7 +9,6 @@ import { Home } from "./components/Home";
 import { Onboarding } from "./components/Onboarding";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { useLearner } from "./hooks/useLearner";
-import { isActivityPlayable } from "./lib/path";
 import type { ActivityAttempt, LearnerProfile, ProgressState } from "./types/progress";
 
 export default function App() {
@@ -54,7 +53,6 @@ export default function App() {
             <RequireProfile profile={learner.profile}>
               <ActivityRoute
                 profile={learner.profile!}
-                progress={learner.progress}
                 onComplete={learner.recordAttempt}
               />
             </RequireProfile>
@@ -112,8 +110,7 @@ function PathwayRoute({
   const location = useLocation();
   const avatar = getAvatar(profile.avatarId);
   const notice = (location.state as { notice?: string } | null)?.notice;
-  const noticeText =
-    notice === "locked" ? copy.activityLocked : notice === "missing" ? copy.activityMissing : null;
+  const noticeText = notice === "missing" ? copy.activityMissing : null;
 
   return (
     <>
@@ -142,11 +139,9 @@ function PathwayRoute({
 
 function ActivityRoute({
   profile,
-  progress,
   onComplete,
 }: {
   profile: LearnerProfile;
-  progress: ProgressState;
   onComplete: (attempt: ActivityAttempt) => void;
 }) {
   const { id } = useParams<{ id: string }>();
@@ -155,9 +150,6 @@ function ActivityRoute({
 
   if (!activity) {
     return <Navigate to="/pathway" replace state={{ notice: "missing" }} />;
-  }
-  if (!isActivityPlayable(activity.id, progress)) {
-    return <Navigate to="/pathway" replace state={{ notice: "locked" }} />;
   }
 
   return (

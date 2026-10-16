@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { Lock, Star, Trophy } from "lucide-react";
+import { Star, Trophy } from "lucide-react";
 import type { LevelState } from "../lib/path";
 import { DoodleShape, DoodleStar } from "./mascot/Doodles";
 import { LevelSheet } from "./LevelSheet";
@@ -34,7 +34,7 @@ const YEAR_COLOURS: Record<string, { ink: string; soft: string }> = {
 };
 
 function wonStarsOnMap(level: LevelState): number {
-  if (level.cup || level.status === "soon" || level.status === "locked") return 0;
+  if (level.cup || level.status === "soon") return 0;
   return Math.max(0, ...level.difficulties.map((entry) => entry.bestStars));
 }
 
@@ -238,8 +238,6 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
     });
   }
 
-  const currentLevel = levels[currentIndex];
-
   return (
     <section className="map-section" aria-label="Your maths map">
       <div className="map-frame" ref={frameRef}>
@@ -311,7 +309,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
 
             {levels.map((level, index) => {
               const point = layout.points[index];
-              const isCurrent = index === currentIndex && level.status === "current";
+              const isCurrent = index === currentIndex;
               const wonStars = wonStarsOnMap(level);
               const label = [
                 `Level ${level.node.number}`,
@@ -319,8 +317,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                 level.status === "soon" ? "coming soon" : null,
                 level.cup ? "gold cup" : null,
                 wonStars > 0 ? `${wonStars} ${wonStars === 1 ? "star" : "stars"}` : null,
-                level.status === "locked" ? "locked" : null,
-                isCurrent ? "play next" : null,
+                isCurrent ? "you are here" : null,
               ]
                 .filter(Boolean)
                 .join(", ");
@@ -342,9 +339,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                     aria-label={label}
                     onClick={() => setOpenLevel(level)}
                   >
-                    {level.status === "locked" ? (
-                      <Lock size={20} aria-hidden />
-                    ) : level.cup ? (
+                    {level.cup ? (
                       <Trophy size={22} aria-hidden />
                     ) : (
                       <span className="map-node-num">{level.node.number}</span>
@@ -376,7 +371,6 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
       <LevelSheet
         level={openLevel}
         learnerName={learnerName}
-        currentLevel={currentLevel}
         onClose={() => setOpenLevel(null)}
         onPlay={(activityId) => {
           setOpenLevel(null);

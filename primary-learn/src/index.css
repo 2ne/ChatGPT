@@ -2351,10 +2351,10 @@ button.learner-chip:focus-visible {
   pointer-events: none;
 }
 
-.map-stop.is-locked .map-node {
-  background: linear-gradient(160deg, #e9e3d4, #d6cdb8);
-  color: #8a8296;
-  box-shadow: 0 5px 0 #bfb39a;
+.map-stop.is-open .map-node {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 5px 0 var(--line-strong), 0 8px 14px rgba(35, 41, 70, 0.12);
 }
 
 .map-stop.is-soon .map-node {
@@ -2709,17 +2709,6 @@ button.learner-chip:focus-visible {
 
 .sheet-note p {
   margin: 0;
-}
-
-.sheet-lock {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #e9e3d4;
-  color: #8a8296;
 }
 
 .sheet-rows {

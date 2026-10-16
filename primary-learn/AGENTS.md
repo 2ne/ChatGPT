@@ -10,7 +10,7 @@ When asked to add or change a learning activity, follow this document and `QUALI
 
 **Writing:** Follow **Writing for children** below for every child-facing string.
 
-**Curriculum:** This product is a **primary maths pathway**. The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one locked path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the start. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
+**Curriculum:** This product is a **primary maths pathway**. The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the suggested start. Everything is open. The path suggests an order but never blocks. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
 
 ## Rapid prototype
 
@@ -30,9 +30,9 @@ Client-side `HashRouter` (not `BrowserRouter`). Hash routes work on GitHub Pages
 | --- | --- |
 | `/onboarding` | Name and buddy. No profile required. |
 | `/pathway` | Path map. Needs a profile. |
-| `/activity/:id` | Quest runner. Needs a profile and a playable quest. |
+| `/activity/:id` | Quest runner. Needs a profile. |
 
-`/` and unknown paths send you to `/pathway` if there is a profile, else `/onboarding`. No profile on a protected route sends you to `/onboarding`. A missing or locked activity sends you to `/pathway` with a short notice.
+`/` and unknown paths send you to `/pathway` if there is a profile, else `/onboarding`. No profile on a protected route sends you to `/onboarding`. A missing activity sends you to `/pathway` with a short notice.
 
 Do not add generated audio files.
 
@@ -68,13 +68,14 @@ Also register the activity in `src/data/activities/index.ts`. Then:
 - Opening it shows Easy / Medium / Hard rows in `LevelSheet`.
 - Your quest sits on the row that matches `difficulty`.
 
-### Locks (actual `buildLevels` behaviour)
+### Open path (actual `buildLevels` behaviour)
 
-- A node with **no Easy quest** is `soon` (coming soon).
-- The first node whose Easy exists but is not **passed** is `current`.
-- Later nodes with an Easy quest stay `locked` until the **previous node's Easy** is passed.
-- On an open node (`current` or `done`): Easy is playable; Medium needs Easy passed; Hard needs Medium passed.
-- Node status `done` means Easy is passed. Medium and Hard can still be unplayed. Map stars = how many of the three difficulties are passed.
+Everything is open. The path suggests an order but never blocks. A Year 4 child can jump straight in.
+
+- A node with **no Easy quest** is `soon` (coming soon). The stop is still tappable. Rows without a quest say coming soon.
+- The first node whose Easy exists but is not yet passed is `current` (You are here).
+- Later nodes with a quest are `open` and playable at once. Easy, Medium and Hard on a node are all playable. Stars show progress. They do not gate anything.
+- Node status `done` means Easy has at least one star. Medium and Hard can still be unplayed. Map stars show the best of Easy / Medium / Hard (up to three). They do not gate anything.
 
 Shipped examples: `count-to-5` / `count-to-5-medium` / `count-to-5-hard` are `pathNode: "eyfs-count-5"` at difficulty 1, 2 and 3. `number-bonds-to-10` is `pathNode: "y1-bonds-10"`, `difficulty: 1` (Easy only).
 
@@ -214,7 +215,7 @@ Until those steps are done, `validateActivity` will reject JSON that uses the ne
 - Map ages roughly: Reception ~4–5, Year 1 ~5–6, … Year 6 ~10–11.
 - Prefer a **single** year group. Use two adjacent years only when the same skill is taught across both (document why in `summary`).
 - `ability` is metadata. `difficulty` is the playable level on the map. Kids see Easy / Medium / Hard, not ability bands.
-- Easy must exist before Medium or Hard can be played on that node. Write Easy first for a new node.
+- Write Easy first for a new node so the stop has a first quest. Medium and Hard are playable in any order.
 
 ## Difficulty progression (required)
 
@@ -410,8 +411,8 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 - Profile + progress keys live in `src/storage/localStore.ts`. Mute is `primary-path:sound-muted:v1`. Do not change key names casually (breaks existing browser data). Do not replace localStorage with another store.
 - A quest is **exactly 10 questions** (unless `extraQuestions`). Score = how many were right. No retry of misses.
 - After a wrong answer, show a short correction (`It was 4.` plus the `explanation`) and move on.
-- Stars and unlock live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.
-- **1 or more stars passes** and unlocks the next Easy / Medium / Hard / node. 0 stars: try again, next stays locked.
+- Stars live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.
+- Stars show progress. They do not gate the path. Everything is open. The path suggests an order but never blocks.
 - Store **best stars** and **best score** per Easy / Medium / Hard in localStorage (`bestStars`, `bestCorrectCount`, `bestTotalCount`).
 - Each node can earn **9 stars** (3 per difficulty). Untouched map stops are just a number. Won stars (best of Easy / Medium / Hard, max 3) hug the node like Candy Crush. No empty stars, pips or fractions on the map. All 9 stars: gold cup replaces the number. Star rows live in the level sheet.
 - Do not show percentages to children. Do not say "mastery".
@@ -419,10 +420,10 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 
 ## UI expectations when adding activities
 
-- Home **is** the path map. Categories, titles, order and locks come from `curriculum/maths.md` via `src/data/path.generated.ts` and `buildLevels`.
-- A learner starts at node 1. Later nodes stay locked until the previous node's Easy has at least one star.
+- Home **is** the path map. Categories, titles and order come from `curriculum/maths.md` via `src/data/path.generated.ts` and `buildLevels`.
+- A learner is suggested node 1 (You are here). Every node and every Easy / Medium / Hard quest that exists is open.
 - Do not add subject filters or a second set of category names.
-- Empty, loading, error and success states must remain useful (especially empty progress, locked nodes, and “coming soon” Medium / Hard).
+- Empty, loading, error and success states must remain useful (especially empty progress and “coming soon” Medium / Hard).
 - Keep motion subtle and purposeful; do not add noisy celebration that blocks the next question.
 - Match the existing visual language in `src/index.css` (brand tokens, fonts). Do not introduce a second theme. No Three.js / WebGL.
 
@@ -430,7 +431,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 
 1. `QUALITY.md` self-review checklist is all ticks.
 2. `npm run build` succeeds in `primary-learn/` (no lint, no tests).
-3. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable when that row should be unlocked.
+3. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable at once.
 4. The speaker reads the question only (no options, counts, or answers). A miss shows teaching feedback on screen.
 5. Completing it updates local progress (best score / stars / cup) and survives a refresh.
 6. README / `curriculum/coverage.md` / the node status in `maths.md` updated if the catalogue meaningfully changes.

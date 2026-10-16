@@ -2,7 +2,7 @@
 
 Rapid prototype of an interactive UK **primary maths** pathway for children. English or other subjects might come later as separate work.
 
-Learners pick a name and avatar, follow a locked path of levels, and play **Easy / Medium / Hard** on each node. Mastering all three means the child can do that skill. Marks live in **localStorage** on this device (no accounts). Browser-only storage is intentional while prototyping — reset is easy.
+Learners pick a name and avatar, follow a path of levels, and play **Easy / Medium / Hard** on each node. Everything is open. The path suggests an order but never blocks. Mastering all three means the child can do that skill. Marks live in **localStorage** on this device (no accounts). Browser-only storage is intentional while prototyping — reset is easy.
 
 ## Live prototype
 
@@ -10,7 +10,7 @@ https://2ne.github.io/ChatGPT/primary-learn/
 
 ## Status
 
-Foundation release: profile onboarding, a locked path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, Count to 5 Easy / Medium / Hard on node 1, and Easy number bonds to 10 on node 13.
+Foundation release: profile onboarding, an open path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, Count to 5 Easy / Medium / Hard on node 1, and Easy number bonds to 10 on node 13.
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
@@ -24,7 +24,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 - Asks for a child’s name and woodland avatar on first visit
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
-- Each level opens a sheet with Easy / Medium / Hard. 6 out of 10 earns a star and unlocks the next row or node
+- Each level opens a sheet with Easy / Medium / Hard. 6 out of 10 earns a star. Stars show progress. They do not gate the path.
 - Runs interactive question kinds (tap-to-count, build a set, multiple choice, multi-select, fill blank, ordered, match pairs)
 - A **speaker** after the question reads the question only (Web Speech API, UK female teacher voice) and highlights words as they are spoken
 - Ten questions, then a star result. A miss shows a short correction and moves on. No retry loop
@@ -81,7 +81,7 @@ npm run preview
 
 - **Rapid prototype** — push to `main`, no PRs, no tests, no lint required; build is the check
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`. localStorage only, on purpose
-- **Primary maths** — the map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order. English or other subjects would be separate work, not this app
+- **Primary maths** — the map is `curriculum/maths.md`: 45 categories and 124 nodes in one suggested order. Everything is open. English or other subjects would be separate work, not this app
 - **Three levels** — every node has Easy / Medium / Hard. The map uses `pathNode` + `difficulty`. Mastering all three means the child can do it
 - **Right first time** — `QUALITY.md` is required. Activities are not rewritten after they ship
 - **Speaker** — Web Speech API only (no generated audio); UK female teacher voice; `narration.prompt` is the question only and must never reveal the answer
@@ -92,7 +92,7 @@ npm run preview
 - **Shared runner** — new content is data; after a miss the runner shows a short correction and moves on. Stars come from the 10-question score
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
-- **Routes** — `/onboarding`, `/pathway`, `/activity/:id` via `HashRouter` (e.g. `https://2ne.github.io/ChatGPT/primary-learn/#/activity/count-to-5`). Hash routing is the Pages strategy: this repo hosts several apps, so a nested `404.html` would not catch `/primary-learn/pathway`. No profile goes to onboarding. Locked or unknown quests go back to the path with a short notice. Path changes scroll to the top.
+- **Routes** — `/onboarding`, `/pathway`, `/activity/:id` via `HashRouter` (e.g. `https://2ne.github.io/ChatGPT/primary-learn/#/activity/count-to-5`). Hash routing is the Pages strategy: this repo hosts several apps, so a nested `404.html` would not catch `/primary-learn/pathway`. No profile goes to onboarding. Unknown quests go back to the path with a short notice. Path changes scroll to the top.
 
 ## Limitations
 

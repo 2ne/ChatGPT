@@ -27,7 +27,7 @@ export function attemptStars(correctCount: number, totalCount: number): StarCoun
   return 0;
 }
 
-/** One or more stars unlocks the next level. */
+/** One or more stars counts as a pass for this quest. Stars do not gate the path. */
 export function passedScore(correctCount: number, totalCount: number): boolean {
   return attemptStars(correctCount, totalCount) >= 1;
 }

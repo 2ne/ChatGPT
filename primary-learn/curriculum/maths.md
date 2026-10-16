@@ -14,8 +14,8 @@ This file is the **primary maths** path only. English or other subjects might co
 - **Nodes** are the levels inside a category, also in order. The home path map (`PathMap`) shows one stop per node.
 - **Each node has three quests:** Easy (`difficulty: 1`), Medium (`2`), Hard (`3`). Each can earn up to three stars (nine in total). All nine awards a gold cup.
 - Place a quest with `pathNode` = this node’s id and `difficulty` = `1` | `2` | `3`. Also set `curriculumRef` to the same id (audit only; the map does not read it).
-- A new learner starts at node 1 only. Every later node stays locked until the **previous node’s Easy** is mastered. On an open node, Medium needs Easy mastered and Hard needs Medium mastered.
-- Finishing Easy on the last node of a category is what opens the next category. There is no second route.
+- Everything is open. The path suggests an order but never blocks. A Year 4 child can jump straight in. You are here sits on the next suggested stop. Stars show progress. They do not gate anything.
+- Easy, Medium and Hard on a node are all playable in any order.
 - **Ids are permanent.** Category ids (`cat-…`) and node ids (`eyfs-…`, `y1-…`) are the names the app and quests must use. Do not rename them. Do not reuse a retired id.
 - Child-facing titles in this file are the titles to show. Do not invent a parallel set of names.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).

@@ -14,17 +14,18 @@ export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
 };
 
 /**
- * done: easy has at least one star. current: the one level to play next.
- * locked: has a quest, but an earlier level is not done.
- * soon: no easy quest written for this level yet.
+ * done: Easy has at least one star.
+ * current: the next suggested stop (You are here). Never a gate.
+ * open: has a quest, playable, not the suggested stop.
+ * soon: no Easy quest written yet.
  */
-export type LevelStatus = "done" | "current" | "locked" | "soon";
+export type LevelStatus = "done" | "current" | "open" | "soon";
 
 export type DifficultyState = {
   difficulty: Difficulty;
   activity?: Activity;
   done: boolean;
-  /** Can be started now. Medium needs easy done; hard needs medium done. */
+  /** True when this row has a quest. Nothing is gated. */
   playable: boolean;
   bestCorrectCount: number;
   bestTotalCount: number;
@@ -56,7 +57,7 @@ export function questFor(nodeId: string, difficulty: Difficulty): Activity | und
 
 export function buildLevels(progress: ProgressState): LevelState[] {
   const levels: LevelState[] = [];
-  let blocked = false;
+  let suggested = false;
 
   PATH_CATEGORIES.forEach((category, categoryIndex) => {
     for (const node of category.nodes) {
@@ -68,6 +69,7 @@ export function buildLevels(progress: ProgressState): LevelState[] {
           difficulty,
           activity,
           done: bestStars >= 1,
+          playable: Boolean(activity),
           bestCorrectCount: mark?.bestCorrectCount ?? 0,
           bestTotalCount: mark?.bestTotalCount ?? 0,
           bestStars,
@@ -80,21 +82,15 @@ export function buildLevels(progress: ProgressState): LevelState[] {
         status = "soon";
       } else if (easy.done) {
         status = "done";
-      } else if (!blocked) {
+      } else if (!suggested) {
         status = "current";
-        blocked = true;
+        suggested = true;
       } else {
-        status = "locked";
+        status = "open";
       }
 
-      const open = status === "done" || status === "current";
-      const difficulties = raw.map((entry, i) => ({
-        ...entry,
-        playable: open && Boolean(entry.activity) && (i === 0 || raw[i - 1].done),
-      }));
-
-      const stars = difficulties.reduce((sum, entry) => sum + entry.bestStars, 0);
-      const cleared = difficulties.filter((entry) => entry.bestStars >= STARS_PER_DIFFICULTY).length;
+      const stars = raw.reduce((sum, entry) => sum + entry.bestStars, 0);
+      const cleared = raw.filter((entry) => entry.bestStars >= STARS_PER_DIFFICULTY).length;
 
       levels.push({
         node,
@@ -104,16 +100,15 @@ export function buildLevels(progress: ProgressState): LevelState[] {
         stars,
         cleared,
         cup: cleared >= LEVELS_PER_NODE,
-        difficulties,
+        difficulties: raw,
       });
     }
   });
 
-  return levels;
-}
+  if (!suggested) {
+    const nextSoon = levels.find((level) => level.status === "soon");
+    if (nextSoon) nextSoon.status = "current";
+  }
 
-export function isActivityPlayable(activityId: string, progress: ProgressState): boolean {
-  return buildLevels(progress).some((level) =>
-    level.difficulties.some((entry) => entry.activity?.id === activityId && entry.playable),
-  );
+  return levels;
 }

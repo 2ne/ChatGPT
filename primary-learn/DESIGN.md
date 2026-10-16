@@ -139,16 +139,16 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
    stat pills (stars on shipped quests, gold cups). No mascot on this banner.
 2. **Path map** (`PathMap`) — a winding road of numbered stops, grouped by
    category signs from `curriculum/maths.md`. No subject chips, year chips, or
-   a free-choice quest list. Locked stops show a lock; the current stop carries
-   the learner’s buddy face. Untouched stops are just a number. Won
+   a free-choice quest list. Every stop is open. The next suggested stop
+   carries the learner’s buddy face (You are here). Untouched stops are just
+   a number. Won
    stars sit in a small indigo cluster hugging the bottom of the node
    (best of Easy / Medium / Hard, up to three, no empty stars). Star
    rows live in the level sheet. When all three levels have three
    stars, the node turns gold and a cup replaces the number.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
-   rows, each with three stars and the best mark (`7/10`). Play only when that
-   row is unlocked. Coming-soon nodes (no Easy quest yet) and locked nodes get
-   a calm Pip / lock note instead of play buttons.
+   rows, each with three stars and the best mark (`7/10`). Every row with a
+   quest is playable. Rows with no quest yet say coming soon.
 4. **Topic pill** — a floating pill at the bottom of the path shows the
    section on screen (`Reception · Numbers to 5`), updated live with
    IntersectionObserver. Tap it (menu icon) to open a sheet of every
@@ -254,7 +254,7 @@ Joyful result, like a lesson-complete or star-reveal screen. CSS/SVG only.
 5. Buttons: `Try again` and `Next` (Next goes back to the path).
 
 No percentages. Off under `prefers-reduced-motion` (final stars, no pop,
-no confetti). 0 stars does not unlock the next level.
+no confetti). Stars show progress. They do not gate the path.
 
 ### Onboarding
 

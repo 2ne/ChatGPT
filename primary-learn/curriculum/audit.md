@@ -2,7 +2,7 @@
 
 Use this before writing a quest, and again after it ships. The path in [maths.md](./maths.md) is the source of names. Do not invent a second list of categories or quest titles.
 
-The home screen **is** the path map (`PathMap` + `LevelSheet`, driven by `buildLevels` in `src/lib/path.ts`). Categories, order and locks come from `maths.md` via `src/data/path.generated.ts`.
+The home screen **is** the path map (`PathMap` + `LevelSheet`, driven by `buildLevels` in `src/lib/path.ts`). Categories and order come from `maths.md` via `src/data/path.generated.ts`. Everything is open. The path suggests an order but never blocks.
 
 ## Vision for this file
 
@@ -27,7 +27,7 @@ A node is:
 | `partial` | At least one quest exists, but at least one bullet under that node is still untaught |
 | `done` | A quest teaches every bullet under that node, and mastery is recorded |
 
-Node status in this file is about **curriculum coverage**, not map stars. The map treats a node as playable-complete (`done` in `buildLevels`) once **Easy** is mastered; Medium and Hard still earn the second and third stars.
+Node status in this file is about **curriculum coverage**, not map stars. The map marks a node `done` once Easy has at least one star. Medium and Hard still earn the rest of the stars. Nothing is gated.
 
 Run `node curriculum/check-path.mjs` from the `primary-learn` folder. It checks that there are 124 nodes and 45 categories, that the numbers run 1 to 124, and that each node requires the one before it.
 
@@ -41,12 +41,11 @@ Run `node curriculum/check-path.mjs` from the `primary-learn` folder. It checks 
 
 If those two map fields are missing, the quest will not appear even if it is registered.
 
-Locks in the product:
+Open path in the product:
 
-- Only node 1 starts unlocked, and only if it has an Easy quest.
-- Unlock node *n* when node *n − 1* Easy has at least one star (6/10 by default, `STAR_SCORE` in `src/lib/mastery.ts`).
-- On an open node, Medium needs Easy mastered; Hard needs Medium mastered.
-- A node with no Easy quest shows as coming soon.
+- Every node and every Easy / Medium / Hard quest that exists is playable.
+- You are here sits on the next suggested stop (first Easy that is not yet passed).
+- A node with no Easy quest shows as coming soon on that row. The stop is still tappable.
 
 ## Checks before creating quests
 
@@ -63,7 +62,7 @@ Locks in the product:
 2. Put the activity id on that node’s **Quest** line.
 3. Update the scoreboard in [coverage.md](./coverage.md).
 4. Confirm `pathNode` and `curriculumRef` equal the node id, and `difficulty` is `1`, `2`, or `3`.
-5. Confirm the quest appears on the path map in the right Easy / Medium / Hard row, and that later nodes stay locked until the previous Easy is mastered.
+5. Confirm the quest appears on the path map in the right Easy / Medium / Hard row, and that it is playable at once.
 
 ## Domain checklist
 
@@ -125,6 +124,6 @@ Year 1 has no statistics programme, and position and direction returns in Year 4
 
 ## What the path screen already does
 
-Home shows categories in index order, using the category id and title from `maths.md`. Inside a category, nodes appear in number order. Only node 1 (`eyfs-count-5`) starts unlocked. Node *n* unlocks when node *n − 1* Easy is mastered. There is no jump to a later category.
+Home shows categories in index order, using the category id and title from `maths.md`. Inside a category, nodes appear in number order. Everything is open. You are here starts on node 1. A Year 4 child can jump to a later category at once.
 
-`number-bonds-to-10` is node 13. It stays locked on the map until the Easy quests before it are mastered. That is expected.
+`number-bonds-to-10` is node 13. It is playable even if earlier Easy quests are still unplayed.
