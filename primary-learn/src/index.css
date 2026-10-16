@@ -2186,32 +2186,52 @@ p {
   font-size: 1.1rem;
 }
 
-.map-pips {
+.map-stars {
   position: absolute;
-  top: calc(100% + 6px);
-  left: 50%;
-  display: flex;
-  gap: 5px;
-  transform: translateX(-50%);
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
+  color: var(--gold);
 }
 
-.map-pip {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 2px var(--line-strong);
+.map-star {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  place-items: center;
+  filter: drop-shadow(0 1px 0 #c47e00);
 }
 
-.map-pip.is-soft {
-  background: linear-gradient(90deg, var(--gold) 50%, #ffffff 50%);
-  box-shadow: inset 0 0 0 2px #e0a800;
+.map-star svg {
+  display: block;
 }
 
-.map-pip.is-gold {
-  background: var(--gold);
-  box-shadow: inset 0 0 0 2px #d98a00;
+.map-stars.is-1 .map-star:nth-child(1) {
+  transform: translateY(calc(var(--node) * 0.48));
+}
+
+.map-stars.is-2 .map-star:nth-child(1) {
+  transform: rotate(-30deg) translateY(calc(var(--node) * 0.46)) rotate(30deg);
+}
+
+.map-stars.is-2 .map-star:nth-child(2) {
+  transform: rotate(30deg) translateY(calc(var(--node) * 0.46)) rotate(-30deg);
+}
+
+.map-stars.is-3 .map-star:nth-child(1) {
+  transform: rotate(-40deg) translateY(calc(var(--node) * 0.45)) rotate(40deg);
+}
+
+.map-stars.is-3 .map-star:nth-child(2) {
+  transform: translateY(calc(var(--node) * 0.5)) scale(1.18);
+}
+
+.map-stars.is-3 .map-star:nth-child(3) {
+  transform: rotate(40deg) translateY(calc(var(--node) * 0.45)) rotate(-40deg);
 }
 
 .map-you {
