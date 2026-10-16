@@ -47,7 +47,6 @@ export const copy = {
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",
   setupTitle: "Set up your Primary Maths account",
-  setupSub: "Pick a name and a woodland buddy. Your stars stay on this device.",
   pipHello: "Hi, I'm Pip! Let's learn together.",
   firstName: "First name",
   chooseBuddy: "Choose your buddy",

@@ -216,7 +216,7 @@ No app header. Full-page setup on the dotted paper:
 
 1. **Hero** — **large Pip** (follows the pointer; idle bob + blink) → speech
    bubble (`Hi, I'm Pip! Let's learn together.`) → display title
-   **`Set up your Primary Maths account`** → one short body line. No top badge.
+   **`Set up your Primary Maths account`**. No top badge. No subtitle.
 2. **Card** — big Baloo name field → `Choose your buddy` avatar grid (3 cols,
    soft tinted faces, selected = indigo ring + scale) → gradient `Let's go →`
    → `Stays on this device` reassurance.

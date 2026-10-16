@@ -44,7 +44,6 @@ export function Onboarding({ onComplete }: OnboardingProps) {
         </div>
         <p className="sidekick-bubble onboard-hello">{copy.pipHello}</p>
         <h1 className="t-display onboard-title">{copy.setupTitle}</h1>
-        <p className="t-body onboard-lead">{copy.setupSub}</p>
       </section>
 
       <section className="card onboard-panel">
