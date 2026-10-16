@@ -1,6 +1,6 @@
 # Primary Maths
 
-Rapid prototype of an interactive UK primary learning pathway for children. The long-term vision is **every UK curriculum subject**, start to finish. **Maths is the current phase** — it is where we started, not a permanent limit.
+Rapid prototype of an interactive UK **primary maths** pathway for children. English or other subjects might come later as separate work.
 
 Learners pick a name and avatar, follow a locked path of levels, and play **Easy / Medium / Hard** on each node. Mastering all three means the child can do that skill. Marks live in **localStorage** on this device (no accounts). Browser-only storage is intentional while prototyping — reset is easy.
 
@@ -12,7 +12,7 @@ https://2ne.github.io/ChatGPT/primary-learn/
 
 Foundation release: profile onboarding, a locked path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, and two Easy quests (`count-to-5` on node 1, `number-bonds-to-10` on node 13). Medium and Hard are not written yet.
 
-**Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes or subjects.
+**Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
 Agent instructions in `AGENTS.md` plus the quality guide in `QUALITY.md` define how to add quests so they appear on the map and are right first time.
 
@@ -50,7 +50,7 @@ Visual system is documented in **`DESIGN.md`** (Baloo 2 + Nunito, indigo actions
 
 UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 
-- `curriculum/overview.md` — stages, ages, and product vision
+- `curriculum/overview.md` — stages and ages
 - `curriculum/maths.md` — the path: 45 categories and 124 nodes, in order
 - `curriculum/audit.md` — how to check that path before adding a quest
 - `curriculum/coverage.md` — how many nodes are still missing
@@ -81,7 +81,7 @@ npm run preview
 
 - **Rapid prototype** — push to `main`, no PRs, no tests, no lint required; build is the check
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`. localStorage only, on purpose
-- **Maths first** — the current map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order. Other subjects are a later phase
+- **Primary maths** — the map is `curriculum/maths.md`: 45 categories and 124 nodes in one locked order. English or other subjects would be separate work, not this app
 - **Three levels** — every node has Easy / Medium / Hard. The map uses `pathNode` + `difficulty`. Mastering all three means the child can do it
 - **Right first time** — `QUALITY.md` is required. Activities are not rewritten after they ship
 - **Speaker** — Web Speech API only (no generated audio); UK female teacher voice; `narration.prompt` is the question only and must never reveal the answer

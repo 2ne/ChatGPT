@@ -10,7 +10,7 @@ When asked to add or change a learning activity, follow this document and `QUALI
 
 **Writing:** Follow **Writing for children** below for every child-facing string.
 
-**Curriculum (current phase):** The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one locked path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the start. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
+**Curriculum:** This product is a **primary maths pathway**. The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one locked path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the start. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
 
 ## Rapid prototype
 
@@ -40,11 +40,11 @@ Every path change scrolls to the top so the name and avatar stay in view. PathMa
 
 ## Vision
 
-Long term this is a **start-to-finish pathway covering every UK curriculum subject**. Maths is where we started and is the **current phase**, not a permanent product rule. Do not add English, science, or foundation subjects until asked.
+This product is a **primary school maths pathway**. English or other subjects might come later as separate work. Do not add them here until asked.
 
 **Three levels per node is a core concept.** Every path node has Easy / Medium / Hard. Each can earn 0–3 stars (9 stars in total). All 9 awards a gold cup and the node is done.
 
-**Priority now:** nail the foundations and **improve existing activities** (especially missing Medium and Hard levels) **before expanding** to new nodes or subjects.
+**Priority now:** nail the foundations and **improve existing activities** (especially missing Medium and Hard levels) **before expanding** to new nodes.
 
 ## How a quest appears on the map
 
@@ -80,7 +80,7 @@ Shipped examples: `count-to-5` is `pathNode: "eyfs-count-5"`, `difficulty: 1`. `
 
 ## Goals
 
-- Build the maths pathway first (Reception → Year 6). Treat other subjects as later phases.
+- Build the primary maths pathway (Reception → Year 6).
 - Prefer **interactive, mastery-oriented** practice over one-shot quizzes.
 - Keep the UI kid-friendly, accessible, and touch-first.
 - Track marks per activity in localStorage.
@@ -185,7 +185,7 @@ Until those steps are done, `validateActivity` will reject JSON that uses the ne
 | `id` | Stable kebab-case string, unique across the registry. Never reuse an id. |
 | `title` | Child-facing, short (e.g. “Number bonds to 10”). The level sheet labels the row Easy / Medium / Hard from `difficulty`, not from this title. |
 | `summary` | One sentence for parents/teachers. |
-| `subject` | `maths` in the current phase. |
+| `subject` | `maths`. |
 | `type` | One of the `ActivityType` union values (extend the union if adding a new type). |
 | `yearGroups` | Non-empty list of `YearGroup` values (`Reception` … `Year6`). |
 | `ability` | `emerging` \| `expected` \| `greater-depth`. Pedagogical band; typically Easy → emerging, Medium → expected, Hard → greater-depth. |
@@ -237,7 +237,7 @@ Copy the gold-standard ramp and first item in `QUALITY.md` / `count-to-5.json`.
 
 ### Activity types
 
-Current phase is maths only. Do not add another subject until asked.
+This app is maths only. Do not add another subject until asked.
 
 If you need a new maths **topic** type (`Activity.type`, not a question kind):
 
@@ -425,5 +425,5 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 
 - Login, cloud sync, teacher dashboards, payments, or changing localStorage.
 - Generating the entire maths curriculum in one change — improve what exists, then add focused batches.
-- Other subjects (later phase).
+- English or other subjects (separate work, not this app).
 - Changing GitHub Pages base path without updating the deploy workflow.

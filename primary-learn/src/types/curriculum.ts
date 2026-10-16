@@ -16,7 +16,7 @@ export const ABILITY_BANDS = ["emerging", "expected", "greater-depth"] as const;
 
 export type AbilityBand = (typeof ABILITY_BANDS)[number];
 
-/** Current phase is maths only. Other UK subjects are a later pathway. */
+/** This product is primary maths. Other subjects are not in this app. */
 export const SUBJECTS = ["maths"] as const;
 
 export type Subject = (typeof SUBJECTS)[number];

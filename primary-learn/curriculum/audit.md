@@ -6,7 +6,7 @@ The home screen **is** the path map (`PathMap` + `LevelSheet`, driven by `buildL
 
 ## Vision for this file
 
-Maths is the **current phase** of a longer pathway that should eventually cover every UK curriculum subject. Do not add other subjects here until asked.
+This audit is for the **primary maths** path only. English or other subjects might come later as separate work. Do not add them here until asked.
 
 Every node has **three levels**: Easy (`difficulty: 1`), Medium (`2`), Hard (`3`). Mastering all three means the child can do that skill. Prefer writing the missing Medium / Hard quests on shipped nodes before adding a new node.
 

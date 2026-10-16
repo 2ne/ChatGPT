@@ -294,6 +294,6 @@ audio files. Scale is too large.
 | Thin lonely progress line | Segmented per-question bar + count + cheer line |
 | Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
 | 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
-| Subject or year filter chips | One maths path map (other subjects are a later phase) |
+| Subject or year filter chips | One maths path map |
 | Emoji-only tiles | Lucide calculator tile in maths orange |
 | Identical Check/Continue | Labelled actions: `Check it` → `Next question` → `See my stars` |

@@ -1,6 +1,6 @@
 # Curriculum overview (England) — maths
 
-Primary Maths is the **current phase** of a longer pathway that should eventually cover every UK curriculum subject. Right now it covers mathematics from Reception to Year 6 only. Do not add other subjects until asked.
+Primary Maths is a **primary school maths pathway** from Reception to Year 6. English or other subjects might come later as separate work. Do not add them here until asked.
 
 Every path node has three playable levels (Easy / Medium / Hard). Mastering all three means the child can do that skill. Improve those activities before expanding the map.
 
@@ -33,7 +33,7 @@ If a child skips bonds to 10, Year 2 facts to 20 and later column methods become
 
 ## Build order
 
-The learner path is the numbered nodes in `maths.md`: 45 categories, 124 nodes, shown on the home path map. A learner starts at `eyfs-count-5` and cannot open a later node until the previous node's Easy is mastered. Each node can hold Easy, Medium and Hard quests. Audit that list with `audit.md` before writing quests. Do not add other subjects in this phase.
+The learner path is the numbered nodes in `maths.md`: 45 categories, 124 nodes, shown on the home path map. A learner starts at `eyfs-count-5` and cannot open a later node until the previous node's Easy is mastered. Each node can hold Easy, Medium and Hard quests. Audit that list with `audit.md` before writing quests.
 
 ## Year flexibility note (from DfE)
 

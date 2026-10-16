@@ -2,7 +2,7 @@
 
 Working notes for **Primary Maths**, distilled from official DfE sources so we can build quests in the right order and see gaps.
 
-**Current phase:** mathematics only. The long-term product is a pathway for every UK curriculum subject — do not add English, science, or foundation-subject pathways until asked.
+This map is **primary maths only**. English or other subjects might come later as separate work. Do not add them here until asked.
 
 Each node has **three levels** (Easy / Medium / Hard). Prefer finishing those on shipped nodes before adding a new node. See `../AGENTS.md`.
 

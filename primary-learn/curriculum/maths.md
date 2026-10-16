@@ -6,7 +6,7 @@ Sources: [EYFS statutory framework](https://www.gov.uk/government/publications/e
 
 The aims that run through every quest are fluency, reasoning and problem solving. They are not separate categories.
 
-Maths is the **current phase** of a longer product that should eventually cover every UK curriculum subject. Do not add other subjects in this file until asked.
+This file is the **primary maths** path only. English or other subjects might come later as separate work. Do not add them here until asked.
 
 ## How the path works
 
