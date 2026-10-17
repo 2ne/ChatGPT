@@ -11,6 +11,7 @@ import type {
   QuestionOption,
   RandomiseSpec,
 } from "../types/activity";
+import { drawPickPairTiles } from "./pickPair";
 
 type Rng = () => number;
 
@@ -256,11 +257,25 @@ function applyStrings(question: Question, vars: Record<string, string>): Questio
   return next;
 }
 
+function realizePickPair(question: Question, rng: Rng): Question {
+  if (question.kind !== "pick-pair") return question;
+  const next = structuredClone(question);
+  if (!next.tiles?.length && next.tileRange) {
+    next.tiles = drawPickPairTiles(next, rng);
+  }
+  if (next.randomise?.shuffleOptions && next.tiles) {
+    next.tiles = shuffle(next.tiles, rng);
+  }
+  return next;
+}
+
 function realizeQuestion(
   question: Question,
   activityRandomise: ActivityRandomise | undefined,
   rng: Rng,
 ): Question {
+  if (question.kind === "pick-pair") return realizePickPair(question, rng);
+
   const spec: RandomiseSpec | undefined = question.randomise;
   if (!spec) return question;
 
@@ -283,7 +298,7 @@ function realizeQuestion(
     : writtenCount;
   const countChanged = spec.count != null && count !== writtenCount;
 
-  let next = structuredClone(question);
+  let next: Question = structuredClone(question);
   next.visual = remapVisual(
     next.visual,
     itemMap,

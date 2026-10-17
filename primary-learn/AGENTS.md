@@ -308,6 +308,7 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 - `ordered` — put items in the right sequence.
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
 - `make-total` — part-whole sum. Required `total` (1–20) and `mode`. Known addend is `part` or `visual.count`. `gap` is `right` (default: `2 + ? = 5`), `left` (`? + 2 = 5`), or `total` (`2 + 3 = ?`). `operation` is `add` (default) or `subtract` (tap to remove later). Modes: `fill-slots` (tap dotted spaces; each tap drops an object and speaks the count), `pick` (slots stay visible, child taps a number), `sum-only` (sum line and number buttons only). Do not randomise `total` or `part`.
+- `pick-pair` — tap two number tiles that add to `total` (1–20). Required `total` plus `tiles` or `tileRange` (`tileCount` default 4). `showDots` (default true) draws quantity dots on each tile. `requireAllPairs` (default false) asks the child to find every disjoint pair, one after the other. Any valid pair is accepted unless `requireAllPairs` is set. Do not randomise `total`. Shuffle tile order with `shuffleOptions`.
 
 Optional on any pictured stem: `extras` (a second kind of object; `extras.item` must differ from `visual.item`) and `layout` (`row` default, `scatter`, or `dice`). For mixed counting, the child counts `visual` and ignores extras. For composition, keep `layout` as `row` so the two kinds stay in groups (first `visual`, then extras). `scatter` shuffles them together. `dice` is a glance pattern to 6 and ignores extras.
 
@@ -325,7 +326,7 @@ The runner calls `realizeActivity` on **Start quest / Play again / Try again**. 
 | --- | --- |
 | Swap objects on `count-objects`, fill-blank counts, match-amount, “which group”, `build-set` | Randomise the **count** on Easy Count to 5 (the 1→2→3→4→5 ramp is the lesson) |
 | `{item}` / `{items}` in stems so “apples” can become bananas, stars, cars | A count range wider than this level (Easy to 5 must not draw 8) |
-| `shuffleOptions` on multiple-choice / multi-select / make-total number buttons so the tap target moves | Shuffle `ordered` items or match-pair order (those kinds have their own pedagogy) |
+| `shuffleOptions` on multiple-choice / multi-select / make-total number buttons / pick-pair tiles so the tap target moves | Shuffle `ordered` items or match-pair order (those kinds have their own pedagogy) |
 | A **tight** `count: { min, max }` on Medium/Hard counting, still inside the node | Randomise number-bond totals or missing addends (that changes the fact being taught) |
 
 Questions **opt in**. An activity-level pool is only used by questions that set `"randomise": {}` (or their own `items` / `count` / `shuffleOptions`). Sequence and numeral items stay fixed unless you opt them in.
@@ -357,7 +358,7 @@ All three keys are optional. `"randomise": {}` means “use the activity pool, k
 
 - `items` — pool for this question (else activity `items`). Distinct original pictures map to distinct picks (`strawberry` + `sparkle` → two different things).
 - `count` — inclusive range. Replaces `visual.count`. Nearby numeric options and fill-blank answers (`"4"`, `"four"`) are rebuilt **inside `min`…`max`**. Omit on Easy Count to 5.
-- `shuffleOptions` — shuffle multiple-choice / multi-select / count-objects / make-total number-button order.
+- `shuffleOptions` — shuffle multiple-choice / multi-select / count-objects / make-total number-button / pick-pair tile order.
 
 ### Templates
 

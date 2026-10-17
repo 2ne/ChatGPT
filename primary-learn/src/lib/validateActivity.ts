@@ -20,6 +20,7 @@ import {
   type RandomiseSpec,
 } from "../types/activity";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
+import { canDrawPickPair } from "./pickPair";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -384,6 +385,60 @@ function parseQuestion(value: unknown, path: string): Question {
           fail(path, "exactly one option label must be the missing number");
         }
       }
+      return draft;
+    }
+    case "pick-pair": {
+      const total = expectNumber(value, "total", path);
+      if (!Number.isInteger(total) || total < 1 || total > 20) {
+        fail(path, "total must be a whole number from 1 to 20");
+      }
+      let tiles: number[] | undefined;
+      if (value.tiles != null) {
+        const list = expectArray(value, "tiles", path);
+        if (list.length < 2 || list.length > 8) fail(path, "tiles must have 2 to 8 numbers");
+        tiles = list.map((entry, index) => {
+          if (typeof entry !== "number" || !Number.isInteger(entry) || entry < 0 || entry > 20) {
+            fail(`${path}.tiles[${index}]`, "tile must be a whole number from 0 to 20");
+          }
+          return entry;
+        });
+      }
+      let tileRange: { min: number; max: number } | undefined;
+      if (value.tileRange != null) {
+        if (!isRecord(value.tileRange)) fail(path, "tileRange must be { min, max }");
+        const min = expectNumber(value.tileRange, "min", `${path}.tileRange`);
+        const max = expectNumber(value.tileRange, "max", `${path}.tileRange`);
+        if (!Number.isInteger(min) || !Number.isInteger(max) || min < 0 || max > 20 || min > max) {
+          fail(`${path}.tileRange`, "min and max must be whole numbers 0–20 with min ≤ max");
+        }
+        tileRange = { min, max };
+      }
+      let tileCount: number | undefined;
+      if (value.tileCount != null) {
+        tileCount = expectNumber(value, "tileCount", path);
+        if (!Number.isInteger(tileCount) || tileCount < 2 || tileCount > 8) {
+          fail(path, "tileCount must be a whole number from 2 to 8");
+        }
+      }
+      if (value.showDots != null && typeof value.showDots !== "boolean") {
+        fail(path, "showDots must be true or false");
+      }
+      if (value.requireAllPairs != null && typeof value.requireAllPairs !== "boolean") {
+        fail(path, "requireAllPairs must be true or false");
+      }
+      const draft = {
+        ...core,
+        kind: "pick-pair" as const,
+        total,
+        tiles,
+        tileRange,
+        tileCount,
+        showDots: value.showDots === undefined ? undefined : Boolean(value.showDots),
+        requireAllPairs:
+          value.requireAllPairs === undefined ? undefined : Boolean(value.requireAllPairs),
+      };
+      const check = canDrawPickPair(draft);
+      if (!check.ok) fail(path, check.reason);
       return draft;
     }
     default:

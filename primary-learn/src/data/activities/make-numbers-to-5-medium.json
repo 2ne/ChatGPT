@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 picks 5 is 2 and ?. Question 6 picks 0 and 5 as a pair that makes 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 picks 5 is 4 and ?. Question 10 picks the partner of 1 to make 5. Starts at 4.",
-    "versus": "Easy starts at 1 and 1 with pictured groups and early hints. Medium starts at 4 and 5, adds 0 and 5, and mixes numerals. Hard uses reverse parts, number words, and a hidden part, with no hints. Still composition of numbers to 5, not quick bond recall."
+    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 picks 5 is 2 and ?. Question 6 taps six tiles to find both pairs that make 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 picks 5 is 4 and ?. Question 10 picks the partner of 1 to make 5. Starts at 4.",
+    "versus": "Easy starts at 1 and 1 with pictured groups, early hints, and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, and may ask for both pairs on six tiles. Hard uses reverse parts, number words, a hidden part, and tiles with no dots. Still composition of numbers to 5, not quick bond recall."
   },
   "skills": [
     "eyfs-compose-5",
@@ -240,34 +240,19 @@
       }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "pick-pair",
       "id": "m5m-pair-0-5",
-      "prompt": "Which pair makes 5?",
+      "prompt": "Find both pairs that make 5.",
+      "total": 5,
+      "tiles": [0, 1, 4, 5, 2, 2],
+      "showDots": true,
+      "requireAllPairs": true,
       "randomise": {
         "shuffleOptions": true
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "0 and 5"
-        },
-        {
-          "id": "b",
-          "label": "2 and 2"
-        },
-        {
-          "id": "c",
-          "label": "3 and 3"
-        },
-        {
-          "id": "d",
-          "label": "1 and 3"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "0 and 5 make 5. Nothing and 5 is still 5.",
+      "explanation": "0 and 5 make 5. 1 and 4 make 5.",
       "narration": {
-        "prompt": "Which pair makes 5?"
+        "prompt": "Find both pairs that make 5."
       }
     },
     {

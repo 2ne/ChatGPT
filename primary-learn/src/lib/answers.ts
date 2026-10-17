@@ -1,6 +1,14 @@
 import type { Question } from "../types/activity";
 import { makeTotalMissing } from "./makeTotal";
 import { matchSideKey } from "./matchSide";
+import {
+  emptyPickPairAnswer,
+  isCompletePickPair,
+  isPickPairAnswer,
+  pickPairRequireAll,
+  pickPairTiles,
+  uniquePairLabels,
+} from "./pickPair";
 
 function normaliseText(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, " ");
@@ -60,6 +68,8 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
     }
     case "make-total":
       return typeof answer === "number" && answer === makeTotalMissing(question);
+    case "pick-pair":
+      return isPickPairAnswer(answer) && isCompletePickPair(question, answer);
     default:
       return false;
   }
@@ -85,6 +95,8 @@ export function emptyAnswerFor(question: Question): unknown {
       return [] as string[];
     case "make-total":
       return makeTotalMissing(question) === 0 && question.mode === "fill-slots" ? 0 : null;
+    case "pick-pair":
+      return emptyPickPairAnswer();
     default:
       return null;
   }
@@ -108,6 +120,11 @@ export function correctAnswerLabel(question: Question): string | null {
       return String(question.visual.count);
     case "make-total":
       return String(makeTotalMissing(question));
+    case "pick-pair": {
+      const labels = uniquePairLabels(pickPairTiles(question), question.total);
+      if (labels.length === 0) return null;
+      return pickPairRequireAll(question) ? labels.join(" and ") : labels.join(" or ");
+    }
     default:
       return null;
   }
@@ -133,6 +150,12 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
       return Array.isArray(answer) && answer.length > 0;
     case "make-total":
       return typeof answer === "number";
+    case "pick-pair":
+      return (
+        isPickPairAnswer(answer) &&
+        (answer.picked.length === 2 ||
+          (pickPairRequireAll(question) && isCompletePickPair(question, answer)))
+      );
     default:
       return false;
   }

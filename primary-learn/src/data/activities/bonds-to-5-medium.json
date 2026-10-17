@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 picks the partner for 3 with slots still showing. Question 2 picks 5 = 4 + ?. Question 3 picks 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps every pair that makes 5, including 0 + 5. Question 7 fills 5 take away 0. Question 8 picks reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
-    "versus": "Easy taps slots to fill the missing part. Medium shows slots and the child picks a number. Hard is the sum line only. Still bonds to 5 only."
+    "within": "Question 1 picks the partner for 3 with slots still showing. Question 2 picks 5 = 4 + ?. Question 3 picks 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 picks reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
+    "versus": "Easy taps slots or four tiles with dots. Medium shows slots or six tiles and may ask for both pairs. Hard is the sum line or tiles with no dots. Still bonds to 5 only."
   },
   "skills": [
     "eyfs-bonds-5",
@@ -208,37 +208,19 @@
       }
     },
     {
-      "kind": "multi-select",
+      "kind": "pick-pair",
       "id": "b5m-every",
-      "prompt": "Tap every pair that makes 5.",
+      "prompt": "Find both pairs that make 5.",
+      "total": 5,
+      "tiles": [1, 2, 3, 4, 0, 2],
+      "showDots": true,
+      "requireAllPairs": true,
       "randomise": {
         "shuffleOptions": true
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "0 + 5"
-        },
-        {
-          "id": "b",
-          "label": "2 + 2"
-        },
-        {
-          "id": "c",
-          "label": "5 + 0"
-        },
-        {
-          "id": "d",
-          "label": "4 + 2"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "0 + 5 = 5 and 5 + 0 = 5. 2 + 2 = 4. 4 + 2 = 6.",
+      "explanation": "1 and 4 make 5. 2 and 3 make 5.",
       "narration": {
-        "prompt": "Tap every pair that makes 5."
+        "prompt": "Find both pairs that make 5."
       }
     },
     {

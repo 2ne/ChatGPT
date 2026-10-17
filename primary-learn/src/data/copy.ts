@@ -63,6 +63,8 @@ export const copy = {
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",
+  pickTwo: "Tap two numbers",
+  findAnotherPair: "Now find another pair.",
   tapASpace: "Tap a space to add one.",
   tapToTakeAway: "Tap one to take it away.",
   startSlotsAgain: "Start again",

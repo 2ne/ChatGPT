@@ -15,6 +15,7 @@ import type { Activity, Question } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { optionNumber } from "../lib/makeTotal";
+import { emptyPickPairAnswer, isPickPairAnswer, togglePickPairTile } from "../lib/pickPair";
 import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
 import { playSound } from "../lib/sound";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
@@ -191,8 +192,20 @@ export function ActivityRunner({
         currentPhase !== "question" ||
         (currentQuestion?.kind !== "multiple-choice" &&
           currentQuestion?.kind !== "count-objects" &&
-          currentQuestion?.kind !== "make-total")
+          currentQuestion?.kind !== "make-total" &&
+          currentQuestion?.kind !== "pick-pair")
       ) {
+        return;
+      }
+      if (currentQuestion.kind === "pick-pair") {
+        const tiles = currentQuestion.tiles ?? [];
+        const slot = Number(event.key) - 1;
+        if (slot < 0 || slot >= tiles.length) return;
+        playSound("tap");
+        setAnswer((prev: unknown) => {
+          const current = isPickPairAnswer(prev) ? prev : emptyPickPairAnswer();
+          return togglePickPairTile(currentQuestion, current, `t${slot}`);
+        });
         return;
       }
       const options = "options" in currentQuestion ? currentQuestion.options : undefined;

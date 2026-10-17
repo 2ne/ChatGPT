@@ -6,6 +6,7 @@ import { CountObjects } from "./CountObjects";
 import { FillBlank } from "./FillBlank";
 import { MakeTotal } from "./MakeTotal";
 import { MatchPairs } from "./MatchPairs";
+import { PickPair } from "./PickPair";
 import { MultiSelect } from "./MultiSelect";
 import { MultipleChoice } from "./MultipleChoice";
 import { Ordered } from "./Ordered";
@@ -40,6 +41,7 @@ export const QUESTION_VIEWS: Record<QuestionKind, KindView> = {
   ordered: Ordered as KindView,
   "match-pairs": MatchPairs as KindView,
   "make-total": MakeTotal as KindView,
+  "pick-pair": PickPair as KindView,
 };
 
 export function QuestionView({

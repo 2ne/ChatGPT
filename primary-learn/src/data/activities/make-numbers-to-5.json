@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put two small groups together on a part-whole sum (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps slots to finish 3 as 2 and ?. Question 6 picks a pair that makes 4. Question 7 puts 2 and 3 together to make 5. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps slots for 4 is 1 and ?. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
-    "versus": "Easy uses two pictured groups and tap-to-fill for a missing part. Medium starts at 4 and 5, includes 0 and 5, and picks numbers with slots showing. Hard uses the sum line only, 0, reverse parts and number words. This node is composition, not quick recall of bonds."
+    "within": "Questions 1 to 3 put two small groups together on a part-whole sum (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps slots to finish 3 as 2 and ?. Question 6 taps four tiles with dots to make 4. Question 7 puts 2 and 3 together to make 5. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps slots for 4 is 1 and ?. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
+    "versus": "Easy uses two pictured groups, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, and may use six tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
   },
   "skills": [
     "eyfs-compose-5",
@@ -208,34 +208,18 @@
       }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "pick-pair",
       "id": "m5e-pair-4",
-      "prompt": "Which pair makes 4?",
+      "prompt": "What two numbers make 4?",
+      "total": 4,
+      "tiles": [1, 2, 3, 4],
+      "showDots": true,
       "randomise": {
         "shuffleOptions": true
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "1 and 3"
-        },
-        {
-          "id": "b",
-          "label": "1 and 2"
-        },
-        {
-          "id": "c",
-          "label": "2 and 3"
-        },
-        {
-          "id": "d",
-          "label": "4 and 2"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "1 and 3 make 4. 1 and 2 make 3. 2 and 3 make 5.",
+      "explanation": "1 and 3 make 4.",
       "narration": {
-        "prompt": "Which pair makes 4?"
+        "prompt": "What two numbers make 4?"
       }
     },
     {

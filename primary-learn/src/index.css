@@ -1670,9 +1670,119 @@ button.learner-chip:focus-visible {
   }
 }
 
+.pick-pair {
+  display: grid;
+  gap: 16px;
+  justify-items: stretch;
+}
+
+.pick-pair-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pick-pair-tile {
+  position: relative;
+  appearance: none;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: 100%;
+  min-height: 96px;
+  padding: 0;
+  border: 2.5px solid var(--line);
+  border-radius: 22px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.pick-pair-tile:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.pick-pair-tile.is-on {
+  background: var(--primary);
+  border-color: var(--primary-deep);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+}
+
+.pick-pair-tile.is-found {
+  cursor: default;
+}
+
+.pick-pair-tile.is-correct {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.pick-pair-tile.is-wrong {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.pick-pair-num {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.pick-pair-dots {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.pick-pair-dots.is-dice {
+  display: grid;
+  grid-template-columns: repeat(3, 5px);
+  gap: 3px;
+}
+
+.pick-pair-dots.is-many {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  width: 28px;
+  gap: 3px;
+}
+
+.pick-pair-dots .is-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+
+.pick-pair-dots.is-on .is-dot {
+  background: #fff;
+}
+
+.pick-pair-coach {
+  margin: 0;
+  text-align: center;
+}
+
+.pick-pair-sum .make-total-box {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 24px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .object-glyph.is-drop {
     animation: none;
+  }
+
+  .pick-pair-tile.is-on {
+    transform: none;
   }
 }
 

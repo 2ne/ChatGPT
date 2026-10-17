@@ -23,6 +23,7 @@ export const QUESTION_KINDS = [
   "ordered",
   "match-pairs",
   "make-total",
+  "pick-pair",
 ] as const;
 
 export type QuestionKind = (typeof QUESTION_KINDS)[number];
@@ -187,6 +188,26 @@ export type MakeTotalQuestion = QuestionCore & {
   options?: QuestionOption[];
 };
 
+/**
+ * Tap two number tiles that add to `total`. Easy shows quantity dots.
+ * Medium may ask for every pair in turn. Hard hides the dots.
+ */
+export type PickPairQuestion = QuestionCore & {
+  kind: "pick-pair";
+  /** The whole. 1–20 so later bonds to 10/20 reuse this. */
+  total: number;
+  /** Number tiles. Omit when `tileRange` should draw a fresh set. */
+  tiles?: number[];
+  /** Inclusive range used when `tiles` is omitted. */
+  tileRange?: { min: number; max: number };
+  /** How many tiles to draw from `tileRange`. Default 4. */
+  tileCount?: number;
+  /** Quantity dots on each tile. Default true. Hard sets false. */
+  showDots?: boolean;
+  /** Child must find every disjoint pair, one after the other. */
+  requireAllPairs?: boolean;
+};
+
 export type Question =
   | CountObjectsQuestion
   | BuildSetQuestion
@@ -195,7 +216,8 @@ export type Question =
   | FillBlankQuestion
   | OrderedQuestion
   | MatchPairsQuestion
-  | MakeTotalQuestion;
+  | MakeTotalQuestion
+  | PickPairQuestion;
 
 export type DifficultyRamp = {
   within: string;

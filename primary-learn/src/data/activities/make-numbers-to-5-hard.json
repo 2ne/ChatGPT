@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 name 5 as 0 and 5, then 5 and 0, on the sum line only. Question 3 matches number words to parts. Question 4 is the sum line 5 is 3 and ?. Question 5 taps every pair that makes 5, including 0 and 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse ? + 2 = 5. Question 8 sees 5 and finds the other part when 2 is given. Question 9 matches other ways to make 3, 4 and 5. Question 10 picks another pair that makes 5. No hints.",
-    "versus": "Easy is small pictured parts from 2 up to 5. Medium is 4 and 5 with 0 and 5 introduced. Hard stays on 5, uses 0, reverse order, number words and a hidden part. Same node: composition of each number to 5."
+    "within": "Questions 1 to 2 name 5 as 0 and 5, then 5 and 0, on the sum line only. Question 3 matches number words to parts. Question 4 is the sum line 5 is 3 and ?. Question 5 taps six tiles with no dots to make 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse ? + 2 = 5. Question 8 sees 5 and finds the other part when 2 is given. Question 9 matches other ways to make 3, 4 and 5. Question 10 picks another pair that makes 5. No hints.",
+    "versus": "Easy is small pictured parts from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, and may use six tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and tiles with no dots. Same node: composition of each number to 5."
   },
   "skills": [
     "eyfs-compose-5",
@@ -165,37 +165,18 @@
       }
     },
     {
-      "kind": "multi-select",
+      "kind": "pick-pair",
       "id": "m5h-every-5",
-      "prompt": "Tap every pair that makes 5.",
+      "prompt": "What two numbers make 5?",
+      "total": 5,
+      "tiles": [0, 1, 2, 3, 4, 5],
+      "showDots": false,
       "randomise": {
         "shuffleOptions": true
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "0 and 5"
-        },
-        {
-          "id": "b",
-          "label": "1 and 4"
-        },
-        {
-          "id": "c",
-          "label": "2 and 4"
-        },
-        {
-          "id": "d",
-          "label": "3 and 3"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "b"
-      ],
-      "explanation": "0 and 5 make 5. 1 and 4 make 5. 2 and 4 make 6. 3 and 3 make 6.",
+      "explanation": "0 and 5 make 5. 1 and 4 make 5. 2 and 3 make 5.",
       "narration": {
-        "prompt": "Tap every pair that makes 5."
+        "prompt": "What two numbers make 5?"
       }
     },
     {
