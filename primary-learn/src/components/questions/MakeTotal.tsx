@@ -11,9 +11,9 @@ import {
   makeTotalOther,
   makeTotalOtherItem,
   makeTotalPart,
+  makeTotalSlotBank,
   optionNumber,
 } from "../../lib/makeTotal";
-import { speakCount } from "../../lib/speech";
 import type { MakeTotalQuestion, ObjectItem } from "../../types/activity";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 import { OptionContent } from "./ObjectGroup";
@@ -25,6 +25,8 @@ type MakeTotalProps = {
   reveal: Reveal;
   onChange: (value: unknown) => void;
 };
+
+type SlotKind = "known" | "added" | "add" | "empty";
 
 function activate(
   handler: () => void,
@@ -53,14 +55,14 @@ function SumBox({
 
 function Slot({
   item,
-  filled,
+  kind,
   tappable = false,
   disabled,
   index,
   onToggle,
 }: {
   item: ObjectItem;
-  filled: boolean;
+  kind: SlotKind;
   tappable?: boolean;
   disabled?: boolean;
   index: number;
@@ -68,29 +70,55 @@ function Slot({
 }) {
   const words = OBJECT_WORDS[item];
   const glyph = OBJECT_GLYPH[item];
+  const filled = kind === "known" || kind === "added";
+  const className = [
+    "make-total-slot",
+    kind === "known" ? "is-filled" : "",
+    kind === "added" ? "is-added" : "",
+    kind === "add" ? "is-add" : "",
+    kind === "empty" ? "is-empty" : "",
+    tappable ? "is-tap" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const inner =
+    filled ? (
+      <span className="object-glyph is-drop">{glyph}</span>
+    ) : kind === "add" ? (
+      <>
+        <span className="make-total-add-icon" aria-hidden>
+          +
+        </span>
+        <span className="make-total-add-label">{copy.addItem(words.singular)}</span>
+      </>
+    ) : null;
+
   if (!tappable || !onToggle) {
     return (
-      <span className={`make-total-slot${filled ? " is-filled" : " is-empty"}`} aria-hidden>
-        {filled ? <span className="object-glyph">{glyph}</span> : null}
+      <span className={className} aria-hidden>
+        {inner}
       </span>
     );
   }
+
+  const addLabel = copy.addItem(words.singular);
   return (
     <button
       type="button"
-      className={`make-total-slot is-tap${filled ? " is-filled" : " is-empty"}`}
+      className={className}
       disabled={disabled}
       aria-label={
-        filled
+        kind === "added"
           ? `${words.singular} ${index + 1}. Tap to take it out.`
-          : `Empty space ${index + 1}. Tap to add a ${words.singular}.`
+          : addLabel
       }
       onPointerDown={(event) => activate(onToggle, event)}
       onClick={(event) => {
         if (event.detail === 0) activate(onToggle, event);
       }}
     >
-      {filled ? <span className="object-glyph is-drop">{glyph}</span> : null}
+      {inner}
     </button>
   );
 }
@@ -104,33 +132,33 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
   const selected = typeof answer === "number" ? answer : null;
   const item = makeTotalItem(question);
   const otherItem = makeTotalOtherItem(question);
-  const showSlots = question.mode !== "sum-only";
-  const canFill = question.mode === "fill-slots" && !disabled;
+  const fillMode = question.mode === "fill-slots";
+  const canFill = fillMode && !disabled;
   const subtract = op === "subtract";
   const sign = subtract ? "−" : "+";
   const signWord = subtract ? "take away" : "plus";
+  const known = makeTotalKnownCount(question);
+  const bank = makeTotalSlotBank(question);
+  const showPickSlots = question.mode === "pick" || (fillMode && subtract);
 
   const leftValue = gap === "left" ? selected : part;
   const rightValue = gap === "right" ? selected : gap === "total" ? other : part;
   const resultValue = gap === "total" ? selected : question.total;
 
-  const filledMissing =
-    question.mode === "fill-slots"
-      ? (selected ?? 0)
-      : question.mode === "pick" && selected != null
-        ? Math.max(0, Math.min(selected, makeTotalEmptyCount(question)))
-        : 0;
+  const filledMissing = fillMode
+    ? (selected ?? 0)
+    : question.mode === "pick" && selected != null
+      ? Math.max(0, Math.min(selected, makeTotalEmptyCount(question)))
+      : 0;
 
   function setFilled(next: number) {
-    const max = subtract ? question.total : makeTotalEmptyCount(question);
+    const max = subtract ? question.total : bank;
     const clamped = Math.max(0, Math.min(max, next));
     if (subtract && gap === "total") {
       onChange(question.total - clamped);
-      if (clamped > 0) speakCount(question.total - clamped);
       return;
     }
     onChange(clamped);
-    if (clamped > 0) speakCount(clamped);
   }
 
   function toggleEmpty(index: number) {
@@ -146,10 +174,46 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
   }
 
   const showButtons = question.mode !== "fill-slots" && question.options;
+  const itemWords = OBJECT_WORDS[item];
 
   return (
     <div className="make-total">
-      {showSlots ? (
+      {fillMode && !subtract ? (
+        <div className="make-total-fill">
+          <div
+            className="make-total-known-row"
+            aria-label={`${known} ${known === 1 ? itemWords.singular : itemWords.plural}`}
+          >
+            <span className="make-total-known" aria-hidden>
+              {Array.from({ length: known }, (_, index) => (
+                <Slot key={`k-${index}`} item={item} kind="known" index={index} />
+              ))}
+            </span>
+            <span className="make-total-join" aria-hidden>
+              +
+            </span>
+          </div>
+          <div
+            className="make-total-add-row"
+            role="group"
+            aria-label={`Add ${itemWords.plural}`}
+          >
+            {Array.from({ length: bank }, (_, index) => (
+              <Slot
+                key={`a-${index}`}
+                item={item}
+                kind={index < filledMissing ? "added" : "add"}
+                tappable={canFill}
+                disabled={disabled}
+                index={index}
+                onToggle={() => toggleEmpty(index)}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {showPickSlots ? (
         <div
           className="make-total-slots"
           role="group"
@@ -163,12 +227,12 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             <>
               <span className="make-total-part" aria-hidden>
                 {Array.from({ length: part }, (_, index) => (
-                  <Slot key={`a-${index}`} item={item} filled index={index} />
+                  <Slot key={`a-${index}`} item={item} kind="known" index={index} />
                 ))}
               </span>
               <span className="make-total-part" aria-hidden>
                 {Array.from({ length: other }, (_, index) => (
-                  <Slot key={`b-${index}`} item={otherItem} filled index={index} />
+                  <Slot key={`b-${index}`} item={otherItem} kind="known" index={index} />
                 ))}
               </span>
             </>
@@ -179,7 +243,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
                 <Slot
                   key={index}
                   item={item}
-                  filled={index < remaining}
+                  kind={index < remaining ? "known" : "empty"}
                   tappable={canFill}
                   disabled={disabled}
                   index={index}
@@ -189,18 +253,15 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             })
           ) : (
             <>
-              {Array.from({ length: makeTotalKnownCount(question) }, (_, index) => (
-                <Slot key={`k-${index}`} item={item} filled index={index} />
+              {Array.from({ length: known }, (_, index) => (
+                <Slot key={`k-${index}`} item={item} kind="known" index={index} />
               ))}
               {Array.from({ length: makeTotalEmptyCount(question) }, (_, index) => (
                 <Slot
                   key={`e-${index}`}
                   item={item}
-                  filled={index < filledMissing}
-                  tappable={canFill}
-                  disabled={disabled}
-                  index={makeTotalKnownCount(question) + index}
-                  onToggle={() => toggleEmpty(index)}
+                  kind={index < filledMissing ? "known" : "empty"}
+                  index={known + index}
                 />
               ))}
             </>
@@ -208,40 +269,36 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
         </div>
       ) : null}
 
-      {canFill ? (
-        <p className="t-meta make-total-coach">
-          {subtract ? copy.tapToTakeAway : copy.tapASpace}
-        </p>
+      {question.mode !== "fill-slots" ? (
+        <div
+          className={`make-total-sum${reveal === "correct" ? " is-correct" : ""}${
+            reveal === "incorrect" ? " is-wrong" : ""
+          }`}
+          aria-label={`${leftValue ?? "what"} ${signWord} ${rightValue ?? "what"} equals ${resultValue ?? "what"}`}
+        >
+          <SumBox
+            value={leftValue}
+            tone={gap === "left" ? "gap" : "part"}
+            label={gap === "left" ? copy.missingNumber : copy.knownPart}
+          />
+          <span className="make-total-sign" aria-hidden>
+            {sign}
+          </span>
+          <SumBox
+            value={rightValue}
+            tone={gap === "right" ? "gap" : "part"}
+            label={gap === "right" ? copy.missingNumber : copy.knownPart}
+          />
+          <span className="make-total-sign" aria-hidden>
+            =
+          </span>
+          <SumBox
+            value={resultValue}
+            tone={gap === "total" ? "gap" : "whole"}
+            label={gap === "total" ? copy.missingNumber : copy.wholeNumber}
+          />
+        </div>
       ) : null}
-
-      <div
-        className={`make-total-sum${reveal === "correct" ? " is-correct" : ""}${
-          reveal === "incorrect" ? " is-wrong" : ""
-        }`}
-        aria-label={`${leftValue ?? "what"} ${signWord} ${rightValue ?? "what"} equals ${resultValue ?? "what"}`}
-      >
-        <SumBox
-          value={leftValue}
-          tone={gap === "left" ? "gap" : "part"}
-          label={gap === "left" ? copy.missingNumber : copy.knownPart}
-        />
-        <span className="make-total-sign" aria-hidden>
-          {sign}
-        </span>
-        <SumBox
-          value={rightValue}
-          tone={gap === "right" ? "gap" : "part"}
-          label={gap === "right" ? copy.missingNumber : copy.knownPart}
-        />
-        <span className="make-total-sign" aria-hidden>
-          =
-        </span>
-        <SumBox
-          value={resultValue}
-          tone={gap === "total" ? "gap" : "whole"}
-          label={gap === "total" ? copy.missingNumber : copy.wholeNumber}
-        />
-      </div>
 
       {showButtons ? (
         <div role="radiogroup" aria-label={copy.pickOne} className="option-stack">

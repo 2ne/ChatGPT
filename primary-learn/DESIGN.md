@@ -253,16 +253,19 @@ rainbow itself is never inset.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.
 - **Part-whole (`make-total`)** stays on the same white activity screen. No
-  scenery. A row shows the known part as filled objects and dotted empty
-  slots for the missing part, so the whole is always visible. Under that, a
-  sum line uses three coloured rounded boxes, e.g. `[2] + [?] = [5]`. The
-  `?` box updates live. Easy (`fill-slots`): tap a dotted space to drop an
-  object; the count is spoken; tap sound on `pointerdown`; then Check it.
-  Medium (`pick`): slots stay, child taps a full-width number button. Hard
-  (`sum-only`): sum line and the same full-width number buttons only. “How
-  many in all?” items use `sum-only` so there are no object tiles. Later
-  the same kind can subtract (tap to take away) and use totals to 10 or 20
-  via `total` / `operation` in JSON.
+  scenery. Easy (`fill-slots`): row 1 is the known part as filled sun-style
+  tiles, then a large `+`. Row 2 is the child’s area. Added objects are
+  green-tinted tiles (tap one to take it out). Empty slots are dashed, with
+  a `+` and a short `Add {item}` label (no “a”, e.g. `Add duck`). Always
+  more slots than the answer (default missing + 2, or `slotCount` in JSON,
+  cap 12) so the child must stop. No “Tap a space to add one.” No sum line
+  (a live `?` would give the answer away). Tap sound on `pointerdown`. No
+  spoken count on taps. Keep “Start again”. Medium (`pick`): known and
+  empty slots stay visible; child taps a full-width number button; sum
+  line underneath. Hard (`sum-only`): sum line and the same full-width
+  number buttons only. “How many in all?” items use `sum-only` so there
+  are no object tiles. Later the same kind can subtract (tap to take away)
+  and use totals to 10 or 20 via `total` / `operation` in JSON.
 - **Number pairs (`pick-pair`)** stay on the same white activity screen. A
   two-column grid of big square tiles: large numeral in the centre, optional
   dice-pip dots in the top-right. Every tile starts the same: white, the same

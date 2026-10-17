@@ -53,6 +53,13 @@ export function makeTotalEmptyCount(question: MakeTotalQuestion): number {
   return question.total - makeTotalPart(question);
 }
 
+/** Addable slots in fill-slots. More than the answer so the child can overshoot. */
+export function makeTotalSlotBank(question: MakeTotalQuestion): number {
+  if (question.slotCount != null) return question.slotCount;
+  const missing = makeTotalMissing(question);
+  return Math.min(12, Math.max(missing + 2, 2));
+}
+
 export function optionNumber(label: string | undefined): number | null {
   if (label == null || label.trim() === "") return null;
   const value = Number(label);

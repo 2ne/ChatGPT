@@ -63,7 +63,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `Which number goes with {n} to make {total}?` |
 | fill-blank bond | Prompt: `Complete the number bond.` Prefix/suffix: `{a} +` / `= {total}` |
-| make-total | `Which number goes with {n} to make {total}?` or `How many in all?` Set `mode` to `fill-slots` / `pick` / `sum-only`. |
+| make-total | fill-slots: `What goes with {n} to make {total}?`. pick: `Which number goes with {n} to make {total}?`. sum-only: `How many in all?`. Optional `slotCount` on fill-slots (default missing + 2). |
 | pick-pair | `What two numbers make {total}?` or `Find both pairs that make {total}.` Set `showDots` and `requireAllPairs`. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |

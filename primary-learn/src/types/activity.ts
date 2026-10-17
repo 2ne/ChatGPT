@@ -170,8 +170,9 @@ export const MAKE_TOTAL_GAPS = ["left", "right", "total"] as const;
 export type MakeTotalGap = (typeof MAKE_TOTAL_GAPS)[number];
 
 /**
- * Part-whole sum. Easy taps empty slots, Medium shows slots and picks a number,
- * Hard is the sum line only. `total` may be 1–20 so later bonds to 10/20 reuse this.
+ * Part-whole sum. Easy (`fill-slots`) adds extra green tiles to the known part.
+ * Medium shows slots and picks a number. Hard is the sum line only.
+ * `total` may be 1–20 so later bonds to 10/20 reuse this.
  */
 export type MakeTotalQuestion = QuestionCore & {
   kind: "make-total";
@@ -184,6 +185,8 @@ export type MakeTotalQuestion = QuestionCore & {
   gap?: MakeTotalGap;
   operation?: MakeTotalOp;
   mode: MakeTotalMode;
+  /** How many addable slots in `fill-slots`. Default is the missing part plus 2. */
+  slotCount?: number;
   /** Number buttons. Required for `pick` and `sum-only`. */
   options?: QuestionOption[];
 };

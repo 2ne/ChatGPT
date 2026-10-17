@@ -1620,6 +1620,38 @@ button.learner-chip:focus-visible {
   justify-self: stretch;
 }
 
+.make-total-fill {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  width: 100%;
+}
+
+.make-total-known-row,
+.make-total-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.make-total-known {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.make-total-join {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+  padding: 0 4px;
+}
+
 .make-total-slots {
   display: flex;
   flex-wrap: wrap;
@@ -1679,9 +1711,40 @@ button.learner-chip:focus-visible {
   border-color: var(--sun);
 }
 
-.make-total-coach {
-  margin: 0;
+.make-total-slot.is-added {
+  background: var(--mint-soft);
+  border-color: var(--mint);
+}
+
+.make-total-slot.is-add {
+  width: auto;
+  min-width: 64px;
+  height: auto;
+  min-height: 64px;
+  padding: 8px 8px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  background: #fff;
+  border: 2.5px dashed var(--ink-faint);
+}
+
+.make-total-add-icon {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+.make-total-add-label {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink-soft);
   text-align: center;
+  white-space: nowrap;
 }
 
 .make-total-sum {

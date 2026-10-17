@@ -357,6 +357,13 @@ function parseQuestion(value: unknown, path: string): Question {
       if (mode === "fill-slots" && (gap ?? "right") === "total" && (operation ?? "add") === "add") {
         fail(path, "fill-slots cannot use gap total (there are no empty slots). Use pick.");
       }
+      let slotCount: number | undefined;
+      if (value.slotCount != null) {
+        slotCount = expectNumber(value, "slotCount", path);
+        if (!Number.isInteger(slotCount) || slotCount < 2 || slotCount > 12) {
+          fail(path, "slotCount must be a whole number from 2 to 12");
+        }
+      }
       const draft = {
         ...core,
         kind: "make-total" as const,
@@ -366,6 +373,7 @@ function parseQuestion(value: unknown, path: string): Question {
         gap,
         operation,
         mode: mode as MakeTotalMode,
+        slotCount,
         visual,
         options,
       };
@@ -378,6 +386,12 @@ function parseQuestion(value: unknown, path: string): Question {
       }
       if (part != null && visual && visual.count !== part) {
         fail(path, "part must match visual.count when both are set");
+      }
+      if (mode === "fill-slots") {
+        const bank = slotCount ?? Math.min(12, Math.max(missing + 2, 2));
+        if (bank <= missing && missing < 12) {
+          fail(path, "slotCount must be more than the missing part so the child can overshoot");
+        }
       }
       if (options) {
         const hits = options.filter((option) => optionNumber(option.label) === missing);

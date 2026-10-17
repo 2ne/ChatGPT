@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 taps empty slots to finish 2 + ? = 5. Question 2 taps two number tiles that make 5, with dots on the tiles. Questions 3 to 5 tap slots for 3 +, 4 + and 1 + to make 5. Question 6 matches 0, 1 and 2 to their partners. Question 7 taps slots for 5 = 2 + ?. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways. Hints on the first three. Totals stay 5.",
+    "within": "Question 1 taps extra slots for what goes with 2 to make 5. Question 2 taps two number tiles that make 5, with dots on the tiles. Questions 3 to 5 tap slots for what goes with 3, 4 and 1 to make 5. Question 6 matches 0, 1 and 2 to their partners. Question 7 taps slots for what goes with 2 to make 5. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways. Hints on the first three. Totals stay 5.",
     "versus": "Easy taps dotted slots or four tiles with dots. Medium shows slots or six tiles and may ask for both pairs. Hard is the sum line or tiles with no dots. Same node: recall bonds to 5 and related subtraction."
   },
   "skills": ["eyfs-bonds-5", "number-bonds-to-5", "subtraction-within-5"],
@@ -25,14 +25,14 @@
     {
       "kind": "make-total",
       "id": "b5e-with-2",
-      "prompt": "Which number goes with 2 to make 5?",
+      "prompt": "What goes with 2 to make 5?",
       "visual": { "item": "star", "count": 2 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Tap a space for each one you still need.",
       "explanation": "2 and 3 make 5. 2 + 3 = 5.",
-      "narration": { "prompt": "Which number goes with 2 to make 5?" }
+      "narration": { "prompt": "What goes with 2 to make 5?" }
     },
     {
       "kind": "pick-pair",
@@ -49,36 +49,36 @@
     {
       "kind": "make-total",
       "id": "b5e-3-plus",
-      "prompt": "Which number goes with 3 to make 5?",
+      "prompt": "What goes with 3 to make 5?",
       "visual": { "item": "apple", "count": 3 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "How many more from 3 to 5?",
       "explanation": "3 + 2 = 5.",
-      "narration": { "prompt": "Which number goes with 3 to make 5?" }
+      "narration": { "prompt": "What goes with 3 to make 5?" }
     },
     {
       "kind": "make-total",
       "id": "b5e-4-plus",
-      "prompt": "Which number goes with 4 to make 5?",
+      "prompt": "What goes with 4 to make 5?",
       "visual": { "item": "duck", "count": 4 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "4 + 1 = 5.",
-      "narration": { "prompt": "Which number goes with 4 to make 5?" }
+      "narration": { "prompt": "What goes with 4 to make 5?" }
     },
     {
       "kind": "make-total",
       "id": "b5e-1-plus",
-      "prompt": "Which number goes with 1 to make 5?",
+      "prompt": "What goes with 1 to make 5?",
       "visual": { "item": "frog", "count": 1 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "1 + 4 = 5.",
-      "narration": { "prompt": "Which number goes with 1 to make 5?" }
+      "narration": { "prompt": "What goes with 1 to make 5?" }
     },
     {
       "kind": "match-pairs",
@@ -95,13 +95,13 @@
     {
       "kind": "make-total",
       "id": "b5e-5-eq",
-      "prompt": "5 = 2 + ?",
+      "prompt": "What goes with 2 to make 5?",
       "visual": { "item": "balloon", "count": 2 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "5 = 2 + 3.",
-      "narration": { "prompt": "5 equals 2 plus what?" }
+      "narration": { "prompt": "What goes with 2 to make 5?" }
     },
     {
       "kind": "multi-select",

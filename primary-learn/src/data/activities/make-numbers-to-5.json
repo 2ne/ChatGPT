@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 add two numbers on the sum line (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps slots to finish 3 as 2 and ?. Question 6 taps four tiles with dots to make 4. Question 7 adds 2 and 3 on the sum line. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps slots for 4 is 1 and ?. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
+    "within": "Questions 1 to 3 add two numbers on the sum line (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps extra slots for what goes with 2 to make 3. Question 6 taps four tiles with dots to make 4. Question 7 adds 2 and 3 on the sum line. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps extra slots for what goes with 1 to make 4. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
     "versus": "Easy uses the sum line for how many in all, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, and may use six tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
   },
   "skills": [
@@ -164,7 +164,7 @@
     {
       "kind": "make-total",
       "id": "m5e-3-parts",
-      "prompt": "3 is 2 and ?",
+      "prompt": "What goes with 2 to make 3?",
       "visual": {
         "item": "fish",
         "count": 2
@@ -174,7 +174,7 @@
       "randomise": {},
       "explanation": "3 is 2 {items} and 1 more.",
       "narration": {
-        "prompt": "3 is 2 and what?"
+        "prompt": "What goes with 2 to make 3?"
       }
     },
     {
@@ -261,7 +261,7 @@
     {
       "kind": "make-total",
       "id": "m5e-4-parts",
-      "prompt": "4 is 1 and ?",
+      "prompt": "What goes with 1 to make 4?",
       "visual": {
         "item": "strawberry",
         "count": 1
@@ -271,7 +271,7 @@
       "randomise": {},
       "explanation": "4 is 1 and 3.",
       "narration": {
-        "prompt": "4 is 1 and what?"
+        "prompt": "What goes with 1 to make 4?"
       }
     },
     {
