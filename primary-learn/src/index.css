@@ -124,13 +124,23 @@ a:focus-visible,
 
 .option:focus:not(:focus-visible),
 .pick-pair-tile:focus:not(:focus-visible),
+.object-token:focus:not(:focus-visible),
+.make-total-slot:focus:not(:focus-visible),
+.btn-text:focus:not(:focus-visible),
+.step-btn:focus:not(:focus-visible),
+.match-row:focus:not(:focus-visible),
 .q-prompt:focus,
 .q-prompt:focus-visible {
   outline: none;
 }
 
 .option:focus-visible,
-.pick-pair-tile:focus-visible {
+.pick-pair-tile:focus-visible,
+.object-token:focus-visible,
+.make-total-slot:focus-visible,
+.btn-text:focus-visible,
+.step-btn:focus-visible,
+.match-row:focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 2px;
 }

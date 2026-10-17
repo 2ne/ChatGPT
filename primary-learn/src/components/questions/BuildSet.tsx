@@ -1,7 +1,6 @@
 import type { MouseEvent, PointerEvent } from "react";
 import { copy } from "../../data/copy";
 import { OBJECT_WORDS, objectGlyph } from "../../data/objects";
-import { speakCount } from "../../lib/speech";
 import type { BuildSetQuestion } from "../../types/activity";
 import type { Reveal } from "./choice";
 
@@ -34,14 +33,12 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
     if (disabled || selected.includes(id)) return;
     const next = [...selected, id];
     onChange(next);
-    speakCount(next.length);
   }
 
   function remove(id: string) {
     if (disabled) return;
     const next = selected.filter((item) => item !== id);
     onChange(next);
-    if (next.length > 0) speakCount(next.length);
   }
 
   function activateAdd(id: string, event: PointerEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) {
@@ -68,14 +65,14 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
           {selected.length === 0 ? (
             <p className="t-meta build-empty">{copy.emptyGroup}</p>
           ) : (
-            selected.map((id, index) => (
+            selected.map((id) => (
               <button
                 key={id}
                 type="button"
                 role="listitem"
                 className="object-token is-lit"
                 disabled={disabled}
-                aria-label={`${words.singular} ${index + 1}. Tap to take it out.`}
+                aria-label={`${words.singular}. Tap to take it out.`}
                 onPointerDown={(event) => activateRemove(id, event)}
                 onClick={(event) => {
                   if (event.detail === 0) activateRemove(id, event);
@@ -83,9 +80,6 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
               >
                 <span className="object-glyph" aria-hidden>
                   {glyph}
-                </span>
-                <span className="object-num" aria-hidden>
-                  {index + 1}
                 </span>
               </button>
             ))

@@ -160,6 +160,18 @@ export function installSoundUi() {
     unlockSound();
     if (!isTapTarget(event.target)) return;
     playSound("tap");
+    const pointerType = event instanceof PointerEvent ? event.pointerType : "touch";
+    if (pointerType === "mouse" || pointerType === "touch" || pointerType === "pen") {
+      const button =
+        event.target instanceof Element
+          ? event.target.closest("button, [role='button'], [role='radio']")
+          : null;
+      if (button instanceof HTMLElement) {
+        requestAnimationFrame(() => {
+          if (document.activeElement === button) button.blur();
+        });
+      }
+    }
   }
 
   window.addEventListener("pointerdown", onPress, { capture: true });

@@ -213,9 +213,13 @@ rainbow itself is never inset.
   tokens on pick-pair tiles). Never invent a solid indigo fill or a private
   selected look for one kind.
 - Focus rings use `:focus-visible` only, so they appear for keyboard
-  navigation and never after a tap or on load. Do not style `:focus` on
-  answers. No answer is auto-focused when a question opens. The selected
-  look comes only from the selected answer state, never from focus.
+  navigation and never after a tap or on load. That includes answer
+  buttons, pick-pair tiles, build-set tray and group tokens, make-total
+  slots, and text resets. Do not style `:focus` on answers. No answer is
+  auto-focused when a question opens. The selected look comes only from
+  the selected answer state, never from focus.
+- Build-set “Your group” shows the objects only. No numbered badges and no
+  spoken count. Those would give the answer away.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
