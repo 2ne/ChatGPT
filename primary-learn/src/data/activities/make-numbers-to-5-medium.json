@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 taps extra slots for what goes with 2 to make 5. Questions 6 and 7 tap six tiles to find one pair that makes 5, first 0 and 5, then 1 and 4. Question 8 taps every pair that makes 4. Question 9 taps extra slots for what goes with 4 to make 5. Question 10 is the sum line for what goes with 1 to make 5. Starts at 4.",
-    "versus": "Easy starts at 1 and 1 on the sum line, with early hints and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, and may use six tiles for one pair. Hard uses reverse parts, number words, a hidden part, and tiles with no dots. Still composition of numbers to 5, not quick bond recall."
+    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 taps extra slots for what goes with 2 to make 5. Questions 6 and 7 tap four tiles to find one pair that makes 5, first 0 and 5, then 1 and 4. Question 8 taps every pair that makes 4. Question 9 taps extra slots for what goes with 4 to make 5. Question 10 is the sum line for what goes with 1 to make 5. Starts at 4.",
+    "versus": "Easy starts at 1 and 1 on the sum line, with early hints and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, still on four tiles. Hard uses reverse parts, number words, a hidden part, and tiles with no dots. Still composition of numbers to 5, not quick bond recall."
   },
   "skills": [
     "eyfs-compose-5",
@@ -194,7 +194,7 @@
       "id": "m5m-pair-0-5",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [0, 5, 1, 1, 2, 2],
+      "tiles": [0, 5, 1, 2],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
@@ -209,7 +209,7 @@
       "id": "m5m-pair-1-4",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [1, 4, 0, 0, 2, 2],
+      "tiles": [1, 4, 0, 2],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true

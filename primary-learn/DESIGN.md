@@ -286,9 +286,10 @@ rainbow itself is never inset.
   soft border as `.option`, grey dots. Selected tiles use the shared option
   selected state (indigo border, soft indigo fill, ring shadow). Dots stay
   grey. Tap again to deselect. At most two tiles are selected. No sum line
-  under the tiles. Always one pair. Any valid pair on the board is accepted.
-  Finding every pair belongs to `match-pairs` later. Easy: four tiles with
-  dots. Medium: six tiles for one pair. Hard: no dots. Later totals to 10
+  under the tiles. Always four tiles and exactly one pair. No duplicate
+  numbers that make a second pair. Finding every pair belongs to
+  `match-pairs` later. Easy: four tiles with dots. Medium: four tiles, harder
+  numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
   or 20 use the same `total` / `tiles` config.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. Sticky white dock at the viewport bottom on

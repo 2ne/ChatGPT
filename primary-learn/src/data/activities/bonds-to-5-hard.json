@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 is the sum line for what goes with 4 to make 5. Question 2 fills 5 take away 2. Question 3 matches number words to partners. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 5. Question 6 is 5 take away 0. Question 7 is the sum line reverse for what goes with 4 to make 5. Question 8 taps six tiles with no dots to make 5. Question 9 picks 5 take away 3 as a number word. Question 10 picks the take-away that matches 1 + 4. No hints. Totals stay 5.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or six tiles. Hard is the sum line or tiles with no dots, mixing plus and take away."
+    "within": "Question 1 is the sum line for what goes with 4 to make 5. Question 2 fills 5 take away 2. Question 3 matches number words to partners. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 5. Question 6 is 5 take away 0. Question 7 is the sum line reverse for what goes with 4 to make 5. Question 8 taps four tiles with no dots to make 5. Question 9 picks 5 take away 3 as a number word. Question 10 picks the take-away that matches 1 + 4. No hints. Totals stay 5.",
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots, mixing plus and take away."
   },
   "skills": [
     "eyfs-bonds-5",
@@ -236,12 +236,12 @@
       "id": "b5h-same-as",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [0, 1, 2, 3, 4, 5],
+      "tiles": [0, 5, 1, 2],
       "showDots": false,
       "randomise": {
         "shuffleOptions": true
       },
-      "explanation": "0 and 5 make 5. 1 and 4 make 5. 2 and 3 make 5.",
+      "explanation": "0 and 5 make 5.",
       "narration": {
         "prompt": "What two numbers make 5?"
       }

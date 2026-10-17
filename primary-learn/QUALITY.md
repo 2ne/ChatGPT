@@ -21,7 +21,7 @@ Change **one or two** dimensions at a time. Never jump all of them at once.
 | Steps | One step, one idea | One step plus a tiny extra (order reversed, picture then numeral) | Two steps the node actually teaches — not a new topic |
 | Representation | Objects / emoji groups the child can touch-count | Mix of pictures and numerals | Numerals, words, or a short story. No count-all objects unless the node is counting |
 | Scaffolding | Hint on the first third of items; stem names the strategy (“count each one”) | Hints only on the last third, or none | No hints unless the item is a new representation |
-| Question kind | Tap-to-count, build-set, make-total fill-slots, pick-pair with dots, multiple-choice or fill-blank | Mix two or three kinds, including make-total fill-slots or sum-only, or pick-pair on six tiles | Include make-total sum-only, pick-pair with no dots, multi-select, ordered, match, or a one-step story if the node supports it |
+| Question kind | Tap-to-count, build-set, make-total fill-slots, pick-pair with dots, multiple-choice or fill-blank | Mix two or three kinds, including make-total fill-slots or sum-only, or pick-pair with harder numbers | Include make-total sum-only, pick-pair with no dots, multi-select, ordered, match, or a one-step story if the node supports it |
 
 **Easy < Medium < Hard** on the same node must be obvious if you put the three quests side by side. Medium is not “Easy plus one trick question”. Hard is not a different topic.
 
@@ -64,7 +64,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice missing | `What goes with {n} to make {total}?` |
 | fill-blank bond | Prompt: `What goes with {n} to make {total}?`. Prefix/suffix: `{a} +` / `= {total}` |
 | make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Totals: `How many in all?`. Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
-| pick-pair | `What two numbers make {total}?`. Always one pair. Set `showDots`. Finding every pair is `match-pairs`. |
+| pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |
 | match-pairs | `Match each {left} to {right}.` |

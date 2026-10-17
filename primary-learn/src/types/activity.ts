@@ -193,17 +193,18 @@ export type MakeTotalQuestion = QuestionCore & {
 
 /**
  * Tap two number tiles that add to `total`. Easy shows quantity dots.
- * Hard hides the dots. Always one pair. Finding every pair is match-pairs.
+ * Hard hides the dots. Always four tiles and one pair. Finding every
+ * pair is match-pairs. Medium difficulty is the numbers, not tile count.
  */
 export type PickPairQuestion = QuestionCore & {
   kind: "pick-pair";
   /** The whole. 1–20 so later bonds to 10/20 reuse this. */
   total: number;
-  /** Number tiles. Omit when `tileRange` should draw a fresh set. */
+  /** Four unique numbers with exactly one pair that makes `total`. */
   tiles?: number[];
   /** Inclusive range used when `tiles` is omitted. */
   tileRange?: { min: number; max: number };
-  /** How many tiles to draw from `tileRange`. Default 4. */
+  /** How many tiles to draw from `tileRange`. Default 4, max 4. */
   tileCount?: number;
   /** Quantity dots on each tile. Default true. Hard sets false. */
   showDots?: boolean;

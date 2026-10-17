@@ -409,7 +409,7 @@ function parseQuestion(value: unknown, path: string): Question {
       let tiles: number[] | undefined;
       if (value.tiles != null) {
         const list = expectArray(value, "tiles", path);
-        if (list.length < 2 || list.length > 8) fail(path, "tiles must have 2 to 8 numbers");
+        if (list.length < 2 || list.length > 4) fail(path, "tiles must have 2 to 4 numbers");
         tiles = list.map((entry, index) => {
           if (typeof entry !== "number" || !Number.isInteger(entry) || entry < 0 || entry > 20) {
             fail(`${path}.tiles[${index}]`, "tile must be a whole number from 0 to 20");
@@ -430,8 +430,8 @@ function parseQuestion(value: unknown, path: string): Question {
       let tileCount: number | undefined;
       if (value.tileCount != null) {
         tileCount = expectNumber(value, "tileCount", path);
-        if (!Number.isInteger(tileCount) || tileCount < 2 || tileCount > 8) {
-          fail(path, "tileCount must be a whole number from 2 to 8");
+        if (!Number.isInteger(tileCount) || tileCount < 2 || tileCount > 4) {
+          fail(path, "tileCount must be a whole number from 2 to 4");
         }
       }
       if (value.showDots != null && typeof value.showDots !== "boolean") {

@@ -69,6 +69,17 @@ export function valuesSumToTotal(left: number, right: number, total: number): bo
   return left + right === total;
 }
 
+/** How many unordered tile pairs add to total, including overlapping pairs. */
+export function pickPairMatchCount(values: number[], total: number): number {
+  let count = 0;
+  for (let i = 0; i < values.length; i += 1) {
+    for (let j = i + 1; j < values.length; j += 1) {
+      if ((values[i] ?? 0) + (values[j] ?? 0) === total) count += 1;
+    }
+  }
+  return count;
+}
+
 export function togglePickPairTile(answer: PickPairAnswer, id: string): PickPairAnswer {
   if (answer.picked.includes(id)) {
     return { picked: answer.picked.filter((item) => item !== id) };
@@ -108,21 +119,28 @@ function shuffleIn<T>(list: T[], rng: Rng): T[] {
   return next;
 }
 
-/** Draw tiles from `tileRange` so at least one valid pair is present. */
+/** Draw tiles from `tileRange` so exactly one valid pair is present. */
 export function drawPickPairTiles(question: PickPairQuestion, rng: Rng): number[] {
   const range = question.tileRange;
   if (!range) return question.tiles ?? [];
-  const count = question.tileCount ?? 4;
+  const count = Math.min(question.tileCount ?? 4, 4);
   const pool: number[] = [];
   for (let value = range.min; value <= range.max; value += 1) pool.push(value);
   const complements = possibleComplements(range.min, range.max, question.total);
-  const chosen = shuffleIn(complements, rng).slice(0, 1);
-  const tiles: number[] = [];
-  for (const [left, right] of chosen) {
-    tiles.push(left, right);
-  }
-  while (tiles.length < count && pool.length > 0) {
-    tiles.push(pool[Math.floor(rng() * pool.length)] ?? range.min);
+  const chosen = shuffleIn(complements, rng)[0];
+  if (!chosen) return [];
+  const tiles = [chosen[0], chosen[1]];
+  const used = new Set(tiles);
+  const blocked = new Set(tiles.map((value) => question.total - value));
+  const candidates = shuffleIn(
+    pool.filter((value) => !used.has(value) && !blocked.has(value)),
+    rng,
+  );
+  for (const value of candidates) {
+    if (tiles.length >= count) break;
+    tiles.push(value);
+    used.add(value);
+    blocked.add(question.total - value);
   }
   return shuffleIn(tiles.slice(0, count), rng);
 }
@@ -130,9 +148,9 @@ export function drawPickPairTiles(question: PickPairQuestion, rng: Rng): number[
 export function canDrawPickPair(question: PickPairQuestion): { ok: true } | { ok: false; reason: string } {
   const total = question.total;
   if (question.tiles && question.tiles.length > 0) {
-    const tiles = pickPairTiles(question);
-    const pairs = requiredTilePairs(tiles, total);
-    if (pairs.length === 0) return { ok: false, reason: "tiles must include at least one pair that makes total" };
+    if (pickPairMatchCount(question.tiles, total) !== 1) {
+      return { ok: false, reason: "tiles must include exactly one pair that makes total" };
+    }
     return { ok: true };
   }
   const range = question.tileRange;
