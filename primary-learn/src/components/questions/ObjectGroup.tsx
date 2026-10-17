@@ -235,7 +235,6 @@ export function ObjectGroup({
       <p className="visually-hidden" aria-live="polite">
         {counted > 0 ? String(counted) : ""}
       </p>
-      {counted === 0 ? <p className="object-coach t-meta">{copy.tapEachToCount}</p> : null}
       {counted > 0 ? (
         <button type="button" className="btn-text" onClick={() => setLit({})}>
           {copy.countAgain}

@@ -30,7 +30,6 @@ export const copy = {
   yourAnswer: "Your answer",
   chooseAll: "Choose all that apply.",
   tapThenPartner: "Tap one, then tap its partner.",
-  tapEachToCount: "Tap each one to count.",
   countAgain: "Count again",
   yourGroup: "Your group",
   tapToAdd: "Tap to add",

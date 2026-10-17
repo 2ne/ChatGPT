@@ -1177,11 +1177,6 @@ button.learner-chip:focus-visible {
   justify-items: center;
 }
 
-.object-coach {
-  margin: 0;
-  text-align: center;
-}
-
 .object-group.is-tappable {
   gap: 10px;
   padding: 4px;
