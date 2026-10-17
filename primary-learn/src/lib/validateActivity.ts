@@ -1,11 +1,17 @@
 import { ABILITY_BANDS, SUBJECTS, YEAR_GROUPS } from "../types/curriculum";
 import {
   ACTIVITY_TYPES,
+  MAKE_TOTAL_GAPS,
+  MAKE_TOTAL_MODES,
+  MAKE_TOTAL_OPS,
   OBJECT_ITEMS,
   OBJECT_LAYOUTS,
   QUESTION_KINDS,
   type Activity,
   type ActivityRandomise,
+  type MakeTotalGap,
+  type MakeTotalMode,
+  type MakeTotalOp,
   type MatchSide,
   type ObjectAsset,
   type ObjectItem,
@@ -13,6 +19,7 @@ import {
   type QuestionOption,
   type RandomiseSpec,
 } from "../types/activity";
+import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -57,6 +64,21 @@ function expectVisual(value: unknown, path: string): ObjectAsset {
   return { item: item as ObjectAsset["item"], count };
 }
 
+/** Part-whole pictures may be empty (0) and can grow to 20 for later tens. */
+function parseMakeTotalVisual(value: unknown, path: string): ObjectAsset | undefined {
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "visual must be { item, count }");
+  const item = value.item;
+  const count = value.count;
+  if (!isString(item) || !(OBJECT_ITEMS as readonly string[]).includes(item)) {
+    fail(path, `visual.item must be one of ${OBJECT_ITEMS.join(", ")}`);
+  }
+  if (typeof count !== "number" || !Number.isInteger(count) || count < 0 || count > 20) {
+    fail(path, "visual.count must be a whole number from 0 to 20");
+  }
+  return { item: item as ObjectAsset["item"], count };
+}
+
 function optionalVisual(record: Record<string, unknown>, path: string): ObjectAsset | undefined {
   if (record.visual == null) return undefined;
   return expectVisual(record.visual, `${path}.visual`);
@@ -67,6 +89,17 @@ function parseExtras(record: Record<string, unknown>, path: string): ObjectAsset
   const list = expectArray(record, "extras", path);
   if (list.length === 0) fail(path, "extras must not be empty if set");
   return list.map((asset, index) => expectVisual(asset, `${path}.extras[${index}]`));
+}
+
+function parseMakeTotalExtras(record: Record<string, unknown>, path: string): ObjectAsset[] | undefined {
+  if (record.extras == null) return undefined;
+  const list = expectArray(record, "extras", path);
+  if (list.length === 0) fail(path, "extras must not be empty if set");
+  return list.map((asset, index) => {
+    const parsed = parseMakeTotalVisual(asset, `${path}.extras[${index}]`);
+    if (!parsed) fail(`${path}.extras[${index}]`, "visual must be { item, count }");
+    return parsed;
+  });
 }
 
 function parseLayout(record: Record<string, unknown>, path: string): Question["layout"] {
@@ -163,8 +196,12 @@ function parseQuestion(value: unknown, path: string): Question {
   const explanation = expectString(value, "explanation", path);
   const hint = value.hint == null ? undefined : expectString(value, "hint", path);
   const narration = parseNarration(value.narration, `${path}.narration`);
-  const visual = optionalVisual(value, path);
-  const extras = parseExtras(value, path);
+  const visual =
+    kind === "make-total"
+      ? parseMakeTotalVisual(value.visual, `${path}.visual`)
+      : optionalVisual(value, path);
+  const extras =
+    kind === "make-total" ? parseMakeTotalExtras(value, path) : parseExtras(value, path);
   const layout = parseLayout(value, path);
   if (visual && extras) {
     for (const extra of extras) {
@@ -264,6 +301,90 @@ function parseQuestion(value: unknown, path: string): Question {
       });
       if (pairs.length < 2) fail(path, "match-pairs needs at least two pairs");
       return { ...core, kind, pairs };
+    }
+    case "make-total": {
+      const total = expectNumber(value, "total", path);
+      if (!Number.isInteger(total) || total < 1 || total > 20) {
+        fail(path, "total must be a whole number from 1 to 20");
+      }
+      let part: number | undefined;
+      if (value.part != null) {
+        part = expectNumber(value, "part", path);
+        if (!Number.isInteger(part) || part < 0 || part > total) {
+          fail(path, "part must be a whole number from 0 to total");
+        }
+      }
+      let other: number | undefined;
+      if (value.other != null) {
+        other = expectNumber(value, "other", path);
+        if (!Number.isInteger(other) || other < 0 || other > total) {
+          fail(path, "other must be a whole number from 0 to total");
+        }
+      }
+      const mode = expectString(value, "mode", path);
+      if (!(MAKE_TOTAL_MODES as readonly string[]).includes(mode)) {
+        fail(path, "mode must be fill-slots, pick or sum-only");
+      }
+      let gap: MakeTotalGap | undefined;
+      if (value.gap != null) {
+        const written = expectString(value, "gap", path);
+        if (!(MAKE_TOTAL_GAPS as readonly string[]).includes(written)) {
+          fail(path, "gap must be left, right or total");
+        }
+        gap = written as MakeTotalGap;
+      }
+      let operation: MakeTotalOp | undefined;
+      if (value.operation != null) {
+        const written = expectString(value, "operation", path);
+        if (!(MAKE_TOTAL_OPS as readonly string[]).includes(written)) {
+          fail(path, "operation must be add or subtract");
+        }
+        operation = written as MakeTotalOp;
+      }
+      if ((mode === "fill-slots" || mode === "pick") && !visual) {
+        fail(path, `${mode} needs visual { item, count }`);
+      }
+      let options: QuestionOption[] | undefined;
+      if (value.options != null) {
+        options = expectArray(value, "options", path).map((option, i) =>
+          parseOption(option, `${path}.options[${i}]`),
+        );
+      }
+      if (mode === "pick" || mode === "sum-only") {
+        if (!options || options.length < 3) fail(path, `${mode} needs at least 3 number options`);
+      }
+      if (mode === "fill-slots" && (gap ?? "right") === "total" && (operation ?? "add") === "add") {
+        fail(path, "fill-slots cannot use gap total (there are no empty slots). Use pick.");
+      }
+      const draft = {
+        ...core,
+        kind: "make-total" as const,
+        total,
+        part,
+        other,
+        gap,
+        operation,
+        mode: mode as MakeTotalMode,
+        visual,
+        options,
+      };
+      const missing = makeTotalMissing(draft);
+      if (!Number.isInteger(missing) || missing < 0 || missing > total) {
+        fail(path, "part / other / total do not make a whole number missing part");
+      }
+      if ((gap ?? "right") === "total" && makeTotalPart(draft) + makeTotalOther(draft) !== total) {
+        fail(path, "when gap is total, part + other must equal total");
+      }
+      if (part != null && visual && visual.count !== part) {
+        fail(path, "part must match visual.count when both are set");
+      }
+      if (options) {
+        const hits = options.filter((option) => optionNumber(option.label) === missing);
+        if ((mode === "pick" || mode === "sum-only") && hits.length !== 1) {
+          fail(path, "exactly one option label must be the missing number");
+        }
+      }
+      return draft;
     }
     default:
       fail(path, `unhandled kind ${kind}`);

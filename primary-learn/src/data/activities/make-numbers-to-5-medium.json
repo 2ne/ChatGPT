@@ -4,7 +4,9 @@
   "summary": "Make 4 and 5 from two parts, including 0 and 5, with pictures and numerals.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -13,154 +15,380 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 fills 5 is 2 and blank. Question 6 picks 0 and 5 as a pair that makes 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 fills 5 is 4 and blank. Question 10 names the partner of 1 to make 5. Starts at 4. No drop back to 1 and 1.",
+    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 picks 5 is 2 and ?. Question 6 picks 0 and 5 as a pair that makes 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 picks 5 is 4 and ?. Question 10 picks the partner of 1 to make 5. Starts at 4.",
     "versus": "Easy starts at 1 and 1 with pictured groups and early hints. Medium starts at 4 and 5, adds 0 and 5, and mixes numerals. Hard uses reverse parts, number words, and a hidden part, with no hints. Still composition of numbers to 5, not quick bond recall."
   },
-  "skills": ["eyfs-compose-5", "composition-to-5", "part-part-whole-to-5"],
+  "skills": [
+    "eyfs-compose-5",
+    "composition-to-5",
+    "part-part-whole-to-5"
+  ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "m5m-1-3",
       "prompt": "How many in all?",
-      "visual": { "item": "star", "count": 1 },
-      "extras": [{ "item": "frog", "count": 3 }],
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+      "visual": {
+        "item": "star",
+        "count": 1
+      },
+      "extras": [
+        {
+          "item": "frog",
+          "count": 3
+        }
       ],
-      "correctId": "b",
-      "hint": "1 and 3 make a group of 4.",
+      "part": 1,
+      "other": 3,
+      "total": 4,
+      "gap": "total",
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
+      ],
       "explanation": "1 {item} and 3 {items2} make 4.",
-      "narration": { "prompt": "How many in all?" }
+      "narration": {
+        "prompt": "How many in all?"
+      },
+      "hint": "1 and 3 make a group of 4."
     },
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "m5m-4-1",
       "prompt": "How many in all?",
-      "visual": { "item": "apple", "count": 4 },
-      "extras": [{ "item": "banana", "count": 1 }],
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "2" }
+      "visual": {
+        "item": "apple",
+        "count": 4
+      },
+      "extras": [
+        {
+          "item": "banana",
+          "count": 1
+        }
       ],
-      "correctId": "b",
-      "hint": "4 and 1 make 5.",
+      "part": 4,
+      "other": 1,
+      "total": 5,
+      "gap": "total",
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
+      ],
       "explanation": "4 {items} and 1 {item2} make 5.",
-      "narration": { "prompt": "How many in all?" }
+      "narration": {
+        "prompt": "How many in all?"
+      },
+      "hint": "4 and 1 make 5."
     },
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "m5m-3-2",
       "prompt": "How many in all?",
-      "visual": { "item": "duck", "count": 3 },
-      "extras": [{ "item": "car", "count": 2 }],
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "6" }
+      "visual": {
+        "item": "duck",
+        "count": 3
+      },
+      "extras": [
+        {
+          "item": "car",
+          "count": 2
+        }
       ],
-      "correctId": "b",
-      "hint": "3 and 2 also make 5.",
+      "part": 3,
+      "other": 2,
+      "total": 5,
+      "gap": "total",
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
       "explanation": "3 {items} and 2 {items2} make 5.",
-      "narration": { "prompt": "How many in all?" }
+      "narration": {
+        "prompt": "How many in all?"
+      },
+      "hint": "3 and 2 also make 5."
     },
     {
       "kind": "match-pairs",
       "id": "m5m-match",
       "prompt": "Match each number to its parts.",
       "pairs": [
-        { "id": "p4", "left": "4", "right": "1 and 3" },
-        { "id": "p5", "left": "5", "right": "4 and 1" },
-        { "id": "p3", "left": "3", "right": "1 and 2" }
+        {
+          "id": "p4",
+          "left": "4",
+          "right": "1 and 3"
+        },
+        {
+          "id": "p5",
+          "left": "5",
+          "right": "4 and 1"
+        },
+        {
+          "id": "p3",
+          "left": "3",
+          "right": "1 and 2"
+        }
       ],
       "explanation": "4 is 1 and 3. 5 is 4 and 1. 3 is 1 and 2.",
-      "narration": { "prompt": "Match each number to its parts." }
+      "narration": {
+        "prompt": "Match each number to its parts."
+      }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "m5m-5-2",
-      "prompt": "Complete the parts.",
-      "prefix": "5 is 2 and",
-      "acceptedAnswers": ["3", "three"],
-      "inputMode": "numeric",
+      "prompt": "5 is 2 and ?",
+      "visual": {
+        "item": "ladybird",
+        "count": 2
+      },
+      "total": 5,
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "1"
+        }
+      ],
       "explanation": "5 is 2 and 3.",
-      "narration": { "prompt": "Complete the parts. 5 is 2 and what?" }
+      "narration": {
+        "prompt": "5 is 2 and what?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "m5m-pair-0-5",
       "prompt": "Which pair makes 5?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "0 and 5" },
-        { "id": "b", "label": "2 and 2" },
-        { "id": "c", "label": "3 and 3" },
-        { "id": "d", "label": "1 and 3" }
+        {
+          "id": "a",
+          "label": "0 and 5"
+        },
+        {
+          "id": "b",
+          "label": "2 and 2"
+        },
+        {
+          "id": "c",
+          "label": "3 and 3"
+        },
+        {
+          "id": "d",
+          "label": "1 and 3"
+        }
       ],
       "correctId": "a",
       "explanation": "0 and 5 make 5. Nothing and 5 is still 5.",
-      "narration": { "prompt": "Which pair makes 5?" }
+      "narration": {
+        "prompt": "Which pair makes 5?"
+      }
     },
     {
       "kind": "build-set",
       "id": "m5m-build-5",
       "prompt": "Make a group of 5 {items}.",
-      "visual": { "item": "ladybird", "count": 5 },
+      "visual": {
+        "item": "ladybird",
+        "count": 5
+      },
       "randomise": {},
       "explanation": "5 is 4 and 1, or 2 and 3. Stop at 5.",
-      "narration": { "prompt": "Make a group of 5 {items}." }
+      "narration": {
+        "prompt": "Make a group of 5 {items}."
+      }
     },
     {
       "kind": "multi-select",
       "id": "m5m-every-4",
       "prompt": "Tap every pair that makes 4.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1 and 3" },
-        { "id": "b", "label": "2 and 2" },
-        { "id": "c", "label": "1 and 2" },
-        { "id": "d", "label": "4 and 1" }
+        {
+          "id": "a",
+          "label": "1 and 3"
+        },
+        {
+          "id": "b",
+          "label": "2 and 2"
+        },
+        {
+          "id": "c",
+          "label": "1 and 2"
+        },
+        {
+          "id": "d",
+          "label": "4 and 1"
+        }
       ],
-      "correctIds": ["a", "b"],
+      "correctIds": [
+        "a",
+        "b"
+      ],
       "explanation": "1 and 3 make 4. 2 and 2 make 4. 1 and 2 make 3. 4 and 1 make 5.",
-      "narration": { "prompt": "Tap every pair that makes 4." }
+      "narration": {
+        "prompt": "Tap every pair that makes 4."
+      }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "m5m-5-4",
-      "prompt": "Complete the parts.",
-      "prefix": "5 is 4 and",
-      "acceptedAnswers": ["1", "one"],
-      "inputMode": "numeric",
+      "prompt": "5 is 4 and ?",
+      "visual": {
+        "item": "fish",
+        "count": 4
+      },
+      "total": 5,
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
+      ],
       "explanation": "5 is 4 and 1.",
-      "narration": { "prompt": "Complete the parts. 5 is 4 and what?" }
+      "narration": {
+        "prompt": "5 is 4 and what?"
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "m5m-5-1",
       "prompt": "5 is 1 and ?",
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "strawberry",
+        "count": 1
+      },
+      "total": 5,
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
       ],
-      "correctId": "b",
       "explanation": "5 is 1 and 4.",
-      "narration": { "prompt": "5 is 1 and what?" }
+      "narration": {
+        "prompt": "5 is 1 and what?"
+      }
     }
   ]
 }

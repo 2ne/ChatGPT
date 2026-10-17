@@ -22,6 +22,7 @@ export const QUESTION_KINDS = [
   "fill-blank",
   "ordered",
   "match-pairs",
+  "make-total",
 ] as const;
 
 export type QuestionKind = (typeof QUESTION_KINDS)[number];
@@ -155,6 +156,37 @@ export type MatchPairsQuestion = QuestionCore & {
   pairs: Array<{ id: string; left: MatchSide; right: MatchSide }>;
 };
 
+/** How the child answers a part-whole sum. */
+export const MAKE_TOTAL_MODES = ["fill-slots", "pick", "sum-only"] as const;
+export type MakeTotalMode = (typeof MAKE_TOTAL_MODES)[number];
+
+/** add: part + ? = total. subtract is reserved for tap-to-remove later. */
+export const MAKE_TOTAL_OPS = ["add", "subtract"] as const;
+export type MakeTotalOp = (typeof MAKE_TOTAL_OPS)[number];
+
+/** Which box is the question mark. Default right (known + ? = total). */
+export const MAKE_TOTAL_GAPS = ["left", "right", "total"] as const;
+export type MakeTotalGap = (typeof MAKE_TOTAL_GAPS)[number];
+
+/**
+ * Part-whole sum. Easy taps empty slots, Medium shows slots and picks a number,
+ * Hard is the sum line only. `total` may be 1–20 so later bonds to 10/20 reuse this.
+ */
+export type MakeTotalQuestion = QuestionCore & {
+  kind: "make-total";
+  /** The whole. 1–20. */
+  total: number;
+  /** Known addend. Defaults to `visual.count`. 0 is allowed (5 is 0 and 5). */
+  part?: number;
+  /** Second known addend when `gap` is `total`. Defaults to `extras[0].count`. */
+  other?: number;
+  gap?: MakeTotalGap;
+  operation?: MakeTotalOp;
+  mode: MakeTotalMode;
+  /** Number buttons. Required for `pick` and `sum-only`. */
+  options?: QuestionOption[];
+};
+
 export type Question =
   | CountObjectsQuestion
   | BuildSetQuestion
@@ -162,7 +194,8 @@ export type Question =
   | MultiSelectQuestion
   | FillBlankQuestion
   | OrderedQuestion
-  | MatchPairsQuestion;
+  | MatchPairsQuestion
+  | MakeTotalQuestion;
 
 export type DifficultyRamp = {
   within: string;

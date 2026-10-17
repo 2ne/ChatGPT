@@ -4,6 +4,7 @@ import { copy } from "../../data/copy";
 import { BuildSet } from "./BuildSet";
 import { CountObjects } from "./CountObjects";
 import { FillBlank } from "./FillBlank";
+import { MakeTotal } from "./MakeTotal";
 import { MatchPairs } from "./MatchPairs";
 import { MultiSelect } from "./MultiSelect";
 import { MultipleChoice } from "./MultipleChoice";
@@ -38,6 +39,7 @@ export const QUESTION_VIEWS: Record<QuestionKind, KindView> = {
   "fill-blank": FillBlank as KindView,
   ordered: Ordered as KindView,
   "match-pairs": MatchPairs as KindView,
+  "make-total": MakeTotal as KindView,
 };
 
 export function QuestionView({

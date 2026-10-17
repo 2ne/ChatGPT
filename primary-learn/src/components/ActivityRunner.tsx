@@ -14,6 +14,7 @@ import {
 import type { Activity, Question } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
+import { optionNumber } from "../lib/makeTotal";
 import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
 import { playSound } from "../lib/sound";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
@@ -188,15 +189,22 @@ export function ActivityRunner({
       if (
         typing ||
         currentPhase !== "question" ||
-        (currentQuestion?.kind !== "multiple-choice" && currentQuestion?.kind !== "count-objects")
+        (currentQuestion?.kind !== "multiple-choice" &&
+          currentQuestion?.kind !== "count-objects" &&
+          currentQuestion?.kind !== "make-total")
       ) {
         return;
       }
+      const options = "options" in currentQuestion ? currentQuestion.options : undefined;
       const choice = Number(event.key) - 1;
-      if (choice >= 0 && choice < currentQuestion.options.length) {
-        playSound("tap");
-        setAnswer(currentQuestion.options[choice].id);
+      if (!options || choice < 0 || choice >= options.length) return;
+      playSound("tap");
+      if (currentQuestion.kind === "make-total") {
+        const value = optionNumber(options[choice]?.label);
+        if (value != null) setAnswer(value);
+        return;
       }
+      setAnswer(options[choice]?.id);
     }
 
     window.addEventListener("keydown", onKey);

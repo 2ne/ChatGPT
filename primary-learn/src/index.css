@@ -1531,6 +1531,151 @@ button.learner-chip:focus-visible {
   background: var(--red-soft);
 }
 
+.make-total {
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+}
+
+.make-total-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 12px;
+  max-width: 420px;
+  padding: 8px 4px;
+}
+
+.make-total-part {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.make-total-part + .make-total-part {
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 3px dashed var(--line-strong);
+}
+
+.make-total-slot {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--paper-deep);
+  border: 2.5px solid transparent;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.make-total-slot.is-empty {
+  background: #fff;
+  border: 2.5px dotted var(--ink-faint);
+}
+
+.make-total-slot.is-tap {
+  appearance: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.make-total-slot.is-tap:hover:not(:disabled) {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.make-total-slot.is-filled {
+  background: var(--sun-soft);
+  border-color: var(--sun);
+}
+
+.make-total-coach {
+  margin: 0;
+  text-align: center;
+}
+
+.make-total-sum {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.make-total-box {
+  display: grid;
+  place-items: center;
+  min-width: 56px;
+  min-height: 56px;
+  padding: 6px 12px;
+  border-radius: 18px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.make-total-box.is-part {
+  background: var(--sky-soft);
+  color: #0369a1;
+}
+
+.make-total-box.is-gap {
+  background: var(--sun-soft);
+  color: #9a6200;
+  box-shadow: 0 0 0 3px rgba(255, 201, 60, 0.35);
+}
+
+.make-total-box.is-whole {
+  background: var(--mint-soft);
+  color: #0b7a4b;
+}
+
+.make-total-sign {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.make-total-sum.is-correct .make-total-box.is-gap {
+  background: var(--green-soft);
+  color: var(--green);
+  box-shadow: 0 0 0 3px rgba(12, 166, 120, 0.25);
+}
+
+.make-total-sum.is-wrong .make-total-box.is-gap {
+  background: var(--red-soft);
+  color: var(--red);
+  box-shadow: 0 0 0 3px rgba(224, 49, 49, 0.2);
+}
+
+.object-glyph.is-drop {
+  animation: make-total-drop 180ms ease;
+}
+
+@keyframes make-total-drop {
+  from {
+    transform: translateY(-10px) scale(0.85);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .object-glyph.is-drop {
+    animation: none;
+  }
+}
+
 .step-pair {
   display: flex;
   gap: 8px;

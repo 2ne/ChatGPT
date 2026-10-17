@@ -229,6 +229,15 @@ rainbow itself is never inset.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Do not restyle a single quest.
+- **Part-whole (`make-total`)** stays on the same white activity screen. No
+  scenery. A row shows the known part as filled objects and dotted empty
+  slots for the missing part, so the whole is always visible. Under that, a
+  sum line uses three coloured rounded boxes, e.g. `[2] + [?] = [5]`. The
+  `?` box updates live. Easy (`fill-slots`): tap a dotted space to drop an
+  object; the count is spoken; tap sound on `pointerdown`; then Check it.
+  Medium (`pick`): slots stay, child taps a number button. Hard (`sum-only`):
+  sum line and number buttons only. Later the same kind can subtract (tap to
+  take away) and use totals to 10 or 20 via `total` / `operation` in JSON.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. Sticky white dock at the viewport bottom on
   every width (with safe-area padding) so kids never have to scroll to find it.

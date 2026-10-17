@@ -75,7 +75,7 @@ export function collectItems(question: Question): ObjectItem[] {
   if (question.extras) {
     for (const extra of question.extras) add(extra.item);
   }
-  if ("options" in question) {
+  if ("options" in question && question.options) {
     for (const option of question.options) add(option.visual?.item);
   }
   if (question.kind === "ordered") {
@@ -223,7 +223,7 @@ function applyStrings(question: Question, vars: Record<string, string>): Questio
   next.hint = applyOptional(next.hint, vars);
   next.narration = applyNarration(next.narration, vars);
 
-  if ("options" in next) {
+  if ("options" in next && next.options) {
     next.options = next.options.map((option) => ({
       ...option,
       label: applyOptional(option.label, vars),
@@ -284,12 +284,16 @@ function realizeQuestion(
   const countChanged = spec.count != null && count !== writtenCount;
 
   let next = structuredClone(question);
-  next.visual = remapVisual(next.visual, itemMap, count);
+  next.visual = remapVisual(
+    next.visual,
+    itemMap,
+    question.kind === "make-total" ? undefined : count,
+  );
   if (next.extras) {
     next.extras = next.extras.map((asset) => remapVisual(asset, itemMap) ?? asset);
   }
 
-  if ("options" in next) {
+  if ("options" in next && next.options) {
     next.options = next.options.map((option) => ({
       ...option,
       visual: remapVisual(option.visual, itemMap),
@@ -338,9 +342,10 @@ function realizeQuestion(
     spec.shuffleOptions &&
     (next.kind === "count-objects" ||
       next.kind === "multiple-choice" ||
-      next.kind === "multi-select")
+      next.kind === "multi-select" ||
+      next.kind === "make-total")
   ) {
-    next.options = shuffle(next.options, rng);
+    if (next.options) next.options = shuffle(next.options, rng);
   }
 
   return next;

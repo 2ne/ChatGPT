@@ -13,8 +13,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 find a partner for 2, then pick a pair that makes 5. Questions 3 to 5 fill 3 +, 4 + and 1 + to make 5. Question 6 matches 0, 1 and 2 to their partners. Question 7 reads 5 = 2 + blank. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways 5 take away 1 and 5 − 2. Hints on the first three. Totals stay 5.",
-    "versus": "Easy uses numerals with one pictured start, early hints, and simple take-aways. Medium adds 0, reverse 5 = blank + n, and more take-aways. Hard mixes plus and take away, uses number words, and has no hints. Same node: recall bonds to 5 and related subtraction. Not composition pictures."
+    "within": "Question 1 taps empty slots to finish 2 + ? = 5. Question 2 picks a pair that makes 5. Questions 3 to 5 tap slots for 3 +, 4 + and 1 + to make 5. Question 6 matches 0, 1 and 2 to their partners. Question 7 taps slots for 5 = 2 + ?. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways. Hints on the first three. Totals stay 5.",
+    "versus": "Easy taps dotted slots to build the missing part. Medium shows the slots but the child picks a number. Hard is the sum line only. Same node: recall bonds to 5 and related subtraction."
   },
   "skills": ["eyfs-bonds-5", "number-bonds-to-5", "subtraction-within-5"],
   "randomise": {
@@ -23,19 +23,14 @@
   },
   "questions": [
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "b5e-with-2",
       "prompt": "Which number goes with 2 to make 5?",
       "visual": { "item": "star", "count": 2 },
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "1" }
-      ],
-      "correctId": "b",
-      "hint": "Count on from 2 until you get to 5.",
+      "total": 5,
+      "mode": "fill-slots",
+      "randomise": {},
+      "hint": "Tap a space for each one you still need.",
       "explanation": "2 and 3 make 5. 2 + 3 = 5.",
       "narration": { "prompt": "Which number goes with 2 to make 5?" }
     },
@@ -56,38 +51,38 @@
       "narration": { "prompt": "Which pair makes 5?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "b5e-3-plus",
-      "prompt": "Complete the number bond.",
-      "prefix": "3 +",
-      "suffix": "= 5",
-      "acceptedAnswers": ["2", "two"],
-      "inputMode": "numeric",
+      "prompt": "Which number goes with 3 to make 5?",
+      "visual": { "item": "apple", "count": 3 },
+      "total": 5,
+      "mode": "fill-slots",
+      "randomise": {},
       "hint": "How many more from 3 to 5?",
       "explanation": "3 + 2 = 5.",
-      "narration": { "prompt": "Complete the number bond. 3 plus what equals 5?" }
+      "narration": { "prompt": "Which number goes with 3 to make 5?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "b5e-4-plus",
-      "prompt": "Complete the number bond.",
-      "prefix": "4 +",
-      "suffix": "= 5",
-      "acceptedAnswers": ["1", "one"],
-      "inputMode": "numeric",
+      "prompt": "Which number goes with 4 to make 5?",
+      "visual": { "item": "duck", "count": 4 },
+      "total": 5,
+      "mode": "fill-slots",
+      "randomise": {},
       "explanation": "4 + 1 = 5.",
-      "narration": { "prompt": "Complete the number bond. 4 plus what equals 5?" }
+      "narration": { "prompt": "Which number goes with 4 to make 5?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "b5e-1-plus",
-      "prompt": "Complete the number bond.",
-      "prefix": "1 +",
-      "suffix": "= 5",
-      "acceptedAnswers": ["4", "four"],
-      "inputMode": "numeric",
+      "prompt": "Which number goes with 1 to make 5?",
+      "visual": { "item": "frog", "count": 1 },
+      "total": 5,
+      "mode": "fill-slots",
+      "randomise": {},
       "explanation": "1 + 4 = 5.",
-      "narration": { "prompt": "Complete the number bond. 1 plus what equals 5?" }
+      "narration": { "prompt": "Which number goes with 1 to make 5?" }
     },
     {
       "kind": "match-pairs",
@@ -102,17 +97,13 @@
       "narration": { "prompt": "Match each number to its partner that makes 5." }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "b5e-5-eq",
       "prompt": "5 = 2 + ?",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "1" }
-      ],
-      "correctId": "b",
+      "visual": { "item": "balloon", "count": 2 },
+      "total": 5,
+      "mode": "fill-slots",
+      "randomise": {},
       "explanation": "5 = 2 + 3.",
       "narration": { "prompt": "5 equals 2 plus what?" }
     },

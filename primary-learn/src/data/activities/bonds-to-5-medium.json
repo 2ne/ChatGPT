@@ -4,7 +4,9 @@
   "summary": "Recall bonds to 5 including 0, reverse order, and more take-away facts.",
   "subject": "maths",
   "type": "number-bonds",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -13,141 +15,329 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 finds the partner for 3. Question 2 fills 5 = 4 + blank. Question 3 fills 0 + blank = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps every pair that makes 5, including 0 + 5. Question 7 fills 5 − 0. Question 8 is reverse 5 = blank + 2. Question 9 fills 5 − 4. Question 10 is 5 take away 5. Hints on 1 to 3. No pictures.",
-    "versus": "Easy starts with a pictured 2 and simple 3 + blank, with take-away only at the end. Medium has no pictures, includes 0, reverse missing addends, and more take-aways. Hard mixes plus and take away in one quest, uses number words, and has no hints. Still bonds to 5 only."
+    "within": "Question 1 picks the partner for 3 with slots still showing. Question 2 picks 5 = 4 + ?. Question 3 picks 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps every pair that makes 5, including 0 + 5. Question 7 fills 5 take away 0. Question 8 picks reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
+    "versus": "Easy taps slots to fill the missing part. Medium shows slots and the child picks a number. Hard is the sum line only. Still bonds to 5 only."
   },
-  "skills": ["eyfs-bonds-5", "number-bonds-to-5", "subtraction-within-5"],
+  "skills": [
+    "eyfs-bonds-5",
+    "number-bonds-to-5",
+    "subtraction-within-5"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
   "questions": [
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "b5m-with-3",
       "prompt": "Which number goes with 3 to make 5?",
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "star",
+        "count": 3
+      },
+      "total": 5,
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
       ],
-      "correctId": "b",
       "hint": "Count on from 3: 4, 5.",
       "explanation": "3 and 2 make 5. 3 + 2 = 5.",
-      "narration": { "prompt": "Which number goes with 3 to make 5?" }
+      "narration": {
+        "prompt": "Which number goes with 3 to make 5?"
+      }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "b5m-5-eq-4",
-      "prompt": "Complete the number bond.",
-      "prefix": "5 = 4 +",
-      "acceptedAnswers": ["1", "one"],
-      "inputMode": "numeric",
+      "prompt": "5 = 4 + ?",
+      "visual": {
+        "item": "apple",
+        "count": 4
+      },
+      "total": 5,
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
+      ],
       "hint": "4 and what make 5?",
       "explanation": "5 = 4 + 1.",
-      "narration": { "prompt": "Complete the number bond. 5 equals 4 plus what?" }
+      "narration": {
+        "prompt": "5 equals 4 plus what?"
+      }
     },
     {
-      "kind": "fill-blank",
+      "kind": "make-total",
       "id": "b5m-0-plus",
-      "prompt": "Complete the number bond.",
-      "prefix": "0 +",
-      "suffix": "= 5",
-      "acceptedAnswers": ["5", "five"],
-      "inputMode": "numeric",
+      "prompt": "Which number goes with 0 to make 5?",
+      "visual": {
+        "item": "duck",
+        "count": 0
+      },
+      "total": 5,
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "0"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
+      ],
       "hint": "0 and 5 make 5.",
       "explanation": "0 + 5 = 5.",
-      "narration": { "prompt": "Complete the number bond. 0 plus what equals 5?" }
+      "narration": {
+        "prompt": "Which number goes with 0 to make 5?"
+      }
     },
     {
       "kind": "match-pairs",
       "id": "b5m-match",
       "prompt": "Match each number to its partner that makes 5.",
       "pairs": [
-        { "id": "p0", "left": "0", "right": "5" },
-        { "id": "p3", "left": "3", "right": "2" },
-        { "id": "p5", "left": "5", "right": "0" }
+        {
+          "id": "p0",
+          "left": "0",
+          "right": "5"
+        },
+        {
+          "id": "p3",
+          "left": "3",
+          "right": "2"
+        },
+        {
+          "id": "p5",
+          "left": "5",
+          "right": "0"
+        }
       ],
       "explanation": "0 + 5 = 5. 3 + 2 = 5. 5 + 0 = 5.",
-      "narration": { "prompt": "Match each number to its partner that makes 5." }
+      "narration": {
+        "prompt": "Match each number to its partner that makes 5."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "b5m-take-3",
       "prompt": "5 take away 3. How many left?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
       ],
       "correctId": "b",
       "explanation": "Because 3 + 2 = 5, 5 take away 3 is 2.",
-      "narration": { "prompt": "5 take away 3. How many left?" }
+      "narration": {
+        "prompt": "5 take away 3. How many left?"
+      }
     },
     {
       "kind": "multi-select",
       "id": "b5m-every",
       "prompt": "Tap every pair that makes 5.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "0 + 5" },
-        { "id": "b", "label": "2 + 2" },
-        { "id": "c", "label": "5 + 0" },
-        { "id": "d", "label": "4 + 2" }
+        {
+          "id": "a",
+          "label": "0 + 5"
+        },
+        {
+          "id": "b",
+          "label": "2 + 2"
+        },
+        {
+          "id": "c",
+          "label": "5 + 0"
+        },
+        {
+          "id": "d",
+          "label": "4 + 2"
+        }
       ],
-      "correctIds": ["a", "c"],
+      "correctIds": [
+        "a",
+        "c"
+      ],
       "explanation": "0 + 5 = 5 and 5 + 0 = 5. 2 + 2 = 4. 4 + 2 = 6.",
-      "narration": { "prompt": "Tap every pair that makes 5." }
+      "narration": {
+        "prompt": "Tap every pair that makes 5."
+      }
     },
     {
       "kind": "fill-blank",
       "id": "b5m-minus-0",
       "prompt": "What is the missing number?",
       "prefix": "5 − 0 =",
-      "acceptedAnswers": ["5", "five"],
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
       "inputMode": "numeric",
       "explanation": "5 take away 0 is still 5.",
-      "narration": { "prompt": "What is the missing number? 5 take away 0 equals what?" }
+      "narration": {
+        "prompt": "What is the missing number? 5 take away 0 equals what?"
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "make-total",
       "id": "b5m-reverse",
       "prompt": "5 = ? + 2",
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "frog",
+        "count": 2
+      },
+      "total": 5,
+      "gap": "left",
+      "mode": "pick",
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "1" }
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "1"
+        }
       ],
-      "correctId": "b",
       "explanation": "5 = 3 + 2.",
-      "narration": { "prompt": "5 equals what plus 2?" }
+      "narration": {
+        "prompt": "5 equals what plus 2?"
+      }
     },
     {
       "kind": "fill-blank",
       "id": "b5m-minus-4",
       "prompt": "What is the missing number?",
       "prefix": "5 − 4 =",
-      "acceptedAnswers": ["1", "one"],
+      "acceptedAnswers": [
+        "1",
+        "one"
+      ],
       "inputMode": "numeric",
       "explanation": "Because 4 + 1 = 5, 5 − 4 = 1.",
-      "narration": { "prompt": "What is the missing number? 5 take away 4 equals what?" }
+      "narration": {
+        "prompt": "What is the missing number? 5 take away 4 equals what?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "b5m-take-5",
       "prompt": "5 take away 5. How many left?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "0" },
-        { "id": "b", "label": "1" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
       ],
       "correctId": "a",
       "explanation": "5 take away 5 is 0. Because 5 + 0 = 5.",
-      "narration": { "prompt": "5 take away 5. How many left?" }
+      "narration": {
+        "prompt": "5 take away 5. How many left?"
+      }
     }
   ]
 }

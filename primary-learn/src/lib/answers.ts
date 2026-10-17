@@ -1,4 +1,5 @@
 import type { Question } from "../types/activity";
+import { makeTotalMissing } from "./makeTotal";
 import { matchSideKey } from "./matchSide";
 
 function normaliseText(value: string): string {
@@ -57,6 +58,8 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
       if (!Array.isArray(answer)) return false;
       return answer.length === question.visual.count;
     }
+    case "make-total":
+      return typeof answer === "number" && answer === makeTotalMissing(question);
     default:
       return false;
   }
@@ -80,6 +83,8 @@ export function emptyAnswerFor(question: Question): unknown {
       >;
     case "build-set":
       return [] as string[];
+    case "make-total":
+      return makeTotalMissing(question) === 0 && question.mode === "fill-slots" ? 0 : null;
     default:
       return null;
   }
@@ -101,6 +106,8 @@ export function correctAnswerLabel(question: Question): string | null {
     }
     case "build-set":
       return String(question.visual.count);
+    case "make-total":
+      return String(makeTotalMissing(question));
     default:
       return null;
   }
@@ -124,6 +131,8 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
     }
     case "build-set":
       return Array.isArray(answer) && answer.length > 0;
+    case "make-total":
+      return typeof answer === "number";
     default:
       return false;
   }
