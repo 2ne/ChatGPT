@@ -208,6 +208,10 @@ rainbow itself is never inset.
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
   indigo ring + soft fill; correct = green + ✓ + wiggle; wrong = red + ✕ +
   shake. Colour is never the only signal (icons + words too).
+- All answer buttons use the one shared full-width `.option` style (letter
+  badge, same height, stretch to the activity column). Never shrink them into
+  centred pills per question kind. Number answers on `make-total` use the same
+  buttons as multiple-choice.
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
@@ -235,9 +239,10 @@ rainbow itself is never inset.
   sum line uses three coloured rounded boxes, e.g. `[2] + [?] = [5]`. The
   `?` box updates live. Easy (`fill-slots`): tap a dotted space to drop an
   object; the count is spoken; tap sound on `pointerdown`; then Check it.
-  Medium (`pick`): slots stay, child taps a number button. Hard (`sum-only`):
-  sum line and number buttons only. Later the same kind can subtract (tap to
-  take away) and use totals to 10 or 20 via `total` / `operation` in JSON.
+  Medium (`pick`): slots stay, child taps a full-width number button. Hard
+  (`sum-only`): sum line and the same full-width number buttons only. Later
+  the same kind can subtract (tap to take away) and use totals to 10 or 20
+  via `total` / `operation` in JSON.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. Sticky white dock at the viewport bottom on
   every width (with safe-area padding) so kids never have to scroll to find it.

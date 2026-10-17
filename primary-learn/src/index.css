@@ -1532,6 +1532,11 @@ button.learner-chip:focus-visible {
   justify-items: center;
 }
 
+.make-total .option-stack {
+  width: 100%;
+  justify-self: stretch;
+}
+
 .make-total-slots {
   display: flex;
   flex-wrap: wrap;

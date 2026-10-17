@@ -16,6 +16,7 @@ import {
 import { speakCount } from "../../lib/speech";
 import type { MakeTotalQuestion, ObjectItem } from "../../types/activity";
 import { choiceClass, markChoice, type Reveal } from "./choice";
+import { OptionContent } from "./ObjectGroup";
 
 type MakeTotalProps = {
   question: MakeTotalQuestion;
@@ -263,7 +264,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
                 <span className="option-letter" aria-hidden>
                   {"ABCD"[slot] ?? "•"}
                 </span>
-                <span>{option.label}</span>
+                <OptionContent label={option.label} visual={option.visual} />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
