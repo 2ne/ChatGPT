@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 taps extra slots for the partner of 3. Question 2 taps extra slots for 5 = 4 + ?. Question 3 is the sum line 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 is the sum line reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
+    "within": "Question 1 taps extra slots for what goes with 3 to make 5. Question 2 taps extra slots for what goes with 4 to make 5. Question 3 is the sum line 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 is the sum line reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
     "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or six tiles, and may ask for both pairs. Hard is the sum line or tiles with no dots. Still bonds to 5 only."
   },
   "skills": [
@@ -59,7 +59,7 @@
     {
       "kind": "make-total",
       "id": "b5m-5-eq-4",
-      "prompt": "5 = 4 + ?",
+      "prompt": "What goes with 4 to make 5?",
       "visual": {
         "item": "apple",
         "count": 4
@@ -70,7 +70,7 @@
       "hint": "4 and what make 5?",
       "explanation": "5 = 4 + 1.",
       "narration": {
-        "prompt": "5 equals 4 plus what?"
+        "prompt": "What goes with 4 to make 5?"
       }
     },
     {

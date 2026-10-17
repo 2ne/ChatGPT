@@ -88,7 +88,7 @@ function Slot({
         <span className="make-total-add-icon" aria-hidden>
           +
         </span>
-        <span className="make-total-add-label">{copy.addItem(words.singular)}</span>
+        <span className="make-total-add-label">{copy.addSlot}</span>
       </>
     ) : null;
 
@@ -100,7 +100,6 @@ function Slot({
     );
   }
 
-  const addLabel = copy.addItem(words.singular);
   return (
     <button
       type="button"
@@ -109,7 +108,7 @@ function Slot({
       aria-label={
         kind === "added"
           ? `${words.singular} ${index + 1}. Tap to take it out.`
-          : addLabel
+          : copy.addSlot
       }
       onPointerDown={(event) => activate(onToggle, event)}
       onClick={(event) => {

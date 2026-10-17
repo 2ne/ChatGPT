@@ -65,7 +65,7 @@ export const copy = {
   pickOne: "Choose one answer",
   pickTwo: "Tap two numbers",
   findAnotherPair: "Now find another pair.",
-  addItem: (item: string) => `Add ${item}`,
+  addSlot: "Add",
   tapToTakeAway: "Tap one to take it away.",
   startSlotsAgain: "Start again",
   missingNumber: "Missing number",

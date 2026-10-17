@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 taps extra slots for 5 is 2 and ?. Question 6 taps six tiles to find both pairs that make 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 taps extra slots for 5 is 4 and ?. Question 10 is the sum line 5 is 1 and ?. Starts at 4.",
+    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 taps extra slots for what goes with 2 to make 5. Question 6 taps six tiles to find both pairs that make 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 taps extra slots for what goes with 4 to make 5. Question 10 is the sum line 5 is 1 and ?. Starts at 4.",
     "versus": "Easy starts at 1 and 1 on the sum line, with early hints and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, and may ask for both pairs on six tiles. Hard uses reverse parts, number words, a hidden part, and tiles with no dots. Still composition of numbers to 5, not quick bond recall."
   },
   "skills": [
@@ -176,7 +176,7 @@
     {
       "kind": "make-total",
       "id": "m5m-5-2",
-      "prompt": "5 is 2 and ?",
+      "prompt": "What goes with 2 to make 5?",
       "visual": {
         "item": "ladybird",
         "count": 2
@@ -186,7 +186,7 @@
       "randomise": {},
       "explanation": "5 is 2 and 3.",
       "narration": {
-        "prompt": "5 is 2 and what?"
+        "prompt": "What goes with 2 to make 5?"
       }
     },
     {
@@ -263,7 +263,7 @@
     {
       "kind": "make-total",
       "id": "m5m-5-4",
-      "prompt": "5 is 4 and ?",
+      "prompt": "What goes with 4 to make 5?",
       "visual": {
         "item": "fish",
         "count": 4
@@ -273,7 +273,7 @@
       "randomise": {},
       "explanation": "5 is 4 and 1.",
       "narration": {
-        "prompt": "5 is 4 and what?"
+        "prompt": "What goes with 4 to make 5?"
       }
     },
     {
