@@ -96,7 +96,7 @@
     {
       "kind": "fill-blank",
       "id": "c5h-mix-5",
-      "prompt": "Count the {items}.",
+      "prompt": "How many {items}?",
       "visual": { "item": "fish", "count": 5 },
       "extras": [{ "item": "car", "count": 2 }],
       "layout": "scatter",
@@ -106,7 +106,7 @@
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
       "explanation": "There are 5 {items}. The {items2} are not part of the count.",
-      "narration": { "prompt": "Count the {items}." }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "build-set",
@@ -164,7 +164,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5h-last",
-      "prompt": "What number did you get to?",
+      "prompt": "How many {items}?",
       "visual": { "item": "balloon", "count": 4 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -176,7 +176,7 @@
       ],
       "correctId": "b",
       "explanation": "Tap each {item}: 1, 2, 3, 4. The last number you say is 4. That is how many there are.",
-      "narration": { "prompt": "What number did you get to?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "fill-blank",

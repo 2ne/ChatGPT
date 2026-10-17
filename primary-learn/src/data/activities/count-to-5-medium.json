@@ -104,7 +104,7 @@
     {
       "kind": "fill-blank",
       "id": "c5m-fb",
-      "prompt": "Count the {items}.",
+      "prompt": "How many {items}?",
       "visual": { "item": "balloon", "count": 5 },
       "layout": "scatter",
       "randomise": { "count": { "min": 4, "max": 5 } },
@@ -113,7 +113,7 @@
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
       "explanation": "Tap each {item}. The last number you say is the answer.",
-      "narration": { "prompt": "Count the {items}." }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
@@ -176,7 +176,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5m-last",
-      "prompt": "What number did you get to?",
+      "prompt": "How many {items}?",
       "visual": { "item": "strawberry", "count": 5 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -188,7 +188,7 @@
       ],
       "correctId": "b",
       "explanation": "Tap each {item}: 1, 2, 3, 4, 5. The last number you say is 5. That is how many there are.",
-      "narration": { "prompt": "What number did you get to?" }
+      "narration": { "prompt": "How many {items}?" }
     }
   ]
 }

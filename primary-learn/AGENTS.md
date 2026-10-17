@@ -263,7 +263,7 @@ Current topic types: `counting`, `number-bonds`, `times-tables`, `fractions`, `p
 Follow `QUALITY.md` for the full wording templates, distractor rules, variety rules and the self-review checklist. The short form:
 
 - Prefer **doing** over reading walls of text. Keep stems short; use visuals/options kids can tap.
-- Match the year-group reading age. Reception: one short sentence + a picture. Reuse the stem templates in `QUALITY.md`. Missing-part items always use `What goes with {n} to make {total}?`.
+- Match the year-group reading age. Reception: one short sentence + a picture. Reuse the stem templates in `QUALITY.md`. Missing-part items always use `What goes with {n} to make {total}?`. The prompt must describe exactly what the child sees and does on that screen.
 - One concept per question. Avoid trick questions and ambiguous distractors.
 - Wrong answers must be plausible misconceptions (off by one, wrong operation, number from the stem) — not random or joke options.
 - Always provide `explanation`. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.

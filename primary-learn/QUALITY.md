@@ -58,7 +58,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 
 | Kind | Template |
 | --- | --- |
-| multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects) |
+| multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
@@ -71,6 +71,8 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | story (Y1+) | `{Name} has {n} {things} and {action}. How many {are left / in all}?` |
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.
+
+**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas?` not `What number did you get to?` or `Count the bananas.` Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
 
 ## Distractors
 
@@ -163,6 +165,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] Questions climb with no spike and no drop-back to a trivial item
 - [ ] Only this node’s **Covers** bullets are taught
 - [ ] Year group reading age; British English; stem templates reused
+- [ ] The prompt describes exactly what the child sees and does on that screen (no leftover “got to”, “count the”, or “look” stems on a how-many screen)
 - [ ] Every item has a teaching `explanation`; hints match the scaffolding plan
 - [ ] Distractors are named misconceptions, not random
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed

@@ -25,7 +25,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5h-dice-4",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "star", "count": 4 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -37,12 +37,12 @@
       ],
       "correctId": "b",
       "explanation": "There are 4 {items}.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5h-dice-5",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 5 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -54,7 +54,7 @@
       ],
       "correctId": "c",
       "explanation": "There are 5 {items}.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "match-pairs",
@@ -72,7 +72,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5h-scatter-4",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "frog", "count": 4 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -84,7 +84,7 @@
       ],
       "correctId": "b",
       "explanation": "There are 4 {items}, even in a messy group.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
@@ -119,7 +119,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5h-scatter-5",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "car", "count": 5 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -131,12 +131,12 @@
       ],
       "correctId": "b",
       "explanation": "There are 5 {items}.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5h-dice-5-word",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "ladybird", "count": 5 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -148,7 +148,7 @@
       ],
       "correctId": "b",
       "explanation": "That dice shows five {items}.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "match-pairs",

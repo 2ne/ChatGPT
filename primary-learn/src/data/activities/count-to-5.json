@@ -92,7 +92,7 @@
     {
       "kind": "fill-blank",
       "id": "c5e-fb-4",
-      "prompt": "Count the {items}.",
+      "prompt": "How many {items}?",
       "visual": { "item": "duck", "count": 4 },
       "randomise": {},
       "prefix": "There are",
@@ -100,7 +100,7 @@
       "acceptedAnswers": ["4", "four"],
       "inputMode": "numeric",
       "explanation": "1, 2, 3, 4. There are 4 {items}.",
-      "narration": { "prompt": "Count the {items}." }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "build-set",

@@ -25,7 +25,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5e-1",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "star", "count": 1 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -38,12 +38,12 @@
       "correctId": "a",
       "hint": "Just look. Do not count one by one.",
       "explanation": "There is 1 {item}. You can see it in one look.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-2",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "balloon", "count": 2 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -56,12 +56,12 @@
       "correctId": "b",
       "hint": "See both {items} at once.",
       "explanation": "There are 2 {items}. Two dots sit opposite on the dice.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-3",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 3 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -74,7 +74,7 @@
       "correctId": "b",
       "hint": "See the whole group in one look.",
       "explanation": "There are 3 {items}. Three sits on a diagonal.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "match-pairs",
@@ -92,7 +92,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5e-4",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "duck", "count": 4 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -104,7 +104,7 @@
       ],
       "correctId": "c",
       "explanation": "There are 4 {items}. Four sits at the corners.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
@@ -124,7 +124,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5e-5",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "ladybird", "count": 5 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -136,7 +136,7 @@
       ],
       "correctId": "c",
       "explanation": "There are 5 {items}. Four corners and one in the middle.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multi-select",

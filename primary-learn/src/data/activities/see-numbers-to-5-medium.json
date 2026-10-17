@@ -25,7 +25,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5m-3",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "star", "count": 3 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -38,12 +38,12 @@
       "correctId": "b",
       "hint": "See the whole group. Do not count one by one.",
       "explanation": "There are 3 {items}. See all three at once.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-4",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 4 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -56,12 +56,12 @@
       "correctId": "b",
       "hint": "Four sits at the four corners.",
       "explanation": "There are 4 {items}.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-5",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "frog", "count": 5 },
       "layout": "dice",
       "randomise": { "shuffleOptions": true },
@@ -74,7 +74,7 @@
       "correctId": "c",
       "hint": "Four corners and one in the middle.",
       "explanation": "There are 5 {items}.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "match-pairs",
@@ -92,7 +92,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5m-scatter-3",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "duck", "count": 3 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -104,7 +104,7 @@
       ],
       "correctId": "b",
       "explanation": "There are still 3 {items}, even if they look messy.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
@@ -124,7 +124,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5m-scatter-5",
-      "prompt": "Look. How many {items}?",
+      "prompt": "How many {items}?",
       "visual": { "item": "ladybird", "count": 5 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -136,7 +136,7 @@
       ],
       "correctId": "c",
       "explanation": "There are 5 {items} in the messy group too.",
-      "narration": { "prompt": "Look. How many {items}?" }
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multi-select",
