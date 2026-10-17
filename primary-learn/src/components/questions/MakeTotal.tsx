@@ -337,8 +337,16 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
         </div>
       ) : null}
 
-      {canFill && selected != null && selected > 0 ? (
-        <button type="button" className="btn-text" onClick={() => onChange(null)}>
+      {fillMode ? (
+        <button
+          type="button"
+          className="btn-text make-total-reset"
+          disabled={!canFill || selected == null || selected <= 0}
+          onClick={(event) => {
+            onChange(null);
+            event.currentTarget.blur();
+          }}
+        >
           {copy.startSlotsAgain}
         </button>
       ) : null}

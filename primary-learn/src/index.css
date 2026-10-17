@@ -272,6 +272,7 @@ p {
   margin: 0 auto;
   display: grid;
   gap: inherit;
+  align-content: start;
 }
 
 .quest-rainbow {
@@ -1118,6 +1119,7 @@ button.learner-chip:focus-visible {
 .question-card {
   display: grid;
   gap: var(--space-4);
+  align-content: start;
   animation: question-in 220ms ease;
   position: relative;
   overflow: hidden;
@@ -1610,9 +1612,12 @@ button.learner-chip:focus-visible {
 }
 
 .make-total {
+  --make-total-tile: 72px;
   display: grid;
-  gap: 18px;
+  gap: 12px;
   justify-items: center;
+  align-content: start;
+  width: 100%;
 }
 
 .make-total .option-stack {
@@ -1622,8 +1627,9 @@ button.learner-chip:focus-visible {
 
 .make-total-fill {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   justify-items: center;
+  align-content: start;
   width: 100%;
 }
 
@@ -1633,14 +1639,16 @@ button.learner-chip:focus-visible {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10px 12px;
+  gap: 10px;
+  min-height: var(--make-total-tile);
 }
 
 .make-total-known {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 .make-total-join {
@@ -1678,8 +1686,10 @@ button.learner-chip:focus-visible {
 .make-total-slot {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  box-sizing: border-box;
+  flex: none;
+  width: var(--make-total-tile, 72px);
+  height: var(--make-total-tile, 72px);
   border-radius: 16px;
   background: var(--paper-deep);
   border: 2.5px solid transparent;
@@ -1717,15 +1727,12 @@ button.learner-chip:focus-visible {
 }
 
 .make-total-slot.is-add {
-  width: auto;
-  min-width: 64px;
-  height: auto;
-  min-height: 64px;
-  padding: 8px 8px 6px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 2px;
+  padding: 6px 4px 5px;
   background: #fff;
   border: 2.5px dashed var(--ink-faint);
 }
@@ -1741,10 +1748,20 @@ button.learner-chip:focus-visible {
 .make-total-add-label {
   font-size: 11px;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.1;
   color: var(--ink-soft);
   text-align: center;
-  white-space: nowrap;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.make-total-reset {
+  min-height: 44px;
+}
+
+.make-total-reset:disabled {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .make-total-sum {
