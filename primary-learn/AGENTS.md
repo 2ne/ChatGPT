@@ -306,7 +306,7 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 - `build-set` — tap objects from a tray to build a group of `visual.count`. Tray size defaults to count + 2. Omit `bank` unless you need a different tray. Correct when the group size matches. Teaches cardinality (stop at the right number).
 - `multiple-choice` — single correct option. Options may use `visual` instead of a label.
 - `multi-select` — all correct options required.
-- `fill-blank` — exact normalised answer (number or short word). May include `visual`. Stem pictures are tappable to count, same as count-objects.
+- `fill-blank` — exact normalised answer (number or short word). May include `visual`. Stem pictures are look-only tiles, same as multiple-choice. Only `count-objects` tiles are tappable.
 - `ordered` — put items in the right sequence.
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
 - `make-total` — part-whole sum. Required `total` (1–20) and `mode`. Known addend is `part` or `visual.count`. `gap` is `right` (default: `2 + ? = 5`), `left` (`? + 2 = 5`), or `total` (`2 + 3 = ?`). `operation` is `add` (default) or `subtract` (tap to remove later). Modes: `fill-slots` (row 1 = known tiles + large `+`; row 2 = green added tiles then extra dashed `Add` slots; no sum line; no spoken count; optional `slotCount`, default missing + 2), `sum-only` (sum line and number buttons only). Missing-part prompt (fill-slots or sum-only, any gap except total) is always `What goes with {n} to make {total}?`. Gap `total` uses `How many in all?`. There is no pick mode. Do not randomise `total` or `part`.

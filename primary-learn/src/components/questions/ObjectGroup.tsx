@@ -175,12 +175,12 @@ export function ObjectGroup({
 
     return (
       <span
-        className={`object-group${scatter ? " is-scatter" : ""}`}
+        className={`object-group is-tiled${scatter ? " is-scatter" : ""}`}
         aria-label={label}
       >
         {tokens.map((token) => (
-          <span key={token.key} className="object-glyph" aria-hidden>
-            {OBJECT_GLYPH[token.item]}
+          <span key={token.key} className="object-token" aria-hidden>
+            <span className="object-glyph">{OBJECT_GLYPH[token.item]}</span>
           </span>
         ))}
       </span>
@@ -190,7 +190,7 @@ export function ObjectGroup({
   return (
     <div className="count-scene">
       <div
-        className={`object-group is-tappable${scatter ? " is-scatter" : ""}`}
+        className={`object-group is-tiled is-tappable${scatter ? " is-scatter" : ""}`}
         role="group"
         aria-label={groupLabel(visual, extras, true)}
       >

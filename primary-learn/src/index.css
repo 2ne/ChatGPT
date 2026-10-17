@@ -1277,7 +1277,7 @@ button.learner-chip:focus-visible {
   justify-items: center;
 }
 
-.object-group.is-tappable {
+.object-group.is-tiled {
   gap: 10px;
   padding: 4px;
 }
@@ -1346,12 +1346,15 @@ button.learner-chip:focus-visible {
   background: var(--paper-deep);
   font-size: 32px;
   line-height: 1;
+}
+
+button.object-token {
   cursor: pointer;
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-.object-token:hover:not(:disabled) {
+button.object-token:hover:not(:disabled) {
   transform: translateY(-2px);
   border-color: var(--primary);
 }

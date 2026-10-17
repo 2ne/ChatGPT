@@ -254,7 +254,9 @@ rainbow itself is never inset.
   avatar chip and stays in localStorage. SFX must not stop narration.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
-  Do not restyle a single quest.
+  Every picture group in a question uses tiles; only count-objects tiles
+  are tappable. Compact, dice and parts layouts, and pictures inside A/B/C/D
+  options, stay as they are. Do not restyle a single quest.
 - **Part-whole (`make-total`)** stays on the same white activity screen. No
   scenery. Easy (`fill-slots`): row 1 is the known part as filled sun-style
   tiles, then a large `+`. Row 2 is the child’s area. Added objects are

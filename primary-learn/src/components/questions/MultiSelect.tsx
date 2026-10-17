@@ -31,7 +31,6 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
           visual={question.visual}
           extras={question.extras}
           layout={question.layout}
-          interactive
         />
       ) : null}
       <p className="t-body">{copy.chooseAll}</p>
