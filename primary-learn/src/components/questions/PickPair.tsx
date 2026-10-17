@@ -39,12 +39,12 @@ function activate(
   handler();
 }
 
-function QuantityDots({ count, selected }: { count: number; selected: boolean }) {
+function QuantityDots({ count }: { count: number }) {
   if (count <= 0) return null;
   const slots = DICE_SLOTS[count];
   if (slots) {
     return (
-      <span className={`pick-pair-dots is-dice${selected ? " is-on" : ""}`} aria-hidden>
+      <span className="pick-pair-dots is-dice" aria-hidden>
         {Array.from({ length: 9 }, (_, cell) => (
           <span key={cell} className={slots.includes(cell) ? "is-dot" : undefined} />
         ))}
@@ -52,18 +52,10 @@ function QuantityDots({ count, selected }: { count: number; selected: boolean })
     );
   }
   return (
-    <span className={`pick-pair-dots is-many${selected ? " is-on" : ""}`} aria-hidden>
+    <span className="pick-pair-dots is-many" aria-hidden>
       {Array.from({ length: count }, (_, index) => (
         <span key={index} className="is-dot" />
       ))}
-    </span>
-  );
-}
-
-function SumBox({ value, tone }: { value: number | null; tone: "part" | "gap" | "whole" }) {
-  return (
-    <span className={`make-total-box is-${tone}`}>
-      {value == null ? "?" : value}
     </span>
   );
 }
@@ -75,19 +67,6 @@ export function PickPair({ question, answer, disabled, reveal, onChange }: PickP
   const showDots = pickPairShowDots(question);
   const need = requiredTilePairs(tiles, question.total).length;
   const foundIds = new Set(state.found.flat());
-
-  const first = tiles.find((tile) => tile.id === state.picked[0])?.value ?? null;
-  const second = tiles.find((tile) => tile.id === state.picked[1])?.value ?? null;
-  const lastFound = state.found[state.found.length - 1];
-  const lastLeft = lastFound
-    ? (tiles.find((tile) => tile.id === lastFound[0])?.value ?? null)
-    : null;
-  const lastRight = lastFound
-    ? (tiles.find((tile) => tile.id === lastFound[1])?.value ?? null)
-    : null;
-  const showLast = state.picked.length === 0 && lastFound != null;
-  const displayFirst = first ?? (showLast ? lastLeft : null);
-  const displaySecond = second ?? (showLast ? lastRight : null);
 
   function toggle(id: string) {
     if (disabled) return;
@@ -111,7 +90,7 @@ export function PickPair({ question, answer, disabled, reveal, onChange }: PickP
             <button
               key={tile.id}
               type="button"
-              className={`pick-pair-tile${selected ? " is-on" : ""}${found ? " is-found" : ""}${
+              className={`pick-pair-tile${selected ? " is-selected" : ""}${found ? " is-found" : ""}${
                 marked ? ` ${marked}` : ""
               }`}
               disabled={disabled || found}
@@ -123,7 +102,7 @@ export function PickPair({ question, answer, disabled, reveal, onChange }: PickP
               }}
             >
               <span className="pick-pair-num">{tile.value}</span>
-              {showDots ? <QuantityDots count={tile.value} selected={selected} /> : null}
+              {showDots ? <QuantityDots count={tile.value} /> : null}
               <span className="visually-hidden">{index + 1}</span>
             </button>
           );
@@ -133,23 +112,6 @@ export function PickPair({ question, answer, disabled, reveal, onChange }: PickP
       {requireAll && state.found.length > 0 && state.found.length < need ? (
         <p className="t-meta pick-pair-coach">{copy.findAnotherPair}</p>
       ) : null}
-
-      <div
-        className={`make-total-sum pick-pair-sum${reveal === "correct" ? " is-correct" : ""}${
-          reveal === "incorrect" ? " is-wrong" : ""
-        }`}
-        aria-label={`${displayFirst ?? "what"} plus ${displaySecond ?? "what"} equals ${question.total}`}
-      >
-        <SumBox value={displayFirst} tone={displayFirst == null ? "gap" : "part"} />
-        <span className="make-total-sign" aria-hidden>
-          +
-        </span>
-        <SumBox value={displaySecond} tone={displaySecond == null ? "gap" : "part"} />
-        <span className="make-total-sign" aria-hidden>
-          =
-        </span>
-        <SumBox value={question.total} tone="whole" />
-      </div>
     </div>
   );
 }

@@ -208,6 +208,10 @@ rainbow itself is never inset.
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Selected =
   indigo ring + soft fill; correct = green + ✓ + wiggle; wrong = red + ✕ +
   shake. Colour is never the only signal (icons + words too).
+- Selection, correct and wrong states are **shared** across every question
+  kind (`.option.is-selected` / `.is-correct` / `.is-wrong` and the same
+  tokens on pick-pair tiles). Never invent a solid indigo fill or a private
+  selected look for one kind.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
@@ -245,13 +249,14 @@ rainbow itself is never inset.
   via `total` / `operation` in JSON.
 - **Number pairs (`pick-pair`)** stay on the same white activity screen. A
   two-column grid of big square tiles: large numeral in the centre, optional
-  small quantity dots in the top-right. Every tile starts the same: white,
-  the same soft border as `.option`, grey dots. Tap selects (indigo fill,
-  slight lift, white dots). Tap again to deselect. At most two tiles are
-  selected. A small sum line above Check it fills live, e.g. `[?] + [?] = [5]`.
-  Easy: four tiles with dots. Medium: six tiles, and JSON may set
-  `requireAllPairs` so the child finds both pairs one after the other. Hard:
-  no dots. Later totals to 10 or 20 use the same `total` / `tiles` config.
+  dice-pip dots in the top-right. Every tile starts the same: white, the same
+  soft border as `.option`, grey dots. Selected tiles use the shared option
+  selected state (indigo border, soft indigo fill, ring shadow). Dots stay
+  grey. Tap again to deselect. At most two tiles are selected. No sum line
+  under the tiles. Easy: four tiles with dots. Medium: six tiles, and JSON
+  may set `requireAllPairs` so the child finds both pairs one after the
+  other. Hard: no dots. Later totals to 10 or 20 use the same `total` /
+  `tiles` config.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. Sticky white dock at the viewport bottom on
   every width (with safe-area padding) so kids never have to scroll to find it.

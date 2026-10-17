@@ -1403,7 +1403,8 @@ button.learner-chip:focus-visible {
   color: var(--ink-soft);
 }
 
-.option.is-selected {
+.option.is-selected,
+.pick-pair-tile.is-selected {
   border-color: var(--primary);
   background: var(--primary-soft);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16);
@@ -1415,7 +1416,8 @@ button.learner-chip:focus-visible {
   color: #fff;
 }
 
-.option.is-correct {
+.option.is-correct,
+.pick-pair-tile.is-correct {
   border-color: var(--green);
   background: var(--green-soft);
   animation: correct-wiggle 320ms ease;
@@ -1427,7 +1429,8 @@ button.learner-chip:focus-visible {
   color: #fff;
 }
 
-.option.is-wrong {
+.option.is-wrong,
+.pick-pair-tile.is-wrong {
   border-color: var(--red);
   background: var(--red-soft);
   animation: wrong-shake 320ms ease;
@@ -1703,28 +1706,8 @@ button.learner-chip:focus-visible {
   border-color: var(--primary);
 }
 
-.pick-pair-tile.is-on {
-  background: var(--primary);
-  border-color: var(--primary-deep);
-  color: #fff;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
-}
-
 .pick-pair-tile.is-found {
   cursor: default;
-}
-
-.pick-pair-tile.is-correct {
-  background: var(--green);
-  border-color: var(--green);
-  color: #fff;
-}
-
-.pick-pair-tile.is-wrong {
-  background: var(--red);
-  border-color: var(--red);
-  color: #fff;
 }
 
 .pick-pair-num {
@@ -1736,33 +1719,29 @@ button.learner-chip:focus-visible {
 
 .pick-pair-dots {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 8px;
+  right: 8px;
 }
 
 .pick-pair-dots.is-dice {
   display: grid;
-  grid-template-columns: repeat(3, 5px);
-  gap: 3px;
+  grid-template-columns: repeat(3, 13px);
+  gap: 4px;
 }
 
 .pick-pair-dots.is-many {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  width: 28px;
-  gap: 3px;
+  width: 47px;
+  gap: 4px;
 }
 
 .pick-pair-dots .is-dot {
-  width: 5px;
-  height: 5px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   background: var(--ink-faint);
-}
-
-.pick-pair-dots.is-on .is-dot {
-  background: #fff;
 }
 
 .pick-pair-coach {
@@ -1770,19 +1749,9 @@ button.learner-chip:focus-visible {
   text-align: center;
 }
 
-.pick-pair-sum .make-total-box {
-  min-width: 48px;
-  min-height: 48px;
-  font-size: 24px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .object-glyph.is-drop {
     animation: none;
-  }
-
-  .pick-pair-tile.is-on {
-    transform: none;
   }
 }
 
