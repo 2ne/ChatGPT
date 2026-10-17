@@ -307,7 +307,7 @@ export function ActivityRunner({
     phase === "question" ? (
       <button
         type="button"
-        className="btn btn-primary btn-block"
+        className="btn btn-success btn-block"
         data-sfx="off"
         disabled={!hasProvidedAnswer(question, answer)}
         onPointerDown={(event) => {

@@ -337,6 +337,31 @@ p {
   box-shadow: none;
 }
 
+.btn-success {
+  background: var(--green);
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  border: 2px solid var(--green);
+}
+
+@media (hover: hover) and (pointer: fine) {
+.btn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+}
+
+
+.btn-success:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(35, 41, 70, 0.22);
+}
+
+.btn-success:disabled {
+  opacity: 0.55;
+  box-shadow: none;
+}
+
 .btn-secondary {
   background: var(--card);
   color: var(--ink);
@@ -2115,7 +2140,8 @@ button.learner-chip:focus-visible {
   margin: 0 auto;
 }
 
-.quest-dock .btn-primary {
+.quest-dock .btn-primary,
+.quest-dock .btn-success {
   border: 0;
 }
 
