@@ -152,6 +152,13 @@ export function ActivityRunner({
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (phase === "question") {
+      const active = document.activeElement;
+      if (
+        active instanceof HTMLElement &&
+        active.closest(".option, .pick-pair-tile, .object-token")
+      ) {
+        active.blur();
+      }
       promptRef.current?.focus({ preventScroll: true });
     }
   }, [phase, currentId]);

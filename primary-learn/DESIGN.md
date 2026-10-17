@@ -212,6 +212,10 @@ rainbow itself is never inset.
   kind (`.option.is-selected` / `.is-correct` / `.is-wrong` and the same
   tokens on pick-pair tiles). Never invent a solid indigo fill or a private
   selected look for one kind.
+- Focus rings use `:focus-visible` only, so they appear for keyboard
+  navigation and never after a tap or on load. Do not style `:focus` on
+  answers. No answer is auto-focused when a question opens. The selected
+  look comes only from the selected answer state, never from focus.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
@@ -244,7 +248,8 @@ rainbow itself is never inset.
   `?` box updates live. Easy (`fill-slots`): tap a dotted space to drop an
   object; the count is spoken; tap sound on `pointerdown`; then Check it.
   Medium (`pick`): slots stay, child taps a full-width number button. Hard
-  (`sum-only`): sum line and the same full-width number buttons only. Later
+  (`sum-only`): sum line and the same full-width number buttons only. “How
+  many in all?” items use `sum-only` so there are no object tiles. Later
   the same kind can subtract (tap to take away) and use totals to 10 or 20
   via `total` / `operation` in JSON.
 - **Number pairs (`pick-pair`)** stay on the same white activity screen. A

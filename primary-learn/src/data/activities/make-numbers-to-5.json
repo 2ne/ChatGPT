@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put two small groups together on a part-whole sum (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps slots to finish 3 as 2 and ?. Question 6 taps four tiles with dots to make 4. Question 7 puts 2 and 3 together to make 5. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps slots for 4 is 1 and ?. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
-    "versus": "Easy uses two pictured groups, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, and may use six tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
+    "within": "Questions 1 to 3 add two numbers on the sum line (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps slots to finish 3 as 2 and ?. Question 6 taps four tiles with dots to make 4. Question 7 adds 2 and 3 on the sum line. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps slots for 4 is 1 and ?. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
+    "versus": "Easy uses the sum line for how many in all, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, and may use six tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
   },
   "skills": [
     "eyfs-compose-5",
@@ -43,21 +43,11 @@
       "kind": "make-total",
       "id": "m5e-1-1",
       "prompt": "How many in all?",
-      "visual": {
-        "item": "apple",
-        "count": 1
-      },
-      "extras": [
-        {
-          "item": "banana",
-          "count": 1
-        }
-      ],
       "part": 1,
       "other": 1,
       "total": 2,
       "gap": "total",
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
@@ -79,31 +69,21 @@
           "label": "4"
         }
       ],
-      "explanation": "1 {item} and 1 {item2} make 2.",
+      "explanation": "1 and 1 make 2.",
       "narration": {
         "prompt": "How many in all?"
       },
-      "hint": "Look at both groups. Put them together."
+      "hint": "Add the two numbers."
     },
     {
       "kind": "make-total",
       "id": "m5e-2-1",
       "prompt": "How many in all?",
-      "visual": {
-        "item": "star",
-        "count": 2
-      },
-      "extras": [
-        {
-          "item": "frog",
-          "count": 1
-        }
-      ],
       "part": 2,
       "other": 1,
       "total": 3,
       "gap": "total",
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
@@ -125,31 +105,21 @@
           "label": "5"
         }
       ],
-      "explanation": "2 {items} and 1 {item2} make 3.",
+      "explanation": "2 and 1 make 3.",
       "narration": {
         "prompt": "How many in all?"
       },
-      "hint": "See the 2. See the 1. Put them together."
+      "hint": "Add the two numbers."
     },
     {
       "kind": "make-total",
       "id": "m5e-2-2",
       "prompt": "How many in all?",
-      "visual": {
-        "item": "duck",
-        "count": 2
-      },
-      "extras": [
-        {
-          "item": "car",
-          "count": 2
-        }
-      ],
       "part": 2,
       "other": 2,
       "total": 4,
       "gap": "total",
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
@@ -171,11 +141,11 @@
           "label": "5"
         }
       ],
-      "explanation": "2 {items} and 2 {items2} make 4.",
+      "explanation": "2 and 2 make 4.",
       "narration": {
         "prompt": "How many in all?"
       },
-      "hint": "Two and two make a bigger group."
+      "hint": "Add the two numbers."
     },
     {
       "kind": "build-set",
@@ -212,7 +182,12 @@
       "id": "m5e-pair-4",
       "prompt": "What two numbers make 4?",
       "total": 4,
-      "tiles": [1, 2, 3, 4],
+      "tiles": [
+        1,
+        2,
+        3,
+        4
+      ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
@@ -226,21 +201,11 @@
       "kind": "make-total",
       "id": "m5e-2-3",
       "prompt": "How many in all?",
-      "visual": {
-        "item": "balloon",
-        "count": 2
-      },
-      "extras": [
-        {
-          "item": "apple",
-          "count": 3
-        }
-      ],
       "part": 2,
       "other": 3,
       "total": 5,
       "gap": "total",
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
@@ -262,7 +227,7 @@
           "label": "2"
         }
       ],
-      "explanation": "2 {items} and 3 {items2} make 5.",
+      "explanation": "2 and 3 make 5.",
       "narration": {
         "prompt": "How many in all?"
       }

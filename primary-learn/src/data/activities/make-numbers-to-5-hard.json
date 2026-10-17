@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 2 name 5 as 0 and 5, then 5 and 0, on the sum line only. Question 3 matches number words to parts. Question 4 is the sum line 5 is 3 and ?. Question 5 taps six tiles with no dots to make 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse ? + 2 = 5. Question 8 sees 5 and finds the other part when 2 is given. Question 9 matches other ways to make 3, 4 and 5. Question 10 picks another pair that makes 5. No hints.",
-    "versus": "Easy is small pictured parts from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, and may use six tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and tiles with no dots. Same node: composition of each number to 5."
+    "versus": "Easy is small sums from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, and may use six tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and tiles with no dots. Same node: composition of each number to 5."
   },
   "skills": [
     "eyfs-compose-5",
@@ -169,7 +169,14 @@
       "id": "m5h-every-5",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [0, 1, 2, 3, 4, 5],
+      "tiles": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "showDots": false,
       "randomise": {
         "shuffleOptions": true
@@ -183,21 +190,11 @@
       "kind": "make-total",
       "id": "m5h-1-4",
       "prompt": "How many in all?",
-      "visual": {
-        "item": "fish",
-        "count": 1
-      },
-      "extras": [
-        {
-          "item": "strawberry",
-          "count": 4
-        }
-      ],
       "part": 1,
       "other": 4,
       "total": 5,
       "gap": "total",
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
@@ -219,7 +216,7 @@
           "label": "6"
         }
       ],
-      "explanation": "1 {item} and 4 {items2} make 5.",
+      "explanation": "1 and 4 make 5.",
       "narration": {
         "prompt": "How many in all?"
       }

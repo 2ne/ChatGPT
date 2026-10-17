@@ -108,6 +108,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+:focus {
+  outline: none;
+}
+
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
@@ -116,6 +120,19 @@ a:focus-visible,
   outline: 3px solid var(--primary);
   outline-offset: 2px;
   border-radius: 8px;
+}
+
+.option:focus:not(:focus-visible),
+.pick-pair-tile:focus:not(:focus-visible),
+.q-prompt:focus,
+.q-prompt:focus-visible {
+  outline: none;
+}
+
+.option:focus-visible,
+.pick-pair-tile:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
 }
 
 h1,
@@ -1510,7 +1527,7 @@ button.learner-chip:focus-visible {
   color: var(--ink);
 }
 
-.equation input:focus {
+.equation input:focus-visible {
   border-color: var(--primary);
   background: var(--primary-soft);
   outline: none;
@@ -2319,9 +2336,9 @@ button.learner-chip:focus-visible {
   font-weight: 700;
 }
 
-.field input:focus,
-.field select:focus,
-.select:focus {
+.field input:focus-visible,
+.field select:focus-visible,
+.select:focus-visible {
   border-color: var(--primary);
   background: var(--primary-soft);
   outline: none;
