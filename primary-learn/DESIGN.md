@@ -218,6 +218,13 @@ rainbow itself is never inset.
   slots, and text resets. Do not style `:focus` on answers. No answer is
   auto-focused when a question opens. The selected look comes only from
   the selected answer state, never from focus.
+- Never apply `:hover` on touch. Wrap every hover style in
+  `@media (hover: hover) and (pointer: fine)`. iOS keeps `:hover` stuck on
+  the last tap, which made unselected answers look selected (indigo
+  border). Answer buttons remount per question id. Blur
+  `document.activeElement` when the question changes. Set
+  `-webkit-tap-highlight-color: transparent`. An indigo answer border is
+  only `.is-selected` or a keyboard `:focus-visible` outline.
 - Build-set “Your group” shows the objects only. No numbered badges and no
   spoken count. Those would give the answer away.
 - All answer buttons use the one shared full-width `.option` style (letter

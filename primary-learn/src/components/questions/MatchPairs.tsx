@@ -67,7 +67,7 @@ export function MatchPairs({ question, answer, disabled, reveal, onChange }: Mat
           const chosenSide = chosen ? rightByKey.get(chosen) : undefined;
           return (
             <button
-              key={pair.id}
+              key={`${question.id}-${pair.id}`}
               type="button"
               disabled={disabled}
               aria-pressed={activeId === pair.id}

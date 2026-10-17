@@ -40,7 +40,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
         const marked = markChoice(reveal, isOn, question.correctIds.includes(option.id));
         return (
           <button
-            key={option.id}
+            key={`${question.id}-${option.id}`}
             type="button"
             aria-pressed={isOn}
             disabled={disabled}

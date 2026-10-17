@@ -88,7 +88,7 @@ export function PickPair({ question, answer, disabled, reveal, onChange }: PickP
                 : "";
           return (
             <button
-              key={tile.id}
+              key={`${question.id}-${tile.id}`}
               type="button"
               className={`pick-pair-tile${selected ? " is-selected" : ""}${found ? " is-found" : ""}${
                 marked ? ` ${marked}` : ""

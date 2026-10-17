@@ -57,6 +57,7 @@ export function QuestionView({
   }
   return (
     <View
+      key={question.id}
       question={question as never}
       answer={answer}
       disabled={disabled}

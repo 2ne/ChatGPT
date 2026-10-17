@@ -67,7 +67,7 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
           ) : (
             selected.map((id) => (
               <button
-                key={id}
+                key={`${question.id}-${id}`}
                 type="button"
                 role="listitem"
                 className="object-token is-lit"
@@ -91,7 +91,7 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
         <div className="build-tray" role="list" aria-label={copy.tapToAdd}>
           {tray.map((id) => (
             <button
-              key={id}
+              key={`${question.id}-${id}`}
               type="button"
               role="listitem"
               className="object-token"

@@ -251,7 +251,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             const marked = markChoice(reveal, isOn, value === missing);
             return (
               <button
-                key={option.id}
+                key={`${question.id}-${option.id}`}
                 type="button"
                 role="radio"
                 aria-checked={isOn}

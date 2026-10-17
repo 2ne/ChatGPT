@@ -34,7 +34,7 @@ export function MultipleChoice({
           const marked = markChoice(reveal, selected, option.id === question.correctId);
           return (
             <button
-              key={option.id}
+              key={`${question.id}-${option.id}`}
               type="button"
               role="radio"
               aria-checked={selected}

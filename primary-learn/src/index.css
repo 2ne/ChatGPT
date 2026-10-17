@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 :root {
   /* ——— Sunny Path palette ——— */
   --paper: #fff6e8;
@@ -96,12 +104,17 @@ select {
   color: inherit;
 }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 button {
   cursor: pointer;
   touch-action: manipulation;
   border: 0;
   background: none;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button:disabled {
@@ -305,10 +318,13 @@ p {
   border: 2px solid var(--primary-deep);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   filter: brightness(1.05);
 }
+}
+
 
 .btn-primary:active:not(:disabled) {
   transform: translateY(2px);
@@ -328,10 +344,13 @@ p {
   min-height: 52px;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .btn-secondary:hover:not(:disabled) {
   transform: translateY(-2px);
   border-color: var(--primary);
 }
+}
+
 
 .btn-block {
   width: 100%;
@@ -350,10 +369,13 @@ p {
   border-radius: 12px;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .btn-text:hover {
   color: var(--primary);
   background: var(--primary-soft);
 }
+}
+
 
 .btn-exit {
   display: inline-flex;
@@ -369,9 +391,12 @@ p {
   font-weight: 700;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .btn-exit:hover {
   background: var(--primary);
 }
+}
+
 
 /* ——— Header ——— */
 .app-header {
@@ -457,9 +482,12 @@ p {
   text-align: left;
 }
 
+@media (hover: hover) and (pointer: fine) {
 button.learner-chip:hover {
   border-color: var(--primary);
 }
+}
+
 
 button.learner-chip:focus-visible {
   outline: 3px solid var(--sky);
@@ -718,10 +746,13 @@ button.learner-chip:focus-visible {
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .chip:hover {
   transform: translateY(-1px);
   border-color: var(--primary);
 }
+}
+
 
 .chip.is-on {
   background: var(--ink);
@@ -769,11 +800,14 @@ button.learner-chip:focus-visible {
   transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .activity-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lift);
   border-color: var(--primary);
 }
+}
+
 
 .activity-tile {
   width: 62px;
@@ -874,9 +908,12 @@ button.learner-chip:focus-visible {
   font-weight: 700;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .activity-card:hover .go-btn {
   background: linear-gradient(135deg, var(--primary), var(--violet));
 }
+}
+
 
 .mini-progress {
   width: 110px;
@@ -943,10 +980,13 @@ button.learner-chip:focus-visible {
   font-weight: 700;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .back-link:hover {
   background: var(--primary-soft);
   color: var(--primary);
 }
+}
+
 
 .context-top {
   display: flex;
@@ -996,10 +1036,13 @@ button.learner-chip:focus-visible {
   cursor: pointer;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .exit-btn:hover {
   background: var(--primary-soft);
   color: var(--primary);
 }
+}
+
 
 .exit-btn:focus-visible {
   outline: 3px solid var(--sky);
@@ -1152,10 +1195,13 @@ button.learner-chip:focus-visible {
   box-shadow: 0 2px 0 rgba(35, 41, 70, 0.1);
 }
 
+@media (hover: hover) and (pointer: fine) {
 .hear-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
 }
+}
+
 
 .hear-btn.is-on {
   background: var(--primary-soft);
@@ -1277,10 +1323,13 @@ button.learner-chip:focus-visible {
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .object-token:hover:not(:disabled) {
   transform: translateY(-2px);
   border-color: var(--primary);
 }
+}
+
 
 .object-token.is-lit {
   background: var(--sun-soft);
@@ -1410,11 +1459,14 @@ button.learner-chip:focus-visible {
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .option:hover:not(:disabled) {
   transform: translateY(-2px);
   border-color: var(--primary);
   box-shadow: 0 6px 16px rgba(79, 70, 229, 0.14);
 }
+}
+
 
 .option-letter {
   flex: none;
@@ -1430,6 +1482,7 @@ button.learner-chip:focus-visible {
   color: var(--ink-soft);
 }
 
+/* Indigo option border is selected only. Hover is gated off on touch. */
 .option.is-selected,
 .pick-pair-tile.is-selected {
   border-color: var(--primary);
@@ -1613,10 +1666,13 @@ button.learner-chip:focus-visible {
   padding: 0;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .make-total-slot.is-tap:hover:not(:disabled) {
   border-color: var(--primary);
   transform: translateY(-2px);
 }
+}
+
 
 .make-total-slot.is-filled {
   background: var(--sun-soft);
@@ -1729,9 +1785,12 @@ button.learner-chip:focus-visible {
   transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .pick-pair-tile:hover:not(:disabled) {
   border-color: var(--primary);
 }
+}
+
 
 .pick-pair-tile.is-found {
   cursor: default;
@@ -2295,10 +2354,13 @@ button.learner-chip:focus-visible {
   transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .avatar-pick:hover {
   transform: translateY(-2px);
   border-color: var(--primary);
 }
+}
+
 
 .avatar-pick.is-selected {
   border-color: var(--primary);
@@ -2588,9 +2650,12 @@ button.learner-chip:focus-visible {
   transition: transform 160ms ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
 .map-node:hover {
   transform: translateY(-2px) scale(1.04);
 }
+}
+
 
 .map-node:active {
   transform: translateY(2px);

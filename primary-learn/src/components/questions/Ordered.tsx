@@ -33,7 +33,7 @@ export function Ordered({ question, answer, disabled, reveal, onChange }: Ordere
         const inPlace = reveal != null && question.correctOrder[index] === id;
         const marked = reveal == null ? null : inPlace ? "correct" : "wrong";
         return (
-          <li key={id} className={choiceClass(false, marked)}>
+          <li key={`${question.id}-${id}`} className={choiceClass(false, marked)}>
             <span>
               <span className="t-meta" style={{ marginRight: 8 }}>
                 {index + 1}.

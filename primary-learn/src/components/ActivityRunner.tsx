@@ -153,10 +153,7 @@ export function ActivityRunner({
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (phase === "question") {
       const active = document.activeElement;
-      if (
-        active instanceof HTMLElement &&
-        active.closest(".option, .pick-pair-tile, .object-token")
-      ) {
+      if (active instanceof HTMLElement && active !== document.body) {
         active.blur();
       }
       promptRef.current?.focus({ preventScroll: true });
