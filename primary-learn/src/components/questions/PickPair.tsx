@@ -3,10 +3,8 @@ import { copy } from "../../data/copy";
 import {
   emptyPickPairAnswer,
   isPickPairAnswer,
-  pickPairRequireAll,
   pickPairShowDots,
   pickPairTiles,
-  requiredTilePairs,
   togglePickPairTile,
   type PickPairAnswer,
 } from "../../lib/pickPair";
@@ -63,37 +61,32 @@ function QuantityDots({ count }: { count: number }) {
 export function PickPair({ question, answer, disabled, reveal, onChange }: PickPairProps) {
   const tiles = pickPairTiles(question);
   const state: PickPairAnswer = isPickPairAnswer(answer) ? answer : emptyPickPairAnswer();
-  const requireAll = pickPairRequireAll(question);
   const showDots = pickPairShowDots(question);
-  const need = requiredTilePairs(tiles, question.total).length;
-  const foundIds = new Set(state.found.flat());
 
   function toggle(id: string) {
     if (disabled) return;
-    onChange(togglePickPairTile(question, state, id));
+    onChange(togglePickPairTile(state, id));
   }
 
   return (
     <div className="pick-pair">
       <div className="pick-pair-grid" role="group" aria-label={copy.pickTwo}>
         {tiles.map((tile, index) => {
-          const picked = state.picked.includes(tile.id);
-          const found = foundIds.has(tile.id);
-          const selected = picked || found;
+          const selected = state.picked.includes(tile.id);
           const marked =
             reveal === "correct" && selected
               ? "is-correct"
-              : reveal === "incorrect" && picked
+              : reveal === "incorrect" && selected
                 ? "is-wrong"
                 : "";
           return (
             <button
               key={`${question.id}-${tile.id}`}
               type="button"
-              className={`pick-pair-tile${selected ? " is-selected" : ""}${found ? " is-found" : ""}${
+              className={`pick-pair-tile${selected ? " is-selected" : ""}${
                 marked ? ` ${marked}` : ""
               }`}
-              disabled={disabled || found}
+              disabled={disabled}
               aria-pressed={selected}
               aria-label={`${tile.value}${showDots ? `, ${tile.value} dots` : ""}`}
               onPointerDown={(event) => activate(() => toggle(tile.id), event)}
@@ -108,10 +101,6 @@ export function PickPair({ question, answer, disabled, reveal, onChange }: PickP
           );
         })}
       </div>
-
-      {requireAll && state.found.length > 0 && state.found.length < need ? (
-        <p className="t-meta pick-pair-coach">{copy.findAnotherPair}</p>
-      ) : null}
     </div>
   );
 }

@@ -208,7 +208,7 @@ export function ActivityRunner({
         playSound("tap");
         setAnswer((prev: unknown) => {
           const current = isPickPairAnswer(prev) ? prev : emptyPickPairAnswer();
-          return togglePickPairTile(currentQuestion, current, `t${slot}`);
+          return togglePickPairTile(current, `t${slot}`);
         });
         return;
       }

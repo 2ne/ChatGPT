@@ -64,7 +64,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice missing | `What goes with {n} to make {total}?` |
 | fill-blank bond | Prompt: `What goes with {n} to make {total}?`. Prefix/suffix: `{a} +` / `= {total}` |
 | make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Totals: `How many in all?`. Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
-| pick-pair | `What two numbers make {total}?` or `Find both pairs that make {total}.` Set `showDots` and `requireAllPairs`. |
+| pick-pair | `What two numbers make {total}?`. Always one pair. Set `showDots`. Finding every pair is `match-pairs`. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |
 | match-pairs | `Match each {left} to {right}.` |

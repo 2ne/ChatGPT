@@ -193,7 +193,7 @@ export type MakeTotalQuestion = QuestionCore & {
 
 /**
  * Tap two number tiles that add to `total`. Easy shows quantity dots.
- * Medium may ask for every pair in turn. Hard hides the dots.
+ * Hard hides the dots. Always one pair. Finding every pair is match-pairs.
  */
 export type PickPairQuestion = QuestionCore & {
   kind: "pick-pair";
@@ -207,8 +207,6 @@ export type PickPairQuestion = QuestionCore & {
   tileCount?: number;
   /** Quantity dots on each tile. Default true. Hard sets false. */
   showDots?: boolean;
-  /** Child must find every disjoint pair, one after the other. */
-  requireAllPairs?: boolean;
 };
 
 export type Question =

@@ -5,7 +5,6 @@ import {
   emptyPickPairAnswer,
   isCompletePickPair,
   isPickPairAnswer,
-  pickPairRequireAll,
   pickPairTiles,
   uniquePairLabels,
 } from "./pickPair";
@@ -123,7 +122,7 @@ export function correctAnswerLabel(question: Question): string | null {
     case "pick-pair": {
       const labels = uniquePairLabels(pickPairTiles(question), question.total);
       if (labels.length === 0) return null;
-      return pickPairRequireAll(question) ? labels.join(" and ") : labels.join(" or ");
+      return labels.join(" or ");
     }
     default:
       return null;
@@ -151,11 +150,7 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
     case "make-total":
       return typeof answer === "number";
     case "pick-pair":
-      return (
-        isPickPairAnswer(answer) &&
-        (answer.picked.length === 2 ||
-          (pickPairRequireAll(question) && isCompletePickPair(question, answer)))
-      );
+      return isPickPairAnswer(answer) && answer.picked.length === 2;
     default:
       return false;
   }

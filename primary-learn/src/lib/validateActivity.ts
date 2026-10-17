@@ -437,9 +437,6 @@ function parseQuestion(value: unknown, path: string): Question {
       if (value.showDots != null && typeof value.showDots !== "boolean") {
         fail(path, "showDots must be true or false");
       }
-      if (value.requireAllPairs != null && typeof value.requireAllPairs !== "boolean") {
-        fail(path, "requireAllPairs must be true or false");
-      }
       const draft = {
         ...core,
         kind: "pick-pair" as const,
@@ -448,8 +445,6 @@ function parseQuestion(value: unknown, path: string): Question {
         tileRange,
         tileCount,
         showDots: value.showDots === undefined ? undefined : Boolean(value.showDots),
-        requireAllPairs:
-          value.requireAllPairs === undefined ? undefined : Boolean(value.requireAllPairs),
       };
       const check = canDrawPickPair(draft);
       if (!check.ok) fail(path, check.reason);

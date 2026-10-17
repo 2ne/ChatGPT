@@ -1859,10 +1859,6 @@ button.learner-chip:focus-visible {
 }
 
 
-.pick-pair-tile.is-found {
-  cursor: default;
-}
-
 .pick-pair-num {
   font-family: var(--font-display);
   font-size: 42px;
@@ -1895,11 +1891,6 @@ button.learner-chip:focus-visible {
   height: 13px;
   border-radius: 50%;
   background: var(--ink-faint);
-}
-
-.pick-pair-coach {
-  margin: 0;
-  text-align: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
