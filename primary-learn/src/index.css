@@ -1665,22 +1665,9 @@ button.learner-chip:focus-visible {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10px 12px;
-  max-width: 420px;
-  padding: 8px 4px;
-}
-
-.make-total-part {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
-.make-total-part + .make-total-part {
-  margin-left: 16px;
-  padding-left: 16px;
-  border-left: 3px dashed var(--line-strong);
+  gap: 10px;
+  width: 100%;
+  min-height: var(--make-total-tile);
 }
 
 .make-total-slot {

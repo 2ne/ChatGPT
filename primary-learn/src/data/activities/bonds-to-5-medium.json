@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 picks the partner for 3 with slots still showing. Question 2 picks 5 = 4 + ?. Question 3 picks 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 picks reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
-    "versus": "Easy taps slots or four tiles with dots. Medium shows slots or six tiles and may ask for both pairs. Hard is the sum line or tiles with no dots. Still bonds to 5 only."
+    "within": "Question 1 taps extra slots for the partner of 3. Question 2 taps extra slots for 5 = 4 + ?. Question 3 is the sum line 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 is the sum line reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or six tiles, and may ask for both pairs. Hard is the sum line or tiles with no dots. Still bonds to 5 only."
   },
   "skills": [
     "eyfs-bonds-5",
@@ -42,38 +42,18 @@
     {
       "kind": "make-total",
       "id": "b5m-with-3",
-      "prompt": "Which number goes with 3 to make 5?",
+      "prompt": "What goes with 3 to make 5?",
       "visual": {
         "item": "star",
         "count": 3
       },
       "total": 5,
-      "mode": "pick",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        },
-        {
-          "id": "d",
-          "label": "4"
-        }
-      ],
+      "mode": "fill-slots",
+      "randomise": {},
       "hint": "Count on from 3: 4, 5.",
       "explanation": "3 and 2 make 5. 3 + 2 = 5.",
       "narration": {
-        "prompt": "Which number goes with 3 to make 5?"
+        "prompt": "What goes with 3 to make 5?"
       }
     },
     {
@@ -85,28 +65,8 @@
         "count": 4
       },
       "total": 5,
-      "mode": "pick",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "3"
-        }
-      ],
+      "mode": "fill-slots",
+      "randomise": {},
       "hint": "4 and what make 5?",
       "explanation": "5 = 4 + 1.",
       "narration": {
@@ -117,12 +77,9 @@
       "kind": "make-total",
       "id": "b5m-0-plus",
       "prompt": "Which number goes with 0 to make 5?",
-      "visual": {
-        "item": "duck",
-        "count": 0
-      },
+      "part": 0,
       "total": 5,
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
@@ -242,13 +199,10 @@
       "kind": "make-total",
       "id": "b5m-reverse",
       "prompt": "5 = ? + 2",
-      "visual": {
-        "item": "frog",
-        "count": 2
-      },
+      "part": 2,
       "total": 5,
       "gap": "left",
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },

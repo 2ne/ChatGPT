@@ -37,20 +37,10 @@ export function makeTotalOtherItem(question: MakeTotalQuestion): ObjectItem {
   return question.extras?.[0]?.item ?? makeTotalItem(question);
 }
 
-export function makeTotalSlotCount(question: MakeTotalQuestion): number {
-  return question.total;
-}
-
 export function makeTotalKnownCount(question: MakeTotalQuestion): number {
   if (makeTotalOp(question) === "subtract") return question.total;
   if (makeTotalGap(question) === "total") return makeTotalPart(question);
   return makeTotalPart(question);
-}
-
-export function makeTotalEmptyCount(question: MakeTotalQuestion): number {
-  if (makeTotalOp(question) === "subtract") return 0;
-  if (makeTotalGap(question) === "total") return 0;
-  return question.total - makeTotalPart(question);
 }
 
 /** Addable slots in fill-slots. More than the answer so the child can overshoot. */

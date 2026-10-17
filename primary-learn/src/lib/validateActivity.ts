@@ -324,7 +324,7 @@ function parseQuestion(value: unknown, path: string): Question {
       }
       const mode = expectString(value, "mode", path);
       if (!(MAKE_TOTAL_MODES as readonly string[]).includes(mode)) {
-        fail(path, "mode must be fill-slots, pick or sum-only");
+        fail(path, "mode must be fill-slots or sum-only");
       }
       let gap: MakeTotalGap | undefined;
       if (value.gap != null) {
@@ -342,8 +342,8 @@ function parseQuestion(value: unknown, path: string): Question {
         }
         operation = written as MakeTotalOp;
       }
-      if ((mode === "fill-slots" || mode === "pick") && !visual) {
-        fail(path, `${mode} needs visual { item, count }`);
+      if (mode === "fill-slots" && !visual) {
+        fail(path, "fill-slots needs visual { item, count }");
       }
       let options: QuestionOption[] | undefined;
       if (value.options != null) {
@@ -351,11 +351,11 @@ function parseQuestion(value: unknown, path: string): Question {
           parseOption(option, `${path}.options[${i}]`),
         );
       }
-      if (mode === "pick" || mode === "sum-only") {
-        if (!options || options.length < 3) fail(path, `${mode} needs at least 3 number options`);
+      if (mode === "sum-only") {
+        if (!options || options.length < 3) fail(path, "sum-only needs at least 3 number options");
       }
       if (mode === "fill-slots" && (gap ?? "right") === "total" && (operation ?? "add") === "add") {
-        fail(path, "fill-slots cannot use gap total (there are no empty slots). Use pick.");
+        fail(path, "fill-slots cannot use gap total (there are no object tiles for both parts). Use sum-only.");
       }
       let slotCount: number | undefined;
       if (value.slotCount != null) {
@@ -395,7 +395,7 @@ function parseQuestion(value: unknown, path: string): Question {
       }
       if (options) {
         const hits = options.filter((option) => optionNumber(option.label) === missing);
-        if ((mode === "pick" || mode === "sum-only") && hits.length !== 1) {
+        if (mode === "sum-only" && hits.length !== 1) {
           fail(path, "exactly one option label must be the missing number");
         }
       }

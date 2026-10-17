@@ -265,12 +265,12 @@ rainbow itself is never inset.
   on taps. Keep “Start again”, always rendered. Hide and disable it when
   nothing has been added so the layout does not move. Prompt, row 1 and
   row 2 sit as a compact group with tight, even gaps. Extra viewport
-  height must not stretch those gaps. Medium (`pick`): known and empty
-  slots stay visible; child taps a full-width number button; sum line
-  underneath. Hard (`sum-only`): sum line and the same full-width number
-  buttons only. “How many in all?” items use `sum-only` so there are no
-  object tiles. Later the same kind can subtract (tap to take away) and
-  use totals to 10 or 20 via `total` / `operation` in JSON.
+  height must not stretch those gaps. Medium may mix `fill-slots` with
+  `sum-only`. Hard (`sum-only`): sum line and the same full-width number
+  buttons only. No empty object slots that count out the missing amount.
+  “How many in all?” items use `sum-only` so there are no object tiles.
+  Later the same kind can subtract (tap to take away) and use totals to
+  10 or 20 via `total` / `operation` in JSON.
 - **Stable question layouts.** The prompt and answer must not jump as the
   child taps. Tiles keep one size across empty, filled and added states.
   Conditional controls (such as “Start again”) reserve their space when
@@ -365,3 +365,4 @@ audio files. Scale is too large.
 | Tiles that change size when filled | One tile size for empty, filled and added |
 | Controls that appear and shove the page | Always render them. Hide or disable in place |
 | Stretching a question to fill the phone | Pack the prompt and answer as a compact group |
+| Empty slots that count out the missing amount | Tap-to-fill with extra slots, or the sum line only |

@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Question 1 is the sum line 4 + ? = 5. Question 2 fills 5 take away 2. Question 3 matches number words to partners. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line 5 = ? + 0. Question 6 is 5 take away 0. Question 7 is the sum line ? + 4 = 5. Question 8 taps six tiles with no dots to make 5. Question 9 picks 5 take away 3 as a number word. Question 10 picks the take-away that matches 1 + 4. No hints. Totals stay 5.",
-    "versus": "Easy taps slots or four tiles with dots. Medium shows slots or six tiles. Hard is the sum line or tiles with no dots, mixing plus and take away."
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or six tiles. Hard is the sum line or tiles with no dots, mixing plus and take away."
   },
   "skills": [
     "eyfs-bonds-5",

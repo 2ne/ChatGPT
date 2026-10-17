@@ -158,7 +158,7 @@ export type MatchPairsQuestion = QuestionCore & {
 };
 
 /** How the child answers a part-whole sum. */
-export const MAKE_TOTAL_MODES = ["fill-slots", "pick", "sum-only"] as const;
+export const MAKE_TOTAL_MODES = ["fill-slots", "sum-only"] as const;
 export type MakeTotalMode = (typeof MAKE_TOTAL_MODES)[number];
 
 /** add: part + ? = total. subtract is reserved for tap-to-remove later. */
@@ -171,7 +171,7 @@ export type MakeTotalGap = (typeof MAKE_TOTAL_GAPS)[number];
 
 /**
  * Part-whole sum. Easy (`fill-slots`) adds extra green tiles to the known part.
- * Medium shows slots and picks a number. Hard is the sum line only.
+ * Medium may mix fill-slots and sum-only. Hard is the sum line only.
  * `total` may be 1–20 so later bonds to 10/20 reuse this.
  */
 export type MakeTotalQuestion = QuestionCore & {
@@ -187,7 +187,7 @@ export type MakeTotalQuestion = QuestionCore & {
   mode: MakeTotalMode;
   /** How many addable slots in `fill-slots`. Default is the missing part plus 2. */
   slotCount?: number;
-  /** Number buttons. Required for `pick` and `sum-only`. */
+  /** Number buttons. Required for `sum-only`. */
   options?: QuestionOption[];
 };
 

@@ -2,14 +2,12 @@ import type { MouseEvent, PointerEvent } from "react";
 import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS } from "../../data/objects";
 import {
-  makeTotalEmptyCount,
   makeTotalGap,
   makeTotalItem,
   makeTotalKnownCount,
   makeTotalMissing,
   makeTotalOp,
   makeTotalOther,
-  makeTotalOtherItem,
   makeTotalPart,
   makeTotalSlotBank,
   optionNumber,
@@ -131,7 +129,6 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
   const missing = makeTotalMissing(question);
   const selected = typeof answer === "number" ? answer : null;
   const item = makeTotalItem(question);
-  const otherItem = makeTotalOtherItem(question);
   const fillMode = question.mode === "fill-slots";
   const canFill = fillMode && !disabled;
   const subtract = op === "subtract";
@@ -139,17 +136,12 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
   const signWord = subtract ? "take away" : "plus";
   const known = makeTotalKnownCount(question);
   const bank = makeTotalSlotBank(question);
-  const showPickSlots = question.mode === "pick" || (fillMode && subtract);
 
   const leftValue = gap === "left" ? selected : part;
   const rightValue = gap === "right" ? selected : gap === "total" ? other : part;
   const resultValue = gap === "total" ? selected : question.total;
 
-  const filledMissing = fillMode
-    ? (selected ?? 0)
-    : question.mode === "pick" && selected != null
-      ? Math.max(0, Math.min(selected, makeTotalEmptyCount(question)))
-      : 0;
+  const filledMissing = selected ?? 0;
 
   function setFilled(next: number) {
     const max = subtract ? question.total : bank;
@@ -213,59 +205,26 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
         </div>
       ) : null}
 
-      {showPickSlots ? (
+      {fillMode && subtract ? (
         <div
           className="make-total-slots"
           role="group"
-          aria-label={
-            gap === "total"
-              ? `${part} ${OBJECT_WORDS[item].plural} and ${other} ${OBJECT_WORDS[otherItem].plural}`
-              : `${question.total} ${OBJECT_WORDS[item].plural}`
-          }
+          aria-label={`${question.total} ${itemWords.plural}`}
         >
-          {gap === "total" ? (
-            <>
-              <span className="make-total-part" aria-hidden>
-                {Array.from({ length: part }, (_, index) => (
-                  <Slot key={`a-${index}`} item={item} kind="known" index={index} />
-                ))}
-              </span>
-              <span className="make-total-part" aria-hidden>
-                {Array.from({ length: other }, (_, index) => (
-                  <Slot key={`b-${index}`} item={otherItem} kind="known" index={index} />
-                ))}
-              </span>
-            </>
-          ) : subtract ? (
-            Array.from({ length: question.total }, (_, index) => {
-              const remaining = question.total - (selected ?? 0);
-              return (
-                <Slot
-                  key={index}
-                  item={item}
-                  kind={index < remaining ? "known" : "empty"}
-                  tappable={canFill}
-                  disabled={disabled}
-                  index={index}
-                  onToggle={() => toggleEmpty(index)}
-                />
-              );
-            })
-          ) : (
-            <>
-              {Array.from({ length: known }, (_, index) => (
-                <Slot key={`k-${index}`} item={item} kind="known" index={index} />
-              ))}
-              {Array.from({ length: makeTotalEmptyCount(question) }, (_, index) => (
-                <Slot
-                  key={`e-${index}`}
-                  item={item}
-                  kind={index < filledMissing ? "known" : "empty"}
-                  index={known + index}
-                />
-              ))}
-            </>
-          )}
+          {Array.from({ length: question.total }, (_, index) => {
+            const remaining = question.total - (selected ?? 0);
+            return (
+              <Slot
+                key={index}
+                item={item}
+                kind={index < remaining ? "known" : "empty"}
+                tappable={canFill}
+                disabled={disabled}
+                index={index}
+                onToggle={() => toggleEmpty(index)}
+              />
+            );
+          })}
         </div>
       ) : null}
 

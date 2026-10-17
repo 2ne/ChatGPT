@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 picks 5 is 2 and ?. Question 6 taps six tiles to find both pairs that make 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 picks 5 is 4 and ?. Question 10 picks the partner of 1 to make 5. Starts at 4.",
+    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 matches 3, 4 and 5 to parts. Question 5 taps extra slots for 5 is 2 and ?. Question 6 taps six tiles to find both pairs that make 5. Question 7 builds 5. Question 8 taps every pair that makes 4. Question 9 taps extra slots for 5 is 4 and ?. Question 10 is the sum line 5 is 1 and ?. Starts at 4.",
     "versus": "Easy starts at 1 and 1 on the sum line, with early hints and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, and may ask for both pairs on six tiles. Hard uses reverse parts, number words, a hidden part, and tiles with no dots. Still composition of numbers to 5, not quick bond recall."
   },
   "skills": [
@@ -182,28 +182,8 @@
         "count": 2
       },
       "total": 5,
-      "mode": "pick",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "1"
-        }
-      ],
+      "mode": "fill-slots",
+      "randomise": {},
       "explanation": "5 is 2 and 3.",
       "narration": {
         "prompt": "5 is 2 and what?"
@@ -289,28 +269,8 @@
         "count": 4
       },
       "total": 5,
-      "mode": "pick",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "3"
-        }
-      ],
+      "mode": "fill-slots",
+      "randomise": {},
       "explanation": "5 is 4 and 1.",
       "narration": {
         "prompt": "5 is 4 and what?"
@@ -320,12 +280,9 @@
       "kind": "make-total",
       "id": "m5m-5-1",
       "prompt": "5 is 1 and ?",
-      "visual": {
-        "item": "strawberry",
-        "count": 1
-      },
+      "part": 1,
       "total": 5,
-      "mode": "pick",
+      "mode": "sum-only",
       "randomise": {
         "shuffleOptions": true
       },
