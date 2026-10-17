@@ -307,7 +307,7 @@ export function ActivityRunner({
     phase === "question" ? (
       <button
         type="button"
-        className="btn btn-success btn-block"
+        className="btn btn-primary btn-block"
         data-sfx="off"
         disabled={!hasProvidedAnswer(question, answer)}
         onPointerDown={(event) => {
@@ -320,7 +320,7 @@ export function ActivityRunner({
         {copy.checkIt} <Check size={19} aria-hidden />
       </button>
     ) : (
-      <button type="button" className="btn btn-primary btn-block" onClick={goNext}>
+      <button type="button" className="btn btn-success btn-block" onClick={goNext}>
         {position === activeQueue.length ? copy.seeMyStars : copy.nextQuestion}{" "}
         <ArrowRight size={19} aria-hidden />
       </button>

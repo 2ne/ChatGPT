@@ -60,9 +60,9 @@ CSS variables in `src/index.css`. The maths tile colour lives in
 | `--paper` / `--paper-deep` | `#FFF6E8` / `#FBEED3` | Page bg / sunken fills, dot texture |
 | `--ink` / `--ink-soft` / `--ink-faint` | `#232946` / `#5B5E7A` / `#9AA0B8` | Text tiers |
 | `--line` / `--line-strong` | `#ECE2CC` / `#DDCFB2` | Borders |
-| `--primary` → `--violet` | `#4F46E5` → `#7C3AED` | Next / See my stars, selected states, progress |
+| `--primary` → `--violet` | `#4F46E5` → `#7C3AED` | Check it, selected states, progress |
 | `--sun` / `--sun-soft` | `#FFC93C` / `#FFF1C4` | Highlights, hints |
-| `--green` / `--green-soft` | `#0CA678` / `#DCF5E9` | Correct, and the Check it button |
+| `--green` / `--green-soft` | `#0CA678` / `#DCF5E9` | Correct, and Next question / See my stars |
 | `--red` / `--red-soft` | `#E03131` / `#FFE3E3` | Try-again only |
 | `--gold` | `#FFB100` | Cups and gold path nodes |
 
@@ -72,11 +72,11 @@ Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
 
 - Page background is warm paper with a subtle dot grid — never flat grey.
   Dots cover the full viewport, including behind the header.
-- Continue CTAs (`Next question`, `See my stars`, Start quest) are the
-  indigo→violet gradient with a 2px deep border + bottom `4px` "squishy"
-  shadow (Duolingo-style press). `Check it` uses `--green` (the same
-  success green as correct feedback). Disabled = 55% opacity on that fill,
-  not grey. Sizes, shadow and layout stay identical across both.
+- `Check it` (and Start quest) is the indigo→violet gradient with a 2px
+  deep border + bottom `4px` "squishy" shadow (Duolingo-style press).
+  Disabled = 55% opacity on that fill, not grey. `Next question` and
+  `See my stars` use `--green` (the same success green as correct
+  feedback). Sizes, shadow and layout stay identical across both.
 - Correct / incorrect colour on answers appears **only after Check**.
 - Maths orange appears on quest icon tiles only, never as a full-page theme.
 
@@ -297,12 +297,13 @@ rainbow itself is never inset.
   numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
   or 20 use the same `total` / `tiles` config.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
-  `See my stars` on the last one. `Check it` is `--green`, including the
-  faded disabled state. `Next question` and `See my stars` stay the indigo
-  to violet gradient. Sticky white dock at the viewport bottom on every
-  width (with safe-area padding) so kids never have to scroll to find it.
-  The dock button has **no 2px border** (fill + squishy shadow only). Same
-  size, shadow and layout for every dock action so nothing shifts.
+  `See my stars` on the last one. `Check it` is the indigo to violet
+  gradient, including the faded disabled state. `Next question` and
+  `See my stars` use `--green`. Sticky white dock at the viewport bottom
+  on every width (with safe-area padding) so kids never have to scroll
+  to find it. The dock button has **no 2px border** (fill + squishy
+  shadow only). Same size, shadow and layout for every dock action so
+  nothing shifts.
 - Home and onboarding keep the dotted paper. Once a quest is open, the screen
   is white edge to edge. Inner content still uses `--max-wide`.
 
