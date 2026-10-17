@@ -1868,8 +1868,8 @@ button.learner-chip:focus-visible {
 
 .pick-pair-dots {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 16px;
+  right: 16px;
 }
 
 .pick-pair-dots.is-dice {
@@ -1886,11 +1886,14 @@ button.learner-chip:focus-visible {
   gap: 4px;
 }
 
-.pick-pair-dots .is-dot {
+.pick-pair-dots .is-dot,
+.pick-pair-tile.is-selected .pick-pair-dots .is-dot,
+.pick-pair-tile.is-correct .pick-pair-dots .is-dot,
+.pick-pair-tile.is-wrong .pick-pair-dots .is-dot {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: var(--ink-faint);
+  background: var(--primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

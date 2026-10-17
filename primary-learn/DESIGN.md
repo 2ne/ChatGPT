@@ -282,12 +282,14 @@ rainbow itself is never inset.
   hidden or disabled. Do not stretch question content to fill the phone.
 - **Number pairs (`pick-pair`)** stay on the same white activity screen. A
   two-column grid of big square tiles: large numeral in the centre, optional
-  dice-pip dots in the top-right. Every tile starts the same: white, the same
-  soft border as `.option`, grey dots. Selected tiles use the shared option
-  selected state (indigo border, soft indigo fill, ring shadow). Dots stay
-  grey. Tap again to deselect. At most two tiles are selected. No sum line
-  under the tiles. Always four tiles and exactly one pair. No duplicate
-  numbers that make a second pair. Finding every pair belongs to
+  dice-pip dots in the top-right, inset from the edges. Every tile starts the
+  same: white, the same soft border as `.option`. Dots use `--primary` (the
+  selected indigo) in every state, including selected, correct and wrong.
+  Selected tiles use the shared option selected state (indigo border, soft
+  indigo fill, ring shadow). Tap again to deselect. At most two tiles are
+  selected. No sum line under the tiles. Always four tiles and exactly one
+  pair. No duplicate numbers that make a second pair. Finding every pair
+  belongs to
   `match-pairs` later. Easy: four tiles with dots. Medium: four tiles, harder
   numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
   or 20 use the same `total` / `tiles` config.
