@@ -33,7 +33,7 @@ If a child skips bonds to 10, Year 2 facts to 20 and later column methods become
 
 ## Build order
 
-The learner path is the numbered nodes in `maths.md`: 45 categories, 124 nodes, shown on the home path map. Everything is open. The path suggests an order but never blocks. You are here starts on `eyfs-count-5`. A Year 4 child can jump straight in. Each node can hold Easy, Medium and Hard quests. Audit that list with `audit.md` before writing quests.
+The learner path is the numbered nodes in `maths.md`: 45 categories, 124 nodes, shown on the home path map. Everything is open. The path suggests an order but never blocks. You are here starts on `eyfs-count-5` and stays there until every existing Easy, Medium and Hard on that node has at least 1 star. A Year 4 child can jump straight in. Each node can hold Easy, Medium and Hard quests. Audit that list with `audit.md` before writing quests.
 
 ## Year flexibility note (from DfE)
 

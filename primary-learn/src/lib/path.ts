@@ -14,10 +14,11 @@ export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
 };
 
 /**
- * done: Easy has at least one star.
- * current: the next suggested stop (You are here). Never a gate.
+ * done: every existing Easy / Medium / Hard has at least one star.
+ * current: first node in path order with any level below 1 star (You are here).
  * open: has a quest, playable, not the suggested stop.
  * soon: no Easy quest written yet.
+ * Nothing is gated. Map stars still need 3 stars on a level.
  */
 export type LevelStatus = "done" | "current" | "open" | "soon";
 
@@ -77,14 +78,15 @@ export function buildLevels(progress: ProgressState): LevelState[] {
       });
 
       const easy = raw[0];
+      const hasUnpassedLevel = raw.some((entry) => entry.activity && !entry.done);
       let status: LevelStatus;
       if (!easy.activity) {
         status = "soon";
-      } else if (easy.done) {
-        status = "done";
-      } else if (!suggested) {
+      } else if (hasUnpassedLevel && !suggested) {
         status = "current";
         suggested = true;
+      } else if (!hasUnpassedLevel) {
+        status = "done";
       } else {
         status = "open";
       }

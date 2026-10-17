@@ -143,8 +143,9 @@ Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
    quests, gold cups). No mascot on this banner.
 2. **Path map** (`PathMap`) — a winding road of numbered stops, grouped by
    category signs from `curriculum/maths.md`. No subject chips, year chips, or
-   a free-choice quest list. Every stop is open. The next suggested stop
-   carries the learner’s buddy face (You are here). Untouched stops are just
+   a free-choice quest list. Every stop is open. You are here (buddy face)
+   sits on the first stop that still has an Easy, Medium or Hard below 1
+   star. Untouched stops are just
    a number. Won
    stars sit in a small indigo cluster hugging the bottom of the node
    (one star per Easy / Medium / Hard that has all three stars, max three;

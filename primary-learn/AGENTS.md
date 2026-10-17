@@ -73,9 +73,9 @@ Also register the activity in `src/data/activities/index.ts`. Then:
 Everything is open. The path suggests an order but never blocks. A Year 4 child can jump straight in.
 
 - A node with **no Easy quest** is `soon` (coming soon). The stop is still tappable. Rows without a quest say coming soon.
-- The first node whose Easy exists but is not yet passed is `current` (You are here).
+- You are here (`current`) is the first node, in path order, that has any Easy, Medium or Hard below 1 star (6 or more right out of 10). A 0-star run does not move it on. The highlighted circle follows the same rule.
 - Later nodes with a quest are `open` and playable at once. Easy, Medium and Hard on a node are all playable. Stars show progress. They do not gate anything.
-- Node status `done` means Easy has at least one star. Medium and Hard can still be unplayed. Map stars: one star per Easy / Medium / Hard that has all three stars (max three). 1 or 2 stars on a level stay in the sheet. They do not gate anything.
+- Node status `done` means every existing Easy, Medium and Hard on that node has at least one star. Map stars: one star per Easy / Medium / Hard that has all three stars (max three). 1 or 2 stars on a level stay in the sheet. They do not gate anything.
 
 Shipped examples: `count-to-5` / `count-to-5-medium` / `count-to-5-hard` are `pathNode: "eyfs-count-5"` at difficulty 1, 2 and 3. `number-bonds-to-10` is `pathNode: "y1-bonds-10"`, `difficulty: 1` (Easy only).
 

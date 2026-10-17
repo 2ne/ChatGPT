@@ -44,7 +44,7 @@ If those two map fields are missing, the quest will not appear even if it is reg
 Open path in the product:
 
 - Every node and every Easy / Medium / Hard quest that exists is playable.
-- You are here sits on the next suggested stop (first Easy that is not yet passed).
+- You are here sits on the first stop, in path order, that has any Easy, Medium or Hard below 1 star.
 - A node with no Easy quest shows as coming soon on that row. The stop is still tappable.
 
 ## Checks before creating quests
