@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 name 5 as 0 and 5, then 5 and 0, on the sum line only. Question 3 matches number words to parts. Question 4 is the sum line 5 is 3 and ?. Question 5 taps six tiles with no dots to make 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse ? + 2 = 5. Question 8 is the sum line for a hidden part when 2 is given. Question 9 matches other ways to make 3, 4 and 5. Question 10 picks another pair that makes 5. No hints.",
+    "within": "Questions 1 to 2 ask what goes with 0, then 5, to make 5, on the sum line only. Question 3 matches number words to parts. Question 4 is the sum line for what goes with 3 to make 5. Question 5 taps six tiles with no dots to make 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse order for what goes with 2 to make 5. Question 8 is the sum line for a hidden part: what goes with 2 to make 5. Question 9 matches other ways to make 3, 4 and 5. Question 10 picks another pair that makes 5. No hints.",
     "versus": "Easy is small sums from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, and may use six tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and tiles with no dots. Same node: composition of each number to 5."
   },
   "skills": [
@@ -42,7 +42,7 @@
     {
       "kind": "make-total",
       "id": "m5h-0-5",
-      "prompt": "5 is 0 and ?",
+      "prompt": "What goes with 0 to make 5?",
       "part": 0,
       "total": 5,
       "mode": "sum-only",
@@ -69,13 +69,13 @@
       ],
       "explanation": "5 is 0 and 5. All of them in one part.",
       "narration": {
-        "prompt": "5 is 0 and what?"
+        "prompt": "What goes with 0 to make 5?"
       }
     },
     {
       "kind": "make-total",
       "id": "m5h-5-0",
-      "prompt": "5 is 5 and ?",
+      "prompt": "What goes with 5 to make 5?",
       "part": 5,
       "total": 5,
       "mode": "sum-only",
@@ -102,7 +102,7 @@
       ],
       "explanation": "5 is 5 and 0. Nothing in the other part.",
       "narration": {
-        "prompt": "5 is 5 and what?"
+        "prompt": "What goes with 5 to make 5?"
       }
     },
     {
@@ -134,7 +134,7 @@
     {
       "kind": "make-total",
       "id": "m5h-5-3",
-      "prompt": "5 is 3 and ?",
+      "prompt": "What goes with 3 to make 5?",
       "part": 3,
       "total": 5,
       "mode": "sum-only",
@@ -161,7 +161,7 @@
       ],
       "explanation": "5 is 3 and 2.",
       "narration": {
-        "prompt": "5 is 3 and what?"
+        "prompt": "What goes with 3 to make 5?"
       }
     },
     {
@@ -224,7 +224,7 @@
     {
       "kind": "make-total",
       "id": "m5h-first-part",
-      "prompt": "5 is ? and 2",
+      "prompt": "What goes with 2 to make 5?",
       "part": 2,
       "total": 5,
       "gap": "left",
@@ -252,13 +252,13 @@
       ],
       "explanation": "5 is 3 and 2.",
       "narration": {
-        "prompt": "5 is what and 2?"
+        "prompt": "What goes with 2 to make 5?"
       }
     },
     {
       "kind": "make-total",
       "id": "m5h-hidden",
-      "prompt": "2 in one part. How many in the other?",
+      "prompt": "What goes with 2 to make 5?",
       "part": 2,
       "total": 5,
       "mode": "sum-only",
@@ -285,7 +285,7 @@
       ],
       "explanation": "5 is 2 and 3. The other part is 3.",
       "narration": {
-        "prompt": "2 in one part. How many in the other?"
+        "prompt": "What goes with 2 to make 5?"
       }
     },
     {

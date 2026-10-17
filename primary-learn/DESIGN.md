@@ -256,10 +256,13 @@ rainbow itself is never inset.
   scenery. Easy (`fill-slots`): row 1 is the known part as filled sun-style
   tiles, then a large `+`. Row 2 is the child’s area. Added objects are
   green-tinted tiles (tap one to take it out). Empty slots are dashed, with
-  a `+` and a short `Add` label (never the object name). The fill-slots
-  prompt is always `What goes with {n} to make {total}?`. Do not write
-  `5 is 2 and ?` on fill-slots. That stem is for sum-only. Known
-  tiles, added tiles and empty slots use one identical tile size. Adding
+  a `+` and a short `Add` label (never the object name). Every missing-part
+  prompt, in any question kind, is `What goes with {n} to make {total}?`.
+  Use it on fill-slots, sum-only, multiple-choice and fill-blank. Do not
+  write `5 is 2 and ?`, `5 = ? + 2`, `Which number goes with 6 to make 10?`,
+  or `Which number is missing? 7 + ? = 10`. Totals still use
+  `How many in all?`. Known tiles, added tiles and empty slots use one
+  identical tile size. Adding
   or removing a tile replaces a slot in place. Always more slots than the
   answer (default missing + 2, or `slotCount` in JSON, cap 12) so the
   child must stop. No “Tap a space to add one.” No sum line (a live `?`

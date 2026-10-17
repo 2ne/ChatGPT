@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 is the sum line 4 + ? = 5. Question 2 fills 5 take away 2. Question 3 matches number words to partners. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line 5 = ? + 0. Question 6 is 5 take away 0. Question 7 is the sum line ? + 4 = 5. Question 8 taps six tiles with no dots to make 5. Question 9 picks 5 take away 3 as a number word. Question 10 picks the take-away that matches 1 + 4. No hints. Totals stay 5.",
+    "within": "Question 1 is the sum line for what goes with 4 to make 5. Question 2 fills 5 take away 2. Question 3 matches number words to partners. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 5. Question 6 is 5 take away 0. Question 7 is the sum line reverse for what goes with 4 to make 5. Question 8 taps six tiles with no dots to make 5. Question 9 picks 5 take away 3 as a number word. Question 10 picks the take-away that matches 1 + 4. No hints. Totals stay 5.",
     "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or six tiles. Hard is the sum line or tiles with no dots, mixing plus and take away."
   },
   "skills": [
@@ -27,7 +27,7 @@
     {
       "kind": "make-total",
       "id": "b5h-true",
-      "prompt": "Which number goes with 4 to make 5?",
+      "prompt": "What goes with 4 to make 5?",
       "part": 4,
       "total": 5,
       "mode": "sum-only",
@@ -54,7 +54,7 @@
       ],
       "explanation": "4 + 1 = 5.",
       "narration": {
-        "prompt": "Which number goes with 4 to make 5?"
+        "prompt": "What goes with 4 to make 5?"
       }
     },
     {
@@ -135,7 +135,7 @@
     {
       "kind": "make-total",
       "id": "b5h-plus-0",
-      "prompt": "5 = ? + 0",
+      "prompt": "What goes with 0 to make 5?",
       "part": 0,
       "total": 5,
       "gap": "left",
@@ -163,7 +163,7 @@
       ],
       "explanation": "5 = 5 + 0.",
       "narration": {
-        "prompt": "5 equals what plus 0?"
+        "prompt": "What goes with 0 to make 5?"
       }
     },
     {
@@ -200,7 +200,7 @@
     {
       "kind": "make-total",
       "id": "b5h-first-addend",
-      "prompt": "? + 4 = 5",
+      "prompt": "What goes with 4 to make 5?",
       "part": 4,
       "total": 5,
       "gap": "left",
@@ -228,7 +228,7 @@
       ],
       "explanation": "1 + 4 = 5.",
       "narration": {
-        "prompt": "What plus 4 equals 5?"
+        "prompt": "What goes with 4 to make 5?"
       }
     },
     {

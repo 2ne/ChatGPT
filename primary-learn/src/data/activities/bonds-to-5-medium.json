@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 taps extra slots for what goes with 3 to make 5. Question 2 taps extra slots for what goes with 4 to make 5. Question 3 is the sum line 0 + ? = 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 is the sum line reverse ? + 2 = 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
+    "within": "Question 1 taps extra slots for what goes with 3 to make 5. Question 2 taps extra slots for what goes with 4 to make 5. Question 3 is the sum line for what goes with 0 to make 5. Question 4 matches 0, 3 and 5 to partners. Question 5 is 5 take away 3. Question 6 taps six tiles to find both pairs that make 5, one after the other. Question 7 fills 5 take away 0. Question 8 is the sum line reverse for what goes with 2 to make 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
     "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or six tiles, and may ask for both pairs. Hard is the sum line or tiles with no dots. Still bonds to 5 only."
   },
   "skills": [
@@ -76,7 +76,7 @@
     {
       "kind": "make-total",
       "id": "b5m-0-plus",
-      "prompt": "Which number goes with 0 to make 5?",
+      "prompt": "What goes with 0 to make 5?",
       "part": 0,
       "total": 5,
       "mode": "sum-only",
@@ -104,7 +104,7 @@
       "hint": "0 and 5 make 5.",
       "explanation": "0 + 5 = 5.",
       "narration": {
-        "prompt": "Which number goes with 0 to make 5?"
+        "prompt": "What goes with 0 to make 5?"
       }
     },
     {
@@ -198,7 +198,7 @@
     {
       "kind": "make-total",
       "id": "b5m-reverse",
-      "prompt": "5 = ? + 2",
+      "prompt": "What goes with 2 to make 5?",
       "part": 2,
       "total": 5,
       "gap": "left",
@@ -226,7 +226,7 @@
       ],
       "explanation": "5 = 3 + 2.",
       "narration": {
-        "prompt": "5 equals what plus 2?"
+        "prompt": "What goes with 2 to make 5?"
       }
     },
     {

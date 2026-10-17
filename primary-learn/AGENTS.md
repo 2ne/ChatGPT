@@ -150,6 +150,8 @@ Every string a child (or parent helper) can read on screen must follow this. Tha
 
 If a line needs a pause, use a full stop or split it. If two ideas fight in one sentence, make two sentences.
 
+**Missing-part stems.** Every missing-part prompt (any question kind: fill-slots, sum-only, multiple-choice, fill-blank) is `What goes with {n} to make {total}?`. Do not write `5 is 2 and ?`, `5 = ? + 2`, `Which number goes with 6 to make 10?`, or `Which number is missing? 7 + ? = 10`. Finding the total still uses `How many in all?`. Take-away stays take-away.
+
 ## How to add an activity (data only)
 
 1. Copy `src/data/activities/count-to-5.json` (gold standard) to `src/data/activities/<kebab-id>.json`.
@@ -261,7 +263,7 @@ Current topic types: `counting`, `number-bonds`, `times-tables`, `fractions`, `p
 Follow `QUALITY.md` for the full wording templates, distractor rules, variety rules and the self-review checklist. The short form:
 
 - Prefer **doing** over reading walls of text. Keep stems short; use visuals/options kids can tap.
-- Match the year-group reading age. Reception: one short sentence + a picture. Reuse the stem templates in `QUALITY.md`.
+- Match the year-group reading age. Reception: one short sentence + a picture. Reuse the stem templates in `QUALITY.md`. Missing-part items always use `What goes with {n} to make {total}?`.
 - One concept per question. Avoid trick questions and ambiguous distractors.
 - Wrong answers must be plausible misconceptions (off by one, wrong operation, number from the stem) — not random or joke options.
 - Always provide `explanation`. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.
@@ -307,7 +309,7 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 - `fill-blank` — exact normalised answer (number or short word). May include `visual`. Stem pictures are tappable to count, same as count-objects.
 - `ordered` — put items in the right sequence.
 - `match-pairs` — match left to right. A side is a string or `{ label, visual }`.
-- `make-total` — part-whole sum. Required `total` (1–20) and `mode`. Known addend is `part` or `visual.count`. `gap` is `right` (default: `2 + ? = 5`), `left` (`? + 2 = 5`), or `total` (`2 + 3 = ?`). `operation` is `add` (default) or `subtract` (tap to remove later). Modes: `fill-slots` (row 1 = known tiles + large `+`; row 2 = green added tiles then extra dashed `Add` slots; prompt is always `What goes with {n} to make {total}?`; no sum line; no spoken count; optional `slotCount`, default missing + 2), `sum-only` (sum line and number buttons only). There is no pick mode. Do not randomise `total` or `part`.
+- `make-total` — part-whole sum. Required `total` (1–20) and `mode`. Known addend is `part` or `visual.count`. `gap` is `right` (default: `2 + ? = 5`), `left` (`? + 2 = 5`), or `total` (`2 + 3 = ?`). `operation` is `add` (default) or `subtract` (tap to remove later). Modes: `fill-slots` (row 1 = known tiles + large `+`; row 2 = green added tiles then extra dashed `Add` slots; no sum line; no spoken count; optional `slotCount`, default missing + 2), `sum-only` (sum line and number buttons only). Missing-part prompt (fill-slots or sum-only, any gap except total) is always `What goes with {n} to make {total}?`. Gap `total` uses `How many in all?`. There is no pick mode. Do not randomise `total` or `part`.
 - `pick-pair` — tap two number tiles that add to `total` (1–20). Required `total` plus `tiles` or `tileRange` (`tileCount` default 4). `showDots` (default true) draws quantity dots on each tile. `requireAllPairs` (default false) asks the child to find every disjoint pair, one after the other. Any valid pair is accepted unless `requireAllPairs` is set. Do not randomise `total`. Shuffle tile order with `shuffleOptions`.
 
 Optional on any pictured stem: `extras` (a second kind of object; `extras.item` must differ from `visual.item`) and `layout` (`row` default, `scatter`, or `dice`). For mixed counting, the child counts `visual` and ignores extras. For composition, keep `layout` as `row` so the two kinds stay in groups (first `visual`, then extras). `scatter` shuffles them together. `dice` is a glance pattern to 6 and ignores extras.

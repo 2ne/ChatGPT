@@ -14,8 +14,8 @@
   "pathNode": "y1-bonds-10",
   "difficulty": 1,
   "difficultyRamp": {
-    "within": "Starts with a supported missing addend (6 + ?), then recognise a pair, then fill-blanks including the double 5 + 5, then multi-select, then a word problem and a related subtraction fact. Range stays 0 to 10. Later items add a second step (subtract using a bond) rather than bigger numbers.",
-    "versus": "Easy: bonds to 10 with numerals and one-step missing addends. Medium should mix order (10 = 3 + ?) and more subtraction. Hard should use two-step stories still totalling 10."
+    "within": "Starts with what goes with 6 to make 10, then recognise a pair, then fill-blanks including the double 5 + 5, then multi-select, then a word problem and a related subtraction fact. Range stays 0 to 10. Later items add a second step (subtract using a bond) rather than bigger numbers.",
+    "versus": "Easy: bonds to 10 with numerals and one-step missing addends. Medium should mix order (what goes with 3 to make 10) and more subtraction. Hard should use two-step stories still totalling 10."
   },
   "skills": [
     "y1-bonds-10",
@@ -33,7 +33,7 @@
       "randomise": {
         "shuffleOptions": true
       },
-      "prompt": "Which number goes with 6 to make 10?",
+      "prompt": "What goes with 6 to make 10?",
       "options": [
         {
           "id": "a",
@@ -56,7 +56,7 @@
       "hint": "Count on from 6 until you reach 10.",
       "explanation": "6 + 4 = 10, so 4 is the bond partner for 6.",
       "narration": {
-        "prompt": "Which number goes with 6 to make 10?"
+        "prompt": "What goes with 6 to make 10?"
       }
     },
     {
@@ -93,7 +93,7 @@
     {
       "kind": "fill-blank",
       "id": "nb10-fb-1",
-      "prompt": "Complete the number bond.",
+      "prompt": "What goes with 8 to make 10?",
       "prefix": "8 +",
       "suffix": "= 10",
       "acceptedAnswers": [
@@ -103,13 +103,13 @@
       "hint": "How many more to get from 8 to 10?",
       "explanation": "8 + 2 = 10.",
       "narration": {
-        "prompt": "Complete the number bond. 8 plus what equals 10?"
+        "prompt": "What goes with 8 to make 10?"
       }
     },
     {
       "kind": "fill-blank",
       "id": "nb10-fb-2",
-      "prompt": "Complete the number bond.",
+      "prompt": "What goes with 1 to make 10?",
       "prefix": "1 +",
       "suffix": "= 10",
       "acceptedAnswers": [
@@ -118,13 +118,13 @@
       "inputMode": "numeric",
       "explanation": "1 + 9 = 10.",
       "narration": {
-        "prompt": "Complete the number bond. 1 plus what equals 10?"
+        "prompt": "What goes with 1 to make 10?"
       }
     },
     {
       "kind": "fill-blank",
       "id": "nb10-fb-3",
-      "prompt": "Complete the number bond.",
+      "prompt": "What goes with 5 to make 10?",
       "prefix": "5 +",
       "suffix": "= 10",
       "acceptedAnswers": [
@@ -133,7 +133,7 @@
       "inputMode": "numeric",
       "explanation": "5 + 5 = 10. This is a double!",
       "narration": {
-        "prompt": "Complete the number bond. 5 plus what equals 10?"
+        "prompt": "What goes with 5 to make 10?"
       }
     },
     {
@@ -176,7 +176,7 @@
       "randomise": {
         "shuffleOptions": true
       },
-      "prompt": "Which number is missing? 7 + ? = 10",
+      "prompt": "What goes with 7 to make 10?",
       "options": [
         {
           "id": "a",
@@ -199,7 +199,7 @@
       "hint": "Count on from 7: 8, 9, 10.",
       "explanation": "7 + 3 = 10, so the missing number is 3.",
       "narration": {
-        "prompt": "Which number is missing? 7 plus what equals 10?"
+        "prompt": "What goes with 7 to make 10?"
       }
     },
     {

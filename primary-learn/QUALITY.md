@@ -61,9 +61,9 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects) |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
-| multiple-choice missing | `Which number goes with {n} to make {total}?` |
-| fill-blank bond | Prompt: `Complete the number bond.` Prefix/suffix: `{a} +` / `= {total}` |
-| make-total | fill-slots: `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` on fill-slots. sum-only: `How many in all?` or `5 is 1 and ?` on the sum line. Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
+| multiple-choice missing | `What goes with {n} to make {total}?` |
+| fill-blank bond | Prompt: `What goes with {n} to make {total}?`. Prefix/suffix: `{a} +` / `= {total}` |
+| make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Totals: `How many in all?`. Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
 | pick-pair | `What two numbers make {total}?` or `Find both pairs that make {total}.` Set `showDots` and `requireAllPairs`. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |
