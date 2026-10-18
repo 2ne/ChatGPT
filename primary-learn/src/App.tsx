@@ -9,9 +9,11 @@ import { Home } from "./components/Home";
 import { Onboarding } from "./components/Onboarding";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { useLearner } from "./hooks/useLearner";
+import { useSafariThemeColor } from "./hooks/useSafariThemeColor";
 import type { ActivityAttempt, LearnerProfile, ProgressState } from "./types/progress";
 
 export default function App() {
+  useSafariThemeColor();
   const learner = useLearner();
 
   if (!learner.ready) {

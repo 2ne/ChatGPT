@@ -143,10 +143,14 @@ Feel like a native app on phones and tablets. No text selection or long-press
 callouts except in text fields. No image drag. `touch-action: manipulation`
 kills double-tap zoom and the 300ms delay; pinch zoom stays on (never
 `user-scalable=no`). Inputs are at least 16px so iOS does not zoom on focus.
-`overscroll-behavior: none` stops pull-to-refresh bounce. Home-screen install
-uses a standalone manifest (`Primary Maths`, paper background, indigo theme,
-Pip favicon) under `/ChatGPT/primary-learn/`. Keep `:focus-visible` and
-pointerdown sounds as they are.
+`overscroll-behavior: none` stops pull-to-refresh bounce. The cream dotted
+paper lives on `html` and `body` so it fills the whole device (no white
+status-bar or toolbar bands); yellow and pink blobs sit on that same layer
+and can run under the notch. Content wrappers use `env(safe-area-inset-*)`
+once, not twice. `theme-color` is cream on setup and the map, white on
+quest screens. Home-screen install uses a standalone manifest (`Primary
+Maths`, paper background, Pip favicon) under `/ChatGPT/primary-learn/`.
+Keep `:focus-visible` and pointerdown sounds as they are.
 
 ### Home
 
