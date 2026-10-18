@@ -1119,27 +1119,6 @@ button.learner-chip:focus-visible {
   to { transform: scaleX(1); }
 }
 
-.streak-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 30px;
-}
-
-.streak-fire {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: #fff4d6;
-  border: 1.5px solid #f0d48a;
-  color: #9a6200;
-  border-radius: var(--radius-pill);
-  padding: 3px 12px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-}
-
 /* ——— Question card ——— */
 .question-card {
   display: grid;

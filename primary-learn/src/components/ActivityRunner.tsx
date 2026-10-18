@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Check,
   Clock,
-  Flame,
   Lightbulb,
   ListChecks,
   RotateCcw,
@@ -57,7 +56,7 @@ export function ActivityRunner({
   const [showHint, setShowHint] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
   const [confettiBurst, setConfettiBurst] = useState(0);
-  const [streak, setStreak] = useState(0);
+  const [, setStreak] = useState(0);
   const { setMood } = usePipMood();
   const promptRef = useRef<HTMLHeadingElement>(null);
   const reducedMotion = usePrefersReducedMotion();
@@ -375,14 +374,6 @@ export function ActivityRunner({
               })}
             </div>
           </div>
-
-          {streak >= 2 && phase !== "feedback" ? (
-            <div className="streak-row">
-              <span className="streak-fire">
-                <Flame size={15} aria-hidden /> {copy.streak(streak)}
-              </span>
-            </div>
-          ) : null}
         </div>
       </section>
 

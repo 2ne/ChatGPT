@@ -18,7 +18,7 @@ rules, change the design — do not invent a second system.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
    ≥ 64px with letter badges (A–D).
-5. **Celebrate constantly** — stars, streak flames, confetti pops, cheering Pip.
+5. **Celebrate constantly** — stars, confetti pops, cheering Pip.
    Kids should feel progress every 30 seconds.
 6. **Colour with meaning** — maths tiles are orange; green = correct,
    red = try again, indigo = earned stars, gold = cups and path nodes.
@@ -315,8 +315,9 @@ rainbow itself is never inset.
 **Segmented bar** — one capsule per question, 12px tall, paper fill. Done =
 gradient fill with pop; current = indigo outline + soft glow. Each question
 is asked once. Counter reads `Question 3 of 10` (Baloo, number in indigo).
-Streaks ≥ 2 earn a `🔥 N in a row!` flame pill. A miss shows a short
-correction (`It was 4.` plus the explanation) then **Next question**.
+No inline streak badge in the header (it pushed the layout down). A streak
+toast may come back later. A miss shows a short correction (`It was 4.`
+plus the explanation) then **Next question**.
 
 ### Summary (end screen)
 
