@@ -140,6 +140,16 @@ body {
   background: transparent;
 }
 
+html[data-surface="white"],
+html[data-surface="white"] body {
+  background-color: #fff;
+  background-image: none;
+}
+
+html[data-surface="white"] #root {
+  background: #fff;
+}
+
 button,
 input,
 select,
