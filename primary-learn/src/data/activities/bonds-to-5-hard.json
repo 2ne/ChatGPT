@@ -79,6 +79,7 @@
       "whole": 5,
       "parts": [2, 3],
       "missing": "whole",
+      "choices": [4, 5, 6],
       "explanation": "2 and 3 make 5.",
       "narration": {
         "prompt": "What do two and three make?"

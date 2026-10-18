@@ -239,6 +239,7 @@
       "whole": 5,
       "parts": [4, 1],
       "missing": "right",
+      "choices": [0, 1, 2],
       "explanation": "4 and 1 make 5.",
       "narration": {
         "prompt": "What goes with four to make five?"

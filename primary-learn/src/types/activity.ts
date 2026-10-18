@@ -216,7 +216,7 @@ export const PART_WHOLE_MISSING = ["left", "right", "whole"] as const;
 export type PartWholeMissing = (typeof PART_WHOLE_MISSING)[number];
 
 /**
- * Cherry number-bond model. One missing circle, round number buttons.
+ * Cherry number-bond model. One missing circle, three nearby number buttons.
  * Prompt is generated from `whole` / `parts` / `missing` unless JSON overrides.
  */
 export type PartWholeQuestion = QuestionCore & {
@@ -226,7 +226,7 @@ export type PartWholeQuestion = QuestionCore & {
   /** The two parts. They must add to `whole`. 0 is allowed. */
   parts: [number, number];
   missing: PartWholeMissing;
-  /** Number pad. Default 0…whole. */
+  /** Three number buttons. Default is the answer plus two nearby misses. */
   choices?: number[];
 };
 

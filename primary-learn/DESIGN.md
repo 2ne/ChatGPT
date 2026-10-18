@@ -252,7 +252,7 @@ rainbow itself is never inset.
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
   buttons as multiple-choice. Exceptions: `pick-pair` square tiles and
-  `part-whole` round 84px number buttons.
+  `part-whole` rounded-square number buttons (one row of three).
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
@@ -322,15 +322,21 @@ rainbow itself is never inset.
   or 20 use the same `total` / `tiles` config.
 - **Cherry bonds (`part-whole`)** stay on the same white activity screen. A
   big whole circle on top (green tint, like the sum-only total), lines down
-  to two smaller part circles (blue tint when known). The empty circle is
-  dashed with `?`. Circles stay one size in every state. Round 84px number
-  buttons sit three to a row: white, soft beige border, shared indigo
-  selected state. Tap drops the number into the empty circle in the selected
-  style. Tap another to replace. Nothing auto-checks. Correct turns the
-  filled circle green. Wrong keeps the usual `It was 3.` line and puts the
-  right number in the circle. Prompt is `What goes with {n} to make
-  {whole}?`, or `What do {a} and {b} make?` when the whole is empty. Do not
-  use match-pairs with `a and b` text for Reception bonds.
+  to two smaller part circles (blue tint when known). One SVG behind the
+  circles draws both joins: they meet at the bottom centre of the whole
+  and end at the top of each part, from the circle sizes, with round caps
+  and the beige line colour. The empty circle is `?` (dashed beige on a
+  part, indigo outline on a missing whole). Circles stay one size in every
+  state. Known circles show small quantity dots under the number, in the
+  circle’s text colour; the `?` has no dots; a correct fill may show them.
+  Three rounded-square buttons in one row: white, soft beige border, shared
+  indigo selected state. Exactly one is right; the other two are nearby
+  misses. Order is shuffled. Tap drops the number into the empty circle in
+  the selected style. Tap another to replace. Nothing auto-checks. Correct
+  turns the filled circle green. Wrong keeps the usual `It was 3.` line and
+  puts the right number in the circle. Prompt is `What goes with {n} to
+  make {whole}?`, or `What do {a} and {b} make?` when the whole is empty.
+  Do not use match-pairs with `a and b` text for Reception bonds.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. `Check it` is the indigo to violet
   gradient, including the faded disabled state. `Next question` and

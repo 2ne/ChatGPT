@@ -22,7 +22,7 @@ import {
   type RandomiseSpec,
 } from "../types/activity";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
-import { partWholeAnswer } from "./partWhole";
+import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -475,7 +475,7 @@ function parseQuestion(value: unknown, path: string): Question {
       let choices: number[] | undefined;
       if (value.choices != null) {
         const list = expectArray(value, "choices", path);
-        if (list.length < 3) fail(path, "choices needs at least 3 numbers");
+        if (list.length !== 3) fail(path, "choices must be exactly 3 numbers");
         choices = list.map((entry, index) => {
           if (typeof entry !== "number" || !Number.isInteger(entry) || entry < 0 || entry > 20) {
             fail(`${path}.choices[${index}]`, "choice must be a whole number from 0 to 20");
@@ -493,8 +493,10 @@ function parseQuestion(value: unknown, path: string): Question {
         choices,
       };
       const answer = partWholeAnswer(draft);
-      const pad = choices ?? Array.from({ length: whole + 1 }, (_, index) => index);
-      if (!pad.includes(answer)) fail(path, "choices must include the missing number");
+      const pad = choices ?? defaultPartWholeChoices(answer, whole);
+      if (pad.filter((value) => value === answer).length !== 1) {
+        fail(path, "exactly one choice must be the missing number");
+      }
       return draft;
     }
     default:

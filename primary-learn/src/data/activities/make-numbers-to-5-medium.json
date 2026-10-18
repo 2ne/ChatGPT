@@ -154,6 +154,7 @@
       "whole": 4,
       "parts": [2, 2],
       "missing": "left",
+      "choices": [1, 2, 3],
       "explanation": "2 and 2 make 4.",
       "narration": {
         "prompt": "What goes with two to make four?"

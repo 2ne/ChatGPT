@@ -114,6 +114,7 @@
       "whole": 5,
       "parts": [5, 0],
       "missing": "right",
+      "choices": [0, 1, 2],
       "explanation": "5 and 0 make 5.",
       "narration": {
         "prompt": "What goes with five to make five?"

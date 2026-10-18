@@ -364,10 +364,6 @@ function realizeQuestion(
   ) {
     if (next.options) next.options = shuffle(next.options, rng);
   }
-  if (spec.shuffleOptions && next.kind === "part-whole" && next.choices) {
-    next.choices = shuffle(next.choices, rng);
-  }
-
   return next;
 }
 
@@ -387,10 +383,12 @@ export function realizeActivity(activity: Activity, seed?: string): Activity {
   const rng = mulberry32(hashString(resolved));
   return {
     ...activity,
-    questions: activity.questions.map((question) =>
-      applyPartWholeDefaults(
+    questions: activity.questions.map((question) => {
+      const realized = applyPartWholeDefaults(
         applyMakeTotalDefaults(realizeQuestion(question, activity.randomise, rng)),
-      ),
-    ),
+      );
+      if (realized.kind !== "part-whole" || !realized.choices) return realized;
+      return { ...realized, choices: shuffle(realized.choices, rng) };
+    }),
   };
 }

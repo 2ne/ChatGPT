@@ -112,6 +112,7 @@
       "whole": 3,
       "parts": [1, 2],
       "missing": "whole",
+      "choices": [2, 3, 4],
       "explanation": "1 and 2 make 3.",
       "narration": {
         "prompt": "What do one and two make?"
@@ -274,6 +275,7 @@
       "whole": 4,
       "parts": [0, 4],
       "missing": "left",
+      "choices": [0, 1, 2],
       "explanation": "0 and 4 make 4.",
       "narration": {
         "prompt": "What goes with four to make four?"
