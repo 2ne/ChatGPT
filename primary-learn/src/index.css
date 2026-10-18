@@ -71,10 +71,31 @@
 
 * {
   box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+[contenteditable]:not([contenteditable="false"]) {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+img,
+svg {
+  -webkit-user-drag: none;
+  user-drag: none;
 }
 
 html {
   min-height: 100%;
+  cursor: default;
+  overscroll-behavior: none;
+  touch-action: manipulation;
   background:
     radial-gradient(circle at 12% 8%, rgba(255, 201, 60, 0.16) 0 90px, transparent 91px),
     radial-gradient(circle at 88% 4%, rgba(124, 58, 237, 0.1) 0 110px, transparent 111px),
@@ -92,6 +113,9 @@ body {
   font-size: 16px;
   line-height: 1.55;
   font-weight: 500;
+  cursor: default;
+  overscroll-behavior: none;
+  touch-action: manipulation;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   background: transparent;
@@ -99,22 +123,32 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
   color: inherit;
 }
 
-html {
-  -webkit-tap-highlight-color: transparent;
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+button,
+a,
+[role="button"],
+[role="radio"],
+label,
+summary {
+  touch-action: manipulation;
 }
 
 button {
   cursor: pointer;
-  touch-action: manipulation;
   border: 0;
   background: none;
   padding: 0;
-  -webkit-tap-highlight-color: transparent;
 }
 
 button:disabled {
@@ -241,7 +275,7 @@ p {
   width: 100%;
   min-height: 100dvh;
   margin: 0;
-  padding: var(--space-5) var(--space-4) var(--space-6);
+  padding: calc(var(--space-5) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-6);
   background: #fff;
 }
 
@@ -256,7 +290,7 @@ p {
   max-width: none;
   width: 100%;
   margin: 0;
-  padding: 0 0 calc(96px + env(safe-area-inset-bottom, 0px));
+  padding: env(safe-area-inset-top, 0px) 0 calc(96px + env(safe-area-inset-bottom, 0px));
   overflow-x: clip;
 }
 
@@ -435,8 +469,11 @@ p {
   width: 100%;
   max-width: var(--max-wide);
   margin: 0 auto;
-  min-height: 72px;
-  padding: 8px var(--page-gutter);
+  min-height: calc(72px + env(safe-area-inset-top, 0px));
+  padding: calc(8px + env(safe-area-inset-top, 0px))
+    calc(var(--page-gutter) + env(safe-area-inset-right, 0px))
+    8px
+    calc(var(--page-gutter) + env(safe-area-inset-left, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2113,7 +2150,10 @@ button.object-token:hover:not(:disabled) {
   background: #fff;
   border-top: 2px solid var(--line);
   box-shadow: 0 -10px 28px rgba(35, 41, 70, 0.08);
-  padding: 12px var(--space-3) calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 12px
+    calc(var(--space-3) + env(safe-area-inset-right, 0px))
+    calc(12px + env(safe-area-inset-bottom, 0px))
+    calc(var(--space-3) + env(safe-area-inset-left, 0px));
 }
 
 .quest-dock-inner {
@@ -2208,7 +2248,7 @@ button.object-token:hover:not(:disabled) {
 .result-page {
   display: grid;
   place-items: center;
-  padding: var(--space-5) var(--space-4) var(--space-6);
+  padding: calc(var(--space-5) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-6);
 }
 
 .result-card {
@@ -2327,7 +2367,7 @@ button.object-token:hover:not(:disabled) {
   width: 100%;
   max-width: var(--max-wide);
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4) var(--space-7);
+  padding: calc(var(--space-6) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-7);
   display: grid;
   gap: var(--space-5);
 }
@@ -2490,7 +2530,7 @@ button.object-token:hover:not(:disabled) {
 .quest-intro-page {
   display: grid;
   align-content: start;
-  padding: var(--space-4) var(--space-4) var(--space-6);
+  padding: calc(var(--space-4) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-6);
 }
 
 .quest-intro {
@@ -3274,7 +3314,7 @@ button.object-token:hover:not(:disabled) {
 
 @media (max-width: 560px) {
   .onboard-page {
-    padding: var(--space-6) var(--space-3) var(--space-6);
+    padding: calc(var(--space-6) + env(safe-area-inset-top, 0px)) var(--space-3) var(--space-6);
     gap: var(--space-4);
   }
 
@@ -3283,7 +3323,7 @@ button.object-token:hover:not(:disabled) {
   }
 
   .quest-intro-page {
-    padding: var(--space-3) var(--space-3) var(--space-5);
+    padding: calc(var(--space-3) + env(safe-area-inset-top, 0px)) var(--space-3) var(--space-5);
   }
 
   .context-card {

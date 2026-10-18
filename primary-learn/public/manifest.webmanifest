@@ -1,0 +1,21 @@
+{
+  "name": "Primary Maths",
+  "short_name": "Primary Maths",
+  "description": "Playful UK primary maths quests for children, with progress saved on this device.",
+  "lang": "en-GB",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "background_color": "#FFF6E8",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

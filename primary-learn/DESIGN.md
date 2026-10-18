@@ -122,7 +122,8 @@ on every screen size. It is the divider, not a card border.
 
 ### Header
 
-72px, `position: relative` — **scrolls with the page**, not sticky. **No fill**.
+72px plus `safe-area-inset-top`, `position: relative` — **scrolls with the
+page**, not sticky. **No fill**.
 No blur, no bottom bar, no indigo wash — the dotted paper runs behind it.
 Left: white Pip tile vertically centred with the "Primary Maths" wordmark in
 ink (no tagline, no gradient on *Maths*). Clicking the logo or name returns to
@@ -133,7 +134,19 @@ quest screens.
 
 **Hidden on onboarding and during a quest.** Setup is a full-page welcome.
 Intro, questions and summary use in-page exits (`All quests` / `Exit quest` /
-`Back to quests`) instead of the global header.
+`Back to quests`) instead of the global header. Quest screens still pad the
+top and the sticky dock with `env(safe-area-inset-*)`.
+
+### App feel
+
+Feel like a native app on phones and tablets. No text selection or long-press
+callouts except in text fields. No image drag. `touch-action: manipulation`
+kills double-tap zoom and the 300ms delay; pinch zoom stays on (never
+`user-scalable=no`). Inputs are at least 16px so iOS does not zoom on focus.
+`overscroll-behavior: none` stops pull-to-refresh bounce. Home-screen install
+uses a standalone manifest (`Primary Maths`, paper background, indigo theme,
+Pip favicon) under `/ChatGPT/primary-learn/`. Keep `:focus-visible` and
+pointerdown sounds as they are.
 
 ### Home
 
