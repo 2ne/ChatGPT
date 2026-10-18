@@ -1,4 +1,5 @@
-import type { MakeTotalGap, MakeTotalOp, MakeTotalQuestion, ObjectItem } from "../types/activity";
+import { numberWord } from "../data/objects";
+import type { MakeTotalGap, MakeTotalOp, MakeTotalQuestion, ObjectItem, Question } from "../types/activity";
 
 export function makeTotalPart(question: MakeTotalQuestion): number {
   if (question.part != null) return question.part;
@@ -54,4 +55,59 @@ export function optionNumber(label: string | undefined): number | null {
   if (label == null || label.trim() === "") return null;
   const value = Number(label);
   return Number.isInteger(value) ? value : null;
+}
+
+const SUM_ONLY_TOTAL_PROMPT = /^What is \d+ [+\u2212\-] \d+\?$/;
+const SUM_ONLY_TOTAL_SPOKEN =
+  /^What is (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) (?:plus|take away) (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
+
+function isSumOnlyBothAddends(question: MakeTotalQuestion): boolean {
+  return question.mode === "sum-only" && makeTotalGap(question) === "total";
+}
+
+/** Visible stem for sum-only `a + b = ?` (or take-away). Null if this kind should keep its JSON prompt. */
+export function defaultSumOnlyPrompt(question: MakeTotalQuestion): string | null {
+  if (!isSumOnlyBothAddends(question)) return null;
+  const a = makeTotalPart(question);
+  const b = makeTotalOther(question);
+  const sign = makeTotalOp(question) === "subtract" ? "−" : "+";
+  return `What is ${a} ${sign} ${b}?`;
+}
+
+/** Spoken stem: numbers and operators as words. */
+export function defaultSumOnlySpoken(question: MakeTotalQuestion): string | null {
+  if (!isSumOnlyBothAddends(question)) return null;
+  const a = numberWord(makeTotalPart(question));
+  const b = numberWord(makeTotalOther(question));
+  const op = makeTotalOp(question) === "subtract" ? "take away" : "plus";
+  return `What is ${a} ${op} ${b}?`;
+}
+
+function shouldReplacePrompt(prompt: string): boolean {
+  return prompt === "How many in all?" || SUM_ONLY_TOTAL_PROMPT.test(prompt);
+}
+
+function shouldReplaceSpoken(spoken: string | undefined, prompt: string): boolean {
+  if (spoken == null || spoken === "" || spoken === "How many in all?" || spoken === prompt) return true;
+  return SUM_ONLY_TOTAL_SPOKEN.test(spoken);
+}
+
+/**
+ * Fill the default `What is a + b?` stem (and spoken words) from the numbers
+ * on screen. JSON can still override with any other prompt.
+ */
+export function applyMakeTotalDefaults(question: Question): Question {
+  if (question.kind !== "make-total") return question;
+  const prompt = defaultSumOnlyPrompt(question);
+  if (!prompt || !shouldReplacePrompt(question.prompt)) return question;
+  const spoken = defaultSumOnlySpoken(question);
+  const writtenSpoken =
+    typeof question.narration?.prompt === "string" ? question.narration.prompt : undefined;
+  const nextSpoken =
+    spoken && shouldReplaceSpoken(writtenSpoken, question.prompt) ? spoken : writtenSpoken;
+  return {
+    ...question,
+    prompt,
+    narration: nextSpoken ? { ...question.narration, prompt: nextSpoken } : question.narration,
+  };
 }

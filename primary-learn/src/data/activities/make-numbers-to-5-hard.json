@@ -182,7 +182,7 @@
     {
       "kind": "make-total",
       "id": "m5h-1-4",
-      "prompt": "How many in all?",
+      "prompt": "What is 1 + 4?",
       "part": 1,
       "other": 4,
       "total": 5,
@@ -211,7 +211,7 @@
       ],
       "explanation": "1 and 4 make 5.",
       "narration": {
-        "prompt": "How many in all?"
+        "prompt": "What is one plus four?"
       }
     },
     {

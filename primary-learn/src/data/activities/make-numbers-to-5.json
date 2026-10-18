@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 3 add two numbers on the sum line (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps extra slots for what goes with 2 to make 3. Question 6 taps four tiles with dots to make 4. Question 7 adds 2 and 3 on the sum line. Question 8 matches 3, 4 and 5 to their parts. Question 9 taps extra slots for what goes with 1 to make 4. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
-    "versus": "Easy uses the sum line for how many in all, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, still on four tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
+    "versus": "Easy uses the sum line for What is a + b, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, still on four tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
   },
   "skills": [
     "eyfs-compose-5",
@@ -42,7 +42,7 @@
     {
       "kind": "make-total",
       "id": "m5e-1-1",
-      "prompt": "How many in all?",
+      "prompt": "What is 1 + 1?",
       "part": 1,
       "other": 1,
       "total": 2,
@@ -71,14 +71,14 @@
       ],
       "explanation": "1 and 1 make 2.",
       "narration": {
-        "prompt": "How many in all?"
+        "prompt": "What is one plus one?"
       },
       "hint": "Add the two numbers."
     },
     {
       "kind": "make-total",
       "id": "m5e-2-1",
-      "prompt": "How many in all?",
+      "prompt": "What is 2 + 1?",
       "part": 2,
       "other": 1,
       "total": 3,
@@ -107,14 +107,14 @@
       ],
       "explanation": "2 and 1 make 3.",
       "narration": {
-        "prompt": "How many in all?"
+        "prompt": "What is two plus one?"
       },
       "hint": "Add the two numbers."
     },
     {
       "kind": "make-total",
       "id": "m5e-2-2",
-      "prompt": "How many in all?",
+      "prompt": "What is 2 + 2?",
       "part": 2,
       "other": 2,
       "total": 4,
@@ -143,7 +143,7 @@
       ],
       "explanation": "2 and 2 make 4.",
       "narration": {
-        "prompt": "How many in all?"
+        "prompt": "What is two plus two?"
       },
       "hint": "Add the two numbers."
     },
@@ -200,7 +200,7 @@
     {
       "kind": "make-total",
       "id": "m5e-2-3",
-      "prompt": "How many in all?",
+      "prompt": "What is 2 + 3?",
       "part": 2,
       "other": 3,
       "total": 5,
@@ -229,7 +229,7 @@
       ],
       "explanation": "2 and 3 make 5.",
       "narration": {
-        "prompt": "How many in all?"
+        "prompt": "What is two plus three?"
       }
     },
     {

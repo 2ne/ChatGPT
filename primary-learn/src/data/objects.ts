@@ -34,7 +34,7 @@ export const OBJECT_WORDS: Record<ObjectItem, { singular: string; plural: string
 };
 
 export const NUMBER_WORDS = [
-  "",
+  "zero",
   "one",
   "two",
   "three",
@@ -47,6 +47,14 @@ export const NUMBER_WORDS = [
   "ten",
   "eleven",
   "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
+  "twenty",
 ] as const;
 
 export function numberWord(count: number): string {

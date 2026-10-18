@@ -63,7 +63,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
 | fill-blank bond | Prompt: `What goes with {n} to make {total}?`. Prefix/suffix: `{a} +` / `= {total}` |
-| make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Totals: `How many in all?`. Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
+| make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Sum-only totals: `What is {a} + {b}?` (subtract: `What is {a} − {b}?`). The kind generates this from the numbers on screen; JSON may override. Spoken: `What is one plus one?` / `What is five take away two?`. Pictured totals: `How many in all?` (only if pictures are shown). Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
 | pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |
@@ -72,7 +72,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.
 
-**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas?` not `What number did you get to?` or `Count the bananas.` Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
+**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas?` not `What number did you get to?` or `Count the bananas.` If the screen is number boxes (`1 + 1 = ?`) with no pictures, write `What is 1 + 1?` not `How many in all?`. Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
 
 ## Distractors
 

@@ -1,4 +1,5 @@
 import type { NarrationLine, Question } from "../types/activity";
+import { defaultSumOnlySpoken } from "./makeTotal";
 
 export function narrationText(line: NarrationLine | undefined, fallback: string): string {
   if (line == null) return fallback;
@@ -15,5 +16,14 @@ export function narrationAudio(line: NarrationLine | undefined): string | undefi
  * those give the answer away to pre-readers.
  */
 export function spokenPrompt(question: Question): string {
+  if (question.kind === "make-total") {
+    const spoken = defaultSumOnlySpoken(question);
+    if (spoken) {
+      const written = narrationText(question.narration?.prompt, "");
+      if (!written || written === "How many in all?" || written === question.prompt) {
+        return spoken;
+      }
+    }
+  }
   return narrationText(question.narration?.prompt, question.prompt);
 }

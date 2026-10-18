@@ -283,8 +283,11 @@ rainbow itself is never inset.
   prompt, in any question kind, is `What goes with {n} to make {total}?`.
   Use it on fill-slots, sum-only, multiple-choice and fill-blank. Do not
   write `5 is 2 and ?`, `5 = ? + 2`, `Which number goes with 6 to make 10?`,
-  or `Which number is missing? 7 + ? = 10`. Totals still use
-  `How many in all?`. Known tiles, added tiles and empty slots use one
+  or `Which number is missing? 7 + ? = 10`. Sum-only totals use
+  `What is {a} + {b}?` (subtract: `What is {a} − {b}?`), generated from
+  the numbers on screen. Spoken uses words (`plus` / `take away`).
+  Keep `How many in all?` only when pictures are shown to count.
+  Known tiles, added tiles and empty slots use one
   identical tile size. Adding
   or removing a tile replaces a slot in place. Always more slots than the
   answer (default missing + 2, or `slotCount` in JSON, cap 12) so the
@@ -296,7 +299,7 @@ rainbow itself is never inset.
   height must not stretch those gaps. Medium may mix `fill-slots` with
   `sum-only`. Hard (`sum-only`): sum line and the same full-width number
   buttons only. No empty object slots that count out the missing amount.
-  “How many in all?” items use `sum-only` so there are no object tiles.
+  Sum-only `a + b = ?` items have no object tiles.
   Later the same kind can subtract (tap to take away) and use totals to
   10 or 20 via `total` / `operation` in JSON.
 - **Stable question layouts.** The prompt and answer must not jump as the

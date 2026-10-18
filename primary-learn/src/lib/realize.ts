@@ -11,6 +11,7 @@ import type {
   QuestionOption,
   RandomiseSpec,
 } from "../types/activity";
+import { applyMakeTotalDefaults } from "./makeTotal";
 import { drawPickPairTiles } from "./pickPair";
 
 type Rng = () => number;
@@ -383,7 +384,7 @@ export function realizeActivity(activity: Activity, seed?: string): Activity {
   return {
     ...activity,
     questions: activity.questions.map((question) =>
-      realizeQuestion(question, activity.randomise, rng),
+      applyMakeTotalDefaults(realizeQuestion(question, activity.randomise, rng)),
     ),
   };
 }
