@@ -6,6 +6,7 @@ import {
   MAKE_TOTAL_OPS,
   OBJECT_ITEMS,
   OBJECT_LAYOUTS,
+  PART_WHOLE_MISSING,
   QUESTION_KINDS,
   type Activity,
   type ActivityRandomise,
@@ -15,11 +16,13 @@ import {
   type MatchSide,
   type ObjectAsset,
   type ObjectItem,
+  type PartWholeMissing,
   type Question,
   type QuestionOption,
   type RandomiseSpec,
 } from "../types/activity";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
+import { partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -448,6 +451,50 @@ function parseQuestion(value: unknown, path: string): Question {
       };
       const check = canDrawPickPair(draft);
       if (!check.ok) fail(path, check.reason);
+      return draft;
+    }
+    case "part-whole": {
+      const whole = expectNumber(value, "whole", path);
+      if (!Number.isInteger(whole) || whole < 1 || whole > 20) {
+        fail(path, "whole must be a whole number from 1 to 20");
+      }
+      const partsRaw = expectArray(value, "parts", path);
+      if (partsRaw.length !== 2) fail(path, "parts must be [a, b]");
+      const parts = partsRaw.map((entry, index) => {
+        if (typeof entry !== "number" || !Number.isInteger(entry) || entry < 0 || entry > whole) {
+          fail(`${path}.parts[${index}]`, "part must be a whole number from 0 to whole");
+        }
+        return entry;
+      }) as [number, number];
+      if (parts[0] + parts[1] !== whole) fail(path, "parts must add to whole");
+      const missingRaw = expectString(value, "missing", path);
+      if (!(PART_WHOLE_MISSING as readonly string[]).includes(missingRaw)) {
+        fail(path, "missing must be left, right or whole");
+      }
+      const missing = missingRaw as PartWholeMissing;
+      let choices: number[] | undefined;
+      if (value.choices != null) {
+        const list = expectArray(value, "choices", path);
+        if (list.length < 3) fail(path, "choices needs at least 3 numbers");
+        choices = list.map((entry, index) => {
+          if (typeof entry !== "number" || !Number.isInteger(entry) || entry < 0 || entry > 20) {
+            fail(`${path}.choices[${index}]`, "choice must be a whole number from 0 to 20");
+          }
+          return entry;
+        });
+        if (new Set(choices).size !== choices.length) fail(path, "choices must be unique");
+      }
+      const draft = {
+        ...core,
+        kind: "part-whole" as const,
+        whole,
+        parts,
+        missing,
+        choices,
+      };
+      const answer = partWholeAnswer(draft);
+      const pad = choices ?? Array.from({ length: whole + 1 }, (_, index) => index);
+      if (!pad.includes(answer)) fail(path, "choices must include the missing number");
       return draft;
     }
     default:

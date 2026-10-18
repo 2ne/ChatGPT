@@ -190,6 +190,7 @@ a:focus-visible,
 
 .option:focus:not(:focus-visible),
 .pick-pair-tile:focus:not(:focus-visible),
+.part-whole-choice:focus:not(:focus-visible),
 .object-token:focus:not(:focus-visible),
 .make-total-slot:focus:not(:focus-visible),
 .btn-text:focus:not(:focus-visible),
@@ -202,6 +203,7 @@ a:focus-visible,
 
 .option:focus-visible,
 .pick-pair-tile:focus-visible,
+.part-whole-choice:focus-visible,
 .object-token:focus-visible,
 .make-total-slot:focus-visible,
 .btn-text:focus-visible,
@@ -1556,7 +1558,9 @@ button.object-token:hover:not(:disabled) {
 
 /* Indigo option border is selected only. Hover is gated off on touch. */
 .option.is-selected,
-.pick-pair-tile.is-selected {
+.pick-pair-tile.is-selected,
+.part-whole-choice.is-selected,
+.part-whole-circle.is-picked {
   border-color: var(--primary);
   background: var(--primary-soft);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16);
@@ -1569,7 +1573,8 @@ button.object-token:hover:not(:disabled) {
 }
 
 .option.is-correct,
-.pick-pair-tile.is-correct {
+.pick-pair-tile.is-correct,
+.part-whole-circle.is-correct {
   border-color: var(--green);
   background: var(--green-soft);
   animation: correct-wiggle 320ms ease;
@@ -1934,6 +1939,127 @@ button.object-token:hover:not(:disabled) {
   font-size: 42px;
   font-weight: 800;
   line-height: 1;
+}
+
+.part-whole {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: center;
+}
+
+.part-whole-tree {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 280px);
+}
+
+.part-whole-lines {
+  width: 240px;
+  height: 44px;
+  margin-block: -6px;
+}
+
+.part-whole-lines line {
+  stroke: var(--line-strong);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.part-whole-row {
+  display: flex;
+  gap: 36px;
+  justify-content: center;
+}
+
+.part-whole-circle {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.part-whole-circle.is-whole-slot {
+  width: 96px;
+  height: 96px;
+  font-size: 40px;
+}
+
+.part-whole-circle.is-part-slot {
+  width: 80px;
+  height: 80px;
+  font-size: 34px;
+}
+
+.part-whole-circle.is-whole {
+  background: var(--green-soft);
+  border-color: var(--green-soft);
+  color: var(--green);
+}
+
+.part-whole-circle.is-part {
+  background: var(--sky-soft);
+  border-color: var(--sky-soft);
+  color: #0369a1;
+}
+
+.part-whole-circle.is-gap {
+  background: #fff;
+  border-color: var(--line-strong);
+  border-style: dashed;
+  color: var(--ink-faint);
+}
+
+.part-whole-circle.is-picked,
+.part-whole-choice.is-selected {
+  color: var(--primary);
+}
+
+.part-whole-choice:focus-visible {
+  border-radius: 50%;
+}
+
+.part-whole-circle.is-correct {
+  color: var(--green);
+}
+
+.part-whole-circle.is-revealed {
+  background: var(--paper-deep);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.part-whole-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 84px);
+  gap: 12px;
+  justify-content: center;
+}
+
+.part-whole-choice {
+  box-sizing: border-box;
+  width: 84px;
+  height: 84px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2.5px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+.part-whole-choice:hover:not(:disabled) {
+  border-color: var(--primary);
+}
 }
 
 .pick-pair-dots {

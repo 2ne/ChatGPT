@@ -12,6 +12,7 @@ import type {
   RandomiseSpec,
 } from "../types/activity";
 import { applyMakeTotalDefaults } from "./makeTotal";
+import { applyPartWholeDefaults } from "./partWhole";
 import { drawPickPairTiles } from "./pickPair";
 
 type Rng = () => number;
@@ -363,6 +364,9 @@ function realizeQuestion(
   ) {
     if (next.options) next.options = shuffle(next.options, rng);
   }
+  if (spec.shuffleOptions && next.kind === "part-whole" && next.choices) {
+    next.choices = shuffle(next.choices, rng);
+  }
 
   return next;
 }
@@ -384,7 +388,9 @@ export function realizeActivity(activity: Activity, seed?: string): Activity {
   return {
     ...activity,
     questions: activity.questions.map((question) =>
-      applyMakeTotalDefaults(realizeQuestion(question, activity.randomise, rng)),
+      applyPartWholeDefaults(
+        applyMakeTotalDefaults(realizeQuestion(question, activity.randomise, rng)),
+      ),
     ),
   };
 }

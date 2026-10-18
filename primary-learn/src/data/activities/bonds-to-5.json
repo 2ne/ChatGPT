@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 taps extra slots for what goes with 2 to make 5. Question 2 taps two number tiles that make 5, with dots on the tiles. Questions 3 to 5 tap slots for what goes with 3, 4 and 1 to make 5. Question 6 matches 0, 1 and 2 to their partners. Question 7 taps slots for what goes with 2 to make 5. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways. Hints on the first three. Totals stay 5.",
+    "within": "Question 1 taps extra slots for what goes with 2 to make 5. Question 2 taps two number tiles that make 5, with dots on the tiles. Questions 3 to 5 tap slots for what goes with 3, 4 and 1 to make 5. Question 6 is the part-whole cherry for what goes with 0 to make 5. Question 7 taps slots for what goes with 2 to make 5. Question 8 taps every pair that makes 5. Questions 9 to 10 are the related take-aways. Hints on the first three. Totals stay 5.",
     "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots. Same node: recall bonds to 5 and related subtraction."
   },
   "skills": ["eyfs-bonds-5", "number-bonds-to-5", "subtraction-within-5"],
@@ -81,16 +81,14 @@
       "narration": { "prompt": "What goes with 1 to make 5?" }
     },
     {
-      "kind": "match-pairs",
-      "id": "b5e-match",
-      "prompt": "Match each number to its partner that makes 5.",
-      "pairs": [
-        { "id": "p2", "left": "2", "right": "3" },
-        { "id": "p1", "left": "1", "right": "4" },
-        { "id": "p0", "left": "0", "right": "5" }
-      ],
-      "explanation": "2 + 3 = 5. 1 + 4 = 5. 0 + 5 = 5.",
-      "narration": { "prompt": "Match each number to its partner that makes 5." }
+      "kind": "part-whole",
+      "id": "b5e-pw-0",
+      "prompt": "What goes with 0 to make 5?",
+      "whole": 5,
+      "parts": [0, 5],
+      "missing": "right",
+      "explanation": "0 and 5 make 5.",
+      "narration": { "prompt": "What goes with zero to make five?" }
     },
     {
       "kind": "make-total",

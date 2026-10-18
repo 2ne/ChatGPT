@@ -1,6 +1,7 @@
 import type { Question } from "../types/activity";
 import { makeTotalMissing } from "./makeTotal";
 import { matchSideKey } from "./matchSide";
+import { partWholeAnswer } from "./partWhole";
 import {
   emptyPickPairAnswer,
   isCompletePickPair,
@@ -69,6 +70,8 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
       return typeof answer === "number" && answer === makeTotalMissing(question);
     case "pick-pair":
       return isPickPairAnswer(answer) && isCompletePickPair(question, answer);
+    case "part-whole":
+      return typeof answer === "number" && answer === partWholeAnswer(question);
     default:
       return false;
   }
@@ -96,6 +99,8 @@ export function emptyAnswerFor(question: Question): unknown {
       return makeTotalMissing(question) === 0 && question.mode === "fill-slots" ? 0 : null;
     case "pick-pair":
       return emptyPickPairAnswer();
+    case "part-whole":
+      return null;
     default:
       return null;
   }
@@ -119,6 +124,8 @@ export function correctAnswerLabel(question: Question): string | null {
       return String(question.visual.count);
     case "make-total":
       return String(makeTotalMissing(question));
+    case "part-whole":
+      return String(partWholeAnswer(question));
     case "pick-pair": {
       const labels = uniquePairLabels(pickPairTiles(question), question.total);
       if (labels.length === 0) return null;
@@ -151,6 +158,8 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
       return typeof answer === "number";
     case "pick-pair":
       return isPickPairAnswer(answer) && answer.picked.length === 2;
+    case "part-whole":
+      return typeof answer === "number";
     default:
       return false;
   }

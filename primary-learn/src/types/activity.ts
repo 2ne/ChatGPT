@@ -24,6 +24,7 @@ export const QUESTION_KINDS = [
   "match-pairs",
   "make-total",
   "pick-pair",
+  "part-whole",
 ] as const;
 
 export type QuestionKind = (typeof QUESTION_KINDS)[number];
@@ -210,6 +211,25 @@ export type PickPairQuestion = QuestionCore & {
   showDots?: boolean;
 };
 
+/** Which cherry circle is empty. */
+export const PART_WHOLE_MISSING = ["left", "right", "whole"] as const;
+export type PartWholeMissing = (typeof PART_WHOLE_MISSING)[number];
+
+/**
+ * Cherry number-bond model. One missing circle, round number buttons.
+ * Prompt is generated from `whole` / `parts` / `missing` unless JSON overrides.
+ */
+export type PartWholeQuestion = QuestionCore & {
+  kind: "part-whole";
+  /** The whole. 1–20. */
+  whole: number;
+  /** The two parts. They must add to `whole`. 0 is allowed. */
+  parts: [number, number];
+  missing: PartWholeMissing;
+  /** Number pad. Default 0…whole. */
+  choices?: number[];
+};
+
 export type Question =
   | CountObjectsQuestion
   | BuildSetQuestion
@@ -219,7 +239,8 @@ export type Question =
   | OrderedQuestion
   | MatchPairsQuestion
   | MakeTotalQuestion
-  | PickPairQuestion;
+  | PickPairQuestion
+  | PartWholeQuestion;
 
 export type DifficultyRamp = {
   within: string;

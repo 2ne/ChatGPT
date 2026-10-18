@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 ask what goes with 0, then 5, to make 5, on the sum line only. Question 3 matches number words to parts. Question 4 is the sum line for what goes with 3 to make 5. Question 5 taps four tiles with no dots to make 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse order for what goes with 2 to make 5. Question 8 is the sum line for a hidden part: what goes with 2 to make 5. Question 9 matches other ways to make 3, 4 and 5. Question 10 picks another pair that makes 5. No hints.",
+    "within": "Questions 1 to 2 ask what goes with 0, then 5, to make 5, on the sum line only. Question 3 is the part-whole cherry for what 1 and 2 make. Question 4 is the sum line for what goes with 3 to make 5. Question 5 taps four tiles with no dots to make 5. Question 6 puts 1 and 4 together in pictures. Question 7 is reverse order for what goes with 2 to make 5. Question 8 is the sum line for a hidden part: what goes with 2 to make 5. Question 9 is the part-whole cherry for what goes with 4 to make 4. Question 10 picks another pair that makes 5. No hints.",
     "versus": "Easy is small sums from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, still on four tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and tiles with no dots. Same node: composition of each number to 5."
   },
   "skills": [
@@ -106,29 +106,15 @@
       }
     },
     {
-      "kind": "match-pairs",
-      "id": "m5h-words",
-      "prompt": "Match each word to its parts.",
-      "pairs": [
-        {
-          "id": "pfive",
-          "left": "five",
-          "right": "2 and 3"
-        },
-        {
-          "id": "pfour",
-          "left": "four",
-          "right": "1 and 3"
-        },
-        {
-          "id": "pthree",
-          "left": "three",
-          "right": "1 and 2"
-        }
-      ],
-      "explanation": "Five is 2 and 3. Four is 1 and 3. Three is 1 and 2.",
+      "kind": "part-whole",
+      "id": "m5h-pw-3",
+      "prompt": "What do 1 and 2 make?",
+      "whole": 3,
+      "parts": [1, 2],
+      "missing": "whole",
+      "explanation": "1 and 2 make 3.",
       "narration": {
-        "prompt": "Match each word to its parts."
+        "prompt": "What do one and two make?"
       }
     },
     {
@@ -282,29 +268,15 @@
       }
     },
     {
-      "kind": "match-pairs",
-      "id": "m5h-match",
-      "prompt": "Match each number to its parts.",
-      "pairs": [
-        {
-          "id": "p5",
-          "left": "5",
-          "right": "1 and 4"
-        },
-        {
-          "id": "p4",
-          "left": "4",
-          "right": "0 and 4"
-        },
-        {
-          "id": "p3",
-          "left": "3",
-          "right": "0 and 3"
-        }
-      ],
-      "explanation": "5 is 1 and 4. 4 is 0 and 4. 3 is 0 and 3.",
+      "kind": "part-whole",
+      "id": "m5h-pw-4",
+      "prompt": "What goes with 4 to make 4?",
+      "whole": 4,
+      "parts": [0, 4],
+      "missing": "left",
+      "explanation": "0 and 4 make 4.",
       "narration": {
-        "prompt": "Match each number to its parts."
+        "prompt": "What goes with four to make four?"
       }
     },
     {

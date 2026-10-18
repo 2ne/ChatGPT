@@ -231,11 +231,11 @@ rainbow itself is never inset.
   shake. Colour is never the only signal (icons + words too).
 - Selection, correct and wrong states are **shared** across every question
   kind (`.option.is-selected` / `.is-correct` / `.is-wrong` and the same
-  tokens on pick-pair tiles). Never invent a solid indigo fill or a private
+  tokens on pick-pair tiles and part-whole buttons). Never invent a solid indigo fill or a private
   selected look for one kind.
 - Focus rings use `:focus-visible` only, so they appear for keyboard
   navigation and never after a tap or on load. That includes answer
-  buttons, pick-pair tiles, build-set tray and group tokens, make-total
+  buttons, pick-pair tiles, part-whole number buttons, build-set tray and group tokens, make-total
   slots, and text resets. Do not style `:focus` on answers. No answer is
   auto-focused when a question opens. The selected look comes only from
   the selected answer state, never from focus.
@@ -251,7 +251,8 @@ rainbow itself is never inset.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
-  buttons as multiple-choice.
+  buttons as multiple-choice. Exceptions: `pick-pair` square tiles and
+  `part-whole` round 84px number buttons.
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
@@ -319,6 +320,17 @@ rainbow itself is never inset.
   `match-pairs` later. Easy: four tiles with dots. Medium: four tiles, harder
   numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
   or 20 use the same `total` / `tiles` config.
+- **Cherry bonds (`part-whole`)** stay on the same white activity screen. A
+  big whole circle on top (green tint, like the sum-only total), lines down
+  to two smaller part circles (blue tint when known). The empty circle is
+  dashed with `?`. Circles stay one size in every state. Round 84px number
+  buttons sit three to a row: white, soft beige border, shared indigo
+  selected state. Tap drops the number into the empty circle in the selected
+  style. Tap another to replace. Nothing auto-checks. Correct turns the
+  filled circle green. Wrong keeps the usual `It was 3.` line and puts the
+  right number in the circle. Prompt is `What goes with {n} to make
+  {whole}?`, or `What do {a} and {b} make?` when the whole is empty. Do not
+  use match-pairs with `a and b` text for Reception bonds.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. `Check it` is the indigo to violet
   gradient, including the faded disabled state. `Next question` and

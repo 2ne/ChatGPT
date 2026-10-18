@@ -14,6 +14,7 @@ import type { Activity, Question } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { optionNumber } from "../lib/makeTotal";
+import { partWholeChoices } from "../lib/partWhole";
 import { emptyPickPairAnswer, isPickPairAnswer, togglePickPairTile } from "../lib/pickPair";
 import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
 import { playSound } from "../lib/sound";
@@ -196,8 +197,17 @@ export function ActivityRunner({
         (currentQuestion?.kind !== "multiple-choice" &&
           currentQuestion?.kind !== "count-objects" &&
           currentQuestion?.kind !== "make-total" &&
-          currentQuestion?.kind !== "pick-pair")
+          currentQuestion?.kind !== "pick-pair" &&
+          currentQuestion?.kind !== "part-whole")
       ) {
+        return;
+      }
+      if (currentQuestion.kind === "part-whole") {
+        if (event.key < "0" || event.key > "9") return;
+        const value = Number(event.key);
+        if (!partWholeChoices(currentQuestion).includes(value)) return;
+        playSound("tap");
+        setAnswer(value);
         return;
       }
       if (currentQuestion.kind === "pick-pair") {

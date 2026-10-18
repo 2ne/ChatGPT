@@ -1,5 +1,6 @@
 import type { NarrationLine, Question } from "../types/activity";
 import { defaultSumOnlySpoken } from "./makeTotal";
+import { defaultPartWholeSpoken } from "./partWhole";
 
 export function narrationText(line: NarrationLine | undefined, fallback: string): string {
   if (line == null) return fallback;
@@ -24,6 +25,11 @@ export function spokenPrompt(question: Question): string {
         return spoken;
       }
     }
+  }
+  if (question.kind === "part-whole") {
+    const spoken = defaultPartWholeSpoken(question);
+    const written = narrationText(question.narration?.prompt, "");
+    if (!written || written === question.prompt) return spoken;
   }
   return narrationText(question.narration?.prompt, question.prompt);
 }
