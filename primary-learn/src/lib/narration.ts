@@ -1,4 +1,5 @@
 import type { NarrationLine, Question } from "../types/activity";
+import { defaultFillBlankSpoken } from "./fillBlank";
 import { defaultSumOnlySpoken } from "./makeTotal";
 import { defaultPartWholeSpoken } from "./partWhole";
 
@@ -30,6 +31,15 @@ export function spokenPrompt(question: Question): string {
     const spoken = defaultPartWholeSpoken(question);
     const written = narrationText(question.narration?.prompt, "");
     if (!written || written === question.prompt) return spoken;
+  }
+  if (question.kind === "fill-blank") {
+    const spoken = defaultFillBlankSpoken(question);
+    if (spoken) {
+      const written = narrationText(question.narration?.prompt, "");
+      if (!written || written === question.prompt || /missing number/i.test(written)) {
+        return spoken;
+      }
+    }
   }
   return narrationText(question.narration?.prompt, question.prompt);
 }

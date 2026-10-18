@@ -218,7 +218,7 @@
     {
       "kind": "fill-blank",
       "id": "b5m-minus-4",
-      "prompt": "What is the missing number?",
+      "prompt": "What is 5 − 4?",
       "prefix": "5 − 4 =",
       "acceptedAnswers": [
         "1",
@@ -227,7 +227,7 @@
       "inputMode": "numeric",
       "explanation": "Because 4 + 1 = 5, 5 − 4 = 1.",
       "narration": {
-        "prompt": "What is the missing number? 5 take away 4 equals what?"
+        "prompt": "What is five take away four?"
       }
     },
     {

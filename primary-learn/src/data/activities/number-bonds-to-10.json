@@ -274,7 +274,7 @@
     {
       "kind": "fill-blank",
       "id": "nb10-fb-4",
-      "prompt": "What is the missing number?",
+      "prompt": "What is 10 − 4?",
       "prefix": "10 − 4 =",
       "acceptedAnswers": [
         "6"
@@ -282,7 +282,7 @@
       "inputMode": "numeric",
       "explanation": "Because 4 + 6 = 10, 10 − 4 = 6.",
       "narration": {
-        "prompt": "What is the missing number? 10 take away 4 equals what?"
+        "prompt": "What is ten take away four?"
       }
     }
   ],

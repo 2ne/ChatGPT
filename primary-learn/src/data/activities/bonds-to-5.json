@@ -135,12 +135,12 @@
     {
       "kind": "fill-blank",
       "id": "b5e-minus-2",
-      "prompt": "What is the missing number?",
+      "prompt": "What is 5 − 2?",
       "prefix": "5 − 2 =",
       "acceptedAnswers": ["3", "three"],
       "inputMode": "numeric",
       "explanation": "Because 2 + 3 = 5, 5 − 2 = 3.",
-      "narration": { "prompt": "What is the missing number? 5 take away 2 equals what?" }
+      "narration": { "prompt": "What is five take away two?" }
     }
   ]
 }

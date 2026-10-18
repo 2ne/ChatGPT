@@ -287,9 +287,11 @@ rainbow itself is never inset.
   prompt, in any question kind, is `What goes with {n} to make {total}?`.
   Use it on fill-slots, sum-only, multiple-choice and fill-blank. Do not
   write `5 is 2 and ?`, `5 = ? + 2`, `Which number goes with 6 to make 10?`,
-  or `Which number is missing? 7 + ? = 10`. Sum-only totals use
+  or `Which number is missing? 7 + ? = 10`.   Sum-only totals use
   `What is {a} + {b}?` (subtract: `What is {a} − {b}?`), generated from
-  the numbers on screen. Spoken uses words (`plus` / `take away`).
+  the numbers on screen. Fill-blank result blanks (`5 − 2 = __`) and bare
+  equation prompts use the same stem, not `What is the missing number?`.
+  Spoken uses words (`plus` / `take away`).
   Keep `How many in all?` only when pictures are shown to count.
   Known tiles, added tiles and empty slots use one
   identical tile size. Adding

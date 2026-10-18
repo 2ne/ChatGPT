@@ -62,7 +62,9 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
-| fill-blank bond | Prompt: `What goes with {n} to make {total}?`. Prefix/suffix: `{a} +` / `= {total}` |
+| fill-blank result | Blank is the answer at the end (`{a} + {b} =` / `{a} − {b} =`). Prompt: `What is {a} + {b}?` / `What is {a} − {b}?`. Kind generates this from prefix/suffix so JSON cannot drift. Spoken: `What is five take away two?`. Never `What is the missing number?` when the blank is the final result. Same stem if another kind shows a bare equation (`5 − 3 =`). |
+| fill-blank bond | Blank is a part inside the sum (`{a} +` / `= {total}`). Prompt: `What goes with {n} to make {total}?`. |
+| fill-blank missing | Blank is a part inside a take-away (`__ − 2 = 3`, `5 − __ = 3`) or a gap in a sequence. Prompt: `What is the missing number?` or, for a count sequence, `Fill the gap in the count.` Prefer the bond wording above for addition. |
 | make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Sum-only totals: `What is {a} + {b}?` (subtract: `What is {a} − {b}?`). The kind generates this from the numbers on screen; JSON may override. Spoken: `What is one plus one?` / `What is five take away two?`. Pictured totals: `How many in all?` (only if pictures are shown). Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
 | pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | part-whole | Missing part: `What goes with {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
@@ -73,7 +75,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.
 
-**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas?` not `What number did you get to?` or `Count the bananas.` If the screen is number boxes (`1 + 1 = ?`) with no pictures, write `What is 1 + 1?` not `How many in all?`. Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
+**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas?` not `What number did you get to?` or `Count the bananas.` If the screen is number boxes (`1 + 1 = ?`) with no pictures, write `What is 1 + 1?` not `How many in all?` or `What is the missing number?`. Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
 
 ## Distractors
 

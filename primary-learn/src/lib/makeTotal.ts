@@ -84,7 +84,11 @@ export function defaultSumOnlySpoken(question: MakeTotalQuestion): string | null
 }
 
 function shouldReplacePrompt(prompt: string): boolean {
-  return prompt === "How many in all?" || SUM_ONLY_TOTAL_PROMPT.test(prompt);
+  return (
+    prompt === "How many in all?" ||
+    SUM_ONLY_TOTAL_PROMPT.test(prompt) ||
+    /missing number/i.test(prompt)
+  );
 }
 
 function shouldReplaceSpoken(spoken: string | undefined, prompt: string): boolean {

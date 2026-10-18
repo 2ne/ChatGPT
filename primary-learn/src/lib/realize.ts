@@ -11,6 +11,7 @@ import type {
   QuestionOption,
   RandomiseSpec,
 } from "../types/activity";
+import { applyStemPromptDefaults } from "./fillBlank";
 import { applyMakeTotalDefaults } from "./makeTotal";
 import { applyPartWholeDefaults } from "./partWhole";
 import { drawPickPairTiles } from "./pickPair";
@@ -384,8 +385,10 @@ export function realizeActivity(activity: Activity, seed?: string): Activity {
   return {
     ...activity,
     questions: activity.questions.map((question) => {
-      const realized = applyPartWholeDefaults(
-        applyMakeTotalDefaults(realizeQuestion(question, activity.randomise, rng)),
+      const realized = applyStemPromptDefaults(
+        applyPartWholeDefaults(
+          applyMakeTotalDefaults(realizeQuestion(question, activity.randomise, rng)),
+        ),
       );
       if (realized.kind !== "part-whole" || !realized.choices) return realized;
       return { ...realized, choices: shuffle(realized.choices, rng) };

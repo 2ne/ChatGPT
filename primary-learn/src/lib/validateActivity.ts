@@ -21,6 +21,7 @@ import {
   type QuestionOption,
   type RandomiseSpec,
 } from "../types/activity";
+import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
 import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
@@ -216,6 +217,12 @@ function parseQuestion(value: unknown, path: string): Question {
   }
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
   const core = { id, prompt, explanation, hint, narration, visual, extras, layout, randomise };
+  if (parseBareEquation(prompt)) {
+    fail(
+      path,
+      "do not use a bare equation as the prompt when the answer is the result. Use What is {a} + {b}? or What is {a} − {b}?.",
+    );
+  }
 
   switch (kind) {
     case "count-objects": {
@@ -273,6 +280,24 @@ function parseQuestion(value: unknown, path: string): Question {
       const inputMode = value.inputMode;
       if (inputMode != null && inputMode !== "numeric" && inputMode !== "text") {
         fail(path, "inputMode must be numeric or text");
+      }
+      if (isResultBlank(prefix, suffix) && /missing number/i.test(prompt)) {
+        fail(
+          path,
+          "result blank must not say 'missing number'. Use What is {a} + {b}? or What is {a} − {b}?.",
+        );
+      }
+      const spoken =
+        narration && typeof narration.prompt === "string"
+          ? narration.prompt
+          : narration && typeof narration.prompt === "object"
+            ? narration.prompt.text
+            : "";
+      if (isResultBlank(prefix, suffix) && spoken && /missing number/i.test(spoken)) {
+        fail(
+          path,
+          "result blank narration must not say 'missing number'. Speak What is five take away two?.",
+        );
       }
       return {
         ...core,
@@ -386,6 +411,12 @@ function parseQuestion(value: unknown, path: string): Question {
       }
       if ((gap ?? "right") === "total" && makeTotalPart(draft) + makeTotalOther(draft) !== total) {
         fail(path, "when gap is total, part + other must equal total");
+      }
+      if ((gap ?? "right") === "total" && /missing number/i.test(prompt)) {
+        fail(
+          path,
+          "result blank must not say 'missing number'. Use What is {a} + {b}? or What is {a} − {b}?.",
+        );
       }
       if (part != null && visual && visual.count !== part) {
         fail(path, "part must match visual.count when both are set");
