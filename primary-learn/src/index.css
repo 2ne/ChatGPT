@@ -1544,19 +1544,13 @@ button.learner-chip:focus-visible {
   cursor: pointer;
 }
 
-.flash-look-again.is-done {
-  cursor: default;
-  pointer-events: none;
-  opacity: 0.55;
-}
-
 @media (hover: hover) and (pointer: fine) {
-  .flash-reveal.is-covered .flash-face-back:has(.flash-look-again:not(.is-done):hover) {
+  .flash-reveal.is-covered .flash-face-back:has(.flash-look-again:hover) {
     filter: brightness(1.06);
   }
 }
 
-.flash-reveal.is-covered .flash-face-back:has(.flash-look-again:not(.is-done):active) {
+.flash-reveal.is-covered .flash-face-back:has(.flash-look-again:active) {
   filter: brightness(0.97);
 }
 

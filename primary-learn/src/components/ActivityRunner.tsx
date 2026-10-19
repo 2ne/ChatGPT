@@ -28,6 +28,7 @@ import { ConfettiBurst } from "./ConfettiBurst";
 import { HearButton, SpokenWords } from "./ReadAloud";
 import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
+import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
 
 type ActivityRunnerProps = {
@@ -56,6 +57,7 @@ export function ActivityRunner({
   );
   const [showHint, setShowHint] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
+  const [lookAgainCount, setLookAgainCount] = useState(0);
   const [confettiBurst, setConfettiBurst] = useState(0);
   const [, setStreak] = useState(0);
   const { setMood } = usePipMood();
@@ -85,6 +87,7 @@ export function ActivityRunner({
     setResults({});
     setShowHint(false);
     setLastCorrect(null);
+    setLookAgainCount(0);
     setConfettiBurst(0);
     setStreak(0);
     setStartedAt(new Date().toISOString());
@@ -116,6 +119,7 @@ export function ActivityRunner({
       setAnswer(nextQuestion ? emptyAnswerFor(nextQuestion) : null);
       setShowHint(false);
       setLastCorrect(null);
+      setLookAgainCount(0);
       setPhase("question");
       return;
     }
@@ -336,6 +340,10 @@ export function ActivityRunner({
     );
 
   return (
+    <FlashPeekProvider
+      lookAgainCount={lookAgainCount}
+      recordLookAgain={() => setLookAgainCount((n) => n + 1)}
+    >
     <main className="page page-quest page-with-dock">
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
@@ -454,6 +462,13 @@ export function ActivityRunner({
                 <p className="feedback-title">
                   {lastCorrect ? copy.feedbackCorrect : copy.feedbackWrong}
                 </p>
+                {lastCorrect && lookAgainCount > 0 ? (
+                  <p>
+                    {lookAgainCount === 1
+                      ? copy.lookedAgainOnce
+                      : copy.lookedAgainTimes(lookAgainCount)}
+                  </p>
+                ) : null}
                 {lastCorrect ? (
                   <p>{question.explanation}</p>
                 ) : (
@@ -478,6 +493,7 @@ export function ActivityRunner({
         <div className="quest-dock-inner">{primaryAction}</div>
       </div>
     </main>
+    </FlashPeekProvider>
   );
 }
 
