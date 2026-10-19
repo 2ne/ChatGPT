@@ -1,7 +1,7 @@
 {
   "id": "see-numbers-to-5-hard",
   "title": "See numbers to 5",
-  "summary": "See 4 and 5 straight away in different patterns, and match number words.",
+  "summary": "See 4 and 5 straight away in different patterns, including 1+4 and 2+3 inside 5, and number words.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": ["Reception"],
@@ -13,10 +13,10 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 glance 4 then 5 on a dice. Question 3 matches number words four and five. Question 4 glances messy 4. Question 5 picks the group of 5. Question 6 taps every group of 5. Question 7 glances messy 5. Question 8 reads a dice 5 as a number word. Question 9 matches 4 and 5. Question 10 picks 4 next to 5. No 1 or 2. No bonds.",
-    "versus": "Easy is 1 to 5 on tidy dice with hints. Medium mixes 3 to 5 and messy groups. Hard stays on 4 and 5, adds number words, and has no hints. Same skill: see how many up to 5."
+    "within": "Questions 1 to 2 flash dice 4 then 5 quickly. Question 3 sees 1 and 4 inside 5. Question 4 flashes messy 4. Question 5 flashes five-frame 5. Question 6 taps every group of 5. Question 7 peeks under the cup for 5. Question 8 reads a dice 5 as a number word. Question 9 sees 2 and 3 inside 5. Question 10 picks 4 next to 5 on dice. No 1 or 2 alone. No match-pairs. No hints.",
+    "versus": "Easy is 1 to 5 with longer flash and hints. Medium mixes 3 to 5 and 2+3. Hard stays on 4 and 5, quick flash, number words, 1+4 and 2+3, and no hints. Same skill: see how many up to 5."
   },
-  "skills": ["eyfs-subitise-5", "subitise-to-5", "number-words-to-5", "dice-patterns"],
+  "skills": ["eyfs-subitise-5", "subitise-to-5", "number-words-to-5", "dice-patterns", "conceptual-subitise"],
   "randomise": {
     "mode": "attempt",
     "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
@@ -28,6 +28,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "star", "count": 4 },
       "layout": "dice",
+      "flashMs": 700,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
@@ -45,6 +46,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 5 },
       "layout": "dice",
+      "flashMs": 700,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
@@ -57,17 +59,23 @@
       "narration": { "prompt": "How many {items}?" }
     },
     {
-      "kind": "match-pairs",
-      "id": "s5h-words",
-      "prompt": "Match each word to the group.",
-      "randomise": {},
-      "pairs": [
-        { "id": "pfour", "left": "four", "right": { "visual": { "item": "fish", "count": 4 } } },
-        { "id": "pfive", "left": "five", "right": { "visual": { "item": "fish", "count": 5 } } },
-        { "id": "pthree", "left": "three", "right": { "visual": { "item": "fish", "count": 3 } } }
+      "kind": "multiple-choice",
+      "id": "s5h-parts-5a",
+      "prompt": "How many in all?",
+      "visual": { "item": "fish", "count": 1 },
+      "extras": [{ "item": "car", "count": 4 }],
+      "layout": "row",
+      "flashMs": 800,
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "4" },
+        { "id": "b", "label": "5" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "2" }
       ],
-      "explanation": "Four means 4. Five means 5. Three means 3.",
-      "narration": { "prompt": "Match each word to the group." }
+      "correctId": "b",
+      "explanation": "See 1 and 4. That makes 5 in all.",
+      "narration": { "prompt": "How many in all?" }
     },
     {
       "kind": "multiple-choice",
@@ -75,6 +83,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "frog", "count": 4 },
       "layout": "scatter",
+      "flashMs": 700,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
@@ -88,40 +97,11 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "s5h-group-5",
-      "prompt": "Which group has 5 {items}?",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "visual": { "item": "duck", "count": 4 } },
-        { "id": "b", "visual": { "item": "duck", "count": 3 } },
-        { "id": "c", "visual": { "item": "duck", "count": 5 } },
-        { "id": "d", "visual": { "item": "duck", "count": 2 } }
-      ],
-      "correctId": "c",
-      "explanation": "That group has 5 {items}.",
-      "narration": { "prompt": "Which group has 5 {items}?" }
-    },
-    {
-      "kind": "multi-select",
-      "id": "s5h-every-5",
-      "prompt": "Tap every group of 5 {items}.",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "visual": { "item": "star", "count": 5 } },
-        { "id": "b", "visual": { "item": "star", "count": 4 } },
-        { "id": "c", "visual": { "item": "star", "count": 5 } },
-        { "id": "d", "visual": { "item": "star", "count": 3 } }
-      ],
-      "correctIds": ["a", "c"],
-      "explanation": "Two groups show 5 {items}. Skip 4 and 3.",
-      "narration": { "prompt": "Tap every group of 5 {items}." }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "s5h-scatter-5",
+      "id": "s5h-frame-5",
       "prompt": "How many {items}?",
-      "visual": { "item": "car", "count": 5 },
-      "layout": "scatter",
+      "visual": { "item": "duck", "count": 5 },
+      "layout": "five-frame",
+      "flashMs": 700,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "4" },
@@ -130,8 +110,41 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "b",
-      "explanation": "There are 5 {items}.",
+      "explanation": "The five-frame is full. That is 5 {items}.",
       "narration": { "prompt": "How many {items}?" }
+    },
+    {
+      "kind": "multi-select",
+      "id": "s5h-every-5",
+      "prompt": "Tap every group of 5 {items}.",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "star", "count": 5 }, "layout": "dice" },
+        { "id": "b", "visual": { "item": "star", "count": 4 }, "layout": "dice" },
+        { "id": "c", "visual": { "item": "star", "count": 5 }, "layout": "five-frame" },
+        { "id": "d", "visual": { "item": "star", "count": 3 }, "layout": "dice" }
+      ],
+      "correctIds": ["a", "c"],
+      "explanation": "Dice 5 and five-frame 5 both show 5. Skip 4 and 3.",
+      "narration": { "prompt": "Tap every group of 5 {items}." }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "s5h-hidden-5",
+      "prompt": "How many {items} under the cup?",
+      "visual": { "item": "car", "count": 5 },
+      "layout": "hidden",
+      "flashMs": 600,
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "4" },
+        { "id": "b", "label": "5" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "b",
+      "explanation": "There are 5 {items} under the cup.",
+      "narration": { "prompt": "How many {items} under the cup?" }
     },
     {
       "kind": "multiple-choice",
@@ -139,6 +152,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "ladybird", "count": 5 },
       "layout": "dice",
+      "flashMs": 700,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "four" },
@@ -151,17 +165,17 @@
       "narration": { "prompt": "How many {items}?" }
     },
     {
-      "kind": "match-pairs",
-      "id": "s5h-match-45",
-      "prompt": "Match each number to the group.",
-      "randomise": {},
-      "pairs": [
-        { "id": "p4", "left": "4", "right": { "visual": { "item": "balloon", "count": 4 } } },
-        { "id": "p5", "left": "5", "right": { "visual": { "item": "balloon", "count": 5 } } },
-        { "id": "p3", "left": "3", "right": { "visual": { "item": "balloon", "count": 3 } } }
-      ],
-      "explanation": "4 is four {items}. 5 is five {items}.",
-      "narration": { "prompt": "Match each number to the group." }
+      "kind": "fill-blank",
+      "id": "s5h-parts-5b",
+      "prompt": "How many in all?",
+      "visual": { "item": "balloon", "count": 2 },
+      "extras": [{ "item": "strawberry", "count": 3 }],
+      "layout": "row",
+      "flashMs": 800,
+      "acceptedAnswers": ["5", "five"],
+      "inputMode": "numeric",
+      "explanation": "See 2 and 3. That makes 5 in all.",
+      "narration": { "prompt": "How many in all?" }
     },
     {
       "kind": "multiple-choice",
@@ -169,13 +183,13 @@
       "prompt": "Which group has 4 {items}?",
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "visual": { "item": "strawberry", "count": 5 } },
-        { "id": "b", "visual": { "item": "strawberry", "count": 4 } },
-        { "id": "c", "visual": { "item": "strawberry", "count": 3 } },
-        { "id": "d", "visual": { "item": "strawberry", "count": 2 } }
+        { "id": "a", "visual": { "item": "strawberry", "count": 5 }, "layout": "dice" },
+        { "id": "b", "visual": { "item": "strawberry", "count": 4 }, "layout": "dice" },
+        { "id": "c", "visual": { "item": "strawberry", "count": 3 }, "layout": "dice" },
+        { "id": "d", "visual": { "item": "strawberry", "count": 2 }, "layout": "dice" }
       ],
       "correctId": "b",
-      "explanation": "That group has 4 {items}. Not 5.",
+      "explanation": "That dice shows 4 {items}. Not 5.",
       "narration": { "prompt": "Which group has 4 {items}?" }
     }
   ]

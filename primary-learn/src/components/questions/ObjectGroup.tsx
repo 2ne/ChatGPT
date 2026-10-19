@@ -4,6 +4,7 @@ import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
 import type { ObjectAsset, ObjectItem, ObjectLayout } from "../../types/activity";
+import { FlashReveal } from "./FlashReveal";
 
 type Token = {
   key: string;
@@ -17,6 +18,8 @@ type ObjectGroupProps = {
   compact?: boolean;
   interactive?: boolean;
   layout?: ObjectLayout;
+  /** Brief reveal then hide (subitising). */
+  flashMs?: number;
 };
 
 /** Dice-face slots on a 3×3 grid (0–8). Used to glance a quantity without counting in a line. */
@@ -74,12 +77,136 @@ function groupLabel(visual: ObjectAsset, extras: ObjectAsset[] | undefined, inte
   return `${words.plural}. Tap each one to count.`;
 }
 
+function FrameCells({
+  capacity,
+  count,
+  glyph,
+  label,
+}: {
+  capacity: number;
+  count: number;
+  glyph: string;
+  label: string;
+}) {
+  const cols = capacity === 10 ? 5 : capacity;
+  return (
+    <span
+      className={`object-group is-frame is-frame-${capacity}`}
+      style={{ gridTemplateColumns: `repeat(${cols}, 36px)` }}
+      aria-label={label}
+    >
+      {Array.from({ length: capacity }, (_, cell) => (
+        <span key={cell} className={`object-frame-cell${cell < count ? " is-filled" : ""}`} aria-hidden>
+          {cell < count ? glyph : null}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function FingerPattern({ count, label }: { count: number; label: string }) {
+  return (
+    <span className="object-group is-fingers" aria-label={label}>
+      <span className="finger-hand" aria-hidden>
+        {Array.from({ length: 5 }, (_, index) => (
+          <span
+            key={index}
+            className={`finger${index < count ? " is-up" : " is-down"}`}
+          />
+        ))}
+      </span>
+    </span>
+  );
+}
+
+function StaticGroup({
+  visual,
+  extras,
+  layout,
+  tokens,
+  scatter,
+}: {
+  visual: ObjectAsset;
+  extras?: ObjectAsset[];
+  layout?: ObjectLayout;
+  tokens: Token[];
+  scatter: boolean;
+}) {
+  const mixed = Boolean(extras && extras.length > 0);
+  const glyph = OBJECT_GLYPH[visual.item];
+  const dice = layout === "dice" && visual.count >= 1 && visual.count <= 6 && !mixed;
+
+  if (layout === "fingers") {
+    return <FingerPattern count={visual.count} label={`${visual.count} fingers`} />;
+  }
+
+  if (layout === "five-frame" && !mixed) {
+    return (
+      <FrameCells capacity={5} count={visual.count} glyph={glyph} label={describeVisual(visual)} />
+    );
+  }
+
+  if (layout === "tens-frame" && !mixed) {
+    return (
+      <FrameCells capacity={10} count={visual.count} glyph={glyph} label={describeVisual(visual)} />
+    );
+  }
+
+  if (dice) {
+    const slots = DICE_SLOTS[visual.count] ?? [];
+    return (
+      <span className="object-group is-dice" aria-label={describeVisual(visual)}>
+        {Array.from({ length: 9 }, (_, cell) => (
+          <span key={cell} className="object-dice-cell" aria-hidden>
+            {slots.includes(cell) ? glyph : null}
+          </span>
+        ))}
+      </span>
+    );
+  }
+
+  const extraLabel =
+    extras?.length ? extras.map((asset) => describeVisual(asset)).join(" and ") : "";
+  const label = extraLabel ? `${describeVisual(visual)} and ${extraLabel}` : describeVisual(visual);
+
+  if (mixed && !scatter) {
+    const parts = [visual, ...(extras ?? [])];
+    return (
+      <span className="object-group is-parts" aria-label={label}>
+        {parts.map((asset, partIndex) => (
+          <span key={`${asset.item}-${partIndex}`} className="object-part" aria-hidden>
+            {Array.from({ length: asset.count }, (_, index) => (
+              <span key={index} className="object-glyph">
+                {OBJECT_GLYPH[asset.item]}
+              </span>
+            ))}
+          </span>
+        ))}
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={`object-group is-tiled${scatter ? " is-scatter" : ""}`}
+      aria-label={label}
+    >
+      {tokens.map((token) => (
+        <span key={token.key} className="object-token" aria-hidden>
+          <span className="object-glyph">{OBJECT_GLYPH[token.item]}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export function ObjectGroup({
   visual,
   extras,
   compact,
   interactive = false,
   layout,
+  flashMs,
 }: ObjectGroupProps) {
   const key = sceneKey(visual, extras, layout);
   const mixed = Boolean(extras && extras.length > 0);
@@ -123,6 +250,28 @@ export function ObjectGroup({
 
   if (compact) {
     const glyph = OBJECT_GLYPH[visual.item];
+    if (layout === "dice" && visual.count >= 1 && visual.count <= 6) {
+      const slots = DICE_SLOTS[visual.count] ?? [];
+      return (
+        <span className="object-group is-dice is-compact-dice" aria-label={describeVisual(visual)}>
+          {Array.from({ length: 9 }, (_, cell) => (
+            <span key={cell} className="object-dice-cell" aria-hidden>
+              {slots.includes(cell) ? glyph : null}
+            </span>
+          ))}
+        </span>
+      );
+    }
+    if (layout === "five-frame") {
+      return (
+        <FrameCells
+          capacity={5}
+          count={visual.count}
+          glyph={glyph}
+          label={describeVisual(visual)}
+        />
+      );
+    }
     return (
       <span className="object-group is-compact" aria-label={describeVisual(visual)}>
         {Array.from({ length: visual.count }, (_, index) => (
@@ -136,55 +285,27 @@ export function ObjectGroup({
 
   const counted = Object.keys(lit).length;
   const scatter = layout === "scatter";
-  const dice = layout === "dice" && visual.count >= 1 && visual.count <= 6 && !mixed;
+  const coveredLabel = layout === "hidden" ? copy.underTheCup : undefined;
+  const showFlash = layout === "hidden" || flashMs != null;
 
   if (!interactive) {
-    if (dice) {
-      const slots = DICE_SLOTS[visual.count] ?? [];
-      const glyph = OBJECT_GLYPH[visual.item];
-      return (
-        <span className="object-group is-dice" aria-label={describeVisual(visual)}>
-          {Array.from({ length: 9 }, (_, cell) => (
-            <span key={cell} className="object-dice-cell" aria-hidden>
-              {slots.includes(cell) ? glyph : null}
-            </span>
-          ))}
-        </span>
-      );
-    }
-    const extraLabel =
-      extras?.length ? extras.map((asset) => describeVisual(asset)).join(" and ") : "";
-    const label = extraLabel ? `${describeVisual(visual)} and ${extraLabel}` : describeVisual(visual);
-
-    if (mixed && !scatter) {
-      const parts = [visual, ...(extras ?? [])];
-      return (
-        <span className="object-group is-parts" aria-label={label}>
-          {parts.map((asset, partIndex) => (
-            <span key={`${asset.item}-${partIndex}`} className="object-part" aria-hidden>
-              {Array.from({ length: asset.count }, (_, index) => (
-                <span key={index} className="object-glyph">
-                  {OBJECT_GLYPH[asset.item]}
-                </span>
-              ))}
-            </span>
-          ))}
-        </span>
-      );
-    }
-
-    return (
-      <span
-        className={`object-group is-tiled${scatter ? " is-scatter" : ""}`}
-        aria-label={label}
-      >
-        {tokens.map((token) => (
-          <span key={token.key} className="object-token" aria-hidden>
-            <span className="object-glyph">{OBJECT_GLYPH[token.item]}</span>
-          </span>
-        ))}
-      </span>
+    const body = (
+      <StaticGroup
+        visual={visual}
+        extras={extras}
+        layout={layout === "hidden" ? "row" : layout}
+        tokens={tokens}
+        scatter={scatter}
+      />
     );
+    if (showFlash) {
+      return (
+        <FlashReveal flashMs={flashMs ?? 1200} coveredLabel={coveredLabel}>
+          {layout === "hidden" ? <div className="hidden-quantity">{body}</div> : body}
+        </FlashReveal>
+      );
+    }
+    return body;
   }
 
   return (
@@ -247,13 +368,15 @@ export function ObjectGroup({
 export function OptionContent({
   label,
   visual,
+  layout,
 }: {
   label?: string;
   visual?: ObjectAsset;
+  layout?: ObjectLayout;
 }) {
   return (
     <span className="option-content">
-      {visual ? <ObjectGroup visual={visual} compact /> : null}
+      {visual ? <ObjectGroup visual={visual} compact layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
     </span>
   );

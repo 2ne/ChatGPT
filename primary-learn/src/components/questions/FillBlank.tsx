@@ -20,6 +20,7 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
           visual={question.visual}
           extras={question.extras}
           layout={question.layout}
+          flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
       <div className={`equation ${tone}`.trim()}>

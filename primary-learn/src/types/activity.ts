@@ -51,14 +51,29 @@ export type ObjectAsset = {
   count: number;
 };
 
-/** How object pictures are laid out. `row` is tidy one-to-one; `scatter` is a messier group; `dice` is a glance pattern to 6. */
-export const OBJECT_LAYOUTS = ["row", "scatter", "dice"] as const;
+/**
+ * How object pictures are laid out.
+ * `row` tidy one-to-one; `scatter` messier; `dice` glance pattern to 6;
+ * `five-frame` / `tens-frame` Mastering Number frames; `fingers` raised-finger pattern;
+ * `hidden` cup cover for a brief peek (pair with `flashMs`).
+ */
+export const OBJECT_LAYOUTS = [
+  "row",
+  "scatter",
+  "dice",
+  "five-frame",
+  "tens-frame",
+  "fingers",
+  "hidden",
+] as const;
 export type ObjectLayout = (typeof OBJECT_LAYOUTS)[number];
 
 export type QuestionOption = {
   id: string;
   label?: string;
   visual?: ObjectAsset;
+  /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
+  layout?: ObjectLayout;
 };
 
 /**
@@ -106,6 +121,11 @@ type QuestionCore = {
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */
   layout?: ObjectLayout;
+  /**
+   * Brief stem reveal in ms, then hide. Stops one-by-one counting on subitise items.
+   * Child can tap Look again. Prefer 1200–2000 Easy, 800–1200 Medium, 500–800 Hard.
+   */
+  flashMs?: number;
   randomise?: RandomiseSpec;
 };
 

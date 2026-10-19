@@ -1,22 +1,22 @@
 {
   "id": "see-numbers-to-5",
   "title": "See numbers to 5",
-  "summary": "Know how many without counting, for groups of 1 to 5.",
+  "summary": "Know how many without counting, for groups of 1 to 5. Brief flash, dice, five-frame and fingers.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": ["Reception"],
   "ability": "emerging",
-  "estimatedMinutes": 4,
+  "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
   "curriculumRef": "eyfs-subitise-5",
   "pathNode": "eyfs-subitise-5",
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 glance a dice pattern of 1, then 2, then 3. Question 4 matches 1 to 3 to pictures. Question 5 glances 4. Question 6 picks the group of 4. Question 7 glances 5. Question 8 taps every group of 5. Question 9 matches 4 and 5. Question 10 picks the group of 5. Amounts climb 1 to 5. No tap-to-count.",
-    "versus": "Easy: tidy dice faces, 1 to 5 in order, hints on the first three. Medium uses a mix of dice and messy groups, amounts 2 to 5. Hard uses 4 and 5 in different patterns, number words, and two groups to compare. Still see how many, not bonds."
+    "within": "Questions 1 to 3 flash a dice of 1, then 2, then 3. Question 4 flashes 3 on a five-frame. Question 5 flashes dice 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 flashes dice 5. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
+    "versus": "Easy: tidy dice and frames, 1 to 5 in order, longer flash, hints on the first three. Medium mixes dice, scatter and 2+3 inside 5, shorter flash. Hard stays on 4 and 5, quick flash, number words, and no hints. Still see how many, not bonds."
   },
-  "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns"],
+  "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns", "five-frame", "finger-patterns"],
   "randomise": {
     "mode": "attempt",
     "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
@@ -28,6 +28,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "star", "count": 1 },
       "layout": "dice",
+      "flashMs": 1800,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "1" },
@@ -46,6 +47,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "balloon", "count": 2 },
       "layout": "dice",
+      "flashMs": 1800,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "1" },
@@ -64,6 +66,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "apple", "count": 3 },
       "layout": "dice",
+      "flashMs": 1800,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "2" },
@@ -77,24 +80,30 @@
       "narration": { "prompt": "How many {items}?" }
     },
     {
-      "kind": "match-pairs",
-      "id": "s5e-match-123",
-      "prompt": "Match each number to the group.",
-      "randomise": {},
-      "pairs": [
-        { "id": "p1", "left": "1", "right": { "visual": { "item": "fish", "count": 1 } } },
-        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 } } },
-        { "id": "p3", "left": "3", "right": { "visual": { "item": "fish", "count": 3 } } }
+      "kind": "multiple-choice",
+      "id": "s5e-frame-3",
+      "prompt": "How many {items}?",
+      "visual": { "item": "duck", "count": 3 },
+      "layout": "five-frame",
+      "flashMs": 1800,
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
       ],
-      "explanation": "1 is one {item}. 2 is two {items}. 3 is three {items}.",
-      "narration": { "prompt": "Match each number to the group." }
+      "correctId": "b",
+      "explanation": "The five-frame shows 3 {items}. Three cells are full.",
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-4",
       "prompt": "How many {items}?",
-      "visual": { "item": "duck", "count": 4 },
+      "visual": { "item": "frog", "count": 4 },
       "layout": "dice",
+      "flashMs": 1600,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "2" },
@@ -108,18 +117,22 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "s5e-group-2",
-      "prompt": "Which group has 4 {items}?",
+      "id": "s5e-parts-4",
+      "prompt": "How many in all?",
+      "visual": { "item": "fish", "count": 2 },
+      "extras": [{ "item": "car", "count": 2 }],
+      "layout": "row",
+      "flashMs": 1800,
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "visual": { "item": "frog", "count": 3 } },
-        { "id": "b", "visual": { "item": "frog", "count": 5 } },
-        { "id": "c", "visual": { "item": "frog", "count": 4 } },
-        { "id": "d", "visual": { "item": "frog", "count": 2 } }
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
       ],
       "correctId": "c",
-      "explanation": "Look for 4. That group has 4 {items}.",
-      "narration": { "prompt": "Which group has 4 {items}?" }
+      "explanation": "See 2 and 2. That makes 4 in all.",
+      "narration": { "prompt": "How many in all?" }
     },
     {
       "kind": "multiple-choice",
@@ -127,6 +140,7 @@
       "prompt": "How many {items}?",
       "visual": { "item": "ladybird", "count": 5 },
       "layout": "dice",
+      "flashMs": 1600,
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
@@ -144,42 +158,44 @@
       "prompt": "Tap every group of 5 {items}.",
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "visual": { "item": "star", "count": 5 } },
-        { "id": "b", "visual": { "item": "star", "count": 4 } },
-        { "id": "c", "visual": { "item": "star", "count": 3 } },
-        { "id": "d", "visual": { "item": "star", "count": 5 } }
+        { "id": "a", "visual": { "item": "star", "count": 5 }, "layout": "dice" },
+        { "id": "b", "visual": { "item": "star", "count": 4 }, "layout": "dice" },
+        { "id": "c", "visual": { "item": "star", "count": 3 }, "layout": "dice" },
+        { "id": "d", "visual": { "item": "star", "count": 5 }, "layout": "dice" }
       ],
       "correctIds": ["a", "d"],
       "explanation": "Two groups show 5 {items}. Skip 4 and 3.",
       "narration": { "prompt": "Tap every group of 5 {items}." }
     },
     {
-      "kind": "match-pairs",
-      "id": "s5e-match-45",
-      "prompt": "Match each number to the group.",
-      "randomise": {},
-      "pairs": [
-        { "id": "p4", "left": "4", "right": { "visual": { "item": "car", "count": 4 } } },
-        { "id": "p5", "left": "5", "right": { "visual": { "item": "car", "count": 5 } } },
-        { "id": "p2", "left": "2", "right": { "visual": { "item": "car", "count": 2 } } }
-      ],
-      "explanation": "4 is four {items}. 5 is five {items}. 2 is two {items}.",
-      "narration": { "prompt": "Match each number to the group." }
+      "kind": "fill-blank",
+      "id": "s5e-fingers-4",
+      "prompt": "How many fingers?",
+      "visual": { "item": "star", "count": 4 },
+      "layout": "fingers",
+      "flashMs": 1600,
+      "acceptedAnswers": ["4", "four"],
+      "inputMode": "numeric",
+      "explanation": "Four fingers are up. That is 4.",
+      "narration": { "prompt": "How many fingers?" }
     },
     {
       "kind": "multiple-choice",
-      "id": "s5e-group-5",
-      "prompt": "Which group has 5 {items}?",
+      "id": "s5e-hidden-3",
+      "prompt": "How many {items} under the cup?",
+      "visual": { "item": "strawberry", "count": 3 },
+      "layout": "hidden",
+      "flashMs": 1500,
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "visual": { "item": "strawberry", "count": 4 } },
-        { "id": "b", "visual": { "item": "strawberry", "count": 3 } },
-        { "id": "c", "visual": { "item": "strawberry", "count": 5 } },
-        { "id": "d", "visual": { "item": "strawberry", "count": 2 } }
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
       ],
-      "correctId": "c",
-      "explanation": "Look for the full 5. That group has 5 {items}.",
-      "narration": { "prompt": "Which group has 5 {items}?" }
+      "correctId": "b",
+      "explanation": "There are 3 {items} under the cup. Peek once. Then say how many.",
+      "narration": { "prompt": "How many {items} under the cup?" }
     }
   ]
 }

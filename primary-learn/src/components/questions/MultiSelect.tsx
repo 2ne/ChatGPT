@@ -31,6 +31,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
           visual={question.visual}
           extras={question.extras}
           layout={question.layout}
+          flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
       <p className="t-body">{copy.chooseAll}</p>
@@ -49,7 +50,11 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
             <span className="option-letter" aria-hidden>
               {"ABCD"[slot] ?? "✓"}
             </span>
-            <OptionContent label={option.label} visual={option.visual} />
+            <OptionContent
+              label={option.label}
+              visual={option.visual}
+              layout={option.layout}
+            />
             {marked === "correct" ? (
               <span className="option-check" aria-hidden>
                 ✓

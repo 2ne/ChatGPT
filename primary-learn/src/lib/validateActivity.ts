@@ -110,9 +110,21 @@ function parseMakeTotalExtras(record: Record<string, unknown>, path: string): Ob
 function parseLayout(record: Record<string, unknown>, path: string): Question["layout"] {
   if (record.layout == null) return undefined;
   if (typeof record.layout !== "string" || !(OBJECT_LAYOUTS as readonly string[]).includes(record.layout)) {
-    fail(path, "layout must be row, scatter or dice");
+    fail(
+      path,
+      "layout must be row, scatter, dice, five-frame, tens-frame, fingers or hidden",
+    );
   }
   return record.layout as Question["layout"];
+}
+
+function parseFlashMs(record: Record<string, unknown>, path: string): number | undefined {
+  if (record.flashMs == null) return undefined;
+  const flashMs = expectNumber(record, "flashMs", path);
+  if (!Number.isInteger(flashMs) || flashMs < 300 || flashMs > 4000) {
+    fail(path, "flashMs must be a whole number from 300 to 4000");
+  }
+  return flashMs;
 }
 
 function parseOption(value: unknown, path: string): QuestionOption {
@@ -121,7 +133,11 @@ function parseOption(value: unknown, path: string): QuestionOption {
   const label = value.label == null ? undefined : expectString(value, "label", path);
   const visual = optionalVisual(value, path);
   if (!label && !visual) fail(path, "option needs a label or a visual");
-  return { id, label, visual };
+  const layout = parseLayout(value, path);
+  if (layout === "hidden" || layout === "fingers") {
+    fail(path, "option layout cannot be hidden or fingers");
+  }
+  return { id, label, visual, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -208,6 +224,21 @@ function parseQuestion(value: unknown, path: string): Question {
   const extras =
     kind === "make-total" ? parseMakeTotalExtras(value, path) : parseExtras(value, path);
   const layout = parseLayout(value, path);
+  const flashMs = parseFlashMs(value, path);
+  if (layout === "hidden" && flashMs == null) {
+    fail(path, "layout hidden needs flashMs so the child can peek");
+  }
+  if (layout === "fingers" && visual) {
+    if (visual.count < 1 || visual.count > 5) {
+      fail(path, "fingers layout needs visual.count from 1 to 5");
+    }
+  }
+  if ((layout === "five-frame" || layout === "tens-frame") && visual) {
+    const max = layout === "five-frame" ? 5 : 10;
+    if (visual.count < 1 || visual.count > max) {
+      fail(path, `${layout} needs visual.count from 1 to ${max}`);
+    }
+  }
   if (visual && extras) {
     for (const extra of extras) {
       if (extra.item === visual.item) {
@@ -216,7 +247,7 @@ function parseQuestion(value: unknown, path: string): Question {
     }
   }
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
-  const core = { id, prompt, explanation, hint, narration, visual, extras, layout, randomise };
+  const core = { id, prompt, explanation, hint, narration, visual, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,
