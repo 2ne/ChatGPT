@@ -11,10 +11,9 @@ type FlashRevealProps = {
 const MAX_LOOK_AGAIN = 2;
 
 /**
- * Brief stem reveal for subitising. Shows the picture, then covers it with a
- * full-size Look again control. Later peeks are shorter. Cap peeks so kids
- * cannot count one by one. Reduced-motion skips the shutter animation but
- * still covers after the flash.
+ * Brief stem reveal for subitising. Auto-hides after flashMs with a 3D flip
+ * onto a purple Look again face. Later peeks are shorter. Cap peeks so kids
+ * cannot count one by one. Picture stays in the layout so the page does not jump.
  */
 export function FlashReveal({ flashMs, children }: FlashRevealProps) {
   const [visible, setVisible] = useState(true);
@@ -38,21 +37,24 @@ export function FlashReveal({ flashMs, children }: FlashRevealProps) {
 
   return (
     <div className={`flash-reveal${covered ? " is-covered" : " is-open"}`}>
-      <div className="flash-stage">{children}</div>
-      {covered ? (
-        canPeek ? (
-          <button
-            type="button"
-            className="flash-cover"
-            onClick={() => setPeeksUsed((n) => n + 1)}
-          >
-            <Eye size={20} aria-hidden />
-            {copy.lookAgain}
-          </button>
-        ) : (
-          <div className="flash-cover is-done" aria-hidden />
-        )
-      ) : null}
+      <div className="flash-card">
+        <div className="flash-face flash-face-front">{children}</div>
+        <div className="flash-face flash-face-back" aria-hidden={!covered}>
+          {canPeek ? (
+            <button
+              type="button"
+              className="flash-look-again"
+              tabIndex={covered ? 0 : -1}
+              onClick={() => setPeeksUsed((n) => n + 1)}
+            >
+              <Eye size={20} aria-hidden />
+              {copy.lookAgain}
+            </button>
+          ) : (
+            <div className="flash-look-again is-done" aria-hidden />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
