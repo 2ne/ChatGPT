@@ -23,7 +23,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - **When those nodes are built:** split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` into smaller stops. Leave them whole until then.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 4 (`eyfs-count-5` to `eyfs-bonds-5`) have Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only. The first `missing` node is `eyfs-count-10`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 4 (`eyfs-count-5` to `eyfs-bonds-5`) have Easy, Medium and Hard. `number-bonds-to-10` is node 13 (`y1-bonds-10`), Easy only (Medium / Hard next). The first `missing` node is `eyfs-count-10`.
 
 ## Category index
 
@@ -177,12 +177,12 @@ Requires: `y1-read-write-20`. Quest: none. Status: missing.
 
 ### 13. `y1-bonds-10` — Number bonds to 10
 
-Requires: `y1-1-more-less`. Quest: `number-bonds-to-10`. Status: partial.
+Requires: `y1-1-more-less`. Quest: `number-bonds-to-10` (Easy). Status: done.
 
 - Recall number bonds to 10 in several forms (9 + 7 is not this node; pairs that make 10 are)
 - Recall the related subtraction facts within 10
 
-The live quest covers addition pairs that make 10. It does not yet cover the related subtraction facts, so this node stays partial.
+Easy covers both bullets (fill-slots, pick-pair, part-whole, then related take-away). Medium and Hard are still to write.
 
 ### 14. `y1-bonds-20` — Bonds within 20
 

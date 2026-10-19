@@ -10,8 +10,8 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 4 — `eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5`, `eyfs-bonds-5` |
-| Partial | 1 — `y1-bonds-10` |
+| Done | 5 — `eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5`, `eyfs-bonds-5`, `y1-bonds-10` |
+| Partial | 0 |
 | Missing | 119 |
 
 ## Quests in the app
@@ -30,7 +30,7 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `bonds-to-5` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Easy: partners that make 5, then related take-away |
 | `bonds-to-5-medium` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Medium: 0, reverse 5 = blank + n, more take-away |
 | `bonds-to-5-hard` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Hard: mix plus and take away, number words |
-| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | partial — addition pairs that make 10 are in the quest; related subtraction facts are not |
+| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, then related take-away |
 
 ## Next quest to build
 

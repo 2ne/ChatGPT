@@ -1,290 +1,146 @@
 {
   "id": "number-bonds-to-10",
   "title": "Number bonds to 10",
-  "summary": "Find pairs of numbers that add up to 10.",
+  "summary": "Know the pairs that make 10, and the take-away facts that go with them.",
   "subject": "maths",
   "type": "number-bonds",
-  "yearGroups": [
-    "Year1"
-  ],
-  "ability": "expected",
+  "yearGroups": ["Year1"],
+  "ability": "emerging",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
   "curriculumRef": "y1-bonds-10",
   "pathNode": "y1-bonds-10",
   "difficulty": 1,
+  "questionCount": 10,
   "difficultyRamp": {
-    "within": "Starts with what goes with 6 to make 10, then recognise a pair, then fill-blanks including the double 5 + 5, then multi-select, then a word problem and a related subtraction fact. Range stays 0 to 10. Later items add a second step (subtract using a bond) rather than bigger numbers.",
-    "versus": "Easy: bonds to 10 with numerals and one-step missing addends. Medium should mix order (what goes with 3 to make 10) and more subtraction. Hard should use two-step stories still totalling 10."
+    "within": "Question 1 taps extra slots for what goes with 6 to make 10. Question 2 taps two number tiles that make 10, with dots on the tiles. Questions 3 to 5 tap slots for what goes with 8, 7 and 5 to make 10. Question 6 is the part-whole cherry for what goes with 0 to make 10. Question 7 taps slots for what goes with 9 to make 10. Question 8 taps every pair that makes 10. Questions 9 to 10 are the related take-aways. Hints on the first three. Totals stay 10.",
+    "versus": "Easy taps extra slots or four tiles with dots. Medium should mix the sum line, reverse missing parts, and more take-away. Hard should use the sum line or tiles with no dots, and short stories still totalling 10. Same node: recall bonds to 10 and related subtraction."
   },
-  "skills": [
-    "y1-bonds-10",
-    "addition-within-10",
-    "number-bonds",
-    "missing-addend"
-  ],
+  "skills": ["y1-bonds-10", "number-bonds-to-10", "addition-within-10", "subtraction-within-10"],
   "randomise": {
-    "mode": "attempt"
+    "mode": "attempt",
+    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
   },
   "questions": [
     {
-      "kind": "multiple-choice",
-      "id": "nb10-mc-1",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "kind": "make-total",
+      "id": "nb10-with-6",
       "prompt": "What goes with 6 to make 10?",
-      "options": [
-        {
-          "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "5"
-        }
-      ],
-      "correctId": "c",
-      "hint": "Count on from 6 until you reach 10.",
-      "explanation": "6 + 4 = 10, so 4 is the bond partner for 6.",
-      "narration": {
-        "prompt": "What goes with 6 to make 10?"
-      }
+      "visual": { "item": "star", "count": 6 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "hint": "Tap a space for each one you still need.",
+      "explanation": "6 and 4 make 10. 6 + 4 = 10.",
+      "narration": { "prompt": "What goes with 6 to make 10?" }
     },
     {
-      "kind": "multiple-choice",
-      "id": "nb10-mc-2",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "prompt": "Which pair adds up to 10?",
-      "options": [
-        {
-          "id": "a",
-          "label": "2 and 7"
-        },
-        {
-          "id": "b",
-          "label": "3 and 7"
-        },
-        {
-          "id": "c",
-          "label": "4 and 7"
-        },
-        {
-          "id": "d",
-          "label": "1 and 8"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "3 + 7 = 10. The others make 9 or 11.",
-      "narration": {
-        "prompt": "Which pair adds up to 10?"
-      }
+      "kind": "pick-pair",
+      "id": "nb10-pair",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [6, 4, 2, 5],
+      "showDots": true,
+      "randomise": { "shuffleOptions": true },
+      "hint": "Find two numbers that add to 10.",
+      "explanation": "6 and 4 make 10.",
+      "narration": { "prompt": "What two numbers make 10?" }
     },
     {
-      "kind": "fill-blank",
-      "id": "nb10-fb-1",
+      "kind": "make-total",
+      "id": "nb10-with-8",
       "prompt": "What goes with 8 to make 10?",
-      "prefix": "8 +",
-      "suffix": "= 10",
-      "acceptedAnswers": [
-        "2"
-      ],
-      "inputMode": "numeric",
-      "hint": "How many more to get from 8 to 10?",
+      "visual": { "item": "apple", "count": 8 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "hint": "How many more from 8 to 10?",
       "explanation": "8 + 2 = 10.",
-      "narration": {
-        "prompt": "What goes with 8 to make 10?"
-      }
+      "narration": { "prompt": "What goes with 8 to make 10?" }
     },
     {
-      "kind": "fill-blank",
-      "id": "nb10-fb-2",
-      "prompt": "What goes with 1 to make 10?",
-      "prefix": "1 +",
-      "suffix": "= 10",
-      "acceptedAnswers": [
-        "9"
-      ],
-      "inputMode": "numeric",
-      "explanation": "1 + 9 = 10.",
-      "narration": {
-        "prompt": "What goes with 1 to make 10?"
-      }
+      "kind": "make-total",
+      "id": "nb10-with-7",
+      "prompt": "What goes with 7 to make 10?",
+      "visual": { "item": "duck", "count": 7 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "explanation": "7 + 3 = 10.",
+      "narration": { "prompt": "What goes with 7 to make 10?" }
     },
     {
-      "kind": "fill-blank",
-      "id": "nb10-fb-3",
+      "kind": "make-total",
+      "id": "nb10-with-5",
       "prompt": "What goes with 5 to make 10?",
-      "prefix": "5 +",
-      "suffix": "= 10",
-      "acceptedAnswers": [
-        "5"
-      ],
-      "inputMode": "numeric",
-      "explanation": "5 + 5 = 10. This is a double!",
-      "narration": {
-        "prompt": "What goes with 5 to make 10?"
-      }
+      "visual": { "item": "frog", "count": 5 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "explanation": "5 + 5 = 10. That is a double.",
+      "narration": { "prompt": "What goes with 5 to make 10?" }
+    },
+    {
+      "kind": "part-whole",
+      "id": "nb10-pw-0",
+      "prompt": "What goes with 0 to make 10?",
+      "whole": 10,
+      "parts": [0, 10],
+      "missing": "right",
+      "choices": [9, 10, 11],
+      "explanation": "0 and 10 make 10.",
+      "narration": { "prompt": "What goes with zero to make ten?" }
+    },
+    {
+      "kind": "make-total",
+      "id": "nb10-with-9",
+      "prompt": "What goes with 9 to make 10?",
+      "visual": { "item": "balloon", "count": 9 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "explanation": "9 + 1 = 10.",
+      "narration": { "prompt": "What goes with 9 to make 10?" }
     },
     {
       "kind": "multi-select",
-      "id": "nb10-ms-1",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "id": "nb10-every",
       "prompt": "Tap every pair that makes 10.",
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "label": "0 + 10"
-        },
-        {
-          "id": "b",
-          "label": "2 + 9"
-        },
-        {
-          "id": "c",
-          "label": "4 + 6"
-        },
-        {
-          "id": "d",
-          "label": "7 + 2"
-        }
+        { "id": "a", "label": "1 + 9" },
+        { "id": "b", "label": "2 + 7" },
+        { "id": "c", "label": "4 + 6" },
+        { "id": "d", "label": "3 + 8" }
       ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "0 + 10 and 4 + 6 both equal 10. 2 + 9 = 11 and 7 + 2 = 9.",
-      "narration": {
-        "prompt": "Tap every pair that makes 10."
-      }
+      "correctIds": ["a", "c"],
+      "explanation": "1 + 9 = 10 and 4 + 6 = 10. 2 + 7 = 9. 3 + 8 = 11.",
+      "narration": { "prompt": "Tap every pair that makes 10." }
     },
     {
       "kind": "multiple-choice",
-      "id": "nb10-mc-4",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "prompt": "What goes with 7 to make 10?",
+      "id": "nb10-take-2",
+      "prompt": "10 take away 2. How many left?",
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "5"
-        }
-      ],
-      "correctId": "b",
-      "hint": "Count on from 7: 8, 9, 10.",
-      "explanation": "7 + 3 = 10, so the missing number is 3.",
-      "narration": {
-        "prompt": "What goes with 7 to make 10?"
-      }
-    },
-    {
-      "kind": "match-pairs",
-      "id": "nb10-mp-1",
-      "prompt": "Match each number to its partner that makes 10.",
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "3",
-          "right": "7"
-        },
-        {
-          "id": "p2",
-          "left": "9",
-          "right": "1"
-        },
-        {
-          "id": "p3",
-          "left": "0",
-          "right": "10"
-        },
-        {
-          "id": "p4",
-          "left": "6",
-          "right": "4"
-        }
-      ],
-      "explanation": "3+7, 9+1, 0+10 and 6+4 are all bonds to 10.",
-      "narration": {
-        "prompt": "Match each number to its partner that makes 10."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "nb10-mc-3",
-      "randomise": {
-        "items": [
-          "apple",
-          "banana",
-          "star",
-          "balloon",
-          "car"
-        ],
-        "shuffleOptions": true
-      },
-      "prompt": "Sam has 10 {items} and eats 2. How many are left?",
-      "options": [
-        {
-          "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        },
-        {
-          "id": "d",
-          "label": "9"
-        }
+        { "id": "a", "label": "6" },
+        { "id": "b", "label": "7" },
+        { "id": "c", "label": "8" },
+        { "id": "d", "label": "9" }
       ],
       "correctId": "c",
-      "explanation": "10 − 2 = 8. That uses the bond 2 + 8 = 10.",
-      "narration": {
-        "prompt": "Sam has 10 {items} and eats 2. How many are left?"
-      }
+      "explanation": "Because 2 + 8 = 10, 10 take away 2 is 8.",
+      "narration": { "prompt": "10 take away 2. How many left?" }
     },
     {
       "kind": "fill-blank",
-      "id": "nb10-fb-4",
+      "id": "nb10-minus-4",
       "prompt": "What is 10 − 4?",
       "prefix": "10 − 4 =",
-      "acceptedAnswers": [
-        "6"
-      ],
+      "acceptedAnswers": ["6", "six"],
       "inputMode": "numeric",
       "explanation": "Because 4 + 6 = 10, 10 − 4 = 6.",
-      "narration": {
-        "prompt": "What is ten take away four?"
-      }
+      "narration": { "prompt": "What is ten take away four?" }
     }
-  ],
-  "questionCount": 10
+  ]
 }
