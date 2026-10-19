@@ -8,50 +8,51 @@ type FlashRevealProps = {
   children: ReactNode;
 };
 
+const MAX_LOOK_AGAIN = 2;
+
 /**
- * Brief stem reveal for subitising. Auto-hides after flashMs with a 3D flip.
- * Picture stays in the layout so the page does not jump. Reduced-motion
- * users keep the picture visible. Covered face is just Look again.
+ * Brief stem reveal for subitising. Shows the picture, then covers it with a
+ * full-size Look again control. Later peeks are shorter. Cap peeks so kids
+ * cannot count one by one. Reduced-motion skips the shutter animation but
+ * still covers after the flash.
  */
 export function FlashReveal({ flashMs, children }: FlashRevealProps) {
   const [visible, setVisible] = useState(true);
-  const [tick, setTick] = useState(0);
+  const [peeksUsed, setPeeksUsed] = useState(0);
 
   useEffect(() => {
     if (flashMs == null) {
       setVisible(true);
       return;
     }
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setVisible(true);
-      return;
-    }
     setVisible(true);
-    const id = window.setTimeout(() => setVisible(false), flashMs);
+    const duration = peeksUsed === 0 ? flashMs : Math.max(400, Math.round(flashMs * 0.65));
+    const id = window.setTimeout(() => setVisible(false), duration);
     return () => window.clearTimeout(id);
-  }, [flashMs, tick]);
+  }, [flashMs, peeksUsed]);
 
   if (flashMs == null) return <>{children}</>;
 
+  const canPeek = peeksUsed < MAX_LOOK_AGAIN;
+  const covered = !visible;
+
   return (
-    <div className={`flash-reveal${visible ? " is-open" : " is-covered"}`}>
-      <div className="flash-card">
-        <div className="flash-face flash-face-front">{children}</div>
-        <div className="flash-face flash-face-back" aria-hidden={visible}>
+    <div className={`flash-reveal${covered ? " is-covered" : " is-open"}`}>
+      <div className="flash-stage">{children}</div>
+      {covered ? (
+        canPeek ? (
           <button
             type="button"
-            className="flash-look-again"
-            tabIndex={visible ? -1 : 0}
-            onClick={() => setTick((n) => n + 1)}
+            className="flash-cover"
+            onClick={() => setPeeksUsed((n) => n + 1)}
           >
-            <Eye size={18} aria-hidden />
+            <Eye size={20} aria-hidden />
             {copy.lookAgain}
           </button>
-        </div>
-      </div>
+        ) : (
+          <div className="flash-cover is-done" aria-hidden />
+        )
+      ) : null}
     </div>
   );
 }
