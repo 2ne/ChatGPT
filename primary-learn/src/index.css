@@ -1498,32 +1498,37 @@ button.learner-chip:focus-visible {
   pointer-events: none;
 }
 
+.flash-face-front {
+  display: block;
+}
+
 .flash-face-back {
   position: absolute;
   inset: 0;
   display: flex;
   overflow: hidden;
   border-radius: 18px;
+  border: 2.5px solid var(--primary-deep);
+  background: linear-gradient(145deg, var(--primary) 0%, var(--violet) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 3px 0 rgba(59, 51, 184, 0.35);
   transform: rotateY(180deg);
 }
 
 .flash-look-again {
   appearance: none;
   display: inline-flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   margin: 0;
   padding: 12px;
-  border: 2.5px solid var(--primary-deep);
-  border-radius: 18px;
-  background: linear-gradient(145deg, var(--primary) 0%, var(--violet) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 3px 0 rgba(59, 51, 184, 0.35);
+  border: 0;
+  border-radius: 15px;
+  background: transparent;
   color: #fff;
   font-family: var(--font-display);
   font-size: 16px;
@@ -1538,21 +1543,18 @@ button.learner-chip:focus-visible {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .flash-look-again:not(.is-done):hover {
+  .flash-reveal.is-covered .flash-face-back:has(.flash-look-again:not(.is-done):hover) {
     filter: brightness(1.06);
   }
 }
 
-.flash-look-again:not(.is-done):active {
+.flash-reveal.is-covered .flash-face-back:has(.flash-look-again:not(.is-done):active) {
   filter: brightness(0.97);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 1px 0 rgba(59, 51, 184, 0.35);
 }
 
 .flash-look-again:focus-visible {
   outline: 3px solid var(--sun);
-  outline-offset: 3px;
+  outline-offset: -5px;
 }
 
 @media (prefers-reduced-motion: reduce) {
