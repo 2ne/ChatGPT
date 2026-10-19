@@ -51,7 +51,10 @@ export function FlashReveal({ flashMs, children }: FlashRevealProps) {
               {copy.lookAgain}
             </button>
           ) : (
-            <div className="flash-look-again is-done" aria-hidden />
+            <div className="flash-look-again is-done" aria-hidden>
+              <Eye size={20} aria-hidden />
+              {copy.lookAgain}
+            </div>
           )}
         </div>
       </div>

@@ -1547,6 +1547,7 @@ button.learner-chip:focus-visible {
 .flash-look-again.is-done {
   cursor: default;
   pointer-events: none;
+  opacity: 0.55;
 }
 
 @media (hover: hover) and (pointer: fine) {
