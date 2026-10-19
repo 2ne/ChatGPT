@@ -170,8 +170,8 @@ export type OrderedQuestion = QuestionCore & {
   correctOrder: string[];
 };
 
-/** A match side is a label, or a picture, or both. */
-export type MatchSide = string | { label?: string; visual?: ObjectAsset };
+/** A match side is a label, or a picture, or both. Optional layout for glanceable amounts. */
+export type MatchSide = string | { label?: string; visual?: ObjectAsset; layout?: ObjectLayout };
 
 export type MatchPairsQuestion = QuestionCore & {
   kind: "match-pairs";

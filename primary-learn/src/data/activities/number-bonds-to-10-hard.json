@@ -13,7 +13,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 is the sum line for what goes with 6 to make 10. Question 2 fills 10 take away 4. Question 3 is the part-whole cherry for what 3 and 7 make. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 10. Question 6 is 10 take away 0. Question 7 is the sum line reverse for what goes with 8 to make 10. Question 8 taps four tiles with no dots to make 10. Question 9 picks 10 take away 7 as a number word. Question 10 picks the take-away that matches 2 + 8. No hints. Totals stay 10.",
+    "within": "Question 1 is the sum line for what goes with 6 to make 10. Question 2 fills 10 take away 4. Question 3 is the part-whole cherry for what 3 and 7 make. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 10. Question 6 is 10 take away 0. Question 7 is the sum line reverse for what goes with 8 to make 10. Question 8 taps four tiles with no dots to make 10. Question 9 picks 10 take away 7 as a number word. Question 10 is a short story: Sam has 10 and gives away 3. No hints. Totals stay 10.",
     "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots, mixing plus and take away."
   },
   "skills": ["y1-bonds-10", "number-bonds-to-10", "addition-within-10", "subtraction-within-10"],
@@ -150,18 +150,18 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "nb10h-match-take",
-      "prompt": "2 + 8 = 10. Which take away matches?",
+      "id": "nb10h-sam-story",
+      "prompt": "Sam has 10. He gives away 3. How many left?",
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "label": "10 − 2 = 8" },
-        { "id": "b", "label": "10 − 3 = 8" },
-        { "id": "c", "label": "10 − 8 = 0" },
-        { "id": "d", "label": "8 − 2 = 10" }
+        { "id": "a", "label": "6" },
+        { "id": "b", "label": "7" },
+        { "id": "c", "label": "8" },
+        { "id": "d", "label": "3" }
       ],
-      "correctId": "a",
-      "explanation": "Because 2 + 8 = 10, 10 − 2 = 8.",
-      "narration": { "prompt": "2 plus 8 equals 10. Which take away matches?" }
+      "correctId": "b",
+      "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
+      "narration": { "prompt": "Sam has 10. He gives away 3. How many left?" }
     }
   ]
 }

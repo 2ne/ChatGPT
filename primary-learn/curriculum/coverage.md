@@ -18,25 +18,25 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 
 | Activity id | Node | Status |
 | --- | --- | --- |
-| `count-to-5` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Easy: tidy tap-count 1 to 5, sequence and numerals |
+| `count-to-5` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Easy: tidy tap-count 1 to 5, five-frame type-4, pictured gap, Sam-needs-5 story |
 | `count-to-5-medium` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Medium: scattered groups, build a set, last-number cardinality |
 | `count-to-5-hard` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Hard: count one kind among mixed objects, number words, full 1 to 5 order |
-| `see-numbers-to-5` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Easy: dice glance 1 to 5, match amounts, no tap-to-count |
-| `see-numbers-to-5-medium` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Medium: dice and messy groups 3 to 5 |
-| `see-numbers-to-5-hard` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Hard: 4 and 5 in different patterns, number words |
+| `see-numbers-to-5` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Easy: flash dice 1 to 5, five-frame, fingers, hidden cup, 2+2 in all |
+| `see-numbers-to-5-medium` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Medium: shorter flash, scatter, 2+3 in all, fingers, hidden cup |
+| `see-numbers-to-5-hard` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Hard: quick flash, 1+4 and 2+3 in all, five-frame, number words |
 | `make-numbers-to-5` | `eyfs-compose-5` (node 3, category `cat-r-to-5`) | done — Easy: pictured parts 1 and 1 up to 2 and 3, build 4 |
 | `make-numbers-to-5-medium` | `eyfs-compose-5` (node 3, category `cat-r-to-5`) | done — Medium: 4 and 5, including 0 and 5 |
 | `make-numbers-to-5-hard` | `eyfs-compose-5` (node 3, category `cat-r-to-5`) | done — Hard: 0, reverse parts, number words, hidden part |
 | `bonds-to-5` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Easy: partners that make 5, then related take-away |
 | `bonds-to-5-medium` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Medium: 0, reverse 5 = blank + n, more take-away |
 | `bonds-to-5-hard` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Hard: mix plus and take away, number words |
-| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, then related take-away |
+| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, tens-frame take-away story |
 | `number-bonds-to-10-medium` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Medium: fill-slots then sum-only, 0 and reverse parts, more take-away |
 | `number-bonds-to-10-hard` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Hard: sum-only, no-dot pick-pair, mixed plus/take-away facts, number words |
 
 ## Next quest to build
 
-When expanding the path, the first `missing` node is `eyfs-count-10` — Count to 10 (node 5, after `eyfs-bonds-5`). Start that node with Easy. Or tighten See numbers to 5 (flash subitise) before expanding.
+When expanding the path, the first `missing` node is `eyfs-count-10` — Count to 10 (node 5, after `eyfs-bonds-5`). Start that node with Easy.
 
 Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.
 

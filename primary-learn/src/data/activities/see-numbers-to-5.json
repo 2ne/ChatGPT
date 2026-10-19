@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 flash a dice of 1, then 2, then 3. Question 4 flashes 3 on a five-frame. Question 5 flashes dice 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 flashes dice 5. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
+    "within": "Questions 1 to 3 flash a dice of 1, then 2, then 3. Question 4 flashes 3 on a five-frame. Question 5 flashes dice 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 is a short story: Sam needs 5 on dice faces. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
     "versus": "Easy: tidy dice and frames, 1 to 5 in order, longer flash, hints on the first three. Medium mixes dice, scatter and 2+3 inside 5, shorter flash. Hard stays on 4 and 5, quick flash, number words, and no hints. Still see how many, not bonds."
   },
   "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns", "five-frame", "finger-patterns"],
@@ -136,21 +136,18 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "s5e-5",
-      "prompt": "How many {items}?",
-      "visual": { "item": "ladybird", "count": 5 },
-      "layout": "dice",
-      "flashMs": 1600,
+      "id": "s5e-sam-5",
+      "prompt": "Sam needs 5 {items}. Which group?",
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        { "id": "a", "visual": { "item": "ladybird", "count": 3 }, "layout": "dice" },
+        { "id": "b", "visual": { "item": "ladybird", "count": 4 }, "layout": "dice" },
+        { "id": "c", "visual": { "item": "ladybird", "count": 5 }, "layout": "dice" },
+        { "id": "d", "visual": { "item": "ladybird", "count": 2 }, "layout": "dice" }
       ],
       "correctId": "c",
-      "explanation": "There are 5 {items}. Four corners and one in the middle.",
-      "narration": { "prompt": "How many {items}?" }
+      "explanation": "Sam needs 5. That dice shows 5 {items}.",
+      "narration": { "prompt": "Sam needs 5 {items}. Which group?" }
     },
     {
       "kind": "multi-select",

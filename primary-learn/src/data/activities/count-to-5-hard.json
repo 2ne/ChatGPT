@@ -13,7 +13,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 matches number words to amounts. Question 8 orders 1 to 5. Question 9 asks which number you got to after counting 4. Question 10 fills the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 matches number words to amounts. Question 8 orders 1 to 5. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
     "versus": "Easy is tidy 1 to 5 with tap-count and early hints. Medium is scattered groups of the same object, counts 2 to 5. Hard adds extra objects to ignore, number words, a full 1 to 5 sequence, and a large build-set. Still the same node: count sequence, numerals and one-to-one to 5."
   },
   "skills": [
@@ -163,20 +163,21 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "c5h-last",
-      "prompt": "How many {items}?",
+      "id": "c5h-sam-mix",
+      "prompt": "Sam only wants {items}. How many can he take?",
       "visual": { "item": "balloon", "count": 4 },
+      "extras": [{ "item": "car", "count": 2 }],
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
         { "id": "b", "label": "4" },
         { "id": "c", "label": "5" },
-        { "id": "d", "label": "1" }
+        { "id": "d", "label": "6" }
       ],
       "correctId": "b",
-      "explanation": "Tap each {item}: 1, 2, 3, 4. The last number you say is 4. That is how many there are.",
-      "narration": { "prompt": "How many {items}?" }
+      "explanation": "Count only the {items}. There are 4. Skip the {items2}.",
+      "narration": { "prompt": "Sam only wants {items}. How many can he take?" }
     },
     {
       "kind": "fill-blank",

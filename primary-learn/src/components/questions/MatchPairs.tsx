@@ -16,9 +16,10 @@ type MatchPairsProps = {
 function SideView({ side }: { side: MatchSide }) {
   const visual = matchSideVisual(side);
   const label = typeof side === "string" ? side : side.label;
+  const layout = typeof side === "string" ? undefined : side.layout;
   return (
     <span className="option-content">
-      {visual ? <ObjectGroup visual={visual} compact /> : null}
+      {visual ? <ObjectGroup visual={visual} compact layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
       {!visual && !label ? matchSideLabel(side) : null}
     </span>

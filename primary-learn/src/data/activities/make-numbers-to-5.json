@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 add two numbers on the sum line (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps extra slots for what goes with 2 to make 3. Question 6 taps four tiles with dots to make 4. Question 7 adds 2 and 3 on the sum line. Question 8 is the part-whole cherry for what goes with 4 to make 5. Question 9 taps extra slots for what goes with 1 to make 4. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
+    "within": "Questions 1 to 3 add two numbers on the sum line (1 and 1, then 2 and 1, then 2 and 2). Question 4 builds a group of 4. Question 5 taps extra slots for what goes with 2 to make 3. Question 6 taps four tiles with dots to make 4. Question 7 asks which other pair also makes 5. Question 8 is the part-whole cherry for what goes with 4 to make 5. Question 9 is a short story: Sam has 1 and gets 3 more. Question 10 taps every pair that makes 5. Parts stay small. No 0.",
     "versus": "Easy uses the sum line for What is a + b, tap-to-fill, or four tiles with dots. Medium starts at 4 and 5, includes 0 and 5, still on four tiles. Hard uses the sum line or tiles with no dots. This node is composition, not quick recall of bonds."
   },
   "skills": [
@@ -198,38 +198,34 @@
       }
     },
     {
-      "kind": "make-total",
-      "id": "m5e-2-3",
-      "prompt": "What is 2 + 3?",
-      "part": 2,
-      "other": 3,
-      "total": 5,
-      "gap": "total",
-      "mode": "sum-only",
+      "kind": "multiple-choice",
+      "id": "m5e-also-5",
+      "prompt": "2 and 3 make 5. Which also makes 5?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "3"
+          "label": "1 and 4"
         },
         {
           "id": "b",
-          "label": "4"
+          "label": "2 and 2"
         },
         {
           "id": "c",
-          "label": "5"
+          "label": "3 and 3"
         },
         {
           "id": "d",
-          "label": "2"
+          "label": "1 and 2"
         }
       ],
-      "explanation": "2 and 3 make 5.",
+      "correctId": "a",
+      "explanation": "1 and 4 make 5 too. 2 and 2 make 4. 3 and 3 make 6. 1 and 2 make 3.",
       "narration": {
-        "prompt": "What is two plus three?"
+        "prompt": "2 and 3 make 5. Which also makes 5?"
       }
     },
     {
@@ -246,19 +242,28 @@
       }
     },
     {
-      "kind": "make-total",
-      "id": "m5e-4-parts",
-      "prompt": "What goes with 1 to make 4?",
+      "kind": "multiple-choice",
+      "id": "m5e-sam-4",
+      "prompt": "Sam has 1 {item}. Mia gives him 3 more. How many in all?",
       "visual": {
         "item": "strawberry",
         "count": 1
       },
-      "total": 4,
-      "mode": "fill-slots",
-      "randomise": {},
-      "explanation": "4 is 1 and 3.",
+      "extras": [{ "item": "banana", "count": 3 }],
+      "layout": "row",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "b",
+      "explanation": "1 and 3 make 4 in all.",
       "narration": {
-        "prompt": "What goes with 1 to make 4?"
+        "prompt": "Sam has 1 {item}. Mia gives him 3 more. How many in all?"
       }
     },
     {

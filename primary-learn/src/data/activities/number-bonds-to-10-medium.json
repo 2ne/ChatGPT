@@ -143,8 +143,8 @@
     {
       "kind": "multiple-choice",
       "id": "nb10m-take-10",
-      "prompt": "10 take away 10. How many left?",
-      "randomise": { "shuffleOptions": true },
+      "prompt": "Sam has 10 {items} and gives them all away. How many left?",
+      "randomise": { "shuffleOptions": true, "items": ["apple", "star", "banana", "balloon"] },
       "options": [
         { "id": "a", "label": "0" },
         { "id": "b", "label": "1" },
@@ -153,7 +153,7 @@
       ],
       "correctId": "a",
       "explanation": "10 take away 10 is 0. Because 10 + 0 = 10.",
-      "narration": { "prompt": "10 take away 10. How many left?" }
+      "narration": { "prompt": "Sam has 10 {items} and gives them all away. How many left?" }
     }
   ]
 }

@@ -96,6 +96,8 @@ Requires: none. Quests: `count-to-5` (Easy), `count-to-5-medium`, `count-to-5-ha
 Requires: `eyfs-count-5`. Quests: `see-numbers-to-5` (Easy), `see-numbers-to-5-medium`, `see-numbers-to-5-hard`. Status: done.
 
 - Subitise (recognise a quantity without counting) up to 5
+- See small numbers inside larger ones (for example 2 and 3 inside 5)
+- Use dice, five-frame, fingers and brief flash so counting one by one is not needed
 
 ### 3. `eyfs-compose-5` — Make numbers to 5
 

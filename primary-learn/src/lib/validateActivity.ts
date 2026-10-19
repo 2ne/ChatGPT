@@ -148,8 +148,12 @@ function parseMatchSide(value: unknown, path: string): MatchSide {
   if (!isRecord(value)) fail(path, "match side must be a string or { label, visual }");
   const label = value.label == null ? undefined : expectString(value, "label", path);
   const visual = optionalVisual(value, path);
+  const layout = parseLayout(value, path);
+  if (layout === "hidden" || layout === "fingers") {
+    fail(path, "match side layout cannot be hidden or fingers");
+  }
   if (!label && !visual) fail(path, "match side needs a label or a visual");
-  return { label, visual };
+  return { label, visual, layout };
 }
 
 function parseNarration(value: unknown, path: string): Question["narration"] {

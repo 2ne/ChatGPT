@@ -13,7 +13,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 flash dice 4 then 5 quickly. Question 3 sees 1 and 4 inside 5. Question 4 flashes messy 4. Question 5 flashes five-frame 5. Question 6 taps every group of 5. Question 7 peeks under the cup for 5. Question 8 reads a dice 5 as a number word. Question 9 sees 2 and 3 inside 5. Question 10 picks 4 next to 5 on dice. No 1 or 2 alone. No match-pairs. No hints.",
+    "within": "Questions 1 to 2 flash dice 4 then 5 quickly. Question 3 sees 1 and 4 inside 5. Question 4 flashes messy 4. Question 5 flashes five-frame 5. Question 6 taps every group of 5. Question 7 peeks under the cup for 5. Question 8 reads a dice 5 as a number word. Question 9 sees 2 and 3 inside 5. Question 10 is a short story: Sam needs 4 on dice faces. No 1 or 2 alone. No match-pairs. No hints.",
     "versus": "Easy is 1 to 5 with longer flash and hints. Medium mixes 3 to 5 and 2+3. Hard stays on 4 and 5, quick flash, number words, 1+4 and 2+3, and no hints. Same skill: see how many up to 5."
   },
   "skills": ["eyfs-subitise-5", "subitise-to-5", "number-words-to-5", "dice-patterns", "conceptual-subitise"],
@@ -179,8 +179,8 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "s5h-group-4",
-      "prompt": "Which group has 4 {items}?",
+      "id": "s5h-sam-4",
+      "prompt": "Sam needs 4 {items}. Which group?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "strawberry", "count": 5 }, "layout": "dice" },
@@ -189,8 +189,8 @@
         { "id": "d", "visual": { "item": "strawberry", "count": 2 }, "layout": "dice" }
       ],
       "correctId": "b",
-      "explanation": "That dice shows 4 {items}. Not 5.",
-      "narration": { "prompt": "Which group has 4 {items}?" }
+      "explanation": "Sam needs 4. That dice shows 4 {items}. Not 5.",
+      "narration": { "prompt": "Sam needs 4 {items}. Which group?" }
     }
   ]
 }

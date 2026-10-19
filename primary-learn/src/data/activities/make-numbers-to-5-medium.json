@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 is the part-whole cherry for what goes with 2 to make 4. Question 5 taps extra slots for what goes with 2 to make 5. Questions 6 and 7 tap four tiles to find one pair that makes 5, first 0 and 5, then 1 and 4. Question 8 taps every pair that makes 4. Question 9 taps extra slots for what goes with 4 to make 5. Question 10 is the sum line for what goes with 1 to make 5. Starts at 4.",
+    "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 is the part-whole cherry for what goes with 2 to make 4. Question 5 taps extra slots for what goes with 2 to make 5. Questions 6 and 7 tap four tiles to find one pair that makes 5, first 0 and 5, then 1 and 4. Question 8 taps every pair that makes 4. Question 9 taps extra slots for what goes with 4 to make 5. Question 10 is a short story: Sam has 2 and gets 3 more. Starts at 4.",
     "versus": "Easy starts at 1 and 1 on the sum line, with early hints and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, still on four tiles. Hard uses reverse parts, number words, a hidden part, and tiles with no dots. Still composition of numbers to 5, not quick bond recall."
   },
   "skills": [
@@ -257,36 +257,28 @@
       }
     },
     {
-      "kind": "make-total",
-      "id": "m5m-5-1",
-      "prompt": "What goes with 1 to make 5?",
-      "part": 1,
-      "total": 5,
-      "mode": "sum-only",
+      "kind": "multiple-choice",
+      "id": "m5m-sam-5",
+      "prompt": "Sam has 2 {items}. Mia gives him 3 more. How many in all?",
+      "visual": {
+        "item": "duck",
+        "count": 2
+      },
+      "extras": [{ "item": "frog", "count": 3 }],
+      "layout": "row",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        },
-        {
-          "id": "d",
-          "label": "2"
-        }
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
       ],
-      "explanation": "5 is 1 and 4.",
+      "correctId": "c",
+      "explanation": "2 and 3 make 5 in all.",
       "narration": {
-        "prompt": "What goes with 1 to make 5?"
+        "prompt": "Sam has 2 {items}. Mia gives him 3 more. How many in all?"
       }
     }
   ]

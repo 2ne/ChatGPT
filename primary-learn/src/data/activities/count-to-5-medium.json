@@ -13,7 +13,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 types the count of a messy group of 4 or 5. Question 6 picks the group of 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 matches 2 to 5 with pictures. Question 10 asks which number you got to after counting 5. No return to a 1-object count.",
+    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 types the count of a messy group of 4 or 5. Question 6 is a short story: Sam needs 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 matches 2 to 5 with pictures. Question 10 asks how many in a messy 5. No return to a 1-object count.",
     "versus": "Easy: tidy rows, counts 1 to 5 in order, hints on items 1 to 3. Medium: scattered layouts, mixed pictures and numerals, build and type counts can move inside 3 to 5, hints only on 1 to 3. Hard: extra objects to ignore, number words, a full 1 to 5 order, and almost no hints. Still counting to 5, not bonds."
   },
   "skills": [
@@ -117,8 +117,8 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "c5m-group-4",
-      "prompt": "Which group has 4 {items}?",
+      "id": "c5m-sam-4",
+      "prompt": "Sam needs 4 {items}. Which group?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 3 } },
@@ -127,8 +127,8 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "Count each group. The group of 4 is 1, 2, 3, 4.",
-      "narration": { "prompt": "Which group has 4 {items}?" }
+      "explanation": "Sam needs 4. Count 1, 2, 3, 4. That group has 4 {items}.",
+      "narration": { "prompt": "Sam needs 4 {items}. Which group?" }
     },
     {
       "kind": "multiple-choice",
@@ -165,10 +165,10 @@
       "prompt": "Match each number to the same amount of {items}.",
       "randomise": {},
       "pairs": [
-        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 } } },
-        { "id": "p3", "left": "3", "right": { "visual": { "item": "fish", "count": 3 } } },
-        { "id": "p4", "left": "4", "right": { "visual": { "item": "fish", "count": 4 } } },
-        { "id": "p5", "left": "5", "right": { "visual": { "item": "fish", "count": 5 } } }
+        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 }, "layout": "dice" } },
+        { "id": "p3", "left": "3", "right": { "visual": { "item": "fish", "count": 3 }, "layout": "dice" } },
+        { "id": "p4", "left": "4", "right": { "visual": { "item": "fish", "count": 4 }, "layout": "dice" } },
+        { "id": "p5", "left": "5", "right": { "visual": { "item": "fish", "count": 5 }, "layout": "dice" } }
       ],
       "explanation": "Count the {items} in each picture, then find that numeral.",
       "narration": { "prompt": "Match each number to the same amount of {items}." }

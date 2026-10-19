@@ -58,7 +58,10 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 
 | Kind | Template |
 | --- | --- |
-| multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. |
+| multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. Subitise stems may set `flashMs` and `layout` (`dice`, `five-frame`, `fingers`, `hidden`). |
+| conceptual subitise | `How many in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
+| hidden quantity | `How many {items} under the cup?` with `layout` `hidden` and `flashMs`. |
+| light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
@@ -70,7 +73,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | part-whole | Missing part: `What goes with {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |
-| match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
+| match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` (`dice` / `five-frame`) so amounts stay glanceable. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (Y1+) | `{Name} has {n} {things} and {action}. How many {are left / in all}?` |
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.

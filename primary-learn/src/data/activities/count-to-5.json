@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Questions 6 to 8 say the count sequence (next, missing number, then order). Questions 9 to 10 match numerals to amounts and pick a group of 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
+    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4 on a five-frame. Question 5 builds a group of 5 from a tray. Question 6 says what comes next. Question 7 picks the missing amount in the count from pictures. Question 8 orders 1 to 3. Question 9 matches numerals to amounts. Question 10 is a short story: Sam needs 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
     "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, number words, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
   },
   "skills": [
@@ -94,6 +94,7 @@
       "id": "c5e-fb-4",
       "prompt": "How many {items}?",
       "visual": { "item": "duck", "count": 4 },
+      "layout": "five-frame",
       "randomise": {},
       "prefix": "There are",
       "suffix": "{items}.",
@@ -127,15 +128,19 @@
       "narration": { "prompt": "What comes next? One, two, three, …" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c5e-gap",
-      "prompt": "Fill the gap in the count.",
-      "prefix": "1, 2,",
-      "suffix": ", 4, 5",
-      "acceptedAnswers": ["3", "three"],
-      "inputMode": "numeric",
-      "explanation": "The count goes 1, 2, 3, 4, 5. The missing number is 3.",
-      "narration": { "prompt": "Fill the gap in the count. 1, 2, blank, 4, 5." }
+      "prompt": "What goes in the gap? 1, 2, …, 4, 5",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "star", "count": 2 } },
+        { "id": "b", "visual": { "item": "star", "count": 3 } },
+        { "id": "c", "visual": { "item": "star", "count": 4 } },
+        { "id": "d", "visual": { "item": "star", "count": 5 } }
+      ],
+      "correctId": "b",
+      "explanation": "The count goes 1, 2, 3, 4, 5. The gap is 3.",
+      "narration": { "prompt": "What goes in the gap? One, two, blank, four, five." }
     },
     {
       "kind": "ordered",
@@ -156,18 +161,18 @@
       "prompt": "Match each number to the same amount of {items}.",
       "randomise": {},
       "pairs": [
-        { "id": "p1", "left": "1", "right": { "visual": { "item": "fish", "count": 1 } } },
-        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 } } },
-        { "id": "p3", "left": "4", "right": { "visual": { "item": "fish", "count": 4 } } },
-        { "id": "p4", "left": "5", "right": { "visual": { "item": "fish", "count": 5 } } }
+        { "id": "p1", "left": "1", "right": { "visual": { "item": "fish", "count": 1 }, "layout": "dice" } },
+        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 }, "layout": "dice" } },
+        { "id": "p3", "left": "4", "right": { "visual": { "item": "fish", "count": 4 }, "layout": "dice" } },
+        { "id": "p4", "left": "5", "right": { "visual": { "item": "fish", "count": 5 }, "layout": "dice" } }
       ],
       "explanation": "The numeral tells us how many: 1 {item}, 2 {items}, 4 {items} and 5 {items}.",
       "narration": { "prompt": "Match each number to the same amount of {items}." }
     },
     {
       "kind": "multiple-choice",
-      "id": "c5e-group-5",
-      "prompt": "Which group has 5 {items}?",
+      "id": "c5e-sam-5",
+      "prompt": "Sam needs 5 {items}. Which group?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 4 } },
@@ -176,8 +181,8 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "The group of 5 {items}: 1, 2, 3, 4, 5.",
-      "narration": { "prompt": "Which group has 5 {items}?" }
+      "explanation": "Sam needs 5. Count 1, 2, 3, 4, 5. That group has 5 {items}.",
+      "narration": { "prompt": "Sam needs 5 {items}. Which group?" }
     }
   ]
 }
