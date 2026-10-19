@@ -154,22 +154,17 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
     onChange(clamped);
   }
 
-  function toggleEmpty(index: number) {
+  function toggleSubtractSlot(index: number) {
     if (!canFill) return;
-    if (subtract) {
-      const remaining = question.total - (selected ?? 0);
-      // Tap a kept tile to take away through that place. Tap a removed tile to put keepers back.
-      if (index < remaining) setFilled(question.total - index);
-      else setFilled(question.total - (index + 1));
-      return;
-    }
-    // Tap a green tile to clear from that place on. Tap an empty slot to fill up to it.
-    if (index < filledMissing) setFilled(index);
-    else setFilled(index + 1);
+    const remaining = question.total - (selected ?? 0);
+    // Tap a kept tile to take away through that place. Tap a removed tile to put keepers back.
+    if (index < remaining) setFilled(question.total - index);
+    else setFilled(question.total - (index + 1));
   }
 
   const showButtons = question.mode !== "fill-slots" && question.options;
   const itemWords = OBJECT_WORDS[item];
+  const canAddMore = filledMissing < bank;
 
   return (
     <div className="make-total">
@@ -193,21 +188,28 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             role="group"
             aria-label={`Add ${itemWords.plural}`}
           >
-            {Array.from({ length: bank }, (_, index) => {
-              const kind: SlotKind =
-                index < filledMissing ? "added" : index === filledMissing ? "add" : "empty";
-              return (
-                <Slot
-                  key={`a-${index}`}
-                  item={item}
-                  kind={kind}
-                  tappable={canFill}
-                  disabled={disabled}
-                  index={index}
-                  onToggle={() => toggleEmpty(index)}
-                />
-              );
-            })}
+            {Array.from({ length: filledMissing }, (_, index) => (
+              <Slot
+                key={`a-${index}`}
+                item={item}
+                kind="added"
+                tappable={canFill}
+                disabled={disabled}
+                index={index}
+                onToggle={() => setFilled(index)}
+              />
+            ))}
+            {canAddMore ? (
+              <Slot
+                key="add"
+                item={item}
+                kind="add"
+                tappable={canFill}
+                disabled={disabled}
+                index={filledMissing}
+                onToggle={() => setFilled(filledMissing + 1)}
+              />
+            ) : null}
           </div>
         </div>
       ) : null}
@@ -228,7 +230,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
                 tappable={canFill}
                 disabled={disabled}
                 index={index}
-                onToggle={() => toggleEmpty(index)}
+                onToggle={() => toggleSubtractSlot(index)}
               />
             );
           })}
