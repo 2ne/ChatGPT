@@ -32,7 +32,7 @@ export const copy = {
   tapThenPartner: "Tap one, then tap its partner.",
   countAgain: "Count again",
   lookAgain: "Look again",
-  lookedAgainOnce: "You looked again once.",
+  lookedAgainOnce: "You only looked again once!",
   lookedAgainTimes: (n: number) => `You looked again ${n} times.`,
   yourGroup: "Your group",
   tapToAdd: "Tap to add",
