@@ -108,7 +108,9 @@ function Slot({
       aria-label={
         kind === "added"
           ? `${words.singular} ${index + 1}. Tap to take it out.`
-          : copy.addSlot
+          : kind === "add"
+            ? copy.addSlot
+            : `Make ${index + 1}`
       }
       onPointerDown={(event) => activate(onToggle, event)}
       onClick={(event) => {
@@ -156,12 +158,14 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
     if (!canFill) return;
     if (subtract) {
       const remaining = question.total - (selected ?? 0);
-      if (index < remaining) setFilled((selected ?? 0) + 1);
-      else setFilled((selected ?? 0) - 1);
+      // Tap a kept tile to take away through that place. Tap a removed tile to put keepers back.
+      if (index < remaining) setFilled(question.total - index);
+      else setFilled(question.total - (index + 1));
       return;
     }
-    if (index < filledMissing) setFilled(filledMissing - 1);
-    else setFilled(filledMissing + 1);
+    // Tap a green tile to clear from that place on. Tap an empty slot to fill up to it.
+    if (index < filledMissing) setFilled(index);
+    else setFilled(index + 1);
   }
 
   const showButtons = question.mode !== "fill-slots" && question.options;
@@ -189,17 +193,21 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             role="group"
             aria-label={`Add ${itemWords.plural}`}
           >
-            {Array.from({ length: bank }, (_, index) => (
-              <Slot
-                key={`a-${index}`}
-                item={item}
-                kind={index < filledMissing ? "added" : "add"}
-                tappable={canFill}
-                disabled={disabled}
-                index={index}
-                onToggle={() => toggleEmpty(index)}
-              />
-            ))}
+            {Array.from({ length: bank }, (_, index) => {
+              const kind: SlotKind =
+                index < filledMissing ? "added" : index === filledMissing ? "add" : "empty";
+              return (
+                <Slot
+                  key={`a-${index}`}
+                  item={item}
+                  kind={kind}
+                  tappable={canFill}
+                  disabled={disabled}
+                  index={index}
+                  onToggle={() => toggleEmpty(index)}
+                />
+              );
+            })}
           </div>
         </div>
       ) : null}
