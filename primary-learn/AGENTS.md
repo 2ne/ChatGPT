@@ -31,6 +31,9 @@ Client-side `HashRouter` (not `BrowserRouter`). Hash routes work on GitHub Pages
 | `/onboarding` | Name and buddy. No profile required. |
 | `/pathway` | Path map. Needs a profile. |
 | `/activity/:id` | Quest runner. Needs a profile. |
+| `/question-bank` | Teacher/agent review of every quest and question. No profile required. Does not save progress. |
+
+Shareable review URL: `https://2ne.github.io/ChatGPT/primary-learn/#/question-bank` (HashRouter path `/question-bank`). Jump-to-activity buttons scroll in place and leave the `#/question-bank` hash alone. Display name is fixed as Teacher Review.
 
 `/` and unknown paths send you to `/pathway` if there is a profile, else `/onboarding`. No profile on a protected route sends you to `/onboarding`. A missing activity sends you to `/pathway` with a short notice.
 

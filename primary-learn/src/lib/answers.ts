@@ -1,12 +1,13 @@
 import type { Question } from "../types/activity";
 import { makeTotalMissing } from "./makeTotal";
-import { matchSideKey } from "./matchSide";
+import { matchSideKey, matchSideLabel } from "./matchSide";
 import { partWholeAnswer } from "./partWhole";
 import {
   emptyPickPairAnswer,
   isCompletePickPair,
   isPickPairAnswer,
   pickPairTiles,
+  requiredTilePairs,
   uniquePairLabels,
 } from "./pickPair";
 
@@ -106,6 +107,38 @@ export function emptyAnswerFor(question: Question): unknown {
   }
 }
 
+/** Correct answer value for pre-filling QuestionView (teacher review, reveal). */
+export function correctAnswerFor(question: Question): unknown {
+  switch (question.kind) {
+    case "count-objects":
+    case "multiple-choice":
+      return question.correctId;
+    case "multi-select":
+      return [...question.correctIds];
+    case "fill-blank":
+      return question.acceptedAnswers[0] ?? "";
+    case "ordered":
+      return [...question.correctOrder];
+    case "match-pairs":
+      return Object.fromEntries(
+        question.pairs.map((pair) => [pair.id, matchSideKey(pair.right)]),
+      );
+    case "build-set":
+      return Array.from({ length: question.visual.count }, (_, index) => String(index));
+    case "make-total":
+      return makeTotalMissing(question);
+    case "pick-pair": {
+      const tiles = pickPairTiles(question);
+      const pair = requiredTilePairs(tiles, question.total)[0];
+      return pair ? { picked: [pair[0], pair[1]] } : emptyPickPairAnswer();
+    }
+    case "part-whole":
+      return partWholeAnswer(question);
+    default:
+      return null;
+  }
+}
+
 /** Short child-facing correct answer, for “It was 4.” */
 export function correctAnswerLabel(question: Question): string | null {
   switch (question.kind) {
@@ -130,6 +163,18 @@ export function correctAnswerLabel(question: Question): string | null {
       const labels = uniquePairLabels(pickPairTiles(question), question.total);
       if (labels.length === 0) return null;
       return labels.join(" or ");
+    }
+    case "ordered": {
+      const labels = question.correctOrder.map(
+        (id) => question.items.find((item) => item.id === id)?.label ?? id,
+      );
+      return labels.length ? labels.join(", ") : null;
+    }
+    case "match-pairs": {
+      const labels = question.pairs.map(
+        (pair) => `${matchSideLabel(pair.left)} with ${matchSideLabel(pair.right)}`,
+      );
+      return labels.length ? labels.join(". ") : null;
     }
     default:
       return null;

@@ -7,10 +7,13 @@ import { ActivityRunner } from "./components/ActivityRunner";
 import { AppHeader } from "./components/AppHeader";
 import { Home } from "./components/Home";
 import { Onboarding } from "./components/Onboarding";
+import { QuestionBank } from "./components/QuestionBank";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { useLearner } from "./hooks/useLearner";
 import { useSafariThemeColor } from "./hooks/useSafariThemeColor";
 import type { ActivityAttempt, LearnerProfile, ProgressState } from "./types/progress";
+
+const TEACHER_REVIEW_NAME = "Teacher Review";
 
 export default function App() {
   useSafariThemeColor();
@@ -59,6 +62,10 @@ export default function App() {
               />
             </RequireProfile>
           }
+        />
+        <Route
+          path="/question-bank"
+          element={<QuestionBankRoute hasProfile={Boolean(learner.profile)} />}
         />
         <Route
           path="/"
@@ -135,6 +142,20 @@ function PathwayRoute({
         progress={progress}
         onOpenActivity={(activityId) => navigate(`/activity/${activityId}`)}
       />
+    </>
+  );
+}
+
+function QuestionBankRoute({ hasProfile }: { hasProfile: boolean }) {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <AppHeader
+        learnerName={TEACHER_REVIEW_NAME}
+        onHome={() => navigate(hasProfile ? "/pathway" : "/onboarding")}
+      />
+      <QuestionBank />
     </>
   );
 }

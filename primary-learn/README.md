@@ -92,7 +92,8 @@ npm run preview
 - **Shared runner** — new content is data; after a miss the runner shows a short correction and moves on. Stars come from the 10-question score
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
 - **GitHub Pages** base path `/ChatGPT/primary-learn/` (see repo deploy workflow)
-- **Routes** — `/onboarding`, `/pathway`, `/activity/:id` via `HashRouter` (e.g. `https://2ne.github.io/ChatGPT/primary-learn/#/activity/count-to-5`). Hash routing is the Pages strategy: this repo hosts several apps, so a nested `404.html` would not catch `/primary-learn/pathway`. No profile goes to onboarding. Unknown quests go back to the path with a short notice. Path changes scroll to the top.
+- **Routes** — `/onboarding`, `/pathway`, `/activity/:id`, `/question-bank` via `HashRouter` (e.g. `https://2ne.github.io/ChatGPT/primary-learn/#/activity/count-to-5`). Hash routing is the Pages strategy: this repo hosts several apps, so a nested `404.html` would not catch `/primary-learn/pathway`. No profile goes to onboarding. Unknown quests go back to the path with a short notice. Path changes scroll to the top.
+- **Question bank** — teacher/agent review at `#/question-bank` (`https://2ne.github.io/ChatGPT/primary-learn/#/question-bank`). Lists every activity with live question UI, answers shown, no progress saved. No onboarding required.
 
 ## Limitations
 
