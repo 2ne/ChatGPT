@@ -32,8 +32,6 @@ export const copy = {
   tapThenPartner: "Tap one, then tap its partner.",
   countAgain: "Count again",
   lookAgain: "Look again",
-  underTheCup: "Under the cup",
-  pictureHidden: "Picture is hidden",
   yourGroup: "Your group",
   tapToAdd: "Tap to add",
   emptyGroup: "Your group is empty.",

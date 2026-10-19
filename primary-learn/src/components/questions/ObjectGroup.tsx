@@ -285,7 +285,6 @@ export function ObjectGroup({
 
   const counted = Object.keys(lit).length;
   const scatter = layout === "scatter";
-  const coveredLabel = layout === "hidden" ? copy.underTheCup : undefined;
   const showFlash = layout === "hidden" || flashMs != null;
 
   if (!interactive) {
@@ -300,7 +299,7 @@ export function ObjectGroup({
     );
     if (showFlash) {
       return (
-        <FlashReveal flashMs={flashMs ?? 1200} coveredLabel={coveredLabel}>
+        <FlashReveal flashMs={flashMs ?? 1200}>
           {layout === "hidden" ? <div className="hidden-quantity">{body}</div> : body}
         </FlashReveal>
       );
