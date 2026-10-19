@@ -1475,6 +1475,8 @@ button.learner-chip:focus-visible {
 .flash-card {
   position: relative;
   width: fit-content;
+  min-width: min(100%, 168px);
+  min-height: 120px;
   max-width: 100%;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
@@ -1499,7 +1501,12 @@ button.learner-chip:focus-visible {
 }
 
 .flash-face-front {
-  display: block;
+  display: grid;
+  place-items: center;
+  min-width: inherit;
+  min-height: inherit;
+  box-sizing: border-box;
+  padding: 8px;
 }
 
 .flash-face-back {
