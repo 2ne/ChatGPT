@@ -1,0 +1,159 @@
+{
+  "id": "number-bonds-to-10-medium",
+  "title": "Number bonds to 10",
+  "summary": "Recall bonds to 10 including 0, reverse order, and more take-away facts.",
+  "subject": "maths",
+  "type": "number-bonds",
+  "yearGroups": ["Year1"],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-bonds-10",
+  "pathNode": "y1-bonds-10",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Question 1 taps extra slots for what goes with 3 to make 10. Question 2 taps extra slots for what goes with 4 to make 10. Question 3 is the sum line for what goes with 0 to make 10. Question 4 is the part-whole cherry for what goes with 10 to make 10. Question 5 is 10 take away 3. Questions 6 and 7 tap four tiles to find one pair that makes 10, first 1 and 9, then 2 and 8. Question 8 is the sum line reverse for what goes with 7 to make 10. Question 9 fills 10 take away 6. Question 10 is 10 take away 10. Hints on 1 to 3.",
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots, mixing plus and take away. Still bonds to 10 only."
+  },
+  "skills": ["y1-bonds-10", "number-bonds-to-10", "addition-within-10", "subtraction-within-10"],
+  "randomise": {
+    "mode": "attempt",
+    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+  },
+  "questions": [
+    {
+      "kind": "make-total",
+      "id": "nb10m-with-3",
+      "prompt": "What goes with 3 to make 10?",
+      "visual": { "item": "star", "count": 3 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "hint": "Count on from 3 until you reach 10.",
+      "explanation": "3 and 7 make 10. 3 + 7 = 10.",
+      "narration": { "prompt": "What goes with 3 to make 10?" }
+    },
+    {
+      "kind": "make-total",
+      "id": "nb10m-with-4",
+      "prompt": "What goes with 4 to make 10?",
+      "visual": { "item": "apple", "count": 4 },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "hint": "4 and what make 10?",
+      "explanation": "10 = 4 + 6.",
+      "narration": { "prompt": "What goes with 4 to make 10?" }
+    },
+    {
+      "kind": "make-total",
+      "id": "nb10m-0-plus",
+      "prompt": "What goes with 0 to make 10?",
+      "part": 0,
+      "total": 10,
+      "mode": "sum-only",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "9" },
+        { "id": "b", "label": "10" },
+        { "id": "c", "label": "0" },
+        { "id": "d", "label": "8" }
+      ],
+      "hint": "0 and 10 make 10.",
+      "explanation": "0 + 10 = 10.",
+      "narration": { "prompt": "What goes with 0 to make 10?" }
+    },
+    {
+      "kind": "part-whole",
+      "id": "nb10m-pw-10",
+      "prompt": "What goes with 10 to make 10?",
+      "whole": 10,
+      "parts": [10, 0],
+      "missing": "right",
+      "choices": [0, 1, 2],
+      "explanation": "10 and 0 make 10.",
+      "narration": { "prompt": "What goes with ten to make ten?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "nb10m-take-3",
+      "prompt": "10 take away 3. How many left?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "5" },
+        { "id": "b", "label": "6" },
+        { "id": "c", "label": "7" },
+        { "id": "d", "label": "8" }
+      ],
+      "correctId": "c",
+      "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
+      "narration": { "prompt": "10 take away 3. How many left?" }
+    },
+    {
+      "kind": "pick-pair",
+      "id": "nb10m-pair-1-9",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [1, 9, 0, 3],
+      "showDots": true,
+      "randomise": { "shuffleOptions": true },
+      "explanation": "1 and 9 make 10.",
+      "narration": { "prompt": "What two numbers make 10?" }
+    },
+    {
+      "kind": "pick-pair",
+      "id": "nb10m-pair-2-8",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [2, 8, 0, 4],
+      "showDots": true,
+      "randomise": { "shuffleOptions": true },
+      "explanation": "2 and 8 make 10.",
+      "narration": { "prompt": "What two numbers make 10?" }
+    },
+    {
+      "kind": "make-total",
+      "id": "nb10m-reverse",
+      "prompt": "What goes with 7 to make 10?",
+      "part": 7,
+      "total": 10,
+      "gap": "left",
+      "mode": "sum-only",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
+      ],
+      "explanation": "10 = 3 + 7.",
+      "narration": { "prompt": "What goes with 7 to make 10?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "nb10m-minus-6",
+      "prompt": "What is 10 − 6?",
+      "prefix": "10 − 6 =",
+      "acceptedAnswers": ["4", "four"],
+      "inputMode": "numeric",
+      "explanation": "Because 6 + 4 = 10, 10 − 6 = 4.",
+      "narration": { "prompt": "What is ten take away six?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "nb10m-take-10",
+      "prompt": "10 take away 10. How many left?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "0" },
+        { "id": "b", "label": "1" },
+        { "id": "c", "label": "10" },
+        { "id": "d", "label": "5" }
+      ],
+      "correctId": "a",
+      "explanation": "10 take away 10 is 0. Because 10 + 0 = 10.",
+      "narration": { "prompt": "10 take away 10. How many left?" }
+    }
+  ]
+}

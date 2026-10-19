@@ -1,0 +1,167 @@
+{
+  "id": "number-bonds-to-10-hard",
+  "title": "Number bonds to 10",
+  "summary": "Mix plus and take away for bonds to 10, including 0 and number words.",
+  "subject": "maths",
+  "type": "number-bonds",
+  "yearGroups": ["Year1"],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-bonds-10",
+  "pathNode": "y1-bonds-10",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Question 1 is the sum line for what goes with 6 to make 10. Question 2 fills 10 take away 4. Question 3 is the part-whole cherry for what 3 and 7 make. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 10. Question 6 is 10 take away 0. Question 7 is the sum line reverse for what goes with 8 to make 10. Question 8 taps four tiles with no dots to make 10. Question 9 picks 10 take away 7 as a number word. Question 10 picks the take-away that matches 2 + 8. No hints. Totals stay 10.",
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots, mixing plus and take away."
+  },
+  "skills": ["y1-bonds-10", "number-bonds-to-10", "addition-within-10", "subtraction-within-10"],
+  "questions": [
+    {
+      "kind": "make-total",
+      "id": "nb10h-with-6",
+      "prompt": "What goes with 6 to make 10?",
+      "part": 6,
+      "total": 10,
+      "mode": "sum-only",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "explanation": "6 + 4 = 10.",
+      "narration": { "prompt": "What goes with 6 to make 10?" }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "nb10h-minus-4",
+      "prompt": "What is 10 − 4?",
+      "prefix": "10 − 4 =",
+      "acceptedAnswers": ["6", "six"],
+      "inputMode": "numeric",
+      "explanation": "Because 4 + 6 = 10, 10 − 4 = 6.",
+      "narration": { "prompt": "What is ten take away four?" }
+    },
+    {
+      "kind": "part-whole",
+      "id": "nb10h-pw-10",
+      "prompt": "What do 3 and 7 make?",
+      "whole": 10,
+      "parts": [3, 7],
+      "missing": "whole",
+      "choices": [9, 10, 11],
+      "explanation": "3 and 7 make 10.",
+      "narration": { "prompt": "What do three and seven make?" }
+    },
+    {
+      "kind": "multi-select",
+      "id": "nb10h-every-fact",
+      "prompt": "Tap every fact that is true.",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2 + 8 = 10" },
+        { "id": "b", "label": "10 − 2 = 8" },
+        { "id": "c", "label": "4 + 5 = 10" },
+        { "id": "d", "label": "10 − 10 = 1" }
+      ],
+      "correctIds": ["a", "b"],
+      "explanation": "2 + 8 = 10 and 10 − 2 = 8. 4 + 5 = 9, not 10. 10 − 10 = 0, not 1.",
+      "narration": { "prompt": "Tap every fact that is true." }
+    },
+    {
+      "kind": "make-total",
+      "id": "nb10h-plus-0",
+      "prompt": "What goes with 0 to make 10?",
+      "part": 0,
+      "total": 10,
+      "gap": "left",
+      "mode": "sum-only",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "9" },
+        { "id": "b", "label": "10" },
+        { "id": "c", "label": "0" },
+        { "id": "d", "label": "1" }
+      ],
+      "explanation": "10 = 10 + 0.",
+      "narration": { "prompt": "What goes with 0 to make 10?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "nb10h-take-0",
+      "prompt": "10 take away 0. How many left?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "0" },
+        { "id": "b", "label": "1" },
+        { "id": "c", "label": "10" },
+        { "id": "d", "label": "9" }
+      ],
+      "correctId": "c",
+      "explanation": "10 take away 0 is 10.",
+      "narration": { "prompt": "10 take away 0. How many left?" }
+    },
+    {
+      "kind": "make-total",
+      "id": "nb10h-first-addend",
+      "prompt": "What goes with 8 to make 10?",
+      "part": 8,
+      "total": 10,
+      "gap": "left",
+      "mode": "sum-only",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "1" },
+        { "id": "b", "label": "2" },
+        { "id": "c", "label": "3" },
+        { "id": "d", "label": "8" }
+      ],
+      "explanation": "2 + 8 = 10.",
+      "narration": { "prompt": "What goes with 8 to make 10?" }
+    },
+    {
+      "kind": "pick-pair",
+      "id": "nb10h-pair-0",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [0, 10, 1, 3],
+      "showDots": false,
+      "randomise": { "shuffleOptions": true },
+      "explanation": "0 and 10 make 10.",
+      "narration": { "prompt": "What two numbers make 10?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "nb10h-minus-word",
+      "prompt": "What is 10 − 7?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "two" },
+        { "id": "b", "label": "three" },
+        { "id": "c", "label": "four" },
+        { "id": "d", "label": "five" }
+      ],
+      "correctId": "b",
+      "explanation": "10 − 7 = 3. Three.",
+      "narration": { "prompt": "What is ten take away seven?" }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "nb10h-match-take",
+      "prompt": "2 + 8 = 10. Which take away matches?",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "10 − 2 = 8" },
+        { "id": "b", "label": "10 − 3 = 8" },
+        { "id": "c", "label": "10 − 8 = 0" },
+        { "id": "d", "label": "8 − 2 = 10" }
+      ],
+      "correctId": "a",
+      "explanation": "Because 2 + 8 = 10, 10 − 2 = 8.",
+      "narration": { "prompt": "2 plus 8 equals 10. Which take away matches?" }
+    }
+  ]
+}

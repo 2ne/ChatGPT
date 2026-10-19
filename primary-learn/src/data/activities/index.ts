@@ -10,6 +10,8 @@ import makeNumbersTo5 from "./make-numbers-to-5.json" with { type: "json" };
 import makeNumbersTo5Hard from "./make-numbers-to-5-hard.json" with { type: "json" };
 import makeNumbersTo5Medium from "./make-numbers-to-5-medium.json" with { type: "json" };
 import numberBondsTo10 from "./number-bonds-to-10.json" with { type: "json" };
+import numberBondsTo10Hard from "./number-bonds-to-10-hard.json" with { type: "json" };
+import numberBondsTo10Medium from "./number-bonds-to-10-medium.json" with { type: "json" };
 import seeNumbersTo5 from "./see-numbers-to-5.json" with { type: "json" };
 import seeNumbersTo5Hard from "./see-numbers-to-5-hard.json" with { type: "json" };
 import seeNumbersTo5Medium from "./see-numbers-to-5-medium.json" with { type: "json" };
@@ -32,6 +34,8 @@ const files = [
   { name: "bonds-to-5-medium.json", data: bondsTo5Medium },
   { name: "bonds-to-5-hard.json", data: bondsTo5Hard },
   { name: "number-bonds-to-10.json", data: numberBondsTo10 },
+  { name: "number-bonds-to-10-medium.json", data: numberBondsTo10Medium },
+  { name: "number-bonds-to-10-hard.json", data: numberBondsTo10Hard },
 ] as const;
 
 export const activities: Activity[] = files.map((file) => validateActivity(file.data, file.name));
