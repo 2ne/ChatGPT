@@ -247,9 +247,8 @@
       "prompt": "Sam has 1 {item}. Mia gives him 3 more. How many in all?",
       "visual": {
         "item": "strawberry",
-        "count": 1
+        "count": 4
       },
-      "extras": [{ "item": "banana", "count": 3 }],
       "layout": "row",
       "randomise": {
         "shuffleOptions": true

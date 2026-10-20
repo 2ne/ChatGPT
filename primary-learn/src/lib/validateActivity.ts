@@ -38,6 +38,15 @@ function fail(path: string, message: string): never {
   throw new Error(`Activity ${path}: ${message}`);
 }
 
+/** Sam/Mia stories that name one object must not mix a second emoji in extras. */
+function storyNamesOneObject(prompt: string): boolean {
+  if (!/\b(Sam|Mia)\b/.test(prompt)) return false;
+  if (!/\{items?\}/.test(prompt)) return false;
+  if (/\{items?2\}/.test(prompt)) return false;
+  if (/only wants|can he take/i.test(prompt)) return false;
+  return true;
+}
+
 function expectString(record: Record<string, unknown>, key: string, path: string): string {
   const value = record[key];
   if (!isString(value) || value.trim() === "") fail(path, `${key} must be a non-empty string`);
@@ -249,6 +258,12 @@ function parseQuestion(value: unknown, path: string): Question {
         fail(path, "extras.item must be a different object from visual.item");
       }
     }
+    if (storyNamesOneObject(prompt)) {
+      fail(
+        path,
+        "story pictures must show the object named in the text. Do not use extras of a different item when the prompt names only one object. Put the whole count on visual.",
+      );
+    }
   }
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
   const core = { id, prompt, explanation, hint, narration, visual, extras, layout, flashMs, randomise };
@@ -289,6 +304,15 @@ function parseQuestion(value: unknown, path: string): Question {
       const correctId = expectString(value, "correctId", path);
       if (!options.some((option) => option.id === correctId)) {
         fail(path, "correctId must match an option id");
+      }
+      if (storyNamesOneObject(prompt)) {
+        const items = options.flatMap((option) => (option.visual ? [option.visual.item] : []));
+        if (new Set(items).size > 1) {
+          fail(
+            path,
+            "story pictures must show the object named in the text. All groups must use the same item.",
+          );
+        }
       }
       return { ...core, kind, options, correctId };
     }

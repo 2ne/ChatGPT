@@ -61,7 +61,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. Subitise stems may set `flashMs` and `layout` (`dice`, `five-frame`, `fingers`, `hidden`). Picture groups still use the same cream tiles; no empty frame cells. |
 | conceptual subitise | `How many in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
 | hidden quantity | `How many {items} under the cup?` with `layout` `hidden` and `flashMs`. |
-| light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. |
+| light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
@@ -74,7 +74,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in counting order. Start with the smallest.` |
 | match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
-| story (Y1+) | `{Name} has {n} {things} and {action}. How many {are left / in all}?` |
+| story (Y1+) | `{Name} has {n} {things} and {action}. How many {are left / in all}?` Pictures must show the object named in the text, with matching counts. |
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.
 

@@ -276,6 +276,9 @@ rainbow itself is never inset.
   avatar chip and stays in localStorage. SFX must not stop narration.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
+  Pictures in a story question must show the object named in the text, with
+  matching counts. Do not use `extras` of a second emoji for “n more” of the
+  same thing; put the whole group on `visual`.
   Every picture group in a question stem uses the same tiles; no frame/strip
   variants. Only count-objects tiles are tappable. Do not draw empty
   placeholder boxes that hint at the total. Dice, five-frame, tens-frame,
