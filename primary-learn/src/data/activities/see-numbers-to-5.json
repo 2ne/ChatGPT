@@ -1,7 +1,7 @@
 {
   "id": "see-numbers-to-5",
   "title": "See numbers to 5",
-  "summary": "Know how many without counting, for groups of 1 to 5. Brief flash, dice, five-frame and fingers.",
+  "summary": "Know how many without counting, for groups of 1 to 5. Brief flash, tidy groups and fingers.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": ["Reception"],
@@ -13,8 +13,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 flash a dice of 1, then 2, then 3. Question 4 flashes 3 on a five-frame. Question 5 flashes dice 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 is a short story: Sam needs 5 on dice faces. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
-    "versus": "Easy: tidy dice and frames, 1 to 5 in order, longer flash, hints on the first three. Medium mixes dice, scatter and 2+3 inside 5, shorter flash. Hard stays on 4 and 5, quick flash, number words, and no hints. Still see how many, not bonds."
+    "within": "Questions 1 to 3 flash a group of 1, then 2, then 3. Question 4 flashes a group of 3. Question 5 flashes 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 is a short story: Sam needs 5. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
+    "versus": "Easy: tidy groups, 1 to 5 in order, longer flash, hints on the first three. Medium mixes tidy, scatter and 2+3 inside 5, shorter flash. Hard stays on 4 and 5, quick flash, number words, and no hints. Still see how many, not bonds."
   },
   "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns", "five-frame", "finger-patterns"],
   "randomise": {
@@ -57,7 +57,7 @@
       ],
       "correctId": "b",
       "hint": "See both {items} at once.",
-      "explanation": "There are 2 {items}. Two dots sit opposite on the dice.",
+      "explanation": "There are 2 {items}. You can see both at once.",
       "narration": { "prompt": "How many {items}?" }
     },
     {
@@ -76,7 +76,7 @@
       ],
       "correctId": "b",
       "hint": "See the whole group in one look.",
-      "explanation": "There are 3 {items}. Three sits on a diagonal.",
+      "explanation": "There are 3 {items}. You can see the whole group at once.",
       "narration": { "prompt": "How many {items}?" }
     },
     {
@@ -94,7 +94,7 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "b",
-      "explanation": "The five-frame shows 3 {items}. Three cells are full.",
+      "explanation": "There are 3 {items}. You can see the whole group at once.",
       "narration": { "prompt": "How many {items}?" }
     },
     {
@@ -112,7 +112,7 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "c",
-      "explanation": "There are 4 {items}. Four sits at the corners.",
+      "explanation": "There are 4 {items}. You can see the whole group at once.",
       "narration": { "prompt": "How many {items}?" }
     },
     {
@@ -146,7 +146,7 @@
         { "id": "d", "visual": { "item": "ladybird", "count": 2 }, "layout": "dice" }
       ],
       "correctId": "c",
-      "explanation": "Sam needs 5. That dice shows 5 {items}.",
+      "explanation": "Sam needs 5. That group has 5 {items}.",
       "narration": { "prompt": "Sam needs 5 {items}. Which group?" }
     },
     {

@@ -53,9 +53,9 @@ export type ObjectAsset = {
 
 /**
  * How object pictures are laid out.
- * `row` tidy one-to-one; `scatter` messier; `dice` glance pattern to 6;
- * `five-frame` / `tens-frame` Mastering Number frames; `fingers` raised-finger pattern;
- * `hidden` cup cover for a brief peek (pair with `flashMs`).
+ * Picture groups (`row`, `scatter`, `dice`, `five-frame`, `tens-frame`) all draw
+ * the same cream tiles with no empty cells. `scatter` messes the group.
+ * `fingers` is a raised-finger pattern. `hidden` is a cup cover (pair with `flashMs`).
  */
 export const OBJECT_LAYOUTS = [
   "row",
