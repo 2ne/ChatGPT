@@ -130,7 +130,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5e-gap",
-      "prompt": "What goes in the gap? 1, 2, …, 4, 5",
+      "prompt": "Which number is missing? 1, 2, _, 4, 5",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "star", "count": 2 } },
@@ -139,8 +139,8 @@
         { "id": "d", "visual": { "item": "star", "count": 5 } }
       ],
       "correctId": "b",
-      "explanation": "The count goes 1, 2, 3, 4, 5. The gap is 3.",
-      "narration": { "prompt": "What goes in the gap? One, two, blank, four, five." }
+      "explanation": "The missing number is 3.",
+      "narration": { "prompt": "Which number is missing? One, two, blank, four, five." }
     },
     {
       "kind": "ordered",

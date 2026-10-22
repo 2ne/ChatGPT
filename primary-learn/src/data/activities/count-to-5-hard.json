@@ -182,12 +182,12 @@
     {
       "kind": "fill-blank",
       "id": "c5h-gap",
-      "prompt": "Fill the gap in the count.",
+      "prompt": "Which number is missing?",
       "prefix": "1, 2, 3, 4,",
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
-      "explanation": "The count goes 1, 2, 3, 4, 5. The last number is 5.",
-      "narration": { "prompt": "Fill the gap in the count. 1, 2, 3, 4, blank." }
+      "explanation": "The missing number is 5.",
+      "narration": { "prompt": "Which number is missing? One, two, three, four, blank." }
     }
   ]
 }
