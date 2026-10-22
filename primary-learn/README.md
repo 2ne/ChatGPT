@@ -23,6 +23,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 ## What it does
 
 - Asks for a child’s name and woodland avatar on first visit
+- Welcomes children into each quest with a centred card, Pip and three stars, clear question count and time, and one Start quest button. The layout adapts to phones and desktops.
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
 - Each level opens a sheet with Easy / Medium / Hard. 6 out of 10 earns a star. Stars show progress. They do not gate the path.
 - Runs interactive question kinds (tap-to-count, build a set, part-whole make-total, cherry part-whole, pick-pair tiles, multiple choice, multi-select, fill blank, ordered, match pairs)

@@ -188,14 +188,14 @@ they are.
 
 ### Activity intro
 
-Compact column, max-width **40rem**, centred on a full-bleed white page.
-Tight gaps around title, summary and fact pills. Do not stretch this block
-across the desktop viewport.
-
-Back link → icon tile + title → summary → fact pills (`10 questions`,
-`About 4 min`, `Earn up to 3 stars`) → Pip + **white speech bubble**
-(same as onboarding: white card, line border, soft shadow, ink text; not
-the sandy tag colour) → gradient `Start quest →`.
+Centred quest card, max-width **34rem**, on a white page with a subtle paper glow.
+Keep the back link outside the card. A warm paper illustration panel holds Pip
+and three decorative stars. Below it, centre the icon and title, readable summary,
+star goal, and a two-column row for question count and time. End with a short
+personal welcome and the full-width gradient `Start quest` button. Use 28px card
+corners and a soft shadow. On narrow screens reduce padding, keep the facts in
+two columns, and allow the whole page to scroll on short screens. Do not add a
+second mascot or a speech bubble to this screen.
 
 ### Activity question (most important)
 

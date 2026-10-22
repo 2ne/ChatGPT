@@ -3021,69 +3021,40 @@ button.object-token:hover:not(:disabled) {
 }
 
 /* ——— Intro screen ——— */
+
 .quest-intro-page {
   display: grid;
-  align-content: start;
-  padding: calc(var(--space-4) + var(--safe-t))
-    calc(var(--space-4) + var(--safe-r))
-    calc(var(--space-6) + var(--safe-b))
-    calc(var(--space-4) + var(--safe-l));
+  align-content: center;
+  padding: calc(32px + var(--safe-t)) calc(24px + var(--safe-r)) calc(40px + var(--safe-b)) calc(24px + var(--safe-l));
+  background: radial-gradient(ellipse at 50% 35%, var(--paper) 0%, #fff 70%);
 }
-
-.quest-intro {
-  width: 100%;
-  max-width: 40rem;
-  margin: 0 auto;
-  display: grid;
-  gap: 12px;
-  padding: 0;
-}
-
-.quest-intro .back-link {
-  margin-bottom: 4px;
-}
-
-.quest-intro-summary {
-  margin: 0;
-  font-size: 16px;
-}
-
-.quest-intro-pip {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin: 8px 0 4px;
-}
-
-.quest-intro-pip .sidekick-bubble {
-  flex: 1;
-  min-width: 0;
-}
-
-.intro-tile-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.intro-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.fact-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--paper);
-  border: 2px solid var(--line);
-  border-radius: var(--radius-pill);
-  padding: 6px 13px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink-soft);
+.quest-intro { width: 100%; max-width: 34rem; margin: 0 auto; display: grid; gap: 20px; }
+.quest-intro .back-link { justify-self: start; min-height: 44px; margin: 0; }
+.intro-card { overflow: hidden; border: 2px solid var(--line); border-radius: 28px; background: white; box-shadow: 0 16px 48px rgba(35,41,70,.08); }
+.intro-scene { position: relative; display: grid; justify-items: center; gap: 4px; padding: 24px 24px 18px; background: var(--paper); isolation: isolate; }
+.intro-scene::before { content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%; background: var(--sun-soft); top: 22px; z-index: -1; }
+.intro-stars { display: flex; gap: 18px; align-items: center; color: #9a6200; }
+.intro-stars svg { width: 26px; height: 26px; fill: var(--sun); stroke-width: 1.8; }
+.intro-stars svg:nth-child(2) { width: 36px; height: 36px; margin-top: -12px; }
+.intro-scene > svg { position: relative; z-index: 1; }
+.intro-scene-floor { width: 112px; height: 12px; border-radius: 50%; background: var(--paper-deep); margin-top: -14px; }
+.intro-card-body { display: grid; gap: 18px; padding: 28px 32px 32px; text-align: center; }
+.intro-tile-row { display: flex; justify-content: center; align-items: center; gap: 12px; }
+.intro-tile-row .context-tile { width: 42px; height: 42px; border-radius: 14px; flex-shrink: 0; }
+.intro-tile-row .context-tile svg { width: 23px; height: 23px; }
+.intro-tile-row h1 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; }
+.quest-intro-summary { margin: 0; color: var(--ink-soft); font-size: 17px; line-height: 1.6; text-wrap: pretty; }
+.intro-star-goal { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0; font-weight: 800; color: var(--ink); }
+.intro-star-goal svg { color: #9a6200; fill: var(--sun); }
+.intro-facts { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 15px 0; }
+.intro-facts .fact-pill { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--ink-soft); }
+.intro-facts .fact-pill + .fact-pill { border-left: 1px solid var(--line); }
+.intro-welcome { margin: 0; font-weight: 700; color: var(--ink-soft); }
+@media (max-width: 480px) {
+  .intro-card-body { padding: 24px 20px; gap: 16px; }
+  .intro-scene { padding-top: 20px; }
+  .quest-intro { gap: 12px; }
+  .quest-intro-summary { font-size: 16px; }
 }
 
 /* ——— Status pill (legacy name) ——— */

@@ -48,6 +48,7 @@ export const copy = {
   streak: (n: number) => `${n} in a row!`,
   starsAria: (n: number) => `${n} out of 3 stars`,
   introCheer: (name: string, total: number) => `You've got this, ${name}! Let's try ${total} questions.`,
+  introWelcome: (name: string) => `Ready, ${name}? Let's have a go!`,
   youGot: (correct: number, total: number) => `You got ${correct} out of ${total}!`,
   starLine: (stars: number) =>
     stars >= 3

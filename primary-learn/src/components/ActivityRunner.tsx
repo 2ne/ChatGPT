@@ -250,6 +250,13 @@ export function ActivityRunner({
           <button type="button" className="back-link" onClick={onExit}>
             <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
           </button>
+          <div className="intro-card">
+          <div className="intro-scene" aria-hidden>
+            <div className="intro-stars"><Star /><Star /><Star /></div>
+            <Pip size={144} mood="happy" />
+            <span className="intro-scene-floor" />
+          </div>
+          <div className="intro-card-body">
           <div className="intro-tile-row">
             <span
               className="context-tile"
@@ -263,6 +270,7 @@ export function ActivityRunner({
             </div>
           </div>
           <p className="t-body quest-intro-summary">{activity.summary}</p>
+          <p className="intro-star-goal"><Star size={18} aria-hidden />{copy.starsFact}</p>
           <div className="intro-facts">
             <span className="fact-pill">
               <ListChecks size={15} aria-hidden /> {copy.questionsFact(total)}
@@ -270,19 +278,13 @@ export function ActivityRunner({
             <span className="fact-pill">
               <Clock size={15} aria-hidden /> {copy.minutesFact(activity.estimatedMinutes)}
             </span>
-            <span className="fact-pill">
-              <Star size={15} aria-hidden /> {copy.starsFact}
-            </span>
           </div>
-          <div className="quest-intro-pip">
-            <span aria-hidden>
-              <Pip size={72} mood="cheer" />
-            </span>
-            <p className="sidekick-bubble">{copy.introCheer(learnerName, activity.questions.length)}</p>
-          </div>
+          <p className="intro-welcome">{copy.introWelcome(learnerName)}</p>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
             {copy.startQuest} <ArrowRight size={19} aria-hidden />
           </button>
+          </div>
+          </div>
         </section>
       </main>
     );
