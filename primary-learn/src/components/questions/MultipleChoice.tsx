@@ -1,7 +1,7 @@
 import { copy } from "../../data/copy";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
-import { choiceClass, markChoice, type Reveal } from "./choice";
+import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 
 type MultipleChoiceProps = {
   question: MultipleChoiceQuestion | CountObjectsQuestion;
@@ -19,6 +19,7 @@ export function MultipleChoice({
   onChange,
 }: MultipleChoiceProps) {
   const showStem = question.kind !== "count-objects" && Boolean(question.visual);
+  const numeralPad = optionsAreNumerals(question.options);
   return (
     <div className="option-stack">
       {showStem && question.visual ? (
@@ -41,11 +42,13 @@ export function MultipleChoice({
               aria-checked={selected}
               disabled={disabled}
               onClick={() => onChange(option.id)}
-              className={choiceClass(selected, marked)}
+              className={choiceClass(selected, marked, numeralPad ? ["is-numeral"] : [])}
             >
-              <span className="option-letter" aria-hidden>
-                {"ABCD"[slot] ?? "•"}
-              </span>
+              {numeralPad ? null : (
+                <span className="option-letter" aria-hidden>
+                  {"ABCD"[slot] ?? "•"}
+                </span>
+              )}
               <OptionContent
                 label={option.label}
                 visual={option.visual}

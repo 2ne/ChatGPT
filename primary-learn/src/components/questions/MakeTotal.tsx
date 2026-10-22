@@ -13,7 +13,7 @@ import {
   optionNumber,
 } from "../../lib/makeTotal";
 import type { MakeTotalQuestion, ObjectItem } from "../../types/activity";
-import { choiceClass, markChoice, type Reveal } from "./choice";
+import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { OptionContent } from "./ObjectGroup";
 
 type MakeTotalProps = {
@@ -163,6 +163,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
   }
 
   const showButtons = question.mode !== "fill-slots" && question.options;
+  const numeralPad = optionsAreNumerals(question.options ?? []);
   const itemWords = OBJECT_WORDS[item];
   const canAddMore = filledMissing < bank;
 
@@ -284,11 +285,13 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
                 onClick={() => {
                   if (value != null) onChange(value);
                 }}
-                className={choiceClass(isOn, marked)}
+                className={choiceClass(isOn, marked, numeralPad ? ["is-numeral"] : [])}
               >
-                <span className="option-letter" aria-hidden>
-                  {"ABCD"[slot] ?? "•"}
-                </span>
+                {numeralPad ? null : (
+                  <span className="option-letter" aria-hidden>
+                    {"ABCD"[slot] ?? "•"}
+                  </span>
+                )}
                 <OptionContent label={option.label} visual={option.visual} />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>

@@ -169,7 +169,7 @@
     {
       "kind": "multiple-choice",
       "id": "m5h-sam-5",
-      "prompt": "Sam has 1. Mia gives him 4 more. How many in all?",
+      "prompt": "Sam has 1. He gets 4 more. How many does he have now?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -180,9 +180,9 @@
         { "id": "d", "label": "6" }
       ],
       "correctId": "b",
-      "explanation": "1 and 4 make 5 in all.",
+      "explanation": "1 and 4 more makes 5.",
       "narration": {
-        "prompt": "Sam has 1. Mia gives him 4 more. How many in all?"
+        "prompt": "Sam has 1. He gets 4 more. How many does he have now?"
       }
     },
     {

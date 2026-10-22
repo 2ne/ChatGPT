@@ -259,7 +259,7 @@
     {
       "kind": "multiple-choice",
       "id": "m5m-sam-5",
-      "prompt": "Sam has 2 {items}. Mia gives him 3 more. How many in all?",
+      "prompt": "Sam has 2 {items}. He gets 3 more. How many {items} does he have now?",
       "visual": {
         "item": "duck",
         "count": 2,
@@ -276,9 +276,9 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "c",
-      "explanation": "2 and 3 make 5 in all.",
+      "explanation": "2 and 3 more makes 5 {items}.",
       "narration": {
-        "prompt": "Sam has 2 {items}. Mia gives him 3 more. How many in all?"
+        "prompt": "Sam has 2 {items}. He gets 3 more. How many {items} does he have now?"
       }
     }
   ]

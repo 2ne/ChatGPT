@@ -244,7 +244,7 @@
     {
       "kind": "multiple-choice",
       "id": "m5e-sam-4",
-      "prompt": "Sam has 1 {item}. Mia gives him 3 more. How many in all?",
+      "prompt": "Sam has 1 {item}. He gets 3 more. How many {items} does he have now?",
       "visual": {
         "item": "strawberry",
         "count": 1,
@@ -261,9 +261,9 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "b",
-      "explanation": "1 and 3 make 4 in all.",
+      "explanation": "1 and 3 more makes 4 {items}.",
       "narration": {
-        "prompt": "Sam has 1 {item}. Mia gives him 3 more. How many in all?"
+        "prompt": "Sam has 1 {item}. He gets 3 more. How many {items} does he have now?"
       }
     },
     {

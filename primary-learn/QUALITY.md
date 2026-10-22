@@ -75,7 +75,8 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multi-select | `Tap every {pair/group} that {rule}.` |
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
 | match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
-| story (Y1+) | `{Name} has {n} {things} and {action}. How many {are left / in all}?` Pictures must show the object named in the text, with matching counts. |
+| story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |
+| story (take away) | `{Name} has {n} {items} and gives away {m}. How many left?` Pictures must show the object named in the text, with matching counts. |
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.
 
