@@ -51,7 +51,7 @@
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 3 and count on to 5. Count how many steps you take.",
-      "explanation": "3 and 2 make 5. 3 + 2 = 5.",
+      "explanation": "3 and 2 make 5.",
       "narration": {
         "prompt": "What goes with 3 to make 5?"
       }
@@ -68,7 +68,7 @@
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 4 and count on to 5.",
-      "explanation": "5 = 4 + 1.",
+      "explanation": "4 and 1 make 5.",
       "narration": {
         "prompt": "What goes with 4 to make 5?"
       }
@@ -102,7 +102,7 @@
         }
       ],
       "hint": "Adding zero does not change a number.",
-      "explanation": "0 + 5 = 5.",
+      "explanation": "0 and 5 make 5. Adding 0 does not change the number.",
       "narration": {
         "prompt": "What goes with 0 to make 5?"
       }
@@ -211,7 +211,7 @@
           "label": "1"
         }
       ],
-      "explanation": "5 = 3 + 2.",
+      "explanation": "2 and 3 make 5.",
       "narration": {
         "prompt": "What goes with 2 to make 5?"
       }
@@ -258,7 +258,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "5 take away 5 is 0. Because 5 + 0 = 5.",
+      "explanation": "Taking away all 5 leaves 0.",
       "narration": {
         "prompt": "Sam has 5 {items} and gives them all away. How many are left?"
       }

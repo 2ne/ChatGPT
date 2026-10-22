@@ -74,7 +74,7 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "b",
-      "explanation": "See 1 and 4. That makes 5 in all.",
+      "explanation": "The two groups have 1 and 4. Together they make 5.",
       "narration": { "prompt": "How many can you see in all?" }
     },
     {
@@ -125,7 +125,7 @@
         { "id": "d", "visual": { "item": "star", "count": 3 }, "layout": "dice" }
       ],
       "correctIds": ["a", "c"],
-      "explanation": "Two groups show 5 {items}. Skip 4 and 3.",
+      "explanation": "Two groups each have 5 {items}. The other groups have 4 and 3.",
       "narration": { "prompt": "Tap every group that has 5 {items}." }
     },
     {
@@ -174,7 +174,7 @@
       "flashMs": 800,
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
-      "explanation": "See 2 and 3. That makes 5 in all.",
+      "explanation": "The two groups have 2 and 3. Together they make 5.",
       "narration": { "prompt": "How many can you see in all?" }
     },
     {

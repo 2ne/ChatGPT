@@ -171,7 +171,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "5 is 2 and 3.",
+      "explanation": "2 and 3 make 5.",
       "narration": {
         "prompt": "What goes with 2 to make 5?"
       }
@@ -235,7 +235,7 @@
         "a",
         "b"
       ],
-      "explanation": "1 and 3 make 4. 2 and 2 make 4. 1 and 2 make 3. 4 and 1 make 5.",
+      "explanation": "1 and 3 make 4. 2 and 2 also make 4.",
       "narration": {
         "prompt": "Tap every pair that makes 4."
       }
@@ -251,7 +251,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "5 is 4 and 1.",
+      "explanation": "4 and 1 make 5.",
       "narration": {
         "prompt": "What goes with 4 to make 5?"
       }
@@ -288,7 +288,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "2 and 3 more make 5 {items}.",
+      "explanation": "2 {items} and 3 more make 5 {items}.",
       "narration": {
         "prompt": "Sam has 2 {items}. He gets 3 more. How many {items} does he have now?"
       }

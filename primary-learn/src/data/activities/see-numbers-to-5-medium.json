@@ -38,7 +38,7 @@
       ],
       "correctId": "b",
       "hint": "See the whole group. Do not count one by one.",
-      "explanation": "There are 3 {items}. See all three at once.",
+      "explanation": "There are 3 {items} in the group.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -131,7 +131,7 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "c",
-      "explanation": "See 2 and 3. That makes 5 in all.",
+      "explanation": "The two groups have 2 and 3. Together they make 5.",
       "narration": { "prompt": "How many can you see in all?" }
     },
     {
@@ -158,7 +158,7 @@
         { "id": "d", "visual": { "item": "balloon", "count": 5 }, "layout": "dice" }
       ],
       "correctIds": ["a", "d"],
-      "explanation": "Two groups show 5 {items}. Skip 3 and 4.",
+      "explanation": "Two groups each have 5 {items}. The other groups have 3 and 4.",
       "narration": { "prompt": "Tap every group that has 5 {items}." }
     },
     {

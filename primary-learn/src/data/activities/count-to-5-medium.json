@@ -53,7 +53,7 @@
       ],
       "correctId": "c",
       "hint": "Tap each {item} once, even when they are spread out.",
-      "explanation": "Count each {item} once. The numbers go 1, 2, 3. There are 3 {items}.",
+      "explanation": "There are 3 {items}. Each one counts once.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -71,7 +71,7 @@
       ],
       "correctId": "c",
       "hint": "Say a new number for each tap.",
-      "explanation": "Count each {item} once. The numbers go 1, 2, 3, 4. There are 4 {items}.",
+      "explanation": "There are 4 {items}. Each one counts once.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -89,7 +89,7 @@
       ],
       "correctId": "c",
       "hint": "Keep going until every {item} has a number.",
-      "explanation": "Count each {item} once. The numbers go 1, 2, 3, 4, 5. There are 5 {items}.",
+      "explanation": "There are 5 {items}. Each one counts once.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -98,7 +98,7 @@
       "prompt": "Make a group of {count} {items}.",
       "visual": { "item": "duck", "count": 4 },
       "randomise": { "count": { "min": 3, "max": 4 } },
-      "explanation": "Stop when the group has {count}. There are {count} {items}.",
+      "explanation": "A group of {count} has {count} {items}.",
       "narration": { "prompt": "Make a group of {count} {items}." }
     },
     {
@@ -112,7 +112,7 @@
       "suffix": "{items}.",
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
-      "explanation": "Count each {item} once. The numbers go {seq}. There are {count} {items}.",
+      "explanation": "There are {count} {items}. Each one counts once.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -127,7 +127,7 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "Count 1, 2, 3, 4. That group has 4 {items}.",
+      "explanation": "That group has 4 {items}.",
       "narration": { "prompt": "Which group has 4 {items}?" }
     },
     {
@@ -156,7 +156,7 @@
         { "id": "n2", "label": "2" }
       ],
       "correctOrder": ["n1", "n2", "n3", "n4"],
-      "explanation": "The numbers go 1, 2, 3, 4.",
+      "explanation": "The numbers go 1, 2, 3, 4 from smallest to biggest.",
       "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
@@ -187,7 +187,7 @@
         { "id": "d", "label": "1" }
       ],
       "correctId": "b",
-      "explanation": "Count each {item} once. The numbers go 1, 2, 3, 4, 5. There are 5 {items}.",
+      "explanation": "There are 5 {items}. Each one counts once.",
       "narration": { "prompt": "How many {items} can you see?" }
     }
   ]

@@ -32,7 +32,7 @@
         { "id": "c", "label": "5" },
         { "id": "d", "label": "2" }
       ],
-      "explanation": "6 + 4 = 10.",
+      "explanation": "6 and 4 make 10.",
       "narration": { "prompt": "What goes with 6 to make 10?" }
     },
     {
@@ -68,7 +68,7 @@
         { "id": "d", "label": "10 − 10 = 1" }
       ],
       "correctIds": ["a", "b"],
-      "explanation": "2 + 8 = 10 and 10 − 2 = 8. 4 + 5 = 9, not 10. 10 − 10 = 0, not 1.",
+      "explanation": "2 and 8 make 10. Taking 2 away from 10 leaves 8.",
       "narration": { "prompt": "Tap every fact that is true." }
     },
     {
@@ -86,7 +86,7 @@
         { "id": "c", "label": "0" },
         { "id": "d", "label": "1" }
       ],
-      "explanation": "10 = 10 + 0.",
+      "explanation": "0 and 10 make 10. Adding 0 does not change the number.",
       "narration": { "prompt": "What goes with 0 to make 10?" }
     },
     {
@@ -115,7 +115,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "10 take away 0 is 10.",
+      "explanation": "Taking away 0 leaves all 10.",
       "narration": {
         "prompt": "What is ten take away zero?"
       }
@@ -135,7 +135,7 @@
         { "id": "c", "label": "3" },
         { "id": "d", "label": "8" }
       ],
-      "explanation": "2 + 8 = 10.",
+      "explanation": "8 and 2 make 10.",
       "narration": { "prompt": "What goes with 8 to make 10?" }
     },
     {

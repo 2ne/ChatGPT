@@ -52,7 +52,7 @@
           "label": "0"
         }
       ],
-      "explanation": "4 + 1 = 5.",
+      "explanation": "4 and 1 make 5.",
       "narration": {
         "prompt": "What goes with 4 to make 5?"
       }
@@ -114,7 +114,7 @@
         "a",
         "b"
       ],
-      "explanation": "1 + 4 = 5 and 5 − 1 = 4. 2 + 2 = 4, not 5. 5 − 5 = 0, not 1.",
+      "explanation": "1 and 4 make 5. Taking 1 away from 5 leaves 4.",
       "narration": {
         "prompt": "Tap every fact that is true."
       }
@@ -148,7 +148,7 @@
           "label": "1"
         }
       ],
-      "explanation": "5 = 5 + 0.",
+      "explanation": "0 and 5 make 5. Adding 0 does not change the number.",
       "narration": {
         "prompt": "What goes with 0 to make 5?"
       }
@@ -179,7 +179,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "5 take away 0 is 5.",
+      "explanation": "Taking away 0 leaves all 5.",
       "narration": {
         "prompt": "What is five take away zero?"
       }
@@ -213,7 +213,7 @@
           "label": "4"
         }
       ],
-      "explanation": "1 + 4 = 5.",
+      "explanation": "4 and 1 make 5.",
       "narration": {
         "prompt": "What goes with 4 to make 5?"
       }

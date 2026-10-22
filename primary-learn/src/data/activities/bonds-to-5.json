@@ -31,7 +31,7 @@
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Count on from the first part. Add one object for each step.",
-      "explanation": "2 and 3 make 5. 2 + 3 = 5.",
+      "explanation": "2 and 3 make 5.",
       "narration": { "prompt": "What goes with 2 to make 5?" }
     },
     {
@@ -55,7 +55,7 @@
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 3 and count on to 5.",
-      "explanation": "3 + 2 = 5.",
+      "explanation": "3 and 2 make 5.",
       "narration": { "prompt": "What goes with 3 to make 5?" }
     },
     {
@@ -66,7 +66,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "4 + 1 = 5.",
+      "explanation": "4 and 1 make 5.",
       "narration": { "prompt": "What goes with 4 to make 5?" }
     },
     {
@@ -77,7 +77,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "1 + 4 = 5.",
+      "explanation": "1 and 4 make 5.",
       "narration": { "prompt": "What goes with 1 to make 5?" }
     },
     {
@@ -99,7 +99,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "5 = 2 + 3.",
+      "explanation": "2 and 3 make 5.",
       "narration": { "prompt": "What goes with 2 to make 5?" }
     },
     {
@@ -114,7 +114,7 @@
         { "id": "d", "label": "3 + 3" }
       ],
       "correctIds": ["a", "c"],
-      "explanation": "2 + 3 = 5 and 1 + 4 = 5. 4 + 2 = 6. 3 + 3 = 6.",
+      "explanation": "2 and 3 make 5. 1 and 4 also make 5.",
       "narration": { "prompt": "Tap every pair that makes 5." }
     },
     {

@@ -31,7 +31,7 @@
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Count on from 3 until you reach 10.",
-      "explanation": "3 and 7 make 10. 3 + 7 = 10.",
+      "explanation": "3 and 7 make 10.",
       "narration": { "prompt": "What goes with 3 to make 10?" }
     },
     {
@@ -43,7 +43,7 @@
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 4 and count on to 10.",
-      "explanation": "10 = 4 + 6.",
+      "explanation": "4 and 6 make 10.",
       "narration": { "prompt": "What goes with 4 to make 10?" }
     },
     {
@@ -61,7 +61,7 @@
         { "id": "d", "label": "8" }
       ],
       "hint": "Adding zero does not change a number.",
-      "explanation": "0 + 10 = 10.",
+      "explanation": "0 and 10 make 10. Adding 0 does not change the number.",
       "narration": { "prompt": "What goes with 0 to make 10?" }
     },
     {
@@ -143,7 +143,7 @@
         { "id": "c", "label": "4" },
         { "id": "d", "label": "5" }
       ],
-      "explanation": "10 = 3 + 7.",
+      "explanation": "7 and 3 make 10.",
       "narration": { "prompt": "What goes with 7 to make 10?" }
     },
     {
@@ -168,7 +168,7 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "a",
-      "explanation": "10 take away 10 is 0. Because 10 + 0 = 10.",
+      "explanation": "Taking away all 10 leaves 0.",
       "narration": { "prompt": "Sam has 10 {items} and gives them all away. How many are left?" }
     }
   ]

@@ -69,7 +69,7 @@
           "label": "4"
         }
       ],
-      "explanation": "1 and 1 make 2.",
+      "explanation": "1 and 1 make 2. This is double 1.",
       "narration": {
         "prompt": "What is one plus one?"
       },
@@ -141,7 +141,7 @@
           "label": "5"
         }
       ],
-      "explanation": "2 and 2 make 4.",
+      "explanation": "2 and 2 make 4. This is double 2.",
       "narration": {
         "prompt": "What is two plus two?"
       },
@@ -156,7 +156,7 @@
         "count": 4
       },
       "randomise": {},
-      "explanation": "Each {item} adds one to the group. A group of 4 has 4 {items}.",
+      "explanation": "A group of 4 has 4 {items}. Each {item} counts as one.",
       "narration": {
         "prompt": "Make a group of 4 {items}."
       }
@@ -172,7 +172,7 @@
       "total": 3,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "3 is 2 {items} and 1 more.",
+      "explanation": "2 and 1 make 3.",
       "narration": {
         "prompt": "What goes with 2 to make 3?"
       }
@@ -223,7 +223,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "1 and 4 make 5 too. 2 and 2 make 4. 3 and 3 make 6. 1 and 2 make 3.",
+      "explanation": "1 and 4 make 5, just like 2 and 3.",
       "narration": {
         "prompt": "2 and 3 make 5. Which other pair makes 5?"
       }
@@ -273,7 +273,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "1 and 3 more make 4 {items}.",
+      "explanation": "1 {item} and 3 more make 4 {items}.",
       "narration": {
         "prompt": "Sam has 1 {item}. He gets 3 more. How many {items} does he have now?"
       }
@@ -307,7 +307,7 @@
         "a",
         "c"
       ],
-      "explanation": "2 and 3 make 5. 1 and 4 make 5. 2 and 2 make 4. 3 and 3 make 6.",
+      "explanation": "2 and 3 make 5. 1 and 4 also make 5.",
       "narration": {
         "prompt": "Tap every pair that makes 5."
       }

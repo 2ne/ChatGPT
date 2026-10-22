@@ -54,7 +54,7 @@
       ],
       "correctId": "a",
       "hint": "Count only the {items}. Leave the {items2}.",
-      "explanation": "Count only the {items}. The numbers go {seq}. There are {count} {items}.",
+      "explanation": "There are {count} {items}. The {items2} are not part of this group.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -72,7 +72,7 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "b",
-      "explanation": "Count only the {items}, not the {items2}. There are {count} {items}.",
+      "explanation": "There are {count} {items}. The {items2} are not part of this group.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -90,7 +90,7 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "b",
-      "explanation": "Count only the {items}. The numbers go {seq}. There are {count} {items}.",
+      "explanation": "There are {count} {items}. The {items2} are not part of this group.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -114,7 +114,7 @@
       "prompt": "Make a group of 5 {items}.",
       "visual": { "item": "ladybird", "count": 5 },
       "randomise": {},
-      "explanation": "A group of 5 has 5 {items}. Leave the extra {items} in the tray.",
+      "explanation": "A group of 5 has 5 {items}. The extra {items} are not needed.",
       "narration": { "prompt": "Make a group of 5 {items}." }
     },
     {
@@ -158,7 +158,7 @@
         { "id": "n3", "label": "3" }
       ],
       "correctOrder": ["n1", "n2", "n3", "n4", "n5"],
-      "explanation": "The numbers go 1, 2, 3, 4, 5.",
+      "explanation": "The numbers go 1, 2, 3, 4, 5 from smallest to biggest.",
       "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
@@ -176,7 +176,7 @@
         { "id": "d", "label": "6" }
       ],
       "correctId": "b",
-      "explanation": "Count only the {items}. There are 4. Skip the {items2}.",
+      "explanation": "There are 4 {items} for Sam. The {items2} are not part of his group.",
       "narration": { "prompt": "Sam only wants {items}. How many can he take?" }
     },
     {

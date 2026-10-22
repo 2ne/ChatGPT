@@ -109,7 +109,7 @@ Rules:
 Every question needs `explanation`. Hints are optional and must follow the scaffolding row above.
 
 - **Hint:** a strategy, never the answer. “Point to each apple and say a number.”
-- **Explanation:** state the correct idea in one or two short sentences. Include the count or the bond. “Touch each apple once and count: 1, 2, 3. There are 3 apples.”
+- **Explanation:** explain why the answer is correct in one or two short sentences. This text appears after both correct and incorrect answers. State the count, relationship or maths fact. For example, “There are 3 apples. Each one counts once.” Never give instructions such as “Count”, “Tap”, “Look”, “See” or “Stop”. Put strategies and instructions in the hint instead. For a single object, “There is 1 apple.” is enough. Explain the correct choices rather than listing every wrong option.
 - After a miss the child sees the correct answer under its own label, followed by this explanation. Write it so it teaches, not scolds. No “you forgot”. Do not add shared feedback phrases to the explanation.
 
 ## Variety
@@ -157,7 +157,7 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
   ],
   "correctId": "a",
   "hint": "Tap the {item} and say one.",
-  "explanation": "Tap the {item} once. One thing counts as 1.",
+  "explanation": "There is 1 {item}.",
   "narration": { "prompt": "How many {items} can you see?" }
 }
 ```
@@ -177,7 +177,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] Only this node’s **Covers** bullets are taught
 - [ ] Year group reading age; British English; stem templates reused
 - [ ] The prompt is a full kid sentence that matches the screen (no clipped `How many ducks?` / `Which group?`; no leftover “got to” or “count the” stems)
-- [ ] Every item has a teaching `explanation`; hints match the scaffolding plan
+- [ ] Every `explanation` explains the correct answer without instructions and reads naturally after a correct answer; hints contain strategies and match the scaffolding plan
 - [ ] Distractors are named misconceptions, not random
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed
 - [ ] At least three question kinds in a 10-question quest; same kind not overused

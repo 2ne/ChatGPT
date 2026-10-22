@@ -30,6 +30,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Ten questions, then a star result. A miss shows a short correction and moves on. No retry loop
 - Incorrect feedback separates the correct answer, number order or matching pairs from the teaching explanation. On addition `make-total` and `part-whole` questions, an optional **Show me** demonstration reveals each part, then the whole. It uses the question's actual numbers and pictures, supports zero, and never changes the score. Children advance it with buttons, with no automatic motion or spoken answers.
 - Shared wording uses natural UK English. Quest introductions use the actual question count. Hints suggest a strategy instead of stating the answer, and number inputs accept number words as well as digits.
+- Feedback explanations state why an answer is correct, including after a miss. Counting instructions belong in hints, not in post-answer feedback.
 - Saves best stars and best score per Easy / Medium / Hard. Nine stars on a node awards a gold cup
 
 ## Adding activities

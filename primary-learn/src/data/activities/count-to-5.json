@@ -52,7 +52,7 @@
       ],
       "correctId": "a",
       "hint": "Tap the {item} and say one.",
-      "explanation": "Count the {item} once. The numbers go 1. There is 1 {item}.",
+      "explanation": "There is 1 {item}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -69,7 +69,7 @@
       ],
       "correctId": "b",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "Count each {item} once. The numbers go 1, 2. There are 2 {items}.",
+      "explanation": "There are 2 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -86,7 +86,7 @@
       ],
       "correctId": "b",
       "hint": "Point to each {item} once and say the next number.",
-      "explanation": "Count each {item} once. The numbers go 1, 2, 3. There are 3 {items}.",
+      "explanation": "There are 3 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -100,7 +100,7 @@
       "suffix": "{items}.",
       "acceptedAnswers": ["4", "four"],
       "inputMode": "numeric",
-      "explanation": "1, 2, 3, 4. There are 4 {items}.",
+      "explanation": "There are 4 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -109,7 +109,7 @@
       "prompt": "Make a group of 5 {items}.",
       "visual": { "item": "ladybird", "count": 5 },
       "randomise": {},
-      "explanation": "Stop when the group has 5. 1, 2, 3, 4, 5. There are 5 {items}.",
+      "explanation": "A group of 5 has 5 {items}.",
       "narration": { "prompt": "Make a group of 5 {items}." }
     },
     {
@@ -152,7 +152,7 @@
         { "id": "n2", "label": "2" }
       ],
       "correctOrder": ["n1", "n2", "n3"],
-      "explanation": "The numbers go 1, 2, 3.",
+      "explanation": "The numbers go 1, 2, 3 from smallest to biggest.",
       "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
@@ -181,7 +181,7 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "Count 1, 2, 3, 4, 5. That group has 5 {items}.",
+      "explanation": "That group has 5 {items}.",
       "narration": { "prompt": "Which group has 5 {items}?" }
     }
   ]
