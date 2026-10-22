@@ -262,7 +262,8 @@
       "prompt": "Sam has 2 {items}. Mia gives him 3 more. How many in all?",
       "visual": {
         "item": "duck",
-        "count": 5
+        "count": 2,
+        "added": 3
       },
       "layout": "row",
       "randomise": {

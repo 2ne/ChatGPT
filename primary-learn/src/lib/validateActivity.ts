@@ -47,6 +47,11 @@ function storyNamesOneObject(prompt: string): boolean {
   return true;
 }
 
+/** Start-plus-more stories. Pictured ones need visual.added of the same item. */
+function storyIsJoin(prompt: string): boolean {
+  return /\b(gives (him|her)|gets) \d+ more\b/i.test(prompt);
+}
+
 function expectString(record: Record<string, unknown>, key: string, path: string): string {
   const value = record[key];
   if (!isString(value) || value.trim() === "") fail(path, `${key} must be a non-empty string`);
@@ -65,7 +70,11 @@ function expectArray(record: Record<string, unknown>, key: string, path: string)
   return value;
 }
 
-function expectVisual(value: unknown, path: string): ObjectAsset {
+function expectVisual(
+  value: unknown,
+  path: string,
+  allowAdded = false,
+): ObjectAsset {
   if (!isRecord(value)) fail(path, "visual must be { item, count }");
   const item = value.item;
   const count = value.count;
@@ -75,13 +84,29 @@ function expectVisual(value: unknown, path: string): ObjectAsset {
   if (typeof count !== "number" || !Number.isInteger(count) || count < 1 || count > 12) {
     fail(path, "visual.count must be a whole number from 1 to 12");
   }
-  return { item: item as ObjectAsset["item"], count };
+  if (value.added == null) {
+    return { item: item as ObjectAsset["item"], count };
+  }
+  if (!allowAdded) {
+    fail(path, "visual.added is only for join story stems, not options or extras");
+  }
+  const added = value.added;
+  if (typeof added !== "number" || !Number.isInteger(added) || added < 1 || added > 12) {
+    fail(path, "visual.added must be a whole number from 1 to 12");
+  }
+  if (count + added > 12) {
+    fail(path, "visual.count plus visual.added must be at most 12");
+  }
+  return { item: item as ObjectAsset["item"], count, added };
 }
 
 /** Part-whole pictures may be empty (0) and can grow to 20 for later tens. */
 function parseMakeTotalVisual(value: unknown, path: string): ObjectAsset | undefined {
   if (value == null) return undefined;
   if (!isRecord(value)) fail(path, "visual must be { item, count }");
+  if (value.added != null) {
+    fail(path, "make-total cannot use visual.added. Join stories use look-only stems.");
+  }
   const item = value.item;
   const count = value.count;
   if (!isString(item) || !(OBJECT_ITEMS as readonly string[]).includes(item)) {
@@ -93,9 +118,13 @@ function parseMakeTotalVisual(value: unknown, path: string): ObjectAsset | undef
   return { item: item as ObjectAsset["item"], count };
 }
 
-function optionalVisual(record: Record<string, unknown>, path: string): ObjectAsset | undefined {
+function optionalVisual(
+  record: Record<string, unknown>,
+  path: string,
+  allowAdded = false,
+): ObjectAsset | undefined {
   if (record.visual == null) return undefined;
-  return expectVisual(record.visual, `${path}.visual`);
+  return expectVisual(record.visual, `${path}.visual`, allowAdded);
 }
 
 function parseExtras(record: Record<string, unknown>, path: string): ObjectAsset[] | undefined {
@@ -140,7 +169,7 @@ function parseOption(value: unknown, path: string): QuestionOption {
   if (!isRecord(value)) fail(path, "option must be an object");
   const id = expectString(value, "id", path);
   const label = value.label == null ? undefined : expectString(value, "label", path);
-  const visual = optionalVisual(value, path);
+  const visual = optionalVisual(value, path, false);
   if (!label && !visual) fail(path, "option needs a label or a visual");
   const layout = parseLayout(value, path);
   if (layout === "hidden" || layout === "fingers") {
@@ -233,7 +262,7 @@ function parseQuestion(value: unknown, path: string): Question {
   const visual =
     kind === "make-total"
       ? parseMakeTotalVisual(value.visual, `${path}.visual`)
-      : optionalVisual(value, path);
+      : optionalVisual(value, path, true);
   const extras =
     kind === "make-total" ? parseMakeTotalExtras(value, path) : parseExtras(value, path);
   const layout = parseLayout(value, path);
@@ -252,6 +281,20 @@ function parseQuestion(value: unknown, path: string): Question {
       fail(path, `${layout} needs visual.count from 1 to ${max}`);
     }
   }
+  if (visual?.added != null) {
+    if (kind === "count-objects" || kind === "build-set" || kind === "make-total") {
+      fail(path, "visual.added is for look-only join stories, not tap-to-count or make-total");
+    }
+    if (extras) {
+      fail(path, "join pictures use visual.added of the same item. Do not set extras.");
+    }
+    if (layout && layout !== "row") {
+      fail(path, "join pictures use a row. Do not set dice, scatter or other layouts.");
+    }
+    if (flashMs != null) {
+      fail(path, "join pictures cannot use flashMs");
+    }
+  }
   if (visual && extras) {
     for (const extra of extras) {
       if (extra.item === visual.item) {
@@ -261,11 +304,20 @@ function parseQuestion(value: unknown, path: string): Question {
     if (storyNamesOneObject(prompt)) {
       fail(
         path,
-        "story pictures must show the object named in the text. Do not use extras of a different item when the prompt names only one object. Put the whole count on visual.",
+        "story pictures must show the object named in the text. Do not use extras of a different item when the prompt names only one object. Use visual.count and visual.added of the same item for a join story.",
       );
     }
   }
+  if (storyIsJoin(prompt) && visual && visual.added == null) {
+    fail(
+      path,
+      "join story pictures need visual.added for the extra group of the same item",
+    );
+  }
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
+  if (visual?.added != null && randomise?.count) {
+    fail(path, "do not randomise count on a join story");
+  }
   const core = { id, prompt, explanation, hint, narration, visual, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(

@@ -61,7 +61,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. Subitise stems may set `flashMs` and `layout` (`dice`, `five-frame`, `fingers`, `hidden`). Picture groups still use the same cream tiles; no empty frame cells. |
 | conceptual subitise | `How many in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
 | hidden quantity | `How many {items} under the cup?` with `layout` `hidden` and `flashMs`. |
-| light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). |
+| light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What comes next? 1, 2, 3, …` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |

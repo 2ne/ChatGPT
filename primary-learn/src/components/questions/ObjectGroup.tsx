@@ -25,7 +25,8 @@ type ObjectGroupProps = {
 
 function sceneKey(visual: ObjectAsset, extras: ObjectAsset[] | undefined, layout: ObjectLayout | undefined) {
   const extra = (extras ?? []).map((asset) => `${asset.item}:${asset.count}`).join(",");
-  return `${visual.item}:${visual.count}:${layout ?? "row"}:${extra}`;
+  const added = visual.added == null ? "" : `+${visual.added}`;
+  return `${visual.item}:${visual.count}${added}:${layout ?? "row"}:${extra}`;
 }
 
 function tokensFor(visual: ObjectAsset, extras: ObjectAsset[] | undefined): Token[] {
@@ -113,6 +114,33 @@ function PictureTiles({
   );
 }
 
+function JoinTiles({ visual, compact }: { visual: ObjectAsset; compact?: boolean }) {
+  const added = visual.added ?? 0;
+  const glyph = OBJECT_GLYPH[visual.item];
+  const label = describeVisual(visual);
+  return (
+    <span className={`join-story${compact ? " is-option" : ""}`} aria-label={label}>
+      <span className="join-story-start" aria-hidden>
+        {Array.from({ length: visual.count }, (_, index) => (
+          <span key={`s-${index}`} className="object-token">
+            <span className="object-glyph">{glyph}</span>
+          </span>
+        ))}
+      </span>
+      <span className="join-story-more" aria-hidden>
+        <span className="join-story-plus">+</span>
+        <span className="join-story-added">
+          {Array.from({ length: added }, (_, index) => (
+            <span key={`a-${index}`} className="object-token is-added">
+              <span className="object-glyph">{glyph}</span>
+            </span>
+          ))}
+        </span>
+      </span>
+    </span>
+  );
+}
+
 export function ObjectGroup({
   visual,
   extras,
@@ -165,6 +193,11 @@ export function ObjectGroup({
     extras?.length ? extras.map((asset) => describeVisual(asset)).join(" and ") : "";
   const lookLabel = extraLabel ? `${describeVisual(visual)} and ${extraLabel}` : describeVisual(visual);
   const showFlash = layout === "hidden" || flashMs != null;
+  const isJoin = visual.added != null && visual.added > 0;
+
+  if (isJoin) {
+    return <JoinTiles visual={visual} compact={compact} />;
+  }
 
   if (!interactive) {
     const body =

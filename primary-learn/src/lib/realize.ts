@@ -115,10 +115,12 @@ function remapVisual(
   count?: number,
 ): ObjectAsset | undefined {
   if (!visual) return undefined;
-  return {
+  const next: ObjectAsset = {
     item: itemMap.get(visual.item) ?? visual.item,
     count: count ?? visual.count,
   };
+  if (visual.added != null) next.added = visual.added;
+  return next;
 }
 
 function remapSide(side: MatchSide, itemMap: Map<ObjectItem, ObjectItem>): MatchSide {

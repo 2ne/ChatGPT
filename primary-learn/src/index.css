@@ -31,6 +31,8 @@
   --mint-soft: #d9f7e8;
   --sky: #0ea5e9;
   --sky-soft: #dcf2fd;
+  --join-added: #e3f0fd;
+  --join-added-line: #a9cdf3;
   --rose: #ec4899;
   --rose-soft: #fbdff0;
 
@@ -1531,6 +1533,54 @@ button.object-token:hover:not(:disabled) {
 }
 }
 
+
+.object-token.is-added {
+  background: var(--join-added);
+  border-color: var(--join-added-line);
+}
+
+.join-story {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+  row-gap: 8px;
+  max-width: 100%;
+  padding: 4px;
+}
+
+.join-story-start,
+.join-story-added,
+.join-story-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.join-story-plus {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--violet);
+  padding: 0 2px;
+  flex: none;
+}
+
+.join-story.is-option .object-token {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 4px;
+  font-size: 22px;
+  border-radius: 12px;
+}
+
+.join-story.is-option .join-story-plus {
+  font-size: 22px;
+}
 
 .object-token.is-lit {
   background: var(--sun-soft);

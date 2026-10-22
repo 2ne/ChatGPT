@@ -48,7 +48,13 @@ export type ObjectItem = (typeof OBJECT_ITEMS)[number];
 
 export type ObjectAsset = {
   item: ObjectItem;
+  /** Starting group, or the whole group when `added` is omitted. */
   count: number;
+  /**
+   * Join stories only. Extra group of the same `item`.
+   * Stem shows `count` cream tiles, a plus, then `added` light-blue tiles.
+   */
+  added?: number;
 };
 
 /**
