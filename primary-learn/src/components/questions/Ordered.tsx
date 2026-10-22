@@ -97,24 +97,55 @@ export function Ordered({ question, answer, disabled, reveal, onChange }: Ordere
         const marked = reveal == null ? null : inPlace ? "correct" : "wrong";
         const dragging = draggingId === id;
         return (
-          <li key={`${question.id}-${id}`}>
-            <button
-              type="button"
-              data-ordered-id={id}
-              disabled={locked}
-              aria-label={copy.dragNumber(label)}
-              aria-grabbed={dragging}
+          <li key={`${question.id}-${id}`} data-ordered-id={id}>
+            <div
               className={[choiceClass(dragging, marked), "ordered-tile", dragging ? "is-dragging" : ""]
                 .filter(Boolean)
                 .join(" ")}
-              onPointerDown={(event) => onPointerDown(event, id)}
-              onPointerMove={onPointerMove}
-              onPointerUp={endDrag}
-              onPointerCancel={endDrag}
-              onKeyDown={(event) => onKeyDown(event, index)}
             >
-              <OptionContent label={item?.label} visual={item?.visual} />
-            </button>
+              <button
+                type="button"
+                disabled={locked}
+                aria-label={copy.dragNumber(label)}
+                aria-grabbed={dragging}
+                className="ordered-drag"
+                onPointerDown={(event) => onPointerDown(event, id)}
+                onPointerMove={onPointerMove}
+                onPointerUp={endDrag}
+                onPointerCancel={endDrag}
+                onKeyDown={(event) => onKeyDown(event, index)}
+              >
+                <span className="ordered-grip" aria-hidden>
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <OptionContent label={item?.label} visual={item?.visual} />
+              </button>
+              <span className="step-pair">
+                <button
+                  type="button"
+                  disabled={locked || index === 0}
+                  aria-label={copy.moveUp(label)}
+                  onClick={() => move(index, index - 1)}
+                  className="btn btn-secondary step-btn"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  disabled={locked || index === order.length - 1}
+                  aria-label={copy.moveDown(label)}
+                  onClick={() => move(index, index + 1)}
+                  className="btn btn-secondary step-btn"
+                >
+                  ↓
+                </button>
+              </span>
+            </div>
           </li>
         );
       })}

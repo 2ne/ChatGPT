@@ -207,6 +207,7 @@ a:focus-visible,
 .make-total-slot:focus:not(:focus-visible),
 .btn-text:focus:not(:focus-visible),
 .step-btn:focus:not(:focus-visible),
+.ordered-drag:focus:not(:focus-visible),
 .match-row:focus:not(:focus-visible),
 .q-prompt:focus,
 .q-prompt:focus-visible {
@@ -220,7 +221,7 @@ a:focus-visible,
 .make-total-slot:focus-visible,
 .btn-text:focus-visible,
 .step-btn:focus-visible,
-.ordered-tile:focus-visible,
+.ordered-drag:focus-visible,
 .match-row:focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 2px;
@@ -2367,35 +2368,78 @@ button.object-token:hover:not(:disabled) {
 }
 
 .ordered-tile {
-  justify-content: center;
+  gap: 10px;
   min-height: 88px;
-  padding: 16px 18px;
-  cursor: grab;
-  touch-action: none;
+  padding: 10px 12px 10px 10px;
+  cursor: default;
   user-select: none;
   -webkit-user-select: none;
-  font-size: 48px;
-  line-height: 1;
+}
+
+.ordered-drag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  min-height: 68px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: inherit;
+  cursor: grab;
+  touch-action: none;
+  font: inherit;
+  text-align: left;
+}
+
+.ordered-drag:disabled {
+  cursor: default;
+}
+
+.ordered-grip {
+  display: grid;
+  grid-template-columns: repeat(2, 6px);
+  gap: 5px 6px;
+  flex: none;
+  width: 18px;
+  padding: 4px 0;
+}
+
+.ordered-grip span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-faint);
 }
 
 .ordered-tile .option-content {
-  flex: none;
+  flex: 1;
   justify-content: center;
   font-size: 48px;
   line-height: 1;
 }
 
+.ordered-tile .step-pair {
+  margin-left: 0;
+}
+
 .ordered-tile.is-dragging {
-  cursor: grabbing;
   z-index: 1;
-  transform: scale(1.04);
+  transform: scale(1.02);
   border-color: var(--primary);
   background: var(--primary-soft);
   box-shadow: 0 10px 24px rgba(79, 70, 229, 0.22);
 }
 
-.ordered-tile:disabled {
-  cursor: default;
+.ordered-tile.is-dragging .ordered-drag {
+  cursor: grabbing;
+}
+
+.ordered-tile.is-dragging .ordered-grip span {
+  background: var(--primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

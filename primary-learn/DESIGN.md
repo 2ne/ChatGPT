@@ -260,8 +260,8 @@ rainbow itself is never inset.
   centred pills per question kind. Number answers on `make-total` use the same
   buttons as multiple-choice (digit-only rows drop the letter badge and enlarge
   the number). Exceptions: `pick-pair` square tiles, `part-whole` rounded-square
-  number buttons (one row of three), and `ordered` big numeral tiles (drag to
-  reorder, no up/down arrows).
+  number buttons (one row of three), and `ordered` big numeral tiles (drag
+  handle plus up/down arrows).
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
@@ -340,9 +340,9 @@ rainbow itself is never inset.
   numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
   or 20 use the same `total` / `tiles` config.
 - **Order (`ordered`)** is a vertical stack of big numeral tiles (about 48px
-  digits, tall touch targets). The child drags a tile up or down to swap
-  places. No position numbers like `1.` beside the answer, and no up/down
-  arrow buttons. Arrow keys still move the focused tile for keyboard use.
+  digits). Left: a grip handle so drag is obvious. Middle: the number. Right:
+  up/down arrow buttons. Kids can drag or tap arrows. No position numbers like
+  `1.` beside the answer. Arrow keys also move the focused tile.
   Stem: `Put the numbers in order, from smallest to biggest.` Feedback:
   `The numbers go 1, 2, 3.`
 - **Cherry bonds (`part-whole`)** stay on the same white activity screen. A
