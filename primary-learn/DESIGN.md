@@ -180,7 +180,7 @@ they are.
    SVG tiles stay at 340 × 310 CSS pixels on phones and desktops. Decoration
    is hidden from assistive technology and never intercepts touches. The road,
    signs and level buttons remain opaque above it. No unrelated floating doodles.
-   Overlap each section's artwork by 96px into the preceding section and fade it
+   Overlap each section's artwork by 32px into the preceding section and fade it
    in with a CSS mask. Both the tint and the doodles blend, while topic boundaries
    used by navigation remain unchanged.
    At each boundary add a 1px black line at 7% opacity with a 1px white highlight
@@ -460,3 +460,4 @@ audio files. Scale is too large.
 | Controls that appear and shove the page | Always render them. Hide or disable in place |
 | Stretching a question to fill the phone | Pack the prompt and answer as a compact group |
 | Empty slots that count out the missing amount | Tap-to-fill with extra slots, or the sum line only |
+

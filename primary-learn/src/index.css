@@ -3120,9 +3120,9 @@ button.object-token:hover:not(:disabled) {
 }
 
 .map-zone-art.is-blended {
-  top: -96px;
-  mask-image: linear-gradient(to bottom, transparent, #000 96px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 96px);
+  top: -32px;
+  mask-image: linear-gradient(to bottom, transparent, #000 32px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 32px);
 }
 
 .map-zone + .map-zone::after {
@@ -4023,4 +4023,5 @@ button.object-token:hover:not(:disabled) {
 .bond-demo-parts { display: grid; gap: 12px; }
 .bond-demo-parts > div { padding: 12px; border: 2px solid var(--line); border-radius: 12px; background: white; }
 .bond-demo-status { font-weight: 800; }
+
 
