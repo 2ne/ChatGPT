@@ -2,6 +2,13 @@
 
 This project is a rapid prototype of an interactive UK primary learning app for children. The product title is **Primary Maths**. Progress and profile data live in **browser localStorage only** (no auth, no backend). That is intentional during prototyping — reset is a button, not a migration.
 
+## How we work
+
+- James is the lead UX engineer and the tastemaker. We agree what to build first, then build it fast and hand it to him to review.
+- Keep token use low. Do only what the task needs.
+- `npm run build` is the only check. Do not run the app, take screenshots, make videos or screen recordings unless James asks for it in that task.
+- Push straight to `main` when the build passes.
+
 When asked to add or change a learning activity, follow this document and `QUALITY.md` strictly. Do not invent a parallel activity format.
 
 **Build once.** Each activity must be right first time. The owner will not rewrite your questions. If the ramp, wording, distractors, narration or checklist would fail, do not push.
