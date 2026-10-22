@@ -92,17 +92,33 @@
     {
       "kind": "multiple-choice",
       "id": "nb10h-take-0",
-      "prompt": "10 take away 0. How many are left?",
-      "randomise": { "shuffleOptions": true },
+      "prompt": "What is 10 − 0?",
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "0" },
-        { "id": "b", "label": "1" },
-        { "id": "c", "label": "10" },
-        { "id": "d", "label": "9" }
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
       ],
       "correctId": "c",
       "explanation": "10 take away 0 is 10.",
-      "narration": { "prompt": "10 take away 0. How many are left?" }
+      "narration": {
+        "prompt": "What is ten take away zero?"
+      }
     },
     {
       "kind": "make-total",
@@ -145,23 +161,39 @@
         { "id": "d", "label": "five" }
       ],
       "correctId": "b",
-      "explanation": "10 − 7 = 3. Three.",
+      "explanation": "10 take away 7 is 3. 7 and 3 make 10.",
       "narration": { "prompt": "What is ten take away seven?" }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10h-sam-story",
-      "prompt": "Sam has 10. He gives away 3. How many are left?",
-      "randomise": { "shuffleOptions": true },
+      "prompt": "Sam has 10 apples. He gives away 3. How many apples are left?",
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "6" },
-        { "id": "b", "label": "7" },
-        { "id": "c", "label": "8" },
-        { "id": "d", "label": "3" }
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
       ],
       "correctId": "b",
-      "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
-      "narration": { "prompt": "Sam has 10. He gives away 3. How many are left?" }
+      "explanation": "10 take away 3 is 7. 3 and 7 make 10.",
+      "narration": {
+        "prompt": "Sam has 10 apples. He gives away 3. How many apples are left?"
+      }
     }
   ]
 }

@@ -110,7 +110,7 @@ Every question needs `explanation`. Hints are optional and must follow the scaff
 
 - **Hint:** a strategy, never the answer. “Point to each apple and say a number.”
 - **Explanation:** state the correct idea in one or two short sentences. Include the count or the bond. “Touch each apple once and count: 1, 2, 3. There are 3 apples.”
-- After a miss the child sees this on screen, after “It was 4.” Write it so it teaches, not scolds. No “you forgot”.
+- After a miss the child sees the correct answer under its own label, followed by this explanation. Write it so it teaches, not scolds. No “you forgot”. Do not add shared feedback phrases to the explanation.
 
 ## Variety
 

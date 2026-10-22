@@ -4029,3 +4029,11 @@ button.object-token:hover:not(:disabled) {
   line-height: 1.45;
   color: var(--ink);
 }
+
+/* Optional number-bond teaching after a scored answer. No automatic motion. */
+.answer-reveal { padding: 12px; border: 2px solid var(--line); border-radius: 12px; background: white; overflow-wrap: anywhere; }
+.bond-demo { display: grid; gap: 12px; margin-top: 8px; min-width: 0; }
+.bond-demo .btn { min-height: 52px; white-space: normal; }
+.bond-demo-parts { display: grid; gap: 12px; }
+.bond-demo-parts > div { padding: 12px; border: 2px solid var(--line); border-radius: 12px; background: white; }
+.bond-demo-status { font-weight: 800; }

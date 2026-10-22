@@ -56,7 +56,7 @@
         { "id": "d", "label": "4" }
       ],
       "correctId": "b",
-      "hint": "See both {items} at once.",
+      "hint": "Look at the whole group in one look.",
       "explanation": "There are 2 {items}. You can see both at once.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
@@ -191,7 +191,7 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "b",
-      "explanation": "There are 3 {items} under the cup. Peek once. Then say how many.",
+      "explanation": "There are 3 {items} under the cup. Hiding them does not change how many there are.",
       "narration": { "prompt": "How many {items} are under the cup?" }
     }
   ]

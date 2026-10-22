@@ -28,6 +28,8 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Runs interactive question kinds (tap-to-count, build a set, part-whole make-total, cherry part-whole, pick-pair tiles, multiple choice, multi-select, fill blank, ordered, match pairs)
 - A **speaker** after the question reads the question only (Web Speech API, UK female teacher voice) and highlights words as they are spoken
 - Ten questions, then a star result. A miss shows a short correction and moves on. No retry loop
+- Incorrect feedback separates the correct answer, number order or matching pairs from the teaching explanation. On addition `make-total` and `part-whole` questions, an optional **Show me** demonstration reveals each part, then the whole. It uses the question's actual numbers and pictures, supports zero, and never changes the score. Children advance it with buttons, with no automatic motion or spoken answers.
+- Shared wording uses natural UK English. Quest introductions use the actual question count. Hints suggest a strategy instead of stating the answer, and number inputs accept number words as well as digits.
 - Saves best stars and best score per Easy / Medium / Hard. Nine stars on a node awards a gold cup
 
 ## Adding activities

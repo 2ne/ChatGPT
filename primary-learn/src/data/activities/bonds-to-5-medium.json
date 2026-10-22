@@ -50,7 +50,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "hint": "Count on from 3: 4, 5.",
+      "hint": "Start at 3 and count on to 5. Count how many steps you take.",
       "explanation": "3 and 2 make 5. 3 + 2 = 5.",
       "narration": {
         "prompt": "What goes with 3 to make 5?"
@@ -67,7 +67,7 @@
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "hint": "4 and what make 5?",
+      "hint": "Start at 4 and count on to 5.",
       "explanation": "5 = 4 + 1.",
       "narration": {
         "prompt": "What goes with 4 to make 5?"
@@ -101,7 +101,7 @@
           "label": "3"
         }
       ],
-      "hint": "0 and 5 make 5.",
+      "hint": "Adding zero does not change a number.",
       "explanation": "0 + 5 = 5.",
       "narration": {
         "prompt": "What goes with 0 to make 5?"

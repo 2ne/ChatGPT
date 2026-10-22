@@ -139,7 +139,7 @@ export function correctAnswerFor(question: Question): unknown {
   }
 }
 
-/** Short child-facing correct answer, for “It was 4.” */
+/** Correct answer text for the labelled feedback reveal and question bank. */
 export function correctAnswerLabel(question: Question): string | null {
   switch (question.kind) {
     case "count-objects":

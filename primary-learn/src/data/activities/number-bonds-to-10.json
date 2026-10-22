@@ -30,7 +30,7 @@
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
-      "hint": "Tap a space for each one you still need.",
+      "hint": "Count on from the first part. Add one object for each step.",
       "explanation": "6 and 4 make 10. 6 + 4 = 10.",
       "narration": { "prompt": "What goes with 6 to make 10?" }
     },
@@ -54,7 +54,7 @@
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
-      "hint": "How many more from 8 to 10?",
+      "hint": "Start at 8 and count on to 10.",
       "explanation": "8 + 2 = 10.",
       "narration": { "prompt": "What goes with 8 to make 10?" }
     },
@@ -137,19 +137,38 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-minus-4",
-      "prompt": "10 take away 4. How many are left?",
-      "visual": { "item": "star", "count": 10 },
+      "prompt": "What is 10 − 4?",
+      "visual": {
+        "item": "star",
+        "count": 10
+      },
       "layout": "tens-frame",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "6" },
-        { "id": "c", "label": "7" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
       ],
       "correctId": "b",
       "explanation": "Because 4 + 6 = 10, 10 take away 4 is 6.",
-      "narration": { "prompt": "10 take away 4. How many are left?" }
+      "narration": {
+        "prompt": "What is ten take away four?"
+      }
     }
   ]
 }

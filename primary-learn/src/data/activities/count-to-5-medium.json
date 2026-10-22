@@ -52,8 +52,8 @@
         { "id": "d", "label": "4" }
       ],
       "correctId": "c",
-      "hint": "Tap each {item}, even if they look messy.",
-      "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
+      "hint": "Tap each {item} once, even when they are spread out.",
+      "explanation": "Count each {item} once. The numbers go 1, 2, 3. There are 3 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -71,7 +71,7 @@
       ],
       "correctId": "c",
       "hint": "Say a new number for each tap.",
-      "explanation": "Touch each {item} once and count: 1, 2, 3, 4. There are 4 {items}.",
+      "explanation": "Count each {item} once. The numbers go 1, 2, 3, 4. There are 4 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -89,7 +89,7 @@
       ],
       "correctId": "c",
       "hint": "Keep going until every {item} has a number.",
-      "explanation": "Touch each {item} once and count: 1, 2, 3, 4, 5. There are 5 {items}.",
+      "explanation": "Count each {item} once. The numbers go 1, 2, 3, 4, 5. There are 5 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -112,7 +112,7 @@
       "suffix": "{items}.",
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
-      "explanation": "Touch each {item} once and count: {seq}. There are {count} {items}.",
+      "explanation": "Count each {item} once. The numbers go {seq}. There are {count} {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -170,7 +170,7 @@
         { "id": "p4", "left": "4", "right": { "visual": { "item": "fish", "count": 4 }, "layout": "dice" } },
         { "id": "p5", "left": "5", "right": { "visual": { "item": "fish", "count": 5 }, "layout": "dice" } }
       ],
-      "explanation": "Count the {items} in each picture, then find that numeral.",
+      "explanation": "Each number matches a group with that many {items}.",
       "narration": { "prompt": "Match each number to the same amount of {items}." }
     },
     {
@@ -187,7 +187,7 @@
         { "id": "d", "label": "1" }
       ],
       "correctId": "b",
-      "explanation": "Touch each {item} once and count: 1, 2, 3, 4, 5. There are 5 {items}.",
+      "explanation": "Count each {item} once. The numbers go 1, 2, 3, 4, 5. There are 5 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     }
   ]

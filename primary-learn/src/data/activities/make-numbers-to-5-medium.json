@@ -109,7 +109,7 @@
       "narration": {
         "prompt": "What is four plus one?"
       },
-      "hint": "4 and 1 make 5."
+      "hint": "Start with the first number and count on."
     },
     {
       "kind": "make-total",
@@ -145,7 +145,7 @@
       "narration": {
         "prompt": "What is three plus two?"
       },
-      "hint": "3 and 2 also make 5."
+      "hint": "Start with the first number and count on."
     },
     {
       "kind": "part-whole",
@@ -270,13 +270,25 @@
         "shuffleOptions": true
       },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
       ],
       "correctId": "c",
-      "explanation": "2 and 3 more makes 5 {items}.",
+      "explanation": "2 and 3 more make 5 {items}.",
       "narration": {
         "prompt": "Sam has 2 {items}. He gets 3 more. How many {items} does he have now?"
       }

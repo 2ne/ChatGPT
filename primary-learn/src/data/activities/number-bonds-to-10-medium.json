@@ -42,7 +42,7 @@
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
-      "hint": "4 and what make 10?",
+      "hint": "Start at 4 and count on to 10.",
       "explanation": "10 = 4 + 6.",
       "narration": { "prompt": "What goes with 4 to make 10?" }
     },
@@ -60,7 +60,7 @@
         { "id": "c", "label": "0" },
         { "id": "d", "label": "8" }
       ],
-      "hint": "0 and 10 make 10.",
+      "hint": "Adding zero does not change a number.",
       "explanation": "0 + 10 = 10.",
       "narration": { "prompt": "What goes with 0 to make 10?" }
     },
@@ -78,17 +78,33 @@
     {
       "kind": "multiple-choice",
       "id": "nb10m-take-3",
-      "prompt": "10 take away 3. How many are left?",
-      "randomise": { "shuffleOptions": true },
+      "prompt": "What is 10 − 3?",
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "6" },
-        { "id": "c", "label": "7" },
-        { "id": "d", "label": "8" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
       ],
       "correctId": "c",
       "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
-      "narration": { "prompt": "10 take away 3. How many are left?" }
+      "narration": {
+        "prompt": "What is ten take away three?"
+      }
     },
     {
       "kind": "pick-pair",

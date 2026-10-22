@@ -52,7 +52,7 @@
       ],
       "correctId": "a",
       "hint": "Tap the {item} and say one.",
-      "explanation": "Touch the {item} once and count: 1. There is 1 {item}.",
+      "explanation": "Count the {item} once. The numbers go 1. There is 1 {item}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -69,7 +69,7 @@
       ],
       "correctId": "b",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "Touch each {item} once and count: 1, 2. There are 2 {items}.",
+      "explanation": "Count each {item} once. The numbers go 1, 2. There are 2 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -85,8 +85,8 @@
         { "id": "d", "label": "5" }
       ],
       "correctId": "b",
-      "hint": "Point to each {item} and say a number: 1, 2, 3.",
-      "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
+      "hint": "Point to each {item} once and say the next number.",
+      "explanation": "Count each {item} once. The numbers go 1, 2, 3. There are 3 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -139,7 +139,7 @@
         { "id": "d", "visual": { "item": "star", "count": 5 } }
       ],
       "correctId": "b",
-      "explanation": "The missing number is 3.",
+      "explanation": "3 comes after 2 and before 4.",
       "narration": { "prompt": "Which number is missing? One, two, blank, four, five." }
     },
     {
@@ -166,7 +166,7 @@
         { "id": "p3", "left": "4", "right": { "visual": { "item": "fish", "count": 4 }, "layout": "dice" } },
         { "id": "p4", "left": "5", "right": { "visual": { "item": "fish", "count": 5 }, "layout": "dice" } }
       ],
-      "explanation": "The numeral tells us how many: 1 {item}, 2 {items}, 4 {items} and 5 {items}.",
+      "explanation": "Each number tells us how many objects are in its group.",
       "narration": { "prompt": "Match each number to the same amount of {items}." }
     },
     {

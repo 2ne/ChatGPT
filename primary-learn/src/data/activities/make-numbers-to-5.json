@@ -156,7 +156,7 @@
         "count": 4
       },
       "randomise": {},
-      "explanation": "4 is 1 and 1 and 1 and 1. Stop at 4.",
+      "explanation": "Each {item} adds one to the group. A group of 4 has 4 {items}.",
       "narration": {
         "prompt": "Make a group of 4 {items}."
       }
@@ -200,7 +200,7 @@
     {
       "kind": "multiple-choice",
       "id": "m5e-also-5",
-      "prompt": "2 and 3 make 5. Which also makes 5?",
+      "prompt": "2 and 3 make 5. Which other pair makes 5?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -225,7 +225,7 @@
       "correctId": "a",
       "explanation": "1 and 4 make 5 too. 2 and 2 make 4. 3 and 3 make 6. 1 and 2 make 3.",
       "narration": {
-        "prompt": "2 and 3 make 5. Which also makes 5?"
+        "prompt": "2 and 3 make 5. Which other pair makes 5?"
       }
     },
     {
@@ -255,13 +255,25 @@
         "shuffleOptions": true
       },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
       ],
       "correctId": "b",
-      "explanation": "1 and 3 more makes 4 {items}.",
+      "explanation": "1 and 3 more make 4 {items}.",
       "narration": {
         "prompt": "Sam has 1 {item}. He gets 3 more. How many {items} does he have now?"
       }

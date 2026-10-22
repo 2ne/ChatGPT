@@ -280,6 +280,7 @@ rainbow itself is never inset.
   `pointerdown` so iOS is instant. Mute lives in Settings behind the
   avatar chip and stays in localStorage. SFX must not stop narration.
 - Shared phrases (Check it, Hear the question, Correct. Nice!) live in `src/data/copy.ts`.
+- After a miss, show the correct answer under a short label appropriate to the question kind, followed by the teaching explanation. Addition make-total and part-whole questions also offer an optional `Show me` demonstration below feedback. Reveal the first part, the second part, then the whole using existing object tiles. Explicitly describe zero as an empty part. Buttons advance the demonstration without timers, narration or score changes.
   Object pictures are drawn from `visual: { item, count }` by `ObjectGroup`.
   Pictures in a story question must show the object named in the text, with
   matching counts. Do not use `extras` of a second emoji for “n more” of the

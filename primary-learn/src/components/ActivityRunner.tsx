@@ -30,6 +30,7 @@ import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
 import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
+import { BondDemonstration } from "./questions/BondDemonstration";
 
 type ActivityRunnerProps = {
   activity: Activity;
@@ -277,7 +278,7 @@ export function ActivityRunner({
             <span aria-hidden>
               <Pip size={72} mood="cheer" />
             </span>
-            <p className="sidekick-bubble">{copy.introCheer(learnerName)}</p>
+            <p className="sidekick-bubble">{copy.introCheer(learnerName, activity.questions.length)}</p>
           </div>
           <button type="button" className="btn btn-primary btn-block" onClick={begin}>
             {copy.startQuest} <ArrowRight size={19} aria-hidden />
@@ -472,10 +473,15 @@ export function ActivityRunner({
                 {lastCorrect ? (
                   <p>{question.explanation}</p>
                 ) : (
-                  <p>
-                    {rightLabel ? `${copy.itWas(rightLabel)} ` : null}
-                    {question.explanation}
-                  </p>
+                  <>
+                    {rightLabel ? (
+                      <div className="answer-reveal">
+                        <p className="t-body"><strong>{question.kind === "ordered" ? copy.orderLabel : question.kind === "match-pairs" ? copy.pairsLabel : question.kind === "multi-select" || question.kind === "pick-pair" ? copy.answersLabel : copy.answerLabel}</strong></p>
+                        <p>{rightLabel}</p>
+                      </div>
+                    ) : null}
+                    <p>{question.explanation}</p>
+                  </>
                 )}
               </div>
               <span className="feedback-pip" aria-hidden>
@@ -483,6 +489,8 @@ export function ActivityRunner({
               </span>
             </div>
           ) : null}
+
+          {phase === "feedback" && lastCorrect === false ? <BondDemonstration key={question.id} question={question} /> : null}
 
           <div className="quest-actions-inline">{primaryAction}</div>
           </div>

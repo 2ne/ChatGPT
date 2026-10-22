@@ -67,7 +67,7 @@
           "label": "1"
         }
       ],
-      "explanation": "5 is 0 and 5. All of them in one part.",
+      "explanation": "0 and 5 make 5. All 5 are in one part.",
       "narration": {
         "prompt": "What goes with 0 to make 5?"
       }
@@ -100,7 +100,7 @@
           "label": "2"
         }
       ],
-      "explanation": "5 is 5 and 0. Nothing in the other part.",
+      "explanation": "5 and 0 make 5. The other part is empty.",
       "narration": {
         "prompt": "What goes with 5 to make 5?"
       }
@@ -169,20 +169,32 @@
     {
       "kind": "multiple-choice",
       "id": "m5h-sam-5",
-      "prompt": "Sam has 1. He gets 4 more. How many does he have now?",
+      "prompt": "Sam has 1 apple. He gets 4 more. How many apples does he have now?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "6" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
       ],
       "correctId": "b",
-      "explanation": "1 and 4 more makes 5.",
+      "explanation": "1 apple and 4 more apples make 5 apples.",
       "narration": {
-        "prompt": "Sam has 1. He gets 4 more. How many does he have now?"
+        "prompt": "Sam has 1 apple. He gets 4 more. How many apples does he have now?"
       }
     },
     {
@@ -268,7 +280,7 @@
     {
       "kind": "multiple-choice",
       "id": "m5h-another-5",
-      "prompt": "2 and 3 make 5. Which also makes 5?",
+      "prompt": "2 and 3 make 5. Which other pair makes 5?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -293,7 +305,7 @@
       "correctId": "a",
       "explanation": "1 and 4 also make 5. 2 and 2 make 4. 3 and 3 make 6. 4 and 2 make 6.",
       "narration": {
-        "prompt": "2 and 3 make 5. Which also makes 5?"
+        "prompt": "2 and 3 make 5. Which other pair makes 5?"
       }
     }
   ]
