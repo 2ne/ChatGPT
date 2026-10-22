@@ -8,6 +8,8 @@ Learners pick a name and avatar, follow a path of levels, and play **Easy / Medi
 
 https://2ne.github.io/ChatGPT/primary-learn/
 
+Built from `main` by GitHub Pages.
+
 ## Status
 
 15 quests across five complete Easy / Medium / Hard nodes: Count to 5, See numbers to 5, Make numbers to 5, Bonds to 5 and Number bonds to 10. Includes local learner profiles, an open path map, shared question runner and device-only progress. See `curriculum/NEXT.md` for the current content priorities.
