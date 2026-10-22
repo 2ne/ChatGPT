@@ -1738,29 +1738,6 @@ button.object-token:hover:not(:disabled) {
   color: var(--ink-soft);
 }
 
-/* Digit-only answers: big number, no A–D badge. */
-.option.is-numeral {
-  position: relative;
-  justify-content: center;
-  min-height: 72px;
-  padding: 14px 18px;
-  font-size: 36px;
-  line-height: 1;
-}
-
-.option.is-numeral .option-content {
-  flex: none;
-  justify-content: center;
-  font-size: 36px;
-  line-height: 1;
-}
-
-.option.is-numeral .option-check,
-.option.is-numeral .option-cross {
-  position: absolute;
-  right: 14px;
-}
-
 /* Indigo option border is selected only. Hover is gated off on touch. */
 .option.is-selected,
 .pick-pair-tile.is-selected,

@@ -19,10 +19,6 @@ export function MultipleChoice({
   onChange,
 }: MultipleChoiceProps) {
   const showStem = question.kind !== "count-objects" && Boolean(question.visual);
-  // Big digit taps only on pictured join stories (start + added). Other number MC keeps A–D.
-  const joinStory =
-    question.kind === "multiple-choice" && question.visual?.added != null;
-  const numeralPad = joinStory && optionsAreNumerals(question.options);
   const sum = !question.visual && optionsAreNumerals(question.options)
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
@@ -58,13 +54,11 @@ export function MultipleChoice({
               aria-checked={selected}
               disabled={disabled}
               onClick={() => onChange(option.id)}
-              className={choiceClass(selected, marked, numeralPad ? ["is-numeral"] : [])}
+              className={choiceClass(selected, marked)}
             >
-              {numeralPad ? null : (
-                <span className="option-letter" aria-hidden>
-                  {"ABCD"[slot] ?? "•"}
-                </span>
-              )}
+              <span className="option-letter" aria-hidden>
+                {"ABCD"[slot] ?? "•"}
+              </span>
               <OptionContent
                 label={option.label}
                 visual={option.visual}

@@ -17,8 +17,7 @@ rules, change the design — do not invent a second system.
 3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
-   ≥ 64px with letter badges (A–D). Pictured join stories are the exception:
-   digit answers there are big centred numbers with no A–D.
+   ≥ 64px with letter badges (A–D). Pictured join stories use the same rows.
 5. **Celebrate constantly** — stars, confetti pops, cheering Pip.
    Kids should feel progress every 30 seconds.
 6. **Colour with meaning** — maths tiles are orange; green = correct,
@@ -244,9 +243,9 @@ rainbow itself is never inset.
   `PICK ONE`, and the rest). Kids already see what to do from the question.
   If the prompt has a sequence after the question mark (`What comes next? 1, 2, 3, …`), that sequence sits on the next line. The speaker stays after the question.
   Do not show a grey `Tap every answer that is right.` line when the prompt already says every.
-- Options carry **letter badges** (A–D), keyboard `1–4` still works. Exception:
-  pictured join stories (`visual.added`) with digit-only answers omit the badge
-  and show a large centred numeral. Selected = indigo ring + soft fill; correct
+- Options carry **letter badges** (A–D), keyboard `1–4` still works. Pictured
+  join stories (`visual.added`) with digit answers use those same rows, not a
+  separate centred number pad. Selected = indigo ring + soft fill; correct
   = green + ✓ + wiggle; wrong = red + ✕ + shake. Colour is never the only signal
   (icons + words too).
 - Selection, correct and wrong states are **shared** across every question
@@ -270,11 +269,10 @@ rainbow itself is never inset.
   spoken count. Those would give the answer away.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
-  centred pills per question kind. Number answers on `make-total` use the same
-  buttons as multiple-choice. Exceptions: pictured join-story digit answers
-  (no A–D, big number), `pick-pair` square tiles, `part-whole` rounded-square
-  number buttons (one row of three), and `ordered` big numeral tiles (drag
-  handle plus up/down arrows).
+  centred pills per question kind. Number answers on `make-total` and pictured
+  join stories use the same buttons as multiple-choice. Exceptions: `pick-pair`
+  square tiles, `part-whole` rounded-square number buttons (one row of three),
+  and `ordered` big numeral tiles (drag handle plus up/down arrows).
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
