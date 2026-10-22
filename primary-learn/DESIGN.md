@@ -254,8 +254,9 @@ rainbow itself is never inset.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
-  buttons as multiple-choice. Exceptions: `pick-pair` square tiles and
-  `part-whole` rounded-square number buttons (one row of three).
+  buttons as multiple-choice. Exceptions: `pick-pair` square tiles,
+  `part-whole` rounded-square number buttons (one row of three), and
+  `ordered` big numeral tiles (drag to reorder, no up/down arrows).
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
@@ -333,6 +334,12 @@ rainbow itself is never inset.
   `match-pairs` later. Easy: four tiles with dots. Medium: four tiles, harder
   numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
   or 20 use the same `total` / `tiles` config.
+- **Order (`ordered`)** is a vertical stack of big numeral tiles (about 48px
+  digits, tall touch targets). The child drags a tile up or down to swap
+  places. No position numbers like `1.` beside the answer, and no up/down
+  arrow buttons. Arrow keys still move the focused tile for keyboard use.
+  Stem: `Put the numbers in order, from smallest to biggest.` Feedback:
+  `The numbers go 1, 2, 3.`
 - **Cherry bonds (`part-whole`)** stay on the same white activity screen. A
   big whole circle on top (green tint, like the sum-only total), lines down
   to two smaller part circles (blue tint when known). One SVG behind the

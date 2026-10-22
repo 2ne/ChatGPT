@@ -148,7 +148,7 @@
     {
       "kind": "ordered",
       "id": "c5m-order",
-      "prompt": "Put the numbers in counting order. Start with the smallest.",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
         { "id": "n3", "label": "3" },
         { "id": "n1", "label": "1" },
@@ -156,8 +156,8 @@
         { "id": "n2", "label": "2" }
       ],
       "correctOrder": ["n1", "n2", "n3", "n4"],
-      "explanation": "We count 1, then 2, then 3, then 4.",
-      "narration": { "prompt": "Put the numbers in counting order. Start with the smallest." }
+      "explanation": "The numbers go 1, 2, 3, 4.",
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
       "kind": "match-pairs",

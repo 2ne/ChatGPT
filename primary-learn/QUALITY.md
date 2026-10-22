@@ -73,7 +73,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | part-whole | Missing part: `What goes with {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
 | multi-select | `Tap every {pair/group} that {rule}.` |
-| ordered | `Put the numbers in counting order. Start with the smallest.` |
+| ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
 | match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (Y1+) | `{Name} has {n} {things} and {action}. How many {are left / in all}?` Pictures must show the object named in the text, with matching counts. |
 
