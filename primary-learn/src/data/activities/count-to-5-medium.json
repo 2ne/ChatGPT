@@ -13,7 +13,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 types the count of a messy group of 4 or 5. Question 6 is a short story: Sam needs 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 matches 2 to 5 with pictures. Question 10 asks how many in a messy 5. No return to a 1-object count.",
+    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 types the count of a messy group of 4 or 5. Question 6 picks which group has 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 matches 2 to 5 with pictures. Question 10 asks how many in a messy 5. No return to a 1-object count.",
     "versus": "Easy: tidy rows, counts 1 to 5 in order, hints on items 1 to 3. Medium: scattered layouts, mixed pictures and numerals, build and type counts can move inside 3 to 5, hints only on 1 to 3. Hard: extra objects to ignore, number words, a full 1 to 5 order, and almost no hints. Still counting to 5, not bonds."
   },
   "skills": [
@@ -53,7 +53,7 @@
       ],
       "correctId": "c",
       "hint": "Tap each {item}, even if they look messy.",
-      "explanation": "Tap each {item} once. The last number you say is how many.",
+      "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -71,7 +71,7 @@
       ],
       "correctId": "c",
       "hint": "Say a new number for each tap.",
-      "explanation": "Count one {item} at a time. Do not skip. Do not count one twice.",
+      "explanation": "Touch each {item} once and count: 1, 2, 3, 4. There are 4 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -89,7 +89,7 @@
       ],
       "correctId": "c",
       "hint": "Keep going until every {item} has a number.",
-      "explanation": "When every {item} has been tapped, the last number is how many there are.",
+      "explanation": "Touch each {item} once and count: 1, 2, 3, 4, 5. There are 5 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -98,7 +98,7 @@
       "prompt": "Make a group of {count} {items}.",
       "visual": { "item": "duck", "count": 4 },
       "randomise": { "count": { "min": 3, "max": 4 } },
-      "explanation": "Add {items} one by one. Stop at {count}. Do not use every {item} in the tray.",
+      "explanation": "Stop when the group has {count}. There are {count} {items}.",
       "narration": { "prompt": "Make a group of {count} {items}." }
     },
     {
@@ -112,7 +112,7 @@
       "suffix": "{items}.",
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
-      "explanation": "Tap each {item}. The last number you say is the answer.",
+      "explanation": "Touch each {item} once and count: {seq}. There are {count} {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -127,7 +127,7 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "Sam needs 4. Count 1, 2, 3, 4. That group has 4 {items}.",
+      "explanation": "Count 1, 2, 3, 4. That group has 4 {items}.",
       "narration": { "prompt": "Which group has 4 {items}?" }
     },
     {
@@ -187,7 +187,7 @@
         { "id": "d", "label": "1" }
       ],
       "correctId": "b",
-      "explanation": "Tap each {item}: 1, 2, 3, 4, 5. The last number you say is 5. That is how many there are.",
+      "explanation": "Touch each {item} once and count: 1, 2, 3, 4, 5. There are 5 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     }
   ]

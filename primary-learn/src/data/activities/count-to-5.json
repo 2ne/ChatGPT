@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Question 6 says what comes next. Question 7 picks the missing amount in the count from pictures. Question 8 orders 1 to 3. Question 9 matches numerals to amounts. Question 10 is a short story: Sam needs 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
+    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Question 6 says what comes next. Question 7 picks the missing amount in the count from pictures. Question 8 orders 1 to 3. Question 9 matches numerals to amounts. Question 10 picks which group has 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
     "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, number words, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
   },
   "skills": [
@@ -52,7 +52,7 @@
       ],
       "correctId": "a",
       "hint": "Tap the {item} and say one.",
-      "explanation": "Tap the {item} once. One thing counts as 1.",
+      "explanation": "Touch the {item} once and count: 1. There is 1 {item}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -69,7 +69,7 @@
       ],
       "correctId": "b",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "Tap each {item} once: 1, 2. There are 2 {items}.",
+      "explanation": "Touch each {item} once and count: 1, 2. There are 2 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -181,7 +181,7 @@
         { "id": "d", "visual": { "item": "frog", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "Sam needs 5. Count 1, 2, 3, 4, 5. That group has 5 {items}.",
+      "explanation": "Count 1, 2, 3, 4, 5. That group has 5 {items}.",
       "narration": { "prompt": "Which group has 5 {items}?" }
     }
   ]

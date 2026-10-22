@@ -54,7 +54,7 @@
       ],
       "correctId": "a",
       "hint": "Count only the {items}. Leave the {items2}.",
-      "explanation": "Count only the {items}. Tap each {item}: {seq}. Do not count the {items2}.",
+      "explanation": "Count only the {items}: {seq}. There are {count} {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
@@ -90,7 +90,7 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "b",
-      "explanation": "Tap each {item}. Skip the {item2}. There are {count} {items}.",
+      "explanation": "Count only the {items}: {seq}. There are {count} {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {

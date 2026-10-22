@@ -408,7 +408,7 @@ Easy item pool only. Counts stay 1, 2, 3, 4, 5 so the ramp does not wobble. Sequ
     "visual": { "item": "star", "count": 1 },
     "randomise": { "shuffleOptions": true },
     "hint": "Tap the {item} and say one.",
-    "explanation": "Tap the {item} once. One thing counts as 1."
+    "explanation": "Touch the {item} once and count: 1. There is 1 {item}."
   }
 ]
 ```

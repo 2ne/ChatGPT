@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 flash a group of 1, then 2, then 3. Question 4 flashes a group of 3. Question 5 flashes 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 is a short story: Sam needs 5. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
+    "within": "Questions 1 to 3 flash a group of 1, then 2, then 3. Question 4 flashes a group of 3. Question 5 flashes 4. Question 6 sees 2 and 2 and asks how many in all. Question 7 picks which group has 5. Question 8 taps every group of 5. Question 9 flashes 4 fingers. Question 10 peeks under the cup for 3. Amounts climb. No match-pairs. No tap-to-count.",
     "versus": "Easy: tidy groups, 1 to 5 in order, longer flash, hints on the first three. Medium mixes tidy, scatter and 2+3 inside 5, shorter flash. Hard stays on 4 and 5, quick flash, number words, and no hints. Still see how many, not bonds."
   },
   "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns", "five-frame", "finger-patterns"],
@@ -146,7 +146,7 @@
         { "id": "d", "visual": { "item": "ladybird", "count": 2 }, "layout": "dice" }
       ],
       "correctId": "c",
-      "explanation": "Sam needs 5. That group has 5 {items}.",
+      "explanation": "That group has 5 {items}.",
       "narration": { "prompt": "Which group has 5 {items}?" }
     },
     {
