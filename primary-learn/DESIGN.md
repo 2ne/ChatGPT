@@ -304,9 +304,9 @@ rainbow itself is never inset.
   variants. Only count-objects tiles are tappable. Do not draw empty
   placeholder boxes that hint at the total. Dice, five-frame, tens-frame,
   compact and parts stems use those same cream tiles, sized and spaced like
-  count-objects. Fingers stay a finger pattern. Flash/hidden still cover the
-  tiles. Pictures inside A/B/C/D and match-pair cards use smaller tiles so
-  they fit.
+  count-objects. Fingers are a cartoon hand on that cream tile, with 0 to 5
+  raised fingers. Flash/hidden still cover the tiles. Pictures inside A/B/C/D
+  and match-pair cards use smaller tiles so they fit.
 - **Part-whole (`make-total`)** stays on the same white activity screen. No
   scenery. Easy (`fill-slots`): row 1 is the known part as filled sun-style
   tiles, then a large `+`. Row 2 is the child’s area. Added objects are

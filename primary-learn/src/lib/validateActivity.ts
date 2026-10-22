@@ -83,6 +83,7 @@ function expectVisual(
   value: unknown,
   path: string,
   allowAdded = false,
+  allowZero = false,
 ): ObjectAsset {
   if (!isRecord(value)) fail(path, "visual must be { item, count }");
   const item = value.item;
@@ -90,8 +91,9 @@ function expectVisual(
   if (!isString(item) || !(OBJECT_ITEMS as readonly string[]).includes(item)) {
     fail(path, `visual.item must be one of ${OBJECT_ITEMS.join(", ")}`);
   }
-  if (typeof count !== "number" || !Number.isInteger(count) || count < 1 || count > 12) {
-    fail(path, "visual.count must be a whole number from 1 to 12");
+  const min = allowZero ? 0 : 1;
+  if (typeof count !== "number" || !Number.isInteger(count) || count < min || count > 12) {
+    fail(path, `visual.count must be a whole number from ${min} to 12`);
   }
   if (value.added == null) {
     return { item: item as ObjectAsset["item"], count };
@@ -131,9 +133,20 @@ function optionalVisual(
   record: Record<string, unknown>,
   path: string,
   allowAdded = false,
+  allowZero = false,
 ): ObjectAsset | undefined {
   if (record.visual == null) return undefined;
-  return expectVisual(record.visual, `${path}.visual`, allowAdded);
+  return expectVisual(record.visual, `${path}.visual`, allowAdded, allowZero);
+}
+
+function assertFingersVisual(visual: ObjectAsset | undefined, path: string) {
+  if (!visual) fail(path, "fingers layout needs a visual");
+  if (visual.count < 0 || visual.count > 5) {
+    fail(path, "fingers layout needs visual.count from 0 to 5");
+  }
+  if (visual.added != null) {
+    fail(path, "fingers cannot use visual.added");
+  }
 }
 
 function parseExtras(record: Record<string, unknown>, path: string): ObjectAsset[] | undefined {
@@ -178,12 +191,13 @@ function parseOption(value: unknown, path: string): QuestionOption {
   if (!isRecord(value)) fail(path, "option must be an object");
   const id = expectString(value, "id", path);
   const label = value.label == null ? undefined : expectString(value, "label", path);
-  const visual = optionalVisual(value, path, false);
-  if (!label && !visual) fail(path, "option needs a label or a visual");
   const layout = parseLayout(value, path);
-  if (layout === "hidden" || layout === "fingers") {
-    fail(path, "option layout cannot be hidden or fingers");
+  if (layout === "hidden") {
+    fail(path, "option layout cannot be hidden");
   }
+  const visual = optionalVisual(value, path, false, layout === "fingers");
+  if (layout === "fingers") assertFingersVisual(visual, path);
+  if (!label && !visual) fail(path, "option needs a label or a visual");
   return { id, label, visual, layout };
 }
 
@@ -194,11 +208,12 @@ function parseMatchSide(value: unknown, path: string): MatchSide {
   }
   if (!isRecord(value)) fail(path, "match side must be a string or { label, visual }");
   const label = value.label == null ? undefined : expectString(value, "label", path);
-  const visual = optionalVisual(value, path);
   const layout = parseLayout(value, path);
-  if (layout === "hidden" || layout === "fingers") {
-    fail(path, "match side layout cannot be hidden or fingers");
+  if (layout === "hidden") {
+    fail(path, "match side layout cannot be hidden");
   }
+  const visual = optionalVisual(value, path, false, layout === "fingers");
+  if (layout === "fingers") assertFingersVisual(visual, path);
   if (!label && !visual) fail(path, "match side needs a label or a visual");
   return { label, visual, layout };
 }
@@ -278,21 +293,19 @@ function parseQuestion(value: unknown, path: string): Question {
         ? narration.prompt.text
         : "";
   if (spokenLine) assertNoFactTrueWording(spokenLine, path, "narration");
-  const visual =
-    kind === "make-total"
-      ? parseMakeTotalVisual(value.visual, `${path}.visual`)
-      : optionalVisual(value, path, true);
   const extras =
     kind === "make-total" ? parseMakeTotalExtras(value, path) : parseExtras(value, path);
   const layout = parseLayout(value, path);
+  const visual =
+    kind === "make-total"
+      ? parseMakeTotalVisual(value.visual, `${path}.visual`)
+      : optionalVisual(value, path, true, layout === "fingers");
   const flashMs = parseFlashMs(value, path);
   if (layout === "hidden" && flashMs == null) {
     fail(path, "layout hidden needs flashMs so the child can peek");
   }
-  if (layout === "fingers" && visual) {
-    if (visual.count < 1 || visual.count > 5) {
-      fail(path, "fingers layout needs visual.count from 1 to 5");
-    }
+  if (layout === "fingers") {
+    assertFingersVisual(visual, path);
   }
   if ((layout === "five-frame" || layout === "tens-frame") && visual) {
     const max = layout === "five-frame" ? 5 : 10;

@@ -1368,31 +1368,32 @@ button.learner-chip:focus-visible {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 8px;
-  min-height: 88px;
-  padding: 8px 16px 12px;
+  box-sizing: border-box;
+  width: 148px;
+  height: 88px;
+  padding: 4px 10px 6px;
   border-radius: 24px 24px 18px 18px;
   background: var(--paper-deep);
   border: 3px solid var(--line);
 }
 
-.finger {
-  width: 18px;
-  border-radius: 10px 10px 6px 6px;
-  background: var(--primary-soft, #c8e6c9);
-  border: 2px solid var(--primary);
-  transition: height 120ms ease;
+.finger-hand-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
-.finger.is-up {
+.object-group.is-fingers.is-option {
+  padding: 0;
+}
+
+.object-group.is-fingers.is-option .finger-hand {
+  width: 96px;
   height: 64px;
-  background: var(--sun-soft);
-  border-color: var(--sun);
-}
-
-.finger.is-down {
-  height: 22px;
-  opacity: 0.45;
+  padding: 2px 6px 4px;
+  border-width: 2px;
+  border-radius: 16px 16px 12px 12px;
 }
 
 /* Picture stays in flow so size does not jump. Flip shows a purple Look again face. */

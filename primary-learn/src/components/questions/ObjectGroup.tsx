@@ -4,6 +4,7 @@ import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
 import type { ObjectAsset, ObjectItem, ObjectLayout } from "../../types/activity";
+import { FingerHand } from "./FingerHand";
 import { FlashReveal } from "./FlashReveal";
 
 type Token = {
@@ -77,16 +78,24 @@ function groupClass(scatter: boolean, compact: boolean, tappable: boolean): stri
   return bits.join(" ");
 }
 
-function FingerPattern({ count, label }: { count: number; label: string }) {
+function fingerLabel(count: number): string {
+  return count === 1 ? "1 finger" : `${count} fingers`;
+}
+
+function FingerPattern({
+  count,
+  compact,
+}: {
+  count: number;
+  compact?: boolean;
+}) {
   return (
-    <span className="object-group is-fingers" aria-label={label}>
+    <span
+      className={`object-group is-fingers${compact ? " is-option" : ""}`}
+      aria-label={fingerLabel(count)}
+    >
       <span className="finger-hand" aria-hidden>
-        {Array.from({ length: 5 }, (_, index) => (
-          <span
-            key={index}
-            className={`finger${index < count ? " is-up" : " is-down"}`}
-          />
-        ))}
+        <FingerHand count={count} />
       </span>
     </span>
   );
@@ -199,18 +208,23 @@ export function ObjectGroup({
     return <JoinTiles visual={visual} compact={compact} />;
   }
 
+  if (layout === "fingers") {
+    const body = <FingerPattern count={visual.count} compact={compact} />;
+    if (showFlash) {
+      return <FlashReveal flashMs={flashMs ?? 1200}>{body}</FlashReveal>;
+    }
+    return body;
+  }
+
   if (!interactive) {
-    const body =
-      layout === "fingers" ? (
-        <FingerPattern count={visual.count} label={`${visual.count} fingers`} />
-      ) : (
-        <PictureTiles
-          tokens={tokens}
-          scatter={scatter}
-          compact={Boolean(compact)}
-          label={lookLabel}
-        />
-      );
+    const body = (
+      <PictureTiles
+        tokens={tokens}
+        scatter={scatter}
+        compact={Boolean(compact)}
+        label={lookLabel}
+      />
+    );
     if (showFlash) {
       return (
         <FlashReveal flashMs={flashMs ?? 1200}>
