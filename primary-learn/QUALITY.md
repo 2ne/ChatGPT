@@ -156,7 +156,7 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
     { "id": "d", "label": "4" }
   ],
   "correctId": "a",
-  "hint": "Tap the {item} and say one.",
+  "hint": "Tap each picture once as you count.",
   "explanation": "There is 1 {item}.",
   "narration": { "prompt": "How many {items} can you see?" }
 }
