@@ -3120,9 +3120,9 @@ button.object-token:hover:not(:disabled) {
 }
 
 .map-zone-art.is-blended {
-  top: -32px;
-  mask-image: linear-gradient(to bottom, transparent, #000 32px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 32px);
+  top: -16px;
+  mask-image: linear-gradient(to bottom, transparent, #000 16px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16px);
 }
 
 .map-zone + .map-zone::after {

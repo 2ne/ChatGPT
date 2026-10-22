@@ -180,11 +180,13 @@ they are.
    SVG tiles stay at 340 × 310 CSS pixels on phones and desktops. Decoration
    is hidden from assistive technology and never intercepts touches. The road,
    signs and level buttons remain opaque above it. No unrelated floating doodles.
-   Overlap each section's artwork by 32px into the preceding section and fade it
+   Overlap each section's artwork by 16px into the preceding section and fade it
    in with a CSS mask. Both the tint and the doodles blend, while topic boundaries
    used by navigation remain unchanged.
    At each boundary add a 1px black line at 7% opacity with a 1px white highlight
    below at 55% opacity, so neighbouring sections with similar tints stay distinct.
+   Centre topic name plates vertically on their section divider. The first plate
+   stays inset from the top of the map because it has no preceding section.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
    rows, each with three stars and the best mark (`7/10`). Every row with a
    quest is playable. Rows with no quest yet say coming soon.

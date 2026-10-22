@@ -160,7 +160,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
     const bands = zones.map((zone, i) => {
       const top = i === 0 ? 0 : points[zone.first].y - half;
       const bottom = i === zones.length - 1 ? height : points[zone.last].y + half;
-      const signY = points[zone.first].y - signDistance(zone.first);
+      const signY = i === 0 ? FIRST_SIGN_TOP : top;
       return {
         ...zone,
         top,
