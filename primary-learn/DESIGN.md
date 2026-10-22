@@ -464,9 +464,8 @@ audio files. Scale is too large.
 
 ### Building a missing part
 
-The make-total fill interaction uses a compact paper panel with a labelled starting
-group, a centred plus on its own row, and a white workspace for added objects.
-The workspace uses five columns and reserves enough unmarked space for the maximum
-allowed additions. Do not draw empty slots or counts that disclose the answer.
-Keep the Add button in its own fixed row below the objects. Tiles stay 56px on
-larger screens and 44px on narrow screens. The workspace must fit a 320px viewport.
+Keep bond building simple. Show the starting objects, a centred plus and the
+child's added objects on plain white. No enclosing cards, dashed workspace panel
+or extra group labels. Use five-column rows and reserve unmarked space so the Add
+button stays still. Keep one Add button below the objects. Do not show empty slots
+or counts that give away the answer. Tiles are 56px, or 44px on narrow screens.

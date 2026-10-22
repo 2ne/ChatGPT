@@ -170,7 +170,6 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
     <div className="make-total">
       {fillMode && !subtract ? (
         <div className="make-total-fill">
-          <p className="make-total-group-label">{copy.startingGroup}</p>
           <div
             className="make-total-known-row"
             aria-label={`${known} ${known === 1 ? itemWords.singular : itemWords.plural}`}
@@ -182,7 +181,6 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             </span>
           </div>
           <span className="make-total-join" aria-hidden>+</span>
-          <p className="make-total-group-label">{copy.addedGroup}</p>
           <div className="make-total-workspace">
           <div
             className="make-total-add-row"

@@ -35,8 +35,6 @@ export const copy = {
   lookedAgainOnce: "You only looked again once!",
   lookedAgainTimes: (n: number) => `You looked again ${n} times.`,
   yourGroup: "Your group",
-  startingGroup: "Start with these",
-  addedGroup: "Add your objects here",
   tapToAdd: "Tap to add",
   emptyGroup: "Your group is empty.",
   startGroupAgain: "Start the group again",
