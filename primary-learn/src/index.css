@@ -3032,10 +3032,6 @@ button.object-token:hover:not(:disabled) {
 .quest-intro .back-link { justify-self: start; min-height: 44px; margin: 0; }
 .intro-card { overflow: hidden; border: 2px solid var(--line); border-radius: 28px; background: white; box-shadow: 0 16px 48px rgba(35,41,70,.08); }
 .intro-scene { position: relative; display: grid; justify-items: center; gap: 4px; padding: 24px 24px 18px; background: var(--paper); isolation: isolate; }
-.intro-scene::before { content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%; background: var(--sun-soft); top: 22px; z-index: -1; }
-.intro-stars { display: flex; gap: 18px; align-items: center; color: #9a6200; }
-.intro-stars svg { width: 26px; height: 26px; fill: var(--sun); stroke-width: 1.8; }
-.intro-stars svg:nth-child(2) { width: 36px; height: 36px; margin-top: -12px; }
 .intro-scene > svg { position: relative; z-index: 1; }
 .intro-scene-floor { width: 112px; height: 12px; border-radius: 50%; background: var(--paper-deep); margin-top: -14px; }
 .intro-card-body { display: grid; gap: 18px; padding: 28px 32px 32px; text-align: center; }

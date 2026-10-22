@@ -190,7 +190,7 @@ they are.
 
 Centred quest card, max-width **34rem**, on a white page with a subtle paper glow.
 Keep the back link outside the card. A warm paper illustration panel holds Pip
-and three decorative stars. Below it, centre the icon and title, readable summary,
+on a simple warm background. Below it, centre the icon and title, readable summary,
 star goal, and a two-column row for question count and time. End with a short
 personal welcome and the full-width gradient `Start quest` button. Use 28px card
 corners and a soft shadow. On narrow screens reduce padding, keep the facts in

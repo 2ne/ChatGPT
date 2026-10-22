@@ -252,7 +252,6 @@ export function ActivityRunner({
           </button>
           <div className="intro-card">
           <div className="intro-scene" aria-hidden>
-            <div className="intro-stars"><Star /><Star /><Star /></div>
             <Pip size={144} mood="happy" />
             <span className="intro-scene-floor" />
           </div>
