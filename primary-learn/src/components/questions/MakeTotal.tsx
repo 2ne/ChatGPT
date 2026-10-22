@@ -1,4 +1,4 @@
-import type { MouseEvent, PointerEvent } from "react";
+import { useState, type MouseEvent, type PointerEvent } from "react";
 import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS } from "../../data/objects";
 import {
@@ -123,6 +123,7 @@ function Slot({
 }
 
 export function MakeTotal({ question, answer, disabled, reveal, onChange }: MakeTotalProps) {
+  const [filledSlots, setFilledSlots] = useState<number[]>([]);
   const part = makeTotalPart(question);
   const other = makeTotalOther(question);
   const gap = makeTotalGap(question);
@@ -143,6 +144,11 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
   const resultValue = gap === "total" ? selected : question.total;
 
   const filledMissing = selected ?? 0;
+  // Keep positions local while scoring continues to use the number of objects.
+  // External resets or answer reveals can still provide a count directly.
+  const occupiedSlots = filledSlots.length === filledMissing
+    ? filledSlots
+    : Array.from({ length: filledMissing }, (_, index) => index);
 
   function setFilled(next: number) {
     const max = subtract ? question.total : bank;
@@ -191,11 +197,17 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
               <Slot
                 key={`a-${index}`}
                 item={item}
-                kind={index < filledMissing ? "added" : "add"}
+                kind={occupiedSlots.includes(index) ? "added" : "add"}
                 tappable={canFill}
                 disabled={disabled}
                 index={index}
-                onToggle={() => setFilled(index < filledMissing ? filledMissing - 1 : filledMissing + 1)}
+                onToggle={() => {
+                  const next = occupiedSlots.includes(index)
+                    ? occupiedSlots.filter((slot) => slot !== index)
+                    : [...occupiedSlots, index];
+                  setFilledSlots(next);
+                  setFilled(next.length);
+                }}
               />
             ))}
           </div>

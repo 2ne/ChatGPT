@@ -465,8 +465,8 @@ audio files. Scale is too large.
 ### Building a missing part
 
 Show the starting objects, a centred plus, and fixed tappable spaces on plain white.
-Each empty space shows + and Add. Tapping any empty space adds one object there in
-the next available position. Tapping an added object removes one object only.
+Each empty space shows + and Add. Tapping an empty space fills that exact space.
+Tapping an added object clears that exact space. Other objects stay in place.
 There is no separate Add button. Use five columns. Keep spare spaces beyond the
 correct answer, so filling every space is not the goal. Do not add instruction text below the boxes.
 Tiles are 56px, or 44px on narrow screens. No extra panels.
