@@ -183,6 +183,8 @@ they are.
    Overlap each section's artwork by 96px into the preceding section and fade it
    in with a CSS mask. Both the tint and the doodles blend, while topic boundaries
    used by navigation remain unchanged.
+   At each boundary add a 1px black line at 7% opacity with a 1px white highlight
+   below at 55% opacity, so neighbouring sections with similar tints stay distinct.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
    rows, each with three stars and the best mark (`7/10`). Every row with a
    quest is playable. Rows with no quest yet say coming soon.
