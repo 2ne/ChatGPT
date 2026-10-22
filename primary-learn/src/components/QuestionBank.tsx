@@ -3,6 +3,7 @@ import { formatYearGroups } from "../data/labels";
 import { correctAnswerFor, correctAnswerLabel } from "../lib/answers";
 import { DIFFICULTY_LABELS } from "../lib/path";
 import type { Question } from "../types/activity";
+import { splitPromptTail } from "../lib/prompt";
 import { QuestionView } from "./questions/QuestionView";
 
 const TEACHER_NAME = "Teacher Review";
@@ -20,6 +21,7 @@ function jumpToActivity(activityId: string) {
 function QuestionBlock({ question, index }: { question: Question; index: number }) {
   const answer = correctAnswerFor(question);
   const keyLabel = correctAnswerLabel(question);
+  const promptParts = splitPromptTail(question.prompt);
 
   return (
     <article className="qb-question card" aria-label={`Question ${index + 1}`}>
@@ -31,7 +33,10 @@ function QuestionBlock({ question, index }: { question: Question; index: number 
           <p className="t-meta">
             {question.kind} · {question.id}
           </p>
-          <h3 className="qb-prompt">{question.prompt}</h3>
+          <h3 className="qb-prompt">
+            {promptParts.head}
+            {promptParts.tail ? <span className="q-prompt-tail">{promptParts.tail}</span> : null}
+          </h3>
         </div>
       </div>
 

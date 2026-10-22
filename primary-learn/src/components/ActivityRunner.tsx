@@ -22,6 +22,7 @@ import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
 import { spokenPrompt } from "../lib/narration";
+import { splitPromptTail } from "../lib/prompt";
 import { subjectTheme } from "../data/subjects";
 import { useNarration } from "../hooks/useNarration";
 import { ConfettiBurst } from "./ConfettiBurst";
@@ -318,6 +319,7 @@ export function ActivityRunner({
   const rightLabel = lastCorrect === false ? correctAnswerLabel(question) : null;
   const reveal = phase === "feedback" ? (lastCorrect ? "correct" : "incorrect") : null;
   const position = Math.min(index + 1, activeQueue.length);
+  const promptParts = splitPromptTail(question.prompt);
   const primaryAction =
     phase === "question" ? (
       <button
@@ -408,7 +410,7 @@ export function ActivityRunner({
             </span>
             <h1 ref={promptRef} tabIndex={-1} className="q-prompt">
               <SpokenWords
-                display={question.prompt}
+                display={promptParts.head}
                 spoken={spokenPrompt(question)}
                 charIndex={speech.playing ? speech.charIndex : -1}
               />
@@ -424,6 +426,7 @@ export function ActivityRunner({
                   }}
                 />
               ) : null}
+              {promptParts.tail ? <span className="q-prompt-tail">{promptParts.tail}</span> : null}
             </h1>
           </div>
 

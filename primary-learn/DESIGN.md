@@ -242,6 +242,7 @@ rainbow itself is never inset.
 - Prompt row is the numbered badge plus the question text and speaker. Do
   **not** show a grey uppercase kind label above it (`HOW MANY?`, `TYPE IT IN`,
   `PICK ONE`, and the rest). Kids already see what to do from the question.
+  If the prompt has a sequence after the question mark (`What comes next? 1, 2, 3, …`), that sequence sits on the next line. The speaker stays after the question.
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Exception:
   pictured join stories (`visual.added`) with digit-only answers omit the badge
   and show a large centred numeral. Selected = indigo ring + soft fill; correct

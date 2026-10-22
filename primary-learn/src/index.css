@@ -1255,6 +1255,11 @@ button.learner-chip:focus-visible {
   color: var(--ink);
 }
 
+.q-prompt-tail {
+  display: block;
+  margin-top: 4px;
+}
+
 .speak-word.is-on {
   background: var(--sun-soft);
   border-radius: 6px;
