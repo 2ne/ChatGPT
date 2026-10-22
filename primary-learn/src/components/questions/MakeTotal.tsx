@@ -164,7 +164,6 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
 
   const showButtons = question.mode !== "fill-slots" && question.options;
   const itemWords = OBJECT_WORDS[item];
-  const canAddMore = filledMissing < bank;
 
   return (
     <div className="make-total">
@@ -188,27 +187,19 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
             role="group"
             aria-label={`Add ${itemWords.plural}`}
           >
-            {Array.from({ length: filledMissing }, (_, index) => (
+            {Array.from({ length: bank }, (_, index) => (
               <Slot
                 key={`a-${index}`}
                 item={item}
-                kind="added"
+                kind={index < filledMissing ? "added" : "add"}
                 tappable={canFill}
                 disabled={disabled}
                 index={index}
-                onToggle={() => setFilled(index)}
+                onToggle={() => setFilled(index < filledMissing ? filledMissing - 1 : filledMissing + 1)}
               />
             ))}
           </div>
-              <Slot
-                key="add"
-                item={item}
-                kind="add"
-                tappable={canFill && canAddMore}
-                disabled={disabled || !canAddMore}
-                index={filledMissing}
-                onToggle={() => setFilled(filledMissing + 1)}
-              />
+              {!disabled ? <p className="make-total-help">{copy.buildBondHelp}</p> : null}
           </div>
         </div>
       ) : null}

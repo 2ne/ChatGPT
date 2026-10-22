@@ -464,8 +464,9 @@ audio files. Scale is too large.
 
 ### Building a missing part
 
-Keep bond building simple. Show the starting objects, a centred plus and the
-child's added objects on plain white. No enclosing cards, dashed workspace panel
-or extra group labels. Use five-column rows and reserve unmarked space so the Add
-button stays still. Keep one Add button below the objects. Do not show empty slots
-or counts that give away the answer. Tiles are 56px, or 44px on narrow screens.
+Show the starting objects, a centred plus, and fixed tappable spaces on plain white.
+Each empty space shows + and Add. Tapping any empty space adds one object there in
+the next available position. Tapping an added object removes one object only.
+There is no separate Add button. Use five columns. Keep spare spaces beyond the
+correct answer, so filling every space is not the goal. Shared help text explains
+adding and removing. Tiles are 56px, or 44px on narrow screens. No extra panels.

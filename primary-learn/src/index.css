@@ -4027,8 +4027,8 @@ button.object-token:hover:not(:disabled) {
 .make-total-fill .make-total-add-row { display: grid; grid-template-columns: repeat(5, var(--make-total-tile)); justify-content: center; align-content: start; gap: 8px; }
 .make-total-fill .make-total-join { font-size: 30px; }
 .make-total-workspace { display: grid; justify-items: center; gap: 10px; }
-.make-total-workspace > .make-total-slot.is-add { width: 112px; height: 52px; flex-direction: row; gap: 8px; }
-.make-total-workspace .make-total-add-label { font-size: 16px; }
+
+.make-total-help { margin: 0; max-width: 30ch; text-align: center; color: var(--ink-soft); font-size: 15px; line-height: 1.5; }
 @media (max-width: 420px) {
   .make-total-fill { --make-total-tile: 44px; }
   .make-total-fill .make-total-slot { border-radius: 12px; font-size: 26px; }
