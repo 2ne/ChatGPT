@@ -52,6 +52,15 @@ function storyIsJoin(prompt: string): boolean {
   return /\b(gives (him|her)|gets) \d+ more\b/i.test(prompt);
 }
 
+function assertNoFactTrueWording(text: string, path: string, field: string) {
+  if (/\b(fact|true)\b/i.test(text)) {
+    fail(
+      path,
+      `${field} must not say fact or true to a child. For number sentences use Select every correct sum.`,
+    );
+  }
+}
+
 function expectString(record: Record<string, unknown>, key: string, path: string): string {
   const value = record[key];
   if (!isString(value) || value.trim() === "") fail(path, `${key} must be a non-empty string`);
@@ -259,6 +268,16 @@ function parseQuestion(value: unknown, path: string): Question {
   const explanation = expectString(value, "explanation", path);
   const hint = value.hint == null ? undefined : expectString(value, "hint", path);
   const narration = parseNarration(value.narration, `${path}.narration`);
+  assertNoFactTrueWording(prompt, path, "prompt");
+  assertNoFactTrueWording(explanation, path, "explanation");
+  if (hint) assertNoFactTrueWording(hint, path, "hint");
+  const spokenLine =
+    narration && typeof narration.prompt === "string"
+      ? narration.prompt
+      : narration && typeof narration.prompt === "object"
+        ? narration.prompt.text
+        : "";
+  if (spokenLine) assertNoFactTrueWording(spokenLine, path, "narration");
   const visual =
     kind === "make-total"
       ? parseMakeTotalVisual(value.visual, `${path}.visual`)

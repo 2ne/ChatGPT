@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 is the sum line for what goes with 6 to make 10. Question 2 fills 10 take away 4. Question 3 is the part-whole cherry for what 3 and 7 make. Question 4 taps every true fact, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 10. Question 6 is 10 take away 0. Question 7 is the sum line reverse for what goes with 8 to make 10. Question 8 taps four tiles with no dots to make 10. Question 9 picks 10 take away 7 as a number word. Question 10 is a short story: Sam has 10 and gives away 3. No hints. Totals stay 10.",
+    "within": "Question 1 is the sum line for what goes with 6 to make 10. Question 2 fills 10 take away 4. Question 3 is the part-whole cherry for what 3 and 7 make. Question 4 asks the child to select every correct sum, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 10. Question 6 is 10 take away 0. Question 7 is the sum line reverse for what goes with 8 to make 10. Question 8 taps four tiles with no dots to make 10. Question 9 picks 10 take away 7 as a number word. Question 10 is a short story: Sam has 10 and gives away 3. No hints. Totals stay 10.",
     "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots, mixing plus and take away."
   },
   "skills": [
@@ -112,7 +112,7 @@
     {
       "kind": "multi-select",
       "id": "nb10h-every-fact",
-      "prompt": "Tap every fact that is true.",
+      "prompt": "Select every correct sum.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -140,7 +140,7 @@
       ],
       "explanation": "2 and 8 make 10. Taking 2 away from 10 leaves 8.",
       "narration": {
-        "prompt": "Tap every fact that is true."
+        "prompt": "Select every correct sum."
       }
     },
     {

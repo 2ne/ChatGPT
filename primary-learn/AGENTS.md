@@ -59,7 +59,7 @@ Every child-facing string (`copy.ts`, activity JSON, component words) must follo
 - **UK English.** *maths*, *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2*.
 - **Full kid sentences.** Everyday words. Present tense. One idea per sentence. The stem must make sense if a parent reads it aloud with no picture context. Prefer a clear short sentence over a clipped fragment.
 - **No fancy punctuation.** No em dashes (`—`) or en dashes (`–`) as punctuation. No semicolons. No colons to glue two ideas. Full stops only.
-- **Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages).
+- **Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages), *fact*, *true*.
 
 | Bad | Good |
 | --- | --- |

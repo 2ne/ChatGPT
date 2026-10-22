@@ -50,7 +50,7 @@ Reading age follows the year group, not the adult who is coding.
 
 **Sentences must make sense to kids.** Do not clip the verb or the ask. A parent reading aloud with no extra help should understand the job.
 
-**Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages).
+**Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages), *fact*, *true* (do not write `Tap every fact that is true`).
 
 Use British English: *maths*, *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2* (not 2nd grade). Follow **Writing for children** in `AGENTS.md`: short sentences, no em or en dashes as punctuation, no semicolons, one idea per sentence.
 
@@ -75,7 +75,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | make-total | Missing part (fill-slots or sum-only): `What do you need to add to {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Sum-only totals: `What is {a} + {b}?` (subtract: `What is {a} take away {b}?`). The kind generates this from the numbers on screen; JSON may override. Spoken: `What is one plus one?` / `What is five take away two?`. Pictured totals: `How many can you see in all?` (only if pictures are shown). Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
 | pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | part-whole | Missing part: `What do you need to add to {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
-| multi-select | `Tap every {pair/group} that {rule}.` Or `Which groups have {n} {items}?` when picking pictured groups. |
+| multi-select | Number sentences: `Select every correct sum.` Never `Tap every fact that is true.` Pictures: `Tap every group that has {n} {items}.` Pairs: `Tap every pair that makes {n}.` |
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
 | match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |

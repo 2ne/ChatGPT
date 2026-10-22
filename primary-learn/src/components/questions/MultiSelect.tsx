@@ -24,8 +24,10 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
     onChange(next);
   }
 
+  const alreadySaysEvery = /\bevery\b/i.test(question.prompt);
+
   return (
-    <div className="option-stack" role="group" aria-label={copy.chooseAll}>
+    <div className="option-stack" role="group" aria-label={alreadySaysEvery ? question.prompt : copy.chooseAll}>
       {question.visual ? (
         <ObjectGroup
           visual={question.visual}
@@ -34,7 +36,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
           flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
-      <p className="t-body">{copy.chooseAll}</p>
+      {alreadySaysEvery ? null : <p className="t-body">{copy.chooseAll}</p>}
       {question.options.map((option, slot) => {
         const isOn = selected.includes(option.id);
         const marked = markChoice(reveal, isOn, question.correctIds.includes(option.id));
