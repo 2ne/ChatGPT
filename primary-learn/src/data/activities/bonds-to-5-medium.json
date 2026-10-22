@@ -42,7 +42,7 @@
     {
       "kind": "make-total",
       "id": "b5m-with-3",
-      "prompt": "What goes with 3 to make 5?",
+      "prompt": "What do you need to add to 3 to make 5?",
       "visual": {
         "item": "star",
         "count": 3
@@ -53,13 +53,13 @@
       "hint": "Start at 3 and count on to 5. Count how many steps you take.",
       "explanation": "3 and 2 make 5.",
       "narration": {
-        "prompt": "What goes with 3 to make 5?"
+        "prompt": "What do you need to add to 3 to make 5?"
       }
     },
     {
       "kind": "make-total",
       "id": "b5m-5-eq-4",
-      "prompt": "What goes with 4 to make 5?",
+      "prompt": "What do you need to add to 4 to make 5?",
       "visual": {
         "item": "apple",
         "count": 4
@@ -70,13 +70,13 @@
       "hint": "Start at 4 and count on to 5.",
       "explanation": "4 and 1 make 5.",
       "narration": {
-        "prompt": "What goes with 4 to make 5?"
+        "prompt": "What do you need to add to 4 to make 5?"
       }
     },
     {
       "kind": "make-total",
       "id": "b5m-0-plus",
-      "prompt": "What goes with 0 to make 5?",
+      "prompt": "What do you need to add to 0 to make 5?",
       "part": 0,
       "total": 5,
       "mode": "sum-only",
@@ -104,13 +104,13 @@
       "hint": "Adding zero does not change a number.",
       "explanation": "0 and 5 make 5. Adding 0 does not change the number.",
       "narration": {
-        "prompt": "What goes with 0 to make 5?"
+        "prompt": "What do you need to add to 0 to make 5?"
       }
     },
     {
       "kind": "part-whole",
       "id": "b5m-pw-5",
-      "prompt": "What goes with 5 to make 5?",
+      "prompt": "What do you need to add to 5 to make 5?",
       "whole": 5,
       "parts": [
         5,
@@ -124,7 +124,7 @@
       ],
       "explanation": "5 and 0 make 5.",
       "narration": {
-        "prompt": "What goes with five to make five?"
+        "prompt": "What do you need to add to five to make five?"
       }
     },
     {
@@ -207,7 +207,7 @@
     {
       "kind": "make-total",
       "id": "b5m-reverse",
-      "prompt": "What goes with 2 to make 5?",
+      "prompt": "What do you need to add to 2 to make 5?",
       "part": 2,
       "total": 5,
       "gap": "left",
@@ -235,13 +235,13 @@
       ],
       "explanation": "2 and 3 make 5.",
       "narration": {
-        "prompt": "What goes with 2 to make 5?"
+        "prompt": "What do you need to add to 2 to make 5?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "b5m-minus-4",
-      "prompt": "What is 5 − 4?",
+      "prompt": "What is 5 take away 4?",
       "explanation": "Because 4 + 1 = 5, 5 − 4 = 1.",
       "narration": {
         "prompt": "What is five take away four?"

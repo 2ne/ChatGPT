@@ -298,11 +298,11 @@ rainbow itself is never inset.
   tiles, then a large `+`. Row 2 is the child’s area. Added objects are
   green-tinted tiles (tap one to take it out). Empty slots are dashed, with
   a `+` and a short `Add` label (never the object name). Every missing-part
-  prompt, in any question kind, is `What goes with {n} to make {total}?`.
+  prompt, in any question kind, is `What do you need to add to {n} to make {total}?`.
   Use it on fill-slots, sum-only, multiple-choice and fill-blank. Do not
   write `5 is 2 and ?`, `5 = ? + 2`, `Which number goes with 6 to make 10?`,
   or `Which number is missing? 7 + ? = 10`.   Sum-only totals use
-  `What is {a} + {b}?` (subtract: `What is {a} − {b}?`), generated from
+  `What is {a} + {b}?` (subtract: `What is {a} take away {b}?`), generated from
   the numbers on screen. Fill-blank result blanks (`5 − 2 = __`) and bare
   equation prompts use the same stem, not `What is the missing number?`.
   Spoken uses words (`plus` / `take away`).
@@ -359,7 +359,7 @@ rainbow itself is never inset.
   misses. Order is shuffled. Tap drops the number into the empty circle in
   the selected style. Tap another to replace. Nothing auto-checks. Correct
   turns the filled circle green. Wrong keeps the usual `It was 3.` line and
-  puts the right number in the circle. Prompt is `What goes with {n} to
+  puts the right number in the circle. Prompt is `What do you need to add to {n} to
   make {whole}?`, or `What do {a} and {b} make?` when the whole is empty.
   Do not use match-pairs with `a and b` text for Reception bonds.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →

@@ -25,14 +25,14 @@
     {
       "kind": "make-total",
       "id": "nb10-with-6",
-      "prompt": "What goes with 6 to make 10?",
+      "prompt": "What do you need to add to 6 to make 10?",
       "visual": { "item": "star", "count": 6 },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Count on from the first part. Add one object for each step.",
       "explanation": "6 and 4 make 10.",
-      "narration": { "prompt": "What goes with 6 to make 10?" }
+      "narration": { "prompt": "What do you need to add to 6 to make 10?" }
     },
     {
       "kind": "pick-pair",
@@ -49,58 +49,58 @@
     {
       "kind": "make-total",
       "id": "nb10-with-8",
-      "prompt": "What goes with 8 to make 10?",
+      "prompt": "What do you need to add to 8 to make 10?",
       "visual": { "item": "apple", "count": 8 },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 8 and count on to 10.",
       "explanation": "8 and 2 make 10.",
-      "narration": { "prompt": "What goes with 8 to make 10?" }
+      "narration": { "prompt": "What do you need to add to 8 to make 10?" }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-7",
-      "prompt": "What goes with 7 to make 10?",
+      "prompt": "What do you need to add to 7 to make 10?",
       "visual": { "item": "duck", "count": 7 },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "7 and 3 make 10.",
-      "narration": { "prompt": "What goes with 7 to make 10?" }
+      "narration": { "prompt": "What do you need to add to 7 to make 10?" }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-5",
-      "prompt": "What goes with 5 to make 10?",
+      "prompt": "What do you need to add to 5 to make 10?",
       "visual": { "item": "frog", "count": 5 },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "5 and 5 make 10. This is double 5.",
-      "narration": { "prompt": "What goes with 5 to make 10?" }
+      "narration": { "prompt": "What do you need to add to 5 to make 10?" }
     },
     {
       "kind": "part-whole",
       "id": "nb10-pw-0",
-      "prompt": "What goes with 0 to make 10?",
+      "prompt": "What do you need to add to 0 to make 10?",
       "whole": 10,
       "parts": [0, 10],
       "missing": "right",
       "choices": [9, 10, 11],
       "explanation": "0 and 10 make 10.",
-      "narration": { "prompt": "What goes with zero to make ten?" }
+      "narration": { "prompt": "What do you need to add to zero to make ten?" }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-9",
-      "prompt": "What goes with 9 to make 10?",
+      "prompt": "What do you need to add to 9 to make 10?",
       "visual": { "item": "balloon", "count": 9 },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "9 and 1 make 10.",
-      "narration": { "prompt": "What goes with 9 to make 10?" }
+      "narration": { "prompt": "What do you need to add to 9 to make 10?" }
     },
     {
       "kind": "multi-select",
@@ -137,7 +137,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-minus-4",
-      "prompt": "What is 10 − 4?",
+      "prompt": "What is 10 take away 4?",
       "visual": {
         "item": "star",
         "count": 10

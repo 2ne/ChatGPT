@@ -83,10 +83,10 @@ export function partWholeChoices(question: PartWholeQuestion): number[] {
   return defaultPartWholeChoices(partWholeAnswer(question), question.whole);
 }
 
-const PART_PROMPT = /^What goes with \d+ to make \d+\?$/;
+const PART_PROMPT = /^What do you need to add to \d+ to make \d+\?$/;
 const WHOLE_PROMPT = /^What do \d+ and \d+ make\?$/;
 const PART_SPOKEN =
-  /^What goes with (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) to make (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
+  /^What do you need to add to (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) to make (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
 const WHOLE_SPOKEN =
   /^What do (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) and (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) make\?$/;
 
@@ -96,7 +96,7 @@ export function defaultPartWholePrompt(question: PartWholeQuestion): string {
     return `What do ${question.parts[0]} and ${question.parts[1]} make?`;
   }
   const known = partWholeKnown(question);
-  return `What goes with ${known} to make ${question.whole}?`;
+  return `What do you need to add to ${known} to make ${question.whole}?`;
 }
 
 /** Spoken stem: numbers as words. */
@@ -107,7 +107,7 @@ export function defaultPartWholeSpoken(question: PartWholeQuestion): string {
     return `What do ${a} and ${b} make?`;
   }
   const known = partWholeKnown(question) ?? 0;
-  return `What goes with ${numberWord(known)} to make ${numberWord(question.whole)}?`;
+  return `What do you need to add to ${numberWord(known)} to make ${numberWord(question.whole)}?`;
 }
 
 function shouldReplacePrompt(prompt: string): boolean {

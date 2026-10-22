@@ -32,6 +32,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Shared wording uses natural UK English. Quest introductions use the actual question count. Hints suggest a strategy instead of stating the answer, and number inputs accept number words as well as digits.
 - Feedback explanations state why an answer is correct, including after a miss. Counting instructions belong in hints, not in post-answer feedback.
 - Addition and subtraction sums use coloured number tiles and selectable answer buttons. Selecting an answer fills the yellow tile, just like number bonds. Counting and word-entry questions retain their existing inputs.
+- Missing-part addition asks “What do you need to add to 4 to make 5?” consistently across question kinds and read-aloud text. Subtraction prompts say “take away”, while the sum tiles keep the minus sign.
 - Saves best stars and best score per Easy / Medium / Hard. Nine stars on a node awards a gold cup
 
 ## Adding activities

@@ -6,12 +6,12 @@ const RESULT_EQ = new RegExp(`^(\\d+)\\s*${OP}\\s*(\\d+)\\s*=\\s*$`);
 const BARE_EQ = new RegExp(`^(\\d+)\\s*${OP}\\s*(\\d+)\\s*=\\s*$`);
 const ADD_KNOWN = /^(\d+)\s*\+\s*$/;
 const ADD_TOTAL = /^=\s*(\d+)\s*$/;
-const RESULT_PROMPT = /^What is \d+ [+\u2212\-] \d+\?$/;
+const RESULT_PROMPT = /^What is \d+ (?:[+\u2212\-]|take away) \d+\?$/;
 const RESULT_SPOKEN =
   /^What is (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) (?:plus|take away) (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
-const BOND_PROMPT = /^What goes with \d+ to make \d+\?$/;
+const BOND_PROMPT = /^What do you need to add to \d+ to make \d+\?$/;
 const BOND_SPOKEN =
-  /^What goes with (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) to make (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
+  /^What do you need to add to (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) to make (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
 
 export type FillBlankEquation =
   | { shape: "result"; a: number; b: number; op: "add" | "subtract" }
@@ -22,7 +22,7 @@ function readOp(symbol: string): "add" | "subtract" {
 }
 
 function signFor(op: "add" | "subtract"): string {
-  return op === "subtract" ? "−" : "+";
+  return op === "subtract" ? "take away" : "+";
 }
 
 function spokenOp(op: "add" | "subtract"): string {
@@ -63,7 +63,7 @@ export function defaultFillBlankPrompt(question: FillBlankQuestion): string | nu
   if (parsed.shape === "result") {
     return `What is ${parsed.a} ${signFor(parsed.op)} ${parsed.b}?`;
   }
-  return `What goes with ${parsed.known} to make ${parsed.total}?`;
+  return `What do you need to add to ${parsed.known} to make ${parsed.total}?`;
 }
 
 export function defaultFillBlankSpoken(question: FillBlankQuestion): string | null {
@@ -72,7 +72,7 @@ export function defaultFillBlankSpoken(question: FillBlankQuestion): string | nu
   if (parsed.shape === "result") {
     return `What is ${numberWord(parsed.a)} ${spokenOp(parsed.op)} ${numberWord(parsed.b)}?`;
   }
-  return `What goes with ${numberWord(parsed.known)} to make ${numberWord(parsed.total)}?`;
+  return `What do you need to add to ${numberWord(parsed.known)} to make ${numberWord(parsed.total)}?`;
 }
 
 export function parseBareEquation(

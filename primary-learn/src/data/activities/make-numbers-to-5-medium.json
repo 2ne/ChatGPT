@@ -150,20 +150,20 @@
     {
       "kind": "part-whole",
       "id": "m5m-pw-4",
-      "prompt": "What goes with 2 to make 4?",
+      "prompt": "What do you need to add to 2 to make 4?",
       "whole": 4,
       "parts": [2, 2],
       "missing": "left",
       "choices": [1, 2, 3],
       "explanation": "2 and 2 make 4.",
       "narration": {
-        "prompt": "What goes with two to make four?"
+        "prompt": "What do you need to add to two to make four?"
       }
     },
     {
       "kind": "make-total",
       "id": "m5m-5-2",
-      "prompt": "What goes with 2 to make 5?",
+      "prompt": "What do you need to add to 2 to make 5?",
       "visual": {
         "item": "ladybird",
         "count": 2
@@ -173,7 +173,7 @@
       "randomise": {},
       "explanation": "2 and 3 make 5.",
       "narration": {
-        "prompt": "What goes with 2 to make 5?"
+        "prompt": "What do you need to add to 2 to make 5?"
       }
     },
     {
@@ -243,7 +243,7 @@
     {
       "kind": "make-total",
       "id": "m5m-5-4",
-      "prompt": "What goes with 4 to make 5?",
+      "prompt": "What do you need to add to 4 to make 5?",
       "visual": {
         "item": "fish",
         "count": 4
@@ -253,7 +253,7 @@
       "randomise": {},
       "explanation": "4 and 1 make 5.",
       "narration": {
-        "prompt": "What goes with 4 to make 5?"
+        "prompt": "What do you need to add to 4 to make 5?"
       }
     },
     {

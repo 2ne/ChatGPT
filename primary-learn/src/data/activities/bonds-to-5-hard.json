@@ -27,7 +27,7 @@
     {
       "kind": "make-total",
       "id": "b5h-true",
-      "prompt": "What goes with 4 to make 5?",
+      "prompt": "What do you need to add to 4 to make 5?",
       "part": 4,
       "total": 5,
       "mode": "sum-only",
@@ -54,13 +54,13 @@
       ],
       "explanation": "4 and 1 make 5.",
       "narration": {
-        "prompt": "What goes with 4 to make 5?"
+        "prompt": "What do you need to add to 4 to make 5?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "b5h-minus-2",
-      "prompt": "What is 5 − 2?",
+      "prompt": "What is 5 take away 2?",
       "explanation": "Because 2 + 3 = 5, 5 − 2 = 3.",
       "narration": {
         "prompt": "What is five take away two?"
@@ -145,7 +145,7 @@
     {
       "kind": "make-total",
       "id": "b5h-plus-0",
-      "prompt": "What goes with 0 to make 5?",
+      "prompt": "What do you need to add to 0 to make 5?",
       "part": 0,
       "total": 5,
       "gap": "left",
@@ -173,13 +173,13 @@
       ],
       "explanation": "0 and 5 make 5. Adding 0 does not change the number.",
       "narration": {
-        "prompt": "What goes with 0 to make 5?"
+        "prompt": "What do you need to add to 0 to make 5?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "b5h-take-0",
-      "prompt": "What is 5 − 0?",
+      "prompt": "What is 5 take away 0?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -210,7 +210,7 @@
     {
       "kind": "make-total",
       "id": "b5h-first-addend",
-      "prompt": "What goes with 4 to make 5?",
+      "prompt": "What do you need to add to 4 to make 5?",
       "part": 4,
       "total": 5,
       "gap": "left",
@@ -238,7 +238,7 @@
       ],
       "explanation": "4 and 1 make 5.",
       "narration": {
-        "prompt": "What goes with 4 to make 5?"
+        "prompt": "What do you need to add to 4 to make 5?"
       }
     },
     {
@@ -264,7 +264,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5h-minus-word",
-      "prompt": "What is 5 − 3?",
+      "prompt": "What is 5 take away 3?",
       "randomise": {
         "shuffleOptions": true
       },

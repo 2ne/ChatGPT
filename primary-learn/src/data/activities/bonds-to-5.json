@@ -25,14 +25,14 @@
     {
       "kind": "make-total",
       "id": "b5e-with-2",
-      "prompt": "What goes with 2 to make 5?",
+      "prompt": "What do you need to add to 2 to make 5?",
       "visual": { "item": "star", "count": 2 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Count on from the first part. Add one object for each step.",
       "explanation": "2 and 3 make 5.",
-      "narration": { "prompt": "What goes with 2 to make 5?" }
+      "narration": { "prompt": "What do you need to add to 2 to make 5?" }
     },
     {
       "kind": "pick-pair",
@@ -49,58 +49,58 @@
     {
       "kind": "make-total",
       "id": "b5e-3-plus",
-      "prompt": "What goes with 3 to make 5?",
+      "prompt": "What do you need to add to 3 to make 5?",
       "visual": { "item": "apple", "count": 3 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 3 and count on to 5.",
       "explanation": "3 and 2 make 5.",
-      "narration": { "prompt": "What goes with 3 to make 5?" }
+      "narration": { "prompt": "What do you need to add to 3 to make 5?" }
     },
     {
       "kind": "make-total",
       "id": "b5e-4-plus",
-      "prompt": "What goes with 4 to make 5?",
+      "prompt": "What do you need to add to 4 to make 5?",
       "visual": { "item": "duck", "count": 4 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "4 and 1 make 5.",
-      "narration": { "prompt": "What goes with 4 to make 5?" }
+      "narration": { "prompt": "What do you need to add to 4 to make 5?" }
     },
     {
       "kind": "make-total",
       "id": "b5e-1-plus",
-      "prompt": "What goes with 1 to make 5?",
+      "prompt": "What do you need to add to 1 to make 5?",
       "visual": { "item": "frog", "count": 1 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "1 and 4 make 5.",
-      "narration": { "prompt": "What goes with 1 to make 5?" }
+      "narration": { "prompt": "What do you need to add to 1 to make 5?" }
     },
     {
       "kind": "part-whole",
       "id": "b5e-pw-0",
-      "prompt": "What goes with 0 to make 5?",
+      "prompt": "What do you need to add to 0 to make 5?",
       "whole": 5,
       "parts": [0, 5],
       "missing": "right",
       "choices": [4, 5, 6],
       "explanation": "0 and 5 make 5.",
-      "narration": { "prompt": "What goes with zero to make five?" }
+      "narration": { "prompt": "What do you need to add to zero to make five?" }
     },
     {
       "kind": "make-total",
       "id": "b5e-5-eq",
-      "prompt": "What goes with 2 to make 5?",
+      "prompt": "What do you need to add to 2 to make 5?",
       "visual": { "item": "balloon", "count": 2 },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "2 and 3 make 5.",
-      "narration": { "prompt": "What goes with 2 to make 5?" }
+      "narration": { "prompt": "What do you need to add to 2 to make 5?" }
     },
     {
       "kind": "multi-select",
@@ -136,7 +136,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5e-minus-2",
-      "prompt": "What is 5 − 2?",
+      "prompt": "What is 5 take away 2?",
       "visual": {
         "item": "star",
         "count": 5

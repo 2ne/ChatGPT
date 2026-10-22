@@ -57,7 +57,7 @@ export function optionNumber(label: string | undefined): number | null {
   return Number.isInteger(value) ? value : null;
 }
 
-const SUM_ONLY_TOTAL_PROMPT = /^What is \d+ [+\u2212\-] \d+\?$/;
+const SUM_ONLY_TOTAL_PROMPT = /^What is \d+ (?:[+\u2212\-]|take away) \d+\?$/;
 const SUM_ONLY_TOTAL_SPOKEN =
   /^What is (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+) (?:plus|take away) (?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\?$/;
 
@@ -70,7 +70,7 @@ export function defaultSumOnlyPrompt(question: MakeTotalQuestion): string | null
   if (!isSumOnlyBothAddends(question)) return null;
   const a = makeTotalPart(question);
   const b = makeTotalOther(question);
-  const sign = makeTotalOp(question) === "subtract" ? "−" : "+";
+  const sign = makeTotalOp(question) === "subtract" ? "take away" : "+";
   return `What is ${a} ${sign} ${b}?`;
 }
 

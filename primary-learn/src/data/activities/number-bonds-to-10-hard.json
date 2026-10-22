@@ -28,7 +28,7 @@
     {
       "kind": "make-total",
       "id": "nb10h-with-6",
-      "prompt": "What goes with 6 to make 10?",
+      "prompt": "What do you need to add to 6 to make 10?",
       "part": 6,
       "total": 10,
       "mode": "sum-only",
@@ -55,13 +55,13 @@
       ],
       "explanation": "6 and 4 make 10.",
       "narration": {
-        "prompt": "What goes with 6 to make 10?"
+        "prompt": "What do you need to add to 6 to make 10?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10h-minus-4",
-      "prompt": "What is 10 − 4?",
+      "prompt": "What is 10 take away 4?",
       "explanation": "Because 4 + 6 = 10, 10 − 4 = 6.",
       "narration": {
         "prompt": "What is ten take away four?"
@@ -146,7 +146,7 @@
     {
       "kind": "make-total",
       "id": "nb10h-plus-0",
-      "prompt": "What goes with 0 to make 10?",
+      "prompt": "What do you need to add to 0 to make 10?",
       "part": 0,
       "total": 10,
       "gap": "left",
@@ -174,13 +174,13 @@
       ],
       "explanation": "0 and 10 make 10. Adding 0 does not change the number.",
       "narration": {
-        "prompt": "What goes with 0 to make 10?"
+        "prompt": "What do you need to add to 0 to make 10?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10h-take-0",
-      "prompt": "What is 10 − 0?",
+      "prompt": "What is 10 take away 0?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -211,7 +211,7 @@
     {
       "kind": "make-total",
       "id": "nb10h-first-addend",
-      "prompt": "What goes with 8 to make 10?",
+      "prompt": "What do you need to add to 8 to make 10?",
       "part": 8,
       "total": 10,
       "gap": "left",
@@ -239,7 +239,7 @@
       ],
       "explanation": "8 and 2 make 10.",
       "narration": {
-        "prompt": "What goes with 8 to make 10?"
+        "prompt": "What do you need to add to 8 to make 10?"
       }
     },
     {
@@ -265,7 +265,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10h-minus-word",
-      "prompt": "What is 10 − 7?",
+      "prompt": "What is 10 take away 7?",
       "randomise": {
         "shuffleOptions": true
       },

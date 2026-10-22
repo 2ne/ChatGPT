@@ -68,7 +68,7 @@ Every child-facing string (`copy.ts`, activity JSON, component words) must follo
 | Sam needs 5 ducks. Which group? | Which group has 5 ducks? |
 | How many left? | How many are left? |
 
-**Missing-part stems** (any kind): `What goes with {n} to make {total}?`. **Result stems** (`a + b = __`): `What is {a} + {b}?` / `What is {a} − {b}?`. Prefer bond wording for addition blanks inside a sum. Pictured totals: `How many can you see in all?`
+**Missing-part stems** (any kind): `What do you need to add to {n} to make {total}?`. **Result stems** (`a + b = __`): `What is {a} + {b}?` / `What is {a} take away {b}?`. Prefer bond wording for addition blanks inside a sum. Pictured totals: `How many can you see in all?`
 
 ## Hash routes
 

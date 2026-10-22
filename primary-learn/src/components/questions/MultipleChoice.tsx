@@ -24,7 +24,7 @@ export function MultipleChoice({
     question.kind === "multiple-choice" && question.visual?.added != null;
   const numeralPad = joinStory && optionsAreNumerals(question.options);
   const sum = !question.visual && optionsAreNumerals(question.options)
-    ? question.prompt.match(/^What is (\d+) ([+−-]) (\d+)\?$/)
+    ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
@@ -32,7 +32,7 @@ export function MultipleChoice({
       {sum ? (
         <div className={`make-total-sum${reveal === "correct" ? " is-correct" : reveal === "incorrect" ? " is-wrong" : ""}`}>
           <span className="make-total-box is-part">{sum[1]}</span>
-          <span className="make-total-sign">{sum[2] === "-" ? "−" : sum[2]}</span>
+          <span className="make-total-sign">{sum[2] === "-" || sum[2] === "take away" ? "−" : sum[2]}</span>
           <span className="make-total-box is-part">{sum[3]}</span>
           <span className="make-total-sign">=</span>
           <span className="make-total-box is-gap" aria-label={copy.yourAnswer}>{selectedLabel ?? "?"}</span>

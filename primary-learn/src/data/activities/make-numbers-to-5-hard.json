@@ -42,7 +42,7 @@
     {
       "kind": "make-total",
       "id": "m5h-0-5",
-      "prompt": "What goes with 0 to make 5?",
+      "prompt": "What do you need to add to 0 to make 5?",
       "part": 0,
       "total": 5,
       "mode": "sum-only",
@@ -69,13 +69,13 @@
       ],
       "explanation": "0 and 5 make 5. Adding 0 does not change the number.",
       "narration": {
-        "prompt": "What goes with 0 to make 5?"
+        "prompt": "What do you need to add to 0 to make 5?"
       }
     },
     {
       "kind": "make-total",
       "id": "m5h-5-0",
-      "prompt": "What goes with 5 to make 5?",
+      "prompt": "What do you need to add to 5 to make 5?",
       "part": 5,
       "total": 5,
       "mode": "sum-only",
@@ -102,7 +102,7 @@
       ],
       "explanation": "5 and 0 make 5. Adding 0 does not change the number.",
       "narration": {
-        "prompt": "What goes with 5 to make 5?"
+        "prompt": "What do you need to add to 5 to make 5?"
       }
     },
     {
@@ -121,7 +121,7 @@
     {
       "kind": "make-total",
       "id": "m5h-5-3",
-      "prompt": "What goes with 3 to make 5?",
+      "prompt": "What do you need to add to 3 to make 5?",
       "part": 3,
       "total": 5,
       "mode": "sum-only",
@@ -148,7 +148,7 @@
       ],
       "explanation": "3 and 2 make 5.",
       "narration": {
-        "prompt": "What goes with 3 to make 5?"
+        "prompt": "What do you need to add to 3 to make 5?"
       }
     },
     {
@@ -200,7 +200,7 @@
     {
       "kind": "make-total",
       "id": "m5h-first-part",
-      "prompt": "What goes with 2 to make 5?",
+      "prompt": "What do you need to add to 2 to make 5?",
       "part": 2,
       "total": 5,
       "gap": "left",
@@ -228,13 +228,13 @@
       ],
       "explanation": "2 and 3 make 5.",
       "narration": {
-        "prompt": "What goes with 2 to make 5?"
+        "prompt": "What do you need to add to 2 to make 5?"
       }
     },
     {
       "kind": "make-total",
       "id": "m5h-hidden",
-      "prompt": "What goes with 2 to make 5?",
+      "prompt": "What do you need to add to 2 to make 5?",
       "part": 2,
       "total": 5,
       "mode": "sum-only",
@@ -261,20 +261,20 @@
       ],
       "explanation": "2 and 3 make 5.",
       "narration": {
-        "prompt": "What goes with 2 to make 5?"
+        "prompt": "What do you need to add to 2 to make 5?"
       }
     },
     {
       "kind": "part-whole",
       "id": "m5h-pw-4",
-      "prompt": "What goes with 4 to make 4?",
+      "prompt": "What do you need to add to 4 to make 4?",
       "whole": 4,
       "parts": [0, 4],
       "missing": "left",
       "choices": [0, 1, 2],
       "explanation": "0 and 4 make 4.",
       "narration": {
-        "prompt": "What goes with four to make four?"
+        "prompt": "What do you need to add to four to make four?"
       }
     },
     {

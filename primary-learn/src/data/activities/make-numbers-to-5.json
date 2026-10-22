@@ -164,7 +164,7 @@
     {
       "kind": "make-total",
       "id": "m5e-3-parts",
-      "prompt": "What goes with 2 to make 3?",
+      "prompt": "What do you need to add to 2 to make 3?",
       "visual": {
         "item": "fish",
         "count": 2
@@ -174,7 +174,7 @@
       "randomise": {},
       "explanation": "2 and 1 make 3.",
       "narration": {
-        "prompt": "What goes with 2 to make 3?"
+        "prompt": "What do you need to add to 2 to make 3?"
       }
     },
     {
@@ -231,14 +231,14 @@
     {
       "kind": "part-whole",
       "id": "m5e-pw-5",
-      "prompt": "What goes with 4 to make 5?",
+      "prompt": "What do you need to add to 4 to make 5?",
       "whole": 5,
       "parts": [4, 1],
       "missing": "right",
       "choices": [0, 1, 2],
       "explanation": "4 and 1 make 5.",
       "narration": {
-        "prompt": "What goes with four to make five?"
+        "prompt": "What do you need to add to four to make five?"
       }
     },
     {

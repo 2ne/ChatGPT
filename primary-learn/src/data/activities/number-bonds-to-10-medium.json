@@ -43,7 +43,7 @@
     {
       "kind": "make-total",
       "id": "nb10m-with-3",
-      "prompt": "What goes with 3 to make 10?",
+      "prompt": "What do you need to add to 3 to make 10?",
       "visual": {
         "item": "star",
         "count": 3
@@ -54,13 +54,13 @@
       "hint": "Count on from 3 until you reach 10.",
       "explanation": "3 and 7 make 10.",
       "narration": {
-        "prompt": "What goes with 3 to make 10?"
+        "prompt": "What do you need to add to 3 to make 10?"
       }
     },
     {
       "kind": "make-total",
       "id": "nb10m-with-4",
-      "prompt": "What goes with 4 to make 10?",
+      "prompt": "What do you need to add to 4 to make 10?",
       "visual": {
         "item": "apple",
         "count": 4
@@ -71,13 +71,13 @@
       "hint": "Start at 4 and count on to 10.",
       "explanation": "4 and 6 make 10.",
       "narration": {
-        "prompt": "What goes with 4 to make 10?"
+        "prompt": "What do you need to add to 4 to make 10?"
       }
     },
     {
       "kind": "make-total",
       "id": "nb10m-0-plus",
-      "prompt": "What goes with 0 to make 10?",
+      "prompt": "What do you need to add to 0 to make 10?",
       "part": 0,
       "total": 10,
       "mode": "sum-only",
@@ -105,13 +105,13 @@
       "hint": "Adding zero does not change a number.",
       "explanation": "0 and 10 make 10. Adding 0 does not change the number.",
       "narration": {
-        "prompt": "What goes with 0 to make 10?"
+        "prompt": "What do you need to add to 0 to make 10?"
       }
     },
     {
       "kind": "part-whole",
       "id": "nb10m-pw-10",
-      "prompt": "What goes with 10 to make 10?",
+      "prompt": "What do you need to add to 10 to make 10?",
       "whole": 10,
       "parts": [
         10,
@@ -125,13 +125,13 @@
       ],
       "explanation": "10 and 0 make 10.",
       "narration": {
-        "prompt": "What goes with ten to make ten?"
+        "prompt": "What do you need to add to ten to make ten?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10m-take-3",
-      "prompt": "What is 10 − 3?",
+      "prompt": "What is 10 take away 3?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -202,7 +202,7 @@
     {
       "kind": "make-total",
       "id": "nb10m-reverse",
-      "prompt": "What goes with 7 to make 10?",
+      "prompt": "What do you need to add to 7 to make 10?",
       "part": 7,
       "total": 10,
       "gap": "left",
@@ -230,13 +230,13 @@
       ],
       "explanation": "7 and 3 make 10.",
       "narration": {
-        "prompt": "What goes with 7 to make 10?"
+        "prompt": "What do you need to add to 7 to make 10?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10m-minus-6",
-      "prompt": "What is 10 − 6?",
+      "prompt": "What is 10 take away 6?",
       "explanation": "Because 6 + 4 = 10, 10 − 6 = 4.",
       "narration": {
         "prompt": "What is ten take away six?"
