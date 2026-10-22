@@ -461,3 +461,12 @@ audio files. Scale is too large.
 | Stretching a question to fill the phone | Pack the prompt and answer as a compact group |
 | Empty slots that count out the missing amount | Tap-to-fill with extra slots, or the sum line only |
 
+
+### Building a missing part
+
+The make-total fill interaction uses a compact paper panel with a labelled starting
+group, a centred plus on its own row, and a white workspace for added objects.
+The workspace uses five columns and reserves enough unmarked space for the maximum
+allowed additions. Do not draw empty slots or counts that disclose the answer.
+Keep the Add button in its own fixed row below the objects. Tiles stay 56px on
+larger screens and 44px on narrow screens. The workspace must fit a 320px viewport.

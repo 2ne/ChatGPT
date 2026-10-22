@@ -170,6 +170,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
     <div className="make-total">
       {fillMode && !subtract ? (
         <div className="make-total-fill">
+          <p className="make-total-group-label">{copy.startingGroup}</p>
           <div
             className="make-total-known-row"
             aria-label={`${known} ${known === 1 ? itemWords.singular : itemWords.plural}`}
@@ -179,12 +180,13 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
                 <Slot key={`k-${index}`} item={item} kind="known" index={index} />
               ))}
             </span>
-            <span className="make-total-join" aria-hidden>
-              +
-            </span>
           </div>
+          <span className="make-total-join" aria-hidden>+</span>
+          <p className="make-total-group-label">{copy.addedGroup}</p>
+          <div className="make-total-workspace">
           <div
             className="make-total-add-row"
+            style={{ minHeight: `calc(${Math.ceil(bank / 5)} * var(--make-total-tile) + ${Math.max(0, Math.ceil(bank / 5) - 1) * 8}px)` }}
             role="group"
             aria-label={`Add ${itemWords.plural}`}
           >
@@ -199,17 +201,16 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
                 onToggle={() => setFilled(index)}
               />
             ))}
-            {canAddMore ? (
+          </div>
               <Slot
                 key="add"
                 item={item}
                 kind="add"
-                tappable={canFill}
-                disabled={disabled}
+                tappable={canFill && canAddMore}
+                disabled={disabled || !canAddMore}
                 index={filledMissing}
                 onToggle={() => setFilled(filledMissing + 1)}
               />
-            ) : null}
           </div>
         </div>
       ) : null}
