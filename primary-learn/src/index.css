@@ -3109,13 +3109,20 @@ button.object-token:hover:not(:disabled) {
   position: absolute;
   left: 0;
   right: 0;
-  background-repeat: repeat;
-  background-size: 340px 310px;
   pointer-events: none;
 }
 
-.map-zone:nth-child(even) {
-  filter: saturate(1.15) brightness(0.985);
+.map-zone-art {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: 340px 310px;
+}
+
+.map-zone-art.is-blended {
+  top: -96px;
+  mask-image: linear-gradient(to bottom, transparent, #000 96px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 96px);
 }
 
 .map-track {
