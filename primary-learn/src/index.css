@@ -4038,17 +4038,3 @@ button.object-token:hover:not(:disabled) {
 .bond-demo-parts > div { padding: 12px; border: 2px solid var(--line); border-radius: 12px; background: white; }
 .bond-demo-status { font-weight: 800; }
 
-/* Typed arithmetic shares the coloured tiles used by number-bond sums. */
-.typed-sum input.make-total-box {
-  width: 80px;
-  max-width: 28vw;
-  border: 2px solid transparent;
-  text-align: center;
-  opacity: 1;
-  -webkit-text-fill-color: currentColor;
-}
-.typed-sum input::placeholder { color: inherit; opacity: 1; }
-.typed-sum input:focus-visible {
-  outline: 3px solid var(--primary);
-  outline-offset: 4px;
-}

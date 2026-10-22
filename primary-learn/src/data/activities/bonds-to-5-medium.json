@@ -112,9 +112,16 @@
       "id": "b5m-pw-5",
       "prompt": "What goes with 5 to make 5?",
       "whole": 5,
-      "parts": [5, 0],
+      "parts": [
+        5,
+        0
+      ],
       "missing": "right",
-      "choices": [0, 1, 2],
+      "choices": [
+        0,
+        1,
+        2
+      ],
       "explanation": "5 and 0 make 5.",
       "narration": {
         "prompt": "What goes with five to make five?"
@@ -126,7 +133,12 @@
       "prompt": "Sam has 5 {items} and gives away 3. How many are left?",
       "randomise": {
         "shuffleOptions": true,
-        "items": ["apple", "star", "banana", "balloon"]
+        "items": [
+          "apple",
+          "star",
+          "banana",
+          "balloon"
+        ]
       },
       "options": [
         {
@@ -157,7 +169,12 @@
       "id": "b5m-pair-1-4",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [1, 4, 0, 2],
+      "tiles": [
+        1,
+        4,
+        0,
+        2
+      ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
@@ -172,7 +189,12 @@
       "id": "b5m-pair-2-3",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [2, 3, 0, 1],
+      "tiles": [
+        2,
+        3,
+        0,
+        1
+      ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
@@ -217,18 +239,30 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "b5m-minus-4",
       "prompt": "What is 5 − 4?",
-      "prefix": "5 − 4 =",
-      "acceptedAnswers": [
-        "1",
-        "one"
-      ],
-      "inputMode": "numeric",
       "explanation": "Because 4 + 1 = 5, 5 − 4 = 1.",
       "narration": {
         "prompt": "What is five take away four?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "0"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
@@ -237,7 +271,12 @@
       "prompt": "Sam has 5 {items} and gives them all away. How many are left?",
       "randomise": {
         "shuffleOptions": true,
-        "items": ["apple", "star", "banana", "balloon"]
+        "items": [
+          "apple",
+          "star",
+          "banana",
+          "balloon"
+        ]
       },
       "options": [
         {

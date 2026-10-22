@@ -58,18 +58,34 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "b5h-minus-2",
       "prompt": "What is 5 − 2?",
-      "prefix": "5 − 2 =",
-      "acceptedAnswers": [
-        "3",
-        "three"
-      ],
-      "inputMode": "numeric",
       "explanation": "Because 2 + 3 = 5, 5 − 2 = 3.",
       "narration": {
         "prompt": "What is five take away two?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "0"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
@@ -77,9 +93,16 @@
       "id": "b5h-pw-5",
       "prompt": "What do 2 and 3 make?",
       "whole": 5,
-      "parts": [2, 3],
+      "parts": [
+        2,
+        3
+      ],
       "missing": "whole",
-      "choices": [4, 5, 6],
+      "choices": [
+        4,
+        5,
+        6
+      ],
       "explanation": "2 and 3 make 5.",
       "narration": {
         "prompt": "What do two and three make?"
@@ -223,7 +246,12 @@
       "id": "b5h-same-as",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [0, 5, 1, 2],
+      "tiles": [
+        0,
+        5,
+        1,
+        2
+      ],
       "showDots": false,
       "randomise": {
         "shuffleOptions": true
