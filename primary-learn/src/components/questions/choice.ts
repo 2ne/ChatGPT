@@ -5,7 +5,7 @@ type ChoiceOption = {
   visual?: unknown;
 };
 
-/** Digit-only answers: big centred numbers, no A–D badge. */
+/** True when every option is a bare digit label (no picture). */
 export function optionsAreNumerals(options: ChoiceOption[]): boolean {
   return (
     options.length > 0 &&

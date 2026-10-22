@@ -19,7 +19,10 @@ export function MultipleChoice({
   onChange,
 }: MultipleChoiceProps) {
   const showStem = question.kind !== "count-objects" && Boolean(question.visual);
-  const numeralPad = optionsAreNumerals(question.options);
+  // Big digit taps only on pictured join stories (start + added). Other number MC keeps A–D.
+  const joinStory =
+    question.kind === "multiple-choice" && question.visual?.added != null;
+  const numeralPad = joinStory && optionsAreNumerals(question.options);
   return (
     <div className="option-stack">
       {showStem && question.visual ? (

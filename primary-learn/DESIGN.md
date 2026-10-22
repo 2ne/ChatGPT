@@ -17,8 +17,8 @@ rules, change the design — do not invent a second system.
 3. **Warmth is the design** — cream paper, chunky radii, a mascot sidekick.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
-   ≥ 64px. Digit-only answers are big centred numbers (no A–D). Picture or
-   phrase options keep letter badges (A–D).
+   ≥ 64px with letter badges (A–D). Pictured join stories are the exception:
+   digit answers there are big centred numbers with no A–D.
 5. **Celebrate constantly** — stars, confetti pops, cheering Pip.
    Kids should feel progress every 30 seconds.
 6. **Colour with meaning** — maths tiles are orange; green = correct,
@@ -230,11 +230,10 @@ rainbow itself is never inset.
 - Prompt row is the numbered badge plus the question text and speaker. Do
   **not** show a grey uppercase kind label above it (`HOW MANY?`, `TYPE IT IN`,
   `PICK ONE`, and the rest). Kids already see what to do from the question.
-- Digit-only options (labels like `3`, `4`, `5`) omit letter badges and show a
-  large centred numeral so Reception kids tap the number itself. Picture options
-  and phrase options (`2 and 3`) still carry **letter badges** (A–D). Keyboard
-  `1–4` still works either way. Selected = indigo ring + soft fill; correct =
-  green + ✓ + wiggle; wrong = red + ✕ + shake. Colour is never the only signal
+- Options carry **letter badges** (A–D), keyboard `1–4` still works. Exception:
+  pictured join stories (`visual.added`) with digit-only answers omit the badge
+  and show a large centred numeral. Selected = indigo ring + soft fill; correct
+  = green + ✓ + wiggle; wrong = red + ✕ + shake. Colour is never the only signal
   (icons + words too).
 - Selection, correct and wrong states are **shared** across every question
   kind (`.option.is-selected` / `.is-correct` / `.is-wrong` and the same
@@ -258,8 +257,8 @@ rainbow itself is never inset.
 - All answer buttons use the one shared full-width `.option` style (letter
   badge, same height, stretch to the activity column). Never shrink them into
   centred pills per question kind. Number answers on `make-total` use the same
-  buttons as multiple-choice (digit-only rows drop the letter badge and enlarge
-  the number). Exceptions: `pick-pair` square tiles, `part-whole` rounded-square
+  buttons as multiple-choice. Exceptions: pictured join-story digit answers
+  (no A–D, big number), `pick-pair` square tiles, `part-whole` rounded-square
   number buttons (one row of three), and `ordered` big numeral tiles (drag
   handle plus up/down arrows).
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
@@ -439,7 +438,7 @@ audio files. Scale is too large.
 | --- | --- |
 | Bare question with no quest name | Context card with tile + title + count on every question |
 | Thin lonely progress line | Segmented per-question bar + count + cheer line |
-| Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, big number taps |
+| Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
 | 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
 | Subject or year filter chips | One maths path map |
 | Emoji-only tiles | Lucide calculator tile in maths orange |
