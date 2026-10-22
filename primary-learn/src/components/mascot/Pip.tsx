@@ -133,7 +133,8 @@ export function Pip({ size = 44, mood = "happy", className, followPointer = fals
             <ellipse cx="50" cy="63.5" rx="4.5" ry="2.8" fill="#FF8FA3" opacity="0.9" />
           ) : null}
 
-          <g className="pip-spark" transform="translate(66 68)">
+          <g transform="translate(66 68)">
+            <g className="pip-spark">
             <path
               d="M0-9l2.2 5.2L7.5-2l-5 2.6L0 6l-2.5-5.4L-7.5-2l5.3-1.8z"
               fill="#FFC93C"
@@ -141,6 +142,7 @@ export function Pip({ size = 44, mood = "happy", className, followPointer = fals
               strokeWidth="1.4"
               strokeLinejoin="round"
             />
+            </g>
           </g>
         </g>
       </g>
