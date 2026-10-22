@@ -3109,6 +3109,9 @@ button.object-token:hover:not(:disabled) {
   position: absolute;
   left: 0;
   right: 0;
+  background-repeat: repeat;
+  background-size: 340px 310px;
+  pointer-events: none;
 }
 
 .map-zone:nth-child(even) {

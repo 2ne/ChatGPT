@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Star, Trophy } from "lucide-react";
 import type { LevelState } from "../lib/path";
-import { DoodleShape, DoodleStar } from "./mascot/Doodles";
+import { mathsWallpaper } from "./mascot/MathsWallpaper";
 import { LevelSheet } from "./LevelSheet";
 import { TopicNav, type TopicSection } from "./TopicNav";
 
@@ -251,7 +251,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                 key={category.id}
                 className="map-zone"
                 data-map-zone={category.id}
-                style={{ top: band.top, height: band.height, background: colours.soft }}
+                style={{ top: band.top, height: band.height, backgroundColor: colours.soft, backgroundImage: mathsWallpaper(category, colours.ink) }}
                 aria-hidden
               />
             );
@@ -269,22 +269,6 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
               <path d={travelledPath} className="road-done" vectorEffect="non-scaling-stroke" />
               <path d={fullPath} className="road-dots" vectorEffect="non-scaling-stroke" />
             </svg>
-
-            {layout.points.map((point, index) =>
-              index % 3 === 1 ? (
-                <span
-                  key={`doodle-${levels[index].node.id}`}
-                  className="map-doodle"
-                  style={{
-                    left: `${(point.x > VIEW_W / 2 ? 9 : 91)}%`,
-                    top: point.y,
-                  }}
-                  aria-hidden
-                >
-                  {index % 2 ? <DoodleStar size={18} /> : <DoodleShape size={16} />}
-                </span>
-              ) : null,
-            )}
 
             {layout.bands.map((band) => {
               const category = levels[band.first].category;

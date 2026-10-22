@@ -25,6 +25,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - Asks for a child’s name and woodland avatar on first visit
 - Welcomes children into each quest with a centred card, Pip, clear question count and time, and one Start quest button. The layout adapts to phones and desktops.
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
+- Each map section has a faint repeating maths doodle wallpaper matched to its curriculum topic. Numbers, shapes, fractions, clocks, rulers and graphs use lightweight SVG backgrounds in the existing year colours, behind the road and controls.
 - Each level opens a sheet with Easy / Medium / Hard. 6 out of 10 earns a star. Stars show progress. They do not gate the path.
 - Runs interactive question kinds (tap-to-count, build a set, part-whole make-total, cherry part-whole, pick-pair tiles, multiple choice, multi-select, fill blank, ordered, match pairs)
 - A **speaker** after the question reads the question only (Web Speech API, UK female teacher voice) and highlights words as they are spoken

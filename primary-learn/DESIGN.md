@@ -173,6 +173,13 @@ they are.
    1 or 2 stars on a level do not appear on the map). Star
    rows live in the level sheet. When all three levels have three
    stars, the node turns gold and a cup replaces the number.
+   Each section uses a repeating outline maths wallpaper selected from its existing
+   category id. Counting sections show numbers within the named range. Other
+   topics use related shapes, fraction diagrams, operations, clocks, rulers or
+   graphs. Keep outlines faint (17% of the year ink) on the existing year tint.
+   SVG tiles stay at 340 × 310 CSS pixels on phones and desktops. Decoration
+   is hidden from assistive technology and never intercepts touches. The road,
+   signs and level buttons remain opaque above it. No unrelated floating doodles.
 3. **Level sheet** (`LevelSheet`) — tap a stop to open Easy / Medium / Hard
    rows, each with three stars and the best mark (`7/10`). Every row with a
    quest is playable. Rows with no quest yet say coming soon.
