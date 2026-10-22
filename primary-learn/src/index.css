@@ -3119,12 +3119,6 @@ button.object-token:hover:not(:disabled) {
   background-size: 340px 310px;
 }
 
-.map-zone-art.is-blended {
-  top: -16px;
-  mask-image: linear-gradient(to bottom, transparent, #000 16px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16px);
-}
-
 .map-zone + .map-zone::after {
   content: "";
   position: absolute;

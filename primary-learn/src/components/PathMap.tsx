@@ -243,7 +243,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
     <section className="map-section" aria-label="Your maths map">
       <div className="map-frame" ref={frameRef}>
         <div className="map-world" style={{ height: layout.height }}>
-          {layout.bands.map((band, index) => {
+          {layout.bands.map((band) => {
             const category = levels[band.first].category;
             const colours = YEAR_COLOURS[category.year] ?? YEAR_COLOURS["Year 1"];
             return (
@@ -254,7 +254,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
                 style={{ top: band.top, height: band.height }}
                 aria-hidden
               >
-                <div className={`map-zone-art${index > 0 ? " is-blended" : ""}`}
+                <div className="map-zone-art"
                   style={{ backgroundColor: colours.soft, backgroundImage: mathsWallpaper(category, colours.ink) }} />
               </div>
             );
