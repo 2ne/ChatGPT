@@ -133,7 +133,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5m-next",
-      "prompt": "What comes next? 1, 2, 3, 4, …",
+      "prompt": "What number comes next? 1, 2, 3, 4, ?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
@@ -142,8 +142,8 @@
         { "id": "d", "label": "2" }
       ],
       "correctId": "c",
-      "explanation": "We count 1, 2, 3, 4, 5. The next number is 5.",
-      "narration": { "prompt": "What comes next? One, two, three, four, …" }
+      "explanation": "5 comes after 4.",
+      "narration": { "prompt": "What number comes next? One, two, three, four, blank." }
     },
     {
       "kind": "ordered",

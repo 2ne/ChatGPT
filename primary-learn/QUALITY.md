@@ -63,12 +63,12 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | hidden quantity | `How many {items} under the cup?` with `layout` `hidden` and `flashMs`. |
 | light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. |
 | build-set | `Make a group of {count} {items}.` |
-| multiple-choice next | `What comes next? 1, 2, 3, …` |
+| multiple-choice next | `What number comes next? 1, 2, 3, ?` Explanation: `{n} comes after {n-1}.` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
 | fill-blank result | Blank is the answer at the end (`{a} + {b} =` / `{a} − {b} =`). Prompt: `What is {a} + {b}?` / `What is {a} − {b}?`. Kind generates this from prefix/suffix so JSON cannot drift. Spoken: `What is five take away two?`. Never `What is the missing number?` when the blank is the final result. Same stem if another kind shows a bare equation (`5 − 3 =`). |
 | fill-blank bond | Blank is a part inside the sum (`{a} +` / `= {total}`). Prompt: `What goes with {n} to make {total}?`. |
 | fill-blank missing | Blank is a part inside a take-away (`__ − 2 = 3`, `5 − __ = 3`) or a hole in a sequence. Prompt: `Which number is missing?` For a count sequence, put the numbers in the stem: `Which number is missing? 1, 2, _, 4, 5`. Prefer the bond wording above for addition. |
-| multiple-choice sequence | `Which number is missing? 1, 2, _, 4, 5` (or `What comes next? 1, 2, 3, …`). Do not say gap. |
+| multiple-choice sequence | `Which number is missing? 1, 2, _, 4, 5` (or `What number comes next? 1, 2, 3, ?`). Do not say gap. |
 | make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Sum-only totals: `What is {a} + {b}?` (subtract: `What is {a} − {b}?`). The kind generates this from the numbers on screen; JSON may override. Spoken: `What is one plus one?` / `What is five take away two?`. Pictured totals: `How many in all?` (only if pictures are shown). Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
 | pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | part-whole | Missing part: `What goes with {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
