@@ -199,7 +199,6 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
               />
             ))}
           </div>
-              {!disabled ? <p className="make-total-help">{copy.buildBondHelp}</p> : null}
           </div>
         </div>
       ) : null}

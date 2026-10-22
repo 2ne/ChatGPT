@@ -80,7 +80,6 @@ export const copy = {
   pickOne: "Choose one answer",
   pickTwo: "Tap two numbers",
   addSlot: "Add",
-  buildBondHelp: "Tap + to add an object. Tap an added object to take it out.",
   tapToTakeAway: "Tap one to take it away.",
   startSlotsAgain: "Start again",
   missingNumber: "Missing number",
