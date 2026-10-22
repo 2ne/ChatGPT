@@ -10,7 +10,7 @@ https://2ne.github.io/ChatGPT/primary-learn/
 
 ## Status
 
-Foundation release: profile onboarding, an open path map (`PathMap` + `LevelSheet`), shared interactive runner, progress/mastery tracking, Count to 5 Easy / Medium / Hard on node 1, and Easy number bonds to 10 on node 13.
+15 quests across five complete Easy / Medium / Hard nodes: Count to 5, See numbers to 5, Make numbers to 5, Bonds to 5 and Number bonds to 10. Includes local learner profiles, an open path map, shared question runner and device-only progress. See `curriculum/NEXT.md` for the current content priorities.
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
@@ -31,7 +31,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 - A **speaker** after the question reads the question only (Web Speech API, UK female teacher voice) and highlights words as they are spoken
 - Ten questions, then a star result. A miss shows a short correction and moves on. No retry loop
 - Incorrect feedback separates the correct answer, number order or matching pairs from the teaching explanation. On addition `make-total` and `part-whole` questions, an optional **Show me** demonstration reveals each part, then the whole. It uses the question's actual numbers and pictures, supports zero, and never changes the score. Children advance it with buttons, with no automatic motion or spoken answers.
-- Shared wording uses natural UK English. Quest introductions use the actual question count. Hints suggest a strategy instead of stating the answer, and number inputs accept number words as well as digits.
+- Shared wording uses natural UK English. Quest facts use the actual question count. Hints suggest a strategy instead of stating the answer, and number inputs accept number words as well as digits.
 - Feedback explanations state why an answer is correct, including after a miss. Counting instructions belong in hints, not in post-answer feedback.
 - Addition and subtraction sums use coloured number tiles and selectable answer buttons. Selecting an answer fills the yellow tile, just like number bonds. Counting and word-entry questions retain their existing inputs.
 - Missing-part addition asks “What do you need to add to 4 to make 5?” consistently across question kinds and read-aloud text. Subtraction prompts say “take away”, while the sum tiles keep the minus sign.

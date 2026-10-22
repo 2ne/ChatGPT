@@ -185,7 +185,7 @@ Every new activity **must**:
 5. Use only question kinds in `QUESTION_KINDS` (`src/types/activity.ts`).
 6. Target a clear UK year group (and ability band) — not “all ages”.
 7. Write `difficultyRamp` first, then a gradual Easy→Hard climb inside the quest (see below).
-8. Write a short teaching `explanation`. After a wrong answer the runner shows it (and “It was …”) then moves on. There is **no** retry loop.
+8. Write a short factual `explanation` of why the answer is correct. It appears after both correct and incorrect answers. Put instructions in hints. After a miss the runner also shows a labelled correct answer. There is **no** retry loop.
 9. Write `narration.prompt` wherever the voice would mangle the stem (`+`, `−`). Spoken text is the **question only** — never the answer.
 10. Use British English spelling and UK maths wording (e.g. *maths*, *number bonds*, *Year 2*).
 11. Run the self-review checklist in `QUALITY.md` before you push.
@@ -283,7 +283,7 @@ Follow `QUALITY.md` for the full wording templates, distractor rules, variety ru
 - Match the year-group reading age. Reception: one short sentence + a picture. Reuse the stem templates in `QUALITY.md`. Missing-part items always use `What do you need to add to {n} to make {total}?`. The prompt must describe exactly what the child sees and does on that screen.
 - One concept per question. Avoid trick questions and ambiguous distractors.
 - Wrong answers must be plausible misconceptions (off by one, wrong operation, number from the stem) — not random or joke options.
-- Always provide `explanation`. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.
+- Always provide a factual `explanation` that reads naturally after a correct answer. No instructions. Hints teach a strategy and never give the answer. Scaffolding follows the Easy / Medium / Hard table above.
 - Mark exactly what is correct in the typed fields (`correctId`, `correctIds`, `acceptedAnswers`, `correctOrder`).
 - Use at least three question kinds in a 10-question quest. Do not run the same kind more than three times in a row unless it is fluency practice.
 - There is no retry loop. Each question is asked once. A miss shows a short correction, then the child moves on.
@@ -432,7 +432,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 
 - Profile + progress keys live in `src/storage/localStore.ts`. Mute is `primary-path:sound-muted:v1`. Do not change key names casually (breaks existing browser data). Do not replace localStorage with another store.
 - A quest is **exactly 10 questions** (unless `extraQuestions`). Score = how many were right. No retry of misses.
-- After a wrong answer, show a short correction (`It was 4.` plus the `explanation`) and move on.
+- After a wrong answer, show a labelled correct answer and the factual `explanation`. Addition make-total and part-whole questions can also offer the optional `BondDemonstration`. It never changes the score.
 - Stars live in **one config**: `STAR_SCORE` in `src/lib/mastery.ts`. On a 10-question quest: **6–7 = 1 star**, **8–9 = 2**, **10 = 3**. Below 6 = 0 stars. Longer quests scale to that 10-question ruler.
 - Stars show progress. They do not gate the path. Everything is open. The path suggests an order but never blocks.
 - Store **best stars** and **best score** per Easy / Medium / Hard in localStorage (`bestStars`, `bestCorrectCount`, `bestTotalCount`).

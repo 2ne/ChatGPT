@@ -1,5 +1,7 @@
 # UI map (screen → file → CSS)
 
+Line numbers below are approximate. Search for the named CSS selectors or comments first.
+
 Do not read all of `src/index.css`. Jump to the region you need. Design rules: [DESIGN.md](../../DESIGN.md).
 
 ## Tokens and global
@@ -26,6 +28,9 @@ Do not read all of `src/index.css`. Jump to the region you need. Design rules: [
 | Object tiles | `src/components/ObjectGroup.tsx` (or similar) | object-group / object-token blocks under Answer options |
 | End / stars | `ActivityRunner` summary | ~2670 `/* Summary / stars */` |
 | Question bank | `src/components/QuestionBank.tsx` | ~3864 `/* Question bank */` |
+| Topic wallpaper | `src/components/mascot/MathsWallpaper.ts` via `PathMap` | `.map-zone`, `.map-zone-art`; no fades |
+| Bond demonstration | `src/components/questions/BondDemonstration.tsx` | `.bond-demo` |
+| Arithmetic choices | `MakeTotal` and `MultipleChoice` | `.make-total-sum`, `.make-total-box`, `.option` |
 | Mascot | `src/components/mascot/Pip.tsx`, `PipMood.tsx` | Pip motion + header |
 
 ## App shell

@@ -370,7 +370,7 @@ rainbow itself is never inset.
   indigo selected state. Exactly one is right; the other two are nearby
   misses. Order is shuffled. Tap drops the number into the empty circle in
   the selected style. Tap another to replace. Nothing auto-checks. Correct
-  turns the filled circle green. Wrong keeps the usual `It was 3.` line and
+  turns the filled circle green. Wrong shows a labelled correct answer and
   puts the right number in the circle. Prompt is `What do you need to add to {n} to
   make {whole}?`, or `What do {a} and {b} make?` when the whole is empty.
   Do not use match-pairs with `a and b` text for Reception bonds.
@@ -382,8 +382,8 @@ rainbow itself is never inset.
   to find it. The dock button has **no 2px border** (fill + squishy
   shadow only). Same size, shadow and layout for every dock action so
   nothing shifts.
-- Home and onboarding keep the dotted paper. Once a quest is open, the screen
-  is white edge to edge. Inner content still uses `--max-wide`.
+- Home and onboarding keep the dotted paper. Question play is white edge to edge.
+  The intro uses the centred Pip card above. Inner question content uses `--max-wide`.
 
 ### Progress
 
@@ -391,8 +391,8 @@ rainbow itself is never inset.
 gradient fill with pop; current = indigo outline + soft glow. Each question
 is asked once. Counter reads `Question 3 of 10` (Baloo, number in indigo).
 No inline streak badge in the header (it pushed the layout down). A streak
-toast may come back later. A miss shows a short correction (`It was 4.`
-plus the explanation) then **Next question**.
+toast may come back later. A miss shows a labelled correct answer and the factual
+explanation, then **Next question**.
 
 ### Summary (end screen)
 

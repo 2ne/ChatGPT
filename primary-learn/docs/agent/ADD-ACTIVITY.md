@@ -19,7 +19,7 @@ Do **not** create a `.tsx` for the quest. Do **not** open the app unless James a
 
 - Exactly 10 questions unless `extraQuestions.reason` (up to 20).
 - Only kinds in `QUESTION_KINDS` (`src/types/activity.ts`). Prefer three or more kinds; no long same-kind streaks unless fluency.
-- Every item has teaching `explanation`. Hints never give the answer. No retry loop.
+- Every item has a factual `explanation` of why its answer is correct. It must read naturally after a correct answer. Put strategies in hints, without revealing the answer. No retry loop.
 - `narration.prompt` when `+`, `−`, `=`, or `?` would mangle speech. Spoken text is the question only.
 - Pictures: `visual: { item, count }` — never emoji in JSON. Shared phrases stay in `src/data/copy.ts`.
 - Child-facing wording: [AGENTS.md](../../AGENTS.md) **Writing for children**. Stem templates: [QUALITY.md](../../QUALITY.md).

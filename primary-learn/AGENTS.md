@@ -70,6 +70,14 @@ Every child-facing string (`copy.ts`, activity JSON, component words) must follo
 
 **Missing-part stems** (any kind): `What do you need to add to {n} to make {total}?`. **Result stems** (`a + b = __`): `What is {a} + {b}?` / `What is {a} take away {b}?`. Prefer bond wording for addition blanks inside a sum. Pictured totals: `How many can you see in all?`
 
+## Established wording and interactions
+
+- Feedback explains why the answer is correct, after both correct and incorrect answers. Never put counting or tapping instructions in `explanation`. Hints suggest a method without giving the answer.
+- Arithmetic answer choices sit below the coloured sum. Choosing a number fills the yellow tile. Use `make-total` for addition bonds and numeric `multiple-choice` for subtraction results. Keep typed input for counting, sequences or words where appropriate.
+- Keep visible subtraction wording as “take away” and the equation symbol as `−`. Update narration and shared prompt defaults together when changing wording.
+- Optional `BondDemonstration` appears only after a missed addition make-total or part-whole question. It never changes marks or stars.
+- Current intro and pathway design decisions live in `DESIGN.md`. Preserve the simple Pip intro, topic-specific doodle backgrounds, centred name plates and subtle dividers. Section backgrounds do not fade or overlap.
+
 ## Hash routes
 
 `HashRouter` (GitHub Pages). Live: `https://2ne.github.io/ChatGPT/primary-learn/`. Review: `#/question-bank`. Paths: `/onboarding`, `/pathway`, `/activity/:id`, `/question-bank`.
