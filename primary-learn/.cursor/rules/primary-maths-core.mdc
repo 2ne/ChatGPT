@@ -1,0 +1,17 @@
+---
+description: Primary Maths slim always-on agent core (workflow, map placement, writing)
+alwaysApply: true
+---
+
+# Primary Maths core
+
+Follow [AGENTS.md](AGENTS.md). Keep token use low.
+
+- Ship gate: `npm run build` in `primary-learn/`. JSON-only iterate with `npm run check:activities`.
+- No app run / screenshots unless James asks. Push to `main`. No PRs. No tests/lint unless asked.
+- Content is JSON in `src/data/activities/` (auto-registered). No per-quest JSX. UI in shared runner + question kinds. Phrases in `src/data/copy.ts`.
+- Map needs `pathNode` + `difficulty` (`1`/`2`/`3`). `curriculumRef` alone does not place a quest.
+- Child-facing copy: UK English, short sentences, no em/en dashes as punctuation. Missing-part: `What goes with {n} to make {total}?`.
+- Quest work → `docs/agent/ADD-ACTIVITY.md` + `QUALITY.md` + node in `curriculum/maths.md` + `curriculum/NEXT.md`.
+- UI work → `DESIGN.md` + `docs/agent/UI-MAP.md`.
+- Deep detail only when needed → `docs/agent/REFERENCE.md`.

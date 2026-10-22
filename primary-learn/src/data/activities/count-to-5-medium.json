@@ -41,7 +41,7 @@
     {
       "kind": "count-objects",
       "id": "c5m-count-3",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "apple", "count": 3 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -54,12 +54,12 @@
       "correctId": "c",
       "hint": "Tap each {item}, even if they look messy.",
       "explanation": "Tap each {item} once. The last number you say is how many.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "count-objects",
       "id": "c5m-count-4",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "car", "count": 4 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -72,12 +72,12 @@
       "correctId": "c",
       "hint": "Say a new number for each tap.",
       "explanation": "Count one {item} at a time. Do not skip. Do not count one twice.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "count-objects",
       "id": "c5m-count-5",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "star", "count": 5 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -90,7 +90,7 @@
       "correctId": "c",
       "hint": "Keep going until every {item} has a number.",
       "explanation": "When every {item} has been tapped, the last number is how many there are.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "build-set",
@@ -104,7 +104,7 @@
     {
       "kind": "fill-blank",
       "id": "c5m-fb",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "balloon", "count": 5 },
       "layout": "scatter",
       "randomise": { "count": { "min": 4, "max": 5 } },
@@ -113,12 +113,12 @@
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
       "explanation": "Tap each {item}. The last number you say is the answer.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "multiple-choice",
       "id": "c5m-sam-4",
-      "prompt": "Sam needs 4 {items}. Which group?",
+      "prompt": "Which group has 4 {items}?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 3 } },
@@ -128,7 +128,7 @@
       ],
       "correctId": "c",
       "explanation": "Sam needs 4. Count 1, 2, 3, 4. That group has 4 {items}.",
-      "narration": { "prompt": "Sam needs 4 {items}. Which group?" }
+      "narration": { "prompt": "Which group has 4 {items}?" }
     },
     {
       "kind": "multiple-choice",
@@ -176,7 +176,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5m-last",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "strawberry", "count": 5 },
       "layout": "scatter",
       "randomise": { "shuffleOptions": true },
@@ -188,7 +188,7 @@
       ],
       "correctId": "b",
       "explanation": "Tap each {item}: 1, 2, 3, 4, 5. The last number you say is 5. That is how many there are.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     }
   ]
 }

@@ -83,16 +83,22 @@ export function defaultSumOnlySpoken(question: MakeTotalQuestion): string | null
   return `What is ${a} ${op} ${b}?`;
 }
 
+function isPicturedTotalPlaceholder(prompt: string): boolean {
+  return prompt === "How many in all?" || prompt === "How many can you see in all?";
+}
+
 function shouldReplacePrompt(prompt: string): boolean {
   return (
-    prompt === "How many in all?" ||
+    isPicturedTotalPlaceholder(prompt) ||
     SUM_ONLY_TOTAL_PROMPT.test(prompt) ||
     /missing number/i.test(prompt)
   );
 }
 
 function shouldReplaceSpoken(spoken: string | undefined, prompt: string): boolean {
-  if (spoken == null || spoken === "" || spoken === "How many in all?" || spoken === prompt) return true;
+  if (spoken == null || spoken === "" || isPicturedTotalPlaceholder(spoken) || spoken === prompt) {
+    return true;
+  }
   return SUM_ONLY_TOTAL_SPOKEN.test(spoken);
 }
 

@@ -1,0 +1,14 @@
+---
+description: Primary Maths UI and CSS design system
+globs: src/**/*.{css,tsx}
+alwaysApply: false
+---
+
+# UI / CSS
+
+Follow [DESIGN.md](DESIGN.md). Screen → file → CSS region map: [docs/agent/UI-MAP.md](docs/agent/UI-MAP.md).
+
+- Semantic classes + CSS variables in `src/index.css`. Do not invent a second theme. No Three.js / WebGL.
+- Do not migrate kid UI to utility-only Tailwind class soup. Tokens and shared classes stay in CSS.
+- Shared child-facing phrases live in `src/data/copy.ts`, not hard-coded per screen when a shared phrase already exists.
+- Keep motion subtle. Match Baloo 2 + Nunito, warm paper, indigo actions.

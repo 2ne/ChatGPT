@@ -36,6 +36,8 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 
 ## Next quest to build
 
+Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
+
 When expanding the path, the first `missing` node is `eyfs-count-10` — Count to 10 (node 5, after `eyfs-bonds-5`). Start that node with Easy.
 
 Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.

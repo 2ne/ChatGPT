@@ -1,0 +1,15 @@
+---
+description: Quest / activity JSON quality rules for Primary Maths
+globs: src/data/activities/**
+alwaysApply: false
+---
+
+# Activity JSON
+
+Follow [QUALITY.md](QUALITY.md) and [docs/agent/ADD-ACTIVITY.md](docs/agent/ADD-ACTIVITY.md).
+
+- Drop `<id>.json` in this folder only. Auto-registry validates on load. No hand import. No JSX.
+- Set `pathNode` + `difficulty` + matching `curriculumRef`. Write `difficultyRamp` before questions.
+- Exactly 10 questions unless `extraQuestions.reason`. Gold standard: `count-to-5.json`.
+- Run QUALITY self-review, then `npm run check:activities`, then `npm run build` before push.
+- Next work: [curriculum/NEXT.md](curriculum/NEXT.md). Covers bullets only for that node in `curriculum/maths.md`.

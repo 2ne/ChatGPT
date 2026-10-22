@@ -14,11 +14,11 @@ Foundation release: profile onboarding, an open path map (`PathMap` + `LevelShee
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
-Agent instructions in `AGENTS.md` plus the quality guide in `QUALITY.md` define how to add quests so they appear on the map and are right first time.
+Agent instructions in `AGENTS.md` (slim core), playbook `docs/agent/ADD-ACTIVITY.md`, and `QUALITY.md` define how to add quests. Deep detail lives in `docs/agent/REFERENCE.md`. What to build next: `curriculum/NEXT.md`.
 
 ## Rapid prototype
 
-Agents work directly on `main`. No pull requests. No test suites. No linting required. `npm run build` in this folder is the check.
+Agents work directly on `main`. No pull requests. No test suites. No linting required. `npm run build` in this folder is the ship check. For JSON-only work, iterate with `npm run check:activities` first.
 
 ## What it does
 
@@ -32,15 +32,15 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 ## Adding activities
 
-Follow **`AGENTS.md`** and **`QUALITY.md`** strictly. Each activity is built once — write `difficultyRamp` first, climb Easy < Medium < Hard, and run the self-review checklist before you push.
+Follow **`docs/agent/ADD-ACTIVITY.md`** and **`QUALITY.md`** strictly. Each activity is built once — write `difficultyRamp` first, climb Easy < Medium < Hard, and run the self-review checklist before you push.
 
-1. Add `src/data/activities/<kebab-id>.json` (pure data — no JSX). See `activity.schema.json`.
-2. Import it in `src/data/activities/index.ts` and run `validateActivity` (invalid JSON fails the build).
-3. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
-4. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, `questionCount`, skills, and `difficultyRamp`
-5. Default is **10** questions that ramp with no spikes. Longer sets need `extraQuestions.reason`. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`. Optional `randomise` (item pools, tight count ranges, shuffled choices) is documented in `AGENTS.md` — never use it to leave the difficulty band.
+1. Add `src/data/activities/<kebab-id>.json` (pure data — no JSX). See `activity.schema.json`. No hand import; the registry auto-loads and validates.
+2. Set `pathNode` to the `curriculum/maths.md` node id and `difficulty` to `1` / `2` / `3` (Easy / Medium / Hard). The map looks up `${pathNode}:${difficulty}` — `curriculumRef` alone will not place the quest
+3. Also set `curriculumRef` to that same node id, plus year group(s), ability, subject, type, mastery threshold, `questionCount`, skills, and `difficultyRamp`
+4. Default is **10** questions that ramp with no spikes. Longer sets need `extraQuestions.reason`. Pictures are `visual: { item, count }`. Shared phrases live in `src/data/copy.ts`. Optional `randomise` is documented in `docs/agent/REFERENCE.md` — never use it to leave the difficulty band.
+5. Run `npm run check:activities`, then `npm run build`.
 
-A new **question kind** is a new component under `src/components/questions/` plus a schema entry — never UI inside a JSON file. Prefer filling Medium / Hard on shipped nodes before adding a new node.
+A new **question kind** is a new component under `src/components/questions/` plus a schema entry — never UI inside a JSON file. Prefer filling Medium / Hard on shipped nodes before adding a new node. See `curriculum/NEXT.md`.
 
 ## Design
 
@@ -50,12 +50,13 @@ Visual system is documented in **`DESIGN.md`** (Baloo 2 + Nunito, indigo actions
 
 UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 
+- `curriculum/NEXT.md` — what agents should build next (keep in sync with coverage)
 - `curriculum/overview.md` — stages and ages
 - `curriculum/maths.md` — the path: 45 categories and 124 nodes, in order
 - `curriculum/audit.md` — how to check that path before adding a quest
 - `curriculum/coverage.md` — how many nodes are still missing
 
-Each node can hold three quests (Easy / Medium / Hard). The next *new* node is the first `missing` one (`eyfs-subitise-5`). Next improvement is Medium / Hard for `y1-bonds-10`.
+Each node can hold three quests (Easy / Medium / Hard). See `curriculum/NEXT.md` for the current next missing Easy.
 
 ## Stack
 

@@ -22,7 +22,12 @@ export function spokenPrompt(question: Question): string {
     const spoken = defaultSumOnlySpoken(question);
     if (spoken) {
       const written = narrationText(question.narration?.prompt, "");
-      if (!written || written === "How many in all?" || written === question.prompt) {
+      if (
+        !written ||
+        written === "How many in all?" ||
+        written === "How many can you see in all?" ||
+        written === question.prompt
+      ) {
         return spoken;
       }
     }

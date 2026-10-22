@@ -25,7 +25,7 @@
     {
       "kind": "multiple-choice",
       "id": "s5m-3",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "star", "count": 3 },
       "layout": "dice",
       "flashMs": 1200,
@@ -39,12 +39,12 @@
       "correctId": "b",
       "hint": "See the whole group. Do not count one by one.",
       "explanation": "There are 3 {items}. See all three at once.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-4",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "apple", "count": 4 },
       "layout": "dice",
       "flashMs": 1200,
@@ -58,12 +58,12 @@
       "correctId": "b",
       "hint": "See the whole group. Do not count one by one.",
       "explanation": "There are 4 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-5",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "frog", "count": 5 },
       "layout": "dice",
       "flashMs": 1200,
@@ -77,12 +77,12 @@
       "correctId": "c",
       "hint": "See the whole group. Do not count one by one.",
       "explanation": "There are 5 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-frame-4",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "banana", "count": 4 },
       "layout": "five-frame",
       "flashMs": 1200,
@@ -95,12 +95,12 @@
       ],
       "correctId": "b",
       "explanation": "There are 4 {items}. You can see the whole group at once.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-scatter-3",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "duck", "count": 3 },
       "layout": "scatter",
       "flashMs": 1100,
@@ -113,12 +113,12 @@
       ],
       "correctId": "b",
       "explanation": "There are still 3 {items}, even if they look messy.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-parts-5",
-      "prompt": "How many in all?",
+      "prompt": "How many can you see in all?",
       "visual": { "item": "fish", "count": 2 },
       "extras": [{ "item": "car", "count": 3 }],
       "layout": "row",
@@ -132,24 +132,24 @@
       ],
       "correctId": "c",
       "explanation": "See 2 and 3. That makes 5 in all.",
-      "narration": { "prompt": "How many in all?" }
+      "narration": { "prompt": "How many can you see in all?" }
     },
     {
       "kind": "fill-blank",
       "id": "s5m-fingers-5",
-      "prompt": "How many fingers?",
+      "prompt": "How many fingers can you see?",
       "visual": { "item": "star", "count": 5 },
       "layout": "fingers",
       "flashMs": 1100,
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
       "explanation": "Five fingers are up. That is 5.",
-      "narration": { "prompt": "How many fingers?" }
+      "narration": { "prompt": "How many fingers can you see?" }
     },
     {
       "kind": "multi-select",
       "id": "s5m-every-5",
-      "prompt": "Tap every group of 5 {items}.",
+      "prompt": "Tap every group that has 5 {items}.",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "balloon", "count": 5 }, "layout": "dice" },
@@ -159,12 +159,12 @@
       ],
       "correctIds": ["a", "d"],
       "explanation": "Two groups show 5 {items}. Skip 3 and 4.",
-      "narration": { "prompt": "Tap every group of 5 {items}." }
+      "narration": { "prompt": "Tap every group that has 5 {items}." }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-hidden-4",
-      "prompt": "How many {items} under the cup?",
+      "prompt": "How many {items} are under the cup?",
       "visual": { "item": "ladybird", "count": 4 },
       "layout": "hidden",
       "flashMs": 1000,
@@ -177,12 +177,12 @@
       ],
       "correctId": "b",
       "explanation": "There are 4 {items} under the cup.",
-      "narration": { "prompt": "How many {items} under the cup?" }
+      "narration": { "prompt": "How many {items} are under the cup?" }
     },
     {
       "kind": "multiple-choice",
       "id": "s5m-sam-5",
-      "prompt": "Sam needs 5 {items}. Which group?",
+      "prompt": "Which group has 5 {items}?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "banana", "count": 4 }, "layout": "dice" },
@@ -192,7 +192,7 @@
       ],
       "correctId": "b",
       "explanation": "Sam needs 5. That group has 5 {items}.",
-      "narration": { "prompt": "Sam needs 5 {items}. Which group?" }
+      "narration": { "prompt": "Which group has 5 {items}?" }
     }
   ]
 }

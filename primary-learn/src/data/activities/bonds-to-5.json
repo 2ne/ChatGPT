@@ -120,7 +120,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5e-take-1",
-      "prompt": "Sam has 5 {items} and gives away 1. How many left?",
+      "prompt": "Sam has 5 {items} and gives away 1. How many are left?",
       "visual": { "item": "apple", "count": 5 },
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -131,12 +131,12 @@
       ],
       "correctId": "b",
       "explanation": "Because 1 + 4 = 5, 5 take away 1 is 4.",
-      "narration": { "prompt": "Sam has 5 {items} and gives away 1. How many left?" }
+      "narration": { "prompt": "Sam has 5 {items} and gives away 1. How many are left?" }
     },
     {
       "kind": "multiple-choice",
       "id": "b5e-minus-2",
-      "prompt": "5 take away 2. How many left?",
+      "prompt": "5 take away 2. How many are left?",
       "visual": { "item": "star", "count": 5 },
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -147,7 +147,7 @@
       ],
       "correctId": "b",
       "explanation": "Because 2 + 3 = 5, 5 take away 2 is 3.",
-      "narration": { "prompt": "5 take away 2. How many left?" }
+      "narration": { "prompt": "5 take away 2. How many are left?" }
     }
   ]
 }

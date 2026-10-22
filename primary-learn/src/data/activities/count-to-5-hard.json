@@ -41,7 +41,7 @@
     {
       "kind": "count-objects",
       "id": "c5h-mix-2",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "duck", "count": 2 },
       "extras": [{ "item": "frog", "count": 2 }],
       "layout": "scatter",
@@ -55,12 +55,12 @@
       "correctId": "a",
       "hint": "Count only the {items}. Leave the {items2}.",
       "explanation": "Count only the {items}. Tap each {item}: {seq}. Do not count the {items2}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "count-objects",
       "id": "c5h-mix-3",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "apple", "count": 3 },
       "extras": [{ "item": "banana", "count": 2 }],
       "layout": "scatter",
@@ -73,12 +73,12 @@
       ],
       "correctId": "b",
       "explanation": "Count only the {items}, not the {items2}. There are {count} {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "count-objects",
       "id": "c5h-mix-4",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "star", "count": 4 },
       "extras": [{ "item": "balloon", "count": 1 }],
       "layout": "scatter",
@@ -91,12 +91,12 @@
       ],
       "correctId": "b",
       "explanation": "Tap each {item}. Skip the {item2}. There are {count} {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "fill-blank",
       "id": "c5h-mix-5",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "fish", "count": 5 },
       "extras": [{ "item": "car", "count": 2 }],
       "layout": "scatter",
@@ -106,7 +106,7 @@
       "acceptedAnswers": ["5", "five"],
       "inputMode": "numeric",
       "explanation": "There are 5 {items}. The {items2} are not part of the count.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "build-set",

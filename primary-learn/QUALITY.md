@@ -1,8 +1,8 @@
 # Activity quality guide
 
-**Each activity is built once and must be right first time.** The owner will not rework your questions. Follow this file and `AGENTS.md` before you write a single stem.
+**Each activity is built once and must be right first time.** The owner will not rework your questions. Follow this file and the playbook in `docs/agent/ADD-ACTIVITY.md` before you write a single stem. Next work: `curriculum/NEXT.md`.
 
-Gold-standard quest to copy: `src/data/activities/count-to-5.json` (Easy, node `eyfs-count-5`). Content is JSON only — no JSX.
+Gold-standard quest to copy: `src/data/activities/count-to-5.json` (Easy, node `eyfs-count-5`). Content is JSON only — no JSX. Drop the file in `src/data/activities/`; it auto-registers.
 
 ## Before you write questions
 
@@ -43,10 +43,12 @@ Reading age follows the year group, not the adult who is coding.
 
 | Year | Sentence rule |
 | --- | --- |
-| Reception | One short sentence. About 4–8 words plus a picture. Present tense. “How many apples?” |
+| Reception | One clear sentence plus a picture. Present tense. Full question, not a fragment. “How many apples can you see?” |
 | Year 1 | One sentence, or two if the second is the equation. No subordinate clauses. |
 | Year 2–3 | Still short. One idea. A name is fine (“Sam has 10 apples”). |
 | Year 4–6 | Can use a precise maths word the node teaches (*factor*, *multiple*). Still no waffle. |
+
+**Sentences must make sense to kids.** Do not clip the verb or the ask. A parent reading aloud with no extra help should understand the job.
 
 **Never say to a child:** mastery, curriculum, ability, emerging, greater depth, distractor, node, percentage (unless the node is percentages).
 
@@ -58,10 +60,11 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 
 | Kind | Template |
 | --- | --- |
-| multiple-choice count | `How many {items}?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. Subitise stems may set `flashMs` and `layout` (`dice`, `five-frame`, `fingers`, `hidden`). Picture groups still use the same cream tiles; no empty frame cells. |
-| conceptual subitise | `How many in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
-| hidden quantity | `How many {items} under the cup?` with `layout` `hidden` and `flashMs`. |
-| light story | `{Name} needs {n} {items}. Which group?` or `{Name} has {n} {items} and {action}. How many left / in all?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. |
+| multiple-choice count | `How many {items} can you see?` + picture (`{item}` / `{items}` if the quest randomises objects). Same stem for fill-blank counts. Fingers: `How many fingers can you see?`. Subitise stems may set `flashMs` and `layout` (`dice`, `five-frame`, `fingers`, `hidden`). Picture groups still use the same cream tiles; no empty frame cells. |
+| conceptual subitise | `How many can you see in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
+| hidden quantity | `How many {items} are under the cup?` with `layout` `hidden` and `flashMs`. |
+| pick a group | `Which group has {n} {items}?` (single choice). Multi-select: `Which groups have {n} {items}?` or `Tap every group that has {n} {items}.` Do not write `Which group?` alone. |
+| light story | `{Name} has {n} {items} and {action}. How many are left?` / `How many {items} does he have now?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What number comes next? 1, 2, 3, ?` Explanation: `{n} comes after {n-1}.` |
 | multiple-choice missing | `What goes with {n} to make {total}?` |
@@ -69,18 +72,18 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | fill-blank bond | Blank is a part inside the sum (`{a} +` / `= {total}`). Prompt: `What goes with {n} to make {total}?`. |
 | fill-blank missing | Blank is a part inside a take-away (`__ − 2 = 3`, `5 − __ = 3`) or a hole in a sequence. Prompt: `Which number is missing?` For a count sequence, put the numbers in the stem: `Which number is missing? 1, 2, _, 4, 5`. Prefer the bond wording above for addition. |
 | multiple-choice sequence | `Which number is missing? 1, 2, _, 4, 5` (or `What number comes next? 1, 2, 3, ?`). Do not say gap. |
-| make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Sum-only totals: `What is {a} + {b}?` (subtract: `What is {a} − {b}?`). The kind generates this from the numbers on screen; JSON may override. Spoken: `What is one plus one?` / `What is five take away two?`. Pictured totals: `How many in all?` (only if pictures are shown). Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
+| make-total | Missing part (fill-slots or sum-only): `What goes with {n} to make {total}?`. Empty slot label is `Add` (no item name). Never `5 is 2 and ?` or `5 = ? + 2`. Sum-only totals: `What is {a} + {b}?` (subtract: `What is {a} − {b}?`). The kind generates this from the numbers on screen; JSON may override. Spoken: `What is one plus one?` / `What is five take away two?`. Pictured totals: `How many can you see in all?` (only if pictures are shown). Optional `slotCount` on fill-slots (default missing + 2). Never use pick. |
 | pick-pair | `What two numbers make {total}?`. Always 4 tiles and exactly one pair. No duplicate distractors. Medium is harder numbers, not more tiles. Set `showDots`. Finding every pair is `match-pairs`. |
 | part-whole | Missing part: `What goes with {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
-| multi-select | `Tap every {pair/group} that {rule}.` |
+| multi-select | `Tap every {pair/group} that {rule}.` Or `Which groups have {n} {items}?` when picking pictured groups. |
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
 | match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |
-| story (take away) | `{Name} has {n} {items} and gives away {m}. How many left?` Pictures must show the object named in the text, with matching counts. |
+| story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures must show the object named in the text, with matching counts. |
 
-Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”.
+Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”. Do not write clipped stems (`How many ducks?`, `Which group?`).
 
-**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas?` not `What number did you get to?` or `Count the bananas.` If the screen is number boxes (`1 + 1 = ?`) with no pictures, write `What is 1 + 1?` not `How many in all?` or `What is the missing number?`. Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
+**The prompt must describe exactly what the child sees and does on that screen.** Do not refer to a previous step, a counting-along routine, or tapping when there is nothing to tap. If the screen is a group of bananas and number buttons, write `How many bananas can you see?` not `What number did you get to?` or `Count the bananas.` If the screen is number boxes (`1 + 1 = ?`) with no pictures, write `What is 1 + 1?` not `How many can you see in all?` or `What is the missing number?`. Method belongs in the hint (`Just look.` / `Tap each one.`), not the stem.
 
 ## Distractors
 
@@ -143,7 +146,7 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
 {
   "kind": "count-objects",
   "id": "c5e-count-1",
-  "prompt": "How many {items}?",
+  "prompt": "How many {items} can you see?",
   "visual": { "item": "star", "count": 1 },
   "randomise": { "shuffleOptions": true },
   "options": [
@@ -155,11 +158,11 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
   "correctId": "a",
   "hint": "Tap the {item} and say one.",
   "explanation": "Tap the {item} once. One thing counts as 1.",
-  "narration": { "prompt": "How many {items}?" }
+  "narration": { "prompt": "How many {items} can you see?" }
 }
 ```
 
-`randomise` on this Easy item swaps the picture (stars → bananas / apples / cars) from the activity pool and shuffles the tap targets. The **count stays 1**. Do not add `"count": { "min", "max" }` here — that would wobble the 1-2-3-4-5 ramp. Pictures light up and say the next number when tapped. See **Optional randomisation** in `AGENTS.md`.
+`randomise` on this Easy item swaps the picture (stars → bananas / apples / cars) from the activity pool and shuffles the tap targets. The **count stays 1**. Do not add `"count": { "min", "max" }` here — that would wobble the 1-2-3-4-5 ramp. Pictures light up and say the next number when tapped. See **Optional randomisation** in `docs/agent/REFERENCE.md`.
 
 The rest of that quest then moves to 2 and 3 objects, types 4, builds a group of 5, then the count sequence, then numerals — see `difficultyRamp.within` at the top of the file.
 
@@ -173,20 +176,20 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] Questions climb with no spike and no drop-back to a trivial item
 - [ ] Only this node’s **Covers** bullets are taught
 - [ ] Year group reading age; British English; stem templates reused
-- [ ] The prompt describes exactly what the child sees and does on that screen (no leftover “got to”, “count the”, or “look” stems on a how-many screen)
+- [ ] The prompt is a full kid sentence that matches the screen (no clipped `How many ducks?` / `Which group?`; no leftover “got to” or “count the” stems)
 - [ ] Every item has a teaching `explanation`; hints match the scaffolding plan
 - [ ] Distractors are named misconceptions, not random
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed
 - [ ] At least three question kinds in a 10-question quest; same kind not overused
 - [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
 - [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set. Stars use `STAR_SCORE` (6–7 / 8–9 / 10). No retry loop.
-- [ ] JSON only (no JSX, no per-activity component). Registered in `src/data/activities/index.ts` via `validateActivity`. New behaviour went into a shared question kind with defaults, not a one-off field
+- [ ] JSON only (no JSX, no per-activity component). File is in `src/data/activities/` and passes `validateActivity` (auto-registered). New behaviour went into a shared question kind with defaults, not a one-off field
 - [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
 - [ ] No shared phrases (“Correct. Nice!”, “Need a hint?”) copied into the JSON. Those live in `src/data/copy.ts`
 - [ ] Child-facing wording follows **Writing for children** in `AGENTS.md` (UK English, short sentences, no em/en dashes as punctuation)
-- [ ] `npm run build` in `primary-learn/` succeeds
-- [ ] You opened the quest in the app: the speaker after the question reads the question only, a miss shows the explanation, the map row is correct
+- [ ] `npm run check:activities` then `npm run build` in `primary-learn/` succeed
+- [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)
 
 ## Elevating written sentences (later)
 

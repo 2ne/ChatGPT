@@ -41,7 +41,7 @@
     {
       "kind": "count-objects",
       "id": "c5e-count-1",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "star", "count": 1 },
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -53,12 +53,12 @@
       "correctId": "a",
       "hint": "Tap the {item} and say one.",
       "explanation": "Tap the {item} once. One thing counts as 1.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "count-objects",
       "id": "c5e-count-2",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "balloon", "count": 2 },
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -70,12 +70,12 @@
       "correctId": "b",
       "hint": "Tap each {item} and say a number.",
       "explanation": "Tap each {item} once: 1, 2. There are 2 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "count-objects",
       "id": "c5e-count-3",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "apple", "count": 3 },
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -87,12 +87,12 @@
       "correctId": "b",
       "hint": "Point to each {item} and say a number: 1, 2, 3.",
       "explanation": "Touch each {item} once and count: 1, 2, 3. There are 3 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "fill-blank",
       "id": "c5e-fb-4",
-      "prompt": "How many {items}?",
+      "prompt": "How many {items} can you see?",
       "visual": { "item": "duck", "count": 4 },
       "layout": "five-frame",
       "randomise": {},
@@ -101,7 +101,7 @@
       "acceptedAnswers": ["4", "four"],
       "inputMode": "numeric",
       "explanation": "1, 2, 3, 4. There are 4 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "How many {items} can you see?" }
     },
     {
       "kind": "build-set",
@@ -172,7 +172,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5e-sam-5",
-      "prompt": "Sam needs 5 {items}. Which group?",
+      "prompt": "Which group has 5 {items}?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 4 } },
@@ -182,7 +182,7 @@
       ],
       "correctId": "c",
       "explanation": "Sam needs 5. Count 1, 2, 3, 4, 5. That group has 5 {items}.",
-      "narration": { "prompt": "Sam needs 5 {items}. Which group?" }
+      "narration": { "prompt": "Which group has 5 {items}?" }
     }
   ]
 }

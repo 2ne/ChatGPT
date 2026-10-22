@@ -156,7 +156,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5h-take-0",
-      "prompt": "5 take away 0. How many left?",
+      "prompt": "5 take away 0. How many are left?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -181,7 +181,7 @@
       "correctId": "c",
       "explanation": "5 take away 0 is 5.",
       "narration": {
-        "prompt": "5 take away 0. How many left?"
+        "prompt": "5 take away 0. How many are left?"
       }
     },
     {

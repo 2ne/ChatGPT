@@ -120,7 +120,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10-take-2",
-      "prompt": "Sam has 10 {items} and eats 2. How many left?",
+      "prompt": "Sam has 10 {items} and eats 2. How many are left?",
       "visual": { "item": "apple", "count": 10 },
       "layout": "tens-frame",
       "randomise": { "shuffleOptions": true },
@@ -132,12 +132,12 @@
       ],
       "correctId": "c",
       "explanation": "Because 2 + 8 = 10, 10 take away 2 is 8.",
-      "narration": { "prompt": "Sam has 10 {items} and eats 2. How many left?" }
+      "narration": { "prompt": "Sam has 10 {items} and eats 2. How many are left?" }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10-minus-4",
-      "prompt": "10 take away 4. How many left?",
+      "prompt": "10 take away 4. How many are left?",
       "visual": { "item": "star", "count": 10 },
       "layout": "tens-frame",
       "randomise": { "shuffleOptions": true },
@@ -149,7 +149,7 @@
       ],
       "correctId": "b",
       "explanation": "Because 4 + 6 = 10, 10 take away 4 is 6.",
-      "narration": { "prompt": "10 take away 4. How many left?" }
+      "narration": { "prompt": "10 take away 4. How many are left?" }
     }
   ]
 }

@@ -123,7 +123,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5m-take-3",
-      "prompt": "Sam has 5 {items} and gives away 3. How many left?",
+      "prompt": "Sam has 5 {items} and gives away 3. How many are left?",
       "randomise": {
         "shuffleOptions": true,
         "items": ["apple", "star", "banana", "balloon"]
@@ -149,7 +149,7 @@
       "correctId": "b",
       "explanation": "Because 3 + 2 = 5, 5 take away 3 is 2.",
       "narration": {
-        "prompt": "Sam has 5 {items} and gives away 3. How many left?"
+        "prompt": "Sam has 5 {items} and gives away 3. How many are left?"
       }
     },
     {
@@ -234,7 +234,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5m-take-5",
-      "prompt": "Sam has 5 {items} and gives them all away. How many left?",
+      "prompt": "Sam has 5 {items} and gives them all away. How many are left?",
       "randomise": {
         "shuffleOptions": true,
         "items": ["apple", "star", "banana", "balloon"]
@@ -260,7 +260,7 @@
       "correctId": "a",
       "explanation": "5 take away 5 is 0. Because 5 + 0 = 5.",
       "narration": {
-        "prompt": "Sam has 5 {items} and gives them all away. How many left?"
+        "prompt": "Sam has 5 {items} and gives them all away. How many are left?"
       }
     }
   ]

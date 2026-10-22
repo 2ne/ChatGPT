@@ -4,14 +4,14 @@ Working notes for **Primary Maths**, distilled from official DfE sources so we c
 
 This map is **primary maths only**. English or other subjects might come later as separate work. Do not add them here until asked.
 
-Each node has **three levels** (Easy / Medium / Hard). Prefer finishing those on shipped nodes before adding a new node. See `../AGENTS.md`.
+Each node has **three levels** (Easy / Medium / Hard). Prefer finishing those on shipped nodes before adding a new node. See [NEXT.md](./NEXT.md) and `../docs/agent/ADD-ACTIVITY.md`.
 
 ## How to use these files
 
-1. Prefer a missing Medium or Hard on a node that already has Easy. When expanding, open `maths.md` and take the first node marked `missing`.
+1. Prefer a missing Medium or Hard on a node that already has Easy. When expanding, open [NEXT.md](./NEXT.md) (or the first `missing` node in `maths.md`).
 2. Follow `audit.md` before and after writing that quest.
-3. Use that node’s id as `pathNode` and `curriculumRef`, set `difficulty` to `1` / `2` / `3`, and use its title as the quest name. Write the quest as JSON in `src/data/activities/`. The map looks up `pathNode` + `difficulty`.
-4. Update the node status in `maths.md` and the scoreboard in `coverage.md`.
+3. Use that node’s id as `pathNode` and `curriculumRef`, set `difficulty` to `1` / `2` / `3`, and use its title as the quest name. Write the quest as JSON in `src/data/activities/` (auto-registered). The map looks up `pathNode` + `difficulty`.
+4. Update the node status in `maths.md`, the scoreboard in `coverage.md`, and [NEXT.md](./NEXT.md).
 
 Agents: when creating quests, set `pathNode`, `difficulty`, `curriculumRef` and `skills` to match a node in these files.
 
@@ -19,6 +19,7 @@ Agents: when creating quests, set `pathNode`, `difficulty`, `curriculumRef` and 
 
 | File | What it covers |
 | --- | --- |
+| [NEXT.md](./NEXT.md) | What agents should build next |
 | [overview.md](./overview.md) | Stages and ages |
 | [eyfs.md](./eyfs.md) | Reception maths (before Year 1) |
 | [maths.md](./maths.md) | The path: 45 categories, 124 quest nodes, Reception → Year 6 |

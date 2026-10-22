@@ -92,7 +92,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10h-take-0",
-      "prompt": "10 take away 0. How many left?",
+      "prompt": "10 take away 0. How many are left?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "0" },
@@ -102,7 +102,7 @@
       ],
       "correctId": "c",
       "explanation": "10 take away 0 is 10.",
-      "narration": { "prompt": "10 take away 0. How many left?" }
+      "narration": { "prompt": "10 take away 0. How many are left?" }
     },
     {
       "kind": "make-total",
@@ -151,7 +151,7 @@
     {
       "kind": "multiple-choice",
       "id": "nb10h-sam-story",
-      "prompt": "Sam has 10. He gives away 3. How many left?",
+      "prompt": "Sam has 10. He gives away 3. How many are left?",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "6" },
@@ -161,7 +161,7 @@
       ],
       "correctId": "b",
       "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
-      "narration": { "prompt": "Sam has 10. He gives away 3. How many left?" }
+      "narration": { "prompt": "Sam has 10. He gives away 3. How many are left?" }
     }
   ]
 }
