@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 3 tap-count a tidy row of 6, then 7, then 8. Question 4 counts 9 on a tens-frame. Question 5 builds a group of 10. Question 6 says what comes next after 7, 8, 9. Question 7 picks the missing amount in 6, 7, blank, 9, 10. Question 8 orders 6, 7, 8. Question 9 shows 6 and asks the child to tap the matching group. Question 10 picks which group has 10. Counts climb 6 to 10 with no drop-back.",
-    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
+    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, a numeral match, and a fuller order, still within 10."
   },
   "skills": [
     "eyfs-count-10",
@@ -280,7 +280,7 @@
     {
       "kind": "multiple-choice",
       "id": "c10e-match",
-      "prompt": "How many {items}?",
+      "prompt": "Tap the {items} that match the number below.",
       "numeral": 6,
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -291,7 +291,7 @@
       ],
       "correctId": "a",
       "explanation": "That group has 6 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "Tap the {items} that match the number below." }
     },
     {
       "kind": "multiple-choice",

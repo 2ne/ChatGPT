@@ -32,7 +32,7 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `bonds-to-5-hard` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Hard: mix plus and take away, number words |
 | `count-to-10` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Easy: tidy tap-count 6 to 10, tens-frame, build 10, sequence and match |
 | `count-to-10-medium` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Medium: scattered groups, build 8, tens-frame 10, order 7 to 10 |
-| `count-to-10-hard` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Hard: count one kind among mixed objects, number words, order 6 to 10 |
+| `count-to-10-hard` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Hard: count one kind among mixed objects, numeral match, order 6 to 10 |
 | `more-less-same` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Easy: more, fewer and same with clear gaps |
 | `more-less-same-medium` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Medium: closer counts, scatter, order four groups |
 | `more-less-same-hard` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Hard: near-equal groups, same-as, story compare |

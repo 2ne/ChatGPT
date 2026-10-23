@@ -1,7 +1,7 @@
 {
   "id": "count-to-10-hard",
   "title": "Count to 10",
-  "summary": "Count one kind among mixed things, build 10, and use number words. Still within 10.",
+  "summary": "Count one kind among mixed things, build 10, and match a numeral to a group. Still within 10.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 4 count only one kind in a mixed scatter (7, then 8, then 9, then 10 of the target). Question 5 builds exactly 10 from a large tray. Question 6 taps every group of 10. Question 7 shows the word nine and asks the child to tap the matching group. Question 8 orders 6 to 10. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 6, 7, 8, 9, blank. No bonds.",
-    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (7, then 8, then 9, then 10 of the target). Question 5 builds exactly 10 from a large tray. Question 6 taps every group of 10. Question 7 shows the numeral 9 and asks the child to tap the matching group. Question 8 orders 6 to 10. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 6, 7, 8, 9, blank. No bonds.",
+    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, a numeral match, and a fuller order, still within 10."
   },
   "skills": [
     "eyfs-count-10",
@@ -271,10 +271,9 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "c10h-words",
-      "prompt": "How many {items}?",
+      "id": "c10h-match",
+      "prompt": "Tap the {items} that match the number below.",
       "numeral": 9,
-      "numeralLabel": "nine",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "star", "count": 8 } },
@@ -283,8 +282,8 @@
         { "id": "d", "visual": { "item": "star", "count": 7 } }
       ],
       "correctId": "c",
-      "explanation": "Nine means 9 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "explanation": "That group has 9 {items}.",
+      "narration": { "prompt": "Tap the {items} that match the number below." }
     },
     {
       "kind": "ordered",

@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 3 tap-count a scattered group of 7, then 8, then 9. Question 4 builds a set of 8. Question 5 counts 10 on a tens-frame. Question 6 picks which group has 9. Question 7 says what comes next after 8, 9. Question 8 orders 7 to 10. Question 9 shows 8 and asks the child to tap the matching group. Question 10 asks how many in a messy 10. No return to a 6-object tidy count.",
-    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
+    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, a numeral match, and a fuller order, still within 10."
   },
   "skills": [
     "eyfs-count-10",
@@ -311,7 +311,7 @@
     {
       "kind": "multiple-choice",
       "id": "c10m-match",
-      "prompt": "How many {items}?",
+      "prompt": "Tap the {items} that match the number below.",
       "numeral": 8,
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -322,7 +322,7 @@
       ],
       "correctId": "b",
       "explanation": "That group has 8 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "Tap the {items} that match the number below." }
     },
     {
       "kind": "count-objects",
