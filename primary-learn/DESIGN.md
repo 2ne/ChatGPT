@@ -199,9 +199,10 @@ they are.
 
 ### Activity intro
 
-Centred quest card, max-width **34rem**, on a white page with a subtle paper glow.
-Keep the back link outside the card. A warm paper illustration panel holds Pip
-on a simple warm background. Below it, centre the Easy / Medium / Hard label above the title (same words
+Centred quest card, max-width **34rem**, on the same year tint and maths wallpaper
+as that quest's path section (matched by `pathNode`). Keep the back link outside
+the card. A warm paper illustration panel holds Pip on a simple warm background.
+Below it, centre the Easy / Medium / Hard label above the title (same words
 as the level sheet), readable summary,
 star goal, and a two-column row for question count and time. End with a short
 personal welcome and the full-width gradient `Start quest` button. Use 28px card

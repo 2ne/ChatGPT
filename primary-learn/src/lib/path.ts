@@ -56,6 +56,11 @@ export function questFor(nodeId: string, difficulty: Difficulty): Activity | und
   return questByLevel.get(`${nodeId}:${difficulty}`);
 }
 
+/** Curriculum category that owns a path node, if any. */
+export function categoryForNode(nodeId: string): PathCategory | undefined {
+  return PATH_CATEGORIES.find((category) => category.nodes.some((node) => node.id === nodeId));
+}
+
 /** Path order: categories → nodes → Easy / Medium / Hard. */
 export function orderedPlayableActivities(): Activity[] {
   const ordered: Activity[] = [];

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Star, Trophy } from "lucide-react";
 import type { LevelState } from "../lib/path";
+import { yearColours } from "../lib/yearColours";
 import { mathsWallpaper } from "./mascot/MathsWallpaper";
 import { LevelSheet } from "./LevelSheet";
 import { TopicNav, type TopicSection } from "./TopicNav";
@@ -22,16 +23,6 @@ const SIGN_HALF_H = 40; // how far above and below its centre a sign can reach
 const SIGN_CLEARANCE = 36; // px from the road's centre line to the sign (road edge is 18px out)
 const FIRST_SIGN_TOP = 58; // centre of the first sign, measured from the top of the map
 const SWING = 112;
-
-const YEAR_COLOURS: Record<string, { ink: string; soft: string }> = {
-  Reception: { ink: "#c98a00", soft: "#fff1c4" },
-  "Year 1": { ink: "#0ca678", soft: "#d9f7e8" },
-  "Year 2": { ink: "#0284c7", soft: "#dcf2fd" },
-  "Year 3": { ink: "#e03131", soft: "#ffe4e1" },
-  "Year 4": { ink: "#6d28d9", soft: "#eceaff" },
-  "Year 5": { ink: "#db2777", soft: "#fbdff0" },
-  "Year 6": { ink: "#ea580c", soft: "#ffead7" },
-};
 
 /** One map star per Easy / Medium / Hard that has all three stars. Partial scores stay in the sheet. */
 function wonStarsOnMap(level: LevelState): number {
@@ -245,7 +236,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
         <div className="map-world" style={{ height: layout.height }}>
           {layout.bands.map((band) => {
             const category = levels[band.first].category;
-            const colours = YEAR_COLOURS[category.year] ?? YEAR_COLOURS["Year 1"];
+            const colours = yearColours(category.year);
             return (
               <div
                 key={category.id}
@@ -275,7 +266,7 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
 
             {layout.bands.map((band) => {
               const category = levels[band.first].category;
-              const colours = YEAR_COLOURS[category.year] ?? YEAR_COLOURS["Year 1"];
+              const colours = yearColours(category.year);
               return (
                 <div
                   key={`sign-${category.id}`}

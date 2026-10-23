@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -23,15 +23,27 @@ import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
 import { spokenPrompt } from "../lib/narration";
 import { splitPromptTail } from "../lib/prompt";
-import { DIFFICULTY_LABELS } from "../lib/path";
+import { categoryForNode, DIFFICULTY_LABELS } from "../lib/path";
+import { yearColours } from "../lib/yearColours";
 import { useNarration } from "../hooks/useNarration";
 import { ConfettiBurst } from "./ConfettiBurst";
 import { HearButton, SpokenWords } from "./ReadAloud";
 import { Pip } from "./mascot/Pip";
 import { usePipMood } from "./PipMood";
+import { mathsWallpaper } from "./mascot/MathsWallpaper";
 import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
 import { BondDemonstration } from "./questions/BondDemonstration";
+
+function sectionBackdrop(pathNode: string): CSSProperties | undefined {
+  const category = categoryForNode(pathNode);
+  if (!category) return undefined;
+  const colours = yearColours(category.year);
+  return {
+    backgroundColor: colours.soft,
+    backgroundImage: mathsWallpaper(category, colours.ink),
+  };
+}
 
 type ActivityRunnerProps = {
   activity: Activity;
@@ -72,6 +84,7 @@ export function ActivityRunner({
 
   const currentId = activeQueue[index];
   const question = playQuestions.find((item) => item.id === currentId);
+  const backdrop = sectionBackdrop(activity.pathNode);
   const speech = useNarration(`${currentId ?? "none"}:${phase}`);
   const total = playQuestions.length;
   const correctCount = Object.values(results).filter(Boolean).length;
@@ -246,7 +259,7 @@ export function ActivityRunner({
   /* ——— Intro ——— */
   if (phase === "intro") {
     return (
-      <main className="page page-quest quest-intro-page">
+      <main className="page page-quest quest-intro-page" style={backdrop}>
         <section className="quest-intro">
           <button type="button" className="back-link" onClick={onExit}>
             <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
@@ -292,6 +305,7 @@ export function ActivityRunner({
         stars={stars}
         reducedMotion={reducedMotion}
         nextLabel={nextLabel}
+        backdrop={backdrop}
         onExit={onExit}
         onTryAgain={begin}
         onNext={onNext}
@@ -512,6 +526,7 @@ function ResultScreen({
   stars,
   reducedMotion,
   nextLabel,
+  backdrop,
   onExit,
   onTryAgain,
   onNext,
@@ -521,6 +536,7 @@ function ResultScreen({
   stars: number;
   reducedMotion: boolean;
   nextLabel: string;
+  backdrop?: CSSProperties;
   onExit: () => void;
   onTryAgain: () => void;
   onNext: () => void;
@@ -541,7 +557,7 @@ function ResultScreen({
   }, [stars, reducedMotion]);
 
   return (
-    <main className="page page-quest quest-intro-page">
+    <main className="page page-quest quest-intro-page" style={backdrop}>
       <ConfettiBurst burstId={confetti} intensity="pop" />
       <section className="quest-intro">
         <button type="button" className="back-link" onClick={onExit}>

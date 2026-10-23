@@ -3106,7 +3106,10 @@ button.object-token {
   display: grid;
   align-content: center;
   padding: calc(32px + var(--safe-t)) calc(24px + var(--safe-r)) calc(40px + var(--safe-b)) calc(24px + var(--safe-l));
-  background: radial-gradient(ellipse at 50% 35%, var(--paper) 0%, #fff 70%);
+  /* Tint + maths wallpaper come from the quest's path section (inline style). */
+  background-color: var(--paper);
+  background-repeat: repeat;
+  background-size: 340px 310px;
 }
 .quest-intro {
   width: 100%;
