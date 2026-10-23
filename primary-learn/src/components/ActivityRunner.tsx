@@ -326,6 +326,7 @@ export function ActivityRunner({
   /* ——— Question / feedback ——— */
   const rightLabel = lastCorrect === false ? correctAnswerLabel(question) : null;
   const reveal = phase === "feedback" ? (lastCorrect ? "correct" : "incorrect") : null;
+  const pipMood = phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy";
   const position = Math.min(index + 1, activeQueue.length);
   const promptParts = splitPromptTail(question.prompt);
   const primaryAction =
@@ -377,6 +378,9 @@ export function ActivityRunner({
       >
         <div className="quest-inner">
           <div className="context-top">
+            <span className="quest-pip" aria-hidden>
+              <Pip size={40} mood={pipMood} />
+            </span>
             <div style={{ minWidth: 0, flex: 1 }}>
               <p className="context-title">{activity.title}</p>
               <p className="context-sub">
@@ -487,9 +491,6 @@ export function ActivityRunner({
                   </>
                 )}
               </div>
-              <span className="feedback-pip" aria-hidden>
-                <Pip size={56} mood={lastCorrect ? "cheer" : "think"} />
-              </span>
             </div>
           ) : null}
 

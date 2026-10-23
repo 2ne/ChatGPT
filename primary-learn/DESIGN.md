@@ -31,7 +31,7 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 | Asset    | Use                                                                                                                         |
 | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `Pip`    | Header badge (42px in a white tile), **onboarding hero** (large, pointer-follow), feedback reactions, finish screen (112px) |
+| `Pip`    | Header badge (42px in a white tile), **onboarding hero** (large, pointer-follow), quest header reaction, finish screen (112px) |
 | Confetti | Short canvas pop on a correct answer; full shower on a mastered summary                                                     |
 | Moods    | `happy` default · `cheer` on correct + mastery · `think` on wrong + empty states                                            |
 
@@ -43,9 +43,10 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 - **Onboarding** shows a **large** Pip (not the header badge). Eyes, head and
   body tilt toward the pointer (mouse or touch). Idle: gentle bob/breathe plus
   blink. SVG/CSS only — no WebGL. Off under `prefers-reduced-motion`.
-- Question cards show a small Pip **only inside feedback** (reaction). Never
-  wallpaper Pip around the screen, and do not put Pip on the home greeting
-  banner — the learner's own buddy emoji is who they are.
+- During a quest, a small Pip sits in the **quest header** (left of the title)
+  and reacts on feedback (`cheer` / `think`). Never wallpaper Pip around the
+  screen, and do not put Pip on the home greeting banner — the learner's own
+  buddy emoji is who they are.
 - Motion: blink (5s), sprout sway, star twinkle, one hop on `cheer`, tilt on
   `think`. All disabled under `prefers-reduced-motion`.
 - Finish screen: Pip bounces in, then 1–3 stars pop in one by one.
@@ -225,8 +226,8 @@ the thin rainbow. Inner words stay padded.
 
 ```
 ┌─────────────────────────────────┐  flush header, no radius
-│ 🎨  Count to 5            ✕    │
-│ Question 5 of 10                │
+│ [Pip]  Count to 5         ✕    │
+│        Easy · Question 5 of 10  │
 │ ▰▰▰▰▰▱▱▱▱▱                      │
 ├─────────────────────────────────┤  rainbow strip (divider)
 │                                 │
@@ -235,7 +236,7 @@ the thin rainbow. Inner words stay padded.
 │ [B] 3                           │
 │ [C] 4                      ✓    │
 │ 💡 Need a hint?                 │
-│ ✅ Correct. Nice! + tip + Pip    │
+│ ✅ Correct. Nice! + tip         │
 │                                 │
 ├─────────────────────────────────┤
 │ [ Check it ✓ / Next question → ]│  sticky dock, every width
@@ -280,7 +281,8 @@ the thin rainbow. Inner words stay padded.
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence
-  teaching tip + mini Pip reaction. No speaker on feedback (it states the answer).
+  teaching tip. Pip reacts in the quest header, not inside the feedback card.
+  No speaker on feedback (it states the answer).
 - **Speaker** (small round icon, 36px) sits **inline right after the question
   text**. It reads **the question only** via Web Speech (`speechSynthesis`).
   Pick a young, warm, happy UK female teacher voice (en-GB female natural

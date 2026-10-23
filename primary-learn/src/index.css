@@ -1144,6 +1144,17 @@ button.learner-chip:focus-visible {
   gap: 12px;
 }
 
+.quest-pip {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(35, 41, 70, 0.15);
+}
+
 .context-title {
   font-family: var(--font-display);
   font-size: clamp(18px, 2.6vw, 22px);
@@ -2668,11 +2679,6 @@ button.object-token {
   font-size: 15.5px;
   line-height: 1.55;
   font-weight: 600;
-}
-
-.feedback-pip {
-  margin-left: auto;
-  flex: none;
 }
 
 /* White activity column fills down to the sticky Check / Next dock. */
