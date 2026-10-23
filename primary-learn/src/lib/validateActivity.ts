@@ -52,6 +52,22 @@ function storyIsJoin(prompt: string): boolean {
   return /\b(gives (him|her)|gets) \d+ more\b/i.test(prompt);
 }
 
+/** Take-away amounts from a pictured sum or give-away/eat story. */
+function parseTakeAwayAmounts(prompt: string): { start: number; taken: number } | null {
+  const sum = prompt.match(/^What is (\d+) take away (\d+)\?$/i);
+  if (sum) return { start: Number(sum[1]), taken: Number(sum[2]) };
+  const story = prompt.match(
+    /\b(?:has|have) (\d+) \{items?\} and (?:gives away|eats) (\d+)\b/i,
+  );
+  if (story) return { start: Number(story[1]), taken: Number(story[2]) };
+  const allAway = prompt.match(/\b(?:has|have) (\d+) \{items?\} and gives them all away\b/i);
+  if (allAway) {
+    const start = Number(allAway[1]);
+    return { start, taken: start };
+  }
+  return null;
+}
+
 function assertNoFactTrueWording(text: string, path: string, field: string) {
   if (/\b(fact|true)\b/i.test(text)) {
     fail(
@@ -95,28 +111,38 @@ function expectVisual(
   if (typeof count !== "number" || !Number.isInteger(count) || count < min || count > 12) {
     fail(path, `visual.count must be a whole number from ${min} to 12`);
   }
-  if (value.added == null) {
+  if (value.added != null && value.removed != null) {
+    fail(path, "visual cannot use added and removed together");
+  }
+  if (value.added == null && value.removed == null) {
     return { item: item as ObjectAsset["item"], count };
   }
   if (!allowAdded) {
-    fail(path, "visual.added is only for join story stems, not options or extras");
+    fail(path, "visual.added and visual.removed are only for look-only story stems, not options or extras");
   }
-  const added = value.added;
-  if (typeof added !== "number" || !Number.isInteger(added) || added < 1 || added > 12) {
-    fail(path, "visual.added must be a whole number from 1 to 12");
+  if (value.added != null) {
+    const added = value.added;
+    if (typeof added !== "number" || !Number.isInteger(added) || added < 1 || added > 12) {
+      fail(path, "visual.added must be a whole number from 1 to 12");
+    }
+    if (count + added > 12) {
+      fail(path, "visual.count plus visual.added must be at most 12");
+    }
+    return { item: item as ObjectAsset["item"], count, added };
   }
-  if (count + added > 12) {
-    fail(path, "visual.count plus visual.added must be at most 12");
+  const removed = value.removed;
+  if (typeof removed !== "number" || !Number.isInteger(removed) || removed < 1 || removed > count) {
+    fail(path, "visual.removed must be a whole number from 1 to visual.count");
   }
-  return { item: item as ObjectAsset["item"], count, added };
+  return { item: item as ObjectAsset["item"], count, removed };
 }
 
 /** Part-whole pictures may be empty (0) and can grow to 20 for later tens. */
 function parseMakeTotalVisual(value: unknown, path: string): ObjectAsset | undefined {
   if (value == null) return undefined;
   if (!isRecord(value)) fail(path, "visual must be { item, count }");
-  if (value.added != null) {
-    fail(path, "make-total cannot use visual.added. Join stories use look-only stems.");
+  if (value.added != null || value.removed != null) {
+    fail(path, "make-total cannot use visual.added or visual.removed. Story pictures use look-only stems.");
   }
   const item = value.item;
   const count = value.count;
@@ -144,8 +170,8 @@ function assertFingersVisual(visual: ObjectAsset | undefined, path: string) {
   if (visual.count < 0 || visual.count > 5) {
     fail(path, "fingers layout needs visual.count from 0 to 5");
   }
-  if (visual.added != null) {
-    fail(path, "fingers cannot use visual.added");
+  if (visual.added != null || visual.removed != null) {
+    fail(path, "fingers cannot use visual.added or visual.removed");
   }
 }
 
@@ -327,6 +353,32 @@ function parseQuestion(value: unknown, path: string): Question {
       fail(path, "join pictures cannot use flashMs");
     }
   }
+  if (visual?.removed != null) {
+    if (kind === "count-objects" || kind === "build-set" || kind === "make-total") {
+      fail(path, "visual.removed is for look-only take-away pictures, not tap-to-count or make-total");
+    }
+    if (extras) {
+      fail(path, "take-away pictures use visual.removed of the same item. Do not set extras.");
+    }
+    if (layout && layout !== "row") {
+      fail(path, "take-away pictures use a cream strip. Do not set dice, scatter or other layouts.");
+    }
+    if (flashMs != null) {
+      fail(path, "take-away pictures cannot use flashMs");
+    }
+  }
+  const takeAway = parseTakeAwayAmounts(prompt);
+  if (takeAway && visual) {
+    if (visual.removed == null) {
+      fail(path, "take-away pictures need visual.removed for how many are taken away");
+    }
+    if (visual.count !== takeAway.start || visual.removed !== takeAway.taken) {
+      fail(
+        path,
+        `take-away pictures must match the sum. visual.count is the start (${takeAway.start}) and visual.removed is taken away (${takeAway.taken})`,
+      );
+    }
+  }
   if (visual && extras) {
     for (const extra of extras) {
       if (extra.item === visual.item) {
@@ -349,6 +401,9 @@ function parseQuestion(value: unknown, path: string): Question {
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
   if (visual?.added != null && randomise?.count) {
     fail(path, "do not randomise count on a join story");
+  }
+  if (visual?.removed != null && randomise?.count) {
+    fail(path, "do not randomise count on a take-away picture");
   }
   const core = { id, prompt, explanation, hint, narration, visual, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {

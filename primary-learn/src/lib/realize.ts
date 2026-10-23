@@ -120,6 +120,7 @@ function remapVisual(
     count: count ?? visual.count,
   };
   if (visual.added != null) next.added = visual.added;
+  if (visual.removed != null) next.removed = visual.removed;
   return next;
 }
 

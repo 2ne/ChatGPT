@@ -48,13 +48,19 @@ export type ObjectItem = (typeof OBJECT_ITEMS)[number];
 
 export type ObjectAsset = {
   item: ObjectItem;
-  /** Starting group, or the whole group when `added` is omitted. */
+  /** Starting group, or the whole group when `added` / `removed` is omitted. */
   count: number;
   /**
    * Join stories only. Extra group of the same `item`.
-   * Stem shows `count` cream tiles, a plus, then `added` light-blue tiles.
+   * Stem shows `count` cream tiles, a purple +, then `added` light-blue tiles.
    */
   added?: number;
+  /**
+   * Take-away pictures only. How many of the last objects are taken away.
+   * Stem shows `count` objects in one cream strip; the last `removed` sit on
+   * pink tiles with a red X.
+   */
+  removed?: number;
 };
 
 /**

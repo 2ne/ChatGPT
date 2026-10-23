@@ -68,13 +68,19 @@ export function isObjectItem(value: string): value is ObjectItem {
 export function describeVisual(visual: ObjectAsset): string {
   const words = OBJECT_WORDS[visual.item];
   const noun = visual.count === 1 ? words.singular : words.plural;
-  if (visual.added == null) return `${visual.count} ${noun}`;
-  const addedNoun = visual.added === 1 ? words.singular : words.plural;
-  return `${visual.count} ${noun} plus ${visual.added} ${addedNoun}`;
+  if (visual.added != null) {
+    const addedNoun = visual.added === 1 ? words.singular : words.plural;
+    return `${visual.count} ${noun} plus ${visual.added} ${addedNoun}`;
+  }
+  if (visual.removed != null) {
+    const takenNoun = visual.removed === 1 ? words.singular : words.plural;
+    return `${visual.count} ${noun}, ${visual.removed} ${takenNoun} taken away`;
+  }
+  return `${visual.count} ${noun}`;
 }
 
 export function visualKey(visual: ObjectAsset): string {
-  return visual.added == null
-    ? `${visual.item}:${visual.count}`
-    : `${visual.item}:${visual.count}+${visual.added}`;
+  if (visual.added != null) return `${visual.item}:${visual.count}+${visual.added}`;
+  if (visual.removed != null) return `${visual.item}:${visual.count}-${visual.removed}`;
+  return `${visual.item}:${visual.count}`;
 }

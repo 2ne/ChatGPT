@@ -27,7 +27,8 @@ type ObjectGroupProps = {
 function sceneKey(visual: ObjectAsset, extras: ObjectAsset[] | undefined, layout: ObjectLayout | undefined) {
   const extra = (extras ?? []).map((asset) => `${asset.item}:${asset.count}`).join(",");
   const added = visual.added == null ? "" : `+${visual.added}`;
-  return `${visual.item}:${visual.count}${added}:${layout ?? "row"}:${extra}`;
+  const removed = visual.removed == null ? "" : `-${visual.removed}`;
+  return `${visual.item}:${visual.count}${added}${removed}:${layout ?? "row"}:${extra}`;
 }
 
 function tokensFor(visual: ObjectAsset, extras: ObjectAsset[] | undefined): Token[] {
@@ -123,6 +124,30 @@ function PictureTiles({
   );
 }
 
+function TakeAwayTiles({ visual, compact }: { visual: ObjectAsset; compact?: boolean }) {
+  const removed = visual.removed ?? 0;
+  const keep = Math.max(0, visual.count - removed);
+  const glyph = OBJECT_GLYPH[visual.item];
+  const label = describeVisual(visual);
+  return (
+    <span className={`take-away-strip${compact ? " is-option" : ""}`} aria-label={label}>
+      {Array.from({ length: visual.count }, (_, index) => {
+        const gone = index >= keep;
+        return (
+          <span key={`t-${index}`} className={`take-away-token${gone ? " is-gone" : ""}`} aria-hidden>
+            <span className="object-glyph">{glyph}</span>
+            {gone ? (
+              <svg className="take-away-x" viewBox="0 0 32 32" aria-hidden>
+                <path d="M6 6 L26 26 M26 6 L6 26" />
+              </svg>
+            ) : null}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 function JoinTiles({ visual, compact }: { visual: ObjectAsset; compact?: boolean }) {
   const added = visual.added ?? 0;
   const glyph = OBJECT_GLYPH[visual.item];
@@ -203,9 +228,14 @@ export function ObjectGroup({
   const lookLabel = extraLabel ? `${describeVisual(visual)} and ${extraLabel}` : describeVisual(visual);
   const showFlash = layout === "hidden" || flashMs != null;
   const isJoin = visual.added != null && visual.added > 0;
+  const isTakeAway = visual.removed != null && visual.removed > 0;
 
   if (isJoin) {
     return <JoinTiles visual={visual} compact={compact} />;
+  }
+
+  if (isTakeAway) {
+    return <TakeAwayTiles visual={visual} compact={compact} />;
   }
 
   if (layout === "fingers") {

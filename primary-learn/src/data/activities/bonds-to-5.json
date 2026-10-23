@@ -121,7 +121,7 @@
       "kind": "multiple-choice",
       "id": "b5e-take-1",
       "prompt": "Sam has 5 {items} and gives away 1. How many are left?",
-      "visual": { "item": "apple", "count": 5 },
+      "visual": { "item": "apple", "count": 5, "removed": 1 },
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "label": "3" },
@@ -139,7 +139,8 @@
       "prompt": "What is 5 take away 2?",
       "visual": {
         "item": "star",
-        "count": 5
+        "count": 5,
+        "removed": 2
       },
       "randomise": {
         "shuffleOptions": true

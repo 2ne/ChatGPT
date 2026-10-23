@@ -298,10 +298,12 @@ rainbow itself is never inset.
   matching counts. Do not use `extras` of a second emoji for “n more” of the
   same thing; set `visual.count` (start) and `visual.added` of the same item.
   Join stories show cream start tiles, a purple +, then light-blue added tiles.
-  Every picture group in a question stem uses the same tiles; no frame/strip
-  variants. Only count-objects tiles are tappable. Do not draw empty
+  Take-away pictures (`visual.count` start, `visual.removed` taken away) sit in
+  one cream rounded strip. Kept objects are larger glyphs on the strip. The
+  last N sit on light red tiles with a red X over the emoji. Counts must match
+  the sum. Only count-objects tiles are tappable. Do not draw empty
   placeholder boxes that hint at the total. Dice, five-frame, tens-frame,
-  compact and parts stems use those same cream tiles, sized and spaced like
+  compact and parts stems use the same cream tiles, sized and spaced like
   count-objects. Fingers are a cartoon hand on that cream tile, with 0 to 5
   raised fingers. Flash/hidden still cover the tiles. Pictures inside A/B/C/D
   and match-pair cards use smaller tiles so they fit.

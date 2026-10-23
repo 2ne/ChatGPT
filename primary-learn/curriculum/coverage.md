@@ -30,7 +30,7 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `bonds-to-5` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Easy: partners that make 5, then related take-away |
 | `bonds-to-5-medium` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Medium: 0, reverse 5 = blank + n, more take-away |
 | `bonds-to-5-hard` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Hard: mix plus and take away, number words |
-| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, tens-frame take-away story |
+| `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, take-away pictures |
 | `number-bonds-to-10-medium` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Medium: fill-slots then sum-only, 0 and reverse parts, more take-away |
 | `number-bonds-to-10-hard` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Hard: sum-only, no-dot pick-pair, mixed plus/take-away facts, number words |
 
