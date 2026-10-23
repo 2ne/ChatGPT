@@ -1654,7 +1654,7 @@ button.object-token {
 
 .join-story.is-fit-ten,
 .take-away-strip.is-fit-ten {
-  --story-tile: min(40px, calc((100% - (9 * var(--story-gap))) / 10));
+  --story-tile: min(34px, calc((100vw - 96px - (9 * var(--story-gap))) / 10));
 }
 
 .story-rows {
