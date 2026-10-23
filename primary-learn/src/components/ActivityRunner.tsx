@@ -463,13 +463,21 @@ export function ActivityRunner({
                       : copy.lookedAgainTimes(lookAgainCount)}
                   </p>
                 ) : null}
-                {lastCorrect ? (
-                  <p>{question.explanation}</p>
-                ) : (
+                {lastCorrect ? null : (
                   <>
                     {rightLabel ? (
                       <div className="answer-reveal">
-                        <p className="t-body"><strong>{question.kind === "ordered" ? copy.orderLabel : question.kind === "match-pairs" ? copy.pairsLabel : question.kind === "multi-select" || question.kind === "pick-pair" ? copy.answersLabel : copy.answerLabel}</strong></p>
+                        <p className="t-body">
+                          <strong>
+                            {question.kind === "ordered"
+                              ? copy.orderLabel
+                              : question.kind === "match-pairs"
+                                ? copy.pairsLabel
+                                : question.kind === "multi-select" || question.kind === "pick-pair"
+                                  ? copy.answersLabel
+                                  : copy.answerLabel}
+                          </strong>
+                        </p>
                         <p>{rightLabel}</p>
                       </div>
                     ) : null}

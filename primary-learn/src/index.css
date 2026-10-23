@@ -2635,6 +2635,7 @@ button.object-token {
 .feedback.is-correct {
   background: var(--green-soft);
   border-color: var(--green);
+  align-items: center;
 }
 
 .feedback.is-wrong {
@@ -2669,6 +2670,7 @@ button.object-token {
 
 .feedback.is-correct .feedback-title {
   color: #05603a;
+  font-size: 22px;
 }
 
 .feedback.is-wrong .feedback-title {
@@ -3108,7 +3110,7 @@ button.object-token {
 }
 .quest-intro {
   width: 100%;
-  max-width: 34rem;
+  max-width: 30rem;
   margin: 0 auto;
   display: grid;
   gap: 20px;
