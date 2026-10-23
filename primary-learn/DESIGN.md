@@ -201,12 +201,14 @@ they are.
 
 Centred quest card, max-width **34rem**, on a white page with a subtle paper glow.
 Keep the back link outside the card. A warm paper illustration panel holds Pip
-on a simple warm background. Below it, centre the icon and title, readable summary,
+on a simple warm background. Below it, centre the icon with the Easy / Medium /
+Hard label above the title (same words as the level sheet), readable summary,
 star goal, and a two-column row for question count and time. End with a short
 personal welcome and the full-width gradient `Start quest` button. Use 28px card
 corners and a soft shadow. On narrow screens reduce padding, keep the facts in
 two columns, and allow the whole page to scroll on short screens. Do not add a
-second mascot or a speech bubble to this screen.
+second mascot or a speech bubble to this screen. During play, the header sub-line
+reads `Medium · Question 3 of 10`.
 
 ### Activity question (most important)
 

@@ -23,6 +23,7 @@ import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
 import { spokenPrompt } from "../lib/narration";
 import { splitPromptTail } from "../lib/prompt";
+import { DIFFICULTY_LABELS } from "../lib/path";
 import { subjectTheme } from "../data/subjects";
 import { useNarration } from "../hooks/useNarration";
 import { ConfettiBurst } from "./ConfettiBurst";
@@ -269,6 +270,7 @@ export function ActivityRunner({
               <ThemeIcon />
             </span>
             <div>
+              <p className="intro-difficulty">{DIFFICULTY_LABELS[activity.difficulty]}</p>
               <h1 className="t-title">{activity.title}</h1>
             </div>
           </div>
@@ -371,7 +373,9 @@ export function ActivityRunner({
               <p className="context-title" style={{ fontSize: 21 }}>
                 {activity.title}
               </p>
-              <p className="context-sub">{copy.questionOf(position, activeQueue.length)}</p>
+              <p className="context-sub">
+                {DIFFICULTY_LABELS[activity.difficulty]} · {copy.questionOf(position, activeQueue.length)}
+              </p>
             </div>
             <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
               <X size={20} aria-hidden />
