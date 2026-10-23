@@ -2764,25 +2764,14 @@ button.object-token:hover:not(:disabled) {
   to { opacity: 1; transform: scale(1); }
 }
 
-.result-page {
-  display: grid;
-  place-items: center;
-  padding: calc(var(--space-5) + var(--safe-t))
-    calc(var(--space-4) + var(--safe-r))
-    calc(var(--space-6) + var(--safe-b))
-    calc(var(--space-4) + var(--safe-l));
-}
-
-.result-card {
-  width: 100%;
-  max-width: 26rem;
-  display: grid;
+/* Result reuses .quest-intro-page / .intro-card / .intro-scene chrome */
+.result-card .intro-card-body {
   justify-items: center;
-  gap: 16px;
-  text-align: center;
 }
 
 .result-pip {
+  position: relative;
+  z-index: 1;
   animation: result-pip-in 0.5s ease both;
 }
 

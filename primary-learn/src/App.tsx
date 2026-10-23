@@ -11,6 +11,7 @@ import { QuestionBank } from "./components/QuestionBank";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { useLearner } from "./hooks/useLearner";
 import { useSafariThemeColor } from "./hooks/useSafariThemeColor";
+import { nextPlayableActivity } from "./lib/path";
 import type { ActivityAttempt, LearnerProfile, ProgressState } from "./types/progress";
 
 const TEACHER_REVIEW_NAME = "Teacher Review";
@@ -175,11 +176,16 @@ function ActivityRoute({
     return <Navigate to="/pathway" replace state={{ notice: "missing" }} />;
   }
 
+  const next = nextPlayableActivity(activity.id);
+
   return (
     <ActivityRunner
+      key={activity.id}
       activity={activity}
       learnerName={profile.name}
       onExit={() => navigate("/pathway")}
+      onNext={() => navigate(next ? `/activity/${next.id}` : "/pathway")}
+      nextLabel={next ? copy.nextQuest : copy.backToQuests}
       onComplete={onComplete}
     />
   );

@@ -24,6 +24,7 @@ export const copy = {
   playAgain: "Play again",
   tryAgain: "Try again",
   next: "Next",
+  nextQuest: "Next quest",
   exitQuest: "Exit quest",
   questComplete: "Quest complete",
   emptyActivity: "This activity has no questions yet.",

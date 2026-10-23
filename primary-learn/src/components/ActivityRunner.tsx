@@ -37,6 +37,8 @@ type ActivityRunnerProps = {
   activity: Activity;
   learnerName: string;
   onExit: () => void;
+  onNext: () => void;
+  nextLabel: string;
   onComplete: (attempt: ActivityAttempt) => void;
 };
 
@@ -46,6 +48,8 @@ export function ActivityRunner({
   activity,
   learnerName,
   onExit,
+  onNext,
+  nextLabel,
   onComplete,
 }: ActivityRunnerProps) {
   const [playQuestions, setPlayQuestions] = useState<Question[]>(activity.questions);
@@ -76,8 +80,8 @@ export function ActivityRunner({
   const correctCount = Object.values(results).filter(Boolean).length;
   const mastered = passedScore(correctCount, total);
 
-  const view = useRef({ phase, question, answer, mastered, onExit });
-  view.current = { phase, question, answer, mastered, onExit };
+  const view = useRef({ phase, question, answer, mastered, onExit, onNext });
+  view.current = { phase, question, answer, mastered, onExit, onNext };
 
   function begin() {
     const realized = realizeActivity(activity);
@@ -191,8 +195,7 @@ export function ActivityRunner({
           actions.current.goNext();
         } else if (currentPhase === "summary") {
           event.preventDefault();
-          if (view.current.mastered) view.current.onExit();
-          else actions.current.begin();
+          view.current.onNext();
         }
         return;
       }
@@ -299,8 +302,10 @@ export function ActivityRunner({
         total={total}
         stars={stars}
         reducedMotion={reducedMotion}
+        nextLabel={nextLabel}
+        onExit={onExit}
         onTryAgain={begin}
-        onNext={onExit}
+        onNext={onNext}
       />
     );
   }
@@ -514,6 +519,8 @@ function ResultScreen({
   total,
   stars,
   reducedMotion,
+  nextLabel,
+  onExit,
   onTryAgain,
   onNext,
 }: {
@@ -521,6 +528,8 @@ function ResultScreen({
   total: number;
   stars: number;
   reducedMotion: boolean;
+  nextLabel: string;
+  onExit: () => void;
   onTryAgain: () => void;
   onNext: () => void;
 }) {
@@ -540,32 +549,49 @@ function ResultScreen({
   }, [stars, reducedMotion]);
 
   return (
-    <main className="page page-quest result-page">
+    <main className="page page-quest quest-intro-page">
       <ConfettiBurst burstId={confetti} intensity="pop" />
-      <section className={`result-card${reducedMotion ? " is-still" : ""}`} aria-live="polite">
-        <div className="result-pip" aria-hidden>
-          <Pip size={120} mood={stars > 0 ? "cheer" : "happy"} />
-        </div>
-        <div className="result-stars" role="img" aria-label={copy.starsAria(stars)}>
-          {[0, 1, 2].map((slot) => (
-            <span
-              key={slot}
-              className={`result-star${slot < stars ? " is-lit" : ""}`}
-              style={{ animationDelay: reducedMotion ? "0s" : `${0.4 + slot * 0.28}s` }}
-            >
-              <Star size={slot === 1 ? 44 : 36} fill={slot < stars ? "currentColor" : "none"} aria-hidden />
-            </span>
-          ))}
-        </div>
-        <h1 className="result-score">{copy.youGot(correctCount, total)}</h1>
-        <p className="result-line">{copy.starLine(stars)}</p>
-        <div className="result-actions">
-          <button type="button" className="btn btn-secondary btn-block" onClick={onTryAgain}>
-            <RotateCcw size={17} aria-hidden /> {copy.tryAgain}
-          </button>
-          <button type="button" className="btn btn-primary btn-block" onClick={onNext}>
-            {copy.next} <ArrowRight size={19} aria-hidden />
-          </button>
+      <section className="quest-intro">
+        <button type="button" className="back-link" onClick={onExit}>
+          <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
+        </button>
+        <div
+          className={`intro-card result-card${reducedMotion ? " is-still" : ""}`}
+          aria-live="polite"
+        >
+          <div className="intro-scene" aria-hidden>
+            <div className="result-pip">
+              <Pip size={144} mood={stars > 0 ? "cheer" : "happy"} />
+            </div>
+            <span className="intro-scene-floor" />
+          </div>
+          <div className="intro-card-body">
+            <div className="result-stars" role="img" aria-label={copy.starsAria(stars)}>
+              {[0, 1, 2].map((slot) => (
+                <span
+                  key={slot}
+                  className={`result-star${slot < stars ? " is-lit" : ""}`}
+                  style={{ animationDelay: reducedMotion ? "0s" : `${0.4 + slot * 0.28}s` }}
+                >
+                  <Star
+                    size={slot === 1 ? 44 : 36}
+                    fill={slot < stars ? "currentColor" : "none"}
+                    aria-hidden
+                  />
+                </span>
+              ))}
+            </div>
+            <h1 className="result-score">{copy.youGot(correctCount, total)}</h1>
+            <p className="result-line">{copy.starLine(stars)}</p>
+            <div className="result-actions">
+              <button type="button" className="btn btn-secondary btn-block" onClick={onTryAgain}>
+                <RotateCcw size={17} aria-hidden /> {copy.tryAgain}
+              </button>
+              <button type="button" className="btn btn-primary btn-block" onClick={onNext}>
+                {nextLabel} <ArrowRight size={19} aria-hidden />
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </main>

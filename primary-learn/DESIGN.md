@@ -398,14 +398,18 @@ explanation, then **Next question**.
 
 ### Summary (end screen)
 
+Same card chrome as the activity intro: warm paper Pip scene on top, white
+body below, `All quests` back link outside the card, max-width **34rem**.
 Joyful result, like a lesson-complete or star-reveal screen. CSS/SVG only.
 
-1. Pip bounces in.
+1. Pip bounces in inside the paper scene (same size as intro).
 2. Three star tiles sit empty, then the earned ones fill **one by one** with
    a pop (1 star = 6–7, 2 = 8–9, 3 = 10). A small confetti burst on 3 stars.
 3. Big text: `You got 7 out of 10!`
 4. One short line: `Two stars! Great work.` (or a try-again nudge at 0 stars).
-5. Buttons: `Try again` and `Next` (Next goes back to the path).
+5. Buttons: `Try again` and `Next quest` (opens the next Easy / Medium / Hard
+   in path order). `All quests` stays top-left and returns to the map. At the
+   end of the path the primary button reads `Back to quests` instead.
 
 No percentages. Off under `prefers-reduced-motion` (final stars, no pop,
 no confetti). Stars show progress. They do not gate the path.

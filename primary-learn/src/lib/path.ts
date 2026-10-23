@@ -56,6 +56,28 @@ export function questFor(nodeId: string, difficulty: Difficulty): Activity | und
   return questByLevel.get(`${nodeId}:${difficulty}`);
 }
 
+/** Path order: categories → nodes → Easy / Medium / Hard. */
+export function orderedPlayableActivities(): Activity[] {
+  const ordered: Activity[] = [];
+  for (const category of PATH_CATEGORIES) {
+    for (const node of category.nodes) {
+      for (const difficulty of DIFFICULTIES) {
+        const activity = questFor(node.id, difficulty);
+        if (activity) ordered.push(activity);
+      }
+    }
+  }
+  return ordered;
+}
+
+/** Next quest after `activityId` in path order, or undefined at the end. */
+export function nextPlayableActivity(activityId: string): Activity | undefined {
+  const ordered = orderedPlayableActivities();
+  const index = ordered.findIndex((activity) => activity.id === activityId);
+  if (index < 0) return undefined;
+  return ordered[index + 1];
+}
+
 export function buildLevels(progress: ProgressState): LevelState[] {
   const levels: LevelState[] = [];
   let suggested = false;
