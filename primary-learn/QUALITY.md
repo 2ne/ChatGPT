@@ -64,7 +64,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | conceptual subitise | `How many can you see in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
 | hidden quantity | `How many {items} are under the cup?` with `layout` `hidden` and `flashMs`. |
 | pick a group | `Which group has {n} {items}?` (single choice). Multi-select: `Which groups have {n} {items}?` or `Tap every group that has {n} {items}.` Do not write `Which group?` alone. |
-| light story | `{Name} has {n} {items} and {action}. How many are left?` / `How many {items} does he have now?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. Take-away pictures set `visual.count` (start) and `visual.removed` (last N crossed out). |
+| light story | `{Name} has {n} {items} and {action}. How many are left?` / `How many {items} does he have now?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. Take-away pictures set `visual.count` (start) and `visual.removed` (last N on light red tiles). |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What number comes next? 1, 2, 3, ?` Explanation: `{n} comes after {n-1}.` |
 | multiple-choice missing | `What do you need to add to {n} to make {total}?` |
@@ -79,7 +79,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
 | match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |
-| story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures use `visual.count` `{n}` and `visual.removed` `{m}` in one cream strip. The last `{m}` sit on pink tiles with a red X. |
+| story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures use `visual.count` `{n}` and `visual.removed` `{m}` in one cream strip. The last `{m}` sit on light red tiles. |
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”. Do not write clipped stems (`How many ducks?`, `Which group?`).
 

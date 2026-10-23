@@ -136,11 +136,6 @@ function TakeAwayTiles({ visual, compact }: { visual: ObjectAsset; compact?: boo
         return (
           <span key={`t-${index}`} className={`take-away-token${gone ? " is-gone" : ""}`} aria-hidden>
             <span className="object-glyph">{glyph}</span>
-            {gone ? (
-              <svg className="take-away-x" viewBox="0 0 32 32" aria-hidden>
-                <path d="M6 6 L26 26 M26 6 L6 26" />
-              </svg>
-            ) : null}
           </span>
         );
       })}

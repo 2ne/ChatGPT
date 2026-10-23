@@ -34,7 +34,6 @@
   --join-added: #e3f0fd;
   --join-added-line: #a9cdf3;
   --take-away: #ffd9d4;
-  --take-away-x: #e03131;
   --rose: #ec4899;
   --rose-soft: #fbdff0;
 
@@ -1608,7 +1607,6 @@ button.object-token:hover:not(:disabled) {
 }
 
 .take-away-token {
-  position: relative;
   display: grid;
   place-items: center;
   width: 52px;
@@ -1620,22 +1618,6 @@ button.object-token:hover:not(:disabled) {
 .take-away-token.is-gone {
   border-radius: 16px;
   background: var(--take-away);
-}
-
-.take-away-x {
-  position: absolute;
-  inset: 4px;
-  width: auto;
-  height: auto;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.take-away-x path {
-  fill: none;
-  stroke: var(--take-away-x);
-  stroke-width: 3.2;
-  stroke-linecap: round;
 }
 
 .take-away-strip.is-option {

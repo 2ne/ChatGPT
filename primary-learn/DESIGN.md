@@ -300,7 +300,7 @@ rainbow itself is never inset.
   Join stories show cream start tiles, a purple +, then light-blue added tiles.
   Take-away pictures (`visual.count` start, `visual.removed` taken away) sit in
   one cream rounded strip. Kept objects are larger glyphs on the strip. The
-  last N sit on light red tiles with a red X over the emoji. Counts must match
+  last N sit on light red tiles. Counts must match
   the sum. Only count-objects tiles are tappable. Do not draw empty
   placeholder boxes that hint at the total. Dice, five-frame, tens-frame,
   compact and parts stems use the same cream tiles, sized and spaced like

@@ -58,7 +58,7 @@ export type ObjectAsset = {
   /**
    * Take-away pictures only. How many of the last objects are taken away.
    * Stem shows `count` objects in one cream strip; the last `removed` sit on
-   * pink tiles with a red X.
+   * light red tiles.
    */
   removed?: number;
 };
