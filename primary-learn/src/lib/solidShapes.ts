@@ -2,6 +2,23 @@ import * as THREE from "three";
 import type { ShapeAsset } from "../types/shapes";
 import { SHAPE_COLOUR_VALUES } from "./shapes";
 
+const CAMERA_POSITION = new THREE.Vector3(3, 2.2, 4);
+
+function startingRotation(shape: ShapeAsset): number {
+  const requested = (shape.rotation ?? 0) * Math.PI / 180;
+  if (shape.name !== "pyramid") return requested;
+
+  // A face-on pyramid can look like a flat triangle. Centre the initial view
+  // around a base vertex, with enough of both neighbouring faces visible.
+  // Keep free dragging unrestricted once the child starts exploring.
+  const sides = shape.variant === "triangular" ? 3 : 4;
+  const period = 2 * Math.PI / sides;
+  const cornerView = Math.atan2(CAMERA_POSITION.x, CAMERA_POSITION.z);
+  const offset = ((requested - cornerView + period / 2) % period + period) % period - period / 2;
+  const limit = 20 * Math.PI / 180;
+  return cornerView + Math.max(-limit, Math.min(limit, offset));
+}
+
 function model(shape: ShapeAsset) {
   const variant = shape.variant ?? "standard";
   let geometry: THREE.BufferGeometry;
@@ -17,7 +34,7 @@ function model(shape: ShapeAsset) {
   if (shape.name !== "sphere") {
     group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: "#343568" })));
   }
-  group.rotation.y = (shape.rotation ?? 0) * Math.PI / 180;
+  group.rotation.y = startingRotation(shape);
   group.scale.setScalar(shape.scale ?? 1);
   return group;
 }
@@ -35,7 +52,7 @@ function disposeModel(group: THREE.Group) {
 function sceneFor(shape: ShapeAsset) {
   const scene = new THREE.Scene();
   const camera = new THREE.OrthographicCamera(-1.65, 1.65, 1.65, -1.65, 0.1, 30);
-  camera.position.set(3, 2.2, 4);
+  camera.position.copy(CAMERA_POSITION);
   camera.lookAt(0, 0, 0);
   scene.add(new THREE.HemisphereLight(0xffffff, 0x686587, 2.4));
   const light = new THREE.DirectionalLight(0xffffff, 3);
@@ -91,7 +108,7 @@ export function mountSolid(host: HTMLElement, shape: ShapeAsset) {
       group.rotation.y += y;
       draw();
     },
-    reset() { group.rotation.set(0, (shape.rotation ?? 0) * Math.PI / 180, 0); draw(); },
+    reset() { group.rotation.set(0, startingRotation(shape), 0); draw(); },
     dispose() {
       disposeModel(group);
       renderer.dispose();
