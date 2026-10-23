@@ -1,0 +1,400 @@
+{
+  "id": "count-to-10",
+  "title": "Count to 10",
+  "summary": "Count up to 10 things, say the numbers in order and spot the numerals to 10.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-count-10",
+  "pathNode": "eyfs-count-10",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 tap-count a tidy row of 6, then 7, then 8. Question 4 counts 9 on a tens-frame. Question 5 builds a group of 10. Question 6 says what comes next after 7, 8, 9. Question 7 picks the missing amount in 6, 7, blank, 9, 10. Question 8 orders 6, 7, 8. Question 9 matches numerals to amounts. Question 10 picks which group has 10. Counts climb 6 to 10 with no drop-back.",
+    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
+  },
+  "skills": [
+    "eyfs-count-10",
+    "count-sequence-to-10",
+    "numerals-1-to-10",
+    "one-to-one-counting"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "count-objects",
+      "id": "c10e-6",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "star",
+        "count": 6
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 6 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "hint": "Tap each picture once as you count."
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10e-7",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "balloon",
+        "count": 7
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 7 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "hint": "Tap each {item} and say a number."
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10e-8",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "apple",
+        "count": 8
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 8 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "hint": "Point to each {item} once and say the next number."
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10e-9",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "duck",
+        "count": 9
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 9 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "layout": "tens-frame",
+      "hint": "Tap each {item} and say a number."
+    },
+    {
+      "kind": "build-set",
+      "id": "c10e-build-10",
+      "prompt": "Make a group of 10 {items}.",
+      "visual": {
+        "item": "ladybird",
+        "count": 10
+      },
+      "randomise": {},
+      "explanation": "A group of 10 has 10 {items}.",
+      "narration": {
+        "prompt": "Make a group of 10 {items}."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c10e-next",
+      "prompt": "What number comes next? 7, 8, 9, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "10 comes after 9.",
+      "narration": {
+        "prompt": "What number comes next? Seven, eight, nine, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c10e-gap",
+      "prompt": "Which number is missing? 6, 7, _, 9, 10",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 6
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 7
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 8
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 9
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "8 comes after 7 and before 9.",
+      "narration": {
+        "prompt": "Which number is missing? Six, seven, blank, nine, ten."
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "c10e-order",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n8",
+          "label": "8"
+        },
+        {
+          "id": "n6",
+          "label": "6"
+        },
+        {
+          "id": "n7",
+          "label": "7"
+        }
+      ],
+      "correctOrder": [
+        "n6",
+        "n7",
+        "n8"
+      ],
+      "explanation": "The numbers go 6, 7, 8 from smallest to biggest.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c10e-match",
+      "prompt": "Match each number to the same amount of {items}.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "6",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 6
+            }
+          }
+        },
+        {
+          "id": "p2",
+          "left": "7",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 7
+            }
+          }
+        },
+        {
+          "id": "p3",
+          "left": "9",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 9
+            }
+          }
+        },
+        {
+          "id": "p4",
+          "left": "10",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 10
+            }
+          }
+        }
+      ],
+      "explanation": "Each number tells us how many objects are in its group.",
+      "narration": {
+        "prompt": "Match each number to the same amount of {items}."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c10e-which-10",
+      "prompt": "Which group has 10 {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "frog",
+            "count": 8
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "frog",
+            "count": 9
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "frog",
+            "count": 10
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "frog",
+            "count": 7
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "That group has 10 {items}.",
+      "narration": {
+        "prompt": "Which group has 10 {items}?"
+      }
+    }
+  ]
+}

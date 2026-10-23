@@ -23,7 +23,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - **When those nodes are built:** split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` into smaller stops. Leave them whole until then.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 4 (`eyfs-count-5` to `eyfs-bonds-5`) and node 13 (`y1-bonds-10`) have Easy, Medium and Hard. The first `missing` node is `eyfs-count-10`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 13 (`eyfs-count-5` to `y1-bonds-10`) have Easy, Medium and Hard. The first `missing` node is `y1-bonds-20`.
 
 ## Category index
 
@@ -118,33 +118,33 @@ Reception.
 
 ### 5. `eyfs-count-10` — Count to 10
 
-Requires: `eyfs-bonds-5`. Quest: none. Status: missing.
+Requires: `eyfs-bonds-5`. Quests: `count-to-10` (Easy), `count-to-10-medium`, `count-to-10-hard`. Status: done.
 
 - Count reliably within 10
 - Recognise numerals to 10
 
 ### 6. `eyfs-compare-10` — More, less or the same
 
-Requires: `eyfs-count-10`. Quest: none. Status: missing.
+Requires: `eyfs-count-10`. Quests: `more-less-same` (Easy), `more-less-same-medium`, `more-less-same-hard`. Status: done.
 
 - Compare quantities up to 10 using more than, less than and the same, in different contexts
 
 ### 7. `eyfs-compose-10` — Make numbers to 10
 
-Requires: `eyfs-compare-10`. Quest: none. Status: missing.
+Requires: `eyfs-compare-10`. Quests: `make-numbers-to-10` (Easy), `make-numbers-to-10-medium`, `make-numbers-to-10-hard`. Status: done.
 
 - Know the composition of each number to 10
 
 ### 8. `eyfs-bonds-10-some` — Doubles and bonds
 
-Requires: `eyfs-compose-10`. Quest: none. Status: missing.
+Requires: `eyfs-compose-10`. Quests: `doubles-and-bonds` (Easy), `doubles-and-bonds-medium`, `doubles-and-bonds-hard`. Status: done.
 
 - Automatically recall some number bonds to 10
 - Automatically recall double facts within 10
 
 ### 9. `eyfs-patterns-10` — Patterns to 10
 
-Requires: `eyfs-bonds-10-some`. Quest: none. Status: missing.
+Requires: `eyfs-bonds-10-some`. Quests: `patterns-to-10` (Easy), `patterns-to-10-medium`, `patterns-to-10-hard`. Status: done.
 
 - Explore and represent odds and evens within 10
 - Explore how quantities to 10 can be shared equally
@@ -155,7 +155,7 @@ Reception.
 
 ### 10. `eyfs-count-20plus` — Count beyond 20
 
-Requires: `eyfs-patterns-10`. Quest: none. Status: missing.
+Requires: `eyfs-patterns-10`. Quests: `count-beyond-20` (Easy), `count-beyond-20-medium`, `count-beyond-20-hard`. Status: done.
 
 - Verbally count beyond 20
 - Notice the pattern of the counting system, including teen numbers
@@ -166,14 +166,14 @@ Year 1.
 
 ### 11. `y1-read-write-20` — Numbers to 20
 
-Requires: `eyfs-count-20plus`. Quest: none. Status: missing.
+Requires: `eyfs-count-20plus`. Quests: `numbers-to-20` (Easy), `numbers-to-20-medium`, `numbers-to-20-hard`. Status: done.
 
 - Read and write numbers from 1 to 20 in numerals and in words
 - Notice ten and a bit in the teen numbers (for example 14 is 10 and 4)
 
 ### 12. `y1-1-more-less` — One more, one less
 
-Requires: `y1-read-write-20`. Quest: none. Status: missing.
+Requires: `y1-read-write-20`. Quests: `one-more-one-less` (Easy), `one-more-one-less-medium`, `one-more-one-less-hard`. Status: done.
 
 - Given a number, identify one more and one less
 

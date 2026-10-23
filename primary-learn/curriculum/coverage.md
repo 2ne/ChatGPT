@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 5 — `eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5`, `eyfs-bonds-5`, `y1-bonds-10` |
+| Done | 13 — nodes 1 to 13 (`eyfs-count-5` through `y1-bonds-10`) |
 | Partial | 0 |
-| Missing | 119 |
+| Missing | 111 |
 
 ## Quests in the app
 
@@ -30,6 +30,30 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `bonds-to-5` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Easy: partners that make 5, then related take-away |
 | `bonds-to-5-medium` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Medium: 0, reverse 5 = blank + n, more take-away |
 | `bonds-to-5-hard` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Hard: mix plus and take away, number words |
+| `count-to-10` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Easy: tidy tap-count 6 to 10, tens-frame, build 10, sequence and match |
+| `count-to-10-medium` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Medium: scattered groups, build 8, tens-frame 10, order 7 to 10 |
+| `count-to-10-hard` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Hard: count one kind among mixed objects, number words, order 6 to 10 |
+| `more-less-same` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Easy: more, fewer and same with clear gaps |
+| `more-less-same-medium` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Medium: closer counts, scatter, order four groups |
+| `more-less-same-hard` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Hard: near-equal groups, same-as, story compare |
+| `make-numbers-to-10` | `eyfs-compose-10` (node 7, category `cat-r-to-10`) | done — Easy: composition parts to 8, pick-pair, story join |
+| `make-numbers-to-10-medium` | `eyfs-compose-10` (node 7, category `cat-r-to-10`) | done — Medium: 8 to 10 including 0, reverse-friendly tiles |
+| `make-numbers-to-10-hard` | `eyfs-compose-10` (node 7, category `cat-r-to-10`) | done — Hard: 0, reverse parts, sum-only, number-word story |
+| `doubles-and-bonds` | `eyfs-bonds-10-some` (node 8, category `cat-r-to-10`) | done — Easy: doubles within 10 and friendly bonds to 10 |
+| `doubles-and-bonds-medium` | `eyfs-bonds-10-some` (node 8, category `cat-r-to-10`) | done — Medium: reverse bonds, related take-away |
+| `doubles-and-bonds-hard` | `eyfs-bonds-10-some` (node 8, category `cat-r-to-10`) | done — Hard: sum-only doubles and bonds, number words |
+| `patterns-to-10` | `eyfs-patterns-10` (node 9, category `cat-r-to-10`) | done — Easy: even pairs, odd spot, share into 2 |
+| `patterns-to-10-medium` | `eyfs-patterns-10` (node 9, category `cat-r-to-10`) | done — Medium: share into 3 or 5, can-share yes/no |
+| `patterns-to-10-hard` | `eyfs-patterns-10` (node 9, category `cat-r-to-10`) | done — Hard: odd/even match, equal-share select |
+| `count-beyond-20` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Easy: teen next/gap, past 20, ten and a bit |
+| `count-beyond-20-medium` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Medium: gaps past 20, teen words, count to 26 |
+| `count-beyond-20-hard` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Hard: longer gaps, before/after, toward 30 |
+| `numbers-to-20` | `y1-read-write-20` (node 11, category `cat-y1-to-20`) | done — Easy: read/write teens, ten and a bit, match words |
+| `numbers-to-20-medium` | `y1-read-write-20` (node 11, category `cat-y1-to-20`) | done — Medium: awkward teens, write 17/18, reverse word |
+| `numbers-to-20-hard` | `y1-read-write-20` (node 11, category `cat-y1-to-20`) | done — Hard: lookalike errors, type twelve, ten and a bit |
+| `one-more-one-less` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Easy: one more/less within 10 with pictures |
+| `one-more-one-less-medium` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Medium: teens, one more than 19, one less than 20 |
+| `one-more-one-less-hard` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Hard: number words, zero edge, story one more |
 | `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, take-away pictures |
 | `number-bonds-to-10-medium` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Medium: fill-slots then sum-only, 0 and reverse parts, more take-away |
 | `number-bonds-to-10-hard` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Hard: sum-only, no-dot pick-pair, mixed plus/take-away facts, number words |
@@ -38,9 +62,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `eyfs-count-10` — Count to 10 (node 5, after `eyfs-bonds-5`). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-bonds-20` — Bonds within 20 (node 14, after `y1-bonds-10`). Start that node with Easy.
 
-Do not build `y1-bonds-20` or any later *new* node while an earlier node is still `missing`.
+Do not build a later *new* node while an earlier node is still `missing`.
 
 The October 2026 path audit did not add or remove nodes. Reception now compares quantities before composing numbers to 10. Years 1 to 6 interleave a practical topic after the first number block. `y1-bonds-10` is still node 13.
 

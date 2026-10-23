@@ -1,0 +1,431 @@
+{
+  "id": "patterns-to-10-medium",
+  "title": "Patterns to 10",
+  "summary": "Sort odds and evens to 10, and share amounts into equal groups.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-patterns-10",
+  "pathNode": "eyfs-patterns-10",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 2 pick even groups of 8 and 10. Question 3 picks an odd group of 9. Question 4 shares 10 into 2. Question 5 taps every odd number. Question 6 shares 6 into 3 equal groups. Question 7 matches odds. Question 8 asks if 7 can be shared into 2 equal groups. Question 9 shares 10 into 5. Question 10 picks the even number near 10.",
+    "versus": "Easy shows clear even pairs and fair shares of small totals. Medium mixes odds and uneven shares. Hard uses number words, near-miss shares and mixed odd/even without hints."
+  },
+  "skills": [
+    "eyfs-patterns-10",
+    "odd-even-to-10",
+    "share-equally-to-10"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-even-8",
+      "prompt": "Which group can be shared into 2 equal pairs?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 7
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 8
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 5
+          }
+        }
+      ],
+      "correctId": "b",
+      "hint": "Even numbers make pairs with none left over.",
+      "explanation": "8 can be shared into 2 equal pairs.",
+      "narration": {
+        "prompt": "Which group can be shared into 2 equal pairs?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-even-10",
+      "prompt": "Which group can be shared into 2 equal pairs?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "apple",
+            "count": 9
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "apple",
+            "count": 7
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "apple",
+            "count": 10
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "apple",
+            "count": 5
+          }
+        }
+      ],
+      "correctId": "c",
+      "hint": "Look for a neat pair count.",
+      "explanation": "10 can be shared into 2 equal pairs.",
+      "narration": {
+        "prompt": "Which group can be shared into 2 equal pairs?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-odd-9",
+      "prompt": "Which group has an odd number of {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "duck",
+            "count": 6
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "duck",
+            "count": 8
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "duck",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "duck",
+            "count": 10
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "9 is odd. It does not make equal pairs.",
+      "narration": {
+        "prompt": "Which group has an odd number of {items}?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-share-10",
+      "prompt": "Share 10 {items} into 2 equal groups. How many in each group?",
+      "visual": {
+        "item": "frog",
+        "count": 10
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "10 shared into 2 equal groups is 5 in each group.",
+      "narration": {
+        "prompt": "Share 10 {items} into 2 equal groups. How many in each group?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "pat-m-every-odd",
+      "prompt": "Tap every odd number.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "5 and 7 are odd.",
+      "narration": {
+        "prompt": "Tap every odd number."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-share-6-3",
+      "prompt": "Share 6 {items} into 3 equal groups. How many in each group?",
+      "visual": {
+        "item": "fish",
+        "count": 6
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "6 shared into 3 equal groups is 2 in each group.",
+      "narration": {
+        "prompt": "Share 6 {items} into 3 equal groups. How many in each group?"
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "pat-m-match-odd",
+      "prompt": "Match each odd number to a group of that many {items}.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "1",
+          "right": {
+            "visual": {
+              "item": "car",
+              "count": 1
+            }
+          }
+        },
+        {
+          "id": "p2",
+          "left": "3",
+          "right": {
+            "visual": {
+              "item": "car",
+              "count": 3
+            }
+          }
+        },
+        {
+          "id": "p3",
+          "left": "5",
+          "right": {
+            "visual": {
+              "item": "car",
+              "count": 5
+            }
+          }
+        },
+        {
+          "id": "p4",
+          "left": "7",
+          "right": {
+            "visual": {
+              "item": "car",
+              "count": 7
+            }
+          }
+        }
+      ],
+      "explanation": "Each odd number matches its group.",
+      "narration": {
+        "prompt": "Match each odd number to a group of that many {items}."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-can-share",
+      "prompt": "Can 7 {items} be shared into 2 equal groups?",
+      "visual": {
+        "item": "balloon",
+        "count": 7
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        },
+        {
+          "id": "c",
+          "label": "Only if we add 1"
+        },
+        {
+          "id": "d",
+          "label": "Only if we take 2"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "7 is odd. It cannot be shared into 2 equal groups.",
+      "narration": {
+        "prompt": "Can 7 {items} be shared into 2 equal groups?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-share-10-5",
+      "prompt": "Share 10 {items} into 5 equal groups. How many in each group?",
+      "visual": {
+        "item": "strawberry",
+        "count": 10
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "5"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "10 shared into 5 equal groups is 2 in each group.",
+      "narration": {
+        "prompt": "Share 10 {items} into 5 equal groups. How many in each group?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-m-even-num",
+      "prompt": "Which number is even?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "5"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "10 is even. It makes equal pairs.",
+      "narration": {
+        "prompt": "Which number is even?"
+      }
+    }
+  ]
+}

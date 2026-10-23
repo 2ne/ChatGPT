@@ -1,0 +1,349 @@
+{
+  "id": "count-beyond-20-hard",
+  "title": "Count beyond 20",
+  "summary": "Count well past 20 and use teen patterns with number words.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-count-20plus",
+  "pathNode": "eyfs-count-20plus",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 2 use longer gaps past 20. Question 3 orders five numbers across 20. Question 4 matches teen words. Question 5 fills a blank with a word accepted. Question 6 notices 14 is 10 and 4. Question 7 multi-select teen numbers. Question 8 counts on from 28. Question 9 is a reverse what comes before. Question 10 fills 29, 30 pattern. No hints.",
+    "versus": "Easy counts on from teens with clear sequences. Medium mixes gaps and teen patterns. Hard goes past 20 with number words and fuller sequences."
+  },
+  "skills": [
+    "eyfs-count-20plus",
+    "count-beyond-20",
+    "teen-number-pattern"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "c20h-gap-1",
+      "prompt": "Which number is missing? 21, _, 23, 24",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "22"
+        },
+        {
+          "id": "c",
+          "label": "25"
+        },
+        {
+          "id": "d",
+          "label": "23"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "22 comes after 21 and before 23.",
+      "narration": {
+        "prompt": "Which number is missing? Twenty-one, blank, twenty-three, twenty-four."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20h-gap-2",
+      "prompt": "Which number is missing? 26, 27, _, 29",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "25"
+        },
+        {
+          "id": "b",
+          "label": "28"
+        },
+        {
+          "id": "c",
+          "label": "30"
+        },
+        {
+          "id": "d",
+          "label": "27"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "28 comes after 27 and before 29.",
+      "narration": {
+        "prompt": "Which number is missing? Twenty-six, twenty-seven, blank, twenty-nine."
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "c20h-order",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n22",
+          "label": "22"
+        },
+        {
+          "id": "n18",
+          "label": "18"
+        },
+        {
+          "id": "n25",
+          "label": "25"
+        },
+        {
+          "id": "n20",
+          "label": "20"
+        },
+        {
+          "id": "n19",
+          "label": "19"
+        }
+      ],
+      "correctOrder": [
+        "n18",
+        "n19",
+        "n20",
+        "n22",
+        "n25"
+      ],
+      "explanation": "The numbers go 18, 19, 20, 22, 25 from smallest to biggest.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c20h-words",
+      "prompt": "Match each word to its number.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "fourteen",
+          "right": "14"
+        },
+        {
+          "id": "p2",
+          "left": "sixteen",
+          "right": "16"
+        },
+        {
+          "id": "p3",
+          "left": "nineteen",
+          "right": "19"
+        },
+        {
+          "id": "p4",
+          "left": "twenty-one",
+          "right": "21"
+        }
+      ],
+      "explanation": "Each word names its number.",
+      "narration": {
+        "prompt": "Match each word to its number."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "c20h-blank",
+      "prompt": "Which number is missing? 27, 28, _",
+      "prefix": "27, 28,",
+      "acceptedAnswers": [
+        "29",
+        "twenty-nine",
+        "twenty nine"
+      ],
+      "inputMode": "numeric",
+      "explanation": "29 comes after 28.",
+      "narration": {
+        "prompt": "Which number is missing? Twenty-seven, twenty-eight, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20h-teen-bit",
+      "prompt": "14 is 10 and which bit?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "5"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "14 is 10 and 4.",
+      "narration": {
+        "prompt": "Fourteen is ten and which bit?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "c20h-teens",
+      "prompt": "Tap every teen number.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "13"
+        },
+        {
+          "id": "b",
+          "label": "20"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "13 and 17 are teen numbers.",
+      "narration": {
+        "prompt": "Tap every teen number."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20h-next-28",
+      "prompt": "What number comes next? 26, 27, 28, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "27"
+        },
+        {
+          "id": "b",
+          "label": "28"
+        },
+        {
+          "id": "c",
+          "label": "29"
+        },
+        {
+          "id": "d",
+          "label": "30"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "29 comes after 28.",
+      "narration": {
+        "prompt": "What number comes next? Twenty-six, twenty-seven, twenty-eight, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20h-before",
+      "prompt": "What number comes just before 23?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "21"
+        },
+        {
+          "id": "b",
+          "label": "22"
+        },
+        {
+          "id": "c",
+          "label": "24"
+        },
+        {
+          "id": "d",
+          "label": "20"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "22 comes just before 23.",
+      "narration": {
+        "prompt": "What number comes just before 23?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20h-next-30",
+      "prompt": "What number comes next? 28, 29, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "27"
+        },
+        {
+          "id": "b",
+          "label": "30"
+        },
+        {
+          "id": "c",
+          "label": "31"
+        },
+        {
+          "id": "d",
+          "label": "29"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "30 comes after 29.",
+      "narration": {
+        "prompt": "What number comes next? Twenty-eight, twenty-nine, blank."
+      }
+    }
+  ]
+}

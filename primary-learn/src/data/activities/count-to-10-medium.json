@@ -1,0 +1,404 @@
+{
+  "id": "count-to-10-medium",
+  "title": "Count to 10",
+  "summary": "Count messy groups to 10, build a set, and match numerals to amounts.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-count-10",
+  "pathNode": "eyfs-count-10",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 tap-count a scattered group of 7, then 8, then 9. Question 4 builds a set of 8. Question 5 counts 10 on a tens-frame. Question 6 picks which group has 9. Question 7 says what comes next after 8, 9. Question 8 orders 7 to 10. Question 9 matches 6 to 10 with pictures. Question 10 asks how many in a messy 10. No return to a 6-object tidy count.",
+    "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
+  },
+  "skills": [
+    "eyfs-count-10",
+    "count-sequence-to-10",
+    "numerals-1-to-10",
+    "one-to-one-counting"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "count-objects",
+      "id": "c10m-7",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "apple",
+        "count": 7
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 7 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "layout": "scatter",
+      "hint": "Tap each {item} once, even when they are spread out."
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10m-8",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "car",
+        "count": 8
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 8 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "layout": "scatter",
+      "hint": "Say a new number for each tap."
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10m-9",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "star",
+        "count": 9
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 9 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "layout": "scatter",
+      "hint": "Tap each {item} once."
+    },
+    {
+      "kind": "build-set",
+      "id": "c10m-build-8",
+      "prompt": "Make a group of 8 {items}.",
+      "visual": {
+        "item": "duck",
+        "count": 8
+      },
+      "randomise": {},
+      "explanation": "A group of 8 has 8 {items}.",
+      "narration": {
+        "prompt": "Make a group of 8 {items}."
+      }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10m-10-frame",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "balloon",
+        "count": 10
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 10 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "layout": "tens-frame"
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c10m-which-9",
+      "prompt": "Which group has 9 {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "frog",
+            "count": 7
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "frog",
+            "count": 8
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "frog",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "frog",
+            "count": 10
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "That group has 9 {items}.",
+      "narration": {
+        "prompt": "Which group has 9 {items}?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c10m-next",
+      "prompt": "What number comes next? 8, 9, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "10 comes after 9.",
+      "narration": {
+        "prompt": "What number comes next? Eight, nine, blank."
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "c10m-order",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n7",
+          "label": "7"
+        },
+        {
+          "id": "n9",
+          "label": "9"
+        },
+        {
+          "id": "n8",
+          "label": "8"
+        }
+      ],
+      "correctOrder": [
+        "n7",
+        "n8",
+        "n9",
+        "n10"
+      ],
+      "explanation": "The numbers go 7, 8, 9, 10 from smallest to biggest.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c10m-match",
+      "prompt": "Match each number to the same amount of {items}.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "6",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 6
+            },
+            "layout": "scatter"
+          }
+        },
+        {
+          "id": "p2",
+          "left": "8",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 8
+            },
+            "layout": "scatter"
+          }
+        },
+        {
+          "id": "p3",
+          "left": "9",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 9
+            },
+            "layout": "scatter"
+          }
+        },
+        {
+          "id": "p4",
+          "left": "10",
+          "right": {
+            "visual": {
+              "item": "fish",
+              "count": 10
+            },
+            "layout": "scatter"
+          }
+        }
+      ],
+      "explanation": "Each number tells us how many objects are in its group.",
+      "narration": {
+        "prompt": "Match each number to the same amount of {items}."
+      }
+    },
+    {
+      "kind": "count-objects",
+      "id": "c10m-messy-10",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "strawberry",
+        "count": 10
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "There are 10 {items}.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "layout": "scatter"
+    }
+  ]
+}

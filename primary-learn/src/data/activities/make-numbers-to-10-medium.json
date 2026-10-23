@@ -1,0 +1,312 @@
+{
+  "id": "make-numbers-to-10-medium",
+  "title": "Make numbers to 10",
+  "summary": "Make 8, 9 and 10 from two parts, including 0.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-compose-10",
+  "pathNode": "eyfs-compose-10",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 put parts together for 8, then 9 as 6 and 3, then 10 as 7 and 3. Question 4 is the part-whole cherry for what goes with 2 to make 8. Question 5 taps slots for what goes with 4 to make 10. Questions 6 and 7 tap four tiles to find one pair that makes 10, first 0 and 10, then 1 and 9. Question 8 taps every pair that makes 8. Question 9 taps slots for what goes with 5 to make 9. Question 10 is a short story: Sam has 5 and gets 4 more. Starts at 8.",
+    "versus": "Easy builds composition with small parts and pictures. Medium uses 0 and reverse parts on totals near 10. Hard uses sum-only, reverse order and number words. This node is composition, not quick recall of all bonds."
+  },
+  "skills": [
+    "eyfs-compose-10",
+    "composition-to-10",
+    "part-part-whole-to-10"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "make-total",
+      "id": "m10m-5-3",
+      "prompt": "What is 5 + 3?",
+      "part": 5,
+      "other": 3,
+      "total": 8,
+      "gap": "total",
+      "mode": "sum-only",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "explanation": "5 and 3 make 8.",
+      "narration": {
+        "prompt": "What is five plus three?"
+      },
+      "hint": "Add the two parts."
+    },
+    {
+      "kind": "make-total",
+      "id": "m10m-6-3",
+      "prompt": "What is 6 + 3?",
+      "part": 6,
+      "other": 3,
+      "total": 9,
+      "gap": "total",
+      "mode": "sum-only",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "explanation": "6 and 3 make 9.",
+      "narration": {
+        "prompt": "What is six plus three?"
+      },
+      "hint": "Count on from 6."
+    },
+    {
+      "kind": "make-total",
+      "id": "m10m-7-3",
+      "prompt": "What is 7 + 3?",
+      "part": 7,
+      "other": 3,
+      "total": 10,
+      "gap": "total",
+      "mode": "sum-only",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "explanation": "7 and 3 make 10.",
+      "narration": {
+        "prompt": "What is seven plus three?"
+      }
+    },
+    {
+      "kind": "part-whole",
+      "id": "m10m-pw-2-8",
+      "whole": 8,
+      "parts": [
+        2,
+        6
+      ],
+      "missing": "right",
+      "choices": [
+        5,
+        6,
+        7
+      ],
+      "explanation": "2 and 6 make 8.",
+      "narration": {
+        "prompt": "What do you need to add to two to make eight?"
+      },
+      "prompt": "What do you need to add to 2 to make 8?"
+    },
+    {
+      "kind": "make-total",
+      "id": "m10m-slots-4-10",
+      "prompt": "What do you need to add to 4 to make 10?",
+      "visual": {
+        "item": "frog",
+        "count": 4
+      },
+      "total": 10,
+      "mode": "fill-slots",
+      "randomise": {},
+      "explanation": "4 and 6 make 10.",
+      "narration": {
+        "prompt": "What do you need to add to four to make ten?"
+      }
+    },
+    {
+      "kind": "pick-pair",
+      "id": "m10m-pair-0-10",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [
+        0,
+        10,
+        3,
+        5
+      ],
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "explanation": "0 and 10 make 10.",
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      }
+    },
+    {
+      "kind": "pick-pair",
+      "id": "m10m-pair-1-9",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [
+        1,
+        9,
+        4,
+        2
+      ],
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "explanation": "1 and 9 make 10.",
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "m10m-every-8",
+      "prompt": "Tap every pair that makes 8.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "3 + 5"
+        },
+        {
+          "id": "b",
+          "label": "2 + 5"
+        },
+        {
+          "id": "c",
+          "label": "4 + 4"
+        },
+        {
+          "id": "d",
+          "label": "1 + 6"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "3 and 5 make 8. 4 and 4 also make 8.",
+      "narration": {
+        "prompt": "Tap every pair that makes 8."
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "m10m-slots-5-9",
+      "prompt": "What do you need to add to 5 to make 9?",
+      "visual": {
+        "item": "balloon",
+        "count": 5
+      },
+      "total": 9,
+      "mode": "fill-slots",
+      "randomise": {},
+      "explanation": "5 and 4 make 9.",
+      "narration": {
+        "prompt": "What do you need to add to five to make nine?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "m10m-sam",
+      "prompt": "Sam has 5 {items}. He gets 4 more. How many {items} does he have now?",
+      "visual": {
+        "item": "apple",
+        "count": 5,
+        "added": 4
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "5 {items} and 4 more make 9 {items}.",
+      "narration": {
+        "prompt": "Sam has 5 {items}. He gets 4 more. How many {items} does he have now?"
+      }
+    }
+  ]
+}

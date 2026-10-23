@@ -1,0 +1,331 @@
+{
+  "id": "numbers-to-20-hard",
+  "title": "Numbers to 20",
+  "summary": "Read and write tricky numbers to 20, and use ten and a bit.",
+  "subject": "maths",
+  "type": "place-value",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-read-write-20",
+  "pathNode": "y1-read-write-20",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 2 catch lookalike errors (15 vs 50 style avoided, use 13 vs 30, 17 vs 71). Question 3 writes nineteen. Question 4 is ten and a bit for 19. Question 5 matches reverse. Question 6 orders mixed. Question 7 fills twelve as a word. Question 8 multi-select. Question 9 is ten and a bit for 11. Question 10 picks the word for 20. No hints.",
+    "versus": "Easy matches numerals and words to 12 with clear teens. Medium stretches to 20 and ten-and-a-bit. Hard mixes reverse matching, fill-blank words and awkward teens."
+  },
+  "skills": [
+    "y1-read-write-20",
+    "numerals-to-20",
+    "number-words-to-20",
+    "ten-and-a-bit"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "rw20h-13",
+      "prompt": "Which number is thirteen?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "13"
+        },
+        {
+          "id": "b",
+          "label": "30"
+        },
+        {
+          "id": "c",
+          "label": "31"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Thirteen is written as 13.",
+      "narration": {
+        "prompt": "Which number is thirteen?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "rw20h-17",
+      "prompt": "Which number is seventeen?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "71"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "16"
+        },
+        {
+          "id": "d",
+          "label": "70"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "Seventeen is written as 17.",
+      "narration": {
+        "prompt": "Which number is seventeen?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "rw20h-write-19",
+      "prompt": "Type the number nineteen.",
+      "acceptedAnswers": [
+        "19",
+        "nineteen"
+      ],
+      "inputMode": "numeric",
+      "explanation": "Nineteen is written as 19.",
+      "narration": {
+        "prompt": "Type the number nineteen."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "rw20h-ten-bit-19",
+      "prompt": "19 is 10 and which bit?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "19 is 10 and 9.",
+      "narration": {
+        "prompt": "Nineteen is ten and which bit?"
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20h-match",
+      "prompt": "Match each number to its word.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "12",
+          "right": "twelve"
+        },
+        {
+          "id": "p2",
+          "left": "15",
+          "right": "fifteen"
+        },
+        {
+          "id": "p3",
+          "left": "18",
+          "right": "eighteen"
+        },
+        {
+          "id": "p4",
+          "left": "20",
+          "right": "twenty"
+        }
+      ],
+      "explanation": "Each number matches its word.",
+      "narration": {
+        "prompt": "Match each number to its word."
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "rw20h-order",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n20",
+          "label": "20"
+        },
+        {
+          "id": "n11",
+          "label": "11"
+        },
+        {
+          "id": "n18",
+          "label": "18"
+        },
+        {
+          "id": "n15",
+          "label": "15"
+        },
+        {
+          "id": "n13",
+          "label": "13"
+        }
+      ],
+      "correctOrder": [
+        "n11",
+        "n13",
+        "n15",
+        "n18",
+        "n20"
+      ],
+      "explanation": "The numbers go 11, 13, 15, 18, 20 from smallest to biggest.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "rw20h-twelve-word",
+      "prompt": "Type the word for 12.",
+      "acceptedAnswers": [
+        "twelve",
+        "12"
+      ],
+      "inputMode": "text",
+      "explanation": "12 is written as twelve.",
+      "narration": {
+        "prompt": "Type the word for 12."
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "rw20h-correct",
+      "prompt": "Tap every correct match.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "11 = eleven"
+        },
+        {
+          "id": "b",
+          "label": "15 = fifty"
+        },
+        {
+          "id": "c",
+          "label": "16 = sixteen"
+        },
+        {
+          "id": "d",
+          "label": "20 = twelve"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "11 is eleven. 16 is sixteen.",
+      "narration": {
+        "prompt": "Tap every correct match."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "rw20h-ten-bit-11",
+      "prompt": "11 is 10 and which bit?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "11 is 10 and 1.",
+      "narration": {
+        "prompt": "Eleven is ten and which bit?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "rw20h-20-word",
+      "prompt": "What is the word for 20?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "twelve"
+        },
+        {
+          "id": "b",
+          "label": "twenty"
+        },
+        {
+          "id": "c",
+          "label": "two"
+        },
+        {
+          "id": "d",
+          "label": "twenty-one"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "20 is written as twenty.",
+      "narration": {
+        "prompt": "What is the word for 20?"
+      }
+    }
+  ]
+}

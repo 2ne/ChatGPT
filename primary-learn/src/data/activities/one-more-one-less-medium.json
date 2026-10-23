@@ -1,0 +1,342 @@
+{
+  "id": "one-more-one-less-medium",
+  "title": "One more, one less",
+  "summary": "Find one more and one less, including teen numbers.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-1-more-less",
+  "pathNode": "y1-1-more-less",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 2 ask one more in teens. Questions 3 to 4 ask one less in teens. Question 5 fills one more than 14. Question 6 matches mixed. Question 7 asks one less than 20. Question 8 multi-select. Question 9 asks one more than 19. Question 10 asks one less than 11.",
+    "versus": "Easy asks one more and one less within 10 with pictures. Medium mixes teens. Hard uses number words and both directions without hints."
+  },
+  "skills": [
+    "y1-1-more-less",
+    "one-more",
+    "one-less"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-more-12",
+      "prompt": "What is one more than 12?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "14"
+        }
+      ],
+      "correctId": "c",
+      "hint": "Count on one from 12.",
+      "explanation": "One more than 12 is 13.",
+      "narration": {
+        "prompt": "What is one more than 12?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-more-15",
+      "prompt": "What is one more than 15?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "14"
+        },
+        {
+          "id": "b",
+          "label": "15"
+        },
+        {
+          "id": "c",
+          "label": "16"
+        },
+        {
+          "id": "d",
+          "label": "17"
+        }
+      ],
+      "correctId": "c",
+      "hint": "Count on one from 15.",
+      "explanation": "One more than 15 is 16.",
+      "narration": {
+        "prompt": "What is one more than 15?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-less-14",
+      "prompt": "What is one less than 14?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "13"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "15"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "One less than 14 is 13.",
+      "narration": {
+        "prompt": "What is one less than 14?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-less-18",
+      "prompt": "What is one less than 18?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "16"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "18"
+        },
+        {
+          "id": "d",
+          "label": "19"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "One less than 18 is 17.",
+      "narration": {
+        "prompt": "What is one less than 18?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "oml-m-more-14",
+      "prompt": "What is one more than 14?",
+      "acceptedAnswers": [
+        "15",
+        "fifteen"
+      ],
+      "inputMode": "numeric",
+      "explanation": "One more than 14 is 15.",
+      "narration": {
+        "prompt": "What is one more than 14?"
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-m-match",
+      "prompt": "Match each number to one less.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "11",
+          "right": "10"
+        },
+        {
+          "id": "p2",
+          "left": "13",
+          "right": "12"
+        },
+        {
+          "id": "p3",
+          "left": "16",
+          "right": "15"
+        },
+        {
+          "id": "p4",
+          "left": "20",
+          "right": "19"
+        }
+      ],
+      "explanation": "Each number matches the number that is one less.",
+      "narration": {
+        "prompt": "Match each number to one less."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-less-20",
+      "prompt": "What is one less than 20?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "One less than 20 is 19.",
+      "narration": {
+        "prompt": "What is one less than 20?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "oml-m-both",
+      "prompt": "Tap every correct sentence.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "One more than 10 is 11"
+        },
+        {
+          "id": "b",
+          "label": "One less than 10 is 11"
+        },
+        {
+          "id": "c",
+          "label": "One more than 16 is 17"
+        },
+        {
+          "id": "d",
+          "label": "One less than 16 is 17"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "One more than 10 is 11. One more than 16 is 17.",
+      "narration": {
+        "prompt": "Tap every correct sentence."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-more-19",
+      "prompt": "What is one more than 19?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "One more than 19 is 20.",
+      "narration": {
+        "prompt": "What is one more than 19?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-m-less-11",
+      "prompt": "What is one less than 11?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "One less than 11 is 10.",
+      "narration": {
+        "prompt": "What is one less than 11?"
+      }
+    }
+  ]
+}

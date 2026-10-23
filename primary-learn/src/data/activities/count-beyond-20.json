@@ -1,0 +1,344 @@
+{
+  "id": "count-beyond-20",
+  "title": "Count beyond 20",
+  "summary": "Count on past 20 and spot the pattern in teen numbers.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-count-20plus",
+  "pathNode": "eyfs-count-20plus",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 say what comes next in teens (11, 12, 13 then 14, 15 then 18, 19). Question 4 fills a teen gap. Question 5 orders teens. Question 6 matches teen numerals. Question 7 says what comes next after 20. Question 8 fills 20, 21, blank. Question 9 notices 13 is ten and 3. Question 10 counts on from 22. Hints on the first three.",
+    "versus": "Easy counts on from teens with clear sequences. Medium mixes gaps and teen patterns. Hard goes past 20 with number words and fuller sequences."
+  },
+  "skills": [
+    "eyfs-count-20plus",
+    "count-beyond-20",
+    "teen-number-pattern"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-next-13",
+      "prompt": "What number comes next? 11, 12, 13, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "13"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "15"
+        }
+      ],
+      "correctId": "c",
+      "hint": "Say the numbers in order.",
+      "explanation": "14 comes after 13.",
+      "narration": {
+        "prompt": "What number comes next? Eleven, twelve, thirteen, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-next-15",
+      "prompt": "What number comes next? 13, 14, 15, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "14"
+        },
+        {
+          "id": "b",
+          "label": "15"
+        },
+        {
+          "id": "c",
+          "label": "16"
+        },
+        {
+          "id": "d",
+          "label": "17"
+        }
+      ],
+      "correctId": "c",
+      "hint": "Keep counting on by one.",
+      "explanation": "16 comes after 15.",
+      "narration": {
+        "prompt": "What number comes next? Thirteen, fourteen, fifteen, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-next-19",
+      "prompt": "What number comes next? 17, 18, 19, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
+      ],
+      "correctId": "c",
+      "hint": "Nineteen comes before twenty.",
+      "explanation": "20 comes after 19.",
+      "narration": {
+        "prompt": "What number comes next? Seventeen, eighteen, nineteen, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-gap-teen",
+      "prompt": "Which number is missing? 14, 15, _, 17, 18",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "13"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "19"
+        },
+        {
+          "id": "d",
+          "label": "15"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "16 comes after 15 and before 17.",
+      "narration": {
+        "prompt": "Which number is missing? Fourteen, fifteen, blank, seventeen, eighteen."
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "c20e-order-teens",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n15",
+          "label": "15"
+        },
+        {
+          "id": "n12",
+          "label": "12"
+        },
+        {
+          "id": "n14",
+          "label": "14"
+        },
+        {
+          "id": "n13",
+          "label": "13"
+        }
+      ],
+      "correctOrder": [
+        "n12",
+        "n13",
+        "n14",
+        "n15"
+      ],
+      "explanation": "The numbers go 12, 13, 14, 15 from smallest to biggest.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c20e-match",
+      "prompt": "Match each number to its place in the count.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "11",
+          "right": "after 10"
+        },
+        {
+          "id": "p2",
+          "left": "15",
+          "right": "after 14"
+        },
+        {
+          "id": "p3",
+          "left": "19",
+          "right": "after 18"
+        },
+        {
+          "id": "p4",
+          "left": "20",
+          "right": "after 19"
+        }
+      ],
+      "explanation": "Each number comes right after the one before it.",
+      "narration": {
+        "prompt": "Match each number to its place in the count."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-next-20",
+      "prompt": "What number comes next? 18, 19, 20, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "19"
+        },
+        {
+          "id": "b",
+          "label": "20"
+        },
+        {
+          "id": "c",
+          "label": "21"
+        },
+        {
+          "id": "d",
+          "label": "22"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "21 comes after 20.",
+      "narration": {
+        "prompt": "What number comes next? Eighteen, nineteen, twenty, blank."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "id": "c20e-blank-22",
+      "prompt": "Which number is missing? 20, 21, _",
+      "prefix": "20, 21,",
+      "acceptedAnswers": [
+        "22",
+        "twenty-two",
+        "twenty two"
+      ],
+      "inputMode": "numeric",
+      "explanation": "22 comes after 21.",
+      "narration": {
+        "prompt": "Which number is missing? Twenty, twenty-one, blank."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-teen-bit",
+      "prompt": "13 is 10 and which bit?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "13 is 10 and 3.",
+      "narration": {
+        "prompt": "Thirteen is ten and which bit?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "c20e-next-23",
+      "prompt": "What number comes next? 21, 22, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "23"
+        },
+        {
+          "id": "c",
+          "label": "24"
+        },
+        {
+          "id": "d",
+          "label": "22"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "23 comes after 22.",
+      "narration": {
+        "prompt": "What number comes next? Twenty-one, twenty-two, blank."
+      }
+    }
+  ]
+}

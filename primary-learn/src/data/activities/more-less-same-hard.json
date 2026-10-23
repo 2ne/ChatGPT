@@ -1,0 +1,535 @@
+{
+  "id": "more-less-same-hard",
+  "title": "More, less or the same",
+  "summary": "Compare near-equal groups to 10, including when two groups are the same.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-compare-10",
+  "pathNode": "eyfs-compare-10",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 3 compare near-equal counts (7 vs 8, 9 vs 10, 5 vs 6). Question 4 picks fewer with a gap of 1. Question 5 finds two matching groups among close distractors. Question 6 asks which has more with scattered tens-frame style. Question 7 orders five groups. Question 8 matches same amounts with mixed objects. Question 9 is a short story compare. Question 10 picks the group that is the same as a shown amount. No hints.",
+    "versus": "Easy compares clear groups with big differences and hints early on. Medium uses closer counts and fewer hints. Hard mixes same amounts, word stems, and near-equal groups within 10."
+  },
+  "skills": [
+    "eyfs-compare-10",
+    "compare-quantities-to-10",
+    "more-less-same"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-more-1",
+      "prompt": "Which group has more {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "apple",
+            "count": 7
+          },
+          "layout": "scatter"
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "apple",
+            "count": 8
+          },
+          "layout": "scatter"
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "apple",
+            "count": 6
+          },
+          "layout": "scatter"
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "apple",
+            "count": 5
+          },
+          "layout": "scatter"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "8 is more than 7, 6 and 5.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-more-2",
+      "prompt": "Which group has more {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "duck",
+            "count": 9
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "duck",
+            "count": 10
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "duck",
+            "count": 8
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "duck",
+            "count": 7
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "10 is more than 9, 8 and 7.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-more-3",
+      "prompt": "Which group has more {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 5
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 4
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 6
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 3
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "6 is more than 5, 4 and 3.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-less-1",
+      "prompt": "Which group has fewer {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "frog",
+            "count": 8
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "frog",
+            "count": 7
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "frog",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "frog",
+            "count": 10
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "7 is fewer than 8, 9 and 10.",
+      "narration": {
+        "prompt": "Which group has fewer {items}?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "cmp-h-same",
+      "prompt": "Tap every group that has the same number of {items}.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "fish",
+            "count": 8
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "fish",
+            "count": 9
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "fish",
+            "count": 8
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "fish",
+            "count": 7
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "Those two groups both have 8 {items}.",
+      "narration": {
+        "prompt": "Tap every group that has the same number of {items}."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-more-4",
+      "prompt": "Which group has more {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "balloon",
+            "count": 9
+          },
+          "layout": "tens-frame"
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "balloon",
+            "count": 10
+          },
+          "layout": "tens-frame"
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "balloon",
+            "count": 8
+          },
+          "layout": "tens-frame"
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "balloon",
+            "count": 7
+          },
+          "layout": "tens-frame"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "10 is more than 9, 8 and 7.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "cmp-h-order",
+      "prompt": "Put the groups in order, from fewest to most.",
+      "items": [
+        {
+          "id": "g5",
+          "visual": {
+            "item": "car",
+            "count": 10
+          }
+        },
+        {
+          "id": "g1",
+          "visual": {
+            "item": "car",
+            "count": 3
+          }
+        },
+        {
+          "id": "g3",
+          "visual": {
+            "item": "car",
+            "count": 6
+          }
+        },
+        {
+          "id": "g2",
+          "visual": {
+            "item": "car",
+            "count": 4
+          }
+        },
+        {
+          "id": "g4",
+          "visual": {
+            "item": "car",
+            "count": 8
+          }
+        }
+      ],
+      "correctOrder": [
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5"
+      ],
+      "explanation": "The counts go 3, 4, 6, 8, 10 from fewest to most.",
+      "narration": {
+        "prompt": "Put the groups in order, from fewest to most."
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "cmp-h-match",
+      "prompt": "Match each group to another group with the same amount.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "visual": {
+              "item": "star",
+              "count": 5
+            },
+            "layout": "scatter"
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 5
+            }
+          }
+        },
+        {
+          "id": "p2",
+          "left": {
+            "visual": {
+              "item": "star",
+              "count": 7
+            },
+            "layout": "scatter"
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 7
+            }
+          }
+        },
+        {
+          "id": "p3",
+          "left": {
+            "visual": {
+              "item": "star",
+              "count": 9
+            },
+            "layout": "scatter"
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 9
+            }
+          }
+        },
+        {
+          "id": "p4",
+          "left": {
+            "visual": {
+              "item": "star",
+              "count": 10
+            },
+            "layout": "scatter"
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 10
+            }
+          }
+        }
+      ],
+      "explanation": "Groups with the same count match each other.",
+      "narration": {
+        "prompt": "Match each group to another group with the same amount."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-sam",
+      "prompt": "Sam has these {items}. Which plate has more?",
+      "visual": {
+        "item": "strawberry",
+        "count": 6
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "strawberry",
+            "count": 5
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "strawberry",
+            "count": 6
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "strawberry",
+            "count": 7
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "strawberry",
+            "count": 4
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "7 is more than Sam's 6 {items}.",
+      "narration": {
+        "prompt": "Sam has these {items}. Which plate has more?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "cmp-h-same-as",
+      "prompt": "Which group has the same number of {items} as this group?",
+      "visual": {
+        "item": "ladybird",
+        "count": 7
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "ladybird",
+            "count": 6
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "ladybird",
+            "count": 8
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "ladybird",
+            "count": 7
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "ladybird",
+            "count": 9
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "That group also has 7 {items}.",
+      "narration": {
+        "prompt": "Which group has the same number of {items} as this group?"
+      }
+    }
+  ]
+}

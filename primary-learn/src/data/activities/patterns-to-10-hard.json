@@ -1,0 +1,402 @@
+{
+  "id": "patterns-to-10-hard",
+  "title": "Patterns to 10",
+  "summary": "Sort odds and evens to 10, and decide fair shares with fewer clues.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "eyfs-patterns-10",
+  "pathNode": "eyfs-patterns-10",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Questions 1 to 2 pick even or odd with close distractors. Question 3 shares 8 into 4. Question 4 taps every even number to 10. Question 5 asks if 9 can be shared equally into 2. Question 6 shares 9 into 3. Question 7 matches odd and even words. Question 8 orders even numbers. Question 9 shares leftover story. Question 10 picks numbers that share equally into 2. No hints.",
+    "versus": "Easy shows clear even pairs and fair shares of small totals. Medium mixes odds and uneven shares. Hard uses number words, near-miss shares and mixed odd/even without hints."
+  },
+  "skills": [
+    "eyfs-patterns-10",
+    "odd-even-to-10",
+    "share-equally-to-10"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-even",
+      "prompt": "Which group can be shared into 2 equal pairs?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 9
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 10
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 7
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 5
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "10 can be shared into 2 equal pairs.",
+      "narration": {
+        "prompt": "Which group can be shared into 2 equal pairs?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-odd",
+      "prompt": "Which group has an odd number of {items}?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "apple",
+            "count": 8
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "apple",
+            "count": 6
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "apple",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "apple",
+            "count": 10
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "9 is odd. It does not make equal pairs.",
+      "narration": {
+        "prompt": "Which group has an odd number of {items}?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-share-8-4",
+      "prompt": "Share 8 {items} into 4 equal groups. How many in each group?",
+      "visual": {
+        "item": "duck",
+        "count": 8
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "8 shared into 4 equal groups is 2 in each group.",
+      "narration": {
+        "prompt": "Share 8 {items} into 4 equal groups. How many in each group?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "pat-h-every-even",
+      "prompt": "Tap every even number.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "6 and 8 are even.",
+      "narration": {
+        "prompt": "Tap every even number."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-can-9",
+      "prompt": "Can 9 {items} be shared into 2 equal groups?",
+      "visual": {
+        "item": "frog",
+        "count": 9
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        },
+        {
+          "id": "c",
+          "label": "Yes, with 1 left over"
+        },
+        {
+          "id": "d",
+          "label": "Yes, into 3 groups"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "9 is odd. It cannot be shared into 2 equal groups.",
+      "narration": {
+        "prompt": "Can 9 {items} be shared into 2 equal groups?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-share-9-3",
+      "prompt": "Share 9 {items} into 3 equal groups. How many in each group?",
+      "visual": {
+        "item": "fish",
+        "count": 9
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "5"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "9 shared into 3 equal groups is 3 in each group.",
+      "narration": {
+        "prompt": "Share 9 {items} into 3 equal groups. How many in each group?"
+      }
+    },
+    {
+      "kind": "match-pairs",
+      "id": "pat-h-match-words",
+      "prompt": "Match each number to its type.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "3",
+          "right": "odd"
+        },
+        {
+          "id": "p2",
+          "left": "4",
+          "right": "even"
+        },
+        {
+          "id": "p3",
+          "left": "9",
+          "right": "odd number"
+        },
+        {
+          "id": "p4",
+          "left": "10",
+          "right": "even number"
+        }
+      ],
+      "explanation": "3 and 9 are odd. 4 and 10 are even.",
+      "narration": {
+        "prompt": "Match each number to its type."
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "pat-h-order-even",
+      "prompt": "Put the even numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n8",
+          "label": "8"
+        },
+        {
+          "id": "n2",
+          "label": "2"
+        },
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        }
+      ],
+      "correctOrder": [
+        "n2",
+        "n4",
+        "n8",
+        "n10"
+      ],
+      "explanation": "The even numbers go 2, 4, 8, 10 from smallest to biggest.",
+      "narration": {
+        "prompt": "Put the even numbers in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-sam",
+      "prompt": "Sam has 5 {items}. Can he share them into 2 equal groups?",
+      "visual": {
+        "item": "strawberry",
+        "count": 5
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        },
+        {
+          "id": "c",
+          "label": "Yes, 3 each"
+        },
+        {
+          "id": "d",
+          "label": "Yes, 2 each"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "5 is odd. Sam cannot share them into 2 equal groups.",
+      "narration": {
+        "prompt": "Sam has 5 {items}. Can he share them into 2 equal groups?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "id": "pat-h-share-2",
+      "prompt": "Tap every number that can be shared into 2 equal groups.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "4 and 8 can be shared into 2 equal groups.",
+      "narration": {
+        "prompt": "Tap every number that can be shared into 2 equal groups."
+      }
+    }
+  ]
+}
