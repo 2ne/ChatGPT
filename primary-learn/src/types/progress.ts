@@ -4,7 +4,13 @@ export type LearnerAvatarId =
   | "otter"
   | "robin"
   | "hedgehog"
-  | "badger";
+  | "badger"
+  | "squirrel"
+  | "rabbit"
+  | "mouse"
+  | "deer"
+  | "frog"
+  | "duck";
 
 export type LearnerProfile = {
   name: string;

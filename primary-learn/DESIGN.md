@@ -353,19 +353,18 @@ the thin rainbow. Inner words stay padded.
   Conditional controls (such as “Start again”) reserve their space when
   hidden or disabled. Do not stretch question content to fill the phone.
 - **Number pairs (`pick-pair`)** stay on the same white activity screen. A
-  two-column grid of big square tiles: large numeral in the centre, optional
-  dice-pip dots in the top-right, inset from the edges. Every tile starts the
-  same: white, the same soft border as `.option`. Dots use `--primary` (the
-  selected indigo) in every state, including selected, correct and wrong.
-  Selected tiles use the shared option selected state (indigo border, soft
-  indigo fill, ring shadow). Tap again to deselect. At most two tiles are
-  selected. No sum line under the tiles. Always four tiles and exactly one
-  pair. No duplicate numbers that make a second pair. Finding every pair
-  belongs to
-  `match-pairs` later. Easy, Medium and Hard all use four tiles with dots.
-  Medium and Hard raise difficulty with harder numbers (0, reverse parts),
-  not by hiding dots. Later totals to 10 or 20 use the same `total` / `tiles`
-  config.
+  grid of big square tiles: two columns on phone, four across from 900px up.
+  Large numeral in the centre, optional dice-pip dots in the top-right, inset
+  from the edges. Every tile starts the same: white, the same soft border as
+  `.option`. Dots use `--primary` (the selected indigo) in every state,
+  including selected, correct and wrong. Selected tiles use the shared option
+  selected state (indigo border, soft indigo fill, ring shadow). Tap again to
+  deselect. At most two tiles are selected. No sum line under the tiles.
+  Always four tiles and exactly one pair. No duplicate numbers that make a
+  second pair. Finding every pair belongs to `match-pairs` later. Easy,
+  Medium and Hard all use four tiles with dots. Medium and Hard raise
+  difficulty with harder numbers (0, reverse parts), not by hiding dots.
+  Later totals to 10 or 20 use the same `total` / `tiles` config.
 - **Order (`ordered`)** is a vertical stack of big numeral tiles (about 48px
   digits). Left: a grip handle so drag is obvious. Middle: the number. Right:
   up/down arrow buttons. Kids can drag or tap arrows. No position numbers like
@@ -435,9 +434,10 @@ No app header. Full-page setup on the dotted paper:
 1. **Hero** — **large Pip** (follows the pointer; idle bob + blink) → speech
    bubble (`Hi, I'm Pip! Let's learn together.`) → display title
    **`Set up your Primary Maths account`**. No top badge. No subtitle.
-2. **Card** — big Baloo name field → `Choose your buddy` avatar grid (3 cols,
-   soft tinted faces, selected = indigo ring + scale) → gradient `Let's go →`
-   → `Stays on this device` reassurance.
+2. **Card** — big Baloo name field → `Choose your buddy` avatar grid (3 cols
+   on phone, 4 from 900px; soft tinted faces, selected = indigo ring + scale)
+   → gradient `Let's go →` → `Stays on this device` reassurance. Twelve UK
+   woodland buddies in `src/data/avatars.ts`.
 
 Touch-first: name field ≥ 64px, buddy tiles ≥ 108px. Same Sunny Path tokens —
 no second visual system.

@@ -2253,6 +2253,12 @@ button.object-token {
   gap: 12px;
 }
 
+@media (min-width: 900px) {
+  .pick-pair-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .pick-pair-tile {
   position: relative;
   appearance: none;
@@ -3133,6 +3139,12 @@ button.object-token {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   width: 100%;
+}
+
+@media (min-width: 900px) {
+  .avatar-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .avatar-pick {
