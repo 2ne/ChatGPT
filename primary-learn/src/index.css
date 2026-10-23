@@ -1089,9 +1089,13 @@ button.learner-chip:focus-visible {
 }
 
 /* ——— Activity context banner ——— */
+/* Progress fill: --quest-progress grows left → right as questions are done */
 .context-card {
   flex: none;
-  background: linear-gradient(90deg, var(--primary-soft) 0%, #fff 72%);
+  position: relative;
+  isolation: isolate;
+  --quest-progress: 0%;
+  background: #fff;
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -1099,6 +1103,18 @@ button.learner-chip:focus-visible {
   margin: 0;
   display: grid;
   gap: 0;
+  overflow: hidden;
+}
+
+.context-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--quest-progress);
+  background: linear-gradient(90deg, #dcd8ff 0%, var(--primary-soft) 100%);
+  transition: width 320ms ease;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .back-link {

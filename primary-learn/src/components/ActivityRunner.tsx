@@ -360,8 +360,21 @@ export function ActivityRunner({
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       <div className="quest-shell">
-      {/* Where am I? — quest name + question count */}
-      <section className="context-card" aria-label={copy.progressLabel}>
+      {/* Where am I? — quest name; progress fills the header left → right */}
+      <section
+        className="context-card"
+        aria-label={copy.progressLabel}
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={activeQueue.length}
+        aria-valuenow={position}
+        aria-valuetext={copy.questionOf(position, activeQueue.length)}
+        style={
+          {
+            "--quest-progress": `${(position / activeQueue.length) * 100}%`,
+          } as CSSProperties
+        }
+      >
         <div className="quest-inner">
           <div className="context-top">
             <div style={{ minWidth: 0, flex: 1 }}>

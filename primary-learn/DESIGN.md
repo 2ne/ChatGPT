@@ -447,8 +447,9 @@ pointer (mouse or touch).
 - Ink on paper/white ≥ 4.5:1. Colour never the only signal (✓/✕ + words).
 - Focus ring: 3px `--primary`.
 - Hit targets ≥ 48px (options 64px, CTAs 52px). Speaker icon 36px, inline after the prompt.
-- Quest header shows title + `Question X of N` (no segmented bar); stars have
-  `aria-label`; live regions for feedback and the path map.
+- Quest header shows title + `Question X of N`. Progress is a soft indigo
+  fill growing left → right in the header background (not a segment bar).
+  Stars have `aria-label`; live regions for feedback and the path map.
 - Pre-readers: speaker on the **question only**. Word highlighting on the
   prompt is a reading aid, not decoration — keep it even when motion is reduced.
 
@@ -461,7 +462,7 @@ audio files. Scale is too large.
 | Don't                                         | Do instead                                                      |
 | --------------------------------------------- | --------------------------------------------------------------- |
 | Bare question with no quest name              | Context card with title + difficulty + count on every question  |
-| Thin lonely progress line                     | Quest title + difficulty + `Question X of N` in the header      |
+| Thin lonely progress line                     | Header background fill left → right + title + question count    |
 | Flat grey cards, tiny labels                  | Paper bg, chunky radii, Baloo prompts, letter badges            |
 | 3D/WebGL mascot with lighting                 | Pure SVG Pip, CSS motion                                        |
 | Subject or year filter chips                  | One maths path map                                              |
