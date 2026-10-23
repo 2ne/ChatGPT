@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a tidy row of 6, then 7, then 8. Question 4 counts 9 on a tens-frame. Question 5 builds a group of 10. Question 6 says what comes next after 7, 8, 9. Question 7 picks the missing amount in 6, 7, blank, 9, 10. Question 8 orders 6, 7, 8. Question 9 matches numerals to amounts. Question 10 picks which group has 10. Counts climb 6 to 10 with no drop-back.",
+    "within": "Questions 1 to 3 tap-count a tidy row of 6, then 7, then 8. Question 4 counts 9 on a tens-frame. Question 5 builds a group of 10. Question 6 says what comes next after 7, 8, 9. Question 7 picks the missing amount in 6, 7, blank, 9, 10. Question 8 orders 6, 7, 8. Question 9 shows 6 and asks the child to tap the matching group. Question 10 picks which group has 10. Counts climb 6 to 10 with no drop-back.",
     "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
   },
   "skills": [
@@ -278,56 +278,20 @@
       }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c10e-match",
-      "prompt": "Match each number to the same amount of {items}.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "6",
-          "right": {
-            "visual": {
-              "item": "fish",
-              "count": 6
-            }
-          }
-        },
-        {
-          "id": "p2",
-          "left": "7",
-          "right": {
-            "visual": {
-              "item": "fish",
-              "count": 7
-            }
-          }
-        },
-        {
-          "id": "p3",
-          "left": "9",
-          "right": {
-            "visual": {
-              "item": "fish",
-              "count": 9
-            }
-          }
-        },
-        {
-          "id": "p4",
-          "left": "10",
-          "right": {
-            "visual": {
-              "item": "fish",
-              "count": 10
-            }
-          }
-        }
+      "prompt": "How many {items}?",
+      "numeral": 6,
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "fish", "count": 6 } },
+        { "id": "b", "visual": { "item": "fish", "count": 7 } },
+        { "id": "c", "visual": { "item": "fish", "count": 9 } },
+        { "id": "d", "visual": { "item": "fish", "count": 10 } }
       ],
-      "explanation": "Each number tells us how many objects are in its group.",
-      "narration": {
-        "prompt": "Match each number to the same amount of {items}."
-      }
+      "correctId": "a",
+      "explanation": "That group has 6 {items}.",
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",

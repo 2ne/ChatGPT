@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 4 count only one kind in a mixed scatter (7, then 8, then 9, then 10 of the target). Question 5 builds exactly 10 from a large tray. Question 6 taps every group of 10. Question 7 matches number words to amounts. Question 8 orders 6 to 10. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 6, 7, 8, 9, blank. No bonds.",
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (7, then 8, then 9, then 10 of the target). Question 5 builds exactly 10 from a large tray. Question 6 taps every group of 10. Question 7 shows the word nine and asks the child to tap the matching group. Question 8 orders 6 to 10. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 6, 7, 8, 9, blank. No bonds.",
     "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, number words, and a fuller order, still within 10."
   },
   "skills": [
@@ -270,56 +270,21 @@
       }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c10h-words",
-      "prompt": "Match each word to the same amount of {items}.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "seven",
-          "right": {
-            "visual": {
-              "item": "star",
-              "count": 7
-            }
-          }
-        },
-        {
-          "id": "p2",
-          "left": "eight",
-          "right": {
-            "visual": {
-              "item": "star",
-              "count": 8
-            }
-          }
-        },
-        {
-          "id": "p3",
-          "left": "nine",
-          "right": {
-            "visual": {
-              "item": "star",
-              "count": 9
-            }
-          }
-        },
-        {
-          "id": "p4",
-          "left": "ten",
-          "right": {
-            "visual": {
-              "item": "star",
-              "count": 10
-            }
-          }
-        }
+      "prompt": "How many {items}?",
+      "numeral": 9,
+      "numeralLabel": "nine",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "star", "count": 8 } },
+        { "id": "b", "visual": { "item": "star", "count": 10 } },
+        { "id": "c", "visual": { "item": "star", "count": 9 } },
+        { "id": "d", "visual": { "item": "star", "count": 7 } }
       ],
-      "explanation": "Each word names how many objects are in its group.",
-      "narration": {
-        "prompt": "Match each word to the same amount of {items}."
-      }
+      "correctId": "c",
+      "explanation": "Nine means 9 {items}.",
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "ordered",
