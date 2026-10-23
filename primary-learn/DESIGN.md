@@ -213,6 +213,11 @@ two columns, and allow the whole page to scroll on short screens. Do not add a
 second mascot or a speech bubble to this screen. During play, the header sub-line
 reads `Medium · Question 3 of 10`.
 
+Intro and results use a fixed, opaque backdrop in the current section's soft
+colour, with the section wallpaper on a separate `::before` layer. Safari can
+extend that solid tint behind both browser bars. Keep the backdrop below the
+card and remove it during question play so the white activity surface returns.
+
 ### Activity question (most important)
 
 On phones the quest runner is **full-bleed white**. Kids know they are in an

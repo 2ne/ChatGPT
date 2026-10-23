@@ -3252,6 +3252,8 @@ button.object-token {
 /* ——— Intro screen ——— */
 
 .quest-intro-page {
+  position: relative;
+  isolation: isolate;
   display: grid;
   align-content: center;
   padding: calc(32px + var(--safe-t)) calc(24px + var(--safe-r)) calc(40px + var(--safe-b)) calc(24px + var(--safe-l));
@@ -3260,6 +3262,29 @@ button.object-token {
   background-repeat: repeat;
   background-size: 340px 310px;
 }
+.quest-intro-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Opaque section tint for Safari, with the doodles on a separate layer. */
+  background-color: var(--paper);
+}
+
+.quest-intro-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--quest-wallpaper);
+  background-repeat: repeat;
+  background-size: 340px 310px;
+}
+
+.quest-intro-page > .quest-intro {
+  position: relative;
+  z-index: 1;
+}
+
 .quest-intro {
   width: 100%;
   max-width: 30rem;

@@ -45,6 +45,19 @@ function sectionBackdrop(pathNode: string): CSSProperties | undefined {
   };
 }
 
+function QuestBackdrop({ backdrop }: { backdrop?: CSSProperties }) {
+  return (
+    <div
+      className="quest-intro-backdrop"
+      style={{
+        backgroundColor: backdrop?.backgroundColor,
+        "--quest-wallpaper": backdrop?.backgroundImage ?? "none",
+      } as CSSProperties}
+      aria-hidden
+    />
+  );
+}
+
 type ActivityRunnerProps = {
   activity: Activity;
   learnerName: string;
@@ -260,6 +273,7 @@ export function ActivityRunner({
   if (phase === "intro") {
     return (
       <main className="page page-quest quest-intro-page" style={backdrop}>
+        <QuestBackdrop backdrop={backdrop} />
         <section className="quest-intro">
           <button type="button" className="back-link" onClick={onExit}>
             <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
@@ -548,6 +562,7 @@ function ResultScreen({
 
   return (
     <main className="page page-quest quest-intro-page" style={backdrop}>
+      <QuestBackdrop backdrop={backdrop} />
       <ConfettiBurst burstId={confetti} intensity="pop" />
       <section className="quest-intro">
         <button type="button" className="back-link" onClick={onExit}>
