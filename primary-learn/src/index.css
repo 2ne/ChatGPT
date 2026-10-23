@@ -4490,3 +4490,23 @@ button.object-token {
     font-size: 26px;
   }
 }
+
+/* Reusable geometry pictures and touch-friendly shape choices. */
+.shape-picture { display: inline-flex; flex-direction: column; align-items: center; width: 100%; max-width: 256px; }
+.shape-art { display: block; position: relative; width: 100%; aspect-ratio: 1; }
+.shape-svg, .shape-art > img, .shape-canvas, .shape-canvas canvas { display: block; width: 100%; height: 100%; }
+.shape-canvas { position: absolute; inset: 0; visibility: hidden; }
+.shape-canvas.is-ready { visibility: visible; touch-action: none; cursor: grab; }
+.shape-canvas.is-ready:active { cursor: grabbing; }
+.shape-picture.is-compact { max-width: 116px; flex-shrink: 0; }
+.shape-stem { display: flex; justify-content: center; padding-bottom: 12px; }
+.shape-controls { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.shape-turn-buttons { display: flex; gap: 6px; }
+.shape-turn-buttons .btn { min-width: 44px; min-height: 44px; padding: 4px 10px; }
+.shape-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.shape-choice-grid .shape-choice { display: flex; position: relative; min-height: 148px; flex-direction: column; justify-content: center; padding: 24px 10px 12px; }
+.shape-choice .option-letter { position: absolute; top: 8px; left: 8px; }
+.shape-choice .option-check, .shape-choice .option-cross { position: absolute; top: 10px; right: 10px; }
+.match-row .shape-picture.is-compact { width: 84px; }
+.match-chip .shape-picture.is-compact { width: 72px; }
+.shape-load-status { display: grid; place-items: center; width: 100%; height: 100%; font-family: var(--font-body); font-size: 14px; text-align: center; }

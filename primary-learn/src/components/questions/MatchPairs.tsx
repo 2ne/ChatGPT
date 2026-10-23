@@ -4,6 +4,7 @@ import { matchSideKey, matchSideLabel, matchSideVisual } from "../../lib/matchSi
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
 import { ObjectGroup } from "./ObjectGroup";
 import { choiceClass, type Reveal } from "./choice";
+import { ShapePicture } from "./ShapePicture";
 
 type MatchPairsProps = {
   question: MatchPairsQuestion;
@@ -17,11 +18,13 @@ function SideView({ side }: { side: MatchSide }) {
   const visual = matchSideVisual(side);
   const label = typeof side === "string" ? side : side.label;
   const layout = typeof side === "string" ? undefined : side.layout;
+  const shape = typeof side === "string" ? undefined : side.shape;
   return (
     <span className="option-content">
+      {shape ? <ShapePicture shape={shape} compact /> : null}
       {visual ? <ObjectGroup visual={visual} compact layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
-      {!visual && !label ? matchSideLabel(side) : null}
+      {!visual && !shape && !label ? matchSideLabel(side) : null}
     </span>
   );
 }

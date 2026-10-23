@@ -25,6 +25,24 @@ import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
 import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
+import { SHAPE_NAMES, SHAPE_COLOURS, type ShapeAsset } from "../types/shapes";
+import { SHAPE_VARIANTS } from "./shapes";
+
+function parseShape(value: unknown, path: string): ShapeAsset | undefined {
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "shape must be an object");
+  const name = expectString(value, "name", path) as ShapeAsset["name"];
+  if (!(SHAPE_NAMES as readonly string[]).includes(name)) fail(path, "unknown shape name");
+  const variant = value.variant == null ? undefined : expectString(value, "variant", path);
+  if (variant && !SHAPE_VARIANTS[name].includes(variant)) fail(path, `unsupported variant for ${name}`);
+  const colour = value.colour == null ? undefined : expectString(value, "colour", path);
+  if (colour && !(SHAPE_COLOURS as readonly string[]).includes(colour)) fail(path, "unknown shape colour");
+  const rotation = value.rotation == null ? undefined : expectNumber(value, "rotation", path);
+  if (rotation != null && (rotation < 0 || rotation >= 360)) fail(path, "shape rotation must be from 0 up to 360");
+  const scale = value.scale == null ? undefined : expectNumber(value, "scale", path);
+  if (scale != null && (scale < 0.6 || scale > 1)) fail(path, "shape scale must be from 0.6 to 1");
+  return { name, variant: variant as ShapeAsset["variant"], colour: colour as ShapeAsset["colour"], rotation, scale };
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -237,7 +255,7 @@ function parseFlashMs(record: Record<string, unknown>, path: string): number | u
   return flashMs;
 }
 
-function parseOption(value: unknown, path: string): QuestionOption {
+function parseOption(value: unknown, path: string, allowShape = false): QuestionOption {
   if (!isRecord(value)) fail(path, "option must be an object");
   const id = expectString(value, "id", path);
   const label = value.label == null ? undefined : expectString(value, "label", path);
@@ -247,8 +265,11 @@ function parseOption(value: unknown, path: string): QuestionOption {
   }
   const visual = optionalVisual(value, path, false, layout === "fingers");
   if (layout === "fingers") assertFingersVisual(visual, path);
-  if (!label && !visual) fail(path, "option needs a label or a visual");
-  return { id, label, visual, layout };
+  const shape = parseShape(value.shape, `${path}.shape`);
+  if (shape && !allowShape) fail(path, "shape options use multiple-choice or multi-select");
+  if (shape && visual) fail(path, "option cannot mix object and shape pictures");
+  if (!label && !visual && !shape) fail(path, "option needs a label or a picture");
+  return { id, label, visual, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -264,8 +285,10 @@ function parseMatchSide(value: unknown, path: string): MatchSide {
   }
   const visual = optionalVisual(value, path, false, layout === "fingers");
   if (layout === "fingers") assertFingersVisual(visual, path);
-  if (!label && !visual) fail(path, "match side needs a label or a visual");
-  return { label, visual, layout };
+  const shape = parseShape(value.shape, `${path}.shape`);
+  if (shape && visual) fail(path, "match side cannot mix object and shape pictures");
+  if (!label && !visual && !shape) fail(path, "match side needs a label or a picture");
+  return { label, visual, shape, layout };
 }
 
 function parseNarration(value: unknown, path: string): Question["narration"] {
@@ -445,7 +468,10 @@ function parseQuestion(value: unknown, path: string): Question {
   if (visual?.removed != null && randomise?.count) {
     fail(path, "do not randomise count on a take-away picture");
   }
-  const core = { id, prompt, explanation, hint, narration, visual, extras, layout, flashMs, randomise };
+  const shape = parseShape(value.shape, `${path}.shape`);
+  if (shape && (visual || extras || layout || flashMs != null)) fail(path, "shape stems cannot mix object picture fields");
+  if (shape && kind !== "multiple-choice" && kind !== "multi-select") fail(path, "shape stems use choice questions");
+  const core = { id, prompt, explanation, hint, narration, visual, shape, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,
@@ -478,8 +504,9 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "multiple-choice": {
       const options = expectArray(value, "options", path).map((option, i) =>
-        parseOption(option, `${path}.options[${i}]`),
+        parseOption(option, `${path}.options[${i}]`, true),
       );
+      if (options.some((option) => option.shape) && options.some((option) => option.visual)) fail(path, "shape choices cannot mix in object pictures");
       const correctId = expectString(value, "correctId", path);
       if (!options.some((option) => option.id === correctId)) {
         fail(path, "correctId must match an option id");
@@ -532,8 +559,9 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "multi-select": {
       const options = expectArray(value, "options", path).map((option, i) =>
-        parseOption(option, `${path}.options[${i}]`),
+        parseOption(option, `${path}.options[${i}]`, true),
       );
+      if (options.some((option) => option.shape) && options.some((option) => option.visual)) fail(path, "shape choices cannot mix in object pictures");
       const correctIds = expectArray(value, "correctIds", path);
       if (!correctIds.every(isString) || correctIds.length === 0) {
         fail(path, "correctIds must be a non-empty string array");

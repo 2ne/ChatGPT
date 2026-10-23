@@ -1,5 +1,6 @@
 import type { AbilityBand, Subject, YearGroup } from "./curriculum";
 import type { Difficulty } from "./path";
+import type { ShapeAsset } from "./shapes";
 
 /** Pedagogical activity kinds (topic), not question UI. */
 export const ACTIVITY_TYPES = [
@@ -84,6 +85,7 @@ export type ObjectLayout = (typeof OBJECT_LAYOUTS)[number];
 
 export type QuestionOption = {
   id: string;
+  shape?: ShapeAsset;
   label?: string;
   visual?: ObjectAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
@@ -125,6 +127,7 @@ export type ActivityRandomise = {
 
 type QuestionCore = {
   id: string;
+  shape?: ShapeAsset;
   prompt: string;
   explanation: string;
   hint?: string;
@@ -192,7 +195,7 @@ export type OrderedQuestion = QuestionCore & {
 };
 
 /** A match side is a label, or a picture, or both. Optional layout for glanceable amounts. */
-export type MatchSide = string | { label?: string; visual?: ObjectAsset; layout?: ObjectLayout };
+export type MatchSide = string | { label?: string; visual?: ObjectAsset; shape?: ShapeAsset; layout?: ObjectLayout };
 
 export type MatchPairsQuestion = QuestionCore & {
   kind: "match-pairs";

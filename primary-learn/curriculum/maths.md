@@ -23,7 +23,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - **When those nodes are built:** split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` into smaller stops. Leave them whole until then.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 15 (`eyfs-count-5` to `y1-add-sub-20`) have Easy, Medium and Hard. The first `missing` node is `y1-shapes`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 16 (`eyfs-count-5` to `y1-shapes`) have Easy, Medium and Hard. The first `missing` node is `y1-turns`.
 
 ## Category index
 
@@ -206,7 +206,7 @@ Year 1. A practical break after numbers to 20, before counting on to 100.
 
 ### 16. `y1-shapes` — Everyday shapes
 
-Requires: `y1-add-sub-20`. Quest: none. Status: missing.
+Requires: `y1-add-sub-20`. Quests: `everyday-shapes` (Easy), `everyday-shapes-medium`, `everyday-shapes-hard`. Status: done.
 
 - Recognise and name common 2-D shapes, including rectangles (including squares), circles and triangles
 - Recognise and name common 3-D shapes, including cuboids (including cubes), pyramids and spheres

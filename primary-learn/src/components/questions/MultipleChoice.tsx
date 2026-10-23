@@ -3,6 +3,7 @@ import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
+import { ShapeChoices } from "./ShapeChoices";
 
 type MultipleChoiceProps = {
   question: MultipleChoiceQuestion | CountObjectsQuestion;
@@ -19,6 +20,9 @@ export function MultipleChoice({
   reveal,
   onChange,
 }: MultipleChoiceProps) {
+  if (question.kind === "multiple-choice" && (question.shape || question.options.some((option) => option.shape))) {
+    return <ShapeChoices question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
+  }
   if (question.kind === "multiple-choice" && question.numeral != null) {
     const shown = question.numeralLabel ?? String(question.numeral);
     return (

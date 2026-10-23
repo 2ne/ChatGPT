@@ -336,6 +336,24 @@ Shared phrases (“Choose all that apply.”, “Correct. Nice!”) live in `src
 
 ## Optional randomisation
 
+### Shape assets
+
+Multiple-choice and multi-select stems and options, and match-pair sides,
+may use `shape: { name, variant?, colour?, rotation?, scale? }`. Shape names
+are circle, triangle, square, rectangle, cube, cuboid, pyramid and sphere.
+Allowed variants depend on the shape and are validated in `src/lib/shapes.ts`.
+Do not combine a shape with an object picture on the same stem or option.
+Do not use shape assets on numeric question kinds or ordered items.
+
+`ShapeChoices` reuses the existing choice marking and scoring. `ShapeSvg`
+draws flat shapes. `ShapePicture` lazy-loads Three.js solids, supports direct
+drag and labelled rotation controls for stems, and generates cached answer
+images through a shared renderer. Offscreen interactive contexts are disposed.
+No automatic spinning and no static fallback drawings. Preserve family
+relationships in content: squares are rectangles and cubes are cuboids.
+Avoid putting both a general and a specific defensible name in one naming
+question. Multi-select questions explicitly state the number of selections.
+
 Kids learn better when the same skill shows up as slightly different pictures or a shuffled choice list — not a new harder puzzle. Randomisation is **opt-in** and **must stay inside the difficulty band**.
 
 The runner calls `realizeActivity` on **Start quest / Play again / Try again**. The draw stays for that play. There is no miss-retry loop.

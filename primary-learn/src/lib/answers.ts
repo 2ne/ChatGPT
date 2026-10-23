@@ -1,4 +1,9 @@
 import type { Question } from "../types/activity";
+import { shapeName } from "./shapes";
+
+function optionLabel(option: { label?: string; shape?: import("../types/shapes").ShapeAsset } | undefined, slot: number): string | null {
+  return option?.label ?? (option?.shape ? `${shapeName(option.shape)} (${"ABCD"[slot]})` : null);
+}
 import { makeTotalMissing } from "./makeTotal";
 import { matchSideKey, matchSideLabel } from "./matchSide";
 import { partWholeAnswer } from "./partWhole";
@@ -144,12 +149,12 @@ export function correctAnswerLabel(question: Question): string | null {
   switch (question.kind) {
     case "count-objects":
     case "multiple-choice":
-      return question.options.find((option) => option.id === question.correctId)?.label ?? null;
+      return optionLabel(question.options.find((option) => option.id === question.correctId), question.options.findIndex((option) => option.id === question.correctId));
     case "fill-blank":
       return question.acceptedAnswers[0] ?? null;
     case "multi-select": {
       const labels = question.correctIds
-        .map((id) => question.options.find((option) => option.id === id)?.label)
+        .map((id) => optionLabel(question.options.find((option) => option.id === id), question.options.findIndex((option) => option.id === id)))
         .filter((label): label is string => Boolean(label));
       return labels.length ? labels.join(", ") : null;
     }

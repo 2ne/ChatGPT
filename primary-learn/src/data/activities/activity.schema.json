@@ -28,30 +28,103 @@
         "items": {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/objectItem" }
+          "items": {
+            "$ref": "#/$defs/objectItem"
+          }
         },
         "count": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["min", "max"],
+          "required": [
+            "min",
+            "max"
+          ],
           "properties": {
-            "min": { "type": "integer", "minimum": 1, "maximum": 12 },
-            "max": { "type": "integer", "minimum": 1, "maximum": 12 }
+            "min": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
           }
         },
-        "shuffleOptions": { "type": "boolean" }
+        "shuffleOptions": {
+          "type": "boolean"
+        }
       }
     },
     "activityRandomise": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "mode": { "enum": ["attempt", "seeded"] },
-        "seed": { "type": "string" },
+        "mode": {
+          "enum": [
+            "attempt",
+            "seeded"
+          ]
+        },
+        "seed": {
+          "type": "string"
+        },
         "items": {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/objectItem" }
+          "items": {
+            "$ref": "#/$defs/objectItem"
+          }
+        }
+      }
+    },
+    "shapeAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "circle",
+            "triangle",
+            "square",
+            "rectangle",
+            "cube",
+            "cuboid",
+            "pyramid",
+            "sphere"
+          ]
+        },
+        "variant": {
+          "enum": [
+            "standard",
+            "wide",
+            "tall",
+            "right",
+            "scalene",
+            "triangular"
+          ]
+        },
+        "colour": {
+          "enum": [
+            "purple",
+            "blue",
+            "green",
+            "orange"
+          ]
+        },
+        "rotation": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360
+        },
+        "scale": {
+          "type": "number",
+          "minimum": 0.6,
+          "maximum": 1
         }
       }
     }
@@ -75,46 +148,177 @@
     "questions"
   ],
   "properties": {
-    "id": { "type": "string" },
-    "title": { "type": "string" },
-    "summary": { "type": "string" },
-    "subject": { "const": "maths" },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "subject": {
+      "const": "maths"
+    },
     "type": {
-      "enum": ["counting", "number-bonds", "times-tables", "fractions", "place-value", "reasoning"]
+      "enum": [
+        "counting",
+        "number-bonds",
+        "times-tables",
+        "fractions",
+        "place-value",
+        "reasoning"
+      ]
     },
     "yearGroups": {
       "type": "array",
       "minItems": 1,
       "items": {
-        "enum": ["Reception", "Year1", "Year2", "Year3", "Year4", "Year5", "Year6"]
+        "enum": [
+          "Reception",
+          "Year1",
+          "Year2",
+          "Year3",
+          "Year4",
+          "Year5",
+          "Year6"
+        ]
       }
     },
-    "ability": { "enum": ["emerging", "expected", "greater-depth"] },
-    "estimatedMinutes": { "type": "number" },
-    "masteryThreshold": { "type": "number", "minimum": 0, "maximum": 1 },
-    "curriculumRef": { "type": "string" },
-    "pathNode": { "type": "string" },
-    "difficulty": { "enum": [1, 2, 3] },
-    "questionCount": { "type": "integer", "minimum": 10, "maximum": 20 },
+    "ability": {
+      "enum": [
+        "emerging",
+        "expected",
+        "greater-depth"
+      ]
+    },
+    "estimatedMinutes": {
+      "type": "number"
+    },
+    "masteryThreshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "curriculumRef": {
+      "type": "string"
+    },
+    "pathNode": {
+      "type": "string"
+    },
+    "difficulty": {
+      "enum": [
+        1,
+        2,
+        3
+      ]
+    },
+    "questionCount": {
+      "type": "integer",
+      "minimum": 10,
+      "maximum": 20
+    },
     "extraQuestions": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["reason"],
+      "required": [
+        "reason"
+      ],
       "description": "Set this to ship more than 10 questions. reason must say why.",
       "properties": {
-        "reason": { "type": "string", "minLength": 12 }
+        "reason": {
+          "type": "string",
+          "minLength": 12
+        }
       }
     },
     "difficultyRamp": {
       "type": "object",
-      "required": ["within", "versus"],
+      "required": [
+        "within",
+        "versus"
+      ],
       "properties": {
-        "within": { "type": "string" },
-        "versus": { "type": "string" }
+        "within": {
+          "type": "string"
+        },
+        "versus": {
+          "type": "string"
+        }
       }
     },
-    "skills": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "type": "string" } },
-    "randomise": { "$ref": "#/$defs/activityRandomise" },
-    "questions": { "type": "array", "minItems": 10, "maxItems": 20 }
+    "skills": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "items": {
+        "type": "string"
+      }
+    },
+    "randomise": {
+      "$ref": "#/$defs/activityRandomise"
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "properties": {
+          "shape": {
+            "$ref": "#/$defs/shapeAsset"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "$ref": "#/$defs/shapeAsset"
+                }
+              }
+            }
+          },
+          "pairs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "left": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "shape": {
+                          "$ref": "#/$defs/shapeAsset"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "right": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "shape": {
+                          "$ref": "#/$defs/shapeAsset"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

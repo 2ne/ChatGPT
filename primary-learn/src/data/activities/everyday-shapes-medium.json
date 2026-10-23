@@ -1,0 +1,524 @@
+{
+  "id": "everyday-shapes-medium",
+  "title": "Everyday shapes",
+  "summary": "Recognise shapes in different sizes and positions.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-shapes",
+  "pathNode": "y1-shapes",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 names a rotated right-angled triangle. Q2 recognises a tilted square. Q3 selects right-angled and scalene triangles. Q4 matches differently proportioned flat shapes. Q5 names a rotated cube. Q6 recognises a tall non-cubic cuboid. Q7 selects square-based and triangular-based pyramids. Q8 distinguishes a sphere from a circle. Q9 relates a box to a cuboid. Q10 matches varied solids to names. No hints.",
+    "versus": "Easy recognises familiar flat shapes and solids, with hints on the first three. Medium varies size, orientation and proportions, including right-angled and scalene triangles and triangular-based pyramids. Hard mixes flat and solid shapes, recognises squares as rectangles and cubes as cuboids, and ignores colour and size. No spelling, face-counting or turn calculations."
+  },
+  "skills": [
+    "y1-shapes",
+    "recognise-2d-shapes",
+    "recognise-3d-shapes",
+    "shape-orientation"
+  ],
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is this shape called?",
+      "explanation": "This is still a triangle. Moving it does not change its three straight sides.",
+      "narration": {
+        "prompt": "What is this shape called?"
+      },
+      "shape": {
+        "name": "triangle",
+        "variant": "right",
+        "rotation": 35,
+        "colour": "orange",
+        "scale": 1
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Triangle"
+        },
+        {
+          "id": "b",
+          "label": "Square"
+        },
+        {
+          "id": "c",
+          "label": "Rectangle"
+        },
+        {
+          "id": "d",
+          "label": "Circle"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-1"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which shape is a square?",
+      "explanation": "A square is still a square when it is tilted.",
+      "narration": {
+        "prompt": "Which shape is a square?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "shape": {
+            "name": "square",
+            "variant": "standard",
+            "rotation": 45,
+            "colour": "blue",
+            "scale": 1
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "rectangle",
+            "variant": "tall",
+            "rotation": 0,
+            "colour": "orange",
+            "scale": 1
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "circle",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "green",
+            "scale": 1
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "triangle",
+            "variant": "wide",
+            "rotation": 0,
+            "colour": "purple",
+            "scale": 1
+          }
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-2"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap every triangle. There are 2 to choose.",
+      "explanation": "Both shapes have three straight sides. Triangles can look different from each other.",
+      "narration": {
+        "prompt": "Tap every triangle. There are 2 to choose."
+      },
+      "options": [
+        {
+          "id": "a",
+          "shape": {
+            "name": "triangle",
+            "variant": "right",
+            "rotation": 15,
+            "colour": "green",
+            "scale": 1
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "rectangle",
+            "variant": "standard",
+            "rotation": 35,
+            "colour": "blue",
+            "scale": 1
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "triangle",
+            "variant": "scalene",
+            "rotation": 100,
+            "colour": "orange",
+            "scale": 0.8
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "circle",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "purple",
+            "scale": 1
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-3"
+    },
+    {
+      "kind": "match-pairs",
+      "prompt": "Match each shape to its name.",
+      "explanation": "A shape keeps its name when its size or position changes.",
+      "narration": {
+        "prompt": "Match each shape to its name."
+      },
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "shape": {
+              "name": "rectangle",
+              "variant": "tall",
+              "rotation": 10,
+              "colour": "purple",
+              "scale": 1
+            }
+          },
+          "right": "Rectangle"
+        },
+        {
+          "id": "p2",
+          "left": {
+            "shape": {
+              "name": "triangle",
+              "variant": "wide",
+              "rotation": 150,
+              "colour": "blue",
+              "scale": 1
+            }
+          },
+          "right": "Triangle"
+        },
+        {
+          "id": "p3",
+          "left": {
+            "shape": {
+              "name": "circle",
+              "variant": "standard",
+              "rotation": 0,
+              "colour": "orange",
+              "scale": 0.7
+            }
+          },
+          "right": "Circle"
+        }
+      ],
+      "id": "shapes-2-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is this shape called?",
+      "explanation": "This is a cube. It has six equal square faces.",
+      "narration": {
+        "prompt": "What is this shape called?"
+      },
+      "shape": {
+        "name": "cube",
+        "variant": "standard",
+        "rotation": 30,
+        "colour": "green",
+        "scale": 1
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Cube"
+        },
+        {
+          "id": "b",
+          "label": "Sphere"
+        },
+        {
+          "id": "c",
+          "label": "Pyramid"
+        },
+        {
+          "id": "d",
+          "label": "Triangle"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-5"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which shape is a cuboid?",
+      "explanation": "This tall box shape is a cuboid.",
+      "narration": {
+        "prompt": "Which shape is a cuboid?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "shape": {
+            "name": "cuboid",
+            "variant": "tall",
+            "rotation": 15,
+            "colour": "purple",
+            "scale": 1
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "sphere",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "blue",
+            "scale": 1
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "pyramid",
+            "variant": "tall",
+            "rotation": 0,
+            "colour": "green",
+            "scale": 1
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "circle",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "orange",
+            "scale": 1
+          }
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-6"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap every pyramid. There are 2 to choose.",
+      "explanation": "Both pyramids have triangular faces meeting at one point. Their bases can be different shapes.",
+      "narration": {
+        "prompt": "Tap every pyramid. There are 2 to choose."
+      },
+      "options": [
+        {
+          "id": "a",
+          "shape": {
+            "name": "pyramid",
+            "variant": "tall",
+            "rotation": 25,
+            "colour": "blue",
+            "scale": 1
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "cube",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "green",
+            "scale": 1
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "sphere",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "orange",
+            "scale": 1
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "pyramid",
+            "variant": "triangular",
+            "rotation": 80,
+            "colour": "purple",
+            "scale": 1
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "d"
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-7"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is this shape called?",
+      "explanation": "A sphere is a solid shape. A circle is flat.",
+      "narration": {
+        "prompt": "What is this shape called?"
+      },
+      "shape": {
+        "name": "sphere",
+        "variant": "standard",
+        "rotation": 0,
+        "colour": "orange",
+        "scale": 0.75
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Sphere"
+        },
+        {
+          "id": "b",
+          "label": "Circle"
+        },
+        {
+          "id": "c",
+          "label": "Cube"
+        },
+        {
+          "id": "d",
+          "label": "Cuboid"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which solid is shaped like a box?",
+      "explanation": "Many boxes are shaped like cuboids.",
+      "narration": {
+        "prompt": "Which solid is shaped like a box?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "shape": {
+            "name": "cuboid",
+            "variant": "wide",
+            "rotation": 10,
+            "colour": "blue",
+            "scale": 1
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "sphere",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "green",
+            "scale": 1
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "pyramid",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "orange",
+            "scale": 1
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "triangle",
+            "variant": "standard",
+            "rotation": 0,
+            "colour": "purple",
+            "scale": 1
+          }
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "shapes-2-9"
+    },
+    {
+      "kind": "match-pairs",
+      "prompt": "Match each shape to its name.",
+      "explanation": "These are a cuboid, a sphere and a pyramid. Solids keep their names when viewed from different directions.",
+      "narration": {
+        "prompt": "Match each shape to its name."
+      },
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "shape": {
+              "name": "cuboid",
+              "variant": "tall",
+              "rotation": 20,
+              "colour": "orange",
+              "scale": 1
+            }
+          },
+          "right": "Cuboid"
+        },
+        {
+          "id": "p2",
+          "left": {
+            "shape": {
+              "name": "sphere",
+              "variant": "standard",
+              "rotation": 0,
+              "colour": "purple",
+              "scale": 1
+            }
+          },
+          "right": "Sphere"
+        },
+        {
+          "id": "p3",
+          "left": {
+            "shape": {
+              "name": "pyramid",
+              "variant": "triangular",
+              "rotation": 40,
+              "colour": "green",
+              "scale": 1
+            }
+          },
+          "right": "Pyramid"
+        }
+      ],
+      "id": "shapes-2-10"
+    }
+  ]
+}

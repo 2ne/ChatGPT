@@ -12,7 +12,7 @@ Built from `main` by GitHub Pages.
 
 ## Status
 
-15 quests across five complete Easy / Medium / Hard nodes: Count to 5, See numbers to 5, Make numbers to 5, Bonds to 5 and Number bonds to 10. Includes local learner profiles, an open path map, shared question runner and device-only progress. See `curriculum/NEXT.md` for the current content priorities.
+48 quests across 16 complete Easy / Medium / Hard nodes, from Count to 5 to Everyday shapes. Includes local learner profiles, an open path map, shared question runner and device-only progress. See `curriculum/NEXT.md` for the current content priorities.
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
@@ -107,11 +107,17 @@ npm run preview
 
 ## Limitations
 
-- Nodes 1 to 15 ship Easy / Medium / Hard. Bonds within 20 and Add and subtract to 20 are nodes 14 and 15. Everyday shapes (node 16) is next.
+- Nodes 1 to 16 ship Easy / Medium / Hard. Everyday shapes is node 16. Whole, half and quarter turns (node 17) is next.
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag
 
 ### Activity content review
 
-The 45 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.
+The 48 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.
+
+### Geometry assets
+
+Everyday shapes uses reusable `shape` assets on choice stems, answer options and matching sides. Flat shapes are SVGs. Solids use a lazy-loaded Three.js renderer. The main solid can be dragged or turned with labelled buttons. Answer cards use cached Three.js renders from one shared context. Offscreen interactive views release their resources. There are no static fallback drawings for solids. Colours, size and orientation are presentation fields, separate from the shape name.
+
+Content follows the [Year 1 national curriculum](https://assets.publishing.service.gov.uk/media/5a7da548ed915d2ac884cb07/PRIMARY_national_curriculum_-_Mathematics_220714.pdf) and [NCETM shape guidance](https://www.ncetm.org.uk/classroom-resources/cp-year-1-unit-4-recognise-compose-decompose-and-manipulate-2d-and-3d-shapes/). Questions recognise shapes in different orientations and proportions. Square and rectangle, and cube and cuboid, are overlapping families, so single-choice distractors never make both names defensible. Turns belong to node 17.

@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 15 — nodes 1 to 15 (`eyfs-count-5` through `y1-add-sub-20`) |
+| Done | 16 — nodes 1 to 16 (`eyfs-count-5` through `y1-shapes`) |
 | Partial | 0 |
-| Missing | 109 |
+| Missing | 108 |
 
 ## Quests in the app
 
@@ -63,12 +63,15 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `add-and-subtract-to-20` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Easy: pictured problems, number sentences and calculations to 12 |
 | `add-and-subtract-to-20-medium` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Medium: zero, crossing ten, missing parts and one-step problems |
 | `add-and-subtract-to-20-hard` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Hard: mixed operations, missing subtraction parts and reversed equality |
+| `everyday-shapes` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Easy: name familiar 2D and 3D shapes |
+| `everyday-shapes-medium` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Medium: varied sizes, proportions and orientations |
+| `everyday-shapes-hard` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Hard: shape families including squares as rectangles and cubes as cuboids |
 
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-shapes` — Everyday shapes (node 16, after `y1-add-sub-20`). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-turns` — Whole, half and quarter turns (node 17, after `y1-shapes`). Start that node with Easy.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 

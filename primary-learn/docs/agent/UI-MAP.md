@@ -30,6 +30,7 @@ Do not read all of `src/index.css`. Jump to the region you need. Design rules: [
 | Question bank | `src/components/QuestionBank.tsx` | ~3864 `/* Question bank */` |
 | Topic wallpaper | `src/components/mascot/MathsWallpaper.ts` via `PathMap` | `.map-zone`, `.map-zone-art`; no fades |
 | Bond demonstration | `src/components/questions/BondDemonstration.tsx` | `.bond-demo` |
+| Shape questions | `ShapeChoices.tsx`, `ShapePicture.tsx`, `ShapeSvg.tsx`, `src/lib/solidShapes.ts` | `.shape-picture`, `.shape-choice-grid`; SVG flat shapes, lazy Three.js solids |
 | Arithmetic choices | `MakeTotal` and `MultipleChoice` | `.make-total-sum`, `.make-total-box`, `.option` |
 | Mascot | `src/components/mascot/Pip.tsx`, `PipMood.tsx` | Pip motion + app/quest header |
 

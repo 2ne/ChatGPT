@@ -3,6 +3,7 @@ import { copy } from "../../data/copy";
 import type { MultiSelectQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { choiceClass, markChoice, type Reveal } from "./choice";
+import { ShapeChoices } from "./ShapeChoices";
 
 type MultiSelectProps = {
   question: MultiSelectQuestion;
@@ -25,6 +26,10 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
   }
 
   const alreadySaysEvery = /\bevery\b/i.test(question.prompt);
+
+  if (question.shape || question.options.some((option) => option.shape)) {
+    return <ShapeChoices question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
+  }
 
   return (
     <div className="option-stack" role="group" aria-label={alreadySaysEvery ? question.prompt : copy.chooseAll}>

@@ -28,7 +28,8 @@ rules, change the design — do not invent a second system.
 
 Pip is a round indigo "path-berry" blob with a leafy sprout (growth), rosy
 cheeks, big sparkle eyes and a sunny star badge. **Pure SVG + CSS motion.**
-No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
+Pip stays SVG with CSS motion. The old 3D header mark is gone. Three.js is
+used only for solid geometry in learning activities, never for Pip or headers.
 
 | Asset    | Use                                                                                                                         |
 | -------- | --------------------------------------------------------------------------------------------------------------------------- |
