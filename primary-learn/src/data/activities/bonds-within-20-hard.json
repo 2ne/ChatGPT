@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Q1 completes 20 with zero. Q2 recalls 20 take away zero. Q3 finds 17 from zero and 17. Q4 reverses a missing part for 16. Q5 uses the related subtraction 16 take away 9. Q6 selects parts of 18. Q7 completes 19 from 8. Q8 finds a missing part of 20. Q9 recalls 20 take away 13. Q10 applies the bond 8 and 12 in a take-away story. No hints.",
-    "versus": "Easy represents totals from 11 to 20 using a known ten and pictures, then related subtraction. Medium varies the known part and reverses the missing part in totals to 20. Hard mixes less familiar bonds, missing wholes and related subtraction without pictures. All totals stay within 20."
+    "versus": "Easy represents totals from 11 to 20 using a known ten and pictures, then related subtraction. Medium varies the known part and reverses the missing part in totals to 20. Hard mixes less familiar bonds, missing wholes and related subtraction. The take-away story uses a look-only picture. All totals stay within 20."
   },
   "skills": [
     "y1-bonds-20",
@@ -286,6 +286,11 @@
       "explanation": "8 and 12 make 20. Taking 8 away from 20 leaves 12 apples.",
       "narration": {
         "prompt": "Sam has twenty apples and gives away eight. How many are left?"
+      },
+      "visual": {
+        "item": "apple",
+        "count": 20,
+        "removed": 8
       },
       "options": [
         {

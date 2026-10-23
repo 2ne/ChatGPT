@@ -159,21 +159,60 @@ function PictureTiles({
   );
 }
 
+const STORY_ROW = 10;
+
+function chunkRows<T>(items: T[], size = STORY_ROW): T[][] {
+  const rows: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    rows.push(items.slice(i, i + size));
+  }
+  return rows;
+}
+
+function StoryTileRows({
+  count,
+  glyph,
+  tokenClass,
+  goneFrom,
+}: {
+  count: number;
+  glyph: string;
+  tokenClass: string;
+  goneFrom?: number;
+}) {
+  const indexes = Array.from({ length: count }, (_, index) => index);
+  const rows = chunkRows(indexes);
+  const ten = count > STORY_ROW;
+  return (
+    <span className={`story-rows${ten ? " is-ten" : ""}`} aria-hidden>
+      {rows.map((row, rowIndex) => (
+        <span key={`r-${rowIndex}`} className="story-row">
+          {row.map((index) => {
+            const gone = goneFrom != null && index >= goneFrom;
+            return (
+              <span key={index} className={`${tokenClass}${gone ? " is-gone" : ""}`}>
+                <span className="object-glyph">{glyph}</span>
+              </span>
+            );
+          })}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 function TakeAwayTiles({ visual, compact }: { visual: ObjectAsset; compact?: boolean }) {
   const removed = visual.removed ?? 0;
   const keep = Math.max(0, visual.count - removed);
   const glyph = OBJECT_GLYPH[visual.item];
   const label = describeVisual(visual);
+  const fitTen = visual.count >= STORY_ROW;
   return (
-    <span className={`take-away-strip${compact ? " is-option" : ""}`} aria-label={label}>
-      {Array.from({ length: visual.count }, (_, index) => {
-        const gone = index >= keep;
-        return (
-          <span key={`t-${index}`} className={`take-away-token${gone ? " is-gone" : ""}`} aria-hidden>
-            <span className="object-glyph">{glyph}</span>
-          </span>
-        );
-      })}
+    <span
+      className={`take-away-strip${compact ? " is-option" : ""}${fitTen ? " is-fit-ten" : ""}`}
+      aria-label={label}
+    >
+      <StoryTileRows count={visual.count} glyph={glyph} tokenClass="take-away-token" goneFrom={keep} />
     </span>
   );
 }
@@ -182,23 +221,16 @@ function JoinTiles({ visual, compact }: { visual: ObjectAsset; compact?: boolean
   const added = visual.added ?? 0;
   const glyph = OBJECT_GLYPH[visual.item];
   const label = describeVisual(visual);
+  const fitTen = visual.count >= STORY_ROW || added >= STORY_ROW;
   return (
-    <span className={`join-story${compact ? " is-option" : ""}`} aria-label={label}>
-      <span className="join-story-start" aria-hidden>
-        {Array.from({ length: visual.count }, (_, index) => (
-          <span key={`s-${index}`} className="object-token">
-            <span className="object-glyph">{glyph}</span>
-          </span>
-        ))}
+    <span className={`join-story${compact ? " is-option" : ""}${fitTen ? " is-fit-ten" : ""}`} aria-label={label}>
+      <span className="join-story-start">
+        <StoryTileRows count={visual.count} glyph={glyph} tokenClass="object-token" />
       </span>
       <span className="join-story-more" aria-hidden>
         <span className="join-story-plus">+</span>
         <span className="join-story-added">
-          {Array.from({ length: added }, (_, index) => (
-            <span key={`a-${index}`} className="object-token is-added">
-              <span className="object-glyph">{glyph}</span>
-            </span>
-          ))}
+          <StoryTileRows count={added} glyph={glyph} tokenClass="object-token is-added" />
         </span>
       </span>
     </span>

@@ -47,25 +47,49 @@ function storyNamesOneObject(prompt: string): boolean {
   return true;
 }
 
+const STORY_OBJECT = String.raw`(?:\{items?\}|[A-Za-z]+)`;
+const STORY_COUNT_MAX = 20;
+
 /** Start-plus-more stories. Pictured ones need visual.added of the same item. */
 function storyIsJoin(prompt: string): boolean {
   return /\b(gives (him|her)|gets) \d+ more\b/i.test(prompt);
+}
+
+function parseJoinAmounts(prompt: string): { start: number; added: number } | null {
+  const story = prompt.match(
+    new RegExp(
+      String.raw`\b(?:has|have) (\d+) ${STORY_OBJECT}\b[\s\S]{0,48}?\b(?:gives (?:him|her)|gets) (\d+) more\b`,
+      "i",
+    ),
+  );
+  if (!story) return null;
+  return { start: Number(story[1]), added: Number(story[2]) };
+}
+
+/** Give-away or eat stories. Sum-only “What is n take away m?” is not a story. */
+function parseTakeAwayStory(prompt: string): { start: number; taken: number } | null {
+  const allAway = prompt.match(
+    new RegExp(String.raw`\b(?:has|have) (\d+) ${STORY_OBJECT} and gives them all away\b`, "i"),
+  );
+  if (allAway) {
+    const start = Number(allAway[1]);
+    return { start, taken: start };
+  }
+  const story = prompt.match(
+    new RegExp(
+      String.raw`\b(?:has|have) (\d+) ${STORY_OBJECT}(?: and|\.)?(?: (?:He|She))? (?:gives away|eats) (\d+)\b`,
+      "i",
+    ),
+  );
+  if (story) return { start: Number(story[1]), taken: Number(story[2]) };
+  return null;
 }
 
 /** Take-away amounts from a pictured sum or give-away/eat story. */
 function parseTakeAwayAmounts(prompt: string): { start: number; taken: number } | null {
   const sum = prompt.match(/^What is (\d+) take away (\d+)\?$/i);
   if (sum) return { start: Number(sum[1]), taken: Number(sum[2]) };
-  const story = prompt.match(
-    /\b(?:has|have) (\d+) \{items?\} and (?:gives away|eats) (\d+)\b/i,
-  );
-  if (story) return { start: Number(story[1]), taken: Number(story[2]) };
-  const allAway = prompt.match(/\b(?:has|have) (\d+) \{items?\} and gives them all away\b/i);
-  if (allAway) {
-    const start = Number(allAway[1]);
-    return { start, taken: start };
-  }
-  return null;
+  return parseTakeAwayStory(prompt);
 }
 
 function assertNoFactTrueWording(text: string, path: string, field: string) {
@@ -108,8 +132,8 @@ function expectVisual(
     fail(path, `visual.item must be one of ${OBJECT_ITEMS.join(", ")}`);
   }
   const min = allowZero ? 0 : 1;
-  if (typeof count !== "number" || !Number.isInteger(count) || count < min || count > 12) {
-    fail(path, `visual.count must be a whole number from ${min} to 12`);
+  if (typeof count !== "number" || !Number.isInteger(count) || count < min || count > STORY_COUNT_MAX) {
+    fail(path, `visual.count must be a whole number from ${min} to ${STORY_COUNT_MAX}`);
   }
   if (value.added != null && value.removed != null) {
     fail(path, "visual cannot use added and removed together");
@@ -122,11 +146,11 @@ function expectVisual(
   }
   if (value.added != null) {
     const added = value.added;
-    if (typeof added !== "number" || !Number.isInteger(added) || added < 1 || added > 12) {
-      fail(path, "visual.added must be a whole number from 1 to 12");
+    if (typeof added !== "number" || !Number.isInteger(added) || added < 1 || added > STORY_COUNT_MAX) {
+      fail(path, `visual.added must be a whole number from 1 to ${STORY_COUNT_MAX}`);
     }
-    if (count + added > 12) {
-      fail(path, "visual.count plus visual.added must be at most 12");
+    if (count + added > STORY_COUNT_MAX) {
+      fail(path, `visual.count plus visual.added must be at most ${STORY_COUNT_MAX}`);
     }
     return { item: item as ObjectAsset["item"], count, added };
   }
@@ -392,11 +416,27 @@ function parseQuestion(value: unknown, path: string): Question {
       );
     }
   }
-  if (storyIsJoin(prompt) && visual && visual.added == null) {
-    fail(
-      path,
-      "join story pictures need visual.added for the extra group of the same item",
-    );
+  const joinStory = parseJoinAmounts(prompt);
+  if (storyIsJoin(prompt)) {
+    if (!visual) {
+      fail(path, "join stories need a look-only picture of the named object");
+    }
+    if (visual.added == null) {
+      fail(
+        path,
+        "join story pictures need visual.added for the extra group of the same item",
+      );
+    }
+    if (joinStory && (visual.count !== joinStory.start || visual.added !== joinStory.added)) {
+      fail(
+        path,
+        `join pictures must match the story. visual.count is the start (${joinStory.start}) and visual.added is the extra group (${joinStory.added})`,
+      );
+    }
+  }
+  const takeAwayStory = parseTakeAwayStory(prompt);
+  if (takeAwayStory && !visual) {
+    fail(path, "take-away stories need a look-only picture of the named object");
   }
   const randomise = parseRandomiseSpec(value.randomise, `${path}.randomise`);
   if (visual?.added != null && randomise?.count) {

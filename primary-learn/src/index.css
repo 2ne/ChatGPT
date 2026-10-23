@@ -1646,6 +1646,42 @@ button.object-token {
   border-color: var(--join-added-line);
 }
 
+.join-story,
+.take-away-strip {
+  --story-gap: 4px;
+  --story-tile: 40px;
+}
+
+.join-story.is-fit-ten,
+.take-away-strip.is-fit-ten {
+  --story-tile: min(40px, calc((100% - (9 * var(--story-gap))) / 10));
+}
+
+.story-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--story-gap);
+}
+
+.story-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: var(--story-gap);
+}
+
+.story-rows.is-ten {
+  align-items: stretch;
+  width: min(100%, calc((10 * var(--story-tile)) + (9 * var(--story-gap))));
+}
+
+.story-rows.is-ten .story-row {
+  display: grid;
+  grid-template-columns: repeat(10, var(--story-tile));
+  justify-content: start;
+}
+
 .join-story {
   display: flex;
   flex-wrap: wrap;
@@ -1653,8 +1689,19 @@ button.object-token {
   justify-content: center;
   column-gap: 10px;
   row-gap: 8px;
+  width: 100%;
   max-width: 100%;
   padding: 4px;
+}
+
+.join-story .object-token {
+  min-width: var(--story-tile);
+  min-height: var(--story-tile);
+  width: var(--story-tile);
+  height: var(--story-tile);
+  padding: 2px;
+  font-size: calc(var(--story-tile) * 0.72);
+  border-radius: 10px;
 }
 
 .join-story-start,
@@ -1664,12 +1711,12 @@ button.object-token {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .join-story-plus {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
   line-height: 1;
   color: var(--violet);
@@ -1677,9 +1724,16 @@ button.object-token {
   flex: none;
 }
 
+.join-story.is-option {
+  --story-tile: 36px;
+  --story-gap: 4px;
+}
+
 .join-story.is-option .object-token {
   min-width: 36px;
   min-height: 36px;
+  width: 36px;
+  height: 36px;
   padding: 4px;
   font-size: 22px;
   border-radius: 12px;
@@ -1691,14 +1745,14 @@ button.object-token {
 
 .take-away-strip {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px 10px;
+  gap: var(--story-gap);
   width: 100%;
-  max-width: 340px;
+  max-width: 100%;
   margin-inline: auto;
-  padding: 12px 14px;
+  padding: 10px 8px;
   border-radius: 22px;
   background: var(--paper-deep);
   border: 3px solid var(--line);
@@ -1707,23 +1761,24 @@ button.object-token {
 .take-away-token {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
-  font-size: 40px;
+  width: var(--story-tile);
+  height: var(--story-tile);
+  font-size: calc(var(--story-tile) * 0.78);
   line-height: 1;
 }
 
 .take-away-token.is-gone {
-  border-radius: 16px;
+  border-radius: 10px;
   background: var(--take-away);
 }
 
 .take-away-strip.is-option {
+  --story-tile: 36px;
+  --story-gap: 4px;
   max-width: 220px;
   padding: 8px 10px;
   border-radius: 16px;
   border-width: 2px;
-  gap: 4px 6px;
 }
 
 .take-away-strip.is-option .take-away-token {

@@ -53,12 +53,13 @@ export type ObjectAsset = {
   /**
    * Join stories only. Extra group of the same `item`.
    * Stem shows `count` cream tiles, a purple +, then `added` light-blue tiles.
+   * Totals over 10 use rows of 10. Look-only. Not tappable.
    */
   added?: number;
   /**
    * Take-away pictures only. How many of the last objects are taken away.
    * Stem shows `count` objects in one cream strip; the last `removed` sit on
-   * light red tiles.
+   * light red tiles. Totals over 10 use rows of 10. Look-only. Not tappable.
    */
   removed?: number;
 };

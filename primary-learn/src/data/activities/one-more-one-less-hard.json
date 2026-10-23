@@ -324,7 +324,12 @@
     {
       "kind": "multiple-choice",
       "id": "oml-h-sam",
-      "prompt": "Sam has 15 stickers. He gets 1 more. How many stickers does he have now?",
+      "prompt": "Sam has 15 {items}. He gets 1 more. How many {items} does he have now?",
+      "visual": {
+        "item": "star",
+        "count": 15,
+        "added": 1
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -347,9 +352,9 @@
         }
       ],
       "correctId": "c",
-      "explanation": "15 stickers and 1 more make 16 stickers.",
+      "explanation": "15 {items} and 1 more make 16 {items}.",
       "narration": {
-        "prompt": "Sam has fifteen stickers. He gets one more. How many stickers does he have now?"
+        "prompt": "Sam has fifteen {items}. He gets one more. How many {items} does he have now?"
       }
     }
   ]

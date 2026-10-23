@@ -283,6 +283,11 @@
       "kind": "multiple-choice",
       "id": "nb10h-sam-story",
       "prompt": "Sam has 10 apples. He gives away 3. How many apples are left?",
+      "visual": {
+        "item": "apple",
+        "count": 10,
+        "removed": 3
+      },
       "randomise": {
         "shuffleOptions": true
       },

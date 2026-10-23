@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Q1 adds zero to 12. Q2 takes zero from 12. Q3 finds 14 from parts 10 and 4. Q4 adds 8 and 7 across ten. Q5 takes 8 from 15 across ten. Q6 finds a missing addend for 16. Q7 finds the amount taken from 17 to leave 9. Q8 selects an addition sentence for a story. Q9 takes 7 from 19. Q10 solves a story taking 8 from 20. No hints.",
-    "versus": "Easy uses small numbers, pictured stories and totals up to 12. Medium includes zero, two-digit numbers and calculations crossing ten up to 20. Hard mixes operations, reversed missing addends, missing subtraction parts and a reversed equality without pictures. All problems are one step."
+    "versus": "Easy uses small numbers, pictured stories and totals up to 12. Medium includes zero, two-digit numbers and calculations crossing ten up to 20. Join and take-away stories use look-only pictures. Hard mixes operations, reversed missing addends, missing subtraction parts and a reversed equality. All problems are one step."
   },
   "skills": [
     "y1-add-sub-20",
@@ -249,6 +249,11 @@
       "narration": {
         "prompt": "Sam has twelve apples and gets six more. Which sum shows this?"
       },
+      "visual": {
+        "item": "apple",
+        "count": 12,
+        "added": 6
+      },
       "options": [
         {
           "id": "a",
@@ -310,6 +315,11 @@
       "explanation": "20 take away 8 is 12. There are 12 apples left.",
       "narration": {
         "prompt": "Sam has twenty apples and gives away eight. How many are left?"
+      },
+      "visual": {
+        "item": "apple",
+        "count": 20,
+        "removed": 8
       },
       "options": [
         {

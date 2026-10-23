@@ -316,14 +316,19 @@ the thin rainbow. Inner words stay padded.
   same thing; set `visual.count` (start) and `visual.added` of the same item.
   Join stories show cream start tiles, a purple +, then light-blue added tiles.
   Take-away pictures (`visual.count` start, `visual.removed` taken away) sit in
-  one cream rounded strip. Kept objects are larger glyphs on the strip. The
-  last N sit on light red tiles. Counts must match
-  the sum. Only count-objects tiles are tappable. Do not draw empty
-  placeholder boxes that hint at the total. Dice, five-frame, tens-frame,
-  compact and parts stems use the same cream tiles, sized and spaced like
-  count-objects. Fingers are a cartoon hand on that cream tile, with 0 to 5
-  raised fingers. Flash/hidden still cover the tiles. Pictures inside A/B/C/D
-  and match-pair cards use smaller tiles so they fit.
+  one cream rounded strip. The last N sit on light red tiles. No X marks.
+  Counts must match the story. Totals over 10 lay out in rows of 10, like a
+  ten-frame. Removed tiles are the last N in reading order. Story tiles are a
+  bit smaller than Reception tap-to-count so 10 fit across a phone row. Counts
+  from 1 to 10 stay readable. Above Reception these pictures are look-only.
+  No tap-to-count and no counting sounds. Reception counting keeps tappable
+  tiles. Sum-only questions stay as coloured number boxes, with no story
+  picture and no Look again flash. Only count-objects tiles are tappable. Do
+  not draw empty placeholder boxes that hint at the total. Dice, five-frame,
+  tens-frame, compact and parts stems use the same cream tiles, sized and
+  spaced like count-objects. Fingers are a cartoon hand on that cream tile,
+  with 0 to 5 raised fingers. Flash/hidden still cover the tiles. Pictures
+  inside A/B/C/D and match-pair cards use smaller tiles so they fit.
 - **Part-whole (`make-total`)** stays on the same white activity screen. No
   scenery. Easy (`fill-slots`): row 1 is the known part as filled sun-style
   tiles, then a large `+`. Row 2 is the child’s area. Added objects are
