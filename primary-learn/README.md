@@ -107,11 +107,11 @@ npm run preview
 
 ## Limitations
 
-- Count to 5 ships Easy / Medium / Hard on node 1. Number bonds to 10 is Easy only on node 13.
+- Nodes 1 to 15 ship Easy / Medium / Hard. Bonds within 20 and Add and subtract to 20 are nodes 14 and 15. Everyday shapes (node 16) is next.
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag
 
 ### Activity content review
 
-The 39 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.
+The 45 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.

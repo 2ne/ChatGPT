@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 13 — nodes 1 to 13 (`eyfs-count-5` through `y1-bonds-10`) |
+| Done | 15 — nodes 1 to 15 (`eyfs-count-5` through `y1-add-sub-20`) |
 | Partial | 0 |
-| Missing | 111 |
+| Missing | 109 |
 
 ## Quests in the app
 
@@ -57,12 +57,18 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, take-away pictures |
 | `number-bonds-to-10-medium` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Medium: fill-slots then sum-only, 0 and reverse parts, more take-away |
 | `number-bonds-to-10-hard` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Hard: missing parts, four-tile pairs with dots and related subtraction |
+| `bonds-within-20` | `y1-bonds-20` (node 14, category `cat-y1-to-20`) | done — Easy: known ten, pictured missing parts and related subtraction |
+| `bonds-within-20-medium` | `y1-bonds-20` (node 14, category `cat-y1-to-20`) | done — Medium: varied parts, zero, reversed parts and related subtraction |
+| `bonds-within-20-hard` | `y1-bonds-20` (node 14, category `cat-y1-to-20`) | done — Hard: mixed bonds, missing wholes and subtraction without pictures |
+| `add-and-subtract-to-20` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Easy: pictured problems, number sentences and calculations to 12 |
+| `add-and-subtract-to-20-medium` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Medium: zero, crossing ten, missing parts and one-step problems |
+| `add-and-subtract-to-20-hard` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Hard: mixed operations, missing subtraction parts and reversed equality |
 
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-bonds-20` — Bonds within 20 (node 14, after `y1-bonds-10`). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-shapes` — Everyday shapes (node 16, after `y1-add-sub-20`). Start that node with Easy.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 

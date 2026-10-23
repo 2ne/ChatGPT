@@ -23,7 +23,7 @@ This file is the **primary maths** path only. English or other subjects might co
 - **When those nodes are built:** split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` into smaller stops. Leave them whole until then.
 - **Status:** `missing` (no Easy quest yet) · `partial` (a quest exists but does not yet cover every bullet) · `done` (the quests cover the bullets).
 
-**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 13 (`eyfs-count-5` to `y1-bonds-10`) have Easy, Medium and Hard. The first `missing` node is `y1-bonds-20`.
+**Priority:** improve existing activities (write Medium / Hard for shipped nodes) before expanding. Nodes 1 to 15 (`eyfs-count-5` to `y1-add-sub-20`) have Easy, Medium and Hard. The first `missing` node is `y1-shapes`.
 
 ## Category index
 
@@ -186,14 +186,14 @@ Requires: `y1-1-more-less`. Quests: `number-bonds-to-10` (Easy), `number-bonds-t
 
 ### 14. `y1-bonds-20` — Bonds within 20
 
-Requires: `y1-bonds-10`. Quest: none. Status: missing.
+Requires: `y1-bonds-10`. Quests: `bonds-within-20` (Easy), `bonds-within-20-medium`, `bonds-within-20-hard`. Status: done.
 
 - Represent and use number bonds within 20
 - Represent and use the related subtraction facts within 20
 
 ### 15. `y1-add-sub-20` — Add and subtract to 20
 
-Requires: `y1-bonds-20`. Quest: none. Status: missing.
+Requires: `y1-bonds-20`. Quests: `add-and-subtract-to-20` (Easy), `add-and-subtract-to-20-medium`, `add-and-subtract-to-20-hard`. Status: done.
 
 - Read, write and interpret statements with addition (+), subtraction (−) and equals (=)
 - Add and subtract one-digit and two-digit numbers to 20, including zero

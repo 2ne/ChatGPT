@@ -1,0 +1,244 @@
+{
+  "id": "bonds-within-20",
+  "title": "Bonds within 20",
+  "summary": "Find pairs of numbers within 20 and use them to take away.",
+  "subject": "maths",
+  "type": "number-bonds",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-bonds-20",
+  "pathNode": "y1-bonds-20",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 builds 11 from 10. Q2 builds 12 from 10. Q3 completes the parts of 13. Q4 uses pictured 12 take away 2. Q5 builds 14 from 10. Q6 selects parts of 15. Q7 completes the parts of 16. Q8 builds 18 from 10. Q9 recalls 18 take away 8. Q10 builds 20 from 10. Hints on Q1 to Q3.",
+    "versus": "Easy represents totals from 11 to 20 using a known ten and pictures, then related subtraction. Medium varies the known part and reverses the missing part in totals to 20. Hard mixes less familiar bonds, missing wholes and related subtraction without pictures. All totals stay within 20."
+  },
+  "skills": [
+    "y1-bonds-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "number-bonds-within-20"
+  ],
+  "questions": [
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 10 to make 11?",
+      "explanation": "10 and 1 make 11.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make eleven?"
+      },
+      "total": 11,
+      "gap": "right",
+      "mode": "fill-slots",
+      "visual": {
+        "item": "apple",
+        "count": 10
+      },
+      "randomise": {},
+      "id": "bonds-within-20-1-1",
+      "hint": "Start at ten and count on."
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 10 to make 12?",
+      "explanation": "10 and 2 make 12.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make twelve?"
+      },
+      "total": 12,
+      "gap": "right",
+      "mode": "fill-slots",
+      "visual": {
+        "item": "apple",
+        "count": 10
+      },
+      "randomise": {},
+      "id": "bonds-within-20-1-2",
+      "hint": "Start at ten and count on."
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do you need to add to 10 to make 13?",
+      "explanation": "10 and 3 make 13.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make thirteen?"
+      },
+      "whole": 13,
+      "parts": [
+        10,
+        3
+      ],
+      "missing": "right",
+      "choices": [
+        3,
+        2,
+        4
+      ],
+      "id": "bonds-within-20-1-3",
+      "hint": "Start at ten and count on."
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 12 take away 2?",
+      "explanation": "12 take away 2 is 10. 10 and 2 make 12.",
+      "narration": {
+        "prompt": "What is twelve take away two?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 12,
+        "removed": 2
+      },
+      "id": "bonds-within-20-1-4"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 10 to make 14?",
+      "explanation": "10 and 4 make 14.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make fourteen?"
+      },
+      "total": 14,
+      "gap": "right",
+      "mode": "fill-slots",
+      "visual": {
+        "item": "apple",
+        "count": 10
+      },
+      "randomise": {},
+      "id": "bonds-within-20-1-5"
+    },
+    {
+      "kind": "pick-pair",
+      "prompt": "What two numbers make 15?",
+      "explanation": "10 and 5 make 15.",
+      "narration": {
+        "prompt": "What two numbers make fifteen?"
+      },
+      "total": 15,
+      "tiles": [
+        10,
+        5,
+        3,
+        7
+      ],
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-1-6"
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do you need to add to 10 to make 16?",
+      "explanation": "10 and 6 make 16.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make sixteen?"
+      },
+      "whole": 16,
+      "parts": [
+        10,
+        6
+      ],
+      "missing": "right",
+      "choices": [
+        6,
+        5,
+        7
+      ],
+      "id": "bonds-within-20-1-7"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 10 to make 18?",
+      "explanation": "10 and 8 make 18.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make eighteen?"
+      },
+      "total": 18,
+      "gap": "right",
+      "mode": "fill-slots",
+      "visual": {
+        "item": "apple",
+        "count": 10
+      },
+      "randomise": {},
+      "id": "bonds-within-20-1-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 18 take away 8?",
+      "explanation": "18 take away 8 is 10. 10 and 8 make 18.",
+      "narration": {
+        "prompt": "What is eighteen take away eight?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "18"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-1-9"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 10 to make 20?",
+      "explanation": "10 and 10 make 20.",
+      "narration": {
+        "prompt": "What do you need to add to ten to make twenty?"
+      },
+      "total": 20,
+      "gap": "right",
+      "mode": "fill-slots",
+      "visual": {
+        "item": "apple",
+        "count": 10
+      },
+      "randomise": {},
+      "id": "bonds-within-20-1-10"
+    }
+  ]
+}

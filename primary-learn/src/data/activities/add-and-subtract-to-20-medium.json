@@ -1,0 +1,339 @@
+{
+  "id": "add-and-subtract-to-20-medium",
+  "title": "Add and subtract to 20",
+  "summary": "Add, take away and find missing numbers within 20.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-add-sub-20",
+  "pathNode": "y1-add-sub-20",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 adds zero to 12. Q2 takes zero from 12. Q3 finds 14 from parts 10 and 4. Q4 adds 8 and 7 across ten. Q5 takes 8 from 15 across ten. Q6 finds a missing addend for 16. Q7 finds the amount taken from 17 to leave 9. Q8 selects an addition sentence for a story. Q9 takes 7 from 19. Q10 solves a story taking 8 from 20. No hints.",
+    "versus": "Easy uses small numbers, pictured stories and totals up to 12. Medium includes zero, two-digit numbers and calculations crossing ten up to 20. Hard mixes operations, reversed missing addends, missing subtraction parts and a reversed equality without pictures. All problems are one step."
+  },
+  "skills": [
+    "y1-add-sub-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "missing-number-to-20"
+  ],
+  "questions": [
+    {
+      "kind": "make-total",
+      "prompt": "What is 12 + 0?",
+      "explanation": "12 and 0 make 12.",
+      "narration": {
+        "prompt": "What is twelve plus zero?"
+      },
+      "part": 12,
+      "other": 0,
+      "total": 12,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "0"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "13"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-1"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 12 take away 0?",
+      "explanation": "12 take away 0 is 12. 12 and 0 make 12.",
+      "narration": {
+        "prompt": "What is twelve take away zero?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "0"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "13"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-2"
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do 10 and 4 make?",
+      "explanation": "10 and 4 make 14.",
+      "narration": {
+        "prompt": "What do ten and four make?"
+      },
+      "whole": 14,
+      "parts": [
+        10,
+        4
+      ],
+      "missing": "whole",
+      "choices": [
+        14,
+        13,
+        15
+      ],
+      "id": "add-and-subtract-to-20-2-3"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What is 8 + 7?",
+      "explanation": "8 and 7 make 15.",
+      "narration": {
+        "prompt": "What is eight plus seven?"
+      },
+      "part": 8,
+      "other": 7,
+      "total": 15,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "14"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 15 take away 8?",
+      "explanation": "15 take away 8 is 7. 7 and 8 make 15.",
+      "narration": {
+        "prompt": "What is fifteen take away eight?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "15"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-5"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 9 to make 16?",
+      "explanation": "9 and 7 make 16.",
+      "narration": {
+        "prompt": "What do you need to add to nine to make sixteen?"
+      },
+      "total": 16,
+      "gap": "right",
+      "mode": "sum-only",
+      "part": 9,
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-6"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number is missing? 17 − ? = 9",
+      "explanation": "17 take away 8 is 9.",
+      "narration": {
+        "prompt": "Which number is missing? seventeen take away what equals nine?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "7"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-7"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam has 12 apples and gets 6 more. Which sum shows this?",
+      "explanation": "12 + 6 = 18. Sam has 18 apples now.",
+      "narration": {
+        "prompt": "Sam has twelve apples and gets six more. Which sum shows this?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12 + 6 = 18"
+        },
+        {
+          "id": "b",
+          "label": "12 − 6 = 6"
+        },
+        {
+          "id": "c",
+          "label": "12 + 6 = 17"
+        },
+        {
+          "id": "d",
+          "label": "12 + 6 = 19"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 19 take away 7?",
+      "explanation": "19 take away 7 is 12. 12 and 7 make 19.",
+      "narration": {
+        "prompt": "What is nineteen take away seven?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-9"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam has 20 apples and gives away 8. How many are left?",
+      "explanation": "20 take away 8 is 12. There are 12 apples left.",
+      "narration": {
+        "prompt": "Sam has twenty apples and gives away eight. How many are left?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "20"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-2-10"
+    }
+  ]
+}

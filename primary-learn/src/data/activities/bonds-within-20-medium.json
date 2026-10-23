@@ -1,0 +1,304 @@
+{
+  "id": "bonds-within-20-medium",
+  "title": "Bonds within 20",
+  "summary": "Find pairs of numbers within 20 and use them to take away.",
+  "subject": "maths",
+  "type": "number-bonds",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-bonds-20",
+  "pathNode": "y1-bonds-20",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 makes 12 with zero. Q2 finds the zero part of 12. Q3 recalls 14 take away 4. Q4 reverses the missing part for 9 and 6 making 15. Q5 selects parts of 16. Q6 recalls 16 take away 9. Q7 finds the whole 18 from 8 and 10. Q8 completes 19 from 11. Q9 recalls 19 take away 11. Q10 selects parts of 20. No hints.",
+    "versus": "Easy represents totals from 11 to 20 using a known ten and pictures, then related subtraction. Medium varies the known part and reverses the missing part in totals to 20. Hard mixes less familiar bonds, missing wholes and related subtraction without pictures. All totals stay within 20."
+  },
+  "skills": [
+    "y1-bonds-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "number-bonds-within-20"
+  ],
+  "questions": [
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 0 to make 12?",
+      "explanation": "0 and 12 make 12.",
+      "narration": {
+        "prompt": "What do you need to add to zero to make twelve?"
+      },
+      "total": 12,
+      "gap": "right",
+      "mode": "sum-only",
+      "part": 0,
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "0"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "13"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-1"
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do you need to add to 12 to make 12?",
+      "explanation": "12 and 0 make 12.",
+      "narration": {
+        "prompt": "What do you need to add to twelve to make twelve?"
+      },
+      "whole": 12,
+      "parts": [
+        12,
+        0
+      ],
+      "missing": "right",
+      "choices": [
+        0,
+        1,
+        2
+      ],
+      "id": "bonds-within-20-2-2"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 14 take away 4?",
+      "explanation": "14 take away 4 is 10. 10 and 4 make 14.",
+      "narration": {
+        "prompt": "What is fourteen take away four?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-3"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 9 to make 15?",
+      "explanation": "9 and 6 make 15.",
+      "narration": {
+        "prompt": "What do you need to add to nine to make fifteen?"
+      },
+      "total": 15,
+      "gap": "left",
+      "mode": "sum-only",
+      "part": 9,
+      "options": [
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "7"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-4"
+    },
+    {
+      "kind": "pick-pair",
+      "prompt": "What two numbers make 16?",
+      "explanation": "7 and 9 make 16.",
+      "narration": {
+        "prompt": "What two numbers make sixteen?"
+      },
+      "total": 16,
+      "tiles": [
+        7,
+        9,
+        4,
+        3
+      ],
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-5"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 16 take away 9?",
+      "explanation": "16 take away 9 is 7. 7 and 9 make 16.",
+      "narration": {
+        "prompt": "What is sixteen take away nine?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-6"
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do 8 and 10 make?",
+      "explanation": "8 and 10 make 18.",
+      "narration": {
+        "prompt": "What do eight and ten make?"
+      },
+      "whole": 18,
+      "parts": [
+        8,
+        10
+      ],
+      "missing": "whole",
+      "choices": [
+        18,
+        17,
+        19
+      ],
+      "id": "bonds-within-20-2-7"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 11 to make 19?",
+      "explanation": "11 and 8 make 19.",
+      "narration": {
+        "prompt": "What do you need to add to eleven to make nineteen?"
+      },
+      "total": 19,
+      "gap": "right",
+      "mode": "sum-only",
+      "part": 11,
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "11"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 19 take away 11?",
+      "explanation": "19 take away 11 is 8. 8 and 11 make 19.",
+      "narration": {
+        "prompt": "What is nineteen take away eleven?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "7"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-9"
+    },
+    {
+      "kind": "pick-pair",
+      "prompt": "What two numbers make 20?",
+      "explanation": "8 and 12 make 20.",
+      "narration": {
+        "prompt": "What two numbers make twenty?"
+      },
+      "total": 20,
+      "tiles": [
+        8,
+        12,
+        5,
+        3
+      ],
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "bonds-within-20-2-10"
+    }
+  ]
+}

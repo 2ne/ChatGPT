@@ -1,0 +1,372 @@
+{
+  "id": "add-and-subtract-to-20",
+  "title": "Add and subtract to 20",
+  "summary": "Add, take away and find missing numbers within 20.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-add-sub-20",
+  "pathNode": "y1-add-sub-20",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 solves a pictured join from 3 to 5. Q2 takes 2 from a pictured 6. Q3 finds 7 from parts 3 and 4. Q4 adds 5 and 3. Q5 takes 4 from a pictured 9. Q6 selects a subtraction sentence for a pictured story. Q7 finds the missing addend in 5 and 4 making 9. Q8 takes 2 from a pictured 12. Q9 adds 8 and 3 across ten. Q10 solves a pictured take-away story from 12. Hints on Q1 to Q3.",
+    "versus": "Easy uses small numbers, pictured stories and totals up to 12. Medium includes zero, two-digit numbers and calculations crossing ten up to 20. Hard mixes operations, reversed missing addends, missing subtraction parts and a reversed equality without pictures. All problems are one step."
+  },
+  "skills": [
+    "y1-add-sub-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "missing-number-to-20"
+  ],
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam has 3 apples and gets 2 more. How many apples does he have now?",
+      "explanation": "3 apples and 2 more make 5 apples.",
+      "narration": {
+        "prompt": "Sam has three apples and gets two more. How many apples does he have now?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 3,
+        "added": 2
+      },
+      "id": "add-and-subtract-to-20-1-1",
+      "hint": "Count on from the number Sam has."
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 6 take away 2?",
+      "explanation": "6 take away 2 is 4. 4 and 2 make 6.",
+      "narration": {
+        "prompt": "What is six take away two?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 6,
+        "removed": 2
+      },
+      "id": "add-and-subtract-to-20-1-2",
+      "hint": "Count back one for each apple taken away."
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do 3 and 4 make?",
+      "explanation": "3 and 4 make 7.",
+      "narration": {
+        "prompt": "What do three and four make?"
+      },
+      "whole": 7,
+      "parts": [
+        3,
+        4
+      ],
+      "missing": "whole",
+      "choices": [
+        7,
+        6,
+        8
+      ],
+      "id": "add-and-subtract-to-20-1-3",
+      "hint": "Use the two parts to find the whole."
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What is 5 + 3?",
+      "explanation": "5 and 3 make 8.",
+      "narration": {
+        "prompt": "What is five plus three?"
+      },
+      "part": 5,
+      "other": 3,
+      "total": 8,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "7"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-1-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 9 take away 4?",
+      "explanation": "9 take away 4 is 5. 5 and 4 make 9.",
+      "narration": {
+        "prompt": "What is nine take away four?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 9,
+        "removed": 4
+      },
+      "id": "add-and-subtract-to-20-1-5"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam has 5 apples and gives away 2. Which sum shows this?",
+      "explanation": "5 − 2 = 3. Sam has 3 apples left.",
+      "narration": {
+        "prompt": "Sam has five apples and gives away two. Which sum shows this?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5 − 2 = 3"
+        },
+        {
+          "id": "b",
+          "label": "5 + 2 = 7"
+        },
+        {
+          "id": "c",
+          "label": "5 − 2 = 2"
+        },
+        {
+          "id": "d",
+          "label": "5 − 2 = 4"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 5,
+        "removed": 2
+      },
+      "id": "add-and-subtract-to-20-1-6"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 5 to make 9?",
+      "explanation": "5 and 4 make 9.",
+      "narration": {
+        "prompt": "What do you need to add to five to make nine?"
+      },
+      "total": 9,
+      "gap": "right",
+      "mode": "sum-only",
+      "part": 5,
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-1-7"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 12 take away 2?",
+      "explanation": "12 take away 2 is 10. 10 and 2 make 12.",
+      "narration": {
+        "prompt": "What is twelve take away two?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 12,
+        "removed": 2
+      },
+      "id": "add-and-subtract-to-20-1-8"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What is 8 + 3?",
+      "explanation": "8 and 3 make 11.",
+      "narration": {
+        "prompt": "What is eight plus three?"
+      },
+      "part": 8,
+      "other": 3,
+      "total": 11,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-1-9"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam has 12 apples and gives away 3. How many are left?",
+      "explanation": "12 take away 3 is 9. There are 9 apples left.",
+      "narration": {
+        "prompt": "Sam has twelve apples and gives away three. How many are left?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 12,
+        "removed": 3
+      },
+      "id": "add-and-subtract-to-20-1-10"
+    }
+  ]
+}

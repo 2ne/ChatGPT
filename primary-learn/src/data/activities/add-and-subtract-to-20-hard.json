@@ -1,0 +1,342 @@
+{
+  "id": "add-and-subtract-to-20-hard",
+  "title": "Add and subtract to 20",
+  "summary": "Add, take away and find missing numbers within 20.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-add-sub-20",
+  "pathNode": "y1-add-sub-20",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 adds zero and 17. Q2 takes all 17 away. Q3 finds 17 from parts 9 and 8. Q4 adds 9 and 9. Q5 takes 9 from 18. Q6 reverses a missing addend to make 19. Q7 finds the amount taken from 20 to leave 8. Q8 selects a subtraction sentence for a story crossing ten. Q9 solves 7 equals a missing starting number take away 9. Q10 finds the extra amount needed to reach 20 in a one-step story. No hints.",
+    "versus": "Easy uses small numbers, pictured stories and totals up to 12. Medium includes zero, two-digit numbers and calculations crossing ten up to 20. Hard mixes operations, reversed missing addends, missing subtraction parts and a reversed equality without pictures. All problems are one step."
+  },
+  "skills": [
+    "y1-add-sub-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "missing-number-to-20"
+  ],
+  "questions": [
+    {
+      "kind": "make-total",
+      "prompt": "What is 0 + 17?",
+      "explanation": "0 and 17 make 17.",
+      "narration": {
+        "prompt": "What is zero plus seventeen?"
+      },
+      "part": 0,
+      "other": 17,
+      "total": 17,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "17"
+        },
+        {
+          "id": "b",
+          "label": "0"
+        },
+        {
+          "id": "c",
+          "label": "16"
+        },
+        {
+          "id": "d",
+          "label": "18"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-1"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 17 take away 17?",
+      "explanation": "17 take away 17 is 0. 0 and 17 make 17.",
+      "narration": {
+        "prompt": "What is seventeen take away seventeen?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "1"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-2"
+    },
+    {
+      "kind": "part-whole",
+      "prompt": "What do 9 and 8 make?",
+      "explanation": "9 and 8 make 17.",
+      "narration": {
+        "prompt": "What do nine and eight make?"
+      },
+      "whole": 17,
+      "parts": [
+        9,
+        8
+      ],
+      "missing": "whole",
+      "choices": [
+        17,
+        16,
+        18
+      ],
+      "id": "add-and-subtract-to-20-3-3"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What is 9 + 9?",
+      "explanation": "9 and 9 make 18.",
+      "narration": {
+        "prompt": "What is nine plus nine?"
+      },
+      "part": 9,
+      "other": 9,
+      "total": 18,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "19"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What is 18 take away 9?",
+      "explanation": "18 take away 9 is 9. 9 and 9 make 18.",
+      "narration": {
+        "prompt": "What is eighteen take away nine?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "18"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-5"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "What do you need to add to 8 to make 19?",
+      "explanation": "8 and 11 make 19.",
+      "narration": {
+        "prompt": "What do you need to add to eight to make nineteen?"
+      },
+      "total": 19,
+      "gap": "left",
+      "mode": "sum-only",
+      "part": 8,
+      "options": [
+        {
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-6"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number is missing? 20 − ? = 8",
+      "explanation": "20 take away 12 is 8.",
+      "narration": {
+        "prompt": "Which number is missing? twenty take away what equals eight?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-7"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam has 17 apples and gives away 9. Which sum shows this?",
+      "explanation": "17 − 9 = 8. Sam has 8 apples left.",
+      "narration": {
+        "prompt": "Sam has seventeen apples and gives away nine. Which sum shows this?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "17 − 9 = 8"
+        },
+        {
+          "id": "b",
+          "label": "17 − 8 = 9"
+        },
+        {
+          "id": "c",
+          "label": "17 − 9 = 7"
+        },
+        {
+          "id": "d",
+          "label": "17 − 9 = 9"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number is missing? 7 = ? − 9",
+      "explanation": "16 take away 9 is 7.",
+      "narration": {
+        "prompt": "Which number is missing? seven equals what take away nine?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "16"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "15"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-9"
+    },
+    {
+      "kind": "make-total",
+      "prompt": "Sam needs 20 apples and has 12. How many more does he need?",
+      "explanation": "12 and 8 make 20. Sam needs 8 more apples.",
+      "narration": {
+        "prompt": "Sam needs twenty apples and has twelve. How many more does he need?"
+      },
+      "total": 20,
+      "gap": "right",
+      "mode": "sum-only",
+      "part": 12,
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "add-and-subtract-to-20-3-10"
+    }
+  ]
+}
