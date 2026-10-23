@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { AVATARS } from "../data/avatars";
 import { copy } from "../data/copy";
@@ -41,7 +41,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     <main className="onboard-page">
       <div
         className="onboard-doodles"
-        style={{ backgroundImage: welcomeWallpaper() }}
+        style={{ "--onboard-wallpaper": welcomeWallpaper() } as CSSProperties}
         aria-hidden
       />
       <section className="onboard-hero" aria-label={copy.setupTitle}>

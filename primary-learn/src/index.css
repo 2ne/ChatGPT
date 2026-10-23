@@ -3068,6 +3068,16 @@ button.object-token {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* Safari samples fixed edge layers for its status and address bar tint. */
+  background-color: var(--paper);
+}
+
+.onboard-doodles::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Keep the transparent SVG separate from the solid browser tint surface. */
+  background-image: var(--onboard-wallpaper);
   background-repeat: repeat;
   background-size: 340px 310px;
 }

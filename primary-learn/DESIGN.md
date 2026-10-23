@@ -432,6 +432,11 @@ no confetti). Stars show progress. They do not gate the path.
 No app header. Full-page setup on the dotted paper, with the same soft
 outline maths doodles as the path (numbers 1 to 5, dice, dots) in indigo:
 
+The fixed onboarding backdrop has an opaque `--paper` background so Safari
+can extend the cream colour behind its status and address bars. Render the
+transparent SVG wallpaper on its `::before` layer, not on the fixed tint
+surface. The backdrop stays decorative and does not intercept touches.
+
 1. **Hero** — **large Pip** (follows the pointer; idle bob + blink) → speech
    bubble (`Hi, I'm Pip! Let's learn together.`) → display title
    **`Set up your Primary Maths account`**. No top badge. No subtitle.
