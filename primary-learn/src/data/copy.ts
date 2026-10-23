@@ -51,14 +51,7 @@ export const copy = {
   introCheer: (name: string, total: number) => `You've got this, ${name}! Let's try ${total} questions.`,
   introWelcome: (name: string) => `Ready, ${name}? Let's have a go!`,
   youGot: (correct: number, total: number) => `You got ${correct} out of ${total}!`,
-  starLine: (stars: number) =>
-    stars >= 3
-      ? "Three stars! Superstar!"
-      : stars === 2
-        ? "Two stars! Great work."
-        : stars === 1
-          ? "One star! Great work."
-          : "No stars this time. Have another go!",
+  starLine: (stars: number) => (stars >= 3 ? "Three stars! Superstar!" : stars === 2 ? "Two stars! Great work." : stars === 1 ? "One star! Great work." : "No stars this time. Have another go!"),
   scoreMark: (correct: number, total: number) => `${correct}/${total}`,
   levelPassed: "You did it!",
   levelRetry: "Have another go",

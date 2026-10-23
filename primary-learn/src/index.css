@@ -1451,6 +1451,7 @@ button.learner-chip:focus-visible {
 .flash-look-again {
   appearance: none;
   display: inline-flex;
+  flex-wrap: balance;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -1467,6 +1468,10 @@ button.learner-chip:focus-visible {
   font-weight: 800;
   line-height: 1;
   cursor: pointer;
+}
+
+.flash-look-again > svg {
+  flex-shrink: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
