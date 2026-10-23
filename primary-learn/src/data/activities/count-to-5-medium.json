@@ -102,16 +102,20 @@
       "narration": { "prompt": "Make a group of {count} {items}." }
     },
     {
-      "kind": "fill-blank",
+      "kind": "count-objects",
       "id": "c5m-fb",
       "prompt": "How many {items} can you see?",
       "visual": { "item": "balloon", "count": 5 },
       "layout": "scatter",
-      "randomise": { "count": { "min": 4, "max": 5 } },
-      "prefix": "There are",
-      "suffix": "{items}.",
-      "acceptedAnswers": ["5", "five"],
-      "inputMode": "numeric",
+      "randomise": { "count": { "min": 4, "max": 5 }, "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "c",
+      "hint": "Keep going until every {item} has a number.",
       "explanation": "There are {count} {items}. Each one counts once.",
       "narration": { "prompt": "How many {items} can you see?" }
     },

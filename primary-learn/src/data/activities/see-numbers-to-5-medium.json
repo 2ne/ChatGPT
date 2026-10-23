@@ -135,14 +135,21 @@
       "narration": { "prompt": "How many can you see in all?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "s5m-fingers-5",
       "prompt": "How many fingers can you see?",
       "visual": { "item": "star", "count": 5 },
       "layout": "fingers",
       "flashMs": 1100,
-      "acceptedAnswers": ["5", "five"],
-      "inputMode": "numeric",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "c",
+      "hint": "Look quickly. How many fingers are up?",
       "explanation": "Five fingers are up. That is 5.",
       "narration": { "prompt": "How many fingers can you see?" }
     },

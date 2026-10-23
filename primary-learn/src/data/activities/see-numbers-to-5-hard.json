@@ -165,15 +165,22 @@
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "s5h-parts-5b",
       "prompt": "How many can you see in all?",
       "visual": { "item": "balloon", "count": 2 },
       "extras": [{ "item": "strawberry", "count": 3 }],
       "layout": "row",
       "flashMs": 800,
-      "acceptedAnswers": ["5", "five"],
-      "inputMode": "numeric",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "c",
+      "hint": "Add the two groups together.",
       "explanation": "The two groups have 2 and 3. Together they make 5.",
       "narration": { "prompt": "How many can you see in all?" }
     },

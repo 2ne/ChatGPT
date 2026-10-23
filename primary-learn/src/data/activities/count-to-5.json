@@ -90,16 +90,20 @@
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "count-objects",
       "id": "c5e-fb-4",
       "prompt": "How many {items} can you see?",
       "visual": { "item": "duck", "count": 4 },
       "layout": "five-frame",
-      "randomise": {},
-      "prefix": "There are",
-      "suffix": "{items}.",
-      "acceptedAnswers": ["4", "four"],
-      "inputMode": "numeric",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
+      ],
+      "correctId": "c",
+      "hint": "Tap each {item} and say a number.",
       "explanation": "There are 4 {items}.",
       "narration": { "prompt": "How many {items} can you see?" }
     },

@@ -94,17 +94,21 @@
       "narration": { "prompt": "How many {items} can you see?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "count-objects",
       "id": "c5h-mix-5",
       "prompt": "How many {items} can you see?",
       "visual": { "item": "fish", "count": 5 },
       "extras": [{ "item": "car", "count": 2 }],
       "layout": "scatter",
-      "randomise": {},
-      "prefix": "There are",
-      "suffix": "{items}.",
-      "acceptedAnswers": ["5", "five"],
-      "inputMode": "numeric",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "5" },
+        { "id": "c", "label": "7" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "b",
+      "hint": "Only count the {items}. Leave the {items2} out.",
       "explanation": "There are 5 {items}. The {items2} are not part of the count.",
       "narration": { "prompt": "How many {items} can you see?" }
     },
@@ -180,15 +184,18 @@
       "narration": { "prompt": "Sam only wants {items}. How many can he take?" }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c5h-gap",
       "prompt": "Which number is missing? 1, 2, 3, 4, _",
-      "prefix": "1, 2, 3, 4,",
-      "acceptedAnswers": [
-        "5",
-        "five"
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "6" }
       ],
-      "inputMode": "numeric",
+      "correctId": "c",
+      "hint": "Say the numbers in order. What comes after 4?",
       "explanation": "5 comes after 4. The numbers go 1, 2, 3, 4, 5.",
       "narration": {
         "prompt": "Which number is missing? 1, 2, 3, 4, _"

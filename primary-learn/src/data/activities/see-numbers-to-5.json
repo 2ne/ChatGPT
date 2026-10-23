@@ -165,14 +165,21 @@
       "narration": { "prompt": "Tap every group that has 5 {items}." }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "s5e-fingers-4",
       "prompt": "How many fingers can you see?",
       "visual": { "item": "star", "count": 4 },
       "layout": "fingers",
       "flashMs": 1600,
-      "acceptedAnswers": ["4", "four"],
-      "inputMode": "numeric",
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "label": "3" },
+        { "id": "b", "label": "4" },
+        { "id": "c", "label": "5" },
+        { "id": "d", "label": "2" }
+      ],
+      "correctId": "b",
+      "hint": "Look quickly. How many fingers are up?",
       "explanation": "Four fingers are up. That is 4.",
       "narration": { "prompt": "How many fingers can you see?" }
     },
