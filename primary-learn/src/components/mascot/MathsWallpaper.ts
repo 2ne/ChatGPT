@@ -45,22 +45,39 @@ function motifs(category: PathCategory): string[] {
 
 const cache = new Map<string, string>();
 
-export function mathsWallpaper(category: PathCategory, ink: string): string {
-  const key = `${category.id}:${ink}`;
-  const cached = cache.get(key);
+const TILE_POSITIONS: [number, number, number][] = [
+  [18, 18, -14], [100, 8, 12], [205, 28, -18], [277, 6, 10],
+  [52, 87, 16], [157, 76, -9], [256, 100, 19],
+  [9, 169, -12], [110, 151, 15], [207, 183, -16],
+  [55, 246, 9], [162, 248, -18], [279, 242, 14],
+];
+
+function wallpaperFromShapes(shapes: string[], ink: string, cacheKey: string): string {
+  const cached = cache.get(cacheKey);
   if (cached) return cached;
-  const shapes = motifs(category);
-  const positions = [
-    [18, 18, -14], [100, 8, 12], [205, 28, -18], [277, 6, 10],
-    [52, 87, 16], [157, 76, -9], [256, 100, 19],
-    [9, 169, -12], [110, 151, 15], [207, 183, -16],
-    [55, 246, 9], [162, 248, -18], [279, 242, 14],
-  ];
-  const artwork = positions.map(([x, y, angle], index) =>
+  const artwork = TILE_POSITIONS.map(([x, y, angle], index) =>
     `<g transform="translate(${x} ${y}) rotate(${angle} 17 17)">${shapes[index % shapes.length]}</g>`,
   ).join("");
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="340" height="310" viewBox="0 0 340 310"><g fill="none" stroke="${ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.17">${artwork}<circle cx="79" cy="66" r="2"/><circle cx="240" cy="165" r="3"/><circle cx="43" cy="227" r="2"/><path d="M193 132h8m-4-4v8M309 207h8m-4-4v8"/></g></svg>`;
   const result = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-  cache.set(key, result);
+  cache.set(cacheKey, result);
   return result;
+}
+
+export function mathsWallpaper(category: PathCategory, ink: string): string {
+  return wallpaperFromShapes(motifs(category), ink, `${category.id}:${ink}`);
+}
+
+/** Soft numbers-and-dice doodles for onboarding (warm paper stays underneath). */
+export function welcomeWallpaper(ink = "#4F46E5"): string {
+  const shapes = [
+    lettering("1"),
+    lettering("2"),
+    lettering("3"),
+    lettering("4"),
+    lettering("5"),
+    drawings.dots,
+    drawings.dice,
+  ];
+  return wallpaperFromShapes(shapes, ink, `welcome:${ink}`);
 }

@@ -91,13 +91,13 @@ export function Pip({ size = 44, mood = "happy", className, followPointer = fals
       <ellipse cx="48" cy="88" rx="24" ry="5" fill="#232946" opacity="0.12" />
 
       <g className="pip-idle">
-        <g className="pip-sprout">
-          <path d="M48 14c0-4 0-7 0-9" stroke="#10B981" strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M48 8C48 4 44 1.5 38.5 2.5c.8 4.5 4.5 6.5 9.5 5.5z" fill="#34D399" />
-          <path d="M48 8c0-4 4-6.5 9.5-5.5C56.7 7 53 9 48 8z" fill="#10B981" />
-        </g>
-
         <g className="pip-look">
+          <g className="pip-sprout">
+            <path d="M48 14c0-4 0-7 0-9" stroke="#10B981" strokeWidth="3.5" strokeLinecap="round" />
+            <path d="M48 8C48 4 44 1.5 38.5 2.5c.8 4.5 4.5 6.5 9.5 5.5z" fill="#34D399" />
+            <path d="M48 8c0-4 4-6.5 9.5-5.5C56.7 7 53 9 48 8z" fill="#10B981" />
+          </g>
+
           <ellipse className="pip-arm pip-arm-left" cx="15" cy="58" rx="7" ry="10" fill="#4338CA" transform="rotate(18 15 58)" />
           <ellipse className="pip-arm pip-arm-right" cx="81" cy="58" rx="7" ry="10" fill="#4338CA" transform="rotate(-18 81 58)" />
 

@@ -4,6 +4,7 @@ import { AVATARS } from "../data/avatars";
 import { copy } from "../data/copy";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
 import { Pip } from "./mascot/Pip";
+import { welcomeWallpaper } from "./mascot/MathsWallpaper";
 
 type OnboardingProps = {
   onComplete: (profile: LearnerProfile) => void;
@@ -38,6 +39,11 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <main className="onboard-page">
+      <div
+        className="onboard-doodles"
+        style={{ backgroundImage: welcomeWallpaper() }}
+        aria-hidden
+      />
       <section className="onboard-hero" aria-label={copy.setupTitle}>
         <div className="onboard-pip">
           <Pip size={220} mood="cheer" followPointer />

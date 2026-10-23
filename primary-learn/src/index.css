@@ -3063,6 +3063,20 @@ button.object-token {
   gap: var(--space-5);
 }
 
+.onboard-doodles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+  background-size: 340px 310px;
+}
+
+.onboard-page > :not(.onboard-doodles) {
+  position: relative;
+  z-index: 1;
+}
+
 .onboard-hero {
   display: grid;
   justify-items: center;

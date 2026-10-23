@@ -429,7 +429,8 @@ no confetti). Stars show progress. They do not gate the path.
 
 ### Onboarding
 
-No app header. Full-page setup on the dotted paper:
+No app header. Full-page setup on the dotted paper, with the same soft
+outline maths doodles as the path (numbers 1 to 5, dice, dots) in indigo:
 
 1. **Hero** — **large Pip** (follows the pointer; idle bob + blink) → speech
    bubble (`Hi, I'm Pip! Let's learn together.`) → display title
