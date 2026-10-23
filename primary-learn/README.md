@@ -111,3 +111,7 @@ npm run preview
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag
+
+### Activity content review
+
+The 39 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.

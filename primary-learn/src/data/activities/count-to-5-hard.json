@@ -13,7 +13,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 shows the numeral 4 and asks the child to tap the matching group. Question 8 orders 1 to 5. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 shows the numeral 4 and asks the child to tap the matching group. Question 8 orders 1 to 5. Question 9 is a short story: Sam only wants one kind. Question 10 chooses the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
     "versus": "Easy is tidy 1 to 5 with tap-count and early hints. Medium is scattered groups of the same object, counts 2 to 5. Hard adds extra objects to ignore, a numeral match, a full 1 to 5 sequence, and a large build-set. Still the same node: count sequence, numerals and one-to-one to 5."
   },
   "skills": [
@@ -124,7 +124,7 @@
     {
       "kind": "multi-select",
       "id": "c5h-every-5",
-      "prompt": "Tap every group that has 5 {items}.",
+      "prompt": "Tap every group that has 5 {items}. There are 2 to choose.",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "frog", "count": 5 } },
@@ -134,7 +134,9 @@
       ],
       "correctIds": ["a", "c"],
       "explanation": "Two groups have 5 {items}. The others have 4 and 3.",
-      "narration": { "prompt": "Tap every group that has 5 {items}." }
+      "narration": {
+        "prompt": "Tap every group that has five {items}. There are two to choose."
+      }
     },
     {
       "kind": "multiple-choice",

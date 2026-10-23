@@ -185,7 +185,7 @@
     {
       "kind": "multiple-choice",
       "id": "rw20e-ten-bit",
-      "prompt": "16 is 10 and which bit?",
+      "prompt": "16 is 10 and how many more?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -210,7 +210,7 @@
       "correctId": "c",
       "explanation": "16 is 10 and 6.",
       "narration": {
-        "prompt": "Sixteen is ten and which bit?"
+        "prompt": "sixteen is ten and how many more?"
       }
     },
     {
@@ -249,7 +249,7 @@
     {
       "kind": "multi-select",
       "id": "rw20e-teens",
-      "prompt": "Tap every teen number word.",
+      "prompt": "Tap every teen number word. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -277,7 +277,7 @@
       ],
       "explanation": "Thirteen and nineteen are teen number words.",
       "narration": {
-        "prompt": "Tap every teen number word."
+        "prompt": "Tap every teen number word. There are two to choose."
       }
     },
     {

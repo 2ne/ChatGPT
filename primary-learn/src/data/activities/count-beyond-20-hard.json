@@ -1,7 +1,7 @@
 {
   "id": "count-beyond-20-hard",
   "title": "Count beyond 20",
-  "summary": "Count well past 20 and use teen patterns with number words.",
+  "summary": "Count on, fill missing numbers and notice the pattern across 20.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 use longer gaps past 20. Question 3 orders five numbers across 20. Question 4 matches teen words. Question 5 fills a blank with a word accepted. Question 6 notices 14 is 10 and 4. Question 7 multi-select teen numbers. Question 8 counts on from 28. Question 9 is a reverse what comes before. Question 10 fills 29, 30 pattern. No hints.",
-    "versus": "Easy counts on from teens with clear sequences. Medium mixes gaps and teen patterns. Hard goes past 20 with number words and fuller sequences."
+    "within": "Question 1 Which number is missing? 21, _, 23, 24 Question 2 Which number is missing? 26, 27, _, 29 Question 3 Put the numbers in order, from smallest to biggest. Question 4 Match each count to the number that comes next. Question 5 Which number is missing? 27, 28, _ Question 6 14 is 10 and how many more? Question 7 What number comes next? 24, 25, 26, ? Question 8 What number comes next? 26, 27, 28, ? Question 9 What number comes just before 23? Question 10 What number comes next? 28, 29, ?",
+    "versus": "Easy counts from teens across 20 with early hints. Medium fills gaps and counts from 20 to 26. Hard fills gaps and orders numbers up to 30. Difficulty comes from the counting pattern rather than reading number words."
   },
   "skills": [
     "eyfs-count-20plus",
@@ -107,90 +107,95 @@
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
         {
-          "id": "n22",
-          "label": "22"
+          "id": "n24",
+          "label": "24"
         },
         {
-          "id": "n18",
-          "label": "18"
+          "id": "n22",
+          "label": "22"
         },
         {
           "id": "n25",
           "label": "25"
         },
         {
-          "id": "n20",
-          "label": "20"
-        },
-        {
-          "id": "n19",
-          "label": "19"
+          "id": "n23",
+          "label": "23"
         }
       ],
       "correctOrder": [
-        "n18",
-        "n19",
-        "n20",
         "n22",
+        "n23",
+        "n24",
         "n25"
       ],
-      "explanation": "The numbers go 18, 19, 20, 22, 25 from smallest to biggest.",
+      "explanation": "The numbers go 22, 23, 24, 25.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
     },
     {
       "kind": "match-pairs",
-      "id": "c20h-words",
-      "prompt": "Match each word to its number.",
-      "randomise": {},
+      "id": "c20h-next-match",
+      "prompt": "Match each count to the number that comes next.",
+      "explanation": "Each count matches the next number.",
+      "narration": {
+        "prompt": "Match each count to the number that comes next."
+      },
       "pairs": [
         {
+          "id": "p0",
+          "left": "24, 25, ?",
+          "right": "26"
+        },
+        {
           "id": "p1",
-          "left": "fourteen",
-          "right": "14"
+          "left": "25, 26, ?",
+          "right": "27"
         },
         {
           "id": "p2",
-          "left": "sixteen",
-          "right": "16"
-        },
-        {
-          "id": "p3",
-          "left": "nineteen",
-          "right": "19"
-        },
-        {
-          "id": "p4",
-          "left": "twenty-one",
-          "right": "21"
+          "left": "26, 27, ?",
+          "right": "28"
         }
       ],
-      "explanation": "Each word names its number.",
-      "narration": {
-        "prompt": "Match each word to its number."
-      }
+      "randomise": {}
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c20h-blank",
       "prompt": "Which number is missing? 27, 28, _",
-      "prefix": "27, 28,",
-      "acceptedAnswers": [
-        "29",
-        "twenty-nine",
-        "twenty nine"
-      ],
-      "inputMode": "numeric",
       "explanation": "29 comes after 28.",
       "narration": {
-        "prompt": "Which number is missing? Twenty-seven, twenty-eight, blank."
+        "prompt": "Which number is missing? twenty-seven, twenty-eight, _"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "29"
+        },
+        {
+          "id": "b",
+          "label": "28"
+        },
+        {
+          "id": "c",
+          "label": "30"
+        },
+        {
+          "id": "d",
+          "label": "27"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "multiple-choice",
       "id": "c20h-teen-bit",
-      "prompt": "14 is 10 and which bit?",
+      "prompt": "14 is 10 and how many more?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -215,41 +220,38 @@
       "correctId": "c",
       "explanation": "14 is 10 and 4.",
       "narration": {
-        "prompt": "Fourteen is ten and which bit?"
+        "prompt": "fourteen is ten and how many more?"
       }
     },
     {
-      "kind": "multi-select",
+      "kind": "multiple-choice",
       "id": "c20h-teens",
-      "prompt": "Tap every teen number.",
-      "randomise": {
-        "shuffleOptions": true
+      "prompt": "What number comes next? 24, 25, 26, ?",
+      "explanation": "27 comes after 26.",
+      "narration": {
+        "prompt": "What number comes next? twenty-four, twenty-five, twenty-six, ?"
       },
       "options": [
         {
           "id": "a",
-          "label": "13"
+          "label": "27"
         },
         {
           "id": "b",
-          "label": "20"
+          "label": "26"
         },
         {
           "id": "c",
-          "label": "17"
+          "label": "28"
         },
         {
           "id": "d",
-          "label": "21"
+          "label": "25"
         }
       ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "13 and 17 are teen numbers.",
-      "narration": {
-        "prompt": "Tap every teen number."
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {

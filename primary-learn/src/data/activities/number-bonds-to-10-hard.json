@@ -1,7 +1,7 @@
 {
   "id": "number-bonds-to-10-hard",
   "title": "Number bonds to 10",
-  "summary": "Mix plus and take away for bonds to 10, including 0 and number words.",
+  "summary": "Mix plus and take away for bonds to 10, including 0.",
   "subject": "maths",
   "type": "number-bonds",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 is the sum line for what goes with 6 to make 10. Question 2 fills 10 take away 4. Question 3 is the part-whole cherry for what 3 and 7 make. Question 4 asks the child to select every correct sum, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 10. Question 6 is 10 take away 0. Question 7 is the sum line reverse for what goes with 8 to make 10. Question 8 taps four tiles with dots to make 10. Question 9 picks 10 take away 7 as a number word. Question 10 is a short story: Sam has 10 and gives away 3. No hints. Totals stay 10.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or four tiles with dots, mixing plus and take away."
+    "within": "Question 1 What do you need to add to 6 to make 10? Question 2 What is 10 take away 4? Question 3 What do 3 and 7 make? Question 4 What two numbers make 10? Question 5 What do you need to add to 0 to make 10? Question 6 What is 10 take away 0? Question 7 What do you need to add to 8 to make 10? Question 8 What two numbers make 10? Question 9 What is 10 take away 7? Question 10 Sam has 10 apples. He gives away 3. How many apples are left?",
+    "versus": "Easy builds pictured bonds to 10 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
     "y1-bonds-10",
@@ -110,37 +110,23 @@
       }
     },
     {
-      "kind": "multi-select",
+      "kind": "pick-pair",
       "id": "nb10h-every-fact",
-      "prompt": "Select every correct sum.",
+      "prompt": "What two numbers make 10?",
+      "explanation": "4 and 6 make 10.",
+      "narration": {
+        "prompt": "What two numbers make ten?"
+      },
+      "total": 10,
+      "tiles": [
+        4,
+        6,
+        0,
+        3
+      ],
+      "showDots": true,
       "randomise": {
         "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "2 + 8 = 10"
-        },
-        {
-          "id": "b",
-          "label": "10 − 2 = 8"
-        },
-        {
-          "id": "c",
-          "label": "4 + 5 = 10"
-        },
-        {
-          "id": "d",
-          "label": "10 − 10 = 1"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "b"
-      ],
-      "explanation": "2 and 8 make 10. Taking 2 away from 10 leaves 8.",
-      "narration": {
-        "prompt": "Select every correct sum."
       }
     },
     {
@@ -272,19 +258,19 @@
       "options": [
         {
           "id": "a",
-          "label": "two"
+          "label": "2"
         },
         {
           "id": "b",
-          "label": "three"
+          "label": "3"
         },
         {
           "id": "c",
-          "label": "four"
+          "label": "4"
         },
         {
           "id": "d",
-          "label": "five"
+          "label": "5"
         }
       ],
       "correctId": "b",

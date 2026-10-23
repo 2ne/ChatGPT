@@ -1,7 +1,7 @@
 {
   "id": "count-beyond-20",
   "title": "Count beyond 20",
-  "summary": "Count on past 20 and spot the pattern in teen numbers.",
+  "summary": "Count on, fill missing numbers and notice the pattern across 20.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 say what comes next in teens (11, 12, 13 then 14, 15 then 18, 19). Question 4 fills a teen gap. Question 5 orders teens. Question 6 matches teen numerals. Question 7 says what comes next after 20. Question 8 fills 20, 21, blank. Question 9 notices 13 is ten and 3. Question 10 counts on from 22. Hints on the first three.",
-    "versus": "Easy counts on from teens with clear sequences. Medium mixes gaps and teen patterns. Hard goes past 20 with number words and fuller sequences."
+    "within": "Question 1 What number comes next? 11, 12, 13, ? Question 2 What number comes next? 13, 14, 15, ? Question 3 What number comes next? 17, 18, 19, ? Question 4 Which number is missing? 14, 15, _, 17, 18 Question 5 Put the numbers in order, from smallest to biggest. Question 6 Match each count to the number that comes next. Question 7 What number comes next? 18, 19, 20, ? Question 8 Which number is missing? 20, 21, _ Question 9 13 is 10 and how many more? Question 10 What number comes next? 21, 22, ?",
+    "versus": "Easy counts from teens across 20 with early hints. Medium fills gaps and counts from 20 to 26. Hard fills gaps and orders numbers up to 30. Difficulty comes from the counting pattern rather than reading number words."
   },
   "skills": [
     "eyfs-count-20plus",
@@ -201,35 +201,30 @@
     },
     {
       "kind": "match-pairs",
-      "id": "c20e-match",
-      "prompt": "Match each number to its place in the count.",
-      "randomise": {},
+      "id": "c20e-next-match",
+      "prompt": "Match each count to the number that comes next.",
+      "explanation": "Each count matches the next number.",
+      "narration": {
+        "prompt": "Match each count to the number that comes next."
+      },
       "pairs": [
         {
+          "id": "p0",
+          "left": "17, 18, ?",
+          "right": "19"
+        },
+        {
           "id": "p1",
-          "left": "11",
-          "right": "after 10"
+          "left": "18, 19, ?",
+          "right": "20"
         },
         {
           "id": "p2",
-          "left": "15",
-          "right": "after 14"
-        },
-        {
-          "id": "p3",
-          "left": "19",
-          "right": "after 18"
-        },
-        {
-          "id": "p4",
-          "left": "20",
-          "right": "after 19"
+          "left": "19, 20, ?",
+          "right": "21"
         }
       ],
-      "explanation": "Each number comes right after the one before it.",
-      "narration": {
-        "prompt": "Match each number to its place in the count."
-      }
+      "randomise": {}
     },
     {
       "kind": "multiple-choice",
@@ -263,25 +258,40 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c20e-blank-22",
       "prompt": "Which number is missing? 20, 21, _",
-      "prefix": "20, 21,",
-      "acceptedAnswers": [
-        "22",
-        "twenty-two",
-        "twenty two"
-      ],
-      "inputMode": "numeric",
       "explanation": "22 comes after 21.",
       "narration": {
-        "prompt": "Which number is missing? Twenty, twenty-one, blank."
+        "prompt": "Which number is missing? twenty, twenty-one, _"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "22"
+        },
+        {
+          "id": "b",
+          "label": "21"
+        },
+        {
+          "id": "c",
+          "label": "23"
+        },
+        {
+          "id": "d",
+          "label": "20"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "multiple-choice",
       "id": "c20e-teen-bit",
-      "prompt": "13 is 10 and which bit?",
+      "prompt": "13 is 10 and how many more?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -306,7 +316,7 @@
       "correctId": "c",
       "explanation": "13 is 10 and 3.",
       "narration": {
-        "prompt": "Thirteen is ten and which bit?"
+        "prompt": "thirteen is ten and how many more?"
       }
     },
     {

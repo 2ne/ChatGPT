@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a tidy row of 6, then 7, then 8. Question 4 counts 9 on a tens-frame. Question 5 builds a group of 10. Question 6 says what comes next after 7, 8, 9. Question 7 picks the missing amount in 6, 7, blank, 9, 10. Question 8 orders 6, 7, 8. Question 9 shows 6 and asks the child to tap the matching group. Question 10 picks which group has 10. Counts climb 6 to 10 with no drop-back.",
+    "within": "Question 1 How many {items} can you see? Question 2 How many {items} can you see? Question 3 How many {items} can you see? Question 4 How many {items} can you see? Question 5 Make a group of 10 {items}. Question 6 What number comes next? 7, 8, 9, ? Question 7 Which number is missing? 6, 7, _, 9, 10 Question 8 Put the numbers in order, from smallest to biggest. Question 9 Tap the {items} that match the number below. Question 10 Which group has 10 {items}?",
     "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, a numeral match, and a fuller order, still within 10."
   },
   "skills": [

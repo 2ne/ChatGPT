@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 4 count only one kind in a mixed scatter (7, then 8, then 9, then 10 of the target). Question 5 builds exactly 10 from a large tray. Question 6 taps every group of 10. Question 7 shows the numeral 9 and asks the child to tap the matching group. Question 8 orders 6 to 10. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 6, 7, 8, 9, blank. No bonds.",
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (7, then 8, then 9, then 10 of the target). Question 5 builds exactly 10 from a large tray. Question 6 taps every group of 10. Question 7 shows the numeral 9 and asks the child to tap the matching group. Question 8 orders 6 to 10. Question 9 is a short story: Sam only wants one kind. Question 10 chooses the last number in 6, 7, 8, 9, blank. No bonds.",
     "versus": "Easy: tidy rows of 6 to 10, tap to count, hints on the first three. Medium uses scattered groups and tens-frames. Hard mixes in extra objects to ignore, a numeral match, and a fuller order, still within 10."
   },
   "skills": [
@@ -226,7 +226,7 @@
     {
       "kind": "multi-select",
       "id": "c10h-every-10",
-      "prompt": "Tap every group that has 10 {items}.",
+      "prompt": "Tap every group that has 10 {items}. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -266,7 +266,7 @@
       ],
       "explanation": "Those two groups each have 10 {items}.",
       "narration": {
-        "prompt": "Tap every group that has 10 {items}."
+        "prompt": "Tap every group that has ten {items}. There are two to choose."
       }
     },
     {
@@ -366,18 +366,34 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c10h-blank",
       "prompt": "Which number is missing? 6, 7, 8, 9, _",
-      "prefix": "6, 7, 8, 9,",
-      "acceptedAnswers": [
-        "10",
-        "ten"
-      ],
-      "inputMode": "numeric",
       "explanation": "10 comes after 9.",
       "narration": {
-        "prompt": "Which number is missing? Six, seven, eight, nine, blank."
+        "prompt": "Which number is missing? six, seven, eight, nine, _"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     }
   ]

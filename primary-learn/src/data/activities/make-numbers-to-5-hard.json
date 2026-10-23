@@ -1,7 +1,7 @@
 {
   "id": "make-numbers-to-5-hard",
   "title": "Make numbers to 5",
-  "summary": "Make 5 from every pair of parts, including 0, reverse order and a hidden part.",
+  "summary": "Explore different ways to make numbers to 5, including zero and missing parts.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 ask what goes with 0, then 5, to make 5, on the sum line only. Question 3 is the part-whole cherry for what 1 and 2 make. Question 4 is the sum line for what goes with 3 to make 5. Question 5 taps four tiles with dots to make 5. Question 6 is a short story: Sam has 1 and gets 4 more. Question 7 is reverse order for what goes with 2 to make 5. Question 8 is the sum line for a hidden part: what goes with 2 to make 5. Question 9 is the part-whole cherry for what goes with 4 to make 4. Question 10 picks another pair that makes 5. No hints.",
-    "versus": "Easy is small sums from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, still on four tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and four tiles with dots. Same node: composition of each number to 5."
+    "within": "Questions 1 and 2 compose 3. Questions 3 and 4 compose 4 in different ways. Question 5 makes 4 with zero. Question 6 finds the zero part. Questions 7 and 8 compose 5 in different ways. Question 9 reverses the missing part. Question 10 finds the whole from 2 and 3. No hints.",
+    "versus": "Easy builds totals 2 to 5 with small parts and pictures. Medium explores 4 and 5 including zero. Hard compares ways to make 3, 4 and 5 using missing parts and reversed parts. No reading or spelling challenge is added."
   },
   "skills": [
     "eyfs-compose-5",
@@ -40,102 +40,42 @@
   },
   "questions": [
     {
-      "kind": "make-total",
-      "id": "m5h-0-5",
-      "prompt": "What do you need to add to 0 to make 5?",
-      "part": 0,
-      "total": 5,
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "0"
-        },
-        {
-          "id": "d",
-          "label": "1"
-        }
-      ],
-      "explanation": "0 and 5 make 5. Adding 0 does not change the number.",
-      "narration": {
-        "prompt": "What do you need to add to 0 to make 5?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "m5h-5-0",
-      "prompt": "What do you need to add to 5 to make 5?",
-      "part": 5,
-      "total": 5,
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "0"
-        },
-        {
-          "id": "d",
-          "label": "2"
-        }
-      ],
-      "explanation": "5 and 0 make 5. Adding 0 does not change the number.",
-      "narration": {
-        "prompt": "What do you need to add to 5 to make 5?"
-      }
-    },
-    {
       "kind": "part-whole",
-      "id": "m5h-pw-3",
+      "id": "m5h-whole-3",
       "prompt": "What do 1 and 2 make?",
-      "whole": 3,
-      "parts": [1, 2],
-      "missing": "whole",
-      "choices": [2, 3, 4],
       "explanation": "1 and 2 make 3.",
       "narration": {
         "prompt": "What do one and two make?"
-      }
+      },
+      "whole": 3,
+      "parts": [1, 2],
+      "missing": "whole",
+      "choices": [
+        3,
+        2,
+        4
+      ]
     },
     {
       "kind": "make-total",
-      "id": "m5h-5-3",
-      "prompt": "What do you need to add to 3 to make 5?",
-      "part": 3,
-      "total": 5,
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
+      "id": "m5h-part-3",
+      "prompt": "What do you need to add to 1 to make 3?",
+      "explanation": "1 and 2 make 3.",
+      "narration": {
+        "prompt": "What do you need to add to one to make three?"
       },
+      "part": 1,
+      "total": 3,
+      "gap": "right",
+      "mode": "sum-only",
       "options": [
         {
           "id": "a",
-          "label": "1"
+          "label": "2"
         },
         {
           "id": "b",
-          "label": "2"
+          "label": "1"
         },
         {
           "id": "c",
@@ -143,170 +83,207 @@
         },
         {
           "id": "d",
-          "label": "4"
+          "label": "0"
         }
       ],
-      "explanation": "3 and 2 make 5.",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "part-whole",
+      "id": "m5h-whole-4",
+      "prompt": "What do 2 and 2 make?",
+      "explanation": "2 and 2 make 4.",
       "narration": {
-        "prompt": "What do you need to add to 3 to make 5?"
+        "prompt": "What do two and two make?"
+      },
+      "whole": 4,
+      "parts": [
+        2,
+        2
+      ],
+      "missing": "whole",
+      "choices": [
+        4,
+        3,
+        5
+      ]
+    },
+    {
+      "kind": "make-total",
+      "id": "m5h-part-4",
+      "prompt": "What do you need to add to 1 to make 4?",
+      "explanation": "1 and 3 make 4.",
+      "narration": {
+        "prompt": "What do you need to add to one to make four?"
+      },
+      "part": 1,
+      "total": 4,
+      "gap": "right",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "1"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "pick-pair",
-      "id": "m5h-every-5",
-      "prompt": "What two numbers make 5?",
-      "total": 5,
-      "tiles": [0, 5, 2, 4],
+      "id": "m5h-pair-4",
+      "prompt": "What two numbers make 4?",
+      "explanation": "0 and 4 make 4.",
+      "narration": {
+        "prompt": "What two numbers make four?"
+      },
+      "total": 4,
+      "tiles": [
+        0,
+        4,
+        1,
+        2
+      ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
-      },
-      "explanation": "0 and 5 make 5.",
-      "narration": {
-        "prompt": "What two numbers make 5?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "m5h-sam-5",
-      "prompt": "Sam has 1 apple. He gets 4 more. How many apples does he have now?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        },
-        {
-          "id": "d",
-          "label": "6"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "1 apple and 4 more apples make 5 apples.",
-      "narration": {
-        "prompt": "Sam has 1 apple. He gets 4 more. How many apples does he have now?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "m5h-first-part",
-      "prompt": "What do you need to add to 2 to make 5?",
-      "part": 2,
-      "total": 5,
-      "gap": "left",
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "1"
-        }
-      ],
-      "explanation": "2 and 3 make 5.",
-      "narration": {
-        "prompt": "What do you need to add to 2 to make 5?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "m5h-hidden",
-      "prompt": "What do you need to add to 2 to make 5?",
-      "part": 2,
-      "total": 5,
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "1"
-        }
-      ],
-      "explanation": "2 and 3 make 5.",
-      "narration": {
-        "prompt": "What do you need to add to 2 to make 5?"
       }
     },
     {
       "kind": "part-whole",
-      "id": "m5h-pw-4",
+      "id": "m5h-zero-4",
       "prompt": "What do you need to add to 4 to make 4?",
-      "whole": 4,
-      "parts": [0, 4],
-      "missing": "left",
-      "choices": [0, 1, 2],
       "explanation": "0 and 4 make 4.",
       "narration": {
         "prompt": "What do you need to add to four to make four?"
-      }
+      },
+      "whole": 4,
+      "parts": [0, 4],
+      "missing": "left",
+      "choices": [0, 1, 2]
     },
     {
-      "kind": "multiple-choice",
-      "id": "m5h-another-5",
-      "prompt": "2 and 3 make 5. Which other pair makes 5?",
-      "randomise": {
-        "shuffleOptions": true
+      "kind": "make-total",
+      "id": "m5h-part-5",
+      "prompt": "What do you need to add to 2 to make 5?",
+      "explanation": "2 and 3 make 5.",
+      "narration": {
+        "prompt": "What do you need to add to two to make five?"
       },
+      "part": 2,
+      "total": 5,
+      "gap": "right",
+      "mode": "sum-only",
       "options": [
         {
           "id": "a",
-          "label": "1 and 4"
+          "label": "3"
         },
         {
           "id": "b",
-          "label": "2 and 2"
+          "label": "2"
         },
         {
           "id": "c",
-          "label": "3 and 3"
+          "label": "4"
         },
         {
           "id": "d",
-          "label": "4 and 2"
+          "label": "1"
         }
       ],
-      "correctId": "a",
-      "explanation": "1 and 4 make 5, just like 2 and 3.",
-      "narration": {
-        "prompt": "2 and 3 make 5. Which other pair makes 5?"
+      "randomise": {
+        "shuffleOptions": true
       }
+    },
+    {
+      "kind": "pick-pair",
+      "id": "m5h-pair-5",
+      "prompt": "What two numbers make 5?",
+      "explanation": "1 and 4 make 5.",
+      "narration": {
+        "prompt": "What two numbers make five?"
+      },
+      "total": 5,
+      "tiles": [
+        1,
+        4,
+        0,
+        2
+      ],
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "m5h-reverse-5",
+      "prompt": "What do you need to add to 3 to make 5?",
+      "explanation": "3 and 2 make 5.",
+      "narration": {
+        "prompt": "What do you need to add to three to make five?"
+      },
+      "part": 3,
+      "total": 5,
+      "gap": "left",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "0"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "part-whole",
+      "id": "m5h-whole-5",
+      "prompt": "What do 2 and 3 make?",
+      "explanation": "2 and 3 make 5.",
+      "narration": {
+        "prompt": "What do two and three make?"
+      },
+      "whole": 5,
+      "parts": [
+        2,
+        3
+      ],
+      "missing": "whole",
+      "choices": [
+        5,
+        4,
+        6
+      ]
     }
   ]
 }

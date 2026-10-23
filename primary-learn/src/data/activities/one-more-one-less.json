@@ -1,7 +1,7 @@
 {
   "id": "one-more-one-less",
   "title": "One more, one less",
-  "summary": "Find one more and one less than a given number.",
+  "summary": "Find one more and one less using numbers and familiar counting patterns.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 ask one more than 3, 5 and 7 with pictures. Questions 4 to 5 ask one less than 6 and 9. Question 6 fills one more than 8. Question 7 matches one more pairs. Question 8 asks one less than 10. Question 9 multi-select numbers that are one more than 4. Question 10 asks one more than 0. Hints on the first three.",
-    "versus": "Easy asks one more and one less within 10 with pictures. Medium mixes teens. Hard uses number words and both directions without hints."
+    "within": "Questions 1 to 3 introduce one more than zero, one more than 3 and one less than 6. Question 4 orders 5, 6 and 7. Question 5 finds one more than 5. Question 6 matches numbers to one more. Questions 7 to 10 work towards 10 with pictured quantities. Numeric answers throughout.",
+    "versus": "Easy uses pictures within 10 and includes zero. Medium bridges 9, 10 and 11 before moving through the teens. Hard mixes both directions across 0 to 20 with a short story and no number-word reading."
   },
   "skills": [
     "y1-1-more-less",
@@ -39,6 +39,37 @@
     ]
   },
   "questions": [
+    {
+      "kind": "multiple-choice",
+      "id": "oml-e-more-0",
+      "prompt": "What is one more than 0?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "One more than 0 is 1.",
+      "narration": {
+        "prompt": "What is one more than zero?"
+      }
+    },
     {
       "kind": "multiple-choice",
       "id": "oml-e-more-3",
@@ -72,79 +103,7 @@
       "hint": "Count on one from 3.",
       "explanation": "One more than 3 is 4.",
       "narration": {
-        "prompt": "What is one more than 3?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "oml-e-more-5",
-      "prompt": "What is one more than 5?",
-      "visual": {
-        "item": "apple",
-        "count": 5
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "7"
-        }
-      ],
-      "correctId": "c",
-      "hint": "Count on one from 5.",
-      "explanation": "One more than 5 is 6.",
-      "narration": {
-        "prompt": "What is one more than 5?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "oml-e-more-7",
-      "prompt": "What is one more than 7?",
-      "visual": {
-        "item": "duck",
-        "count": 7
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        },
-        {
-          "id": "d",
-          "label": "9"
-        }
-      ],
-      "correctId": "c",
-      "hint": "Count on one from 7.",
-      "explanation": "One more than 7 is 8.",
-      "narration": {
-        "prompt": "What is one more than 7?"
+        "prompt": "What is one more than three?"
       }
     },
     {
@@ -179,16 +138,44 @@
       "correctId": "b",
       "explanation": "One less than 6 is 5.",
       "narration": {
-        "prompt": "What is one less than 6?"
+        "prompt": "What is one less than six?"
       }
     },
     {
+      "kind": "ordered",
+      "id": "oml-e-order",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "explanation": "The numbers go 5, 6, 7.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      },
+      "items": [
+        {
+          "id": "n7",
+          "label": "7"
+        },
+        {
+          "id": "n5",
+          "label": "5"
+        },
+        {
+          "id": "n6",
+          "label": "6"
+        }
+      ],
+      "correctOrder": [
+        "n5",
+        "n6",
+        "n7"
+      ]
+    },
+    {
       "kind": "multiple-choice",
-      "id": "oml-e-less-9",
-      "prompt": "What is one less than 9?",
+      "id": "oml-e-more-5",
+      "prompt": "What is one more than 5?",
       "visual": {
-        "item": "balloon",
-        "count": 9
+        "item": "apple",
+        "count": 5
       },
       "randomise": {
         "shuffleOptions": true
@@ -196,39 +183,26 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "4"
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "5"
         },
         {
           "id": "c",
-          "label": "9"
+          "label": "6"
         },
         {
           "id": "d",
-          "label": "10"
+          "label": "7"
         }
       ],
-      "correctId": "b",
-      "explanation": "One less than 9 is 8.",
+      "correctId": "c",
+      "hint": "Count on one from 5.",
+      "explanation": "One more than 5 is 6.",
       "narration": {
-        "prompt": "What is one less than 9?"
-      }
-    },
-    {
-      "kind": "fill-blank",
-      "id": "oml-e-more-8",
-      "prompt": "What is one more than 8?",
-      "acceptedAnswers": [
-        "9",
-        "nine"
-      ],
-      "inputMode": "numeric",
-      "explanation": "One more than 8 is 9.",
-      "narration": {
-        "prompt": "What is one more than 8?"
+        "prompt": "What is one more than five?"
       }
     },
     {
@@ -265,6 +239,108 @@
     },
     {
       "kind": "multiple-choice",
+      "id": "oml-e-more-7",
+      "prompt": "What is one more than 7?",
+      "visual": {
+        "item": "duck",
+        "count": 7
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
+      ],
+      "correctId": "c",
+      "hint": "Count on one from 7.",
+      "explanation": "One more than 7 is 8.",
+      "narration": {
+        "prompt": "What is one more than seven?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-e-more-8",
+      "prompt": "What is one more than 8?",
+      "explanation": "One more than 8 is 9.",
+      "narration": {
+        "prompt": "What is one more than eight?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "7"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-e-more-than-4",
+      "prompt": "What is one less than 9?",
+      "explanation": "One less than 9 is 8.",
+      "narration": {
+        "prompt": "What is one less than nine?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 9
+      }
+    },
+    {
+      "kind": "multiple-choice",
       "id": "oml-e-less-10",
       "prompt": "What is one less than 10?",
       "visual": {
@@ -295,72 +371,7 @@
       "correctId": "b",
       "explanation": "One less than 10 is 9.",
       "narration": {
-        "prompt": "What is one less than 10?"
-      }
-    },
-    {
-      "kind": "multi-select",
-      "id": "oml-e-more-than-4",
-      "prompt": "Tap every correct sentence.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "One more than 4 is 5"
-        },
-        {
-          "id": "b",
-          "label": "One more than 4 is 3"
-        },
-        {
-          "id": "c",
-          "label": "One more than 6 is 7"
-        },
-        {
-          "id": "d",
-          "label": "One more than 6 is 5"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "One more than 4 is 5. One more than 6 is 7.",
-      "narration": {
-        "prompt": "Tap every correct sentence."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "oml-e-more-0",
-      "prompt": "What is one more than 0?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "10"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "One more than 0 is 1.",
-      "narration": {
-        "prompt": "What is one more than 0?"
+        "prompt": "What is one less than ten?"
       }
     }
   ]

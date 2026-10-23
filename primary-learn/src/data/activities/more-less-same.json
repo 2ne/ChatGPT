@@ -217,7 +217,7 @@
     {
       "kind": "multi-select",
       "id": "cmp-e-same",
-      "prompt": "Tap every group that has the same number of {items}.",
+      "prompt": "Tap every group that has the same number of {items}. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -257,7 +257,7 @@
       ],
       "explanation": "Those two groups both have 5 {items}.",
       "narration": {
-        "prompt": "Tap every group that has the same number of {items}."
+        "prompt": "Tap every group that has the same number of {items}. There are two to choose."
       }
     },
     {

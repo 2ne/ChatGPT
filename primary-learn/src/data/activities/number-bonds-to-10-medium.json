@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 taps extra slots for what goes with 3 to make 10. Question 2 taps extra slots for what goes with 4 to make 10. Question 3 is the sum line for what goes with 0 to make 10. Question 4 is the part-whole cherry for what goes with 10 to make 10. Question 5 is 10 take away 3. Questions 6 and 7 tap four tiles to find one pair that makes 10, first 1 and 9, then 2 and 8. Question 8 is the sum line reverse for what goes with 7 to make 10. Question 9 fills 10 take away 6. Question 10 is 10 take away 10. Hints on 1 to 3.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or four tiles with dots, mixing plus and take away. Still bonds to 10 only."
+    "within": "Question 1 What do you need to add to 3 to make 10? Question 2 What do you need to add to 4 to make 10? Question 3 What do you need to add to 0 to make 10? Question 4 What do you need to add to 10 to make 10? Question 5 What is 10 take away 3? Question 6 What two numbers make 10? Question 7 What two numbers make 10? Question 8 What do you need to add to 7 to make 10? Question 9 What is 10 take away 6? Question 10 Sam has 10 {items} and gives them all away. How many are left?",
+    "versus": "Easy builds pictured bonds to 10 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
     "y1-bonds-10",
@@ -157,6 +157,11 @@
       "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
       "narration": {
         "prompt": "What is ten take away three?"
+      },
+      "visual": {
+        "item": "apple",
+        "count": 10,
+        "removed": 3
       }
     },
     {
@@ -262,6 +267,11 @@
       "correctId": "a",
       "randomise": {
         "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 10,
+        "removed": 6
       }
     },
     {
@@ -299,6 +309,11 @@
       "explanation": "Taking away all 10 leaves 0.",
       "narration": {
         "prompt": "Sam has 10 {items} and gives them all away. How many are left?"
+      },
+      "visual": {
+        "item": "apple",
+        "count": 10,
+        "removed": 10
       }
     }
   ]

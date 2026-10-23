@@ -1,7 +1,7 @@
 {
   "id": "patterns-to-10-hard",
-  "title": "Patterns to 10",
-  "summary": "Sort odds and evens to 10, and decide fair shares with fewer clues.",
+  "title": "Odd, even and sharing",
+  "summary": "Make pairs, spot odd and even numbers, and share objects into two equal groups.",
   "subject": "maths",
   "type": "reasoning",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 pick even or odd with close distractors. Question 3 shares 8 into 4. Question 4 taps every even number to 10. Question 5 asks if 9 can be shared equally into 2. Question 6 shares 9 into 3. Question 7 matches odd and even words. Question 8 orders even numbers. Question 9 shares leftover story. Question 10 picks numbers that share equally into 2. No hints.",
-    "versus": "Easy shows clear even pairs and fair shares of small totals. Medium mixes odds and uneven shares. Hard uses number words, near-miss shares and mixed odd/even without hints."
+    "within": "Questions 1 and 2 recognise paired and unpaired quantities. Question 3 shares 8. Question 4 selects two even numbers. Question 5 shares 10. Question 6 selects two odd numbers. Question 7 pairs 10. Question 8 orders even numbers. Questions 9 and 10 reason about the leftover in 9 and adding one to make pairs. No hints.",
+    "versus": "Easy pairs small pictured groups and shares 4 and 6 into two groups. Medium uses quantities to 10 and introduces two-choice odd/even selection. Hard mixes odd/even reasoning, sharing and ordered even numbers. All sharing uses two groups of whole objects."
   },
   "skills": [
     "eyfs-patterns-10",
@@ -41,131 +41,140 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "id": "pat-h-even",
-      "prompt": "Which group can be shared into 2 equal pairs?",
-      "randomise": {
-        "shuffleOptions": true
+      "id": "pat-h-pair-8",
+      "prompt": "Which group can be put into pairs with none left over?",
+      "explanation": "8 makes 4 pairs with none left over.",
+      "narration": {
+        "prompt": "Which group can be put into pairs with none left over?"
       },
       "options": [
         {
           "id": "a",
-          "visual": {
-            "item": "star",
-            "count": 9
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "star",
-            "count": 10
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "star",
-            "count": 7
-          }
-        },
-        {
-          "id": "d",
           "visual": {
             "item": "star",
             "count": 5
-          }
-        }
-      ],
-      "correctId": "b",
-      "explanation": "10 can be shared into 2 equal pairs.",
-      "narration": {
-        "prompt": "Which group can be shared into 2 equal pairs?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "pat-h-odd",
-      "prompt": "Which group has an odd number of {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "apple",
-            "count": 8
-          }
+          },
+          "layout": "dice"
         },
         {
           "id": "b",
           "visual": {
-            "item": "apple",
-            "count": 6
-          }
+            "item": "star",
+            "count": 7
+          },
+          "layout": "dice"
         },
         {
           "id": "c",
           "visual": {
-            "item": "apple",
-            "count": 9
-          }
+            "item": "star",
+            "count": 8
+          },
+          "layout": "dice"
         },
         {
           "id": "d",
           "visual": {
-            "item": "apple",
-            "count": 10
-          }
+            "item": "star",
+            "count": 9
+          },
+          "layout": "dice"
         }
       ],
       "correctId": "c",
-      "explanation": "9 is odd. It does not make equal pairs.",
-      "narration": {
-        "prompt": "Which group has an odd number of {items}?"
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "multiple-choice",
-      "id": "pat-h-share-8-4",
-      "prompt": "Share 8 {items} into 4 equal groups. How many in each group?",
-      "visual": {
-        "item": "duck",
-        "count": 8
-      },
-      "randomise": {
-        "shuffleOptions": true
+      "id": "pat-h-odd-7",
+      "prompt": "Which group has one left over when you make pairs?",
+      "explanation": "7 makes 3 pairs with 1 left over.",
+      "narration": {
+        "prompt": "Which group has one left over when you make pairs?"
       },
       "options": [
         {
           "id": "a",
-          "label": "1"
+          "visual": {
+            "item": "star",
+            "count": 6
+          },
+          "layout": "dice"
         },
         {
           "id": "b",
-          "label": "2"
+          "visual": {
+            "item": "star",
+            "count": 7
+          },
+          "layout": "dice"
         },
         {
           "id": "c",
-          "label": "3"
+          "visual": {
+            "item": "star",
+            "count": 8
+          },
+          "layout": "dice"
         },
         {
           "id": "d",
-          "label": "4"
+          "visual": {
+            "item": "star",
+            "count": 10
+          },
+          "layout": "dice"
         }
       ],
       "correctId": "b",
-      "explanation": "8 shared into 4 equal groups is 2 in each group.",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-share-8",
+      "prompt": "Share 8 {items} into 2 equal groups. How many are in each group?",
+      "explanation": "8 {items} make 2 equal groups of 4.",
       "narration": {
-        "prompt": "Share 8 {items} into 4 equal groups. How many in each group?"
+        "prompt": "Share eight {items} into two equal groups. How many are in each group?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "2"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 8
       }
     },
     {
       "kind": "multi-select",
-      "id": "pat-h-every-even",
-      "prompt": "Tap every even number.",
-      "randomise": {
-        "shuffleOptions": true
+      "id": "pat-h-even-select",
+      "prompt": "Tap every even number. There are 2 to choose.",
+      "explanation": "6 and 8 are even. They make pairs with none left over.",
+      "narration": {
+        "prompt": "Tap every even number. There are two to choose."
       },
       "options": [
         {
@@ -189,196 +198,61 @@
         "a",
         "c"
       ],
-      "explanation": "6 and 8 are even.",
-      "narration": {
-        "prompt": "Tap every even number."
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "multiple-choice",
-      "id": "pat-h-can-9",
-      "prompt": "Can 9 {items} be shared into 2 equal groups?",
-      "visual": {
-        "item": "frog",
-        "count": 9
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "Yes"
-        },
-        {
-          "id": "b",
-          "label": "No"
-        },
-        {
-          "id": "c",
-          "label": "Yes, with 1 left over"
-        },
-        {
-          "id": "d",
-          "label": "Yes, into 3 groups"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "9 is odd. It cannot be shared into 2 equal groups.",
+      "id": "pat-h-share-10",
+      "prompt": "Share 10 {items} into 2 equal groups. How many are in each group?",
+      "explanation": "10 {items} make 2 equal groups of 5.",
       "narration": {
-        "prompt": "Can 9 {items} be shared into 2 equal groups?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "pat-h-share-9-3",
-      "prompt": "Share 9 {items} into 3 equal groups. How many in each group?",
-      "visual": {
-        "item": "fish",
-        "count": 9
-      },
-      "randomise": {
-        "shuffleOptions": true
+        "prompt": "Share ten {items} into two equal groups. How many are in each group?"
       },
       "options": [
         {
           "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
           "label": "5"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "9 shared into 3 equal groups is 3 in each group.",
-      "narration": {
-        "prompt": "Share 9 {items} into 3 equal groups. How many in each group?"
-      }
-    },
-    {
-      "kind": "match-pairs",
-      "id": "pat-h-match-words",
-      "prompt": "Match each number to its type.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "3",
-          "right": "odd"
-        },
-        {
-          "id": "p2",
-          "left": "4",
-          "right": "even"
-        },
-        {
-          "id": "p3",
-          "left": "9",
-          "right": "odd number"
-        },
-        {
-          "id": "p4",
-          "left": "10",
-          "right": "even number"
-        }
-      ],
-      "explanation": "3 and 9 are odd. 4 and 10 are even.",
-      "narration": {
-        "prompt": "Match each number to its type."
-      }
-    },
-    {
-      "kind": "ordered",
-      "id": "pat-h-order-even",
-      "prompt": "Put the even numbers in order, from smallest to biggest.",
-      "items": [
-        {
-          "id": "n8",
-          "label": "8"
-        },
-        {
-          "id": "n2",
-          "label": "2"
-        },
-        {
-          "id": "n10",
-          "label": "10"
-        },
-        {
-          "id": "n4",
-          "label": "4"
-        }
-      ],
-      "correctOrder": [
-        "n2",
-        "n4",
-        "n8",
-        "n10"
-      ],
-      "explanation": "The even numbers go 2, 4, 8, 10 from smallest to biggest.",
-      "narration": {
-        "prompt": "Put the even numbers in order, from smallest to biggest."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "pat-h-sam",
-      "prompt": "Sam has 5 {items}. Can he share them into 2 equal groups?",
-      "visual": {
-        "item": "strawberry",
-        "count": 5
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "Yes"
         },
         {
           "id": "b",
-          "label": "No"
+          "label": "4"
         },
         {
           "id": "c",
-          "label": "Yes, 3 each"
+          "label": "6"
         },
         {
           "id": "d",
-          "label": "Yes, 2 each"
+          "label": "3"
         }
       ],
-      "correctId": "b",
-      "explanation": "5 is odd. Sam cannot share them into 2 equal groups.",
-      "narration": {
-        "prompt": "Sam has 5 {items}. Can he share them into 2 equal groups?"
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 10
       }
     },
     {
       "kind": "multi-select",
-      "id": "pat-h-share-2",
-      "prompt": "Tap every number that can be shared into 2 equal groups.",
-      "randomise": {
-        "shuffleOptions": true
+      "id": "pat-h-odd-select",
+      "prompt": "Tap every odd number. There are 2 to choose.",
+      "explanation": "7 and 9 are odd. Each has 1 left over when paired.",
+      "narration": {
+        "prompt": "Tap every odd number. There are two to choose."
       },
       "options": [
         {
           "id": "a",
-          "label": "4"
+          "label": "6"
         },
         {
           "id": "b",
-          "label": "5"
+          "label": "7"
         },
         {
           "id": "c",
@@ -390,12 +264,161 @@
         }
       ],
       "correctIds": [
-        "a",
-        "c"
+        "b",
+        "d"
       ],
-      "explanation": "4 and 8 can be shared into 2 equal groups.",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-pair-10",
+      "prompt": "Which group can be put into pairs with none left over?",
+      "explanation": "10 makes 5 pairs with none left over.",
       "narration": {
-        "prompt": "Tap every number that can be shared into 2 equal groups."
+        "prompt": "Which group can be put into pairs with none left over?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 5
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 7
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 9
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 10
+          },
+          "layout": "dice"
+        }
+      ],
+      "correctId": "d",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "ordered",
+      "id": "pat-h-evens",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "explanation": "The numbers go 4, 6, 8, 10.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      },
+      "items": [
+        {
+          "id": "n8",
+          "label": "8"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        },
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n6",
+          "label": "6"
+        }
+      ],
+      "correctOrder": [
+        "n4",
+        "n6",
+        "n8",
+        "n10"
+      ]
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-leftover",
+      "prompt": "How many {items} are left over when 9 are put into pairs?",
+      "explanation": "9 makes 4 pairs with 1 left over.",
+      "narration": {
+        "prompt": "How many {items} are left over when nine are put into pairs?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
+      ],
+      "correctId": "b",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 9
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "pat-h-whole-groups",
+      "prompt": "How many more {items} does 9 need to make pairs with none left over?",
+      "explanation": "9 and 1 make 10. 10 makes 5 pairs.",
+      "narration": {
+        "prompt": "How many more {items} does nine need to make pairs with none left over?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
+      ],
+      "correctId": "b",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 9
       }
     }
   ]

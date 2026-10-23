@@ -13,8 +13,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 taps extra slots for what goes with 6 to make 10. Question 2 taps two number tiles that make 10, with dots on the tiles. Questions 3 to 5 tap slots for what goes with 8, 7 and 5 to make 10. Question 6 is the part-whole cherry for what goes with 0 to make 10. Question 7 taps slots for what goes with 9 to make 10. Question 8 taps every pair that makes 10. Question 9 is a short take-away story. Question 10 is 10 take away 4 with pictures. Hints on the first three. Totals stay 10.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or four tiles with dots, mixing plus and take away. Same node: recall bonds to 10 and related subtraction."
+    "within": "Question 1 What do you need to add to 6 to make 10? Question 2 What two numbers make 10? Question 3 What do you need to add to 8 to make 10? Question 4 What do you need to add to 7 to make 10? Question 5 What do you need to add to 5 to make 10? Question 6 What do you need to add to 0 to make 10? Question 7 What do you need to add to 9 to make 10? Question 8 What two numbers make 10? Question 9 Sam has 10 {items} and gives away 2. How many are left? Question 10 What is 10 take away 4?",
+    "versus": "Easy builds pictured bonds to 10 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": ["y1-bonds-10", "number-bonds-to-10", "addition-within-10", "subtraction-within-10"],
   "randomise": {
@@ -103,26 +103,33 @@
       "narration": { "prompt": "What do you need to add to 9 to make 10?" }
     },
     {
-      "kind": "multi-select",
+      "kind": "pick-pair",
       "id": "nb10-every",
-      "prompt": "Tap every pair that makes 10.",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "1 + 9" },
-        { "id": "b", "label": "2 + 7" },
-        { "id": "c", "label": "4 + 6" },
-        { "id": "d", "label": "3 + 8" }
+      "prompt": "What two numbers make 10?",
+      "explanation": "4 and 6 make 10.",
+      "narration": {
+        "prompt": "What two numbers make ten?"
+      },
+      "total": 10,
+      "tiles": [
+        4,
+        6,
+        0,
+        3
       ],
-      "correctIds": ["a", "c"],
-      "explanation": "1 and 9 make 10. 4 and 6 also make 10.",
-      "narration": { "prompt": "Tap every pair that makes 10." }
+      "showDots": true,
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10-take-2",
-      "prompt": "Sam has 10 {items} and eats 2. How many are left?",
+      "prompt": "Sam has 10 {items} and gives away 2. How many are left?",
       "visual": { "item": "apple", "count": 10, "removed": 2 },
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
         { "id": "a", "label": "6" },
         { "id": "b", "label": "7" },
@@ -131,14 +138,16 @@
       ],
       "correctId": "c",
       "explanation": "Because 2 + 8 = 10, 10 take away 2 is 8.",
-      "narration": { "prompt": "Sam has 10 {items} and eats 2. How many are left?" }
+      "narration": {
+        "prompt": "Sam has ten {items} and gives away two. How many are left?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "nb10-minus-4",
       "prompt": "What is 10 take away 4?",
       "visual": {
-        "item": "star",
+        "item": "apple",
         "count": 10,
         "removed": 4
       },

@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 compare near-equal counts (7 vs 8, 9 vs 10, 5 vs 6). Question 4 picks fewer with a gap of 1. Question 5 finds two matching groups among close distractors. Question 6 asks which has more with scattered tens-frame style. Question 7 orders five groups. Question 8 matches same amounts with mixed objects. Question 9 is a short story compare. Question 10 picks the group that is the same as a shown amount. No hints.",
+    "within": "Questions 1 to 3 compare near-equal counts (7 vs 8, 9 vs 10, 5 vs 6). Question 4 picks fewer with a gap of 1. Question 5 finds two matching groups among close distractors. Question 6 asks which has more with scattered tens-frame style. Question 7 orders four groups. Question 8 matches same amounts with mixed objects. Question 9 is a short story compare. Question 10 picks the group that is the same as a shown amount. No hints.",
     "versus": "Easy compares clear groups with big differences and hints early on. Medium uses closer counts and fewer hints. Hard mixes same amounts, word stems, and near-equal groups within 10."
   },
   "skills": [
@@ -218,7 +218,7 @@
     {
       "kind": "multi-select",
       "id": "cmp-h-same",
-      "prompt": "Tap every group that has the same number of {items}.",
+      "prompt": "Tap every group that has the same number of {items}. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -258,7 +258,7 @@
       ],
       "explanation": "Those two groups both have 8 {items}.",
       "narration": {
-        "prompt": "Tap every group that has the same number of {items}."
+        "prompt": "Tap every group that has the same number of {items}. There are two to choose."
       }
     },
     {
@@ -321,13 +321,6 @@
           }
         },
         {
-          "id": "g1",
-          "visual": {
-            "item": "car",
-            "count": 3
-          }
-        },
-        {
           "id": "g3",
           "visual": {
             "item": "car",
@@ -350,13 +343,12 @@
         }
       ],
       "correctOrder": [
-        "g1",
         "g2",
         "g3",
         "g4",
         "g5"
       ],
-      "explanation": "The counts go 3, 4, 6, 8, 10 from fewest to most.",
+      "explanation": "The groups go 4, 6, 8 and 10 from fewest to most.",
       "narration": {
         "prompt": "Put the groups in order, from fewest to most."
       }

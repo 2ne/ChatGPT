@@ -142,7 +142,7 @@ Requires: `eyfs-compose-10`. Quests: `doubles-and-bonds` (Easy), `doubles-and-bo
 - Automatically recall some number bonds to 10
 - Automatically recall double facts within 10
 
-### 9. `eyfs-patterns-10` — Patterns to 10
+### 9. `eyfs-patterns-10` — Odd, even and sharing
 
 Requires: `eyfs-bonds-10-some`. Quests: `patterns-to-10` (Easy), `patterns-to-10-medium`, `patterns-to-10-hard`. Status: done.
 

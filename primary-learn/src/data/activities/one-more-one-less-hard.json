@@ -1,7 +1,7 @@
 {
   "id": "one-more-one-less-hard",
   "title": "One more, one less",
-  "summary": "Find one more and one less with number words and mixed directions.",
+  "summary": "Find one more and one less using numbers and familiar counting patterns.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 use number words. Question 3 fills one less than 17. Question 4 matches mixed more and less. Question 5 asks one more than 0 as a stretch within the idea. Question 6 multi-select. Question 7 asks one less than 1. Question 8 orders by applying one more. Question 9 fills one more than 19. Question 10 is a short story. No hints.",
-    "versus": "Easy asks one more and one less within 10 with pictures. Medium mixes teens. Hard uses number words and both directions without hints."
+    "within": "Questions 1 and 2 handle the zero boundary without pictures. Questions 3 to 5 mix one more and one less in teens. Question 6 finds one less than 19. Question 7 matches clues. Question 8 orders nearby numbers. Question 9 crosses from 19 to 20. Question 10 applies one more in a short story. No hints or number-word reading.",
+    "versus": "Easy uses pictures within 10 and includes zero. Medium bridges 9, 10 and 11 before moving through the teens. Hard mixes both directions across 0 to 20 with a short story and no number-word reading."
   },
   "skills": [
     "y1-1-more-less",
@@ -41,8 +41,70 @@
   "questions": [
     {
       "kind": "multiple-choice",
+      "id": "oml-h-more-0",
+      "prompt": "What is one more than 0?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "One more than 0 is 1.",
+      "narration": {
+        "prompt": "What is one more than zero?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-h-less-1",
+      "prompt": "What is one less than 1?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "0"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "One less than 1 is 0.",
+      "narration": {
+        "prompt": "What is one less than one?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
       "id": "oml-h-more-word",
-      "prompt": "What is one more than thirteen?",
+      "prompt": "What is one more than 13?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -73,7 +135,7 @@
     {
       "kind": "multiple-choice",
       "id": "oml-h-less-word",
-      "prompt": "What is one less than sixteen?",
+      "prompt": "What is one less than 16?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -102,17 +164,65 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "oml-h-less-17",
       "prompt": "What is one less than 17?",
-      "acceptedAnswers": [
-        "16",
-        "sixteen"
-      ],
-      "inputMode": "numeric",
       "explanation": "One less than 17 is 16.",
       "narration": {
-        "prompt": "What is one less than 17?"
+        "prompt": "What is one less than seventeen?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "16"
+        },
+        {
+          "id": "b",
+          "label": "15"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "14"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "id": "oml-h-both",
+      "prompt": "What is one less than 19?",
+      "explanation": "One less than 19 is 18.",
+      "narration": {
+        "prompt": "What is one less than nineteen?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "19"
+        },
+        {
+          "id": "d",
+          "label": "16"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
@@ -145,102 +255,6 @@
       "explanation": "Each clue matches its number.",
       "narration": {
         "prompt": "Match each clue to its number."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "oml-h-more-0",
-      "prompt": "What is one more than zero?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "10"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "One more than 0 is 1.",
-      "narration": {
-        "prompt": "What is one more than zero?"
-      }
-    },
-    {
-      "kind": "multi-select",
-      "id": "oml-h-both",
-      "prompt": "Tap every correct sentence.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "One more than 19 is 20"
-        },
-        {
-          "id": "b",
-          "label": "One less than 19 is 20"
-        },
-        {
-          "id": "c",
-          "label": "One less than 12 is 11"
-        },
-        {
-          "id": "d",
-          "label": "One more than 12 is 11"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "One more than 19 is 20. One less than 12 is 11.",
-      "narration": {
-        "prompt": "Tap every correct sentence."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "oml-h-less-1",
-      "prompt": "What is one less than 1?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "10"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "One less than 1 is 0.",
-      "narration": {
-        "prompt": "What is one less than 1?"
       }
     },
     {
@@ -277,17 +291,34 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "oml-h-more-19",
       "prompt": "What is one more than 19?",
-      "acceptedAnswers": [
-        "20",
-        "twenty"
-      ],
-      "inputMode": "numeric",
       "explanation": "One more than 19 is 20.",
       "narration": {
-        "prompt": "What is one more than 19?"
+        "prompt": "What is one more than nineteen?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "21"
+        },
+        {
+          "id": "d",
+          "label": "18"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
@@ -318,7 +349,7 @@
       "correctId": "c",
       "explanation": "15 stickers and 1 more make 16 stickers.",
       "narration": {
-        "prompt": "Sam has 15 stickers. He gets 1 more. How many stickers does he have now?"
+        "prompt": "Sam has fifteen stickers. He gets one more. How many stickers does he have now?"
       }
     }
   ]

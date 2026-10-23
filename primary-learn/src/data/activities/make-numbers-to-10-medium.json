@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 3 put parts together for 8, then 9 as 6 and 3, then 10 as 7 and 3. Question 4 is the part-whole cherry for what goes with 2 to make 8. Question 5 taps slots for what goes with 4 to make 10. Questions 6 and 7 tap four tiles to find one pair that makes 10, first 0 and 10, then 1 and 9. Question 8 taps every pair that makes 8. Question 9 taps slots for what goes with 5 to make 9. Question 10 is a short story: Sam has 5 and gets 4 more. Starts at 8.",
-    "versus": "Easy builds composition with small parts and pictures. Medium uses 0 and reverse parts on totals near 10. Hard uses sum-only, reverse order and number words. This node is composition, not quick recall of all bonds."
+    "versus": "Easy builds totals 6 to 9 with pictures and small parts. Medium explores totals 8 to 10 including zero. Hard varies totals 6 to 10 with reversed parts and missing wholes. Bonds to a fixed total are practised separately."
   },
   "skills": [
     "eyfs-compose-10",
@@ -225,7 +225,7 @@
     {
       "kind": "multi-select",
       "id": "m10m-every-8",
-      "prompt": "Tap every pair that makes 8.",
+      "prompt": "Tap every pair that makes 8. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -253,7 +253,7 @@
       ],
       "explanation": "3 and 5 make 8. 4 and 4 also make 8.",
       "narration": {
-        "prompt": "Tap every pair that makes 8."
+        "prompt": "Tap every pair that makes eight. There are two to choose."
       }
     },
     {

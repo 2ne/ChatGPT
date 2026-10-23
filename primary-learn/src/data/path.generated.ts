@@ -57,7 +57,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
       {
         "number": 9,
         "id": "eyfs-patterns-10",
-        "title": "Patterns to 10"
+        "title": "Odd, even and sharing"
       }
     ]
   },

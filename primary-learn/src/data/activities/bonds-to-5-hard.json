@@ -1,7 +1,7 @@
 {
   "id": "bonds-to-5-hard",
   "title": "Bonds to 5",
-  "summary": "Mix plus and take away for bonds to 5, including 0 and number words.",
+  "summary": "Mix plus and take away for bonds to 5, including 0.",
   "subject": "maths",
   "type": "number-bonds",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 is the sum line for what goes with 4 to make 5. Question 2 fills 5 take away 2. Question 3 is the part-whole cherry for what 2 and 3 make. Question 4 asks the child to select every correct sum, mixing plus and take away. Question 5 is the sum line reverse for what goes with 0 to make 5. Question 6 is 5 take away 0. Question 7 is the sum line reverse for what goes with 4 to make 5. Question 8 taps four tiles with dots to make 5. Question 9 picks 5 take away 3 as a number word. Question 10 is 5 take away 1 with the bond in the explanation. No hints. Totals stay 5.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or four tiles with dots, mixing plus and take away."
+    "within": "Question 1 What do you need to add to 4 to make 5? Question 2 What is 5 take away 2? Question 3 What do 2 and 3 make? Question 4 What two numbers make 5? Question 5 What do you need to add to 0 to make 5? Question 6 What is 5 take away 0? Question 7 What do you need to add to 4 to make 5? Question 8 What two numbers make 5? Question 9 What is 5 take away 3? Question 10 What is 5 take away 1?",
+    "versus": "Easy builds pictured bonds to 5 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
     "eyfs-bonds-5",
@@ -109,37 +109,23 @@
       }
     },
     {
-      "kind": "multi-select",
+      "kind": "pick-pair",
       "id": "b5h-every-fact",
-      "prompt": "Select every correct sum.",
+      "prompt": "What two numbers make 5?",
+      "explanation": "1 and 4 make 5.",
+      "narration": {
+        "prompt": "What two numbers make five?"
+      },
+      "total": 5,
+      "tiles": [
+        1,
+        4,
+        0,
+        2
+      ],
+      "showDots": true,
       "randomise": {
         "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "1 + 4 = 5"
-        },
-        {
-          "id": "b",
-          "label": "5 − 1 = 4"
-        },
-        {
-          "id": "c",
-          "label": "2 + 2 = 5"
-        },
-        {
-          "id": "d",
-          "label": "5 − 5 = 1"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "b"
-      ],
-      "explanation": "1 and 4 make 5. Taking 1 away from 5 leaves 4.",
-      "narration": {
-        "prompt": "Select every correct sum."
       }
     },
     {
@@ -271,19 +257,19 @@
       "options": [
         {
           "id": "a",
-          "label": "one"
+          "label": "1"
         },
         {
           "id": "b",
-          "label": "two"
+          "label": "2"
         },
         {
           "id": "c",
-          "label": "three"
+          "label": "3"
         },
         {
           "id": "d",
-          "label": "four"
+          "label": "4"
         }
       ],
       "correctId": "b",

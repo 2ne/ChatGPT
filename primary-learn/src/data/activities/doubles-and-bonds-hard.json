@@ -1,7 +1,7 @@
 {
   "id": "doubles-and-bonds-hard",
   "title": "Doubles and bonds",
-  "summary": "Recall doubles and some bonds to 10 with sum-only and number words.",
+  "summary": "Practise doubles, then pairs of numbers that make 10.",
   "subject": "maths",
   "type": "number-bonds",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 are sum-only doubles and bonds (double 5, 9+1, 8+2). Question 4 is reverse blank + 5 = 10. Question 5 taps four tiles without relying on easy doubles only. Question 6 mixes take-away 10 − 2. Question 7 is double 4 as words. Question 8 taps every correct double. Question 9 is part-whole for 1 and 9. Question 10 is 10 take away 9. No hints.",
-    "versus": "Easy recalls doubles and friendly bonds like 5+5 and 9+1 with pictures. Medium mixes reverse order and take-away. Hard is sum-only with more bonds and number words. Full fluent recall of every bond to 10 is Year 1 node y1-bonds-10."
+    "within": "Questions 1 to 3 practise doubles in ascending order. The next questions practise bonds to 10, including the double 5. The last four mix familiar doubles and bonds without subtraction. No hints.",
+    "versus": "Easy practises doubles 1 to 4 before pictured bonds to 10. Medium starts with doubles to 10, then practises bonds 2 and 8 and 5 and 5. Hard mixes doubles and bonds after short blocks, without number words or unrelated subtraction."
   },
   "skills": [
     "eyfs-bonds-10-some",
@@ -41,124 +41,21 @@
   "questions": [
     {
       "kind": "make-total",
-      "id": "db-h-5-5",
-      "prompt": "What is 5 + 5?",
-      "part": 5,
-      "other": 5,
-      "total": 10,
+      "id": "db-h-double-3",
+      "prompt": "What is 3 + 3?",
+      "explanation": "3 and 3 make 6.",
+      "narration": {
+        "prompt": "What is three plus three?"
+      },
+      "part": 3,
+      "other": 3,
+      "total": 6,
       "gap": "total",
       "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
       "options": [
         {
           "id": "a",
-          "label": "10"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "12"
-        }
-      ],
-      "explanation": "5 and 5 make 10. This is double 5.",
-      "narration": {
-        "prompt": "What is five plus five?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "db-h-9-1",
-      "prompt": "What is 9 + 1?",
-      "part": 9,
-      "other": 1,
-      "total": 10,
-      "gap": "total",
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "10"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "12"
-        }
-      ],
-      "explanation": "9 and 1 make 10.",
-      "narration": {
-        "prompt": "What is nine plus one?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "db-h-8-2",
-      "prompt": "What is 8 + 2?",
-      "part": 8,
-      "other": 2,
-      "total": 10,
-      "gap": "total",
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "10"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "12"
-        }
-      ],
-      "explanation": "8 and 2 make 10.",
-      "narration": {
-        "prompt": "What is eight plus two?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "db-h-rev-5",
-      "prompt": "What do you need to add to 5 to make 10?",
-      "part": 5,
-      "total": 10,
-      "gap": "right",
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
+          "label": "6"
         },
         {
           "id": "b",
@@ -166,176 +63,280 @@
         },
         {
           "id": "c",
-          "label": "6"
+          "label": "7"
         },
         {
           "id": "d",
-          "label": "3"
+          "label": "4"
         }
       ],
-      "correctId": "b",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "db-h-double-4",
+      "prompt": "What is 4 + 4?",
+      "explanation": "4 and 4 make 8.",
+      "narration": {
+        "prompt": "What is four plus four?"
+      },
+      "part": 4,
+      "other": 4,
+      "total": 8,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "db-h-double-5",
+      "prompt": "What is 5 + 5?",
       "explanation": "5 and 5 make 10.",
       "narration": {
-        "prompt": "What do you need to add to five to make ten?"
+        "prompt": "What is five plus five?"
+      },
+      "part": 5,
+      "other": 5,
+      "total": 10,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "db-h-bond-3",
+      "prompt": "What do you need to add to 3 to make 10?",
+      "explanation": "3 and 7 make 10.",
+      "narration": {
+        "prompt": "What do you need to add to three to make ten?"
+      },
+      "part": 3,
+      "total": 10,
+      "gap": "right",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "5"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "db-h-bond-7",
+      "prompt": "What do you need to add to 7 to make 10?",
+      "explanation": "7 and 3 make 10.",
+      "narration": {
+        "prompt": "What do you need to add to seven to make ten?"
+      },
+      "part": 7,
+      "total": 10,
+      "gap": "right",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        },
+        {
+          "id": "d",
+          "label": "1"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "pick-pair",
-      "id": "db-h-pair",
+      "id": "db-h-pair-10",
       "prompt": "What two numbers make 10?",
+      "explanation": "3 and 7 make 10.",
+      "narration": {
+        "prompt": "What two numbers make ten?"
+      },
       "total": 10,
       "tiles": [
-        7,
         3,
-        4,
+        7,
+        0,
         2
       ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
-      },
-      "explanation": "7 and 3 make 10.",
-      "narration": {
-        "prompt": "What two numbers make 10?"
       }
     },
     {
-      "kind": "multiple-choice",
-      "id": "db-h-take-2",
-      "prompt": "What is 10 take away 2?",
-      "visual": {
-        "item": "star",
-        "count": 10,
-        "removed": 2
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "7"
-        },
-        {
-          "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
-          "label": "9"
-        },
-        {
-          "id": "d",
-          "label": "6"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "Because 8 + 2 = 10, 10 take away 2 is 8.",
-      "narration": {
-        "prompt": "What is ten take away two?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "db-h-words",
-      "prompt": "What is four plus four?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        },
-        {
-          "id": "d",
-          "label": "9"
-        }
-      ],
-      "correctId": "c",
-      "explanation": "4 and 4 make 8. This is double 4.",
+      "kind": "make-total",
+      "id": "db-h-double-4-review",
+      "prompt": "What is 4 + 4?",
+      "explanation": "4 and 4 make 8.",
       "narration": {
         "prompt": "What is four plus four?"
-      }
-    },
-    {
-      "kind": "multi-select",
-      "id": "db-h-every-double",
-      "prompt": "Select every correct sum.",
-      "randomise": {
-        "shuffleOptions": true
       },
+      "part": 4,
+      "other": 4,
+      "total": 8,
+      "gap": "total",
+      "mode": "sum-only",
       "options": [
         {
           "id": "a",
-          "label": "3 + 3 = 6"
+          "label": "8"
         },
         {
           "id": "b",
-          "label": "4 + 4 = 7"
+          "label": "7"
         },
         {
           "id": "c",
-          "label": "5 + 5 = 10"
+          "label": "9"
         },
         {
           "id": "d",
-          "label": "2 + 2 = 5"
+          "label": "6"
         }
       ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "3 and 3 make 6. 5 and 5 make 10.",
-      "narration": {
-        "prompt": "Select every correct sum."
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
       "kind": "part-whole",
-      "id": "db-h-pw-1-9",
+      "id": "db-h-double-5-review",
+      "prompt": "What do 5 and 5 make?",
+      "explanation": "5 and 5 make 10.",
+      "narration": {
+        "prompt": "What do five and five make?"
+      },
       "whole": 10,
       "parts": [
-        1,
-        9
+        5,
+        5
       ],
-      "missing": "right",
+      "missing": "whole",
       "choices": [
-        8,
+        10,
         9,
-        10
-      ],
-      "explanation": "1 and 9 make 10.",
-      "narration": {
-        "prompt": "What do you need to add to one to make ten?"
-      },
-      "prompt": "What do you need to add to 1 to make 10?"
+        11
+      ]
     },
     {
-      "kind": "multiple-choice",
-      "id": "db-h-take-9",
-      "prompt": "What is 10 take away 9?",
-      "visual": {
-        "item": "apple",
-        "count": 10,
-        "removed": 9
+      "kind": "make-total",
+      "id": "db-h-bond-2",
+      "prompt": "What do you need to add to 2 to make 10?",
+      "explanation": "2 and 8 make 10.",
+      "narration": {
+        "prompt": "What do you need to add to two to make ten?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "part": 2,
+      "total": 10,
+      "gap": "left",
+      "mode": "sum-only",
       "options": [
         {
           "id": "a",
-          "label": "0"
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "kind": "make-total",
+      "id": "db-h-bond-8",
+      "prompt": "What do you need to add to 8 to make 10?",
+      "explanation": "8 and 2 make 10.",
+      "narration": {
+        "prompt": "What do you need to add to eight to make ten?"
+      },
+      "part": 8,
+      "total": 10,
+      "gap": "left",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
         },
         {
           "id": "b",
@@ -343,17 +344,15 @@
         },
         {
           "id": "c",
-          "label": "2"
+          "label": "3"
         },
         {
           "id": "d",
-          "label": "3"
+          "label": "0"
         }
       ],
-      "correctId": "b",
-      "explanation": "Because 9 + 1 = 10, 10 take away 9 is 1.",
-      "narration": {
-        "prompt": "What is ten take away nine?"
+      "randomise": {
+        "shuffleOptions": true
       }
     }
   ]

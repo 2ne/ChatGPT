@@ -119,7 +119,7 @@
     {
       "kind": "multiple-choice",
       "id": "rw20h-ten-bit-19",
-      "prompt": "19 is 10 and which bit?",
+      "prompt": "19 is 10 and how many more?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -144,7 +144,7 @@
       "correctId": "c",
       "explanation": "19 is 10 and 9.",
       "narration": {
-        "prompt": "Nineteen is ten and which bit?"
+        "prompt": "nineteen is ten and how many more?"
       }
     },
     {
@@ -234,7 +234,7 @@
     {
       "kind": "multi-select",
       "id": "rw20h-correct",
-      "prompt": "Tap every correct match.",
+      "prompt": "Tap every correct match. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -262,13 +262,13 @@
       ],
       "explanation": "11 is eleven. 16 is sixteen.",
       "narration": {
-        "prompt": "Tap every correct match."
+        "prompt": "Tap every correct match. There are two to choose."
       }
     },
     {
       "kind": "multiple-choice",
       "id": "rw20h-ten-bit-11",
-      "prompt": "11 is 10 and which bit?",
+      "prompt": "11 is 10 and how many more?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -293,7 +293,7 @@
       "correctId": "b",
       "explanation": "11 is 10 and 1.",
       "narration": {
-        "prompt": "Eleven is ten and which bit?"
+        "prompt": "eleven is ten and how many more?"
       }
     },
     {

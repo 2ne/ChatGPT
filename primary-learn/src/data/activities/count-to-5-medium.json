@@ -13,7 +13,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 types the count of a messy group of 4 or 5. Question 6 picks which group has 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 shows 5 and asks the child to tap the matching group. Question 10 asks how many in a messy 5. No return to a 1-object count.",
+    "within": "Questions 1 to 3 tap-count a scattered group of 3, then 4, then 5. Question 4 builds a set of 3 or 4. Question 5 chooses the count of a messy group of 4 or 5. Question 6 picks which group has 4. Questions 7 to 8 stretch the count sequence (next after 4, then order 1 to 4). Question 9 shows 5 and asks the child to tap the matching group. Question 10 asks how many in a messy 5. No return to a 1-object count.",
     "versus": "Easy: tidy rows, counts 1 to 5 in order, hints on items 1 to 3. Medium: scattered layouts, mixed pictures and numerals, build and type counts can move inside 3 to 5, hints only on 1 to 3. Hard: extra objects to ignore, a numeral match, a full 1 to 5 order, and almost no hints. Still counting to 5, not bonds."
   },
   "skills": [

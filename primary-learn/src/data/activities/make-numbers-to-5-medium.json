@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 3 put parts together for 4, then 5 as 4 and 1, then 5 as 3 and 2. Question 4 is the part-whole cherry for what goes with 2 to make 4. Question 5 taps extra slots for what goes with 2 to make 5. Questions 6 and 7 tap four tiles to find one pair that makes 5, first 0 and 5, then 1 and 4. Question 8 taps every pair that makes 4. Question 9 taps extra slots for what goes with 4 to make 5. Question 10 is a short story: Sam has 2 and gets 3 more. Starts at 4.",
-    "versus": "Easy starts at 1 and 1 on the sum line, with early hints and four tiles with dots. Medium starts at 4 and 5, adds 0 and 5, still on four tiles. Hard uses reverse parts, number words, a hidden part, and four tiles with dots. Still composition of numbers to 5, not quick bond recall."
+    "versus": "Easy builds totals 2 to 5 with small parts and pictures. Medium explores 4 and 5 including zero. Hard compares ways to make 3, 4 and 5 using missing parts and reversed parts. No reading or spelling challenge is added."
   },
   "skills": [
     "eyfs-compose-5",
@@ -209,7 +209,7 @@
     {
       "kind": "multi-select",
       "id": "m5m-every-4",
-      "prompt": "Tap every pair that makes 4.",
+      "prompt": "Tap every pair that makes 4. There are 2 to choose.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -237,7 +237,7 @@
       ],
       "explanation": "1 and 3 make 4. 2 and 2 also make 4.",
       "narration": {
-        "prompt": "Tap every pair that makes 4."
+        "prompt": "Tap every pair that makes four. There are two to choose."
       }
     },
     {
