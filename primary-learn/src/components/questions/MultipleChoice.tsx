@@ -1,4 +1,5 @@
 import { copy } from "../../data/copy";
+import { OBJECT_WORDS, describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
@@ -18,6 +19,49 @@ export function MultipleChoice({
   reveal,
   onChange,
 }: MultipleChoiceProps) {
+  if (question.kind === "multiple-choice" && question.numeral != null) {
+    const item = question.options.find((option) => option.visual)?.visual?.item;
+    const items = item ? OBJECT_WORDS[item].plural : "objects";
+    const shown = question.numeralLabel ?? String(question.numeral);
+    return (
+      <div className="amount-pick">
+        <p className="t-body">{copy.tapMatchNumber(items)}</p>
+        <div className={`amount-numeral${question.numeralLabel ? " is-word" : ""}`} aria-hidden>
+          {shown}
+        </div>
+        <div role="radiogroup" aria-label={copy.pickOne} className="amount-grid">
+          {question.options.map((option) => {
+            const selected = answer === option.id;
+            const marked = markChoice(reveal, selected, option.id === question.correctId);
+            return (
+              <button
+                key={`${question.id}-${option.id}`}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                aria-label={option.visual ? describeVisual(option.visual) : undefined}
+                disabled={disabled}
+                onClick={() => onChange(option.id)}
+                className={choiceClass(selected, marked, ["amount-card"])}
+              >
+                <OptionContent visual={option.visual} layout={option.layout} pack />
+                {marked === "correct" ? (
+                  <span className="option-check" aria-hidden>
+                    ✓
+                  </span>
+                ) : marked === "wrong" ? (
+                  <span className="option-cross" aria-hidden>
+                    ✕
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   const showStem = question.kind !== "count-objects" && Boolean(question.visual);
   const sum = !question.visual && optionsAreNumerals(question.options)
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)

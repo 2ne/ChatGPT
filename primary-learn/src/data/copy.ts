@@ -31,6 +31,7 @@ export const copy = {
   yourAnswer: "Your answer",
   chooseAll: "Tap every answer that is right.",
   tapThenPartner: "Tap one, then tap its partner.",
+  tapMatchNumber: (items: string) => `Tap the ${items} that match the number.`,
   countAgain: "Count again",
   lookAgain: "Look again",
   lookedAgainOnce: "You only looked again once!",

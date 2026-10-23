@@ -453,7 +453,42 @@ function parseQuestion(value: unknown, path: string): Question {
           );
         }
       }
-      return { ...core, kind, options, correctId };
+      let numeral: number | undefined;
+      let numeralLabel: string | undefined;
+      if (value.numeral != null) {
+        numeral = expectNumber(value, "numeral", path);
+        if (!Number.isInteger(numeral) || numeral < 1 || numeral > 12) {
+          fail(path, "numeral must be a whole number from 1 to 12");
+        }
+        if (prompt !== "How many {items}?") {
+          fail(path, 'numeral picture picks use prompt How many {items}?');
+        }
+        if (visual) fail(path, "numeral picture picks show the number card, not a stem picture");
+        if (options.length !== 4) fail(path, "numeral picture picks need exactly 4 picture options");
+        const items = new Set<string>();
+        const counts = new Set<number>();
+        for (const option of options) {
+          if (!option.visual || option.label) {
+            fail(path, "numeral options must be a picture with no label");
+          }
+          if (option.layout && option.layout !== "row") {
+            fail(path, "numeral picture groups use a tidy row");
+          }
+          items.add(option.visual.item);
+          counts.add(option.visual.count);
+        }
+        if (items.size !== 1) fail(path, "all picture groups must use the same item");
+        if (counts.size !== 4) fail(path, "each picture group needs a different count");
+        const correct = options.find((option) => option.id === correctId);
+        if (correct?.visual?.count !== numeral) {
+          fail(path, "the correct group must have visual.count equal to numeral");
+        }
+        if (core.randomise?.count) fail(path, "do not randomise count on a numeral picture pick");
+        if (value.numeralLabel != null) {
+          numeralLabel = expectString(value, "numeralLabel", path);
+        }
+      }
+      return { ...core, kind, options, correctId, numeral, numeralLabel };
     }
     case "multi-select": {
       const options = expectArray(value, "options", path).map((option, i) =>

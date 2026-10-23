@@ -18,6 +18,8 @@ type ObjectGroupProps = {
   extras?: ObjectAsset[];
   /** Smaller tiles for A/B/C/D and match-pair cards. Stems never pass this. */
   compact?: boolean;
+  /** Neat rows of at most 5 for the 2x2 amount-pick cards. */
+  pack?: boolean;
   interactive?: boolean;
   layout?: ObjectLayout;
   /** Brief reveal then hide (subitising). */
@@ -71,12 +73,21 @@ function groupLabel(visual: ObjectAsset, extras: ObjectAsset[] | undefined, inte
   return `${words.plural}. Tap each one to count.`;
 }
 
-function groupClass(scatter: boolean, compact: boolean, tappable: boolean): string {
+function groupClass(scatter: boolean, compact: boolean, tappable: boolean, pack?: boolean): string {
   const bits = ["object-group", "is-tiled"];
   if (tappable) bits.push("is-tappable");
   if (scatter) bits.push("is-scatter");
   if (compact) bits.push("is-option");
+  if (pack) bits.push("is-amount");
   return bits.join(" ");
+}
+
+function rowLengths(count: number, max = 5): number[] {
+  if (count <= max) return [count];
+  const rows = Math.ceil(count / max);
+  const base = Math.floor(count / rows);
+  const extra = count % rows;
+  return Array.from({ length: rows }, (_, index) => base + (index < extra ? 1 : 0));
 }
 
 function fingerLabel(count: number): string {
@@ -106,15 +117,39 @@ function PictureTiles({
   tokens,
   scatter,
   compact,
+  pack,
   label,
 }: {
   tokens: Token[];
   scatter: boolean;
   compact: boolean;
+  pack?: boolean;
   label: string;
 }) {
+  const className = groupClass(scatter, compact, false, pack);
+  if (pack) {
+    const rows = rowLengths(tokens.length);
+    let offset = 0;
+    return (
+      <span className={className} aria-label={label}>
+        {rows.map((size, row) => {
+          const slice = tokens.slice(offset, offset + size);
+          offset += size;
+          return (
+            <span key={`r-${row}`} className="object-row" aria-hidden>
+              {slice.map((token) => (
+                <span key={token.key} className="object-token">
+                  <span className="object-glyph">{OBJECT_GLYPH[token.item]}</span>
+                </span>
+              ))}
+            </span>
+          );
+        })}
+      </span>
+    );
+  }
   return (
-    <span className={groupClass(scatter, compact, false)} aria-label={label}>
+    <span className={className} aria-label={label}>
       {tokens.map((token) => (
         <span key={token.key} className="object-token" aria-hidden>
           <span className="object-glyph">{OBJECT_GLYPH[token.item]}</span>
@@ -174,6 +209,7 @@ export function ObjectGroup({
   visual,
   extras,
   compact,
+  pack,
   interactive = false,
   layout,
   flashMs,
@@ -247,6 +283,7 @@ export function ObjectGroup({
         tokens={tokens}
         scatter={scatter}
         compact={Boolean(compact)}
+        pack={pack}
         label={lookLabel}
       />
     );
@@ -323,14 +360,16 @@ export function OptionContent({
   label,
   visual,
   layout,
+  pack,
 }: {
   label?: string;
   visual?: ObjectAsset;
   layout?: ObjectLayout;
+  pack?: boolean;
 }) {
   return (
     <span className="option-content">
-      {visual ? <ObjectGroup visual={visual} compact layout={layout} /> : null}
+      {visual ? <ObjectGroup visual={visual} compact pack={pack} layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
     </span>
   );

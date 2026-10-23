@@ -18,6 +18,7 @@ rules, change the design — do not invent a second system.
    Calm does not mean grey.
 4. **Chunky and touch-first** — primary controls ≥ 52px tall; answer options
    ≥ 64px with letter badges (A–D). Pictured join stories use the same rows.
+   Number-to-amount picks use a 2x2 picture grid instead.
 5. **Celebrate constantly** — stars, confetti pops, cheering Pip.
    Kids should feel progress every 30 seconds.
 6. **Colour with meaning** — maths tiles are orange; green = correct,
@@ -250,7 +251,10 @@ the thin rainbow. Inner words stay padded.
   Do not show a grey `Tap every answer that is right.` line when the prompt already says every.
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Pictured
   join stories (`visual.added`) with digit answers use those same rows, not a
-  separate centred number pad. Selected = indigo ring + soft fill; correct
+  separate centred number pad. Number-to-amount picks (`numeral` on
+  multiple-choice) are the other exception: a lavender number card and a 2x2
+  grid of equal picture cards, no A-D. The grey line is
+  `Tap the {items} that match the number.` Selected = indigo ring + soft fill; correct
   = green + ✓ + wiggle; wrong = red + ✕ + shake. Colour is never the only signal
   (icons + words too).
 - Selection, correct and wrong states are **shared** across every question
@@ -277,7 +281,9 @@ the thin rainbow. Inner words stay padded.
   centred pills per question kind. Number answers on `make-total` and pictured
   join stories use the same buttons as multiple-choice. Exceptions: `pick-pair`
   square tiles, `part-whole` rounded-square number buttons (one row of three),
-  and `ordered` big numeral tiles (drag handle plus up/down arrows).
+  `ordered` big numeral tiles (drag handle plus up/down arrows), and
+  number-to-amount 2x2 picture cards (same size, cream tiles in neat rows of
+  at most 5).
 - Hint is a `Need a hint?` button until opened, then a sunny dashed card.
   Do not put a speaker on the hint — hints can give the strategy away.
 - Feedback appears under options: icon medallion + bold title + 1–2 sentence

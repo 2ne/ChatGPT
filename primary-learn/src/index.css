@@ -1353,6 +1353,95 @@ button.learner-chip:focus-visible {
   border-radius: 12px;
 }
 
+.object-group.is-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+
+.object-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.object-group.is-amount .object-token {
+  min-width: 26px;
+  min-height: 26px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.amount-pick {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  width: 100%;
+}
+
+.amount-pick .t-body {
+  margin: 0;
+  text-align: center;
+}
+
+.amount-numeral {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 28px;
+  background: var(--primary-soft);
+  border: 3px solid var(--primary);
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.amount-numeral.is-word {
+  width: auto;
+  min-width: 112px;
+  padding: 0 18px;
+  font-size: 36px;
+}
+
+.amount-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.option.amount-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 148px;
+  min-height: 148px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.option.amount-card .option-content {
+  flex: none;
+  justify-content: center;
+}
+
+.option.amount-card .option-check,
+.option.amount-card .option-cross {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
 .object-group.is-scatter {
   display: grid;
   grid-template-columns: repeat(3, minmax(56px, 1fr));

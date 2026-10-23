@@ -64,6 +64,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | conceptual subitise | `How many can you see in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
 | hidden quantity | `How many {items} are under the cup?` with `layout` `hidden` and `flashMs`. |
 | pick a group | `Which group has {n} {items}?` (single choice). Multi-select: `Which groups have {n} {items}?` or `Tap every group that has {n} {items}.` Do not write `Which group?` alone. |
+| pick an amount | Number shown, tap the matching group: `How many {items}?` plus `numeral`. Grey line: `Tap the {items} that match the number.` Four picture cards, one correct count, three near misses. Do not use match-pairs for this. |
 | light story | `{Name} has {n} {items} and {action}. How many are left?` / `How many {items} does he have now?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. Take-away pictures set `visual.count` (start) and `visual.removed` (last N on light red tiles). |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What number comes next? 1, 2, 3, ?` Explanation: `{n} comes after {n-1}.` |
@@ -77,7 +78,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | part-whole | Missing part: `What do you need to add to {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
 | multi-select | Number sentences: `Select every correct sum.` Never `Tap every fact that is true.` Pictures: `Tap every group that has {n} {items}.` Pairs: `Tap every pair that makes {n}.` |
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
-| match-pairs | `Match each {left} to {right}.` Picture-to-numeral matching is fine. Option sides may set `layout` but still draw tiles, not frames. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
+| match-pairs | `Match each {left} to {right}.` Do not use match-pairs to pair numerals with amounts. Use multiple-choice with `numeral` and four picture groups. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |
 | story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures use `visual.count` `{n}` and `visual.removed` `{m}` in one cream strip. The last `{m}` sit on light red tiles. |
 

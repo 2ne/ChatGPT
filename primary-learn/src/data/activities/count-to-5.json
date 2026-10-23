@@ -13,7 +13,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Question 6 says what comes next. Question 7 picks the missing amount in the count from pictures. Question 8 orders 1 to 3. Question 9 matches numerals to amounts. Question 10 picks which group has 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
+    "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Question 6 says what comes next. Question 7 picks the missing amount in the count from pictures. Question 8 orders 1 to 3. Question 9 shows 4 and asks the child to tap the matching group. Question 10 picks which group has 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
     "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, number words, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
   },
   "skills": [
@@ -160,18 +160,20 @@
       "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c5e-match",
-      "prompt": "Match each number to the same amount of {items}.",
-      "randomise": {},
-      "pairs": [
-        { "id": "p1", "left": "1", "right": { "visual": { "item": "fish", "count": 1 }, "layout": "dice" } },
-        { "id": "p2", "left": "2", "right": { "visual": { "item": "fish", "count": 2 }, "layout": "dice" } },
-        { "id": "p3", "left": "4", "right": { "visual": { "item": "fish", "count": 4 }, "layout": "dice" } },
-        { "id": "p4", "left": "5", "right": { "visual": { "item": "fish", "count": 5 }, "layout": "dice" } }
+      "prompt": "How many {items}?",
+      "numeral": 4,
+      "randomise": { "shuffleOptions": true },
+      "options": [
+        { "id": "a", "visual": { "item": "fish", "count": 3 } },
+        { "id": "b", "visual": { "item": "fish", "count": 5 } },
+        { "id": "c", "visual": { "item": "fish", "count": 4 } },
+        { "id": "d", "visual": { "item": "fish", "count": 2 } }
       ],
-      "explanation": "Each number tells us how many objects are in its group.",
-      "narration": { "prompt": "Match each number to the same amount of {items}." }
+      "correctId": "c",
+      "explanation": "That group has 4 {items}.",
+      "narration": { "prompt": "How many {items}?" }
     },
     {
       "kind": "multiple-choice",
