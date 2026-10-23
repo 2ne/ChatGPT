@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Question 1 taps extra slots for what goes with 3 to make 5. Question 2 taps extra slots for what goes with 4 to make 5. Question 3 is the sum line for what goes with 0 to make 5. Question 4 is the part-whole cherry for what goes with 5 to make 5. Question 5 is 5 take away 3. Questions 6 and 7 tap four tiles to find one pair that makes 5, first 1 and 4, then 2 and 3. Question 8 is the sum line reverse for what goes with 2 to make 5. Question 9 fills 5 take away 4. Question 10 is 5 take away 5. Hints on 1 to 3.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots. Still bonds to 5 only."
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or four tiles with dots, mixing plus and take away. Still bonds to 5 only."
   },
   "skills": [
     "eyfs-bonds-5",

@@ -21,7 +21,7 @@ Change **one or two** dimensions at a time. Never jump all of them at once.
 | Steps | One step, one idea | One step plus a tiny extra (order reversed, picture then numeral) | Two steps the node actually teaches — not a new topic |
 | Representation | Objects / emoji groups the child can touch-count | Mix of pictures and numerals | Numerals, words, or a short story. No count-all objects unless the node is counting |
 | Scaffolding | Hint on the first third of items; stem names the strategy (“count each one”) | Hints only on the last third, or none | No hints unless the item is a new representation |
-| Question kind | Tap-to-count, build-set, make-total fill-slots, pick-pair with dots, part-whole, multiple-choice or fill-blank | Mix two or three kinds, including make-total fill-slots or sum-only, pick-pair with harder numbers, or part-whole | Include make-total sum-only, pick-pair with no dots, part-whole with a missing whole, multi-select, ordered, match, or a one-step story if the node supports it |
+| Question kind | Tap-to-count, build-set, make-total fill-slots, pick-pair with dots, part-whole, multiple-choice or fill-blank | Mix two or three kinds, including make-total fill-slots or sum-only, pick-pair with harder numbers, or part-whole | Include make-total sum-only, pick-pair with harder numbers (still with dots), part-whole with a missing whole, multi-select, ordered, match, or a one-step story if the node supports it |
 
 **Easy < Medium < Hard** on the same node must be obvious if you put the three quests side by side. Medium is not “Easy plus one trick question”. Hard is not a different topic.
 

@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Question 1 taps extra slots for what goes with 3 to make 10. Question 2 taps extra slots for what goes with 4 to make 10. Question 3 is the sum line for what goes with 0 to make 10. Question 4 is the part-whole cherry for what goes with 10 to make 10. Question 5 is 10 take away 3. Questions 6 and 7 tap four tiles to find one pair that makes 10, first 1 and 9, then 2 and 8. Question 8 is the sum line reverse for what goes with 7 to make 10. Question 9 fills 10 take away 6. Question 10 is 10 take away 10. Hints on 1 to 3.",
-    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or tiles with no dots, mixing plus and take away. Still bonds to 10 only."
+    "versus": "Easy taps extra slots or four tiles with dots. Medium mixes tap-to-fill with the sum line, or four tiles with 0. Hard is the sum line or four tiles with dots, mixing plus and take away. Still bonds to 10 only."
   },
   "skills": [
     "y1-bonds-10",

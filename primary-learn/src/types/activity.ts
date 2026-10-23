@@ -226,9 +226,9 @@ export type MakeTotalQuestion = QuestionCore & {
 };
 
 /**
- * Tap two number tiles that add to `total`. Easy shows quantity dots.
- * Hard hides the dots. Always four tiles and one pair. Finding every
- * pair is match-pairs. Medium difficulty is the numbers, not tile count.
+ * Tap two number tiles that add to `total`. Quantity dots on every level.
+ * Always four tiles and one pair. Finding every pair is match-pairs.
+ * Medium and Hard raise difficulty with the numbers, not by hiding dots.
  */
 export type PickPairQuestion = QuestionCore & {
   kind: "pick-pair";
@@ -240,7 +240,7 @@ export type PickPairQuestion = QuestionCore & {
   tileRange?: { min: number; max: number };
   /** How many tiles to draw from `tileRange`. Default 4, max 4. */
   tileCount?: number;
-  /** Quantity dots on each tile. Default true. Hard sets false. */
+  /** Quantity dots on each tile. Default true. Keep true on Hard too. */
   showDots?: boolean;
 };
 

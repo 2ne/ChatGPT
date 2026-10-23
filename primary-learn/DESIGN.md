@@ -356,9 +356,10 @@ the thin rainbow. Inner words stay padded.
   selected. No sum line under the tiles. Always four tiles and exactly one
   pair. No duplicate numbers that make a second pair. Finding every pair
   belongs to
-  `match-pairs` later. Easy: four tiles with dots. Medium: four tiles, harder
-  numbers (0, reverse parts). Hard: four tiles, no dots. Later totals to 10
-  or 20 use the same `total` / `tiles` config.
+  `match-pairs` later. Easy, Medium and Hard all use four tiles with dots.
+  Medium and Hard raise difficulty with harder numbers (0, reverse parts),
+  not by hiding dots. Later totals to 10 or 20 use the same `total` / `tiles`
+  config.
 - **Order (`ordered`)** is a vertical stack of big numeral tiles (about 48px
   digits). Left: a grip handle so drag is obvious. Middle: the number. Right:
   up/down arrow buttons. Kids can drag or tap arrows. No position numbers like

@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 2 ask what goes with 0, then 5, to make 5, on the sum line only. Question 3 is the part-whole cherry for what 1 and 2 make. Question 4 is the sum line for what goes with 3 to make 5. Question 5 taps four tiles with no dots to make 5. Question 6 is a short story: Sam has 1 and gets 4 more. Question 7 is reverse order for what goes with 2 to make 5. Question 8 is the sum line for a hidden part: what goes with 2 to make 5. Question 9 is the part-whole cherry for what goes with 4 to make 4. Question 10 picks another pair that makes 5. No hints.",
-    "versus": "Easy is small sums from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, still on four tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and tiles with no dots. Same node: composition of each number to 5."
+    "within": "Questions 1 to 2 ask what goes with 0, then 5, to make 5, on the sum line only. Question 3 is the part-whole cherry for what 1 and 2 make. Question 4 is the sum line for what goes with 3 to make 5. Question 5 taps four tiles with dots to make 5. Question 6 is a short story: Sam has 1 and gets 4 more. Question 7 is reverse order for what goes with 2 to make 5. Question 8 is the sum line for a hidden part: what goes with 2 to make 5. Question 9 is the part-whole cherry for what goes with 4 to make 4. Question 10 picks another pair that makes 5. No hints.",
+    "versus": "Easy is small sums from 2 up to 5, or four tiles with dots. Medium is 4 and 5 with 0 and 5, still on four tiles. Hard stays on 5, uses 0, reverse order, number words, a hidden part, and four tiles with dots. Same node: composition of each number to 5."
   },
   "skills": [
     "eyfs-compose-5",
@@ -157,7 +157,7 @@
       "prompt": "What two numbers make 5?",
       "total": 5,
       "tiles": [0, 5, 2, 4],
-      "showDots": false,
+      "showDots": true,
       "randomise": {
         "shuffleOptions": true
       },
