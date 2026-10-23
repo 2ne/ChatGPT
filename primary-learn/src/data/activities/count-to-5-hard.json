@@ -1,7 +1,7 @@
 {
   "id": "count-to-5-hard",
   "title": "Count to 5",
-  "summary": "Count one kind among mixed things, build 5, and use number words. Still within 5.",
+  "summary": "Count one kind among mixed things, build 5, and match a numeral to a group. Still within 5.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": ["Reception"],
@@ -13,8 +13,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 shows the word four and asks the child to tap the matching group. Question 8 orders 1 to 5. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
-    "versus": "Easy is tidy 1 to 5 with tap-count and early hints. Medium is scattered groups of the same object, counts 2 to 5. Hard adds extra objects to ignore, number words, a full 1 to 5 sequence, and a large build-set. Still the same node: count sequence, numerals and one-to-one to 5."
+    "within": "Questions 1 to 4 count only one kind in a mixed scatter (2, then 3, then 4, then 5 of the target). Question 5 builds exactly 5 from a large tray. Question 6 taps every group of 5. Question 7 shows the numeral 4 and asks the child to tap the matching group. Question 8 orders 1 to 5. Question 9 is a short story: Sam only wants one kind. Question 10 fills the last number in 1, 2, 3, 4, blank. No adding two groups. No bonds.",
+    "versus": "Easy is tidy 1 to 5 with tap-count and early hints. Medium is scattered groups of the same object, counts 2 to 5. Hard adds extra objects to ignore, a numeral match, a full 1 to 5 sequence, and a large build-set. Still the same node: count sequence, numerals and one-to-one to 5."
   },
   "skills": [
     "eyfs-count-5",
@@ -138,10 +138,9 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "c5h-words",
-      "prompt": "How many {items}?",
+      "id": "c5h-match",
+      "prompt": "Tap the {items} that match the number below.",
       "numeral": 4,
-      "numeralLabel": "four",
       "randomise": { "shuffleOptions": true },
       "options": [
         { "id": "a", "visual": { "item": "strawberry", "count": 5 } },
@@ -150,8 +149,8 @@
         { "id": "d", "visual": { "item": "strawberry", "count": 2 } }
       ],
       "correctId": "c",
-      "explanation": "Four means 4 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "explanation": "That group has 4 {items}.",
+      "narration": { "prompt": "Tap the {items} that match the number below." }
     },
     {
       "kind": "ordered",

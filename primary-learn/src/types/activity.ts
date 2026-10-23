@@ -166,7 +166,7 @@ export type MultipleChoiceQuestion = QuestionCore & {
    * grid of picture groups. The correct option’s visual.count must match.
    */
   numeral?: number;
-  /** Word on the number card (hard). Omit to show the digit. */
+  /** Optional word on the number card. Omit to show the digit. */
   numeralLabel?: string;
 };
 

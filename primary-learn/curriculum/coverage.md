@@ -20,7 +20,7 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- | --- |
 | `count-to-5` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Easy: tidy tap-count 1 to 5, five-frame type-4, pictured gap, Sam-needs-5 story |
 | `count-to-5-medium` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Medium: scattered groups, build a set, last-number cardinality |
-| `count-to-5-hard` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Hard: count one kind among mixed objects, number words, full 1 to 5 order |
+| `count-to-5-hard` | `eyfs-count-5` (node 1, category `cat-r-to-5`) | done — Hard: count one kind among mixed objects, numeral match, full 1 to 5 order |
 | `see-numbers-to-5` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Easy: flash dice 1 to 5, five-frame, fingers, hidden cup, 2+2 in all |
 | `see-numbers-to-5-medium` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Medium: shorter flash, scatter, 2+3 in all, fingers, hidden cup |
 | `see-numbers-to-5-hard` | `eyfs-subitise-5` (node 2, category `cat-r-to-5`) | done — Hard: quick flash, 1+4 and 2+3 in all, five-frame, number words |

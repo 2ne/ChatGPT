@@ -14,7 +14,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Questions 1 to 3 tap-count a tidy row of 1, then 2, then 3 objects. Question 4 types the count of 4. Question 5 builds a group of 5 from a tray. Question 6 says what comes next. Question 7 picks the missing amount in the count from pictures. Question 8 orders 1 to 3. Question 9 shows 4 and asks the child to tap the matching group. Question 10 picks which group has 5. The object counts climb 1, 2, 3, 4, 5 with no drop-back.",
-    "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, number words, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
+    "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, a numeral match, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
   },
   "skills": [
     "eyfs-count-5",
@@ -162,7 +162,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5e-match",
-      "prompt": "How many {items}?",
+      "prompt": "Tap the {items} that match the number below.",
       "numeral": 4,
       "randomise": { "shuffleOptions": true },
       "options": [
@@ -173,7 +173,7 @@
       ],
       "correctId": "c",
       "explanation": "That group has 4 {items}.",
-      "narration": { "prompt": "How many {items}?" }
+      "narration": { "prompt": "Tap the {items} that match the number below." }
     },
     {
       "kind": "multiple-choice",

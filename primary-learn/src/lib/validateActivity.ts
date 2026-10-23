@@ -460,8 +460,8 @@ function parseQuestion(value: unknown, path: string): Question {
         if (!Number.isInteger(numeral) || numeral < 1 || numeral > 12) {
           fail(path, "numeral must be a whole number from 1 to 12");
         }
-        if (prompt !== "How many {items}?") {
-          fail(path, 'numeral picture picks use prompt How many {items}?');
+        if (prompt !== "Tap the {items} that match the number below.") {
+          fail(path, 'numeral picture picks use prompt Tap the {items} that match the number below.');
         }
         if (visual) fail(path, "numeral picture picks show the number card, not a stem picture");
         if (options.length !== 4) fail(path, "numeral picture picks need exactly 4 picture options");

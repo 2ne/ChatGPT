@@ -1,5 +1,5 @@
 import { copy } from "../../data/copy";
-import { OBJECT_WORDS, describeVisual } from "../../data/objects";
+import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
@@ -20,12 +20,9 @@ export function MultipleChoice({
   onChange,
 }: MultipleChoiceProps) {
   if (question.kind === "multiple-choice" && question.numeral != null) {
-    const item = question.options.find((option) => option.visual)?.visual?.item;
-    const items = item ? OBJECT_WORDS[item].plural : "objects";
     const shown = question.numeralLabel ?? String(question.numeral);
     return (
       <div className="amount-pick">
-        <p className="t-body">{copy.tapMatchNumber(items)}</p>
         <div className={`amount-numeral${question.numeralLabel ? " is-word" : ""}`} aria-hidden>
           {shown}
         </div>

@@ -64,7 +64,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | conceptual subitise | `How many can you see in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
 | hidden quantity | `How many {items} are under the cup?` with `layout` `hidden` and `flashMs`. |
 | pick a group | `Which group has {n} {items}?` (single choice). Multi-select: `Which groups have {n} {items}?` or `Tap every group that has {n} {items}.` Do not write `Which group?` alone. |
-| pick an amount | Number shown, tap the matching group: `How many {items}?` plus `numeral`. Grey line: `Tap the {items} that match the number.` Four picture cards, one correct count, three near misses. Do not use match-pairs for this. |
+| pick an amount | Number shown, tap the matching group: `Tap the {items} that match the number below.` plus `numeral` (digit on the card). Optional `numeralLabel` only when the card must show a number word. Four picture cards, one correct count, three near misses. Do not use match-pairs for this. |
 | light story | `{Name} has {n} {items} and {action}. How many are left?` / `How many {items} does he have now?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. Take-away pictures set `visual.count` (start) and `visual.removed` (last N on light red tiles). |
 | build-set | `Make a group of {count} {items}.` |
 | multiple-choice next | `What number comes next? 1, 2, 3, ?` Explanation: `{n} comes after {n-1}.` |
