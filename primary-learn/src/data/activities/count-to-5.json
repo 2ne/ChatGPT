@@ -137,10 +137,10 @@
       "prompt": "Which number is missing? 1, 2, _, 4, 5",
       "randomise": { "shuffleOptions": true },
       "options": [
-        { "id": "a", "visual": { "item": "star", "count": 2 } },
-        { "id": "b", "visual": { "item": "star", "count": 3 } },
-        { "id": "c", "visual": { "item": "star", "count": 4 } },
-        { "id": "d", "visual": { "item": "star", "count": 5 } }
+        { "id": "a", "label": "2" },
+        { "id": "b", "label": "3" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "5" }
       ],
       "correctId": "b",
       "explanation": "3 comes after 2 and before 4.",

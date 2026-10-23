@@ -238,34 +238,10 @@
         "shuffleOptions": true
       },
       "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "star",
-            "count": 6
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "star",
-            "count": 7
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "star",
-            "count": 8
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 9
-          }
-        }
+        { "id": "a", "label": "6" },
+        { "id": "b", "label": "7" },
+        { "id": "c", "label": "8" },
+        { "id": "d", "label": "9" }
       ],
       "correctId": "c",
       "explanation": "8 comes after 7 and before 9.",
