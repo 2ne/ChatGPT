@@ -29,16 +29,16 @@ Pip is a round indigo "path-berry" blob with a leafy sprout (growth), rosy
 cheeks, big sparkle eyes and a sunny star badge. **Pure SVG + CSS motion.**
 No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
-| Asset | Use |
-| --- | --- |
-| `Pip` | Header badge (42px in a white tile), **onboarding hero** (large, pointer-follow), feedback reactions, finish screen (112px) |
-| Confetti | Short canvas pop on a correct answer; full shower on a mastered summary |
-| Moods | `happy` default · `cheer` on correct + mastery · `think` on wrong + empty states |
+| Asset    | Use                                                                                                                         |
+| -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `Pip`    | Header badge (42px in a white tile), **onboarding hero** (large, pointer-follow), feedback reactions, finish screen (112px) |
+| Confetti | Short canvas pop on a correct answer; full shower on a mastered summary                                                     |
+| Moods    | `happy` default · `cheer` on correct + mastery · `think` on wrong + empty states                                            |
 
 **Rules**
 
 - `AppHeader` on the home path (hidden during onboarding and during a quest):
-  Pip tile + "Primary *Maths*" wordmark. Once a learner has a name, the logo
+  Pip tile + "Primary _Maths_" wordmark. Once a learner has a name, the logo
   and wordmark are a button that returns to the path map.
 - **Onboarding** shows a **large** Pip (not the header badge). Eyes, head and
   body tilt toward the pointer (mouse or touch). Idle: gentle bob/breathe plus
@@ -54,16 +54,16 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 CSS variables in `src/index.css`.
 
-| Token | Hex | Use |
-| --- | --- | --- |
-| `--paper` / `--paper-deep` | `#FFF6E8` / `#FBEED3` | Page bg / sunken fills, dot texture |
-| `--ink` / `--ink-soft` / `--ink-faint` | `#232946` / `#5B5E7A` / `#9AA0B8` | Text tiers |
-| `--line` / `--line-strong` | `#ECE2CC` / `#DDCFB2` | Borders |
-| `--primary` → `--violet` | `#4F46E5` → `#7C3AED` | Check it, selected states, progress |
-| `--sun` / `--sun-soft` | `#FFC93C` / `#FFF1C4` | Highlights, hints |
-| `--green` / `--green-soft` | `#0CA678` / `#DCF5E9` | Correct, and Next question / See my stars |
-| `--red` / `--red-soft` | `#E03131` / `#FFE3E3` | Try-again only |
-| `--gold` | `#FFB100` | Cups and gold path nodes |
+| Token                                  | Hex                               | Use                                       |
+| -------------------------------------- | --------------------------------- | ----------------------------------------- |
+| `--paper` / `--paper-deep`             | `#FFF6E8` / `#FBEED3`             | Page bg / sunken fills, dot texture       |
+| `--ink` / `--ink-soft` / `--ink-faint` | `#232946` / `#5B5E7A` / `#9AA0B8` | Text tiers                                |
+| `--line` / `--line-strong`             | `#ECE2CC` / `#DDCFB2`             | Borders                                   |
+| `--primary` → `--violet`               | `#4F46E5` → `#7C3AED`             | Check it, selected states, progress       |
+| `--sun` / `--sun-soft`                 | `#FFC93C` / `#FFF1C4`             | Highlights, hints                         |
+| `--green` / `--green-soft`             | `#0CA678` / `#DCF5E9`             | Correct, and Next question / See my stars |
+| `--red` / `--red-soft`                 | `#E03131` / `#FFE3E3`             | Try-again only                            |
+| `--gold`                               | `#FFB100`                         | Cups and gold path nodes                  |
 
 No subject icon tile on intro or question screens. Title and difficulty
 label stand alone.
@@ -86,13 +86,13 @@ label stand alone.
 Loaded from Google Fonts. Rounded letterforms read friendly at kid sizes.
 Do not switch back to Lato / Noto Sans.
 
-| Role | Style | When to use |
-| --- | --- | --- |
-| Display (`.t-display`) | Baloo 800, 30–40px | Celebration screens |
-| Title (`.t-title`) | Baloo 800, 24–30px | Quest titles, question prompts (`.q-prompt` 22–27px) |
-| Title-sm (`.t-title-sm`) | Baloo 700, 20px | Card titles, names |
-| Body (`.t-body`) | Nunito 500–600, 16px | Summaries, explanations |
-| Meta (`.t-meta`) | Nunito 800, 12.5px, caps, tracked | Short counts only, such as `1 quest` |
+| Role                     | Style                             | When to use                                          |
+| ------------------------ | --------------------------------- | ---------------------------------------------------- |
+| Display (`.t-display`)   | Baloo 800, 30–40px                | Celebration screens                                  |
+| Title (`.t-title`)       | Baloo 800, 24–30px                | Quest titles, question prompts (`.q-prompt` 22–27px) |
+| Title-sm (`.t-title-sm`) | Baloo 700, 20px                   | Card titles, names                                   |
+| Body (`.t-body`)         | Nunito 500–600, 16px              | Summaries, explanations                              |
+| Meta (`.t-meta`)         | Nunito 800, 12.5px, caps, tracked | Short counts only, such as `1 quest`                 |
 
 **Rules**
 
@@ -105,14 +105,14 @@ Do not switch back to Lato / Noto Sans.
 
 ## Shape & elevation
 
-| Element | Radius | Border | Shadow |
-| --- | --- | --- | --- |
-| Cards | 20px (`--radius`) | 2px `--line` | `0 10px 28px rgba(35,41,70,.09)` |
-| Hero / score | 28px | 2px deep | same + pattern fills |
-| Answer options | 18px | 2.5px `--line` | lift on hover; glow ring when selected |
-| CTA buttons | 16px | 2px deep | `0 4px 0` squishy press |
-| Pills / chips | 9999px | 1.5–2px | flat or soft |
-| Avatar / icon tiles | 18–20px (tiles), circle (faces) | 2px | soft indigo glow on brand tile |
+| Element             | Radius                          | Border         | Shadow                                 |
+| ------------------- | ------------------------------- | -------------- | -------------------------------------- |
+| Cards               | 20px (`--radius`)               | 2px `--line`   | `0 10px 28px rgba(35,41,70,.09)`       |
+| Hero / score        | 28px                            | 2px deep       | same + pattern fills                   |
+| Answer options      | 18px                            | 2.5px `--line` | lift on hover; glow ring when selected |
+| CTA buttons         | 16px                            | 2px deep       | `0 4px 0` squishy press                |
+| Pills / chips       | 9999px                          | 1.5–2px        | flat or soft                           |
+| Avatar / icon tiles | 18–20px (tiles), circle (faces) | 2px            | soft indigo glow on brand tile         |
 
 An 8px rainbow strip (sun/coral/mint/sky) sits between the flush header and
 the white activity column. It spans the **full viewport width**, edge to edge,
@@ -126,7 +126,7 @@ on every screen size. It is the divider, not a card border.
 page**, not sticky. **No fill**.
 No blur, no bottom bar, no indigo wash — the dotted paper runs behind it.
 Left: white Pip tile vertically centred with the "Primary Maths" wordmark in
-ink (no tagline, no gradient on *Maths*). Clicking the logo or name returns to
+ink (no tagline, no gradient on _Maths_). Clicking the logo or name returns to
 `/pathway`. Right: learner chip (avatar face centred in its circle + name).
 Tap the avatar to open Settings (sound on/off, and Start again with a
 confirm step). Sound and reset are not shown on the path, onboarding, or
@@ -213,14 +213,15 @@ reads `Medium · Question 3 of 10`.
 
 ### Activity question (most important)
 
-The quest runner is **full-bleed white**. Kids know they are in an activity
-because the dotted sandy paper is gone. Header and activity touch the top and
-both sides. Square corners. No card chrome. Keep the header snug to the top
-(small top padding). Leave extra space between the title / question-count
-row and the segment bar, then more space between the bar and the rainbow,
-then more padding above the question. Inner words stay padded and, on wide
-screens, centred (`--max-wide`) while the white still goes edge to edge. The
-rainbow itself is never inset.
+On phones the quest runner is **full-bleed white**. Kids know they are in an
+activity because the dotted sandy paper is gone. Header and activity touch the
+top and both sides. Square corners. No card chrome.
+
+From **900px** up, the same white column sits in a centred card
+(`--max-wide`, 28px corners, soft shadow) on that quest’s section wallpaper.
+The rainbow and sticky Check / Next dock stay inside the card. Keep the header
+compact: snug padding, title + difficulty line, then a slim segment bar, then
+the thin rainbow. Inner words stay padded.
 
 ```
 ┌─────────────────────────────────┐  flush header, no radius
@@ -318,7 +319,7 @@ rainbow itself is never inset.
   prompt, in any question kind, is `What do you need to add to {n} to make {total}?`.
   Use it on fill-slots, sum-only, multiple-choice and fill-blank. Do not
   write `5 is 2 and ?`, `5 = ? + 2`, `Which number goes with 6 to make 10?`,
-  or `Which number is missing? 7 + ? = 10`.   Sum-only totals use
+  or `Which number is missing? 7 + ? = 10`. Sum-only totals use
   `What is {a} + {b}?` (subtract: `What is {a} take away {b}?`), generated from
   the numbers on screen. Fill-blank result blanks (`5 − 2 = __`) and bare
   equation prompts use the same stem, not `What is the missing number?`.
@@ -377,27 +378,28 @@ rainbow itself is never inset.
   the selected style. Tap another to replace. Nothing auto-checks. Correct
   turns the filled circle green. Wrong shows a labelled correct answer and
   puts the right number in the circle. Prompt is `What do you need to add to {n} to
-  make {whole}?`, or `What do {a} and {b} make?` when the whole is empty.
+make {whole}?`, or `What do {a} and {b} make?` when the whole is empty.
   Do not use match-pairs with `a and b` text for Reception bonds.
 - Action button: `Check it ✓` (disabled until answered) → `Next question →` →
   `See my stars` on the last one. `Check it` is the indigo to violet
   gradient, including the faded disabled state. `Next question` and
-  `See my stars` use `--green`. Sticky white dock at the viewport bottom
-  on every width (with safe-area padding) so kids never have to scroll
-  to find it. The dock button has **no 2px border** (fill + squishy
-  shadow only). Same size, shadow and layout for every dock action so
-  nothing shifts.
-- Home and onboarding keep the dotted paper. Question play is white edge to edge.
+  `See my stars` use `--green`. Sticky white dock at the bottom of the activity (fixed to the viewport
+  on phones, sticky inside the desktop card) with safe-area padding so kids
+  never have to scroll to find it. The dock button has **no 2px border**
+  (fill + squishy shadow only). Same size, shadow and layout for every dock
+  action so nothing shifts.
+- Home and onboarding keep the dotted paper. Question play is white edge to edge
+  on phones; on desktop it is a white card on the section wallpaper.
   The intro uses the centred Pip card above. Inner question content uses `--max-wide`.
 
 ### Progress
 
-**Segmented bar** — one capsule per question, 12px tall, paper fill. Done =
-gradient fill with pop; current = indigo outline + soft glow. Each question
-is asked once. Counter reads `Question 3 of 10` (Baloo, number in indigo).
-No inline streak badge in the header (it pushed the layout down). A streak
-toast may come back later. A miss shows a labelled correct answer and the factual
-explanation, then **Next question**.
+**Segmented bar** — one slim capsule per question (6px tall, tight gaps). Done =
+gradient fill with pop; current = soft indigo fill with a thin inset ring.
+Each question is asked once. Counter reads `Medium · Question 3 of 10` under
+the title. No inline streak badge in the header. A streak toast may come back
+later. A miss shows a labelled correct answer and the factual explanation, then
+**Next question**.
 
 ### Summary (end screen)
 
@@ -434,7 +436,7 @@ no second visual system.
 ## Motion
 
 Cheerful but brief. 120–240ms easings; options lift on hover; cards lift on
-hover; stars pop in sequence; progress segments pop; feedback slides up;
+hover; stars pop in sequence; feedback slides up;
 Pip blinks/sways/twinkles. Onboarding Pip also bobs and looks toward the
 pointer (mouse or touch).
 
@@ -445,8 +447,8 @@ pointer (mouse or touch).
 - Ink on paper/white ≥ 4.5:1. Colour never the only signal (✓/✕ + words).
 - Focus ring: 3px `--primary`.
 - Hit targets ≥ 48px (options 64px, CTAs 52px). Speaker icon 36px, inline after the prompt.
-- `role="progressbar"` with `aria-valuetext`; stars have `aria-label`;
-  live regions for feedback and the path map.
+- Quest header shows title + `Question X of N` (no segmented bar); stars have
+  `aria-label`; live regions for feedback and the path map.
 - Pre-readers: speaker on the **question only**. Word highlighting on the
   prompt is a reading aid, not decoration — keep it even when motion is reduced.
 
@@ -456,20 +458,19 @@ audio files. Scale is too large.
 
 ## Anti-patterns (fix these)
 
-| Don't | Do instead |
-| --- | --- |
-| Bare question with no quest name | Context card with title + difficulty + count on every question |
-| Thin lonely progress line | Segmented per-question bar + count + cheer line |
-| Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
-| 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
-| Subject or year filter chips | One maths path map |
-| Subject calculator tile beside the title | Title and Easy / Medium / Hard only |
-| Identical Check/Continue | Labelled actions: `Check it` → `Next question` → `See my stars` |
-| Tiles that change size when filled | One tile size for empty, filled and added |
-| Controls that appear and shove the page | Always render them. Hide or disable in place |
-| Stretching a question to fill the phone | Pack the prompt and answer as a compact group |
-| Empty slots that count out the missing amount | Tap-to-fill with extra slots, or the sum line only |
-
+| Don't                                         | Do instead                                                      |
+| --------------------------------------------- | --------------------------------------------------------------- |
+| Bare question with no quest name              | Context card with title + difficulty + count on every question  |
+| Thin lonely progress line                     | Quest title + difficulty + `Question X of N` in the header      |
+| Flat grey cards, tiny labels                  | Paper bg, chunky radii, Baloo prompts, letter badges            |
+| 3D/WebGL mascot with lighting                 | Pure SVG Pip, CSS motion                                        |
+| Subject or year filter chips                  | One maths path map                                              |
+| Subject calculator tile beside the title      | Title and Easy / Medium / Hard only                             |
+| Identical Check/Continue                      | Labelled actions: `Check it` → `Next question` → `See my stars` |
+| Tiles that change size when filled            | One tile size for empty, filled and added                       |
+| Controls that appear and shove the page       | Always render them. Hide or disable in place                    |
+| Stretching a question to fill the phone       | Pack the prompt and answer as a compact group                   |
+| Empty slots that count out the missing amount | Tap-to-fill with extra slots, or the sum line only              |
 
 ### Building a missing part
 
@@ -479,4 +480,3 @@ Tapping an added object clears that exact space. Other objects stay in place.
 There is no separate Add button. Use five columns. Keep spare spaces beyond the
 correct answer, so filling every space is not the goal. Do not add instruction text below the boxes.
 Tiles are 56px, or 44px on narrow screens. No extra panels.
-

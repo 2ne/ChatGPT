@@ -356,17 +356,16 @@ export function ActivityRunner({
       lookAgainCount={lookAgainCount}
       recordLookAgain={() => setLookAgainCount((n) => n + 1)}
     >
-    <main className="page page-quest page-with-dock">
+    <main className="page page-quest page-with-dock" style={backdrop}>
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
-      {/* Where am I? — activity context + segmented progress */}
+      <div className="quest-shell">
+      {/* Where am I? — quest name + question count */}
       <section className="context-card" aria-label={copy.progressLabel}>
         <div className="quest-inner">
           <div className="context-top">
             <div style={{ minWidth: 0, flex: 1 }}>
-              <p className="context-title" style={{ fontSize: 21 }}>
-                {activity.title}
-              </p>
+              <p className="context-title">{activity.title}</p>
               <p className="context-sub">
                 {DIFFICULTY_LABELS[activity.difficulty]} · {copy.questionOf(position, activeQueue.length)}
               </p>
@@ -374,30 +373,6 @@ export function ActivityRunner({
             <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
               <X size={20} aria-hidden />
             </button>
-          </div>
-
-          <div className="context-progress">
-            <div
-              className="seg-bar"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={activeQueue.length}
-              aria-valuenow={index + (phase === "feedback" ? 1 : 0)}
-              aria-valuetext={copy.questionOf(position, activeQueue.length)}
-            >
-              {activeQueue.map((id, slot) => {
-                const done = slot < index || (slot === index && phase === "feedback");
-                const current = slot === index && phase !== "feedback";
-                return (
-                  <span
-                    key={id}
-                    className={`seg${done ? " is-done" : ""}${current ? " is-current" : ""}`}
-                  >
-                    {done ? <span className="seg-fill" /> : null}
-                  </span>
-                );
-              })}
-            </div>
           </div>
         </div>
       </section>
@@ -514,6 +489,7 @@ export function ActivityRunner({
 
       <div className="quest-dock" role="region" aria-label="Answer actions">
         <div className="quest-dock-inner">{primaryAction}</div>
+      </div>
       </div>
     </main>
     </FlashPeekProvider>
