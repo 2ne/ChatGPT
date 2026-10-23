@@ -52,8 +52,7 @@ No WebGL, no Three.js, no lighting rigs — the old 3D header mark is gone.
 
 ## Colour
 
-CSS variables in `src/index.css`. The maths tile colour lives in
-`src/data/subjects.tsx` (orange + calculator icon).
+CSS variables in `src/index.css`.
 
 | Token | Hex | Use |
 | --- | --- | --- |
@@ -66,7 +65,8 @@ CSS variables in `src/index.css`. The maths tile colour lives in
 | `--red` / `--red-soft` | `#E03131` / `#FFE3E3` | Try-again only |
 | `--gold` | `#FFB100` | Cups and gold path nodes |
 
-Quest tiles use maths orange `#F97316` with a soft tint `#FFEAD7`.
+No subject icon tile on intro or question screens. Title and difficulty
+label stand alone.
 
 **Rules**
 
@@ -201,8 +201,8 @@ they are.
 
 Centred quest card, max-width **34rem**, on a white page with a subtle paper glow.
 Keep the back link outside the card. A warm paper illustration panel holds Pip
-on a simple warm background. Below it, centre the icon with the Easy / Medium /
-Hard label above the title (same words as the level sheet), readable summary,
+on a simple warm background. Below it, centre the Easy / Medium / Hard label above the title (same words
+as the level sheet), readable summary,
 star goal, and a two-column row for question count and time. End with a short
 personal welcome and the full-width gradient `Start quest` button. Use 28px card
 corners and a soft shadow. On narrow screens reduce padding, keep the facts in
@@ -457,12 +457,12 @@ audio files. Scale is too large.
 
 | Don't | Do instead |
 | --- | --- |
-| Bare question with no quest name | Context card with tile + title + count on every question |
+| Bare question with no quest name | Context card with title + difficulty + count on every question |
 | Thin lonely progress line | Segmented per-question bar + count + cheer line |
 | Flat grey cards, tiny labels | Paper bg, chunky radii, Baloo prompts, letter badges |
 | 3D/WebGL mascot with lighting | Pure SVG Pip, CSS motion |
 | Subject or year filter chips | One maths path map |
-| Emoji-only tiles | Lucide calculator tile in maths orange |
+| Subject calculator tile beside the title | Title and Easy / Medium / Hard only |
 | Identical Check/Continue | Labelled actions: `Check it` → `Next question` → `See my stars` |
 | Tiles that change size when filled | One tile size for empty, filled and added |
 | Controls that appear and shove the page | Always render them. Hide or disable in place |

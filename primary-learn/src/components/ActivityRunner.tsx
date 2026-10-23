@@ -24,7 +24,6 @@ import { copy } from "../data/copy";
 import { spokenPrompt } from "../lib/narration";
 import { splitPromptTail } from "../lib/prompt";
 import { DIFFICULTY_LABELS } from "../lib/path";
-import { subjectTheme } from "../data/subjects";
 import { useNarration } from "../hooks/useNarration";
 import { ConfettiBurst } from "./ConfettiBurst";
 import { HearButton, SpokenWords } from "./ReadAloud";
@@ -70,9 +69,6 @@ export function ActivityRunner({
   const { setMood } = usePipMood();
   const promptRef = useRef<HTMLHeadingElement>(null);
   const reducedMotion = usePrefersReducedMotion();
-
-  const theme = subjectTheme(activity.subject);
-  const ThemeIcon = theme.icon;
 
   const currentId = activeQueue[index];
   const question = playQuestions.find((item) => item.id === currentId);
@@ -261,18 +257,9 @@ export function ActivityRunner({
             <span className="intro-scene-floor" />
           </div>
           <div className="intro-card-body">
-          <div className="intro-tile-row">
-            <span
-              className="context-tile"
-              style={{ background: `linear-gradient(135deg, ${theme.color}, ${theme.color}CC)` }}
-              aria-hidden
-            >
-              <ThemeIcon />
-            </span>
-            <div>
-              <p className="intro-difficulty">{DIFFICULTY_LABELS[activity.difficulty]}</p>
-              <h1 className="t-title">{activity.title}</h1>
-            </div>
+          <div className="intro-title-block">
+            <p className="intro-difficulty">{DIFFICULTY_LABELS[activity.difficulty]}</p>
+            <h1 className="t-title">{activity.title}</h1>
           </div>
           <p className="t-body quest-intro-summary">{activity.summary}</p>
           <p className="intro-star-goal"><Star size={18} aria-hidden />{copy.starsFact}</p>
@@ -362,13 +349,6 @@ export function ActivityRunner({
       <section className="context-card" aria-label={copy.progressLabel}>
         <div className="quest-inner">
           <div className="context-top">
-            <span
-              className="context-tile"
-              style={{ background: `linear-gradient(135deg, ${theme.color}, ${theme.color}CC)` }}
-              aria-hidden
-            >
-              <ThemeIcon />
-            </span>
             <div style={{ minWidth: 0, flex: 1 }}>
               <p className="context-title" style={{ fontSize: 21 }}>
                 {activity.title}
