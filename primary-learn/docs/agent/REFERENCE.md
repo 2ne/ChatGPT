@@ -347,7 +347,7 @@ Do not use shape assets on numeric question kinds or ordered items.
 
 `ShapeChoices` reuses the existing choice marking and scoring. `ShapeSvg`
 draws flat shapes. `ShapePicture` lazy-loads Three.js solids, supports direct
-drag and labelled rotation controls for stems, and generates cached answer
+drag and keyboard rotation for stems, with no visible control row, and generates cached answer
 images through a shared renderer. Offscreen interactive contexts are disposed.
 No automatic spinning and no static fallback drawings. Preserve family
 relationships in content: squares are rectangles and cubes are cuboids.

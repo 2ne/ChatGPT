@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronUp, RotateCcw, RotateCw } from "lucide-react";
 import type { ShapeAsset } from "../../types/shapes";
 import { describeShape, isSolidShape } from "../../lib/shapes";
 import { ShapeSvg } from "./ShapeSvg";
@@ -60,6 +59,18 @@ export function ShapePicture({ shape, interactive = false, compact = false }: { 
           <div
             ref={host}
             className={`shape-canvas${ready ? " is-ready" : ""}`}
+            tabIndex={ready ? 0 : undefined}
+            role="img"
+            aria-label={`${describeShape(shape)} Use arrow keys to rotate. Press Home to reset.`}
+            onKeyDown={(event) => {
+              const turns: Record<string, [number, number]> = {
+                ArrowLeft: [0, -Math.PI / 6], ArrowRight: [0, Math.PI / 6],
+                ArrowUp: [-Math.PI / 6, 0], ArrowDown: [Math.PI / 6, 0],
+              };
+              const turn = turns[event.key];
+              if (turn) { event.preventDefault(); view.current?.rotate(...turn); }
+              else if (event.key === "Home") { event.preventDefault(); view.current?.reset(); }
+            }}
             onPointerDown={(event) => {
               if (!ready || (event.pointerType === "mouse" && event.button !== 0)) return;
               drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
@@ -77,17 +88,6 @@ export function ShapePicture({ shape, interactive = false, compact = false }: { 
           />
         ) : null}
       </span>
-      {ready && interactive ? (
-        <span className="shape-controls">
-          <span className="t-body">Drag to explore.</span>
-          <span className="shape-turn-buttons">
-            <button type="button" className="btn btn-ghost" aria-label="Turn shape left" onClick={() => view.current?.rotate(0, -Math.PI / 6)}><RotateCcw size={20} aria-hidden /></button>
-            <button type="button" className="btn btn-ghost" aria-label="Turn shape up" onClick={() => view.current?.rotate(-Math.PI / 6, 0)}><ChevronUp size={20} aria-hidden /></button>
-            <button type="button" className="btn btn-ghost" aria-label="Turn shape right" onClick={() => view.current?.rotate(0, Math.PI / 6)}><RotateCw size={20} aria-hidden /></button>
-            <button type="button" className="btn btn-ghost" onClick={() => view.current?.reset()}>Reset</button>
-          </span>
-        </span>
-      ) : null}
     </span>
   );
 }
