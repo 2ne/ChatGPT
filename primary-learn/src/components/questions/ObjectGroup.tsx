@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type MouseEvent, type PointerEvent } from "react";
+import { RotateCw } from "lucide-react";
 import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
@@ -381,6 +382,7 @@ export function ObjectGroup({
       </p>
       {counted > 0 ? (
         <button type="button" className="btn-text" onClick={() => setLit({})}>
+          <RotateCw size={20} style={{ flexShrink: 0 }} aria-hidden />
           {copy.countAgain}
         </button>
       ) : null}
