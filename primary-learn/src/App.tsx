@@ -49,7 +49,6 @@ export default function App() {
                 profile={learner.profile!}
                 progress={learner.progress}
                 resetAll={learner.resetAll}
-                onYearChange={year => learner.updateProfile({ preferredYearGroup: year })}
               />
             </RequireProfile>
           }
@@ -112,12 +111,10 @@ function PathwayRoute({
   profile,
   progress,
   resetAll,
-  onYearChange,
 }: {
   profile: LearnerProfile;
   progress: ProgressState;
   resetAll: () => void;
-  onYearChange: (year: import("./types/curriculum").YearGroup) => void;
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -144,7 +141,6 @@ function PathwayRoute({
       <Home
         profile={profile}
         progress={progress}
-        onYearChange={onYearChange}
         onOpenActivity={(activityId) => navigate(`/activity/${activityId}`)}
       />
     </>

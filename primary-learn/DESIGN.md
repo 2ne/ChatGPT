@@ -520,10 +520,7 @@ The question header close button opens a bottom sheet using the level-picker sty
 
 All four sheets (levels, topics, settings and quest exit) use `Sheet.tsx` with Vaul. Keep the controlled root mounted during closing so exit animations finish. Use the shared `SheetTitle`, portal, overlay and drag handle. Drawers rise from the bottom on phone and desktop, with a 480px width cap. Preserve safe-area padding and reduced-motion support. Do not scale or recolour the page behind the drawer.
 
-### Learner year group
-
-Onboarding asks for Reception or Years 1 to 6 after the buddy choice. Save the canonical year ID in the existing `preferredYearGroup` profile field. The greeting year button lets learners change it using a Vaul drawer. The floating topic menu only lists topics grouped by year. Wait until the drawer closes before updating the visible pathway, so scroll restoration does not undo navigation. The selected year becomes the first visible year and determines the suggested learner marker. Earlier years are collapsed by default with a Show Reception / Show earlier years button above the map. Expanding reveals them without changing the saved year or stars. Later years stay visible. Include all years even where activities are coming soon. Keep all stars and existing storage keys. Legacy null profiles retain their previous suggested stop until a year is chosen.
-
 Drawer content scrolls in `.app-drawer-body`, a native pan-y scroll area excluded from Vaul drag handling. The handle remains draggable. Topic navigation waits for the drawer to finish closing before scrolling the pathway, so body scroll restoration does not undo the selected destination.
 
-The topic drawer groups links by year. Each year heading sticks to the top of the drawer scroll area within its own group, then gives way to the next year. Use an opaque card background so scrolling topic rows do not show through the heading.
+
+Everyone sees the full pathway. Onboarding asks for a name and buddy only. Do not use stored legacy year preferences to hide or jump past activities.

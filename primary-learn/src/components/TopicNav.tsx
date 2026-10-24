@@ -59,13 +59,14 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNav
             <SheetTitle className="sheet-title toc-title">
               {copy.pickATopic}
             </SheetTitle>
-            <ul className="toc-years">
-              {Array.from(new Set(sections.map(section => section.year))).map(year => (
-                <li key={year} className="toc-year-group">
-                  <h3 className="toc-year-head">{year}</h3>
-                  <ul className="toc-list">
-                    {sections.filter(section => section.year === year).map(section => (
+            <ul className="toc-list">
+              {sections.map((section, index) => {
+                const newYear = index === 0 || sections[index - 1].year !== section.year;
+                return (
                   <li key={section.id}>
+                    {newYear ? (
+                      <p className="toc-year-head">{section.year}</p>
+                    ) : null}
                     <button
                       type="button"
                       className={`toc-row${section.id === visibleId ? " is-now" : ""}`}
@@ -95,10 +96,8 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNav
                       ) : null}
                     </button>
                   </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
+                );
+              })}
             </ul>
       </Sheet>
     </>

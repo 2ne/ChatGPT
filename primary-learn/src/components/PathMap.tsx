@@ -1,5 +1,3 @@
-import { YEAR_GROUP_LABELS } from "../data/labels";
-import type { YearGroup } from "../types/curriculum";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Star, Trophy } from "lucide-react";
 import type { LevelState } from "../lib/path";
@@ -10,7 +8,6 @@ import { TopicNav, type TopicSection } from "./TopicNav";
 
 type PathMapProps = {
   levels: LevelState[];
-  preferredYear: YearGroup | null;
   learnerEmoji: string;
   learnerName: string;
   onPlay: (activityId: string) => void;
@@ -107,29 +104,22 @@ function placeSign(samples: Point[], signY: number): SignPlacement {
   };
 }
 
-export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYear }: PathMapProps) {
+export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [openLevel, setOpenLevel] = useState<LevelState | null>(null);
   const [visibleId, setVisibleId] = useState(levels[0]?.category.id ?? "");
 
   const currentIndex = useMemo(() => {
-    if (preferredYear && YEAR_GROUP_LABELS[preferredYear]) {
-      const inYear = (level: LevelState) => level.category.year === YEAR_GROUP_LABELS[preferredYear];
-      const next = levels.findIndex(level => inYear(level) && level.status !== "done" && level.status !== "soon");
-      if (next >= 0) return next;
-      const first = levels.findIndex(inYear);
-      if (first >= 0) return first;
-    }
     const current = levels.findIndex((level) => level.status === "current");
     if (current >= 0) return current;
     for (let i = levels.length - 1; i >= 0; i -= 1) {
       if (levels[i].status === "done") return i;
     }
     return 0;
-  }, [levels, preferredYear]);
+  }, [levels]);
 
   // The "you are here" badge floats above the current level, so a sign needs more room there.
-  const markerIndex = currentIndex;
+  const markerIndex = levels[currentIndex].status === "current" ? currentIndex : -1;
 
   const layout = useMemo(() => {
     // Level 1 sits at the top; the road runs down the page.

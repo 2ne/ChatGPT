@@ -15,7 +15,7 @@ export type LearnerAvatarId =
 export type LearnerProfile = {
   name: string;
   avatarId: LearnerAvatarId;
-  /** Preferred pathway starting year. Null preserves legacy profiles. */
+  /** Legacy profile field retained for storage compatibility. Not used by the pathway. */
   preferredYearGroup: string | null;
   createdAt: string;
   updatedAt: string;

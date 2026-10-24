@@ -4540,26 +4540,12 @@ button.object-token {
   [data-vaul-drawer], [data-vaul-overlay] { animation: none !important; transition: none !important; }
 }
 
-.onboard-years { border: 0; padding: 0; margin: 0; min-width: 0; }
-.onboard-years legend { margin-bottom: 12px; }
-.year-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0 20px; }
-.year-choice { border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; padding: 10px; border: 2px solid var(--line); color: var(--ink); background: white; font-weight: 700; }
-.year-choice.is-selected { border-color: var(--primary); background: var(--primary-soft); }
-.year-choice:focus-visible, .hero-year:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
-.hero-year { border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; margin: 8px 0; border: 2px solid rgba(255,255,255,.5); background: white; color: var(--ink); font-size: 17px; }
 
 /* Form sections own their outer spacing; choice grids add no extra margins. */
 .onboard-form { gap: 24px; }
 .onboard-form .field { gap: 12px; }
-.onboard-years .year-choices { margin: 0; gap: 12px; }
 
 /* Native content scrolling stays separate from the draggable handle. */
 .app-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
 
-/* A year heading stays visible within its own group as the topic list scrolls. */
-.toc-years { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
-.toc-year-group { position: relative; min-width: 0; }
-.toc-year-group > .toc-year-head { position: sticky; top: 0; z-index: 2; margin: 0 0 6px; padding: 10px 0; background: var(--card); }
 
-.path-year-start { display: flex; justify-content: center; scroll-margin-top: 16px; }
-.path-earlier-toggle { margin: 24px 0 8px; border-radius: var(--radius-pill); }

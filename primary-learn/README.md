@@ -130,6 +130,4 @@ Node 17 uses illustrated position scenes with Pip and SVG toy cars with a clear 
 
 Level selection, topic navigation, settings and quest exit share a Vaul drawer (`Sheet.tsx`). Includes swipe dismissal, a drag handle, modal focus handling and reduced-motion support. Vaul 1.1.2 is MIT licensed; its upstream currently describes the project as unmaintained. Keep its use behind the shared wrapper.
 
-### Year-group starting point
-
-Learners choose Reception or Year 1 to Year 6 during setup. A year button beside the pathway greeting updates the saved preference and starts the visible pathway at that year. The floating topic menu only lists topics, grouped by year. Drawer contents scroll independently of the drag handle, and topic jumps run after closing. Earlier years are collapsed behind Show Reception or Show earlier years above the map; later years remain visible. Revealing earlier years preserves the selected year and all progress. Unwritten activities still open their Coming soon level details. Changing year preserves all progress. Existing profiles with no selected year continue to load without migration.
+Everyone sees the full pathway from Reception onwards. Onboarding asks for a name and buddy only. Previous year preferences are ignored, with all learner progress preserved. The floating topic menu remains available and scrolls independently of its drag handle.
