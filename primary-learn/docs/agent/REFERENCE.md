@@ -492,3 +492,5 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 ### Turn diagrams
 
 Choice stems may set `position: {object, relation}` for illustrated relationships with Pip, or `turn: {start, quarters, clockwise, showEnd, interactive?}`. `start` is 0 up, 1 right, 2 down or 3 left. `quarters` is 1 to 4. `TurnPicture` uses a top-down toy car with headlights, a faint starting car, and one-shot rotation with replay. Prediction items show only the start and picture choices. Reduced motion disables automatic and transition motion; movement descriptions remain. `TurnChoices` supports signed quarter-step controls on `interactive` items. Those items encode eight possible nonzero net movements as option IDs (-4 to -1 and 1 to 4), validated against the requested movement, with no option shuffling. Reset clears the answer. Controls lock during feedback. Existing choice scoring and labelled correction remain.
+
+Safari tint: the confetti canvas stays 1px inside viewport edges and is hidden after its last particle disappears. Never leave an empty fixed full-viewport canvas painted over intro/result tint surfaces.

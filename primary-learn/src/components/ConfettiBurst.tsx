@@ -38,13 +38,14 @@ export function ConfettiBurst({ burstId, intensity = "pop" }: ConfettiBurstProps
     const context = canvas.getContext("2d");
     if (!context) return;
 
+    canvas.hidden = false;
     let frame = 0;
     let stopped = false;
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const width = Math.max(1, window.innerWidth - 2);
+      const height = Math.max(1, window.innerHeight - 2);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
@@ -96,7 +97,12 @@ export function ConfettiBurst({ burstId, intensity = "pop" }: ConfettiBurstProps
         context.restore();
       }
 
-      if (alive === 0) return;
+      if (alive === 0) {
+        // An empty fixed canvas can still affect Safari toolbar colour sampling.
+        canvas.hidden = true;
+        window.removeEventListener("resize", onResize);
+        return;
+      }
       frame = window.requestAnimationFrame(tick);
     };
 
