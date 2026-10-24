@@ -11,7 +11,7 @@ type LevelSheetProps = {
   onPlay: (activityId: string) => void;
 };
 
-export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetProps) {
+export function LevelSheet({ level, onClose, onPlay }: LevelSheetProps) {
   const lastLevel = useRef(level);
   if (level) lastLevel.current = level;
   const shown = level ?? lastLevel.current;
@@ -20,7 +20,7 @@ export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetPr
   const { node, category, difficulties } = shown;
 
   return (
-    <Sheet open={level !== null} onClose={onClose}>
+    <Sheet open={level !== null} onClose={onClose} className="level-sheet">
         <button
           type="button"
           className="sheet-close"
@@ -35,8 +35,8 @@ export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetPr
             {category.year} · {category.title}
           </p>
           <SheetTitle className="sheet-title">
-            <span className="sheet-level">Level {node.number}</span>
             <span>{node.title}</span>
+            <span className="sheet-level">Level {node.number}</span>
           </SheetTitle>
         </header>
         {shown.cup ? (
@@ -56,9 +56,7 @@ export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetPr
                 ? copy.levelPassed
                 : hasScore
                   ? copy.levelRetry
-                  : entry.difficulty === 1
-                    ? `Ready when you are, ${learnerName}`
-                    : "Ready to play";
+                  : "Ready to play";
 
             return (
               <li

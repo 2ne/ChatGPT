@@ -4043,8 +4043,8 @@ button.object-token {
 
 .level-sheet-heading {
   display: grid;
-  gap: 12px;
-  margin-bottom: var(--space-4);
+  gap: 8px;
+  margin-bottom: var(--space-3);
 }
 
 .level-sheet-heading .sheet-crumb {
@@ -4053,14 +4053,45 @@ button.object-token {
 }
 
 .level-sheet-heading .sheet-title {
-  gap: 4px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 12px;
   margin: 0;
   line-height: 1.2;
 }
 
 .level-sheet-heading .sheet-level {
-  font-size: 0.875rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
   line-height: 1.2;
+  white-space: nowrap;
+}
+
+.level-sheet .sheet-rows {
+  gap: 12px;
+}
+
+.level-sheet .sheet-row {
+  padding: 12px;
+}
+
+.level-sheet .sheet-row-text {
+  gap: 4px;
+}
+
+.level-sheet .sheet-row-title {
+  font-family: var(--font-body);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.level-sheet .sheet-row-note {
+  line-height: 1.35;
+}
+
+.level-sheet .sheet-play {
+  flex-shrink: 0;
 }
 
 .sheet-note {
