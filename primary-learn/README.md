@@ -125,3 +125,7 @@ Content follows the [Year 1 national curriculum](https://assets.publishing.servi
 ### Whole, half and quarter turns
 
 Node 17 uses illustrated position scenes with Pip and SVG toy cars with a clear front. Easy starts with position words and whole/half turns before supported quarter turns. Medium uses quarter and half turns in both directions. Hard adds three-quarter turns and varied starts. Demonstrations animate once and can be replayed. Reduced motion shows the finishing car with a text description of the movement. Predictions use four car pictures. Later questions let children perform signed quarter steps and reset before checking. A whole turn is recorded separately from no movement. All use existing choice scoring, with validated movement IDs on performed turns. No degrees or right-angle counting. Scope follows [NCETM Year 1 position and direction](https://www.ncetm.org.uk/classroom-resources/cp-year-1-unit-10-position-and-direction/).
+
+### Drawers
+
+Level selection, topic navigation, settings and quest exit share a Vaul drawer (`Sheet.tsx`). Includes swipe dismissal, a drag handle, modal focus handling and reduced-motion support. Vaul 1.1.2 is MIT licensed; its upstream currently describes the project as unmaintained. Keep its use behind the shared wrapper.

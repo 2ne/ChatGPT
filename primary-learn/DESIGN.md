@@ -514,4 +514,8 @@ Tiles are 56px, or 44px on narrow screens. No extra panels.
 
 ### Leaving a quest
 
-The question header close button opens a bottom sheet using the level-picker styling. Try again resets the current difficulty from question one. Back to quests returns to the map. Closing the sheet, tapping its backdrop or pressing Escape resumes the current question. A native modal dialog traps focus and makes the background inert; quest keyboard shortcuts pause while it is open. Incomplete attempts do not award stars.
+The question header close button opens a bottom sheet using the level-picker styling. Try again resets the current difficulty from question one. Back to quests returns to the map. Closing the sheet, tapping its backdrop or pressing Escape resumes the current question. The shared Vaul drawer traps focus and makes the background inert; quest keyboard shortcuts pause while it is open. Incomplete attempts do not award stars.
+
+### Shared drawers
+
+All four sheets (levels, topics, settings and quest exit) use `Sheet.tsx` with Vaul. Keep the controlled root mounted during closing so exit animations finish. Use the shared `SheetTitle`, portal, overlay and drag handle. Drawers rise from the bottom on phone and desktop, with a 480px width cap. Preserve safe-area padding and reduced-motion support. Do not scale or recolour the page behind the drawer.

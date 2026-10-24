@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { Sheet, SheetTitle } from "./Sheet";
+import { useRef } from "react";
 import { Play, RotateCcw, Star, Trophy, X } from "lucide-react";
 import { copy } from "../data/copy";
 import { DIFFICULTY_LABELS, type LevelState } from "../lib/path";
@@ -11,41 +12,16 @@ type LevelSheetProps = {
 };
 
 export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetProps) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const returnFocus = useRef<HTMLElement | null>(null);
-  const closeHandler = useRef(onClose);
-  closeHandler.current = onClose;
-  const isOpen = level !== null;
+  const lastLevel = useRef(level);
+  if (level) lastLevel.current = level;
+  const shown = level ?? lastLevel.current;
+  if (!shown) return null;
 
-  useEffect(() => {
-    if (!isOpen) return;
-    returnFocus.current = document.activeElement as HTMLElement | null;
-    closeRef.current?.focus();
-    function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") closeHandler.current();
-    }
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      returnFocus.current?.focus();
-    };
-  }, [isOpen]);
-
-  if (!level) return null;
-
-  const { node, category, difficulties } = level;
+  const { node, category, difficulties } = shown;
 
   return (
-    <div className="sheet-layer" onClick={onClose}>
-      <div
-        className="sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="sheet-title"
-        onClick={(event) => event.stopPropagation()}
-      >
+    <Sheet open={level !== null} onClose={onClose}>
         <button
-          ref={closeRef}
           type="button"
           className="sheet-close"
           onClick={onClose}
@@ -57,11 +33,11 @@ export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetPr
         <p className="sheet-crumb">
           {category.year} · {category.title}
         </p>
-        <h2 id="sheet-title" className="sheet-title">
+        <SheetTitle className="sheet-title">
           <span className="sheet-level">Level {node.number}</span>
           {node.title}
-        </h2>
-        {level.cup ? (
+        </SheetTitle>
+        {shown.cup ? (
           <p className="sheet-cup-line is-gold">
             <Trophy size={18} aria-hidden />
             Gold cup!
@@ -127,7 +103,6 @@ export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetPr
             );
           })}
         </ul>
-      </div>
-    </div>
+    </Sheet>
   );
 }

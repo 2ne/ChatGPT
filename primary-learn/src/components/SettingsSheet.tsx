@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { Sheet, SheetTitle } from "./Sheet";
+import { useEffect, useState } from "react";
 import { RotateCcw, Volume2, VolumeX, X } from "lucide-react";
 import { copy } from "../data/copy";
 import {
@@ -17,45 +18,16 @@ type SettingsSheetProps = {
 };
 
 export function SettingsSheet({ open, learnerName, onClose, onReset }: SettingsSheetProps) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const returnFocus = useRef<HTMLElement | null>(null);
-  const closeHandler = useRef(onClose);
-  closeHandler.current = onClose;
   const [confirm, setConfirm] = useState(false);
   const [muted, setMuted] = useState(isSoundMuted);
 
   useEffect(() => subscribeSoundMuted(setMuted), []);
 
-  useEffect(() => {
-    if (!open) {
-      setConfirm(false);
-      return;
-    }
-    returnFocus.current = document.activeElement as HTMLElement | null;
-    closeRef.current?.focus();
-    function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") closeHandler.current();
-    }
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      returnFocus.current?.focus();
-    };
-  }, [open]);
-
-  if (!open) return null;
+  useEffect(() => { if (!open) setConfirm(false); }, [open]);
 
   return (
-    <div className="sheet-layer" onClick={onClose}>
-      <div
-        className="sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="settings-title"
-        onClick={(event) => event.stopPropagation()}
-      >
+    <Sheet open={open} onClose={onClose}>
         <button
-          ref={closeRef}
           type="button"
           className="sheet-close"
           onClick={onClose}
@@ -64,9 +36,9 @@ export function SettingsSheet({ open, learnerName, onClose, onReset }: SettingsS
           <X size={20} aria-hidden />
         </button>
 
-        <h2 id="settings-title" className="sheet-title toc-title">
+        <SheetTitle className="sheet-title toc-title">
           {copy.settings}
-        </h2>
+        </SheetTitle>
         <p className="settings-hello">{learnerName}</p>
 
         {confirm ? (
@@ -118,7 +90,6 @@ export function SettingsSheet({ open, learnerName, onClose, onReset }: SettingsS
             </li>
           </ul>
         )}
-      </div>
-    </div>
+    </Sheet>
   );
 }

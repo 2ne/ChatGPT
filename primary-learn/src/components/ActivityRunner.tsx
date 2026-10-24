@@ -528,7 +528,7 @@ export function ActivityRunner({
       </div>
       </div>
     </main>
-      {exitOpen ? <QuestExitSheet title={activity.title} onClose={() => setExitOpen(false)} onRetry={begin} onExit={onExit} /> : null}
+      <QuestExitSheet open={exitOpen} title={activity.title} onClose={() => setExitOpen(false)} onRetry={begin} onExit={onExit} />
     </FlashPeekProvider>
   );
 }

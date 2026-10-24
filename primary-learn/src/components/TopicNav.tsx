@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { Sheet, SheetTitle } from "./Sheet";
+import { useState } from "react";
 import { Menu, Star, Trophy, X } from "lucide-react";
 import { copy } from "../data/copy";
 
@@ -21,23 +22,7 @@ type TopicNavProps = {
 
 export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNavProps) {
   const [open, setOpen] = useState(false);
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const returnFocus = useRef<HTMLElement | null>(null);
   const visible = sections.find((section) => section.id === visibleId) ?? sections[0];
-
-  useEffect(() => {
-    if (!open) return;
-    returnFocus.current = document.activeElement as HTMLElement | null;
-    closeRef.current?.focus();
-    function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
-    }
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      returnFocus.current?.focus();
-    };
-  }, [open]);
 
   if (!visible) return null;
 
@@ -61,17 +46,8 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNav
         </span>
       </button>
 
-      {open ? (
-        <div className="sheet-layer" onClick={() => setOpen(false)}>
-          <div
-            className="sheet sheet-toc"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="toc-title"
-            onClick={(event) => event.stopPropagation()}
-          >
+      <Sheet open={open} onClose={() => setOpen(false)} className="sheet-toc">
             <button
-              ref={closeRef}
               type="button"
               className="sheet-close"
               onClick={() => setOpen(false)}
@@ -79,9 +55,9 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNav
             >
               <X size={20} aria-hidden />
             </button>
-            <h2 id="toc-title" className="sheet-title toc-title">
+            <SheetTitle className="sheet-title toc-title">
               {copy.pickATopic}
-            </h2>
+            </SheetTitle>
             <ul className="toc-list">
               {sections.map((section, index) => {
                 const newYear = index === 0 || sections[index - 1].year !== section.year;
@@ -122,9 +98,7 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNav
                 );
               })}
             </ul>
-          </div>
-        </div>
-      ) : null}
+      </Sheet>
     </>
   );
 }

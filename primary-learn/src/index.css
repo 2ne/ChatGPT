@@ -3978,17 +3978,6 @@ button.object-token {
 }
 
 /* ——— Level sheet ——— */
-.sheet-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  background: rgba(35, 41, 70, 0.42);
-  animation: sheet-fade 160ms ease-out;
-}
-
 .sheet {
   position: relative;
   width: min(100%, 480px);
@@ -3998,15 +3987,9 @@ button.object-token {
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   background: var(--card);
   box-shadow: var(--shadow-lift);
-  animation: sheet-up 220ms ease-out;
 }
 
 @media (min-width: 640px) {
-  .sheet-layer {
-    align-items: center;
-    padding: var(--space-4);
-  }
-
   .sheet {
     border-radius: var(--radius-lg);
   }
@@ -4244,7 +4227,6 @@ button.object-token {
 
   .map-stop.is-here::before,
   .map-you,
-  .sheet-layer,
   .sheet,
   .result-pip,
   .result-star,
@@ -4545,11 +4527,15 @@ button.object-token {
 .turn-controls .quarter-turn-icon { display: block; width: 44px; height: 44px; flex: 0 0 44px; }
 @media (prefers-reduced-motion: reduce) { .car-turn-car { transition: none; } }
 
-/* Exit choices reuse the level-picker sheet and native modal focus handling. */
-.quest-exit-dialog { margin: 0; padding: 0; width: 100%; max-width: none; height: 100%; max-height: none; border: 0; color: var(--ink); background: transparent; }
-.quest-exit-dialog:not([open]) { display: none; }
-.quest-exit-dialog::backdrop { background: rgba(35, 41, 70, 0.42); }
-.quest-exit-dialog .sheet-crumb { padding-right: 42px; }
-.quest-exit-dialog .sheet-title { padding-right: 30px; }
 .quest-exit-actions { display: grid; gap: 12px; margin-top: 24px; }
-@media (min-width: 640px) { .quest-exit-dialog { padding: var(--space-4); } }
+
+/* Vaul owns the drag and spring transitions for every sheet. */
+.app-drawer-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(35, 41, 70, .42); }
+.sheet.app-drawer { position: fixed; z-index: 61; bottom: 0; left: 50%; margin: 0; width: min(100%, 480px); max-height: 88dvh; transform: translateX(-50%); outline: none; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.sheet.app-drawer[data-vaul-drawer-direction="bottom"] { left: 0; right: 0; margin-inline: auto; transform: none; }
+.app-drawer-handle { margin: 0 auto 20px; background: var(--line-strong); }
+.quest-exit-sheet .sheet-crumb { padding-right: 42px; }
+.quest-exit-sheet .sheet-title { padding-right: 30px; }
+@media (prefers-reduced-motion: reduce) {
+  [data-vaul-drawer], [data-vaul-overlay] { animation: none !important; transition: none !important; }
+}
