@@ -2,6 +2,14 @@ import { useRef, useState } from "react";
 import type { MultipleChoiceQuestion } from "../../types/activity";
 import { TurnPicture, ToyCar, directions } from "./TurnPicture";
 import { choiceClass, markChoice, type Reveal } from "./choice";
+function QuarterTurnIcon({ clockwise }: { clockwise: boolean }) {
+  return <svg className="quarter-turn-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <g transform={clockwise ? undefined : "translate(64 0) scale(-1 1)"} fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 46 V44 A28 28 0 0 1 44 16 H48" />
+      <path d="M38 6 L48 16 L38 26" />
+    </g>
+  </svg>;
+}
 export function TurnChoices({ question, answer, disabled, reveal, onChange }: {question: MultipleChoiceQuestion; answer: unknown; disabled?: boolean; reveal: Reveal; onChange: (value: unknown) => void}) {
   const [steps, setSteps] = useState(0);
   const current = useRef(0);
@@ -14,7 +22,7 @@ export function TurnChoices({ question, answer, disabled, reveal, onChange }: {q
       onChange(next === 0 ? null : String(next));
     };
     return <div className="option-stack"><TurnPicture turn={turn} steps={steps}/>
-      <div className="turn-controls"><button type="button" className="btn btn-secondary" disabled={disabled || steps <= -4} onClick={() => move(-1)}>↶<span>Quarter turn<br/>anti-clockwise</span></button><button type="button" className="btn btn-secondary" disabled={disabled || steps >= 4} onClick={() => move(1)}>↷<span>Quarter turn<br/>clockwise</span></button></div>
+      <div className="turn-controls"><button type="button" className="btn btn-secondary" aria-label="Quarter turn anti-clockwise" disabled={disabled || steps <= -4} onClick={() => move(-1)}><QuarterTurnIcon clockwise={false}/></button><button type="button" className="btn btn-secondary" aria-label="Quarter turn clockwise" disabled={disabled || steps >= 4} onClick={() => move(1)}><QuarterTurnIcon clockwise/></button></div>
       <p className="turn-description" aria-live="polite">{Math.abs(steps)} quarter {Math.abs(steps) === 1 ? "step" : "steps"}{steps ? steps < 0 ? " anti-clockwise" : " clockwise" : ""}</p>
       <button type="button" className="btn btn-ghost" disabled={disabled || !steps} onClick={() => {current.current = 0;setSteps(0);onChange(null);}}>Start again</button>
     </div>;
