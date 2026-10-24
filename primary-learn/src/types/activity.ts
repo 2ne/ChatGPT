@@ -125,7 +125,10 @@ export type ActivityRandomise = {
   items?: ObjectItem[];
 };
 
+export type TurnDiagram = { start: 0 | 1 | 2 | 3; quarters: 1 | 2 | 3 | 4; clockwise: boolean; showEnd: boolean };
+
 type QuestionCore = {
+  turn?: TurnDiagram;
   id: string;
   shape?: ShapeAsset;
   prompt: string;

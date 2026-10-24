@@ -471,7 +471,14 @@ function parseQuestion(value: unknown, path: string): Question {
   const shape = parseShape(value.shape, `${path}.shape`);
   if (shape && (visual || extras || layout || flashMs != null)) fail(path, "shape stems cannot mix object picture fields");
   if (shape && kind !== "multiple-choice" && kind !== "multi-select") fail(path, "shape stems use choice questions");
-  const core = { id, prompt, explanation, hint, narration, visual, shape, extras, layout, flashMs, randomise };
+  let turn: import("../types/activity").TurnDiagram | undefined;
+  if (value.turn != null) {
+    const t = value.turn;
+    if (!isRecord(t) || ![0, 1, 2, 3].includes(t.start as number) || ![1, 2, 3, 4].includes(t.quarters as number) || typeof t.clockwise !== "boolean" || typeof t.showEnd !== "boolean") fail(path, "invalid turn diagram");
+    if (kind !== "multiple-choice" || visual || shape || extras || layout || flashMs != null) fail(path, "turn diagrams use multiple-choice without other stem pictures");
+    turn = { start: t.start as 0 | 1 | 2 | 3, quarters: t.quarters as 1 | 2 | 3 | 4, clockwise: t.clockwise, showEnd: t.showEnd };
+  }
+  const core = { id, prompt, explanation, hint, narration, visual, shape, turn, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,

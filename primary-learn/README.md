@@ -12,7 +12,7 @@ Built from `main` by GitHub Pages.
 
 ## Status
 
-48 quests across 16 complete Easy / Medium / Hard nodes, from Count to 5 to Everyday shapes. Includes local learner profiles, an open path map, shared question runner and device-only progress. See `curriculum/NEXT.md` for the current content priorities.
+51 quests across 17 complete Easy / Medium / Hard nodes, from Count to 5 to Whole, half and quarter turns. Includes local learner profiles, an open path map, shared question runner and device-only progress. See `curriculum/NEXT.md` for the current content priorities.
 
 **Priority:** improve existing activities (especially the missing Medium / Hard levels) before expanding to new nodes.
 
@@ -107,17 +107,21 @@ npm run preview
 
 ## Limitations
 
-- Nodes 1 to 16 ship Easy / Medium / Hard. Everyday shapes is node 16. Whole, half and quarter turns (node 17) is next.
+- Nodes 1 to 17 ship Easy / Medium / Hard. Count to 100 (node 18) is next.
 - Progress does not sync across devices or browsers
 - Match-pairs is tap-to-match (prompt, then partner), not drag-and-drop
 - Ordered questions use up/down controls rather than drag
 
 ### Activity content review
 
-The 48 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.
+The 51 difficulty variants use numeric answers for counting, subitising and arithmetic. Reading and writing number words remains an explicit Year 1 objective in Numbers to 20. Composition activities explore varied totals, while bond activities practise a fixed total. Doubles are introduced in a block before bonds. One more, one less bridges 9, 10 and 11 before teens. Odd, even and sharing uses pairs and two equal groups of whole objects. Retained multi-select questions state how many choices to select. Activity and pathway IDs are unchanged so existing progress remains available.
 
 ### Geometry assets
 
 Everyday shapes uses reusable `shape` assets on choice stems, answer options and matching sides. Flat shapes are SVGs. Solids use a lazy-loaded Three.js renderer. The main solid can be dragged or rotated with arrow keys when focused. No instruction label or rotation controls appear below it. Answer cards use cached Three.js renders from one shared context. Offscreen interactive views release their resources. There are no static fallback drawings for solids. Colours, size and orientation are presentation fields, separate from the shape name.
 
 Content follows the [Year 1 national curriculum](https://assets.publishing.service.gov.uk/media/5a7da548ed915d2ac884cb07/PRIMARY_national_curriculum_-_Mathematics_220714.pdf) and [NCETM shape guidance](https://www.ncetm.org.uk/classroom-resources/cp-year-1-unit-4-recognise-compose-decompose-and-manipulate-2d-and-3d-shapes/). Questions recognise shapes in different orientations and proportions. Square and rectangle, and cube and cuboid, are overlapping families, so single-choice distractors never make both names defensible. Turns belong to node 17.
+
+### Whole, half and quarter turns
+
+Node 17 uses shared SVG arrow diagrams in existing multiple-choice questions. Easy starts with position words and whole/half turns before supported quarter turns. Medium uses quarter and half turns in both directions. Hard adds three-quarter turns and varied starts. Orange paths distinguish a whole turn from no movement; prediction items show only the starting arrow. Diagrams are static and have text alternatives. Single-choice throughout keeps the focus on spatial fluency. No degrees or right-angle counting. Scope follows [NCETM Year 1 position and direction](https://www.ncetm.org.uk/classroom-resources/cp-year-1-unit-10-position-and-direction/).

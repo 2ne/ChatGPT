@@ -213,7 +213,7 @@ Requires: `y1-add-sub-20`. Quests: `everyday-shapes` (Easy), `everyday-shapes-me
 
 ### 17. `y1-turns` — Whole, half and quarter turns
 
-Requires: `y1-shapes`. Quest: none. Status: missing.
+Requires: `y1-shapes`. Quest: `whole-half-quarter-turns` / `whole-half-quarter-turns-medium` / `whole-half-quarter-turns-hard`. Status: done.
 
 - Describe position, direction and movement, including whole, half, quarter and three-quarter turns
 - Use position words such as left, right, in front, behind, above and below

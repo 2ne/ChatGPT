@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 16 — nodes 1 to 16 (`eyfs-count-5` through `y1-shapes`) |
+| Done | 17 — nodes 1 to 17 (`eyfs-count-5` through `y1-turns`) |
 | Partial | 0 |
-| Missing | 108 |
+| Missing | 107 |
 
 ## Quests in the app
 
@@ -67,11 +67,15 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `everyday-shapes-medium` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Medium: varied sizes, proportions and orientations |
 | `everyday-shapes-hard` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Hard: shape families including squares as rectangles and cubes as cuboids |
 
+| `whole-half-quarter-turns` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Easy: position words, whole and half turns, supported quarter turns |
+| `whole-half-quarter-turns-medium` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Medium: quarter and half turns in both directions |
+| `whole-half-quarter-turns-hard` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Hard: three-quarter turns and varied starting directions |
+
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-turns` — Whole, half and quarter turns (node 17, after `y1-shapes`). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-count-100` — Count to 100 (node 18, after `y1-turns`). Start that node with Easy.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 

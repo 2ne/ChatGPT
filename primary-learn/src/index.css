@@ -4508,3 +4508,8 @@ button.object-token {
 .match-row .shape-picture.is-compact { width: 84px; }
 .match-chip .shape-picture.is-compact { width: 72px; }
 .shape-load-status { display: grid; place-items: center; width: 100%; height: 100%; font-family: var(--font-body); font-size: 14px; text-align: center; }
+
+/* Shared turn diagrams. Arrows remain still so children can inspect the path. */
+.turn-picture { margin: 0 auto 12px; width: min(100%, 260px); text-align: center; }
+.turn-picture svg { display: block; width: 100%; height: auto; }
+.turn-picture figcaption { color: var(--ink-soft); font-size: 15px; }

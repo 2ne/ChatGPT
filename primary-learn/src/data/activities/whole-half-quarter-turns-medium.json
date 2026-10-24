@@ -1,0 +1,337 @@
+{
+  "id": "whole-half-quarter-turns-medium",
+  "title": "Whole, half and quarter turns",
+  "summary": "Use position words and explore turns in both directions.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-turns",
+  "pathNode": "y1-turns",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 uses in front and behind. Q2 uses above and below. Q3 identifies a 1-quarter turn from right. Q4 identifies a 2-quarter turn from down. Q5 identifies a 1-quarter turn from up. Q6 predicts a 1-quarter turn from left. Q7 predicts a 1-quarter turn from right. Q8 predicts a 2-quarter turn from down. Q9 predicts a 1-quarter turn from left. Q10 predicts a 1-quarter turn from down.",
+    "versus": "Easy uses position words, whole and half turns, then supported quarter-turn predictions. Medium identifies and predicts quarter and half turns in both directions. Hard adds three-quarter turns, varied starts and whole-turn distinctions. All use one shared arrow diagram and single-choice spatial fluency to avoid interaction changes."
+  },
+  "skills": [
+    "y1-turns",
+    "position-words",
+    "turn-direction",
+    "amount-of-turn"
+  ],
+  "questions": [
+    {
+      "id": "turns-2-1",
+      "kind": "multiple-choice",
+      "prompt": "A tree is behind Pip. Where is Pip?",
+      "options": [
+        {
+          "id": "a",
+          "label": "In front of the tree"
+        },
+        {
+          "id": "b",
+          "label": "Behind the tree"
+        },
+        {
+          "id": "c",
+          "label": "Above the tree"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Pip is in front of the tree because the tree is behind him.",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "turns-2-2",
+      "kind": "multiple-choice",
+      "prompt": "Pip is below a kite. Where is the kite?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Above Pip"
+        },
+        {
+          "id": "b",
+          "label": "Below Pip"
+        },
+        {
+          "id": "c",
+          "label": "Behind Pip"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The kite is above Pip because Pip is below it.",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "turns-2-3",
+      "kind": "multiple-choice",
+      "prompt": "Follow the orange path. How much does the arrow turn?",
+      "options": [
+        {
+          "id": "a",
+          "label": "A quarter turn"
+        },
+        {
+          "id": "b",
+          "label": "A half turn"
+        },
+        {
+          "id": "c",
+          "label": "A whole turn"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "A quarter turn goes one of four equal parts of the way round.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 1,
+        "quarters": 1,
+        "clockwise": true,
+        "showEnd": true
+      }
+    },
+    {
+      "id": "turns-2-4",
+      "kind": "multiple-choice",
+      "prompt": "Follow the orange path. How much does the arrow turn?",
+      "options": [
+        {
+          "id": "a",
+          "label": "A quarter turn"
+        },
+        {
+          "id": "b",
+          "label": "A half turn"
+        },
+        {
+          "id": "c",
+          "label": "A whole turn"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "A half turn goes halfway round.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 2,
+        "quarters": 2,
+        "clockwise": false,
+        "showEnd": true
+      }
+    },
+    {
+      "id": "turns-2-5",
+      "kind": "multiple-choice",
+      "prompt": "Follow the orange path. How much does the arrow turn?",
+      "options": [
+        {
+          "id": "a",
+          "label": "A quarter turn"
+        },
+        {
+          "id": "b",
+          "label": "A half turn"
+        },
+        {
+          "id": "c",
+          "label": "A whole turn"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "A quarter turn goes one of four equal parts of the way round.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 0,
+        "quarters": 1,
+        "clockwise": false,
+        "showEnd": true
+      }
+    },
+    {
+      "id": "turns-2-6",
+      "kind": "multiple-choice",
+      "prompt": "The arrow makes a quarter turn clockwise. Which way does it point now?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Up"
+        },
+        {
+          "id": "b",
+          "label": "Right"
+        },
+        {
+          "id": "c",
+          "label": "Down"
+        },
+        {
+          "id": "d",
+          "label": "Left"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "From pointing left, a quarter turn clockwise finishes pointing up.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 3,
+        "quarters": 1,
+        "clockwise": true,
+        "showEnd": false
+      }
+    },
+    {
+      "id": "turns-2-7",
+      "kind": "multiple-choice",
+      "prompt": "The arrow makes a quarter turn anti-clockwise. Which way does it point now?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Up"
+        },
+        {
+          "id": "b",
+          "label": "Right"
+        },
+        {
+          "id": "c",
+          "label": "Down"
+        },
+        {
+          "id": "d",
+          "label": "Left"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "From pointing right, a quarter turn anti-clockwise finishes pointing up.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 1,
+        "quarters": 1,
+        "clockwise": false,
+        "showEnd": false
+      }
+    },
+    {
+      "id": "turns-2-8",
+      "kind": "multiple-choice",
+      "prompt": "The arrow makes a half turn anti-clockwise. Which way does it point now?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Up"
+        },
+        {
+          "id": "b",
+          "label": "Right"
+        },
+        {
+          "id": "c",
+          "label": "Down"
+        },
+        {
+          "id": "d",
+          "label": "Left"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "From pointing down, a half turn anti-clockwise finishes pointing up.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 2,
+        "quarters": 2,
+        "clockwise": false,
+        "showEnd": false
+      }
+    },
+    {
+      "id": "turns-2-9",
+      "kind": "multiple-choice",
+      "prompt": "The arrow makes a quarter turn anti-clockwise. Which way does it point now?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Up"
+        },
+        {
+          "id": "b",
+          "label": "Right"
+        },
+        {
+          "id": "c",
+          "label": "Down"
+        },
+        {
+          "id": "d",
+          "label": "Left"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "From pointing left, a quarter turn anti-clockwise finishes pointing down.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 3,
+        "quarters": 1,
+        "clockwise": false,
+        "showEnd": false
+      }
+    },
+    {
+      "id": "turns-2-10",
+      "kind": "multiple-choice",
+      "prompt": "The arrow makes a quarter turn clockwise. Which way does it point now?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Up"
+        },
+        {
+          "id": "b",
+          "label": "Right"
+        },
+        {
+          "id": "c",
+          "label": "Down"
+        },
+        {
+          "id": "d",
+          "label": "Left"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "From pointing down, a quarter turn clockwise finishes pointing left.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "turn": {
+        "start": 2,
+        "quarters": 1,
+        "clockwise": true,
+        "showEnd": false
+      }
+    }
+  ]
+}

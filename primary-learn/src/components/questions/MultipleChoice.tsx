@@ -1,3 +1,4 @@
+import { TurnPicture } from "./TurnPicture";
 import { copy } from "../../data/copy";
 import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
@@ -70,6 +71,7 @@ export function MultipleChoice({
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
     <div className="option-stack">
+      {question.turn ? <TurnPicture turn={question.turn} /> : null}
       {sum ? (
         <div className={`make-total-sum${reveal === "correct" ? " is-correct" : reveal === "incorrect" ? " is-wrong" : ""}`}>
           <span className="make-total-box is-part">{sum[1]}</span>

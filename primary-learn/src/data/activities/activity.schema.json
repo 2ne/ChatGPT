@@ -316,6 +316,40 @@
                 }
               }
             }
+          },
+          "turn": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start",
+              "quarters",
+              "clockwise",
+              "showEnd"
+            ],
+            "properties": {
+              "start": {
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "quarters": {
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              },
+              "clockwise": {
+                "type": "boolean"
+              },
+              "showEnd": {
+                "type": "boolean"
+              }
+            }
           }
         }
       }

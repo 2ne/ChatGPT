@@ -488,3 +488,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 - Generating the entire maths curriculum in one change — improve what exists, then add focused batches.
 - English or other subjects (separate work, not this app).
 - Changing GitHub Pages base path without updating the deploy workflow.
+
+### Turn diagrams
+
+Choice stems may set `turn: {start, quarters, clockwise, showEnd}`. `start` is 0 up, 1 right, 2 down or 3 left. `quarters` is 1 to 4. `TurnPicture` shows the starting arrow alone for prediction, or dashed start, solid finish and orange swept path for identifying an amount of turn. Full turns retain a nearly complete arc to distinguish them from no turn. No animation or new scoring kind. Options use existing labels and shuffle behaviour.
