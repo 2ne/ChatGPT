@@ -511,3 +511,7 @@ Tapping an added object clears that exact space. Other objects stay in place.
 There is no separate Add button. Use five columns. Keep spare spaces beyond the
 correct answer, so filling every space is not the goal. Do not add instruction text below the boxes.
 Tiles are 56px, or 44px on narrow screens. No extra panels.
+
+### Leaving a quest
+
+The question header close button opens a bottom sheet using the level-picker styling. Try again resets the current difficulty from question one. Back to quests returns to the map. Closing the sheet, tapping its backdrop or pressing Escape resumes the current question. A native modal dialog traps focus and makes the background inert; quest keyboard shortcuts pause while it is open. Incomplete attempts do not award stars.

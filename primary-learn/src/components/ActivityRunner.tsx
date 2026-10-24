@@ -33,6 +33,7 @@ import { usePipMood } from "./PipMood";
 import { mathsWallpaper } from "./mascot/MathsWallpaper";
 import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
+import { QuestExitSheet } from "./QuestExitSheet";
 import { BondDemonstration } from "./questions/BondDemonstration";
 
 function sectionBackdrop(pathNode: string): CSSProperties | undefined {
@@ -80,6 +81,10 @@ export function ActivityRunner({
   const [playQuestions, setPlayQuestions] = useState<Question[]>(activity.questions);
   const [phase, setPhase] = useState<Phase>("intro");
   const [index, setIndex] = useState(0);
+  const [exitOpen, setExitOpen] = useState(false);
+  const [playSession, setPlaySession] = useState(0);
+  const exitOpenRef = useRef(false);
+  exitOpenRef.current = exitOpen;
   const [answer, setAnswer] = useState<unknown>(null);
   const [startedAt, setStartedAt] = useState(() => new Date().toISOString());
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -107,6 +112,8 @@ export function ActivityRunner({
   view.current = { phase, question, answer, mastered, onExit, onNext };
 
   function begin() {
+    setPlaySession(value => value + 1);
+    setExitOpen(false);
     const realized = realizeActivity(activity);
     const first = realized.questions[0];
     setPlayQuestions(realized.questions);
@@ -195,6 +202,7 @@ export function ActivityRunner({
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
+      if (exitOpenRef.current) return;
       const target = event.target instanceof HTMLElement ? event.target : null;
       const tag = target?.tagName;
       const typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
@@ -401,7 +409,7 @@ export function ActivityRunner({
                 {DIFFICULTY_LABELS[activity.difficulty]} · {copy.questionOf(position, activeQueue.length)}
               </p>
             </div>
-            <button type="button" className="exit-btn" onClick={onExit} aria-label={copy.exitQuest}>
+            <button type="button" className="exit-btn" onClick={() => { speech.stop(); setExitOpen(true); }} aria-label={copy.exitQuest}>
               <X size={20} aria-hidden />
             </button>
           </div>
@@ -411,7 +419,7 @@ export function ActivityRunner({
       <div className="quest-rainbow" aria-hidden />
 
       <div className="play-grid">
-        <section key={question.id} className="card question-card" aria-label={`Question ${position}`}>
+        <section key={`${playSession}:${question.id}`} className="card question-card" aria-label={`Question ${position}`}>
           <div className="quest-inner">
           <div className="q-head">
             <span className="q-num" aria-hidden>
@@ -520,6 +528,7 @@ export function ActivityRunner({
       </div>
       </div>
     </main>
+      {exitOpen ? <QuestExitSheet title={activity.title} onClose={() => setExitOpen(false)} onRetry={begin} onExit={onExit} /> : null}
     </FlashPeekProvider>
   );
 }

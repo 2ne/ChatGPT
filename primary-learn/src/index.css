@@ -4544,3 +4544,12 @@ button.object-token {
 .turn-controls button { display: flex; align-items: center; justify-content: center; min-height: 76px; padding: 12px; }
 .turn-controls .quarter-turn-icon { display: block; width: 44px; height: 44px; flex: 0 0 44px; }
 @media (prefers-reduced-motion: reduce) { .car-turn-car { transition: none; } }
+
+/* Exit choices reuse the level-picker sheet and native modal focus handling. */
+.quest-exit-dialog { margin: 0; padding: 0; width: 100%; max-width: none; height: 100%; max-height: none; border: 0; color: var(--ink); background: transparent; }
+.quest-exit-dialog:not([open]) { display: none; }
+.quest-exit-dialog::backdrop { background: rgba(35, 41, 70, 0.42); }
+.quest-exit-dialog .sheet-crumb { padding-right: 42px; }
+.quest-exit-dialog .sheet-title { padding-right: 30px; }
+.quest-exit-actions { display: grid; gap: 12px; margin-top: 24px; }
+@media (min-width: 640px) { .quest-exit-dialog { padding: var(--space-4); } }
