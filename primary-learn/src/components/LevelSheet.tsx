@@ -36,7 +36,7 @@ export function LevelSheet({ level, onClose, onPlay }: LevelSheetProps) {
           </p>
           <SheetTitle className="sheet-title">
             <span>{node.title}</span>
-            <span className="sheet-level"><span aria-hidden="true">· </span>Level {node.number}</span>
+            <span className="sheet-level"><span className="level-sheet-separator" aria-hidden="true">·</span>Level {node.number}</span>
           </SheetTitle>
         </header>
         {shown.cup ? (

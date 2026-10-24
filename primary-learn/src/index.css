@@ -4061,11 +4061,15 @@ button.object-token {
 
 .level-sheet-heading .sheet-level {
   display: inline-block;
-  margin-left: 8px;
   font-family: inherit;
   font-size: 1em;
   line-height: 1.2;
   white-space: nowrap;
+}
+
+.level-sheet-separator {
+  display: inline-block;
+  margin-inline: 8px;
 }
 
 .level-sheet .sheet-rows {
