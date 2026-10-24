@@ -4546,7 +4546,16 @@ button.object-token {
 .onboard-form .field { gap: 12px; }
 
 /* Native content scrolling stays separate from the draggable handle. */
-.app-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+.sheet.app-drawer { padding-inline: 0; }
+.app-drawer-body {
+  min-width: 0;
+  min-height: 0;
+  padding: 4px calc(var(--space-4) + var(--safe-r)) 6px calc(var(--space-4) + var(--safe-l));
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
 
 
 
