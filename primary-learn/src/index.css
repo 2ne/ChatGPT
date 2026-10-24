@@ -4526,8 +4526,8 @@ button.object-token {
 .position-scene.is-in-front .position-pip { top: 28px; }
 .position-scene.is-above .position-object { width: 100px; height: 110px; top: 0; left: 155px; }
 .position-scene.is-above .position-pip { top: 119px; left: 90px; }
-.position-scene.is-below .position-object { width: 100px; height: 110px; top: 145px; left: 155px; }
-.position-scene.is-below .position-pip { top: 0; left: 90px; }
+.position-scene.is-below .position-object { width: 100px; height: 110px; top: 145px; left: 50%; transform: translateX(-50%); }
+.position-scene.is-below .position-pip { top: 0; width: 130px; left: 50%; transform: translateX(-50%); }
 .car-turn { margin: 0 auto 12px; width: min(100%, 280px); text-align: center; }
 .car-turn-stage { position: relative; width: 230px; height: 230px; margin: auto; border-radius: 50%; border: 2px dashed var(--line-strong); background: var(--paper); }
 .car-turn-car, .car-turn-ghost { position: absolute; inset: 25px; }
