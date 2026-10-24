@@ -272,7 +272,7 @@ export function ActivityRunner({
   /* ——— Intro ——— */
   if (phase === "intro") {
     return (
-      <main className="page page-quest quest-intro-page" style={backdrop}>
+      <main className="page page-quest quest-intro-page" style={backdrop} data-browser-color={backdrop?.backgroundColor ?? "#FFF6E8"}>
         <QuestBackdrop backdrop={backdrop} />
         <section className="quest-intro">
           <button type="button" className="back-link" onClick={onExit}>
@@ -561,7 +561,7 @@ function ResultScreen({
   }, [stars, reducedMotion]);
 
   return (
-    <main className="page page-quest quest-intro-page" style={backdrop}>
+    <main className="page page-quest quest-intro-page" style={backdrop} data-browser-color={backdrop?.backgroundColor ?? "#FFF6E8"}>
       <QuestBackdrop backdrop={backdrop} />
       <ConfettiBurst burstId={confetti} intensity="pop" />
       <section className="quest-intro">

@@ -447,6 +447,10 @@ The fixed onboarding backdrop has an opaque `--paper` background so Safari
 can extend the cream colour behind its status and address bars. Render the
 transparent SVG wallpaper on its `::before` layer, not on the fixed tint
 surface. The backdrop stays decorative and does not intercept touches.
+`useSafariThemeColor` also synchronises the html/body surface and theme-colour
+meta on route changes and activity phase changes. Intro and result screens
+expose their section tint through `data-browser-color`; question play uses white.
+Do not infer every activity screen as white or depend on a full reload.
 
 1. **Hero** — **large Pip** (follows the pointer; idle bob + blink) → speech
    bubble (`Hi, I'm Pip! Let's learn together.`) → display title

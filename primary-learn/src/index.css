@@ -112,7 +112,7 @@ html {
   touch-action: manipulation;
   overflow-x: clip;
   color-scheme: light;
-  background-color: var(--paper);
+  background-color: var(--browser-surface, var(--paper));
   background-image: var(--paper-scene);
 }
 
@@ -132,7 +132,7 @@ body {
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  background-color: var(--paper);
+  background-color: var(--browser-surface, var(--paper));
   background-image: var(--paper-scene);
 }
 
@@ -144,7 +144,7 @@ body {
 
 html[data-surface="white"],
 html[data-surface="white"] body {
-  background-color: #fff;
+  background-color: var(--browser-surface, #fff);
   background-image: none;
 }
 
