@@ -4664,16 +4664,22 @@ button.object-token {
 .match-turn .match-card-face {
   min-height: 120px;
   height: 120px;
+}
+
+.match-turn .match-card-face {
   overflow: hidden;
 }
 
 .match-card-static {
   pointer-events: none;
   cursor: default;
+  perspective: none;
 }
 
-.match-card-static .match-card-inner {
-  transition: none;
+.match-card-static .match-card-front {
+  transform: none;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
 }
 
 @media (min-width: 560px) {
