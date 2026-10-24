@@ -349,6 +349,9 @@ Do not use shape assets on numeric question kinds or ordered items.
 draws flat shapes. `ShapePicture` lazy-loads Three.js solids, supports direct
 drag and keyboard rotation for stems, with no visible control row, and generates cached answer
 images through a shared renderer. Offscreen interactive contexts are disposed.
+Solids use glossy non-metallic materials with a clear coat, a directional key
+light and subdued ambient fill so highlights and face shading reveal depth.
+The same material and lighting apply to stems and answer images.
 Pyramids start at a corner view showing two clear faces, including on answer
 cards. Free dragging remains unrestricted. No automatic spinning and no
 static fallback drawings. Preserve family

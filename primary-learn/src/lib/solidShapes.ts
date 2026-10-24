@@ -28,7 +28,14 @@ function model(shape: ShapeAsset) {
     case "pyramid": geometry = new THREE.ConeGeometry(1.05, variant === "tall" ? 2 : 1.65, variant === "triangular" ? 3 : 4); break;
     default: geometry = new THREE.SphereGeometry(0.86, 40, 28);
   }
-  const material = new THREE.MeshStandardMaterial({ color: SHAPE_COLOUR_VALUES[shape.colour ?? "purple"], roughness: 0.75, flatShading: shape.name !== "sphere" });
+  const material = new THREE.MeshPhysicalMaterial({
+    color: SHAPE_COLOUR_VALUES[shape.colour ?? "purple"],
+    metalness: 0,
+    roughness: 0.28,
+    clearcoat: 0.65,
+    clearcoatRoughness: 0.2,
+    flatShading: shape.name !== "sphere",
+  });
   const group = new THREE.Group();
   group.add(new THREE.Mesh(geometry, material));
   if (shape.name !== "sphere") {
@@ -54,10 +61,15 @@ function sceneFor(shape: ShapeAsset) {
   const camera = new THREE.OrthographicCamera(-1.65, 1.65, 1.65, -1.65, 0.1, 30);
   camera.position.copy(CAMERA_POSITION);
   camera.lookAt(0, 0, 0);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x686587, 2.4));
+  // Keep the ambient fill below the key light so neighbouring faces retain
+  // contrast. The glossy non-metallic surface gives spheres a clear highlight.
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x686587, 1.2));
   const light = new THREE.DirectionalLight(0xffffff, 3);
   light.position.set(-3, 5, 4);
   scene.add(light);
+  const rim = new THREE.DirectionalLight(0xe3eaff, 0.7);
+  rim.position.set(4, 2, -3);
+  scene.add(rim);
   const group = model(shape);
   scene.add(group);
   return { scene, camera, group };
