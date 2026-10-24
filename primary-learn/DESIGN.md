@@ -509,3 +509,5 @@ Drawer content scrolls in `.app-drawer-body`, a native pan-y scroll area exclude
 
 
 Everyone sees the full pathway. Onboarding asks for a name and buddy only. Do not use stored legacy year preferences to hide or jump past activities.
+
+The learner chip opens settings with an Edit profile action. Edit the name and buddy in the same scrolling drawer, using the onboarding buddy picker. Save updates the stored profile without clearing stars or attempts. Cancel or dismiss discards edits.

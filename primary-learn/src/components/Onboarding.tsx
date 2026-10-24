@@ -1,6 +1,6 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { AVATARS } from "../data/avatars";
+import { BuddyChoices } from "./BuddyChoices";
 import { copy } from "../data/copy";
 import type { LearnerAvatarId, LearnerProfile } from "../types/progress";
 import { Pip } from "./mascot/Pip";
@@ -69,32 +69,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
             />
           </label>
 
-          <fieldset className="onboard-buddies">
-            <legend className="t-title-sm">{copy.chooseBuddy}</legend>
-            <div className="avatar-grid">
-              {AVATARS.map((avatar) => {
-                const selected = avatar.id === avatarId;
-                return (
-                  <button
-                    key={avatar.id}
-                    type="button"
-                    onClick={() => setAvatarId(avatar.id)}
-                    aria-pressed={selected}
-                    className={`avatar-pick${selected ? " is-selected" : ""}`}
-                  >
-                    <span
-                      className="avatar-face"
-                      style={{ background: `${avatar.accent}26` }}
-                      aria-hidden
-                    >
-                      {avatar.emoji}
-                    </span>
-                    <span className="t-meta avatar-label">{avatar.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </fieldset>
+          <BuddyChoices avatarId={avatarId} onChange={setAvatarId} />
 
           {error ? (
             <p className="feedback is-wrong" role="alert">

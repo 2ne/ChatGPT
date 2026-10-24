@@ -4549,3 +4549,9 @@ button.object-token {
 .app-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
 
 
+
+/* Profile editing shares onboarding fields inside the settings drawer. */
+.profile-editor { display: grid; gap: 24px; }
+.profile-editor .field { gap: 12px; }
+.profile-editor .field input { min-height: 64px; font-size: 22px; }
+.profile-editor .avatar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }

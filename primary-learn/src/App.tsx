@@ -49,6 +49,7 @@ export default function App() {
                 profile={learner.profile!}
                 progress={learner.progress}
                 resetAll={learner.resetAll}
+                updateProfile={learner.updateProfile}
               />
             </RequireProfile>
           }
@@ -111,10 +112,12 @@ function PathwayRoute({
   profile,
   progress,
   resetAll,
+  updateProfile,
 }: {
   profile: LearnerProfile;
   progress: ProgressState;
   resetAll: () => void;
+  updateProfile: (patch: Pick<LearnerProfile, "name" | "avatarId">) => void;
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -125,6 +128,8 @@ function PathwayRoute({
   return (
     <>
       <AppHeader
+        profile={profile}
+        onUpdateProfile={updateProfile}
         learnerName={profile.name}
         learnerEmoji={avatar.emoji}
         onHome={() => navigate("/pathway")}

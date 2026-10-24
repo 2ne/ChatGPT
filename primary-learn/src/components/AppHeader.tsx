@@ -1,3 +1,4 @@
+import type { LearnerProfile } from "../types/progress";
 import { useState } from "react";
 import { copy } from "../data/copy";
 import { Pip } from "./mascot/Pip";
@@ -7,11 +8,13 @@ import { SettingsSheet } from "./SettingsSheet";
 type AppHeaderProps = {
   learnerName?: string;
   learnerEmoji?: string;
+  profile?: LearnerProfile;
+  onUpdateProfile?: (patch: Pick<LearnerProfile, "name" | "avatarId">) => void;
   onHome?: () => void;
   onReset?: () => void;
 };
 
-export function AppHeader({ learnerName, learnerEmoji, onHome, onReset }: AppHeaderProps) {
+export function AppHeader({ learnerName, learnerEmoji, onHome, onReset, profile, onUpdateProfile }: AppHeaderProps) {
   const { mood } = usePipMood();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -70,6 +73,8 @@ export function AppHeader({ learnerName, learnerEmoji, onHome, onReset }: AppHea
         <SettingsSheet
           open={settingsOpen}
           learnerName={learnerName ?? ""}
+          profile={profile}
+          onUpdateProfile={onUpdateProfile}
           onClose={() => setSettingsOpen(false)}
           onReset={() => {
             setSettingsOpen(false);
