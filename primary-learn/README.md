@@ -132,4 +132,4 @@ Level selection, topic navigation, settings and quest exit share a Vaul drawer (
 
 ### Year-group starting point
 
-Learners choose Reception or Year 1 to Year 6 during setup. A year button beside the pathway greeting and year choices in the floating topic menu update the saved preference and jump to that year. Earlier and later years remain accessible. Unwritten activities still open their Coming soon level details. Changing year preserves all progress. Existing profiles with no selected year continue to load without migration.
+Learners choose Reception or Year 1 to Year 6 during setup. A year button beside the pathway greeting updates the saved preference and jumps to that year. The floating topic menu only lists topics, grouped by year. Drawer contents scroll independently of the drag handle, and topic jumps run after closing. Earlier and later years remain accessible. Unwritten activities still open their Coming soon level details. Changing year preserves all progress. Existing profiles with no selected year continue to load without migration.

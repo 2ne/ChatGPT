@@ -4531,9 +4531,9 @@ button.object-token {
 
 /* Vaul owns the drag and spring transitions for every sheet. */
 .app-drawer-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(35, 41, 70, .42); }
-.sheet.app-drawer { position: fixed; z-index: 61; bottom: 0; left: 50%; margin: 0; width: min(100%, 480px); max-height: 88dvh; transform: translateX(-50%); outline: none; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.sheet.app-drawer { display: flex; flex-direction: column; overflow: hidden; position: fixed; z-index: 61; bottom: 0; left: 50%; margin: 0; width: min(100%, 480px); max-height: 88dvh; transform: translateX(-50%); outline: none; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
 .sheet.app-drawer[data-vaul-drawer-direction="bottom"] { left: 0; right: 0; margin-inline: auto; transform: none; }
-.app-drawer-handle { margin: 0 auto 20px; background: var(--line-strong); }
+.app-drawer-handle { flex-shrink: 0; margin: 0 auto 20px; background: var(--line-strong); }
 .quest-exit-sheet .sheet-crumb { padding-right: 42px; }
 .quest-exit-sheet .sheet-title { padding-right: 30px; }
 @media (prefers-reduced-motion: reduce) {
@@ -4552,3 +4552,6 @@ button.object-token {
 .onboard-form { gap: 24px; }
 .onboard-form .field { gap: 12px; }
 .onboard-years .year-choices { margin: 0; gap: 12px; }
+
+/* Native content scrolling stays separate from the draggable handle. */
+.app-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }

@@ -61,7 +61,6 @@ export function Home({ profile, progress, onOpenActivity, onYearChange }: HomePr
         learnerName={profile.name}
         onPlay={onOpenActivity}
         preferredYear={selectedYear}
-        onYearChange={chooseYear}
         yearVisit={yearVisit}
       />
       <Sheet open={yearOpen} onClose={() => setYearOpen(false)} onAfterClose={() => { if (pendingYear.current) {chooseYear(pendingYear.current);pendingYear.current = null;} }}>

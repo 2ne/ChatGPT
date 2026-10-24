@@ -1,5 +1,3 @@
-import { YearChoices } from "./YearChoices";
-import type { YearGroup } from "../types/curriculum";
 import { Sheet, SheetTitle } from "./Sheet";
 import { useRef, useState } from "react";
 import { Menu, Star, Trophy, X } from "lucide-react";
@@ -17,15 +15,13 @@ export type TopicSection = {
 
 type TopicNavProps = {
   sections: TopicSection[];
-  preferredYear: YearGroup | null;
-  onYearChange: (year: YearGroup) => void;
   visibleId: string;
   learnerEmoji: string;
   onJump: (section: TopicSection) => void;
 };
 
-export function TopicNav({ sections, visibleId, learnerEmoji, onJump, preferredYear, onYearChange }: TopicNavProps) {
-  const pendingYear = useRef<YearGroup | null>(null);
+export function TopicNav({ sections, visibleId, learnerEmoji, onJump }: TopicNavProps) {
+  const pendingSection = useRef<TopicSection | null>(null);
   const [open, setOpen] = useState(false);
   const visible = sections.find((section) => section.id === visibleId) ?? sections[0];
 
@@ -51,7 +47,7 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump, preferredY
         </span>
       </button>
 
-      <Sheet open={open} onClose={() => setOpen(false)} className="sheet-toc" onAfterClose={() => {if (pendingYear.current) {onYearChange(pendingYear.current);pendingYear.current = null;}}}>
+      <Sheet open={open} onClose={() => setOpen(false)} className="sheet-toc" onAfterClose={() => {if (pendingSection.current) {onJump(pendingSection.current);pendingSection.current = null;}}}>
             <button
               type="button"
               className="sheet-close"
@@ -63,8 +59,6 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump, preferredY
             <SheetTitle className="sheet-title toc-title">
               {copy.pickATopic}
             </SheetTitle>
-            <p className="t-title-sm">{copy.yourYear}</p>
-            <YearChoices value={preferredYear ?? "Reception"} onSelect={year => {pendingYear.current = year;setOpen(false);}} />
             <ul className="toc-list">
               {sections.map((section, index) => {
                 const newYear = index === 0 || sections[index - 1].year !== section.year;
@@ -85,8 +79,8 @@ export function TopicNav({ sections, visibleId, learnerEmoji, onJump, preferredY
                         .filter(Boolean)
                         .join(", ")}
                       onClick={() => {
+                        pendingSection.current = section;
                         setOpen(false);
-                        onJump(section);
                       }}
                     >
                       <span className="toc-row-title">{section.title}</span>

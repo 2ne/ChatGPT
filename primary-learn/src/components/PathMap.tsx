@@ -12,7 +12,6 @@ type PathMapProps = {
   levels: LevelState[];
   preferredYear: YearGroup | null;
   yearVisit: number;
-  onYearChange: (year: YearGroup) => void;
   learnerEmoji: string;
   learnerName: string;
   onPlay: (activityId: string) => void;
@@ -109,7 +108,7 @@ function placeSign(samples: Point[], signY: number): SignPlacement {
   };
 }
 
-export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYear, onYearChange, yearVisit }: PathMapProps) {
+export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYear, yearVisit }: PathMapProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [openLevel, setOpenLevel] = useState<LevelState | null>(null);
   const [visibleId, setVisibleId] = useState(levels[0]?.category.id ?? "");
@@ -368,8 +367,6 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYe
         visibleId={visibleId}
         learnerEmoji={learnerEmoji}
         onJump={jumpToSection}
-        preferredYear={preferredYear}
-        onYearChange={onYearChange}
       />
 
       <LevelSheet

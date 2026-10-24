@@ -15,7 +15,7 @@ export function Sheet({ open, onClose, children, className = "", descriptionId, 
         onOpenAutoFocus={() => { returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null; }}
         onCloseAutoFocus={event => { event.preventDefault(); if (returnFocus.current?.isConnected) returnFocus.current.focus({ preventScroll: true }); }}>
         <Drawer.Handle className="app-drawer-handle" aria-label="Drag to close" />
-        {children}
+        <div className="app-drawer-body" data-vaul-no-drag>{children}</div>
       </Drawer.Content>
     </Drawer.Portal>
   </Drawer.Root>;
