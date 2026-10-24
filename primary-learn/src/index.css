@@ -4541,9 +4541,14 @@ button.object-token {
 }
 
 .onboard-years { border: 0; padding: 0; margin: 0; min-width: 0; }
-.onboard-years legend { margin-bottom: 16px; }
+.onboard-years legend { margin-bottom: 12px; }
 .year-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0 20px; }
 .year-choice { border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; padding: 10px; border: 2px solid var(--line); color: var(--ink); background: white; font-weight: 700; }
 .year-choice.is-selected { border-color: var(--primary); background: var(--primary-soft); }
 .year-choice:focus-visible, .hero-year:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
 .hero-year { border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; margin: 8px 0; border: 2px solid rgba(255,255,255,.5); background: white; color: var(--ink); font-size: 17px; }
+
+/* Form sections own their outer spacing; choice grids add no extra margins. */
+.onboard-form { gap: 24px; }
+.onboard-form .field { gap: 12px; }
+.onboard-years .year-choices { margin: 0; gap: 12px; }
