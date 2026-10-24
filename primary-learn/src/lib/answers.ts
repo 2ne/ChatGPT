@@ -200,7 +200,7 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
     case "match-pairs": {
       if (!answer || typeof answer !== "object") return false;
       const map = answer as Record<string, string>;
-      return question.pairs.every((pair) => Boolean(map[pair.id]));
+      return question.pairs.every((pair) => map[pair.id] === matchSideKey(pair.right));
     }
     case "build-set":
       return Array.isArray(answer) && answer.length > 0;

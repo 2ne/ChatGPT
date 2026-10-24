@@ -343,6 +343,10 @@ p {
   padding-bottom: calc(96px + var(--safe-b));
 }
 
+.page-with-dock.is-no-dock .quest-shell {
+  padding-bottom: calc(16px + var(--safe-b));
+}
+
 .page-quest .card {
   border: 0;
   border-radius: 0;
@@ -4787,15 +4791,6 @@ button.object-token {
 
 .match-card .object-group.is-amount {
   gap: 3px;
-}
-
-.match-pair-mark {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  font-size: 18px;
-  line-height: 1;
-  color: var(--pair-ink, var(--primary));
 }
 
 .match-peek {

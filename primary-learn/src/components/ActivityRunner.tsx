@@ -140,6 +140,7 @@ export function ActivityRunner({
 
   function checkAnswer() {
     if (!question) return;
+    if (question.kind === "match-pairs" && !isAnswerCorrect(question, answer)) return;
     const correct = isAnswerCorrect(question, answer);
     playSound(correct ? "correct" : "wrong");
     setLastCorrect(correct);
@@ -151,6 +152,7 @@ export function ActivityRunner({
 
   function goNext() {
     if (!question) return;
+    if (question.kind === "match-pairs" && lastCorrect !== true) return;
     const nextIndex = index + 1;
     if (nextIndex < activeQueue.length) {
       const nextQuestion = playQuestions.find((item) => item.id === activeQueue[nextIndex]);
@@ -344,8 +346,10 @@ export function ActivityRunner({
   const oneAtATimeMatch =
     question.kind === "match-pairs" && matchPairsMode(question) === "one-at-a-time";
   const hideCheck = flipMatch && phase === "question";
+  const matchNeedsRetry =
+    (flipMatch || oneAtATimeMatch) && phase === "feedback" && lastCorrect === false;
   const primaryAction =
-    hideCheck ? null : phase === "question" ? (
+    hideCheck || matchNeedsRetry ? null : phase === "question" ? (
       <button
         type="button"
         className="btn btn-primary btn-block"
@@ -386,7 +390,7 @@ export function ActivityRunner({
       lookAgainCount={lookAgainCount}
       recordLookAgain={() => setLookAgainCount((n) => n + 1)}
     >
-    <main className={`page page-quest${hideCheck ? "" : " page-with-dock"}`} style={backdrop}>
+    <main className={`page page-quest page-with-dock${hideCheck ? " is-no-dock" : ""}`} style={backdrop}>
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       <div className="quest-shell">

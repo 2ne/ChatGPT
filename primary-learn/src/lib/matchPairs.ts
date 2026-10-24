@@ -1,23 +1,24 @@
 import type { MatchPairsMode, MatchPairsQuestion } from "../types/activity";
 
-export const MATCH_PAIR_MARKS = [
-  { id: "star", word: "star", tint: "#fff4d6", ink: "#b45309" },
-  { id: "heart", word: "heart", tint: "#ffe4e9", ink: "#be123c" },
-  { id: "moon", word: "moon", tint: "#e0f2fe", ink: "#0369a1" },
-  { id: "sun", word: "sun", tint: "#fef3c7", ink: "#d97706" },
-  { id: "leaf", word: "leaf", tint: "#dcfce7", ink: "#047857" },
-  { id: "drop", word: "drop", tint: "#e0e7ff", ink: "#4338ca" },
+/** Distinct fill and border colours for a found pair. No symbols. */
+export const MATCH_PAIR_COLOURS = [
+  { tint: "#fff4d6", ink: "#b45309" },
+  { tint: "#ffe4e9", ink: "#be123c" },
+  { tint: "#e0f2fe", ink: "#0369a1" },
+  { tint: "#dcfce7", ink: "#047857" },
+  { tint: "#f3e8ff", ink: "#6d28d9" },
+  { tint: "#ffedd5", ink: "#c2410c" },
 ] as const;
 
-export type MatchPairMark = (typeof MATCH_PAIR_MARKS)[number];
+export type MatchPairColour = (typeof MATCH_PAIR_COLOURS)[number];
 
 export function matchPairsMode(question: MatchPairsQuestion): MatchPairsMode {
   return question.mode;
 }
 
-export function markForPair(index: number): MatchPairMark {
-  const mark = MATCH_PAIR_MARKS[index % MATCH_PAIR_MARKS.length];
-  return mark ?? MATCH_PAIR_MARKS[0]!;
+export function colourForPair(index: number): MatchPairColour {
+  const colour = MATCH_PAIR_COLOURS[index % MATCH_PAIR_COLOURS.length];
+  return colour ?? MATCH_PAIR_COLOURS[0]!;
 }
 
 /** Deterministic shuffle, same family as the old match-pairs bank order. */

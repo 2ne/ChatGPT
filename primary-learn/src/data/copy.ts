@@ -37,8 +37,6 @@ export const copy = {
   yourAnswer: "Your answer",
   chooseAll: "Tap every answer that is right.",
   tapThenPartner: "Tap one, then tap its partner.",
-  rememberCards: "Remember these cards.",
-  tapTwoCards: "Tap two cards that go together.",
   showTheCards: "Show the cards",
   matchCards: "Cards",
   cardFaceDown: (n: number) => `Card ${n}, face down`,

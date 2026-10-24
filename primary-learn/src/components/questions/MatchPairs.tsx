@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { copy } from "../../data/copy";
 import { matchSideKey, matchSideLabel, matchSideVisual } from "../../lib/matchSide";
-import { markForPair, matchPairsMode, seededOrder, type MatchPairMark } from "../../lib/matchPairs";
+import { colourForPair, matchPairsMode, seededOrder, type MatchPairColour } from "../../lib/matchPairs";
 import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
@@ -44,19 +44,6 @@ function SideView({ side }: { side: MatchSide }) {
   );
 }
 
-function PairMark({ mark }: { mark: MatchPairMark }) {
-  return (
-    <span className="match-pair-mark" aria-hidden>
-      {mark.id === "star" ? "★" : null}
-      {mark.id === "heart" ? "♥" : null}
-      {mark.id === "moon" ? "☾" : null}
-      {mark.id === "sun" ? "☀" : null}
-      {mark.id === "leaf" ? "🍃" : null}
-      {mark.id === "drop" ? "💧" : null}
-    </span>
-  );
-}
-
 function answerMap(
   question: MatchPairsQuestion,
   answer: unknown,
@@ -65,12 +52,20 @@ function answerMap(
   return Object.fromEntries(question.pairs.map((pair) => [pair.id, ""]));
 }
 
+function foundPairIds(question: MatchPairsQuestion, map: Record<string, string>): Set<string> {
+  return new Set(
+    question.pairs
+      .filter((pair) => map[pair.id] === matchSideKey(pair.right))
+      .map((pair) => pair.id),
+  );
+}
+
 function FlipCardButton({
   card,
   index,
   faceUp,
   found,
-  mark,
+  colour,
   disabled,
   onTap,
 }: {
@@ -78,7 +73,7 @@ function FlipCardButton({
   index: number;
   faceUp: boolean;
   found: boolean;
-  mark?: MatchPairMark;
+  colour?: MatchPairColour;
   disabled?: boolean;
   onTap: () => void;
 }) {
@@ -89,8 +84,8 @@ function FlipCardButton({
       ? copy.cardShowsFound(number, label)
       : copy.cardShows(number, label)
     : copy.cardFaceDown(number);
-  const style = found && mark
-    ? ({ "--pair-tint": mark.tint, "--pair-ink": mark.ink } as CSSProperties)
+  const style = found && colour
+    ? ({ "--pair-tint": colour.tint, "--pair-ink": colour.ink } as CSSProperties)
     : undefined;
   return (
     <button
@@ -108,7 +103,6 @@ function FlipCardButton({
           </span>
         </span>
         <span className="match-card-face match-card-front">
-          {found && mark ? <PairMark mark={mark} /> : null}
           <SideView side={card.content} />
         </span>
       </span>
@@ -142,15 +136,27 @@ function FlipMatch({
       ),
     [question],
   );
-  const marks = useMemo(
-    () => Object.fromEntries(question.pairs.map((pair, index) => [pair.id, markForPair(index)])),
+  const colours = useMemo(
+    () => Object.fromEntries(question.pairs.map((pair, index) => [pair.id, colourForPair(index)])),
     [question],
   );
   const [preview, setPreview] = useState(!review);
   const [peek, setPeek] = useState(false);
   const [picked, setPicked] = useState<string[]>([]);
   const [locked, setLocked] = useState(false);
+  const mapRef = useRef(map);
+  const previewRef = useRef(preview);
+  const peekRef = useRef(peek);
+  const pickedRef = useRef(picked);
+  const lockedRef = useRef(locked);
+  const foundRef = useRef(foundPairIds(question, map));
   const timers = useRef<number[]>([]);
+  mapRef.current = map;
+  previewRef.current = preview;
+  peekRef.current = peek;
+  pickedRef.current = picked;
+  lockedRef.current = locked;
+  foundRef.current = foundPairIds(question, map);
 
   function clearTimers() {
     for (const id of timers.current) window.clearTimeout(id);
@@ -162,76 +168,87 @@ function FlipMatch({
   }, []);
 
   useEffect(() => {
-    if (review) {
-      setPreview(false);
-      setPeek(false);
-      return;
-    }
-    setPreview(true);
-    setPeek(false);
+    clearTimers();
+    pickedRef.current = [];
+    lockedRef.current = false;
+    peekRef.current = false;
     setPicked([]);
     setLocked(false);
-    clearTimers();
+    setPeek(false);
+    if (review) {
+      previewRef.current = false;
+      setPreview(false);
+      return;
+    }
+    previewRef.current = true;
+    setPreview(true);
     const wait = reducedMotion ? 400 : 3000;
-    const timer = window.setTimeout(() => setPreview(false), wait);
+    const timer = window.setTimeout(() => {
+      previewRef.current = false;
+      setPreview(false);
+    }, wait);
     timers.current.push(timer);
     return () => window.clearTimeout(timer);
-  }, [question.id, review, reducedMotion]);
-
-  const foundIds = new Set(
-    question.pairs
-      .filter((pair) => map[pair.id] === matchSideKey(pair.right))
-      .map((pair) => pair.id),
-  );
+    // Reset only when the question changes so a re-render cannot restart the preview.
+  }, [question.id]);
 
   function showAllAgain() {
-    if (preview || locked || disabled) return;
-    setPeek(true);
+    if (disabled || previewRef.current || peekRef.current || lockedRef.current) return;
+    pickedRef.current = [];
     setPicked([]);
+    peekRef.current = true;
+    setPeek(true);
     const wait = reducedMotion ? 400 : 3000;
-    const timer = window.setTimeout(() => setPeek(false), wait);
-    timers.current.push(timer);
-  }
-
-  function tapCard(card: FlipCard) {
-    if (disabled || preview || peek || locked) return;
-    if (foundIds.has(card.pairId)) return;
-    if (picked.includes(card.id)) return;
-    playSound("tap");
-    const next = [...picked, card.id];
-    if (next.length < 2) {
-      setPicked(next);
-      return;
-    }
-    setPicked(next);
-    const first = cards.find((item) => item.id === next[0]);
-    const second = cards.find((item) => item.id === next[1]);
-    if (!first || !second) {
-      setPicked([]);
-      return;
-    }
-    if (first.pairId === second.pairId) {
-      const pair = question.pairs.find((item) => item.id === first.pairId);
-      if (pair) {
-        const updated = { ...map, [pair.id]: matchSideKey(pair.right) };
-        onChange(updated);
-      }
-      setPicked([]);
-      return;
-    }
-    setLocked(true);
-    const wait = reducedMotion ? 350 : 1000;
     const timer = window.setTimeout(() => {
-      setPicked([]);
-      setLocked(false);
+      peekRef.current = false;
+      setPeek(false);
     }, wait);
     timers.current.push(timer);
   }
 
+  function tapCard(card: FlipCard) {
+    if (disabled || previewRef.current || peekRef.current || lockedRef.current) return;
+    if (foundRef.current.has(card.pairId)) return;
+    if (pickedRef.current.includes(card.id)) return;
+    if (pickedRef.current.length >= 2) return;
+    playSound("tap");
+    const next = [...pickedRef.current, card.id];
+    pickedRef.current = next;
+    setPicked(next);
+    if (next.length < 2) return;
+    const first = cards.find((item) => item.id === next[0]);
+    const second = cards.find((item) => item.id === next[1]);
+    if (!first || !second || first.pairId !== second.pairId) {
+      lockedRef.current = true;
+      setLocked(true);
+      const wait = reducedMotion ? 350 : 1000;
+      const timer = window.setTimeout(() => {
+        pickedRef.current = [];
+        lockedRef.current = false;
+        setPicked([]);
+        setLocked(false);
+      }, wait);
+      timers.current.push(timer);
+      return;
+    }
+    const pair = question.pairs.find((item) => item.id === first.pairId);
+    if (!pair) {
+      pickedRef.current = [];
+      setPicked([]);
+      return;
+    }
+    const nextFound = new Set(foundRef.current);
+    nextFound.add(pair.id);
+    foundRef.current = nextFound;
+    pickedRef.current = [];
+    setPicked([]);
+    onChange({ ...mapRef.current, [pair.id]: matchSideKey(pair.right) });
+  }
+
   const looking = preview || peek;
+  const foundIds = foundRef.current;
   return (
     <div className="match-flip">
-      <p className="t-body">{looking ? copy.rememberCards : copy.tapTwoCards}</p>
       <div
         className={`match-flip-grid pairs-${question.pairs.length}`}
         role="group"
@@ -247,7 +264,7 @@ function FlipMatch({
               index={index}
               faceUp={faceUp}
               found={found}
-              mark={marks[card.pairId]}
+              colour={colours[card.pairId]}
               disabled={disabled || preview || peek || locked || found}
               onTap={() => tapCard(card)}
             />
@@ -286,10 +303,17 @@ function OneAtATime({
   const reducedMotion = usePrefersReducedMotion();
   const review = Boolean(disabled && reveal);
   const current = question.pairs[0];
-  const done = Boolean(current && map[current.id]);
+  const done = Boolean(current && map[current.id] === matchSideKey(current.right));
   const [picked, setPicked] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const pickedRef = useRef<string | null>(null);
+  const busyRef = useRef(false);
+  const doneRef = useRef(done);
   const confirmRef = useRef<() => void>(() => {});
+  const busyTimer = useRef<number | null>(null);
+  pickedRef.current = picked;
+  busyRef.current = busy;
+  doneRef.current = done;
 
   const choices = useMemo(() => {
     const sides = question.choices ?? [];
@@ -297,22 +321,37 @@ function OneAtATime({
   }, [question]);
 
   useEffect(() => {
+    if (busyTimer.current != null) window.clearTimeout(busyTimer.current);
+    busyTimer.current = null;
+    pickedRef.current = null;
+    busyRef.current = false;
     setPicked(null);
     setBusy(false);
   }, [question.id]);
 
+  useEffect(() => {
+    return () => {
+      if (busyTimer.current != null) window.clearTimeout(busyTimer.current);
+    };
+  }, []);
+
   function confirmPick() {
-    if (!current || picked == null || busy || disabled || done) return;
+    if (!current || pickedRef.current == null || busyRef.current || disabled || doneRef.current) return;
     const rightKey = matchSideKey(current.right);
-    if (picked === rightKey) {
+    if (pickedRef.current === rightKey) {
       playSound("tap");
-      onChange({ ...map, [current.id]: picked });
+      doneRef.current = true;
+      onChange({ ...map, [current.id]: pickedRef.current });
       return;
     }
+    busyRef.current = true;
     setBusy(true);
     playSound("wrong");
     const wait = reducedMotion ? 280 : 800;
-    window.setTimeout(() => {
+    if (busyTimer.current != null) window.clearTimeout(busyTimer.current);
+    busyTimer.current = window.setTimeout(() => {
+      pickedRef.current = null;
+      busyRef.current = false;
       setPicked(null);
       setBusy(false);
     }, wait);
@@ -334,7 +373,7 @@ function OneAtATime({
 
   if (!current) return null;
 
-  const mark = markForPair(0);
+  const colour = colourForPair(0);
 
   return (
     <div className="match-turn">
@@ -368,12 +407,14 @@ function OneAtATime({
                 index={index}
                 faceUp={review || selected || found}
                 found={found}
-                mark={found ? mark : undefined}
+                colour={found ? colour : undefined}
                 disabled={disabled || busy || review}
                 onTap={() => {
-                  if (disabled || busy || review) return;
+                  if (disabled || busyRef.current || review || doneRef.current) return;
                   playSound("tap");
-                  setPicked(key === picked ? null : key);
+                  const next = key === pickedRef.current ? null : key;
+                  pickedRef.current = next;
+                  setPicked(next);
                 }}
               />
             );
