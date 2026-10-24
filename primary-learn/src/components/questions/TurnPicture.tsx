@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { RotateCw } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { TurnDiagram } from "../../types/activity";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
@@ -36,8 +37,7 @@ export function TurnPicture({ turn, steps }: { turn: TurnDiagram; steps?: number
     <div className="car-turn-stage" role="img" aria-label={`The car starts facing ${directions[turn.start].toLowerCase()}.${turn.showEnd || steps != null ? ` It turns ${Math.abs(delta)} quarter steps ${delta < 0 ? "anti-clockwise" : "clockwise"} and finishes facing ${directions[end].toLowerCase()}.` : ""}`}>
       <div className="car-turn-ghost" style={{ transform: `rotate(${turn.start * 90}deg)` }} aria-hidden><ToyCar /></div>
       <div ref={car} className="car-turn-car" style={{ transform: `rotate(${(turn.start + delta) * 90}deg)`, "--turn-duration": steps != null ? "250ms" : "0ms" } as CSSProperties} aria-hidden><ToyCar /></div>
-      <span className="car-start-label">Faint car shows the start.</span>
     </div>
-    {turn.showEnd ? <><p className="turn-description">{turn.quarters} quarter {turn.quarters === 1 ? "step" : "steps"} {turn.clockwise ? "clockwise" : "anti-clockwise"}</p><button className="btn btn-ghost" type="button" onClick={() => setReplay(x => x + 1)}>Watch again</button></> : <figcaption>The headlights show the front.</figcaption>}
+    {turn.showEnd ? <button className="btn btn-ghost" type="button" onClick={() => setReplay(x => x + 1)}><RotateCw size={20} aria-hidden />Watch again</button> : <figcaption>The headlights show the front.</figcaption>}
   </figure>;
 }
