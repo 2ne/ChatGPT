@@ -4041,6 +4041,28 @@ button.object-token {
   font-weight: 700;
 }
 
+.level-sheet-heading {
+  display: grid;
+  gap: 12px;
+  margin-bottom: var(--space-4);
+}
+
+.level-sheet-heading .sheet-crumb {
+  margin: 0 48px 0 0;
+  line-height: 1.3;
+}
+
+.level-sheet-heading .sheet-title {
+  gap: 4px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.level-sheet-heading .sheet-level {
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
 .sheet-note {
   display: flex;
   align-items: center;

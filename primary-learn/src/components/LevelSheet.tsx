@@ -30,13 +30,15 @@ export function LevelSheet({ level, learnerName, onClose, onPlay }: LevelSheetPr
           <X size={20} aria-hidden />
         </button>
 
-        <p className="sheet-crumb">
-          {category.year} · {category.title}
-        </p>
-        <SheetTitle className="sheet-title">
-          <span className="sheet-level">Level {node.number}</span>
-          {node.title}
-        </SheetTitle>
+        <header className="level-sheet-heading">
+          <p className="sheet-crumb">
+            {category.year} · {category.title}
+          </p>
+          <SheetTitle className="sheet-title">
+            <span className="sheet-level">Level {node.number}</span>
+            <span>{node.title}</span>
+          </SheetTitle>
+        </header>
         {shown.cup ? (
           <p className="sheet-cup-line is-gold">
             <Trophy size={18} aria-hidden />
