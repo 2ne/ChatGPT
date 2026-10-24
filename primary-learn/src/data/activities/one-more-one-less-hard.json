@@ -255,7 +255,8 @@
       "explanation": "Each clue matches its number.",
       "narration": {
         "prompt": "Match each clue to its number."
-      }
+      },
+      "mode": "flip"
     },
     {
       "kind": "ordered",

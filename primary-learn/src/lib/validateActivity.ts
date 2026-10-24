@@ -4,6 +4,7 @@ import {
   MAKE_TOTAL_GAPS,
   MAKE_TOTAL_MODES,
   MAKE_TOTAL_OPS,
+  MATCH_PAIRS_MODES,
   OBJECT_ITEMS,
   OBJECT_LAYOUTS,
   PART_WHOLE_MISSING,
@@ -13,6 +14,7 @@ import {
   type MakeTotalGap,
   type MakeTotalMode,
   type MakeTotalOp,
+  type MatchPairsMode,
   type MatchSide,
   type ObjectAsset,
   type ObjectItem,
@@ -657,8 +659,17 @@ function parseQuestion(value: unknown, path: string): Question {
           right: parseMatchSide(pair.right, `${pairPath}.right`),
         };
       });
-      if (pairs.length < 2) fail(path, "match-pairs needs at least two pairs");
-      return { ...core, kind, pairs };
+      if (pairs.length < 2 || pairs.length > 4) {
+        fail(path, "match-pairs needs 2 to 4 pairs (at most 8 cards)");
+      }
+      const writtenMode = expectString(value, "mode", path);
+      if (!(MATCH_PAIRS_MODES as readonly string[]).includes(writtenMode)) {
+        fail(path, "mode must be flip or one-at-a-time");
+      }
+      if (writtenMode === "one-at-a-time" && pairs.length < 3) {
+        fail(path, "one-at-a-time matching needs at least 3 pairs so two other cards can sit face down");
+      }
+      return { ...core, kind, pairs, mode: writtenMode as MatchPairsMode };
     }
     case "make-total": {
       const total = expectNumber(value, "total", path);

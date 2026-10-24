@@ -169,17 +169,13 @@
           "id": "p3",
           "left": "nineteen",
           "right": "19"
-        },
-        {
-          "id": "p4",
-          "left": "twenty",
-          "right": "20"
         }
       ],
       "explanation": "Each word names its number.",
       "narration": {
         "prompt": "Match each word to its number."
-      }
+      },
+      "mode": "flip"
     },
     {
       "kind": "ordered",

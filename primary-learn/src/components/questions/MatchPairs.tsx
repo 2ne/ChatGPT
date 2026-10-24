@@ -1,9 +1,18 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { copy } from "../../data/copy";
 import { matchSideKey, matchSideLabel, matchSideVisual } from "../../lib/matchSide";
+import { markForPair, matchPairsMode, seededOrder, type MatchPairMark } from "../../lib/matchPairs";
+import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { ObjectGroup } from "./ObjectGroup";
-import { type Reveal } from "./choice";
+import type { Reveal } from "./choice";
 import { ShapePicture } from "./ShapePicture";
+
+export type QuestionPlayControl = {
+  canConfirm: boolean;
+  confirm: () => void;
+};
 
 type MatchPairsProps = {
   question: MatchPairsQuestion;
@@ -11,6 +20,13 @@ type MatchPairsProps = {
   disabled?: boolean;
   reveal: Reveal;
   onChange: (value: unknown) => void;
+  onPlayControl?: (control: QuestionPlayControl | null) => void;
+};
+
+type FlipCard = {
+  id: string;
+  pairId: string;
+  content: MatchSide;
 };
 
 function SideView({ side }: { side: MatchSide }) {
@@ -28,100 +44,394 @@ function SideView({ side }: { side: MatchSide }) {
   );
 }
 
-export function MatchPairs({ question, answer, disabled, reveal, onChange }: MatchPairsProps) {
-  const map =
-    answer && typeof answer === "object"
-      ? (answer as Record<string, string>)
-      : Object.fromEntries(question.pairs.map((pair) => [pair.id, ""]));
-  const rights = useMemo(
-    () => seededOrder(question.pairs.map((pair) => matchSideKey(pair.right)), question.id),
+function PairMark({ mark }: { mark: MatchPairMark }) {
+  return (
+    <span className="match-pair-mark" aria-hidden>
+      {mark.id === "star" ? "★" : null}
+      {mark.id === "heart" ? "♥" : null}
+      {mark.id === "moon" ? "☾" : null}
+      {mark.id === "sun" ? "☀" : null}
+      {mark.id === "leaf" ? "🍃" : null}
+      {mark.id === "drop" ? "💧" : null}
+    </span>
+  );
+}
+
+function answerMap(
+  question: MatchPairsQuestion,
+  answer: unknown,
+): Record<string, string> {
+  if (answer && typeof answer === "object") return { ...(answer as Record<string, string>) };
+  return Object.fromEntries(question.pairs.map((pair) => [pair.id, ""]));
+}
+
+function FlipCardButton({
+  card,
+  index,
+  faceUp,
+  found,
+  mark,
+  disabled,
+  onTap,
+}: {
+  card: FlipCard;
+  index: number;
+  faceUp: boolean;
+  found: boolean;
+  mark?: MatchPairMark;
+  disabled?: boolean;
+  onTap: () => void;
+}) {
+  const label = matchSideLabel(card.content);
+  const number = index + 1;
+  const aria = faceUp
+    ? found
+      ? copy.cardShowsFound(number, label)
+      : copy.cardShows(number, label)
+    : copy.cardFaceDown(number);
+  const style = found && mark
+    ? ({ "--pair-tint": mark.tint, "--pair-ink": mark.ink } as CSSProperties)
+    : undefined;
+  return (
+    <button
+      type="button"
+      className={`match-card${faceUp ? " is-up" : ""}${found ? " is-found" : ""}`}
+      style={style}
+      disabled={disabled}
+      aria-label={aria}
+      onClick={onTap}
+    >
+      <span className="match-card-inner">
+        <span className="match-card-face match-card-back">
+          <span className="match-card-back-mark" aria-hidden>
+            ?
+          </span>
+        </span>
+        <span className="match-card-face match-card-front">
+          {found && mark ? <PairMark mark={mark} /> : null}
+          <SideView side={card.content} />
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function FlipMatch({
+  question,
+  map,
+  disabled,
+  reveal,
+  onChange,
+}: {
+  question: MatchPairsQuestion;
+  map: Record<string, string>;
+  disabled?: boolean;
+  reveal: Reveal;
+  onChange: (value: unknown) => void;
+}) {
+  const reducedMotion = usePrefersReducedMotion();
+  const review = Boolean(disabled && reveal);
+  const cards = useMemo(
+    () =>
+      seededOrder(
+        question.pairs.flatMap((pair) => [
+          { id: `${pair.id}:L`, pairId: pair.id, content: pair.left },
+          { id: `${pair.id}:R`, pairId: pair.id, content: pair.right },
+        ]),
+        question.id,
+      ),
     [question],
   );
-  const [activeId, setActiveId] = useState(question.pairs[0]?.id ?? "");
-  const rightByKey = new Map(question.pairs.map((pair) => [matchSideKey(pair.right), pair.right]));
+  const marks = useMemo(
+    () => Object.fromEntries(question.pairs.map((pair, index) => [pair.id, markForPair(index)])),
+    [question],
+  );
+  const [preview, setPreview] = useState(!review);
+  const [peek, setPeek] = useState(false);
+  const [picked, setPicked] = useState<string[]>([]);
+  const [locked, setLocked] = useState(false);
+  const timers = useRef<number[]>([]);
 
-  function assign(rightKey: string) {
-    const target =
-      activeId || question.pairs.find((pair) => !map[pair.id])?.id || question.pairs[0]?.id;
-    if (!target) return;
-    const next = { ...map };
-    if (next[target] === rightKey) {
-      next[target] = "";
-      onChange(next);
-      return;
-    }
-    for (const id of Object.keys(next)) {
-      if (next[id] === rightKey) next[id] = "";
-    }
-    next[target] = rightKey;
-    onChange(next);
-    const following = question.pairs.find((pair) => pair.id !== target && !next[pair.id]);
-    if (following) setActiveId(following.id);
+  function clearTimers() {
+    for (const id of timers.current) window.clearTimeout(id);
+    timers.current = [];
   }
 
-  const completed = question.pairs.filter(pair => map[pair.id]).length;
-  const statusFor = (id: string) => {
-    const pair = question.pairs.find(pair => pair.id === id);
-    if (!reveal || !pair) return "";
-    return map[id] === matchSideKey(pair.right) ? " is-correct" : " is-wrong";
-  };
+  useEffect(() => {
+    return () => clearTimers();
+  }, []);
+
+  useEffect(() => {
+    if (review) {
+      setPreview(false);
+      setPeek(false);
+      return;
+    }
+    setPreview(true);
+    setPeek(false);
+    setPicked([]);
+    setLocked(false);
+    clearTimers();
+    const wait = reducedMotion ? 400 : 3000;
+    const timer = window.setTimeout(() => setPreview(false), wait);
+    timers.current.push(timer);
+    return () => window.clearTimeout(timer);
+  }, [question.id, review, reducedMotion]);
+
+  const foundIds = new Set(
+    question.pairs
+      .filter((pair) => map[pair.id] === matchSideKey(pair.right))
+      .map((pair) => pair.id),
+  );
+
+  function showAllAgain() {
+    if (preview || locked || disabled) return;
+    setPeek(true);
+    setPicked([]);
+    const wait = reducedMotion ? 400 : 3000;
+    const timer = window.setTimeout(() => setPeek(false), wait);
+    timers.current.push(timer);
+  }
+
+  function tapCard(card: FlipCard) {
+    if (disabled || preview || peek || locked) return;
+    if (foundIds.has(card.pairId)) return;
+    if (picked.includes(card.id)) return;
+    playSound("tap");
+    const next = [...picked, card.id];
+    if (next.length < 2) {
+      setPicked(next);
+      return;
+    }
+    setPicked(next);
+    const first = cards.find((item) => item.id === next[0]);
+    const second = cards.find((item) => item.id === next[1]);
+    if (!first || !second) {
+      setPicked([]);
+      return;
+    }
+    if (first.pairId === second.pairId) {
+      const pair = question.pairs.find((item) => item.id === first.pairId);
+      if (pair) {
+        const updated = { ...map, [pair.id]: matchSideKey(pair.right) };
+        onChange(updated);
+      }
+      setPicked([]);
+      return;
+    }
+    setLocked(true);
+    const wait = reducedMotion ? 350 : 1000;
+    const timer = window.setTimeout(() => {
+      setPicked([]);
+      setLocked(false);
+    }, wait);
+    timers.current.push(timer);
+  }
+
+  const looking = preview || peek;
   return (
-    <div className="pair-match">
-      <p className="t-body">Tap a card on the left, then its partner on the right.</p>
-      <div className="pair-match-grid">
-        <div className="pair-match-column" role="group" aria-label="Cards to match">
-          {question.pairs.map((pair, index) => (
-            <button key={pair.id} type="button" disabled={disabled}
-              aria-pressed={activeId === pair.id}
-              aria-label={`Card ${index + 1}. ${matchSideLabel(pair.left)}.${map[pair.id] ? ` Paired with ${matchSideLabel(rightByKey.get(map[pair.id])!)}. Tap to change.` : " Choose a partner."}`}
-              onClick={() => setActiveId(pair.id)}
-              className={`pair-match-card${activeId === pair.id ? " is-active" : ""}${map[pair.id] ? " is-paired" : ""}${statusFor(pair.id)}`}>
-              <span className="pair-match-badge" aria-hidden>{index + 1}</span>
-              <SideView side={pair.left} />
-              {reveal ? <span className="pair-match-result" aria-hidden>{statusFor(pair.id) === " is-correct" ? "✓" : "×"}</span> : null}
-            </button>
-          ))}
-        </div>
-        <div className="pair-match-column" role="group" aria-label="Partners">
-          {rights.map(key => {
-            const owner = question.pairs.findIndex(pair => map[pair.id] === key);
-            const pair = question.pairs[owner];
-            const side = rightByKey.get(key)!;
-            return <button key={key} type="button" disabled={disabled}
-              aria-pressed={Boolean(pair && pair.id === activeId)}
-              aria-label={`${matchSideLabel(side)}.${pair ? ` Paired with card ${owner + 1}.` : " Not paired yet."}`}
-              onClick={() => assign(key)}
-              className={`pair-match-card${pair ? " is-paired" : ""}${pair?.id === activeId ? " is-active" : ""}${pair ? statusFor(pair.id) : ""}`}>
-                <span className="pair-match-badge" aria-hidden style={{ visibility: pair ? "visible" : "hidden" }}>{owner + 1}</span>
-                <SideView side={side} />
-                {reveal && pair ? <span className="pair-match-result" aria-hidden>{statusFor(pair.id) === " is-correct" ? "✓" : "×"}</span> : null}
-              </button>;
-          })}
-        </div>
+    <div className="match-flip">
+      <p className="t-body">{looking ? copy.rememberCards : copy.tapTwoCards}</p>
+      <div
+        className={`match-flip-grid pairs-${question.pairs.length}`}
+        role="group"
+        aria-label={copy.matchCards}
+      >
+        {cards.map((card, index) => {
+          const found = foundIds.has(card.pairId);
+          const faceUp = review || looking || found || picked.includes(card.id);
+          return (
+            <FlipCardButton
+              key={card.id}
+              card={card}
+              index={index}
+              faceUp={faceUp}
+              found={found}
+              mark={marks[card.pairId]}
+              disabled={disabled || preview || peek || locked || found}
+              onTap={() => tapCard(card)}
+            />
+          );
+        })}
       </div>
-      <p className="pair-match-status" role="status" aria-live="polite">{completed} of {question.pairs.length} pairs chosen.</p>
+      {review ? null : (
+        <button
+          type="button"
+          className="btn-text match-peek"
+          disabled={disabled || preview || peek || locked}
+          onClick={showAllAgain}
+        >
+          {copy.showTheCards}
+        </button>
+      )}
     </div>
   );
 }
 
-function seededOrder(items: string[], seed: string): string[] {
-  let hash = 2166136261;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash ^= seed.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
+function OneAtATime({
+  question,
+  map,
+  disabled,
+  reveal,
+  onChange,
+  onPlayControl,
+}: {
+  question: MatchPairsQuestion;
+  map: Record<string, string>;
+  disabled?: boolean;
+  reveal: Reveal;
+  onChange: (value: unknown) => void;
+  onPlayControl?: (control: QuestionPlayControl | null) => void;
+}) {
+  const reducedMotion = usePrefersReducedMotion();
+  const review = Boolean(disabled && reveal);
+  const confirmedCount = question.pairs.filter((pair) => map[pair.id]).length;
+  const step = Math.min(confirmedCount, question.pairs.length - 1);
+  const current = question.pairs[step];
+  const [picked, setPicked] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const confirmRef = useRef<() => void>(() => {});
+
+  const choices = useMemo(() => {
+    if (!current) return [];
+    const others = question.pairs
+      .filter((pair) => pair.id !== current.id)
+      .map((pair) => pair.right);
+    const extras = seededOrder(others, `${question.id}:${current.id}`).slice(0, 2);
+    return seededOrder([current.right, ...extras], `${question.id}:choices:${current.id}`);
+  }, [question, current]);
+
+  useEffect(() => {
+    setPicked(null);
+    setBusy(false);
+  }, [question.id, current?.id]);
+
+  function confirmPick() {
+    if (!current || picked == null || busy || disabled) return;
+    const rightKey = matchSideKey(current.right);
+    if (picked === rightKey) {
+      playSound("tap");
+      onChange({ ...map, [current.id]: picked });
+      setPicked(null);
+      return;
+    }
+    setBusy(true);
+    playSound("wrong");
+    const wait = reducedMotion ? 280 : 800;
+    window.setTimeout(() => {
+      setPicked(null);
+      setBusy(false);
+    }, wait);
   }
-  const next = [...items];
-  for (let i = next.length - 1; i > 0; i -= 1) {
-    hash = Math.imul(hash ^ (hash >>> 16), 2246822507);
-    const j = (hash >>> 0) % (i + 1);
-    const swap = next[i];
-    next[i] = next[j];
-    next[j] = swap;
+
+  confirmRef.current = confirmPick;
+
+  useEffect(() => {
+    if (review || disabled || confirmedCount >= question.pairs.length) {
+      onPlayControl?.(null);
+      return;
+    }
+    onPlayControl?.({
+      canConfirm: picked != null && !busy,
+      confirm: () => confirmRef.current(),
+    });
+    return () => onPlayControl?.(null);
+  }, [review, disabled, confirmedCount, question.pairs.length, picked, busy, onPlayControl]);
+
+  if (!current) return null;
+
+  const foundPairs = question.pairs.filter((pair) => map[pair.id]);
+
+  return (
+    <div className="match-turn">
+      <p className="t-body">{copy.tapTheMatch}</p>
+      <p className="match-turn-progress" aria-live="polite">
+        {copy.cardOf(step + 1, question.pairs.length)}
+      </p>
+      <div className="match-turn-dots" aria-hidden>
+        {question.pairs.map((pair, index) => (
+          <span
+            key={pair.id}
+            className={`match-turn-dot${index < confirmedCount ? " is-done" : ""}${
+              index === step && confirmedCount < question.pairs.length ? " is-now" : ""
+            }`}
+          />
+        ))}
+      </div>
+      <div className="match-turn-target" aria-label={matchSideLabel(current.left)}>
+        <SideView side={current.left} />
+      </div>
+      <div className="match-turn-choices" role="group" aria-label={copy.matchCards}>
+        {choices.map((side, index) => {
+          const key = matchSideKey(side);
+          const selected = picked === key;
+          const show = review || selected;
+          const found = map[current.id] === key;
+          const mark = markForPair(question.pairs.findIndex((pair) => pair.id === current.id));
+          return (
+            <FlipCardButton
+              key={`${current.id}-${key}-${index}`}
+              card={{ id: key, pairId: current.id, content: side }}
+              index={index}
+              faceUp={show || found}
+              found={found}
+              mark={found ? mark : undefined}
+              disabled={disabled || busy || review}
+              onTap={() => {
+                if (disabled || busy || review) return;
+                playSound("tap");
+                setPicked(key === picked ? null : key);
+              }}
+            />
+          );
+        })}
+      </div>
+      {foundPairs.length > 0 ? (
+        <ul className="match-found-list">
+          {foundPairs.map((pair) => {
+            const mark = markForPair(question.pairs.findIndex((item) => item.id === pair.id));
+            return (
+              <li
+                key={pair.id}
+                className="match-found-item"
+                style={{ "--pair-tint": mark.tint, "--pair-ink": mark.ink } as CSSProperties}
+              >
+                <PairMark mark={mark} />
+                <span>
+                  {matchSideLabel(pair.left)} and {matchSideLabel(pair.right)}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+export function MatchPairs({
+  question,
+  answer,
+  disabled,
+  reveal,
+  onChange,
+  onPlayControl,
+}: MatchPairsProps) {
+  const map = answerMap(question, answer);
+  const mode = matchPairsMode(question);
+  if (mode === "one-at-a-time") {
+    return (
+      <OneAtATime
+        question={question}
+        map={map}
+        disabled={disabled}
+        reveal={reveal}
+        onChange={onChange}
+        onPlayControl={onPlayControl}
+      />
+    );
   }
-  if (next.length > 1 && next.every((item, index) => item === items[index])) {
-    const first = next[0];
-    next[0] = next[1];
-    next[1] = first;
-  }
-  return next;
+  return (
+    <FlipMatch question={question} map={map} disabled={disabled} reveal={reveal} onChange={onChange} />
+  );
 }

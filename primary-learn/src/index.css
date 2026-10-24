@@ -4623,20 +4623,229 @@ button.object-token {
 .profile-editor .avatar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 /* Matching cards keep their content and footprint throughout selection. */
-.pair-match { display: grid; gap: 12px; }
-.pair-match-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
-.pair-match-column { display: grid; grid-auto-rows: 1fr; gap: 10px; min-width: 0; }
-.pair-match-card { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 112px; padding: 30px 8px 12px; border: 2px solid var(--line); border-radius: 18px; background: var(--card); font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
-.pair-match-card.is-paired { background: var(--primary-soft); border-color: var(--primary); }
-.pair-match-card.is-active { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
-.pair-match-card.is-correct { border-color: var(--green); background: var(--green-soft); }
-.pair-match-card.is-wrong { border-color: var(--red); background: var(--red-soft); }
-.pair-match-badge { position: absolute; top: 6px; left: 8px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-family: var(--font-body); font-size: 12px; font-weight: 800; color: var(--primary-deep); background: var(--primary-soft); }
-.pair-match-card.is-paired .pair-match-badge { color: white; background: var(--primary); }
-.pair-match-result { position: absolute; top: 6px; right: 8px; font-size: 20px; }
-.pair-match-card .option-content { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
-.pair-match-card .shape-picture.is-compact { width: 72px; max-width: 100%; }
-.pair-match-card .object-group.is-amount .object-token { min-width: 20px; min-height: 20px; width: 20px; height: 20px; font-size: 17px; padding: 0; border-radius: 5px; }
-.pair-match-card .object-row { gap: 2px; }
-.pair-match-card .object-group.is-amount { gap: 3px; }
-.pair-match-status { color: var(--ink-soft); font-size: 14px; text-align: center; }
+.match-flip,
+.match-turn {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.match-flip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.match-turn-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (min-width: 560px) {
+  .match-flip-grid.pairs-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .match-flip-grid.pairs-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.match-card {
+  appearance: none;
+  position: relative;
+  width: 100%;
+  min-width: 44px;
+  min-height: 96px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.match-card:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 18px;
+}
+
+.match-card-inner {
+  display: grid;
+  width: 100%;
+  min-height: 96px;
+  transform-style: preserve-3d;
+  transition: transform 420ms ease;
+}
+
+.match-card.is-up .match-card-inner {
+  transform: rotateY(180deg);
+}
+
+.match-card-face {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  min-height: 96px;
+  padding: 12px 8px;
+  border: 2.5px solid var(--line);
+  border-radius: 18px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.match-card-back {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.2) 0 16px, transparent 17px),
+    radial-gradient(circle at 82% 74%, rgba(255, 255, 255, 0.14) 0 20px, transparent 21px),
+    linear-gradient(160deg, #7c3aed, #4f46e5);
+  border-color: #3b33b8;
+  color: #fff;
+}
+
+.match-card-back-mark {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.match-card-front {
+  transform: rotateY(180deg);
+  background: var(--card);
+}
+
+.match-card.is-found .match-card-front {
+  background: var(--pair-tint, var(--primary-soft));
+  border-color: var(--pair-ink, var(--primary));
+}
+
+.match-card .option-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.match-card .shape-picture.is-compact {
+  width: 72px;
+  max-width: 100%;
+}
+
+.match-card .object-group.is-amount .object-token {
+  min-width: 16px;
+  min-height: 16px;
+  width: 16px;
+  height: 16px;
+  font-size: 13px;
+  padding: 0;
+  border-radius: 5px;
+}
+
+.match-card .object-row {
+  gap: 2px;
+}
+
+.match-card .object-group.is-amount {
+  gap: 3px;
+}
+
+.match-pair-mark {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--pair-ink, var(--primary));
+}
+
+.match-peek {
+  justify-self: center;
+}
+
+.match-turn-progress {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.match-turn-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.match-turn-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.match-turn-dot.is-now {
+  background: var(--primary);
+}
+
+.match-turn-dot.is-done {
+  background: var(--mint);
+}
+
+.match-turn-target {
+  display: grid;
+  place-items: center;
+  width: min(100%, 240px);
+  min-height: 96px;
+  padding: 14px 12px;
+  border: 2.5px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper-deep);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.match-found-list {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.match-found-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: var(--pair-tint, var(--primary-soft));
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.match-found-item .match-pair-mark {
+  position: static;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .match-card-inner {
+    transition: none;
+  }
+}

@@ -230,7 +230,8 @@
           "right": "17"
         }
       ],
-      "randomise": {}
+      "randomise": {},
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",

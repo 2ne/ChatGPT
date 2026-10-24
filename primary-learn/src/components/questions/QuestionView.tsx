@@ -5,7 +5,7 @@ import { BuildSet } from "./BuildSet";
 import { CountObjects } from "./CountObjects";
 import { FillBlank } from "./FillBlank";
 import { MakeTotal } from "./MakeTotal";
-import { MatchPairs } from "./MatchPairs";
+import { MatchPairs, type QuestionPlayControl } from "./MatchPairs";
 import { PartWhole } from "./PartWhole";
 import { PickPair } from "./PickPair";
 import { MultiSelect } from "./MultiSelect";
@@ -19,6 +19,7 @@ type QuestionViewProps = {
   disabled?: boolean;
   reveal?: Reveal;
   onChange: (value: unknown) => void;
+  onPlayControl?: (control: QuestionPlayControl | null) => void;
 };
 
 type KindView = ComponentType<{
@@ -27,6 +28,7 @@ type KindView = ComponentType<{
   disabled?: boolean;
   reveal: Reveal;
   onChange: (value: unknown) => void;
+  onPlayControl?: (control: QuestionPlayControl | null) => void;
 }>;
 
 /**
@@ -52,6 +54,7 @@ export function QuestionView({
   disabled,
   reveal = null,
   onChange,
+  onPlayControl,
 }: QuestionViewProps) {
   const View = QUESTION_VIEWS[question.kind];
   if (!View) {
@@ -65,6 +68,7 @@ export function QuestionView({
       disabled={disabled}
       reveal={reveal}
       onChange={onChange}
+      onPlayControl={onPlayControl}
     />
   );
 }

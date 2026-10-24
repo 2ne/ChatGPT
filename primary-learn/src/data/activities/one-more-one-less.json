@@ -235,7 +235,8 @@
       "explanation": "Each number matches the number that is one more.",
       "narration": {
         "prompt": "Match each number to one more."
-      }
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

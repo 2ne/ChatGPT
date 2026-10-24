@@ -192,7 +192,8 @@
           "right": "24"
         }
       ],
-      "randomise": {}
+      "randomise": {},
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",

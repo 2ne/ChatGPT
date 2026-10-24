@@ -514,4 +514,10 @@ The learner chip opens settings with an Edit profile action. Edit the name and b
 
 ### Matching questions
 
-Use two equal columns of stationary cards for every match-pairs question. Tap a left card, then its right partner. Keep all picture and text content in its original card; never insert a chosen answer into a slot or move/remove cards. Number badges identify chosen pairs without relying on colour. Selection, pairing and feedback must not change card dimensions. Children can revisit a left card and replace its partner. Compact object groups use rows of at most five, and shapes stay contained within their cards. Keep Check it as the scoring step.
+Matching is a card game, not a two-column list.
+
+Easy (`mode: one-at-a-time`): one face-up card at the top and three same-size face-down cards below. The child taps one to turn it over, then presses Check it. A right match keeps a shared colour and symbol. Then the next left card is shown (`Card 2 of 3`). Keep it on one phone screen.
+
+Medium and Hard (`mode: flip`): every pair becomes two same-size cards in a fixed grid (2 columns on a phone). Cards start face up with Remember these cards, then flip over. Tap two cards. A match stays up with a shared colour and symbol (star, heart, moon, sun, leaf, drop). A miss flips back after a short pause. Show the cards lets the child peek without losing found pairs. There is no Check it. The question finishes when every pair is found. Use CSS 3D flips and respect reduced motion.
+
+Cards show pictures, shapes, numbers or words with the existing SideView. Compact object groups use rows of at most five. Shapes stay inside the card. Keep the answer as pairId to the right key.

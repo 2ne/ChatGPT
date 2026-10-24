@@ -157,9 +157,15 @@
           "id": "p2",
           "left": "26, 27, ?",
           "right": "28"
+        },
+        {
+          "id": "p3",
+          "left": "27, 28, ?",
+          "right": "29"
         }
       ],
-      "randomise": {}
+      "randomise": {},
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",

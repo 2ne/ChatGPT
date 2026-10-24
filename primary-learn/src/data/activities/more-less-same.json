@@ -416,7 +416,8 @@
       "explanation": "Groups with the same count match each other.",
       "narration": {
         "prompt": "Match each group to another group with the same amount."
-      }
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "ordered",

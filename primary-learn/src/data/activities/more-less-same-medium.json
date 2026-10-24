@@ -453,28 +453,13 @@
               "count": 8
             }
           }
-        },
-        {
-          "id": "p4",
-          "left": {
-            "visual": {
-              "item": "star",
-              "count": 10
-            },
-            "layout": "scatter"
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 10
-            }
-          }
         }
       ],
       "explanation": "Groups with the same count match each other.",
       "narration": {
         "prompt": "Match each group to another group with the same amount."
-      }
+      },
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",

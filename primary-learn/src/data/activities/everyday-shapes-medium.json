@@ -224,7 +224,8 @@
           "right": "Circle"
         }
       ],
-      "id": "shapes-2-4"
+      "id": "shapes-2-4",
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",
@@ -518,7 +519,8 @@
           "right": "Pyramid"
         }
       ],
-      "id": "shapes-2-10"
+      "id": "shapes-2-10",
+      "mode": "flip"
     }
   ]
 }

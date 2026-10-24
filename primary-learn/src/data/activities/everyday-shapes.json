@@ -241,7 +241,8 @@
           "right": "Square"
         }
       ],
-      "id": "shapes-1-4"
+      "id": "shapes-1-4",
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
@@ -535,7 +536,8 @@
           "right": "Pyramid"
         }
       ],
-      "id": "shapes-1-10"
+      "id": "shapes-1-10",
+      "mode": "one-at-a-time"
     }
   ]
 }

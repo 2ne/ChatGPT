@@ -177,7 +177,8 @@
       "explanation": "Each number matches its word.",
       "narration": {
         "prompt": "Match each number to its word."
-      }
+      },
+      "mode": "flip"
     },
     {
       "kind": "ordered",

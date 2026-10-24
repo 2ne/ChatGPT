@@ -151,7 +151,8 @@
       ],
       "explanation": "Equal groups have the same number of apples.",
       "id": "represent100-1-3",
-      "hint": "Find groups with the same number of apples."
+      "hint": "Find groups with the same number of apples.",
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

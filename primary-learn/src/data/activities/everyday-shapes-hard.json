@@ -169,7 +169,8 @@
           "right": "Circle"
         }
       ],
-      "id": "shapes-3-3"
+      "id": "shapes-3-3",
+      "mode": "flip"
     },
     {
       "kind": "multi-select",
@@ -429,7 +430,8 @@
           "right": "Cuboid"
         }
       ],
-      "id": "shapes-3-8"
+      "id": "shapes-3-8",
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",

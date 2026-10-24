@@ -224,7 +224,8 @@
           "right": "21"
         }
       ],
-      "randomise": {}
+      "randomise": {},
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

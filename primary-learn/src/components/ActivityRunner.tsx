@@ -31,6 +31,8 @@ import { usePipMood } from "./PipMood";
 import { mathsWallpaper } from "./mascot/MathsWallpaper";
 import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
+import type { QuestionPlayControl } from "./questions/MatchPairs";
+import { matchPairsMode } from "../lib/matchPairs";
 import { QuestExitSheet } from "./QuestExitSheet";
 import { BondDemonstration } from "./questions/BondDemonstration";
 
@@ -96,6 +98,9 @@ export function ActivityRunner({
   const { setMood } = usePipMood();
   const promptRef = useRef<HTMLHeadingElement>(null);
   const reducedMotion = usePrefersReducedMotion();
+  const playControlRef = useRef<QuestionPlayControl | null>(null);
+  const autoCheckedRef = useRef<string | null>(null);
+  const [canConfirmPlay, setCanConfirmPlay] = useState(false);
 
   const currentId = activeQueue[index];
   const question = playQuestions.find((item) => item.id === currentId);
@@ -123,6 +128,7 @@ export function ActivityRunner({
     setLookAgainCount(0);
     setConfettiBurst(0);
     setStreak(0);
+    autoCheckedRef.current = null;
     setStartedAt(new Date().toISOString());
     setPhase("question");
   }
@@ -153,6 +159,7 @@ export function ActivityRunner({
       setShowHint(false);
       setLastCorrect(null);
       setLookAgainCount(0);
+      autoCheckedRef.current = null;
       setPhase("question");
       return;
     }
@@ -175,6 +182,25 @@ export function ActivityRunner({
 
   const actions = useRef({ begin, checkAnswer, goNext });
   actions.current = { begin, checkAnswer, goNext };
+
+  function setPlayControl(control: QuestionPlayControl | null) {
+    playControlRef.current = control;
+    setCanConfirmPlay(Boolean(control?.canConfirm));
+  }
+
+  useEffect(() => {
+    setPlayControl(null);
+  }, [currentId, playSession]);
+
+  useEffect(() => {
+    if (phase !== "question" || !question) return;
+    if (question.kind !== "match-pairs") return;
+    if (!hasProvidedAnswer(question, answer)) return;
+    if (!isAnswerCorrect(question, answer)) return;
+    if (autoCheckedRef.current === question.id) return;
+    autoCheckedRef.current = question.id;
+    checkAnswer();
+  }, [phase, question, answer]);
 
   useEffect(() => {
     if (phase === "summary") setMood(mastered ? "cheer" : "happy");
@@ -209,6 +235,14 @@ export function ActivityRunner({
       if (event.key === "Enter") {
         if (tag === "BUTTON" || tag === "SELECT" || tag === "TEXTAREA") return;
         if (
+          currentPhase === "question" &&
+          currentQuestion?.kind === "match-pairs" &&
+          matchPairsMode(currentQuestion) === "one-at-a-time" &&
+          playControlRef.current?.canConfirm
+        ) {
+          event.preventDefault();
+          playControlRef.current.confirm();
+        } else if (
           currentPhase === "question" &&
           currentQuestion &&
           hasProvidedAnswer(currentQuestion, currentAnswer)
@@ -305,19 +339,38 @@ export function ActivityRunner({
   const pipMood = phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy";
   const position = Math.min(index + 1, activeQueue.length);
   const promptParts = splitPromptTail(question.prompt);
+  const flipMatch =
+    question.kind === "match-pairs" && matchPairsMode(question) === "flip";
+  const oneAtATimeMatch =
+    question.kind === "match-pairs" && matchPairsMode(question) === "one-at-a-time";
+  const hideCheck = flipMatch && phase === "question";
   const primaryAction =
-    phase === "question" ? (
+    hideCheck ? null : phase === "question" ? (
       <button
         type="button"
         className="btn btn-primary btn-block"
         data-sfx="off"
-        disabled={!hasProvidedAnswer(question, answer)}
+        disabled={
+          oneAtATimeMatch && !hasProvidedAnswer(question, answer)
+            ? !canConfirmPlay
+            : !hasProvidedAnswer(question, answer)
+        }
         onPointerDown={(event) => {
           if (event.button !== 0) return;
+          if (oneAtATimeMatch && !hasProvidedAnswer(question, answer)) return;
           markSound();
         }}
-        onTouchStart={markSound}
-        onClick={checkAnswer}
+        onTouchStart={() => {
+          if (oneAtATimeMatch && !hasProvidedAnswer(question, answer)) return;
+          markSound();
+        }}
+        onClick={() => {
+          if (oneAtATimeMatch && !hasProvidedAnswer(question, answer)) {
+            playControlRef.current?.confirm();
+            return;
+          }
+          checkAnswer();
+        }}
       >
         {copy.checkIt} <Check size={19} aria-hidden />
       </button>
@@ -333,7 +386,7 @@ export function ActivityRunner({
       lookAgainCount={lookAgainCount}
       recordLookAgain={() => setLookAgainCount((n) => n + 1)}
     >
-    <main className="page page-quest page-with-dock" style={backdrop}>
+    <main className={`page page-quest${hideCheck ? "" : " page-with-dock"}`} style={backdrop}>
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       <div className="quest-shell">
@@ -407,6 +460,7 @@ export function ActivityRunner({
             disabled={phase === "feedback"}
             reveal={reveal}
             onChange={setAnswer}
+            onPlayControl={setPlayControl}
           />
 
           {phase === "question" && question.hint ? (
@@ -472,14 +526,16 @@ export function ActivityRunner({
 
           {phase === "feedback" && lastCorrect === false ? <BondDemonstration key={question.id} question={question} /> : null}
 
-          <div className="quest-actions-inline">{primaryAction}</div>
+          {primaryAction ? <div className="quest-actions-inline">{primaryAction}</div> : null}
           </div>
         </section>
       </div>
 
+      {primaryAction ? (
       <div className="quest-dock" role="region" aria-label="Answer actions">
         <div className="quest-dock-inner">{primaryAction}</div>
       </div>
+      ) : null}
       </div>
     </main>
       <QuestExitSheet open={exitOpen} title={activity.title} onClose={() => setExitOpen(false)} onRetry={begin} onExit={onExit} />

@@ -148,7 +148,8 @@
         }
       ],
       "explanation": "Equal groups have the same number of apples.",
-      "id": "represent100-3-3"
+      "id": "represent100-3-3",
+      "mode": "flip"
     },
     {
       "kind": "multiple-choice",

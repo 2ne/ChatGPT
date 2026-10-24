@@ -180,7 +180,8 @@
       "explanation": "Each word names its number.",
       "narration": {
         "prompt": "Match each word to its number."
-      }
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
