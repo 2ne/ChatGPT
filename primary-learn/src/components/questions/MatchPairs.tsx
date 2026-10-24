@@ -380,13 +380,8 @@ function OneAtATime({
       <div className="match-turn-board">
         <div className="match-turn-target-row">
           <div className="match-turn-target-slot">
-            <div
-              className="match-card match-card-static"
-              aria-label={matchSideLabel(current.left)}
-            >
-              <span className="match-card-face match-card-front">
-                <SideView side={current.left} />
-              </span>
+            <div className="match-turn-target" aria-label={matchSideLabel(current.left)}>
+              <SideView side={current.left} />
             </div>
           </div>
         </div>

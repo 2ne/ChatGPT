@@ -4659,6 +4659,7 @@ button.object-token {
   grid-column: 2;
 }
 
+.match-turn-target,
 .match-turn .match-card,
 .match-turn .match-card-inner,
 .match-turn .match-card-face {
@@ -4666,20 +4667,40 @@ button.object-token {
   height: 120px;
 }
 
-.match-turn .match-card-face {
-  overflow: hidden;
-}
-
-.match-card-static {
-  pointer-events: none;
-  cursor: default;
+/* Easy cards must paint their face. Phone browsers hide rotateY + backface-visibility. */
+.match-turn .match-card {
   perspective: none;
 }
 
-.match-card-static .match-card-front {
+.match-turn .match-card-inner,
+.match-turn .match-card.is-up .match-card-inner {
+  transform: none;
+  transform-style: flat;
+  transition: none;
+}
+
+.match-turn .match-card-face,
+.match-turn .match-card-front {
   transform: none;
   backface-visibility: visible;
   -webkit-backface-visibility: visible;
+  overflow: visible;
+}
+
+.match-turn-target {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 12px 8px;
+  border: 2.5px solid var(--line);
+  border-radius: 18px;
+  background: var(--card);
+  pointer-events: none;
+}
+
+.match-turn .match-card:not(.is-up) .match-card-front,
+.match-turn .match-card.is-up .match-card-back {
+  visibility: hidden;
 }
 
 @media (min-width: 560px) {
@@ -4760,6 +4781,7 @@ button.object-token {
   border-color: var(--pair-ink, var(--primary));
 }
 
+.match-turn-target .option-content,
 .match-card .option-content {
   display: flex;
   flex-direction: column;
