@@ -4061,8 +4061,8 @@ button.object-token {
 .level-sheet-heading .sheet-level {
   display: inline-block;
   margin-left: 8px;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-family: inherit;
+  font-size: 1em;
   line-height: 1.2;
   white-space: nowrap;
 }
