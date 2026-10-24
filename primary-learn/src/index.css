@@ -4513,3 +4513,29 @@ button.object-token {
 .turn-picture { margin: 0 auto 12px; width: min(100%, 260px); text-align: center; }
 .turn-picture svg { display: block; width: 100%; height: auto; }
 .turn-picture figcaption { color: var(--ink-soft); font-size: 15px; }
+
+.position-scene { position: relative; width: min(100%, 330px); height: 260px; margin: 0 auto 16px; overflow: hidden; }
+.position-ground { position: absolute; inset: auto 8px 20px; height: 46px; border-radius: 50%; background: #e5f4e9; }
+.position-object { position: absolute; width: 150px; height: 170px; left: 110px; top: 23px; z-index: 1; }
+.position-object svg { width: 100%; height: 100%; }
+.position-pip { position: absolute; left: 70px; top: 105px; z-index: 2; }
+.position-scene.is-in-front .position-object { top: 100px; z-index: 3; }
+.position-scene.is-in-front .position-pip { top: 28px; }
+.position-scene.is-above .position-object { width: 100px; height: 110px; top: 0; left: 155px; }
+.position-scene.is-above .position-pip { top: 119px; left: 90px; }
+.position-scene.is-below .position-object { width: 100px; height: 110px; top: 145px; left: 155px; }
+.position-scene.is-below .position-pip { top: 0; left: 90px; }
+.car-turn { margin: 0 auto 12px; width: min(100%, 280px); text-align: center; }
+.car-turn-stage { position: relative; width: 230px; height: 230px; margin: auto; border-radius: 50%; border: 2px dashed var(--line-strong); background: var(--paper); }
+.car-turn-car, .car-turn-ghost { position: absolute; inset: 25px; }
+.car-turn-car { transition: transform var(--turn-duration) ease-in-out; }
+.car-turn-ghost { opacity: .18; }
+.car-turn svg { display: block; width: 100%; height: 100%; }
+.car-start-label { position: absolute; bottom: 3px; left: 0; right: 0; font-size: 12px; color: var(--ink-soft); }
+.car-turn figcaption, .turn-description { font-size: 15px; text-align: center; color: var(--ink-soft); margin: 10px 0; }
+.car-choice svg { width: 100px; height: 100px; }
+.car-choice { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.turn-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.turn-controls button { display: flex; flex-direction: column; font-size: 30px; }
+.turn-controls span { font-size: 16px; }
+@media (prefers-reduced-motion: reduce) { .car-turn-car { transition: none; } }

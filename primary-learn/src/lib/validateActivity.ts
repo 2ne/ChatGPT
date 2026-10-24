@@ -476,9 +476,18 @@ function parseQuestion(value: unknown, path: string): Question {
     const t = value.turn;
     if (!isRecord(t) || ![0, 1, 2, 3].includes(t.start as number) || ![1, 2, 3, 4].includes(t.quarters as number) || typeof t.clockwise !== "boolean" || typeof t.showEnd !== "boolean") fail(path, "invalid turn diagram");
     if (kind !== "multiple-choice" || visual || shape || extras || layout || flashMs != null) fail(path, "turn diagrams use multiple-choice without other stem pictures");
-    turn = { start: t.start as 0 | 1 | 2 | 3, quarters: t.quarters as 1 | 2 | 3 | 4, clockwise: t.clockwise, showEnd: t.showEnd };
+    turn = { start: t.start as 0 | 1 | 2 | 3, quarters: t.quarters as 1 | 2 | 3 | 4, clockwise: t.clockwise, showEnd: t.showEnd, interactive: t.interactive === true };
+    if (t.interactive != null && typeof t.interactive !== "boolean") fail(path, "interactive must be boolean");
+    if (t.interactive && t.showEnd) fail(path, "interactive turns must not show the answer");
   }
-  const core = { id, prompt, explanation, hint, narration, visual, shape, turn, extras, layout, flashMs, randomise };
+  let position: import("../types/activity").PositionScene | undefined;
+  if (value.position != null) {
+    const p = value.position;
+    if (!isRecord(p) || !["tree", "box", "kite", "bird"].includes(p.object as string) || !["behind", "in-front", "above", "below"].includes(p.relation as string)) fail(path, "invalid position scene");
+    if (kind !== "multiple-choice" || turn || shape || visual || extras || layout || flashMs != null) fail(path, "position scenes use choice questions without other pictures");
+    position = p as unknown as typeof position;
+  }
+  const core = { id, prompt, explanation, hint, narration, visual, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,
@@ -517,6 +526,10 @@ function parseQuestion(value: unknown, path: string): Question {
       const correctId = expectString(value, "correctId", path);
       if (!options.some((option) => option.id === correctId)) {
         fail(path, "correctId must match an option id");
+      }
+      if (turn?.interactive) {
+        const expected = String((turn.clockwise ? 1 : -1) * turn.quarters);
+        if (correctId !== expected || options.length !== 8 || new Set(options.map(o => o.id)).size !== 8 || options.some(o => !["-4","-3","-2","-1","1","2","3","4"].includes(o.id))) fail(path, "interactive turn options must encode all eight signed movements and the requested correct movement");
       }
       if (storyNamesOneObject(prompt)) {
         const items = options.flatMap((option) => (option.visual ? [option.visual.item] : []));

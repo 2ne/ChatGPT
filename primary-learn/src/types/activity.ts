@@ -125,9 +125,12 @@ export type ActivityRandomise = {
   items?: ObjectItem[];
 };
 
-export type TurnDiagram = { start: 0 | 1 | 2 | 3; quarters: 1 | 2 | 3 | 4; clockwise: boolean; showEnd: boolean };
+export type PositionScene = { object: "tree" | "box" | "kite" | "bird"; relation: "behind" | "in-front" | "above" | "below" };
+
+export type TurnDiagram = { start: 0 | 1 | 2 | 3; quarters: 1 | 2 | 3 | 4; clockwise: boolean; showEnd: boolean; interactive?: boolean };
 
 type QuestionCore = {
+  position?: PositionScene;
   turn?: TurnDiagram;
   id: string;
   shape?: ShapeAsset;

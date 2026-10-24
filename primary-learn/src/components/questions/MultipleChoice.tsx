@@ -1,4 +1,5 @@
-import { TurnPicture } from "./TurnPicture";
+import { TurnChoices } from "./TurnChoices";
+import { PositionPicture } from "./PositionPicture";
 import { copy } from "../../data/copy";
 import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
@@ -21,6 +22,7 @@ export function MultipleChoice({
   reveal,
   onChange,
 }: MultipleChoiceProps) {
+  if (question.kind === "multiple-choice" && question.turn) return <TurnChoices key={question.id} question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
   if (question.kind === "multiple-choice" && (question.shape || question.options.some((option) => option.shape))) {
     return <ShapeChoices question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
   }
@@ -71,7 +73,7 @@ export function MultipleChoice({
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
     <div className="option-stack">
-      {question.turn ? <TurnPicture turn={question.turn} /> : null}
+      {question.position ? <PositionPicture scene={question.position} /> : null}
       {sum ? (
         <div className={`make-total-sum${reveal === "correct" ? " is-correct" : reveal === "incorrect" ? " is-wrong" : ""}`}>
           <span className="make-total-box is-part">{sum[1]}</span>

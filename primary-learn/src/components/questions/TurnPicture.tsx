@@ -1,29 +1,43 @@
-import { useId } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { TurnDiagram } from "../../types/activity";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
-const directions = ["up", "right", "down", "left"];
-export function TurnPicture({ turn }: { turn: TurnDiagram }) {
-  const id = useId().replace(/:/g, "");
-  const sign = turn.clockwise ? 1 : -1;
-  const end = (turn.start + sign * turn.quarters + 8) % 4;
-  const point = (q: number) => [140 + 99 * Math.sin(q * Math.PI / 2), 140 - 99 * Math.cos(q * Math.PI / 2)];
-  // A small gap keeps the arrowhead clear even for one complete revolution.
-  const from = point(turn.start + sign * 0.06);
-  const to = point(turn.start + sign * (turn.quarters - 0.06));
-  const path = `M ${from} A 99 99 0 ${turn.quarters > 2 ? 1 : 0} ${turn.clockwise ? 1 : 0} ${to}`;
-  const label = turn.showEnd
-    ? `The dashed arrow starts pointing ${directions[turn.start]}. The orange path goes ${turn.clockwise ? "clockwise" : "anti-clockwise"} to the solid arrow pointing ${directions[end]}. ${turn.quarters === 4 ? "The path goes all the way round." : ""}`
-    : `The arrow starts pointing ${directions[turn.start]}.`;
-  const arrow = (direction: number, start: boolean) => <path d="M 130 195 L 130 115 L 110 115 L 140 77 L 170 115 L 150 115 L 150 195 Z" transform={`rotate(${direction * 90} 140 140)`} fill={start ? "none" : "var(--primary)"} stroke={start ? "var(--ink-soft)" : "var(--primary)"} strokeWidth="3" strokeDasharray={start ? "6 5" : undefined} />;
-  return <figure className="turn-picture">
-    <svg viewBox="0 0 280 280" role="img" aria-label={label}>
-      <defs><marker id={id} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b97512" /></marker></defs>
-      <circle cx="140" cy="140" r="99" fill="var(--paper)" stroke="var(--line)" strokeWidth="2" />
-      {[0,1,2,3].map(q => { const [x,y] = point(q);return <circle key={q} cx={x} cy={y} r="4" fill="var(--line-strong)" />; })}
-      {turn.showEnd && <path d={path} fill="none" stroke="#b97512" strokeWidth="5" strokeLinecap="round" markerEnd={`url(#${id})`} />}
-      {turn.showEnd && arrow(turn.start, true)}
-      {arrow(turn.showEnd ? end : turn.start, false)}
-    </svg>
-    <figcaption>{turn.showEnd ? "Dashed arrow starts. Solid arrow finishes." : "Starting direction"}</figcaption>
+export const directions = ["Up", "Right", "Down", "Left"];
+export function ToyCar({ direction = 0 }: { direction?: number }) {
+  return <svg viewBox="0 0 180 180" role="img" aria-label={`Car facing ${directions[((direction % 4) + 4) % 4]?.toLowerCase() ?? "up"}`}>
+    <g transform={`rotate(${direction * 90} 90 90)`}>
+      <ellipse cx="92" cy="99" rx="38" ry="62" fill="#232946" opacity=".12" />
+      <g fill="#232946"><rect x="48" y="45" width="16" height="29" rx="5"/><rect x="116" y="45" width="16" height="29" rx="5"/><rect x="48" y="111" width="16" height="29" rx="5"/><rect x="116" y="111" width="16" height="29" rx="5"/></g>
+      <rect x="59" y="25" width="62" height="132" rx="23" fill="#e9a34c" stroke="#9c601f" strokeWidth="3"/>
+      <path d="M68 66 L74 50 H106 L112 66 L107 92 H73 Z" fill="#c9eeff" stroke="#9c601f" strokeWidth="3"/>
+      <rect x="72" y="102" width="36" height="29" rx="7" fill="#fff1c4"/>
+      <rect x="67" y="30" width="13" height="8" rx="3" fill="white"/><rect x="100" y="30" width="13" height="8" rx="3" fill="white"/>
+      <path d="M82 44 L90 36 L98 44" fill="none" stroke="#9c601f" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="66" y="144" width="13" height="6" rx="2" fill="#e03131"/><rect x="101" y="144" width="13" height="6" rx="2" fill="#e03131"/>
+    </g>
+  </svg>;
+}
+export function TurnPicture({ turn, steps }: { turn: TurnDiagram; steps?: number }) {
+  const reduced = usePrefersReducedMotion();
+  const car = useRef<HTMLDivElement>(null);
+  const [replay, setReplay] = useState(0);
+  const delta = turn.showEnd ? (turn.clockwise ? 1 : -1) * turn.quarters : steps ?? 0;
+  useEffect(() => {
+    if (!turn.showEnd || reduced) return;
+    const animation = car.current?.animate([
+      { transform: `rotate(${turn.start * 90}deg)` },
+      { transform: `rotate(${(turn.start + delta) * 90}deg)` },
+    ], { duration: turn.quarters * 650, delay: 450, easing: "ease-in-out", fill: "backwards" });
+    return () => animation?.cancel();
+  }, [turn.start, turn.quarters, turn.showEnd, delta, reduced, replay]);
+  const end = (turn.start + delta + 8) % 4;
+  return <figure className="car-turn">
+    <div className="car-turn-stage" role="img" aria-label={`The car starts facing ${directions[turn.start].toLowerCase()}.${turn.showEnd || steps != null ? ` It turns ${Math.abs(delta)} quarter steps ${delta < 0 ? "anti-clockwise" : "clockwise"} and finishes facing ${directions[end].toLowerCase()}.` : ""}`}>
+      <div className="car-turn-ghost" style={{ transform: `rotate(${turn.start * 90}deg)` }} aria-hidden><ToyCar /></div>
+      <div ref={car} className="car-turn-car" style={{ transform: `rotate(${(turn.start + delta) * 90}deg)`, "--turn-duration": steps != null ? "250ms" : "0ms" } as CSSProperties} aria-hidden><ToyCar /></div>
+      <span className="car-start-label">Faint car shows the start.</span>
+    </div>
+    {turn.showEnd ? <><p className="turn-description">{turn.quarters} quarter {turn.quarters === 1 ? "step" : "steps"} {turn.clockwise ? "clockwise" : "anti-clockwise"}</p><button className="btn btn-ghost" type="button" onClick={() => setReplay(x => x + 1)}>Watch again</button></> : <figcaption>The headlights show the front.</figcaption>}
   </figure>;
 }

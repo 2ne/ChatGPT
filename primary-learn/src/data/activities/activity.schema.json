@@ -348,6 +348,35 @@
               },
               "showEnd": {
                 "type": "boolean"
+              },
+              "interactive": {
+                "type": "boolean"
+              }
+            }
+          },
+          "position": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "object",
+              "relation"
+            ],
+            "properties": {
+              "object": {
+                "enum": [
+                  "tree",
+                  "box",
+                  "kite",
+                  "bird"
+                ]
+              },
+              "relation": {
+                "enum": [
+                  "behind",
+                  "in-front",
+                  "above",
+                  "below"
+                ]
               }
             }
           }

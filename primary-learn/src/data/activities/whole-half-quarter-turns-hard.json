@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 uses in front and behind. Q2 uses above and below. Q3 identifies a 3-quarter turn from right. Q4 identifies a 3-quarter turn from down. Q5 identifies a 4-quarter turn from left. Q6 predicts a 3-quarter turn from up. Q7 predicts a 3-quarter turn from right. Q8 predicts a 3-quarter turn from down. Q9 predicts a 3-quarter turn from left. Q10 predicts a 4-quarter turn from right.",
-    "versus": "Easy uses position words, whole and half turns, then supported quarter-turn predictions. Medium identifies and predicts quarter and half turns in both directions. Hard adds three-quarter turns, varied starts and whole-turn distinctions. All use one shared arrow diagram and single-choice spatial fluency to avoid interaction changes."
+    "within": "Q1 to Q2 read illustrated position scenes. Q3 onwards watch turns or predict the car picture. The last four perform three-quarter and whole turns.",
+    "versus": "Easy uses illustrated position scenes, whole and half turns, supported quarter turns and one performed quarter turn. Medium varies starts and direction with quarter and half turns and two performed turns. Hard adds three-quarter turns and four performed turns. Picture choices reduce reading. Signed quarter steps distinguish whole turns from no movement."
   },
   "skills": [
     "y1-turns",
@@ -28,11 +28,39 @@
     {
       "id": "turns-3-1",
       "kind": "multiple-choice",
-      "prompt": "Pip stands behind a box. Where is the box?",
+      "prompt": "Where is the box?",
       "options": [
         {
           "id": "a",
+          "label": "Behind Pip"
+        },
+        {
+          "id": "b",
           "label": "In front of Pip"
+        },
+        {
+          "id": "c",
+          "label": "Above Pip"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The box is behind Pip.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "position": {
+        "object": "box",
+        "relation": "behind"
+      }
+    },
+    {
+      "id": "turns-3-2",
+      "kind": "multiple-choice",
+      "prompt": "Where is the bird?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Below Pip"
         },
         {
           "id": "b",
@@ -40,43 +68,23 @@
         },
         {
           "id": "c",
-          "label": "Below Pip"
+          "label": "In front of Pip"
         }
       ],
       "correctId": "a",
-      "explanation": "The box is in front of Pip because Pip stands behind it.",
+      "explanation": "The bird is below Pip.",
       "randomise": {
         "shuffleOptions": true
-      }
-    },
-    {
-      "id": "turns-3-2",
-      "kind": "multiple-choice",
-      "prompt": "A shelf is above a box. Where is the box?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Below the shelf"
-        },
-        {
-          "id": "b",
-          "label": "Above the shelf"
-        },
-        {
-          "id": "c",
-          "label": "In front of the shelf"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "The box is below the shelf because the shelf is above it.",
-      "randomise": {
-        "shuffleOptions": true
+      },
+      "position": {
+        "object": "bird",
+        "relation": "below"
       }
     },
     {
       "id": "turns-3-3",
       "kind": "multiple-choice",
-      "prompt": "Follow the orange path. How much does the arrow turn?",
+      "prompt": "Watch the car turn. How much does it turn?",
       "options": [
         {
           "id": "a",
@@ -110,7 +118,7 @@
     {
       "id": "turns-3-4",
       "kind": "multiple-choice",
-      "prompt": "Follow the orange path. How much does the arrow turn?",
+      "prompt": "Watch the car turn. How much does it turn?",
       "options": [
         {
           "id": "a",
@@ -144,7 +152,7 @@
     {
       "id": "turns-3-5",
       "kind": "multiple-choice",
-      "prompt": "Follow the orange path. How much does the arrow turn?",
+      "prompt": "Watch the car turn. How much does it turn?",
       "options": [
         {
           "id": "a",
@@ -178,7 +186,7 @@
     {
       "id": "turns-3-6",
       "kind": "multiple-choice",
-      "prompt": "The arrow makes a three-quarter turn clockwise. Which way does it point now?",
+      "prompt": "The car makes a three-quarter turn clockwise. Which way does it point now?",
       "options": [
         {
           "id": "a",
@@ -198,7 +206,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "From pointing up, a three-quarter turn clockwise finishes pointing left.",
+      "explanation": "From facing up, a three-quarter turn clockwise finishes facing left.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -212,137 +220,193 @@
     {
       "id": "turns-3-7",
       "kind": "multiple-choice",
-      "prompt": "The arrow makes a three-quarter turn anti-clockwise. Which way does it point now?",
+      "prompt": "Make the car do a three-quarter turn anti-clockwise.",
       "options": [
         {
-          "id": "a",
-          "label": "Up"
+          "id": "-1",
+          "label": "A quarter turn anti-clockwise"
         },
         {
-          "id": "b",
-          "label": "Right"
+          "id": "-2",
+          "label": "A half turn anti-clockwise"
         },
         {
-          "id": "c",
-          "label": "Down"
+          "id": "-3",
+          "label": "A three-quarter turn anti-clockwise"
         },
         {
-          "id": "d",
-          "label": "Left"
+          "id": "-4",
+          "label": "A whole turn anti-clockwise"
+        },
+        {
+          "id": "1",
+          "label": "A quarter turn clockwise"
+        },
+        {
+          "id": "2",
+          "label": "A half turn clockwise"
+        },
+        {
+          "id": "3",
+          "label": "A three-quarter turn clockwise"
+        },
+        {
+          "id": "4",
+          "label": "A whole turn clockwise"
         }
       ],
-      "correctId": "c",
-      "explanation": "From pointing right, a three-quarter turn anti-clockwise finishes pointing down.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "correctId": "-3",
+      "explanation": "A three-quarter turn anti-clockwise is 3 quarter steps.",
       "turn": {
         "start": 1,
         "quarters": 3,
         "clockwise": false,
-        "showEnd": false
+        "showEnd": false,
+        "interactive": true
       }
     },
     {
       "id": "turns-3-8",
       "kind": "multiple-choice",
-      "prompt": "The arrow makes a three-quarter turn clockwise. Which way does it point now?",
+      "prompt": "Make the car do a three-quarter turn clockwise.",
       "options": [
         {
-          "id": "a",
-          "label": "Up"
+          "id": "-1",
+          "label": "A quarter turn anti-clockwise"
         },
         {
-          "id": "b",
-          "label": "Right"
+          "id": "-2",
+          "label": "A half turn anti-clockwise"
         },
         {
-          "id": "c",
-          "label": "Down"
+          "id": "-3",
+          "label": "A three-quarter turn anti-clockwise"
         },
         {
-          "id": "d",
-          "label": "Left"
+          "id": "-4",
+          "label": "A whole turn anti-clockwise"
+        },
+        {
+          "id": "1",
+          "label": "A quarter turn clockwise"
+        },
+        {
+          "id": "2",
+          "label": "A half turn clockwise"
+        },
+        {
+          "id": "3",
+          "label": "A three-quarter turn clockwise"
+        },
+        {
+          "id": "4",
+          "label": "A whole turn clockwise"
         }
       ],
-      "correctId": "b",
-      "explanation": "From pointing down, a three-quarter turn clockwise finishes pointing right.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "correctId": "3",
+      "explanation": "A three-quarter turn clockwise is 3 quarter steps.",
       "turn": {
         "start": 2,
         "quarters": 3,
         "clockwise": true,
-        "showEnd": false
+        "showEnd": false,
+        "interactive": true
       }
     },
     {
       "id": "turns-3-9",
       "kind": "multiple-choice",
-      "prompt": "The arrow makes a three-quarter turn anti-clockwise. Which way does it point now?",
+      "prompt": "Make the car do a three-quarter turn anti-clockwise.",
       "options": [
         {
-          "id": "a",
-          "label": "Up"
+          "id": "-1",
+          "label": "A quarter turn anti-clockwise"
         },
         {
-          "id": "b",
-          "label": "Right"
+          "id": "-2",
+          "label": "A half turn anti-clockwise"
         },
         {
-          "id": "c",
-          "label": "Down"
+          "id": "-3",
+          "label": "A three-quarter turn anti-clockwise"
         },
         {
-          "id": "d",
-          "label": "Left"
+          "id": "-4",
+          "label": "A whole turn anti-clockwise"
+        },
+        {
+          "id": "1",
+          "label": "A quarter turn clockwise"
+        },
+        {
+          "id": "2",
+          "label": "A half turn clockwise"
+        },
+        {
+          "id": "3",
+          "label": "A three-quarter turn clockwise"
+        },
+        {
+          "id": "4",
+          "label": "A whole turn clockwise"
         }
       ],
-      "correctId": "a",
-      "explanation": "From pointing left, a three-quarter turn anti-clockwise finishes pointing up.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "correctId": "-3",
+      "explanation": "A three-quarter turn anti-clockwise is 3 quarter steps.",
       "turn": {
         "start": 3,
         "quarters": 3,
         "clockwise": false,
-        "showEnd": false
+        "showEnd": false,
+        "interactive": true
       }
     },
     {
       "id": "turns-3-10",
       "kind": "multiple-choice",
-      "prompt": "The arrow makes a whole turn anti-clockwise. Which way does it point now?",
+      "prompt": "Make the car do a whole turn anti-clockwise.",
       "options": [
         {
-          "id": "a",
-          "label": "Up"
+          "id": "-1",
+          "label": "A quarter turn anti-clockwise"
         },
         {
-          "id": "b",
-          "label": "Right"
+          "id": "-2",
+          "label": "A half turn anti-clockwise"
         },
         {
-          "id": "c",
-          "label": "Down"
+          "id": "-3",
+          "label": "A three-quarter turn anti-clockwise"
         },
         {
-          "id": "d",
-          "label": "Left"
+          "id": "-4",
+          "label": "A whole turn anti-clockwise"
+        },
+        {
+          "id": "1",
+          "label": "A quarter turn clockwise"
+        },
+        {
+          "id": "2",
+          "label": "A half turn clockwise"
+        },
+        {
+          "id": "3",
+          "label": "A three-quarter turn clockwise"
+        },
+        {
+          "id": "4",
+          "label": "A whole turn clockwise"
         }
       ],
-      "correctId": "b",
-      "explanation": "From pointing right, a whole turn anti-clockwise finishes pointing right.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "correctId": "-4",
+      "explanation": "A whole turn anti-clockwise is 4 quarter steps.",
       "turn": {
         "start": 1,
         "quarters": 4,
         "clockwise": false,
-        "showEnd": false
+        "showEnd": false,
+        "interactive": true
       }
     }
   ]

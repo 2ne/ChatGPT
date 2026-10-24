@@ -67,9 +67,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `everyday-shapes-medium` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Medium: varied sizes, proportions and orientations |
 | `everyday-shapes-hard` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Hard: shape families including squares as rectangles and cubes as cuboids |
 
-| `whole-half-quarter-turns` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Easy: position words, whole and half turns, supported quarter turns |
-| `whole-half-quarter-turns-medium` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Medium: quarter and half turns in both directions |
-| `whole-half-quarter-turns-hard` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Hard: three-quarter turns and varied starting directions |
+| `whole-half-quarter-turns` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Easy: illustrated positions, car demonstrations and predictions, performed quarter turn |
+| `whole-half-quarter-turns-medium` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Medium: car pictures and performed quarter turns in both directions |
+| `whole-half-quarter-turns-hard` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Hard: three-quarter and whole car turns, including performed movements |
 
 ## Next quest to build
 
