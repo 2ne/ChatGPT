@@ -200,24 +200,9 @@ they are.
    Major screen changes (onboarding, pathway, activity) scroll to the top so
    the name and avatar stay in view. Do not auto-jump down the path on entry.
 
-### Activity intro
+### Starting an activity
 
-Centred quest card, max-width **34rem**, on the same year tint and maths wallpaper
-as that quest's path section (matched by `pathNode`). Keep the back link outside
-the card. A warm paper illustration panel holds Pip on a simple warm background.
-Below it, centre the Easy / Medium / Hard label above the title (same words
-as the level sheet), readable summary,
-star goal, and a two-column row for question count and time. End with a short
-personal welcome and the full-width gradient `Start quest` button. Use 28px card
-corners and a soft shadow. On narrow screens reduce padding, keep the facts in
-two columns, and allow the whole page to scroll on short screens. Do not add a
-second mascot or a speech bubble to this screen. During play, the header sub-line
-reads `Medium · Question 3 of 10`.
-
-Intro and results use a fixed, opaque backdrop in the current section's soft
-colour, with the section wallpaper on a separate `::before` layer. Safari can
-extend that solid tint behind both browser bars. Keep the backdrop below the
-card and remove it during question play so the white activity surface returns.
+Choosing a difficulty opens question one directly. There is no activity intro or extra Start quest step. Direct links and Next quest also begin immediately. Realise each play once on entry; Try again creates a fresh play with cleared answers and question-local state. Keep activity title, difficulty and question count in the question header. Results retain the Pip celebration card and opaque section backdrop.
 
 ### Activity question (most important)
 
@@ -409,7 +394,7 @@ make {whole}?`, or `What do {a} and {b} make?` when the whole is empty.
   action so nothing shifts.
 - Home and onboarding keep the dotted paper. Question play is white edge to edge
   on phones; on desktop it is a white card on the section wallpaper.
-  The intro uses the centred Pip card above. Inner question content uses `--max-wide`.
+  Inner question content uses `--max-wide`.
 
 ### Progress
 
@@ -422,11 +407,11 @@ later. A miss shows a labelled correct answer and the factual explanation, then
 
 ### Summary (end screen)
 
-Same card chrome as the activity intro: warm paper Pip scene on top, white
+Celebration card with a warm paper Pip scene on top, white
 body below, `All quests` back link outside the card, max-width **34rem**.
 Joyful result, like a lesson-complete or star-reveal screen. CSS/SVG only.
 
-1. Pip bounces in inside the paper scene (same size as intro).
+1. Pip bounces in inside the paper scene (144px).
 2. Three star tiles sit empty, then the earned ones fill **one by one** with
    a pop (1 star = 6–7, 2 = 8–9, 3 = 10). A small confetti burst on 3 stars.
 3. Big text: `You got 7 out of 10!`
@@ -448,7 +433,7 @@ can extend the cream colour behind its status and address bars. Render the
 transparent SVG wallpaper on its `::before` layer, not on the fixed tint
 surface. The backdrop stays decorative and does not intercept touches.
 `useSafariThemeColor` also synchronises the html/body surface and theme-colour
-meta on route changes and activity phase changes. Intro and result screens
+meta on route changes and activity phase changes. Result screens
 expose their section tint through `data-browser-color`; question play uses white.
 Do not infer every activity screen as white or depend on a full reload.
 

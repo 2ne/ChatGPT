@@ -361,7 +361,7 @@ question. Multi-select questions explicitly state the number of selections.
 
 Kids learn better when the same skill shows up as slightly different pictures or a shuffled choice list — not a new harder puzzle. Randomisation is **opt-in** and **must stay inside the difficulty band**.
 
-The runner calls `realizeActivity` on **Start quest / Play again / Try again**. The draw stays for that play. There is no miss-retry loop.
+The runner calls `realizeActivity` on **activity entry / Play again / Try again**. The draw stays for that play. There is no miss-retry loop.
 
 ### When to use it
 

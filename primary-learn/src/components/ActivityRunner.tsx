@@ -3,9 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  Clock,
   Lightbulb,
-  ListChecks,
   RotateCcw,
   Star,
   X,
@@ -68,28 +66,27 @@ type ActivityRunnerProps = {
   onComplete: (attempt: ActivityAttempt) => void;
 };
 
-type Phase = "intro" | "question" | "feedback" | "summary";
+type Phase = "question" | "feedback" | "summary";
 
 export function ActivityRunner({
   activity,
-  learnerName,
   onExit,
   onNext,
   nextLabel,
   onComplete,
 }: ActivityRunnerProps) {
-  const [playQuestions, setPlayQuestions] = useState<Question[]>(activity.questions);
-  const [phase, setPhase] = useState<Phase>("intro");
+  const [playQuestions, setPlayQuestions] = useState<Question[]>(() => realizeActivity(activity).questions);
+  const [phase, setPhase] = useState<Phase>("question");
   const [index, setIndex] = useState(0);
   const [exitOpen, setExitOpen] = useState(false);
   const [playSession, setPlaySession] = useState(0);
   const exitOpenRef = useRef(false);
   exitOpenRef.current = exitOpen;
-  const [answer, setAnswer] = useState<unknown>(null);
+  const [answer, setAnswer] = useState<unknown>(() => playQuestions[0] ? emptyAnswerFor(playQuestions[0]) : null);
   const [startedAt, setStartedAt] = useState(() => new Date().toISOString());
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [activeQueue, setActiveQueue] = useState<string[]>(() =>
-    activity.questions.map((question) => question.id),
+    playQuestions.map((question) => question.id),
   );
   const [showHint, setShowHint] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
@@ -103,7 +100,7 @@ export function ActivityRunner({
   const currentId = activeQueue[index];
   const question = playQuestions.find((item) => item.id === currentId);
   const backdrop = sectionBackdrop(activity.pathNode);
-  const speech = useNarration(`${currentId ?? "none"}:${phase}`);
+  const speech = useNarration(`${playSession}:${currentId ?? "none"}:${phase}`);
   const total = playQuestions.length;
   const correctCount = Object.values(results).filter(Boolean).length;
   const mastered = passedScore(correctCount, total);
@@ -198,7 +195,7 @@ export function ActivityRunner({
       }
       promptRef.current?.focus({ preventScroll: true });
     }
-  }, [phase, currentId]);
+  }, [phase, currentId, playSession]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -211,10 +208,7 @@ export function ActivityRunner({
 
       if (event.key === "Enter") {
         if (tag === "BUTTON" || tag === "SELECT" || tag === "TEXTAREA") return;
-        if (currentPhase === "intro") {
-          event.preventDefault();
-          actions.current.begin();
-        } else if (
+        if (
           currentPhase === "question" &&
           currentQuestion &&
           hasProvidedAnswer(currentQuestion, currentAnswer)
@@ -276,46 +270,6 @@ export function ActivityRunner({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
-
-  /* ——— Intro ——— */
-  if (phase === "intro") {
-    return (
-      <main className="page page-quest quest-intro-page" style={backdrop} data-browser-color={backdrop?.backgroundColor ?? "#FFF6E8"}>
-        <QuestBackdrop backdrop={backdrop} />
-        <section className="quest-intro">
-          <button type="button" className="back-link" onClick={onExit}>
-            <ArrowLeft size={17} aria-hidden /> {copy.allQuests}
-          </button>
-          <div className="intro-card">
-          <div className="intro-scene" aria-hidden>
-            <Pip size={144} mood="happy" />
-            <span className="intro-scene-floor" />
-          </div>
-          <div className="intro-card-body">
-          <div className="intro-title-block">
-            <p className="intro-difficulty">{DIFFICULTY_LABELS[activity.difficulty]}</p>
-            <h1 className="t-title">{activity.title}</h1>
-          </div>
-          <p className="t-body quest-intro-summary">{activity.summary}</p>
-          <p className="intro-star-goal"><Star size={18} aria-hidden />{copy.starsFact}</p>
-          <div className="intro-facts">
-            <span className="fact-pill">
-              <ListChecks size={15} aria-hidden /> {copy.questionsFact(total)}
-            </span>
-            <span className="fact-pill">
-              <Clock size={15} aria-hidden /> {copy.minutesFact(activity.estimatedMinutes)}
-            </span>
-          </div>
-          <p className="intro-welcome">{copy.introWelcome(learnerName)}</p>
-          <button type="button" className="btn btn-primary btn-block" onClick={begin}>
-            {copy.startQuest} <ArrowRight size={19} aria-hidden />
-          </button>
-          </div>
-          </div>
-        </section>
-      </main>
-    );
-  }
 
   /* ——— Summary ——— */
   if (phase === "summary") {
