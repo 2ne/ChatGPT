@@ -1,0 +1,304 @@
+{
+  "id": "count-to-100-hard",
+  "title": "Count to 100",
+  "summary": "Count forwards and backwards and fill in missing numbers.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-count-100",
+  "pathNode": "y1-count-100",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "1. What number comes next? 78, 79, 80, ? 2. What number comes next? 81, 80, 79, ? 3. What number comes next? 88, 89, 90, ? 4. What number comes next? 91, 90, 89, ? 5. Put the numbers in order, from smallest to biggest. 6. What number comes next? 101, 100, 99, ? 7. What number comes next? 99, 100, 101, ? 8. What number comes next? 100, 99, 98, ? 9. Put the numbers in order, from smallest to biggest. 10. What number comes next? 102, 101, 100, ?",
+    "versus": "Easy practises short counts from 21 to the sixties with early hints. Medium counts through higher tens up to 100. Hard counts forwards and backwards around 100, including crossing 100. Each level mixes choosing, writing and ordering numerals."
+  },
+  "skills": [
+    "count-forwards",
+    "count-backwards",
+    "write-numerals"
+  ],
+  "questions": [
+    {
+      "id": "c100-3-1",
+      "prompt": "What number comes next? 78, 79, 80, ?",
+      "explanation": "Counting forwards in ones gives 78, 79, 80, 81.",
+      "narration": {
+        "prompt": "What number comes next? 78, 79, 80."
+      },
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "0",
+          "label": "81"
+        },
+        {
+          "id": "1",
+          "label": "80"
+        },
+        {
+          "id": "2",
+          "label": "82"
+        },
+        {
+          "id": "3",
+          "label": "83"
+        }
+      ],
+      "correctId": "0",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c100-3-2",
+      "prompt": "What number comes next? 81, 80, 79, ?",
+      "explanation": "Counting backwards in ones gives 81, 80, 79, 78.",
+      "narration": {
+        "prompt": "What number comes next? 81, 80, 79."
+      },
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "0",
+          "label": "78"
+        },
+        {
+          "id": "1",
+          "label": "79"
+        },
+        {
+          "id": "2",
+          "label": "77"
+        },
+        {
+          "id": "3",
+          "label": "76"
+        }
+      ],
+      "correctId": "0",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c100-3-3",
+      "prompt": "What number comes next? 88, 89, 90, ?",
+      "explanation": "Counting forwards in ones gives 88, 89, 90, 91.",
+      "narration": {
+        "prompt": "What number comes next? 88, 89, 90."
+      },
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "0",
+          "label": "91"
+        },
+        {
+          "id": "1",
+          "label": "90"
+        },
+        {
+          "id": "2",
+          "label": "92"
+        },
+        {
+          "id": "3",
+          "label": "93"
+        }
+      ],
+      "correctId": "0",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c100-3-4",
+      "prompt": "What number comes next? 91, 90, 89, ?",
+      "explanation": "Counting backwards in ones gives 91, 90, 89, 88.",
+      "narration": {
+        "prompt": "What number comes next? 91, 90, 89."
+      },
+      "kind": "fill-blank",
+      "acceptedAnswers": [
+        "88",
+        "eighty-eight",
+        "eighty eight"
+      ],
+      "inputMode": "numeric"
+    },
+    {
+      "id": "c100-3-5",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "explanation": "The numbers go 98, 99, 100, 101.",
+      "kind": "ordered",
+      "items": [
+        {
+          "id": "c",
+          "label": "100"
+        },
+        {
+          "id": "a",
+          "label": "98"
+        },
+        {
+          "id": "d",
+          "label": "101"
+        },
+        {
+          "id": "b",
+          "label": "99"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "id": "c100-3-6",
+      "prompt": "What number comes next? 101, 100, 99, ?",
+      "explanation": "Counting backwards in ones gives 101, 100, 99, 98.",
+      "narration": {
+        "prompt": "What number comes next? 101, 100, 99."
+      },
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "0",
+          "label": "98"
+        },
+        {
+          "id": "1",
+          "label": "99"
+        },
+        {
+          "id": "2",
+          "label": "97"
+        },
+        {
+          "id": "3",
+          "label": "96"
+        }
+      ],
+      "correctId": "0",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c100-3-7",
+      "prompt": "What number comes next? 99, 100, 101, ?",
+      "explanation": "Counting forwards in ones gives 99, 100, 101, 102.",
+      "narration": {
+        "prompt": "What number comes next? 99, 100, 101."
+      },
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "0",
+          "label": "102"
+        },
+        {
+          "id": "1",
+          "label": "101"
+        },
+        {
+          "id": "2",
+          "label": "103"
+        },
+        {
+          "id": "3",
+          "label": "104"
+        }
+      ],
+      "correctId": "0",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c100-3-8",
+      "prompt": "What number comes next? 100, 99, 98, ?",
+      "explanation": "Counting backwards in ones gives 100, 99, 98, 97.",
+      "narration": {
+        "prompt": "What number comes next? 100, 99, 98."
+      },
+      "kind": "fill-blank",
+      "acceptedAnswers": [
+        "97",
+        "ninety-seven",
+        "ninety seven"
+      ],
+      "inputMode": "numeric"
+    },
+    {
+      "id": "c100-3-9",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "explanation": "The numbers go 101, 102, 103, 104.",
+      "kind": "ordered",
+      "items": [
+        {
+          "id": "c",
+          "label": "103"
+        },
+        {
+          "id": "a",
+          "label": "101"
+        },
+        {
+          "id": "d",
+          "label": "104"
+        },
+        {
+          "id": "b",
+          "label": "102"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "id": "c100-3-10",
+      "prompt": "What number comes next? 102, 101, 100, ?",
+      "explanation": "Counting backwards in ones gives 102, 101, 100, 99.",
+      "narration": {
+        "prompt": "What number comes next? 102, 101, 100."
+      },
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "0",
+          "label": "99"
+        },
+        {
+          "id": "1",
+          "label": "100"
+        },
+        {
+          "id": "2",
+          "label": "98"
+        },
+        {
+          "id": "3",
+          "label": "97"
+        }
+      ],
+      "correctId": "0",
+      "randomise": {
+        "shuffleOptions": true
+      }
+    }
+  ]
+}

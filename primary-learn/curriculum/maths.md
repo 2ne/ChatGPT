@@ -224,7 +224,7 @@ Year 1.
 
 ### 18. `y1-count-100` — Count to 100
 
-Requires: `y1-turns`. Quest: none. Status: missing.
+Requires: `y1-turns`. Quest: `count-to-100`, `count-to-100-medium`, `count-to-100-hard`. Status: done.
 
 - Count to and across 100, forwards and backwards, beginning with 0 or 1, or from any given number
 - Count, read and write numbers to 100 in numerals

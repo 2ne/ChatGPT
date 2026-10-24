@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 17 — nodes 1 to 17 (`eyfs-count-5` through `y1-turns`) |
+| Done | 18 — nodes 1 to 18 (`eyfs-count-5` through `y1-count-100`) |
 | Partial | 0 |
-| Missing | 107 |
+| Missing | 106 |
 
 ## Quests in the app
 
@@ -71,11 +71,16 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `whole-half-quarter-turns-medium` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Medium: car pictures and performed quarter turns in both directions |
 | `whole-half-quarter-turns-hard` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Hard: three-quarter and whole car turns, including performed movements |
 
+
+| `count-to-100` | `y1-count-100` (node 18) | done — Easy counting sequences, written numerals and ordering |
+| `count-to-100-medium` | `y1-count-100` (node 18) | done — Medium counting sequences, written numerals and ordering |
+| `count-to-100-hard` | `y1-count-100` (node 18) | done — Hard counting sequences, written numerals and ordering |
+
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-count-100` — Count to 100 (node 18, after `y1-turns`). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-represent-100` — Show and compare numbers (node 19). Start that node with Easy.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 
