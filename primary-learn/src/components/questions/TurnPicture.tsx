@@ -34,7 +34,7 @@ export function TurnPicture({ turn, steps }: { turn: TurnDiagram; steps?: number
   }, [turn.start, turn.quarters, turn.showEnd, delta, reduced, replay]);
   const end = (turn.start + delta + 8) % 4;
   return <figure className="car-turn">
-    <div className="car-turn-stage" role="img" aria-label={`The car starts facing ${directions[turn.start].toLowerCase()}.${turn.showEnd || steps != null ? ` It turns ${Math.abs(delta)} quarter steps ${delta < 0 ? "anti-clockwise" : "clockwise"} and finishes facing ${directions[end].toLowerCase()}.` : ""}`}>
+    <div className="car-turn-stage" role="img" aria-label={`The car starts facing ${directions[turn.start].toLowerCase()}.${turn.showEnd ? ` It turns ${Math.abs(delta)} quarter steps ${delta < 0 ? "anti-clockwise" : "clockwise"} and finishes facing ${directions[end].toLowerCase()}.` : steps != null ? ` It now faces ${directions[end].toLowerCase()}.` : ""}`}>
       <div className="car-turn-ghost" style={{ transform: `rotate(${turn.start * 90}deg)` }} aria-hidden><ToyCar /></div>
       <div ref={car} className="car-turn-car" style={{ transform: `rotate(${(turn.start + delta) * 90}deg)`, "--turn-duration": steps != null ? "250ms" : "0ms" } as CSSProperties} aria-hidden><ToyCar /></div>
     </div>

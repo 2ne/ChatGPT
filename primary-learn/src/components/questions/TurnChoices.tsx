@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { RotateCw } from "lucide-react";
 import type { MultipleChoiceQuestion } from "../../types/activity";
 import { TurnPicture, ToyCar, directions } from "./TurnPicture";
 import { choiceClass, markChoice, type Reveal } from "./choice";
@@ -23,8 +24,7 @@ export function TurnChoices({ question, answer, disabled, reveal, onChange }: {q
     };
     return <div className="option-stack"><TurnPicture turn={turn} steps={steps}/>
       <div className="turn-controls"><button type="button" className="btn btn-secondary" aria-label="Quarter turn anti-clockwise" disabled={disabled || steps <= -4} onClick={() => move(-1)}><QuarterTurnIcon clockwise={false}/></button><button type="button" className="btn btn-secondary" aria-label="Quarter turn clockwise" disabled={disabled || steps >= 4} onClick={() => move(1)}><QuarterTurnIcon clockwise/></button></div>
-      <p className="turn-description" aria-live="polite">{Math.abs(steps)} quarter {Math.abs(steps) === 1 ? "step" : "steps"}{steps ? steps < 0 ? " anti-clockwise" : " clockwise" : ""}</p>
-      <button type="button" className="btn btn-ghost" disabled={disabled || !steps} onClick={() => {current.current = 0;setSteps(0);onChange(null);}}>Start again</button>
+      <button type="button" className="btn btn-ghost" disabled={disabled || !steps} onClick={() => {current.current = 0;setSteps(0);onChange(null);}}><RotateCw size={20} aria-hidden />Start again</button>
     </div>;
   }
   const pictures = !turn.showEnd;
