@@ -90,6 +90,9 @@ export function collectItems(question: Question): ObjectItem[] {
       add(sideItem(pair.left));
       add(sideItem(pair.right));
     }
+    if (question.choices) {
+      for (const side of question.choices) add(sideItem(side));
+    }
   }
   return found;
 }
@@ -259,6 +262,13 @@ function applyStrings(question: Question, vars: Record<string, string>): Questio
         label: applyOptional(pair.right.label, vars),
       },
     }));
+    if (next.choices) {
+      next.choices = next.choices.map((side) =>
+        typeof side === "string"
+          ? applyText(side, vars)
+          : { ...side, label: applyOptional(side.label, vars) },
+      );
+    }
   }
   return next;
 }
@@ -332,6 +342,9 @@ function realizeQuestion(
       left: remapSide(pair.left, itemMap),
       right: remapSide(pair.right, itemMap),
     }));
+    if (next.choices) {
+      next.choices = next.choices.map((side) => remapSide(side, itemMap));
+    }
   }
 
   if (

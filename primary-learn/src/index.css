@@ -4637,11 +4637,39 @@ button.object-token {
   width: 100%;
 }
 
+.match-turn-board {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.match-turn-target-row,
 .match-turn-choices {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   width: 100%;
+}
+
+.match-turn-target-slot {
+  grid-column: 2;
+}
+
+.match-turn .match-card,
+.match-turn .match-card-inner,
+.match-turn .match-card-face {
+  min-height: 120px;
+  height: 120px;
+  overflow: hidden;
+}
+
+.match-card-static {
+  pointer-events: none;
+  cursor: default;
+}
+
+.match-card-static .match-card-inner {
+  transition: none;
 }
 
 @media (min-width: 560px) {
@@ -4774,75 +4802,6 @@ button.object-token {
   justify-self: center;
 }
 
-.match-turn-progress {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--ink-soft);
-}
-
-.match-turn-dots {
-  display: flex;
-  gap: 8px;
-}
-
-.match-turn-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: var(--line-strong);
-}
-
-.match-turn-dot.is-now {
-  background: var(--primary);
-}
-
-.match-turn-dot.is-done {
-  background: var(--mint);
-}
-
-.match-turn-target {
-  display: grid;
-  place-items: center;
-  width: min(100%, 240px);
-  min-height: 96px;
-  padding: 14px 12px;
-  border: 2.5px solid var(--line);
-  border-radius: 18px;
-  background: var(--paper-deep);
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 800;
-  text-align: center;
-}
-
-.match-found-list {
-  display: grid;
-  gap: 6px;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.match-found-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 14px;
-  background: var(--pair-tint, var(--primary-soft));
-  color: var(--ink);
-  font-size: 15px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.match-found-item .match-pair-mark {
-  position: static;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .match-card-inner {

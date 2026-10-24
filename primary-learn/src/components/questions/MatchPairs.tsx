@@ -285,34 +285,28 @@ function OneAtATime({
 }) {
   const reducedMotion = usePrefersReducedMotion();
   const review = Boolean(disabled && reveal);
-  const confirmedCount = question.pairs.filter((pair) => map[pair.id]).length;
-  const step = Math.min(confirmedCount, question.pairs.length - 1);
-  const current = question.pairs[step];
+  const current = question.pairs[0];
+  const done = Boolean(current && map[current.id]);
   const [picked, setPicked] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const confirmRef = useRef<() => void>(() => {});
 
   const choices = useMemo(() => {
-    if (!current) return [];
-    const others = question.pairs
-      .filter((pair) => pair.id !== current.id)
-      .map((pair) => pair.right);
-    const extras = seededOrder(others, `${question.id}:${current.id}`).slice(0, 2);
-    return seededOrder([current.right, ...extras], `${question.id}:choices:${current.id}`);
-  }, [question, current]);
+    const sides = question.choices ?? [];
+    return seededOrder(sides, `${question.id}:choices`);
+  }, [question]);
 
   useEffect(() => {
     setPicked(null);
     setBusy(false);
-  }, [question.id, current?.id]);
+  }, [question.id]);
 
   function confirmPick() {
-    if (!current || picked == null || busy || disabled) return;
+    if (!current || picked == null || busy || disabled || done) return;
     const rightKey = matchSideKey(current.right);
     if (picked === rightKey) {
       playSound("tap");
       onChange({ ...map, [current.id]: picked });
-      setPicked(null);
       return;
     }
     setBusy(true);
@@ -327,7 +321,7 @@ function OneAtATime({
   confirmRef.current = confirmPick;
 
   useEffect(() => {
-    if (review || disabled || confirmedCount >= question.pairs.length) {
+    if (review || disabled || done) {
       onPlayControl?.(null);
       return;
     }
@@ -336,75 +330,56 @@ function OneAtATime({
       confirm: () => confirmRef.current(),
     });
     return () => onPlayControl?.(null);
-  }, [review, disabled, confirmedCount, question.pairs.length, picked, busy, onPlayControl]);
+  }, [review, disabled, done, picked, busy, onPlayControl]);
 
   if (!current) return null;
 
-  const foundPairs = question.pairs.filter((pair) => map[pair.id]);
+  const mark = markForPair(0);
 
   return (
     <div className="match-turn">
-      <p className="t-body">{copy.tapTheMatch}</p>
-      <p className="match-turn-progress" aria-live="polite">
-        {copy.cardOf(step + 1, question.pairs.length)}
-      </p>
-      <div className="match-turn-dots" aria-hidden>
-        {question.pairs.map((pair, index) => (
-          <span
-            key={pair.id}
-            className={`match-turn-dot${index < confirmedCount ? " is-done" : ""}${
-              index === step && confirmedCount < question.pairs.length ? " is-now" : ""
-            }`}
-          />
-        ))}
-      </div>
-      <div className="match-turn-target" aria-label={matchSideLabel(current.left)}>
-        <SideView side={current.left} />
-      </div>
-      <div className="match-turn-choices" role="group" aria-label={copy.matchCards}>
-        {choices.map((side, index) => {
-          const key = matchSideKey(side);
-          const selected = picked === key;
-          const show = review || selected;
-          const found = map[current.id] === key;
-          const mark = markForPair(question.pairs.findIndex((pair) => pair.id === current.id));
-          return (
-            <FlipCardButton
-              key={`${current.id}-${key}-${index}`}
-              card={{ id: key, pairId: current.id, content: side }}
-              index={index}
-              faceUp={show || found}
-              found={found}
-              mark={found ? mark : undefined}
-              disabled={disabled || busy || review}
-              onTap={() => {
-                if (disabled || busy || review) return;
-                playSound("tap");
-                setPicked(key === picked ? null : key);
-              }}
-            />
-          );
-        })}
-      </div>
-      {foundPairs.length > 0 ? (
-        <ul className="match-found-list">
-          {foundPairs.map((pair) => {
-            const mark = markForPair(question.pairs.findIndex((item) => item.id === pair.id));
-            return (
-              <li
-                key={pair.id}
-                className="match-found-item"
-                style={{ "--pair-tint": mark.tint, "--pair-ink": mark.ink } as CSSProperties}
-              >
-                <PairMark mark={mark} />
-                <span>
-                  {matchSideLabel(pair.left)} and {matchSideLabel(pair.right)}
+      <div className="match-turn-board">
+        <div className="match-turn-target-row">
+          <div className="match-turn-target-slot">
+            <div
+              className="match-card is-up match-card-static"
+              aria-label={matchSideLabel(current.left)}
+            >
+              <span className="match-card-inner">
+                <span className="match-card-face match-card-back" aria-hidden>
+                  <span className="match-card-back-mark">?</span>
                 </span>
-              </li>
+                <span className="match-card-face match-card-front">
+                  <SideView side={current.left} />
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="match-turn-choices" role="group" aria-label={copy.matchCards}>
+          {choices.map((side, index) => {
+            const key = matchSideKey(side);
+            const selected = picked === key;
+            const found = map[current.id] === key;
+            return (
+              <FlipCardButton
+                key={`${current.id}-${key}-${index}`}
+                card={{ id: key, pairId: current.id, content: side }}
+                index={index}
+                faceUp={review || selected || found}
+                found={found}
+                mark={found ? mark : undefined}
+                disabled={disabled || busy || review}
+                onTap={() => {
+                  if (disabled || busy || review) return;
+                  playSound("tap");
+                  setPicked(key === picked ? null : key);
+                }}
+              />
             );
           })}
-        </ul>
-      ) : null}
+        </div>
+      </div>
     </div>
   );
 }

@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 What number comes next? 11, 12, 13, ? Question 2 What number comes next? 13, 14, 15, ? Question 3 What number comes next? 17, 18, 19, ? Question 4 Which number is missing? 14, 15, _, 17, 18 Question 5 Put the numbers in order, from smallest to biggest. Question 6 Match each count to the number that comes next. Question 7 What number comes next? 18, 19, 20, ? Question 8 Which number is missing? 20, 21, _ Question 9 13 is 10 and how many more? Question 10 What number comes next? 21, 22, ?",
+    "within": "Question 1 What number comes next? 11, 12, 13, ? Question 2 What number comes next? 13, 14, 15, ? Question 3 Which number is missing? 14, 15, _, 17, 18 Question 4 Put the numbers in order, from smallest to biggest. Questions 5 to 7 each match one count to the next number. Question 8 Which number is missing? 20, 21, _ Question 9 13 is 10 and how many more? Question 10 What number comes next? 21, 22, ?",
     "versus": "Easy counts from teens across 20 with early hints. Medium fills gaps and counts from 20 to 26. Hard fills gaps and orders numbers up to 30. Difficulty comes from the counting pattern rather than reading number words."
   },
   "skills": [
@@ -105,38 +105,6 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "c20e-next-19",
-      "prompt": "What number comes next? 17, 18, 19, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "18"
-        },
-        {
-          "id": "b",
-          "label": "19"
-        },
-        {
-          "id": "c",
-          "label": "20"
-        },
-        {
-          "id": "d",
-          "label": "21"
-        }
-      ],
-      "correctId": "c",
-      "hint": "Nineteen comes before twenty.",
-      "explanation": "20 comes after 19.",
-      "narration": {
-        "prompt": "What number comes next? Seventeen, eighteen, nineteen, blank."
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "c20e-gap-teen",
       "prompt": "Which number is missing? 14, 15, _, 17, 18",
       "randomise": {
@@ -201,62 +169,60 @@
     },
     {
       "kind": "match-pairs",
-      "id": "c20e-next-match",
-      "prompt": "Match each count to the number that comes next.",
-      "explanation": "Each count matches the next number.",
+      "id": "c20e-next-match-19",
+      "prompt": "Select the card that matches the number.",
+      "explanation": "19 comes after 18.",
       "narration": {
-        "prompt": "Match each count to the number that comes next."
+        "prompt": "Select the card that matches the number."
       },
       "pairs": [
         {
-          "id": "p0",
+          "id": "p1",
           "left": "17, 18, ?",
           "right": "19"
-        },
-        {
-          "id": "p1",
-          "left": "18, 19, ?",
-          "right": "20"
-        },
-        {
-          "id": "p2",
-          "left": "19, 20, ?",
-          "right": "21"
         }
       ],
+      "choices": ["19", "20", "21"],
       "randomise": {},
       "mode": "one-at-a-time"
     },
     {
-      "kind": "multiple-choice",
-      "id": "c20e-next-20",
-      "prompt": "What number comes next? 18, 19, 20, ?",
-      "randomise": {
-        "shuffleOptions": true
+      "kind": "match-pairs",
+      "id": "c20e-next-match-20",
+      "prompt": "Select the card that matches the number.",
+      "explanation": "20 comes after 19.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
       },
-      "options": [
+      "pairs": [
         {
-          "id": "a",
-          "label": "19"
-        },
-        {
-          "id": "b",
-          "label": "20"
-        },
-        {
-          "id": "c",
-          "label": "21"
-        },
-        {
-          "id": "d",
-          "label": "22"
+          "id": "p1",
+          "left": "18, 19, ?",
+          "right": "20"
         }
       ],
-      "correctId": "c",
+      "choices": ["19", "20", "21"],
+      "randomise": {},
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c20e-next-match-21",
+      "prompt": "Select the card that matches the number.",
       "explanation": "21 comes after 20.",
       "narration": {
-        "prompt": "What number comes next? Eighteen, nineteen, twenty, blank."
-      }
+        "prompt": "Select the card that matches the number."
+      },
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "19, 20, ?",
+          "right": "21"
+        }
+      ],
+      "choices": ["20", "21", "22"],
+      "randomise": {},
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

@@ -213,6 +213,8 @@ export type MatchPairsQuestion = QuestionCore & {
   pairs: Array<{ id: string; left: MatchSide; right: MatchSide }>;
   /** Easy uses one-at-a-time. Medium and Hard use the flip game. */
   mode: MatchPairsMode;
+  /** Easy: the three face-down cards. Must include the pair's right side. */
+  choices?: MatchSide[];
 };
 
 /** How the child answers a part-whole sum. */

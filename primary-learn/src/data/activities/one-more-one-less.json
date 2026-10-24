@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 introduce one more than zero, one more than 3 and one less than 6. Question 4 orders 5, 6 and 7. Question 5 finds one more than 5. Question 6 matches numbers to one more. Questions 7 to 10 work towards 10 with pictured quantities. Numeric answers throughout.",
+    "within": "Questions 1 to 3 introduce one more than zero, one more than 3 and one less than 6. Question 4 orders 5, 6 and 7. Questions 5 to 8 each match one number to one more. Questions 9 and 10 find one less than 9 and 10. Pictures stay on the early items.",
     "versus": "Easy uses pictures within 10 and includes zero. Medium bridges 9, 10 and 11 before moving through the teens. Hard mixes both directions across 0 to 20 with a short story and no number-word reading."
   },
   "skills": [
@@ -170,140 +170,80 @@
       ]
     },
     {
-      "kind": "multiple-choice",
-      "id": "oml-e-more-5",
-      "prompt": "What is one more than 5?",
-      "visual": {
-        "item": "apple",
-        "count": 5
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "7"
-        }
-      ],
-      "correctId": "c",
-      "hint": "Count on one from 5.",
-      "explanation": "One more than 5 is 6.",
-      "narration": {
-        "prompt": "What is one more than five?"
-      }
-    },
-    {
       "kind": "match-pairs",
-      "id": "oml-e-match",
-      "prompt": "Match each number to one more.",
+      "id": "oml-e-match-2",
+      "prompt": "Select the card that matches the number.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
           "left": "2",
           "right": "3"
-        },
-        {
-          "id": "p2",
-          "left": "4",
-          "right": "5"
-        },
-        {
-          "id": "p3",
-          "left": "6",
-          "right": "7"
-        },
-        {
-          "id": "p4",
-          "left": "9",
-          "right": "10"
         }
       ],
-      "explanation": "Each number matches the number that is one more.",
+      "choices": ["3", "4", "5"],
+      "explanation": "One more than 2 is 3.",
       "narration": {
-        "prompt": "Match each number to one more."
+        "prompt": "Select the card that matches the number."
       },
       "mode": "one-at-a-time"
     },
     {
-      "kind": "multiple-choice",
-      "id": "oml-e-more-7",
-      "prompt": "What is one more than 7?",
-      "visual": {
-        "item": "duck",
-        "count": 7
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
+      "kind": "match-pairs",
+      "id": "oml-e-match-4",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        },
-        {
-          "id": "d",
-          "label": "9"
+          "id": "p1",
+          "left": "4",
+          "right": "5"
         }
       ],
-      "correctId": "c",
-      "hint": "Count on one from 7.",
-      "explanation": "One more than 7 is 8.",
+      "choices": ["3", "5", "6"],
+      "explanation": "One more than 4 is 5.",
       "narration": {
-        "prompt": "What is one more than seven?"
-      }
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
     },
     {
-      "kind": "multiple-choice",
-      "id": "oml-e-more-8",
-      "prompt": "What is one more than 8?",
-      "explanation": "One more than 8 is 9.",
-      "narration": {
-        "prompt": "What is one more than eight?"
-      },
-      "options": [
+      "kind": "match-pairs",
+      "id": "oml-e-match-6",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
-          "label": "10"
-        },
-        {
-          "id": "d",
-          "label": "7"
+          "id": "p1",
+          "left": "6",
+          "right": "7"
         }
       ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "choices": ["5", "7", "8"],
+      "explanation": "One more than 6 is 7.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-e-match-9",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "9",
+          "right": "10"
+        }
+      ],
+      "choices": ["8", "10", "11"],
+      "explanation": "One more than 9 is 10.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

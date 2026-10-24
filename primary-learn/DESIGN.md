@@ -516,7 +516,7 @@ The learner chip opens settings with an Edit profile action. Edit the name and b
 
 Matching is a card game, not a two-column list.
 
-Easy (`mode: one-at-a-time`): one face-up card at the top and three same-size face-down cards below. The child taps one to turn it over, then presses Check it. A right match keeps a shared colour and symbol. Then the next left card is shown (`Card 2 of 3`). Keep it on one phone screen.
+Easy (`mode: one-at-a-time`): one pair per question. The prompt is `Select the card that matches the {noun}.` The face-up card sits centred above a row of three same-size face-down cards. All four cards share width, height, radius and frame. The child taps one to turn it over, taps another to switch, then presses Check it. Do not show Card X of N, progress dots, or a grey instruction line. Keep it on one phone screen.
 
 Medium and Hard (`mode: flip`): every pair becomes two same-size cards in a fixed grid (2 columns on a phone). Cards start face up with Remember these cards, then flip over. Tap two cards. A match stays up with a shared colour and symbol (star, heart, moon, sun, leaf, drop). A miss flips back after a short pause. Show the cards lets the child peek without losing found pairs. There is no Check it. The question finishes when every pair is found. Use CSS 3D flips and respect reduced motion.
 

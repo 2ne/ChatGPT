@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 match words to numerals for 11, 12 and 13. Question 4 writes 14. Question 5 matches 15 to 18. Question 6 says 16 is 10 and 6. Question 7 orders teen numerals. Question 8 multi-select teen words. Question 9 fills fifteen. Question 10 matches 20. Hints on the first three.",
+    "within": "Questions 1 and 2 match words to numerals for 11 and 12. Question 3 writes 14. Questions 4 to 7 each match one teen word to its number. Question 8 says 16 is 10 and 6. Question 9 orders teen numerals. Question 10 matches 20. Hints on the first two.",
     "versus": "Easy matches numerals and words to 12 with clear teens. Medium stretches to 20 and ten-and-a-bit. Hard mixes reverse matching, fill-blank words and awkward teens."
   },
   "skills": [
@@ -105,38 +105,6 @@
       }
     },
     {
-      "kind": "multiple-choice",
-      "id": "rw20e-13",
-      "prompt": "Which number is thirteen?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "12"
-        },
-        {
-          "id": "b",
-          "label": "13"
-        },
-        {
-          "id": "c",
-          "label": "14"
-        },
-        {
-          "id": "d",
-          "label": "30"
-        }
-      ],
-      "correctId": "b",
-      "hint": "Thirteen is a teen number.",
-      "explanation": "Thirteen is written as 13.",
-      "narration": {
-        "prompt": "Which number is thirteen?"
-      }
-    },
-    {
       "kind": "fill-blank",
       "id": "rw20e-write-14",
       "prompt": "Type the number fourteen.",
@@ -152,34 +120,77 @@
     },
     {
       "kind": "match-pairs",
-      "id": "rw20e-match",
-      "prompt": "Match each word to its number.",
+      "id": "rw20e-match-15",
+      "prompt": "Select the card that matches the word.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
           "left": "fifteen",
           "right": "15"
-        },
+        }
+      ],
+      "choices": ["15", "16", "17"],
+      "explanation": "Fifteen is written as 15.",
+      "narration": {
+        "prompt": "Select the card that matches the word."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20e-match-16",
+      "prompt": "Select the card that matches the word.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": "sixteen",
           "right": "16"
-        },
+        }
+      ],
+      "choices": ["15", "16", "18"],
+      "explanation": "Sixteen is written as 16.",
+      "narration": {
+        "prompt": "Select the card that matches the word."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20e-match-17",
+      "prompt": "Select the card that matches the word.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p3",
+          "id": "p1",
           "left": "seventeen",
           "right": "17"
-        },
+        }
+      ],
+      "choices": ["16", "17", "18"],
+      "explanation": "Seventeen is written as 17.",
+      "narration": {
+        "prompt": "Select the card that matches the word."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20e-match-18",
+      "prompt": "Select the card that matches the word.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p4",
+          "id": "p1",
           "left": "eighteen",
           "right": "18"
         }
       ],
-      "explanation": "Each word names its number.",
+      "choices": ["16", "17", "18"],
+      "explanation": "Eighteen is written as 18.",
       "narration": {
-        "prompt": "Match each word to its number."
+        "prompt": "Select the card that matches the word."
       },
       "mode": "one-at-a-time"
     },
@@ -245,54 +256,6 @@
       "explanation": "The numbers go 11, 12, 13, 14 from smallest to biggest.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
-      }
-    },
-    {
-      "kind": "multi-select",
-      "id": "rw20e-teens",
-      "prompt": "Tap every teen number word. There are 2 to choose.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "thirteen"
-        },
-        {
-          "id": "b",
-          "label": "twenty"
-        },
-        {
-          "id": "c",
-          "label": "nineteen"
-        },
-        {
-          "id": "d",
-          "label": "ten"
-        }
-      ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
-      "explanation": "Thirteen and nineteen are teen number words.",
-      "narration": {
-        "prompt": "Tap every teen number word. There are two to choose."
-      }
-    },
-    {
-      "kind": "fill-blank",
-      "id": "rw20e-fifteen",
-      "prompt": "Type the number for fifteen.",
-      "acceptedAnswers": [
-        "15",
-        "fifteen"
-      ],
-      "inputMode": "numeric",
-      "explanation": "Fifteen is written as 15.",
-      "narration": {
-        "prompt": "Type the number for fifteen."
       }
     },
     {

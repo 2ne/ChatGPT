@@ -25,6 +25,7 @@ import {
 } from "../types/activity";
 import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
+import { matchSideKey } from "./matchSide";
 import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
 import { SHAPE_NAMES, SHAPE_COLOURS, type ShapeAsset } from "../types/shapes";
@@ -659,17 +660,38 @@ function parseQuestion(value: unknown, path: string): Question {
           right: parseMatchSide(pair.right, `${pairPath}.right`),
         };
       });
-      if (pairs.length < 2 || pairs.length > 4) {
-        fail(path, "match-pairs needs 2 to 4 pairs (at most 8 cards)");
-      }
       const writtenMode = expectString(value, "mode", path);
       if (!(MATCH_PAIRS_MODES as readonly string[]).includes(writtenMode)) {
         fail(path, "mode must be flip or one-at-a-time");
       }
-      if (writtenMode === "one-at-a-time" && pairs.length < 3) {
-        fail(path, "one-at-a-time matching needs at least 3 pairs so two other cards can sit face down");
+      let choices: MatchSide[] | undefined;
+      if (writtenMode === "one-at-a-time") {
+        if (pairs.length !== 1) {
+          fail(path, "one-at-a-time matching needs exactly 1 pair");
+        }
+        choices = expectArray(value, "choices", path).map((side, i) =>
+          parseMatchSide(side, `${path}.choices[${i}]`),
+        );
+        if (choices.length !== 3) {
+          fail(path, "one-at-a-time matching needs exactly 3 choices");
+        }
+        const keys = choices.map((side) => matchSideKey(side));
+        if (new Set(keys).size !== keys.length) {
+          fail(path, "choices must be unique");
+        }
+        const rightKey = matchSideKey(pairs[0]!.right);
+        if (!keys.includes(rightKey)) {
+          fail(path, "choices must include the pair's right side");
+        }
+      } else {
+        if (pairs.length < 2 || pairs.length > 4) {
+          fail(path, "match-pairs needs 2 to 4 pairs (at most 8 cards)");
+        }
+        if (value.choices != null) {
+          fail(path, "flip matching must not set choices");
+        }
       }
-      return { ...core, kind, pairs, mode: writtenMode as MatchPairsMode };
+      return { ...core, kind, pairs, mode: writtenMode as MatchPairsMode, choices };
     }
     case "make-total": {
       const total = expectNumber(value, "total", path);
