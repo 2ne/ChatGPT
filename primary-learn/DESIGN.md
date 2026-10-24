@@ -511,3 +511,7 @@ Drawer content scrolls in `.app-drawer-body`, a native pan-y scroll area exclude
 Everyone sees the full pathway. Onboarding asks for a name and buddy only. Do not use stored legacy year preferences to hide or jump past activities.
 
 The learner chip opens settings with an Edit profile action. Edit the name and buddy in the same scrolling drawer, using the onboarding buddy picker. Save updates the stored profile without clearing stars or attempts. Cancel or dismiss discards edits.
+
+### Matching questions
+
+Use two equal columns of stationary cards for every match-pairs question. Tap a left card, then its right partner. Keep all picture and text content in its original card; never insert a chosen answer into a slot or move/remove cards. Number badges identify chosen pairs without relying on colour. Selection, pairing and feedback must not change card dimensions. Children can revisit a left card and replace its partner. Compact object groups use rows of at most five, and shapes stay contained within their cards. Keep Check it as the scoring step.

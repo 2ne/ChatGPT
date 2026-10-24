@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-import { copy } from "../../data/copy";
 import { matchSideKey, matchSideLabel, matchSideVisual } from "../../lib/matchSide";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
 import { ObjectGroup } from "./ObjectGroup";
-import { choiceClass, type Reveal } from "./choice";
+import { type Reveal } from "./choice";
 import { ShapePicture } from "./ShapePicture";
 
 type MatchPairsProps = {
@@ -22,7 +21,7 @@ function SideView({ side }: { side: MatchSide }) {
   return (
     <span className="option-content">
       {shape ? <ShapePicture shape={shape} compact /> : null}
-      {visual ? <ObjectGroup visual={visual} compact layout={layout} /> : null}
+      {visual ? <ObjectGroup visual={visual} compact pack layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
       {!visual && !shape && !label ? matchSideLabel(side) : null}
     </span>
@@ -60,50 +59,47 @@ export function MatchPairs({ question, answer, disabled, reveal, onChange }: Mat
     if (following) setActiveId(following.id);
   }
 
+  const completed = question.pairs.filter(pair => map[pair.id]).length;
+  const statusFor = (id: string) => {
+    const pair = question.pairs.find(pair => pair.id === id);
+    if (!reveal || !pair) return "";
+    return map[id] === matchSideKey(pair.right) ? " is-correct" : " is-wrong";
+  };
   return (
-    <div className="option-stack">
-      <p className="t-body">{copy.tapThenPartner}</p>
-      <div className="match-board">
-        {question.pairs.map((pair) => {
-          const chosen = map[pair.id] ?? "";
-          const marked =
-            reveal == null ? null : chosen === matchSideKey(pair.right) ? "correct" : "wrong";
-          const chosenSide = chosen ? rightByKey.get(chosen) : undefined;
-          return (
-            <button
-              key={`${question.id}-${pair.id}`}
-              type="button"
-              disabled={disabled}
+    <div className="pair-match">
+      <p className="t-body">Tap a card on the left, then its partner on the right.</p>
+      <div className="pair-match-grid">
+        <div className="pair-match-column" role="group" aria-label="Cards to match">
+          {question.pairs.map((pair, index) => (
+            <button key={pair.id} type="button" disabled={disabled}
               aria-pressed={activeId === pair.id}
+              aria-label={`Card ${index + 1}. ${matchSideLabel(pair.left)}.${map[pair.id] ? ` Paired with ${matchSideLabel(rightByKey.get(map[pair.id])!)}. Tap to change.` : " Choose a partner."}`}
               onClick={() => setActiveId(pair.id)}
-              className={`match-row ${choiceClass(activeId === pair.id, marked)}`}
-            >
+              className={`pair-match-card${activeId === pair.id ? " is-active" : ""}${map[pair.id] ? " is-paired" : ""}${statusFor(pair.id)}`}>
+              <span className="pair-match-badge" aria-hidden>{index + 1}</span>
               <SideView side={pair.left} />
-              <span className={`match-slot${chosen ? " is-filled" : ""}`}>
-                {chosenSide ? <SideView side={chosenSide} /> : copy.matchChoose}
-              </span>
+              {reveal ? <span className="pair-match-result" aria-hidden>{statusFor(pair.id) === " is-correct" ? "✓" : "×"}</span> : null}
             </button>
-          );
-        })}
-      </div>
-      <div className="match-bank" role="group" aria-label={copy.matchPartners}>
-        {rights.map((key, index) => {
-          const used = Object.values(map).includes(key);
-          const side = rightByKey.get(key);
-          return (
-            <button
-              key={`${key}-${index}`}
-              type="button"
-              disabled={disabled}
-              aria-pressed={used}
+          ))}
+        </div>
+        <div className="pair-match-column" role="group" aria-label="Partners">
+          {rights.map(key => {
+            const owner = question.pairs.findIndex(pair => map[pair.id] === key);
+            const pair = question.pairs[owner];
+            const side = rightByKey.get(key)!;
+            return <button key={key} type="button" disabled={disabled}
+              aria-pressed={Boolean(pair && pair.id === activeId)}
+              aria-label={`${matchSideLabel(side)}.${pair ? ` Paired with card ${owner + 1}.` : " Not paired yet."}`}
               onClick={() => assign(key)}
-              className={`match-chip${used ? " is-used" : ""}`}
-            >
-              {side ? <SideView side={side} /> : key}
-            </button>
-          );
-        })}
+              className={`pair-match-card${pair ? " is-paired" : ""}${pair?.id === activeId ? " is-active" : ""}${pair ? statusFor(pair.id) : ""}`}>
+                <span className="pair-match-badge" aria-hidden style={{ visibility: pair ? "visible" : "hidden" }}>{owner + 1}</span>
+                <SideView side={side} />
+                {reveal && pair ? <span className="pair-match-result" aria-hidden>{statusFor(pair.id) === " is-correct" ? "✓" : "×"}</span> : null}
+              </button>;
+          })}
+        </div>
       </div>
+      <p className="pair-match-status" role="status" aria-live="polite">{completed} of {question.pairs.length} pairs chosen.</p>
     </div>
   );
 }

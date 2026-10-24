@@ -4621,3 +4621,22 @@ button.object-token {
 .profile-editor .field { gap: 12px; }
 .profile-editor .field input { min-height: 64px; font-size: 22px; }
 .profile-editor .avatar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Matching cards keep their content and footprint throughout selection. */
+.pair-match { display: grid; gap: 12px; }
+.pair-match-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.pair-match-column { display: grid; grid-auto-rows: 1fr; gap: 10px; min-width: 0; }
+.pair-match-card { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 112px; padding: 30px 8px 12px; border: 2px solid var(--line); border-radius: 18px; background: var(--card); font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.pair-match-card.is-paired { background: var(--primary-soft); border-color: var(--primary); }
+.pair-match-card.is-active { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.pair-match-card.is-correct { border-color: var(--green); background: var(--green-soft); }
+.pair-match-card.is-wrong { border-color: var(--red); background: var(--red-soft); }
+.pair-match-badge { position: absolute; top: 6px; left: 8px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-family: var(--font-body); font-size: 12px; font-weight: 800; color: var(--primary-deep); background: var(--primary-soft); }
+.pair-match-card.is-paired .pair-match-badge { color: white; background: var(--primary); }
+.pair-match-result { position: absolute; top: 6px; right: 8px; font-size: 20px; }
+.pair-match-card .option-content { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
+.pair-match-card .shape-picture.is-compact { width: 72px; max-width: 100%; }
+.pair-match-card .object-group.is-amount .object-token { min-width: 20px; min-height: 20px; width: 20px; height: 20px; font-size: 17px; padding: 0; border-radius: 5px; }
+.pair-match-card .object-row { gap: 2px; }
+.pair-match-card .object-group.is-amount { gap: 3px; }
+.pair-match-status { color: var(--ink-soft); font-size: 14px; text-align: center; }
