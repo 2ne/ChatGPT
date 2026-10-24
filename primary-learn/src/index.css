@@ -4055,6 +4055,7 @@ button.object-token {
 .level-sheet-heading .sheet-title {
   display: block;
   margin: 0;
+  font-size: 1.25rem;
   line-height: 1.2;
 }
 
