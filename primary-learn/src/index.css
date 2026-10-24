@@ -4555,3 +4555,8 @@ button.object-token {
 
 /* Native content scrolling stays separate from the draggable handle. */
 .app-drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+
+/* A year heading stays visible within its own group as the topic list scrolls. */
+.toc-years { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.toc-year-group { position: relative; min-width: 0; }
+.toc-year-group > .toc-year-head { position: sticky; top: 0; z-index: 2; margin: 0 0 6px; padding: 10px 0; background: var(--card); }
