@@ -519,3 +519,7 @@ The question header close button opens a bottom sheet using the level-picker sty
 ### Shared drawers
 
 All four sheets (levels, topics, settings and quest exit) use `Sheet.tsx` with Vaul. Keep the controlled root mounted during closing so exit animations finish. Use the shared `SheetTitle`, portal, overlay and drag handle. Drawers rise from the bottom on phone and desktop, with a 480px width cap. Preserve safe-area padding and reduced-motion support. Do not scale or recolour the page behind the drawer.
+
+### Learner year group
+
+Onboarding asks for Reception or Years 1 to 6 after the buddy choice. Save the canonical year ID in the existing `preferredYearGroup` profile field. The greeting year button and floating topic menu let learners change it using Vaul drawers. Wait until the drawer closes before jumping the map, so scroll restoration does not undo the jump. The selected year changes the starting position and suggested learner marker, never filters or locks content. Include all years even where activities are coming soon. Keep all stars and existing storage keys. Legacy null profiles retain their previous suggested stop until a year is chosen.

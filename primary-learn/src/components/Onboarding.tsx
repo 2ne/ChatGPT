@@ -1,3 +1,5 @@
+import { YearChoices } from "./YearChoices";
+import type { YearGroup } from "../types/curriculum";
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { AVATARS } from "../data/avatars";
@@ -13,6 +15,7 @@ type OnboardingProps = {
 export function Onboarding({ onComplete }: OnboardingProps) {
   const [name, setName] = useState("");
   const [avatarId, setAvatarId] = useState<LearnerAvatarId>("fox");
+  const [year, setYear] = useState<YearGroup>("Reception");
   const [error, setError] = useState<string | null>(null);
 
   function handleSubmit(event: FormEvent) {
@@ -31,7 +34,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     onComplete({
       name: trimmed,
       avatarId,
-      preferredYearGroup: null,
+      preferredYearGroup: year,
       createdAt: now,
       updatedAt: now,
     });
@@ -95,6 +98,8 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               })}
             </div>
           </fieldset>
+
+          <fieldset className="onboard-years"><legend className="t-title-sm">{copy.schoolYearQuestion}</legend><YearChoices value={year} onSelect={setYear} /></fieldset>
 
           {error ? (
             <p className="feedback is-wrong" role="alert">

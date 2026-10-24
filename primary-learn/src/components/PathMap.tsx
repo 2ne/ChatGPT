@@ -1,3 +1,5 @@
+import { YEAR_GROUP_LABELS } from "../data/labels";
+import type { YearGroup } from "../types/curriculum";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Star, Trophy } from "lucide-react";
 import type { LevelState } from "../lib/path";
@@ -8,6 +10,9 @@ import { TopicNav, type TopicSection } from "./TopicNav";
 
 type PathMapProps = {
   levels: LevelState[];
+  preferredYear: YearGroup | null;
+  yearVisit: number;
+  onYearChange: (year: YearGroup) => void;
   learnerEmoji: string;
   learnerName: string;
   onPlay: (activityId: string) => void;
@@ -104,22 +109,29 @@ function placeSign(samples: Point[], signY: number): SignPlacement {
   };
 }
 
-export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapProps) {
+export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYear, onYearChange, yearVisit }: PathMapProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [openLevel, setOpenLevel] = useState<LevelState | null>(null);
   const [visibleId, setVisibleId] = useState(levels[0]?.category.id ?? "");
 
   const currentIndex = useMemo(() => {
+    if (preferredYear && YEAR_GROUP_LABELS[preferredYear]) {
+      const inYear = (level: LevelState) => level.category.year === YEAR_GROUP_LABELS[preferredYear];
+      const next = levels.findIndex(level => inYear(level) && level.status !== "done" && level.status !== "soon");
+      if (next >= 0) return next;
+      const first = levels.findIndex(inYear);
+      if (first >= 0) return first;
+    }
     const current = levels.findIndex((level) => level.status === "current");
     if (current >= 0) return current;
     for (let i = levels.length - 1; i >= 0; i -= 1) {
       if (levels[i].status === "done") return i;
     }
     return 0;
-  }, [levels]);
+  }, [levels, preferredYear]);
 
   // The "you are here" badge floats above the current level, so a sign needs more room there.
-  const markerIndex = levels[currentIndex].status === "current" ? currentIndex : -1;
+  const markerIndex = currentIndex;
 
   const layout = useMemo(() => {
     // Level 1 sits at the top; the road runs down the page.
@@ -216,6 +228,17 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
     zones.forEach((zone) => observer.observe(zone));
     return () => observer.disconnect();
   }, [layout.bands]);
+
+  useEffect(() => {
+    if (!preferredYear || !YEAR_GROUP_LABELS[preferredYear]) return;
+    const frame = requestAnimationFrame(() => {
+      const section = sections.find(item => item.year === YEAR_GROUP_LABELS[preferredYear]);
+      if (!section || !frameRef.current) return;
+      const top = frameRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: preferredYear === "Reception" ? 0 : Math.max(0, top + section.signY - 28), behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [preferredYear, yearVisit]);
 
   function jumpToSection(section: TopicSection) {
     const frame = frameRef.current;
@@ -345,6 +368,8 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay }: PathMapPr
         visibleId={visibleId}
         learnerEmoji={learnerEmoji}
         onJump={jumpToSection}
+        preferredYear={preferredYear}
+        onYearChange={onYearChange}
       />
 
       <LevelSheet

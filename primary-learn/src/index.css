@@ -4539,3 +4539,11 @@ button.object-token {
 @media (prefers-reduced-motion: reduce) {
   [data-vaul-drawer], [data-vaul-overlay] { animation: none !important; transition: none !important; }
 }
+
+.onboard-years { border: 0; padding: 0; margin: 0; min-width: 0; }
+.onboard-years legend { margin-bottom: 16px; }
+.year-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0 20px; }
+.year-choice { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; padding: 10px; border: 2px solid var(--line); color: var(--ink); background: white; font-weight: 700; }
+.year-choice.is-selected { border-color: var(--primary); background: var(--primary-soft); }
+.year-choice:focus-visible, .hero-year:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+.hero-year { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; margin: 8px 0; border: 2px solid rgba(255,255,255,.5); background: white; color: var(--ink); font-size: 17px; }

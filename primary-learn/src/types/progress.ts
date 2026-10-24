@@ -15,7 +15,7 @@ export type LearnerAvatarId =
 export type LearnerProfile = {
   name: string;
   avatarId: LearnerAvatarId;
-  /** Preferred year filter on the home screen; null means show a mixed catalogue. */
+  /** Preferred pathway starting year. Null preserves legacy profiles. */
   preferredYearGroup: string | null;
   createdAt: string;
   updatedAt: string;
