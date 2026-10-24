@@ -38,6 +38,6 @@ export function TurnPicture({ turn, steps }: { turn: TurnDiagram; steps?: number
       <div className="car-turn-ghost" style={{ transform: `rotate(${turn.start * 90}deg)` }} aria-hidden><ToyCar /></div>
       <div ref={car} className="car-turn-car" style={{ transform: `rotate(${(turn.start + delta) * 90}deg)`, "--turn-duration": steps != null ? "250ms" : "0ms" } as CSSProperties} aria-hidden><ToyCar /></div>
     </div>
-    {turn.showEnd ? <button className="btn btn-ghost" type="button" onClick={() => setReplay(x => x + 1)}><RotateCw size={20} aria-hidden />Watch again</button> : <figcaption>The headlights show the front.</figcaption>}
+    {turn.showEnd ? <button className="btn btn-ghost turn-replay" type="button" onClick={() => setReplay(x => x + 1)}><RotateCw size={20} aria-hidden />Watch again</button> : <figcaption>The headlights show the front.</figcaption>}
   </figure>;
 }

@@ -4530,7 +4530,9 @@ button.object-token {
 .car-turn-car, .car-turn-ghost { position: absolute; inset: 25px; }
 .car-turn-car { transition: transform var(--turn-duration) ease-in-out; }
 .car-turn-ghost { opacity: .18; }
-.car-turn svg { display: block; width: 100%; height: 100%; }
+.car-turn-stage svg { display: block; width: 100%; height: 100%; }
+.car-turn .turn-replay { white-space: nowrap; gap: 8px; }
+.car-turn .turn-replay svg { width: 1em; height: 1em; flex: 0 0 1em; }
 .car-start-label { position: absolute; bottom: 3px; left: 0; right: 0; font-size: 12px; color: var(--ink-soft); }
 .car-turn figcaption, .turn-description { font-size: 15px; text-align: center; color: var(--ink-soft); margin: 10px 0; }
 .car-choice svg { width: 100px; height: 100px; }
