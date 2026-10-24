@@ -4667,26 +4667,6 @@ button.object-token {
   height: 120px;
 }
 
-/* Easy cards must paint their face. Phone browsers hide rotateY + backface-visibility. */
-.match-turn .match-card {
-  perspective: none;
-}
-
-.match-turn .match-card-inner,
-.match-turn .match-card.is-up .match-card-inner {
-  transform: none;
-  transform-style: flat;
-  transition: none;
-}
-
-.match-turn .match-card-face,
-.match-turn .match-card-front {
-  transform: none;
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
-  overflow: visible;
-}
-
 .match-turn-target {
   display: grid;
   place-items: center;
@@ -4696,11 +4676,6 @@ button.object-token {
   border-radius: 18px;
   background: var(--card);
   pointer-events: none;
-}
-
-.match-turn .match-card:not(.is-up) .match-card-front,
-.match-turn .match-card.is-up .match-card-back {
-  visibility: hidden;
 }
 
 @media (min-width: 560px) {
@@ -4722,7 +4697,6 @@ button.object-token {
   border: 0;
   background: transparent;
   cursor: pointer;
-  perspective: 900px;
 }
 
 .match-card:focus-visible {
@@ -4735,24 +4709,21 @@ button.object-token {
   display: grid;
   width: 100%;
   min-height: 96px;
-  transform-style: preserve-3d;
-  transition: transform 420ms ease;
+  transform: scaleX(1);
+  transition: transform 150ms ease;
 }
 
-.match-card.is-up .match-card-inner {
-  transform: rotateY(180deg);
+.match-card.is-squeeze .match-card-inner {
+  transform: scaleX(0);
 }
 
 .match-card-face {
-  grid-area: 1 / 1;
   display: grid;
   place-items: center;
   min-height: 96px;
   padding: 12px 8px;
   border: 2.5px solid var(--line);
   border-radius: 18px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .match-card-back {
@@ -4772,7 +4743,6 @@ button.object-token {
 }
 
 .match-card-front {
-  transform: rotateY(180deg);
   background: var(--card);
 }
 
