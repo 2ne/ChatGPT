@@ -11,7 +11,6 @@ import { TopicNav, type TopicSection } from "./TopicNav";
 type PathMapProps = {
   levels: LevelState[];
   preferredYear: YearGroup | null;
-  yearVisit: number;
   learnerEmoji: string;
   learnerName: string;
   onPlay: (activityId: string) => void;
@@ -108,7 +107,7 @@ function placeSign(samples: Point[], signY: number): SignPlacement {
   };
 }
 
-export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYear, yearVisit }: PathMapProps) {
+export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYear }: PathMapProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [openLevel, setOpenLevel] = useState<LevelState | null>(null);
   const [visibleId, setVisibleId] = useState(levels[0]?.category.id ?? "");
@@ -227,17 +226,6 @@ export function PathMap({ levels, learnerEmoji, learnerName, onPlay, preferredYe
     zones.forEach((zone) => observer.observe(zone));
     return () => observer.disconnect();
   }, [layout.bands]);
-
-  useEffect(() => {
-    if (!preferredYear || !YEAR_GROUP_LABELS[preferredYear]) return;
-    const frame = requestAnimationFrame(() => {
-      const section = sections.find(item => item.year === YEAR_GROUP_LABELS[preferredYear]);
-      if (!section || !frameRef.current) return;
-      const top = frameRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: preferredYear === "Reception" ? 0 : Math.max(0, top + section.signY - 28), behavior: "instant" });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [preferredYear, yearVisit]);
 
   function jumpToSection(section: TopicSection) {
     const frame = frameRef.current;

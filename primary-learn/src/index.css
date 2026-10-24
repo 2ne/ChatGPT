@@ -4560,3 +4560,6 @@ button.object-token {
 .toc-years { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
 .toc-year-group { position: relative; min-width: 0; }
 .toc-year-group > .toc-year-head { position: sticky; top: 0; z-index: 2; margin: 0 0 6px; padding: 10px 0; background: var(--card); }
+
+.path-year-start { display: flex; justify-content: center; scroll-margin-top: 16px; }
+.path-earlier-toggle { margin: 24px 0 8px; border-radius: var(--radius-pill); }
