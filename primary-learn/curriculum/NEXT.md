@@ -4,8 +4,8 @@ Priority: Medium / Hard on partial or Easy-only nodes first, else first missing 
 
 | | |
 | --- | --- |
-| Next missing Easy | `y1-represent-100` — Show and compare numbers (node 19) |
-| Shipped full Easy / Medium / Hard | `eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5`, `eyfs-bonds-5`, `eyfs-count-10`, `eyfs-compare-10`, `eyfs-compose-10`, `eyfs-bonds-10-some`, `eyfs-patterns-10`, `eyfs-count-20plus`, `y1-read-write-20`, `y1-1-more-less`, `y1-bonds-10`, `y1-bonds-20`, `y1-add-sub-20`, `y1-shapes`, `y1-turns`, `y1-count-100` |
+| Next missing Easy | `y1-count-2-5-10` — Count in 2s, 5s and 10s (node 20) |
+| Shipped full Easy / Medium / Hard | `eyfs-count-5`, `eyfs-subitise-5`, `eyfs-compose-5`, `eyfs-bonds-5`, `eyfs-count-10`, `eyfs-compare-10`, `eyfs-compose-10`, `eyfs-bonds-10-some`, `eyfs-patterns-10`, `eyfs-count-20plus`, `y1-read-write-20`, `y1-1-more-less`, `y1-bonds-10`, `y1-bonds-20`, `y1-add-sub-20`, `y1-shapes`, `y1-turns`, `y1-count-100`, `y1-represent-100` |
 | Partial nodes | none |
 
 Do not build a later *new* node while an earlier node is still `missing`.

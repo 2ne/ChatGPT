@@ -231,7 +231,7 @@ Requires: `y1-turns`. Quest: `count-to-100`, `count-to-100-medium`, `count-to-10
 
 ### 19. `y1-represent-100` — Show and compare numbers
 
-Requires: `y1-count-100`. Quest: none. Status: missing.
+Requires: `y1-count-100`. Quest: `show-and-compare-numbers`, `show-and-compare-numbers-medium`, `show-and-compare-numbers-hard`. Status: done.
 
 - Identify and represent numbers using objects and pictorial representations, including the number line
 - Use the language equal to, more than, less than (fewer), most and least

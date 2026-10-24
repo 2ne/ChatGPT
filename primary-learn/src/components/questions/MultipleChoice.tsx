@@ -73,6 +73,13 @@ export function MultipleChoice({
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
     <div className="option-stack">
+      {question.numberLine ? <svg viewBox="0 0 360 100" role="img" aria-label={`Number line from ${question.numberLine.start} to ${question.numberLine.end}, with a missing label at the marked tick.`} style={{ width: "100%", maxWidth: 440, margin: "0 auto 16px", overflow: "visible" }}>
+        <line x1="20" y1="45" x2="340" y2="45" stroke="currentColor" strokeWidth="2" />
+        {Array.from({ length: question.numberLine.end - question.numberLine.start + 1 }, (_, i) => {
+          const n = question.numberLine!; const value = n.start + i; const x = 20 + i * 320 / (n.end - n.start);
+          return <g key={value}><line x1={x} x2={x} y1="39" y2="51" stroke="currentColor" strokeWidth="2" /><text x={x} y="76" textAnchor="middle" fontSize="16" fill="currentColor">{value === n.marked ? "?" : value}</text>{value === n.marked ? <path d={`M ${x-5} 25 L ${x+5} 25 L ${x} 34 Z`} fill="currentColor" /> : null}</g>;
+        })}
+      </svg> : null}
       {question.position ? <PositionPicture scene={question.position} /> : null}
       {sum ? (
         <div className={`make-total-sum${reveal === "correct" ? " is-correct" : reveal === "incorrect" ? " is-wrong" : ""}`}>

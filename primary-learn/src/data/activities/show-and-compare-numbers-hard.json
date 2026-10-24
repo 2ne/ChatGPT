@@ -1,0 +1,365 @@
+{
+  "id": "show-and-compare-numbers-hard",
+  "title": "Show and compare numbers",
+  "summary": "Use pictures and number lines to compare numbers.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-represent-100",
+  "pathNode": "y1-represent-100",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Start with quantities shown as apples, compare fewer and equal groups, identify two marked number-line positions, then compare more, less, most and least before ordering four numbers.",
+    "versus": "Easy uses pictures to 8 and numerals in the teens. Medium uses pictures to 14 and numerals around 40 to 60. Hard uses pictures to 20 and closely spaced numerals around 90 to 100. All levels use the same representations with progressively larger quantities."
+  },
+  "skills": [
+    "represent-numbers",
+    "number-lines",
+    "compare-quantities"
+  ],
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "How many apples can you see?",
+      "options": [
+        {
+          "id": "0",
+          "label": "17"
+        },
+        {
+          "id": "1",
+          "label": "18"
+        },
+        {
+          "id": "2",
+          "label": "19"
+        },
+        {
+          "id": "3",
+          "label": "20"
+        }
+      ],
+      "correctId": "1",
+      "explanation": "There are 18 apples.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "visual": {
+        "item": "apple",
+        "count": 18
+      },
+      "layout": "row",
+      "id": "represent100-3-1"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which group has fewer than 18 apples?",
+      "options": [
+        {
+          "id": "0",
+          "visual": {
+            "item": "apple",
+            "count": 16
+          }
+        },
+        {
+          "id": "1",
+          "visual": {
+            "item": "apple",
+            "count": 18
+          }
+        },
+        {
+          "id": "2",
+          "visual": {
+            "item": "apple",
+            "count": 19
+          }
+        },
+        {
+          "id": "3",
+          "visual": {
+            "item": "apple",
+            "count": 20
+          }
+        }
+      ],
+      "correctId": "0",
+      "explanation": "16 is less than 18.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "represent100-3-2"
+    },
+    {
+      "kind": "match-pairs",
+      "prompt": "Match each group to an equal number of apples.",
+      "pairs": [
+        {
+          "id": "0",
+          "left": {
+            "visual": {
+              "item": "apple",
+              "count": 15
+            }
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 15
+            }
+          }
+        },
+        {
+          "id": "1",
+          "left": {
+            "visual": {
+              "item": "apple",
+              "count": 17
+            }
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 17
+            }
+          }
+        },
+        {
+          "id": "2",
+          "left": {
+            "visual": {
+              "item": "apple",
+              "count": 18
+            }
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 18
+            }
+          }
+        }
+      ],
+      "explanation": "Equal groups have the same number of apples.",
+      "id": "represent100-3-3"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number belongs at the marked tick?",
+      "options": [
+        {
+          "id": "0",
+          "label": "91"
+        },
+        {
+          "id": "1",
+          "label": "92"
+        },
+        {
+          "id": "2",
+          "label": "93"
+        },
+        {
+          "id": "3",
+          "label": "94"
+        }
+      ],
+      "correctId": "1",
+      "explanation": "The marked tick is 92. Each tick is one more than the tick before it.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "numberLine": {
+        "start": 90,
+        "end": 96,
+        "marked": 92
+      },
+      "id": "represent100-3-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number belongs at the marked tick?",
+      "options": [
+        {
+          "id": "0",
+          "label": "94"
+        },
+        {
+          "id": "1",
+          "label": "95"
+        },
+        {
+          "id": "2",
+          "label": "96"
+        },
+        {
+          "id": "3",
+          "label": "97"
+        }
+      ],
+      "correctId": "1",
+      "explanation": "The marked tick is 95. Each tick is one more than the tick before it.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "numberLine": {
+        "start": 90,
+        "end": 96,
+        "marked": 95
+      },
+      "id": "represent100-3-5"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Select the two numbers that are more than 96.",
+      "options": [
+        {
+          "id": "0",
+          "label": "97"
+        },
+        {
+          "id": "1",
+          "label": "95"
+        },
+        {
+          "id": "2",
+          "label": "98"
+        },
+        {
+          "id": "3",
+          "label": "96"
+        }
+      ],
+      "explanation": "97 and 98 are both more than 96.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "represent100-3-6",
+      "correctIds": [
+        "0",
+        "2"
+      ]
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number is less than 96?",
+      "options": [
+        {
+          "id": "0",
+          "label": "98"
+        },
+        {
+          "id": "1",
+          "label": "96"
+        },
+        {
+          "id": "2",
+          "label": "95"
+        },
+        {
+          "id": "3",
+          "label": "97"
+        }
+      ],
+      "correctId": "2",
+      "explanation": "95 is less than 96.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "represent100-3-7"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number is the most?",
+      "options": [
+        {
+          "id": "0",
+          "label": "93"
+        },
+        {
+          "id": "1",
+          "label": "96"
+        },
+        {
+          "id": "2",
+          "label": "98"
+        },
+        {
+          "id": "3",
+          "label": "95"
+        }
+      ],
+      "correctId": "2",
+      "explanation": "98 is the biggest number in this group.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "represent100-3-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which number is the least?",
+      "options": [
+        {
+          "id": "0",
+          "label": "98"
+        },
+        {
+          "id": "1",
+          "label": "94"
+        },
+        {
+          "id": "2",
+          "label": "96"
+        },
+        {
+          "id": "3",
+          "label": "97"
+        }
+      ],
+      "correctId": "1",
+      "explanation": "94 is the smallest number in this group.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "represent100-3-9"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "2",
+          "label": "96"
+        },
+        {
+          "id": "0",
+          "label": "93"
+        },
+        {
+          "id": "3",
+          "label": "99"
+        },
+        {
+          "id": "1",
+          "label": "95"
+        }
+      ],
+      "correctOrder": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "explanation": "The numbers go 93, 95, 96, 99.",
+      "id": "represent100-3-10"
+    }
+  ]
+}

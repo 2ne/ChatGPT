@@ -487,7 +487,15 @@ function parseQuestion(value: unknown, path: string): Question {
     if (kind !== "multiple-choice" || turn || shape || visual || extras || layout || flashMs != null) fail(path, "position scenes use choice questions without other pictures");
     position = p as unknown as typeof position;
   }
-  const core = { id, prompt, explanation, hint, narration, visual, shape, turn, position, extras, layout, flashMs, randomise };
+  let numberLine: { start: number; end: number; marked: number } | undefined;
+  if (value.numberLine != null) {
+    const n = value.numberLine;
+    if (!isRecord(n) || !Number.isInteger(n.start) || !Number.isInteger(n.end) || !Number.isInteger(n.marked)) fail(path, "number line needs whole numbers");
+    const start = n.start as number, end = n.end as number, marked = n.marked as number;
+    if (start < 0 || end > 100 || end <= start || end - start > 10 || marked <= start || marked >= end || kind !== "multiple-choice") fail(path, "invalid number line range");
+    numberLine = { start, end, marked };
+  }
+  const core = { numberLine, id, prompt, explanation, hint, narration, visual, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,

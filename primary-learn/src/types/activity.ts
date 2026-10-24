@@ -130,6 +130,7 @@ export type PositionScene = { object: "tree" | "box" | "kite" | "bird"; relation
 export type TurnDiagram = { start: 0 | 1 | 2 | 3; quarters: 1 | 2 | 3 | 4; clockwise: boolean; showEnd: boolean; interactive?: boolean };
 
 type QuestionCore = {
+  numberLine?: { start: number; end: number; marked: number };
   position?: PositionScene;
   turn?: TurnDiagram;
   id: string;
