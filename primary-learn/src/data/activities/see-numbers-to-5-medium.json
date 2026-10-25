@@ -44,36 +44,23 @@
   "questions": [
     {
       "id": "s5-2-1",
-      "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "kind": "fill-blank",
+      "prompt": "Type how many {items} you can see.",
       "visual": {
         "item": "star",
         "count": 3
       },
       "layout": "dice",
       "flashMs": 1100,
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        }
-      ],
-      "correctId": "a",
       "explanation": "The dice shows 3. The middle pip is not a fourth.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "Type how many {items} you can see."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "s5-2-2",
@@ -110,35 +97,22 @@
     },
     {
       "id": "s5-2-3",
-      "kind": "multiple-choice",
-      "prompt": "How many fingers can you see?",
+      "kind": "fill-blank",
+      "prompt": "Type how many fingers you can see.",
       "visual": {
         "item": "star",
         "count": 4
       },
       "layout": "fingers",
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        }
-      ],
-      "correctId": "b",
       "explanation": "4 fingers are up. The thumb is still down.",
       "narration": {
-        "prompt": "How many fingers can you see?"
+        "prompt": "Type how many fingers you can see."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "s5-2-4",
@@ -221,8 +195,8 @@
     },
     {
       "id": "s5-2-6",
-      "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "kind": "fill-blank",
+      "prompt": "Type how many you can see in all.",
       "tenFrame": {
         "count": 4,
         "item": "frog",
@@ -231,28 +205,15 @@
           2
         ]
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        }
-      ],
-      "correctId": "b",
       "explanation": "2 and 2 make 4. That is a double, not 2.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "Type how many you can see in all."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "s5-2-7",

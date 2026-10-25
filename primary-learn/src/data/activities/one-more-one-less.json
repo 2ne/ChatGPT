@@ -62,39 +62,22 @@
     },
     {
       "id": "oml-1-2",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What is one less than 6?",
       "tenFrame": {
         "count": 6,
         "item": "frog"
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        },
-        {
-          "id": "d",
-          "label": "7"
-        }
-      ],
-      "correctId": "c",
       "hint": "Count back one from 6.",
       "explanation": "One less than 6 is 5. Not one more.",
       "narration": {
         "prompt": "What is one less than 6?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-1-3",
@@ -195,34 +178,17 @@
     },
     {
       "id": "oml-1-6",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "5 is one more than ?",
-      "options": [
-        {
-          "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        },
-        {
-          "id": "d",
-          "label": "4"
-        }
-      ],
-      "correctId": "d",
       "explanation": "5 is one more than 4. One less than 5 is the number before.",
       "narration": {
         "prompt": "5 is one more than what?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-1-7",
@@ -310,40 +276,23 @@
     },
     {
       "id": "oml-1-10",
-      "kind": "multiple-choice",
-      "prompt": "What is one less than the marked number?",
+      "kind": "fill-blank",
+      "prompt": "Type one less than the marked number.",
       "numberLine": {
         "start": 0,
         "end": 10,
         "scale": "ones",
         "marked": 7
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "8"
-        }
-      ],
-      "correctId": "c",
       "explanation": "The mark is 7. One less is the tick before, 6.",
       "narration": {
-        "prompt": "What is one less than the marked number?"
+        "prompt": "Type one less than the marked number."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "6",
+        "six"
+      ],
+      "inputMode": "numeric"
     }
   ]
 }

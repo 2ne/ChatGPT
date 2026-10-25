@@ -26,39 +26,21 @@
   "questions": [
     {
       "id": "c100-3-1",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number is this?",
       "baseTen": {
         "tens": 3,
         "ones": 4,
         "style": "plain"
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "7"
-        },
-        {
-          "id": "b",
-          "label": "30"
-        },
-        {
-          "id": "c",
-          "label": "33"
-        },
-        {
-          "id": "d",
-          "label": "34"
-        }
-      ],
-      "correctId": "d",
       "explanation": "3 tens and 4 ones make 34. Not 7 and not 30.",
       "narration": {
         "prompt": "What number is this?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "34"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-3-2",
@@ -110,11 +92,11 @@
       "options": [
         {
           "id": "a",
-          "label": "90"
+          "label": "100"
         },
         {
           "id": "b",
-          "label": "98"
+          "label": "101"
         },
         {
           "id": "c",
@@ -122,11 +104,11 @@
         },
         {
           "id": "d",
-          "label": "101"
+          "label": "110"
         }
       ],
       "correctId": "c",
-      "explanation": "Left of 100 is 99. Do not jump to 90.",
+      "explanation": "Left of 100 is 99. Do not step the other way.",
       "narration": {
         "prompt": "Which number is left of 100?"
       },
@@ -136,65 +118,31 @@
     },
     {
       "id": "c100-3-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes after 99?",
-      "options": [
-        {
-          "id": "a",
-          "label": "90"
-        },
-        {
-          "id": "b",
-          "label": "98"
-        },
-        {
-          "id": "c",
-          "label": "99"
-        },
-        {
-          "id": "d",
-          "label": "100"
-        }
-      ],
-      "correctId": "d",
       "explanation": "After 99 comes 100. That is 10 tens.",
       "narration": {
         "prompt": "What number comes after 99?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "100",
+        "one hundred"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-3-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 100?",
-      "options": [
-        {
-          "id": "a",
-          "label": "99"
-        },
-        {
-          "id": "b",
-          "label": "100"
-        },
-        {
-          "id": "c",
-          "label": "101"
-        },
-        {
-          "id": "d",
-          "label": "110"
-        }
-      ],
-      "correctId": "a",
       "explanation": "Before 100 is 99. Not 90 and not 101.",
       "narration": {
         "prompt": "What number comes before 100?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "99",
+        "ninety-nine"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-3-6",

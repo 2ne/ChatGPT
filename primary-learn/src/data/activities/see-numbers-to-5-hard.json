@@ -44,36 +44,23 @@
   "questions": [
     {
       "id": "s5-3-1",
-      "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "kind": "fill-blank",
+      "prompt": "Type how many {items} you can see.",
       "visual": {
         "item": "star",
         "count": 1
       },
       "layout": "dice",
       "flashMs": 600,
-      "options": [
-        {
-          "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        }
-      ],
-      "correctId": "a",
       "explanation": "The dice shows 1. One pip is not 2.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "Type how many {items} you can see."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "1",
+        "one"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "s5-3-2",
@@ -110,35 +97,22 @@
     },
     {
       "id": "s5-3-3",
-      "kind": "multiple-choice",
-      "prompt": "How many fingers can you see?",
+      "kind": "fill-blank",
+      "prompt": "Type how many fingers you can see.",
       "visual": {
         "item": "star",
         "count": 5
       },
       "layout": "fingers",
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        }
-      ],
-      "correctId": "b",
       "explanation": "All 5 fingers are up. Do not miss the thumb.",
       "narration": {
-        "prompt": "How many fingers can you see?"
+        "prompt": "Type how many fingers you can see."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "s5-3-4",
@@ -227,8 +201,8 @@
     },
     {
       "id": "s5-3-6",
-      "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "kind": "fill-blank",
+      "prompt": "Type how many you can see in all.",
       "tenFrame": {
         "count": 5,
         "item": "frog",
@@ -237,28 +211,15 @@
           1
         ]
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "1"
-        }
-      ],
-      "correctId": "b",
       "explanation": "4 and 1 make 5. The first 4 is only one part.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "Type how many you can see in all."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "s5-3-7",

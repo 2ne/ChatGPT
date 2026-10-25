@@ -4,7 +4,9 @@
   "summary": "Sort flat shapes from solids and spot near misses.",
   "subject": "maths",
   "type": "reasoning",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "greater-depth",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -13,55 +15,120 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 treats a square as a rectangle among near misses. Q2 names a cube as a cuboid too. Q3 matches a party hat to a pyramid. Q4 picks the solid next to flat shapes. Q5 keeps a squashed turned triangle. Q6 matches dice to a cube. Q7 picks a small cube next to a cuboid. Q8 matches a pyramid to its name. Q9 names a turned square next to a kite. Q10 picks the ball as a sphere. No hints.",
+    "within": "Q1 treats a square as a rectangle among near misses. Q2 matches a cube to cuboid. Q3 matches a party hat to a pyramid. Q4 picks the solid next to flat shapes. Q5 keeps a squashed turned triangle. Q6 matches dice to a cube. Q7 picks a small cube next to a cuboid. Q8 matches a pyramid to its name. Q9 matches a turned square to its name. Q10 picks the ball as a sphere. No hints.",
     "versus": "Easy names familiar shapes. Medium treats a square as a rectangle. Hard adds a new kind of thinking: 2D versus 3D mix-ups, a cube as a cuboid, and real objects matched to shapes."
   },
-  "skills": ["y1-shapes", "recognise-2d-shapes", "recognise-3d-shapes", "shape-orientation"],
+  "skills": [
+    "y1-shapes",
+    "recognise-2d-shapes",
+    "recognise-3d-shapes",
+    "shape-orientation"
+  ],
   "questions": [
     {
       "kind": "multiple-choice",
       "id": "shapes-3-1",
       "prompt": "Which shape is a rectangle?",
       "explanation": "A square is a rectangle too. A kite and a pentagon are not.",
-      "narration": { "prompt": "Which shape is a rectangle?" },
+      "narration": {
+        "prompt": "Which shape is a rectangle?"
+      },
       "options": [
-        { "id": "a", "shape": { "name": "square", "rotation": 14, "scale": 0.8, "colour": "green" } },
-        { "id": "b", "shape": { "name": "kite", "rotation": 18, "colour": "purple" } },
-        { "id": "c", "shape": { "name": "pentagon", "rotation": 10, "scale": 0.8, "colour": "blue" } },
-        { "id": "d", "shape": { "name": "triangle", "variant": "scalene", "rotation": 22, "colour": "orange" } }
+        {
+          "id": "a",
+          "shape": {
+            "name": "square",
+            "rotation": 14,
+            "scale": 0.8,
+            "colour": "green"
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "kite",
+            "rotation": 18,
+            "colour": "purple"
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "pentagon",
+            "rotation": 10,
+            "scale": 0.8,
+            "colour": "blue"
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "triangle",
+            "variant": "scalene",
+            "rotation": 22,
+            "colour": "orange"
+          }
+        }
       ],
       "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "match-pairs",
       "id": "shapes-3-2",
-      "prompt": "A cube is also which shape?",
+      "prompt": "Select the card that matches the shape.",
       "explanation": "A cube is a special cuboid. All its edges are the same.",
-      "narration": { "prompt": "A cube is also which shape?" },
-      "options": [
-        { "id": "a", "label": "Cuboid" },
-        { "id": "b", "label": "Sphere" },
-        { "id": "c", "label": "Pyramid" },
-        { "id": "d", "label": "Circle" }
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "shape": {
+              "name": "cube",
+              "colour": "green"
+            }
+          },
+          "right": "Cuboid"
+        }
       ],
-      "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "choices": [
+        "Cuboid",
+        "Sphere",
+        "Pyramid",
+        "Circle"
+      ],
+      "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "id": "shapes-3-3",
       "prompt": "Select the card that matches the picture.",
       "explanation": "A party hat is a pyramid. A triangle is the flat face.",
-      "narration": { "prompt": "Select the card that matches the picture." },
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
       "pairs": [
         {
           "id": "p1",
-          "left": { "shape": { "name": "cone-hat", "colour": "orange" } },
+          "left": {
+            "shape": {
+              "name": "cone-hat",
+              "colour": "orange"
+            }
+          },
           "right": "Pyramid"
         }
       ],
-      "choices": ["Pyramid", "Triangle", "Cone", "Cuboid"],
+      "choices": [
+        "Pyramid",
+        "Triangle",
+        "Cone",
+        "Cuboid"
+      ],
       "mode": "one-at-a-time"
     },
     {
@@ -69,45 +136,123 @@
       "id": "shapes-3-4",
       "prompt": "Which shape is a solid?",
       "explanation": "A sphere is solid. The circle, triangle and square are flat.",
-      "narration": { "prompt": "Which shape is a solid?" },
+      "narration": {
+        "prompt": "Which shape is a solid?"
+      },
       "options": [
-        { "id": "a", "shape": { "name": "sphere", "colour": "purple" } },
-        { "id": "b", "shape": { "name": "circle", "colour": "blue" } },
-        { "id": "c", "shape": { "name": "triangle", "rotation": 18, "colour": "green" } },
-        { "id": "d", "shape": { "name": "square", "rotation": 12, "colour": "orange" } }
+        {
+          "id": "a",
+          "shape": {
+            "name": "sphere",
+            "colour": "purple"
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "circle",
+            "colour": "blue"
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "triangle",
+            "rotation": 18,
+            "colour": "green"
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "square",
+            "rotation": 12,
+            "colour": "orange"
+          }
+        }
       ],
       "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "shapes-3-5",
       "prompt": "Which shape is a triangle?",
       "explanation": "3 straight sides make a triangle. Curved or 5 sides do not.",
-      "narration": { "prompt": "Which shape is a triangle?" },
+      "narration": {
+        "prompt": "Which shape is a triangle?"
+      },
       "options": [
-        { "id": "a", "shape": { "name": "triangle", "variant": "squashed", "rotation": 40, "scale": 0.85, "colour": "blue" } },
-        { "id": "b", "shape": { "name": "wonky", "rotation": 30, "colour": "green" } },
-        { "id": "c", "shape": { "name": "kite", "rotation": 35, "scale": 0.8, "colour": "orange" } },
-        { "id": "d", "shape": { "name": "pentagon", "rotation": 18, "scale": 0.75, "colour": "purple" } }
+        {
+          "id": "a",
+          "shape": {
+            "name": "triangle",
+            "variant": "squashed",
+            "rotation": 40,
+            "scale": 0.85,
+            "colour": "blue"
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "wonky",
+            "rotation": 30,
+            "colour": "green"
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "kite",
+            "rotation": 35,
+            "scale": 0.8,
+            "colour": "orange"
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "pentagon",
+            "rotation": 18,
+            "scale": 0.75,
+            "colour": "purple"
+          }
+        }
       ],
       "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "match-pairs",
       "id": "shapes-3-6",
       "prompt": "Select the card that matches the picture.",
       "explanation": "A dice is a cube. A longer box is a cuboid.",
-      "narration": { "prompt": "Select the card that matches the picture." },
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
       "pairs": [
         {
           "id": "p1",
-          "left": { "shape": { "name": "dice", "colour": "green" } },
+          "left": {
+            "shape": {
+              "name": "dice",
+              "colour": "green"
+            }
+          },
           "right": "Cube"
         }
       ],
-      "choices": ["Cube", "Cuboid", "Sphere", "Square"],
+      "choices": [
+        "Cube",
+        "Cuboid",
+        "Sphere",
+        "Square"
+      ],
       "mode": "one-at-a-time"
     },
     {
@@ -115,62 +260,149 @@
       "id": "shapes-3-7",
       "prompt": "Which shape is a cube?",
       "explanation": "A cube has equal square faces. A longer box is a cuboid.",
-      "narration": { "prompt": "Which shape is a cube?" },
+      "narration": {
+        "prompt": "Which shape is a cube?"
+      },
       "options": [
-        { "id": "a", "shape": { "name": "cube", "scale": 0.75, "colour": "orange" } },
-        { "id": "b", "shape": { "name": "cuboid", "variant": "wide", "colour": "blue" } },
-        { "id": "c", "shape": { "name": "sphere", "scale": 0.8, "colour": "green" } },
-        { "id": "d", "shape": { "name": "pyramid", "scale": 0.8, "colour": "purple" } }
+        {
+          "id": "a",
+          "shape": {
+            "name": "cube",
+            "scale": 0.75,
+            "colour": "orange"
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "cuboid",
+            "variant": "wide",
+            "colour": "blue"
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "sphere",
+            "scale": 0.8,
+            "colour": "green"
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "pyramid",
+            "scale": 0.8,
+            "colour": "purple"
+          }
+        }
       ],
       "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "match-pairs",
       "id": "shapes-3-8",
       "prompt": "Select the card that matches the shape.",
       "explanation": "A pyramid is a solid with a point. A triangle is flat.",
-      "narration": { "prompt": "Select the card that matches the shape." },
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
       "pairs": [
         {
           "id": "p1",
-          "left": { "shape": { "name": "pyramid", "variant": "triangular", "colour": "blue" } },
+          "left": {
+            "shape": {
+              "name": "pyramid",
+              "variant": "triangular",
+              "colour": "blue"
+            }
+          },
           "right": "Pyramid"
         }
       ],
-      "choices": ["Pyramid", "Triangle", "Cube", "Cone"],
+      "choices": [
+        "Pyramid",
+        "Triangle",
+        "Cube",
+        "Cone"
+      ],
       "mode": "one-at-a-time"
     },
     {
-      "kind": "multiple-choice",
+      "kind": "match-pairs",
       "id": "shapes-3-9",
-      "prompt": "What is this shape called?",
-      "shape": { "name": "square", "rotation": 45, "scale": 0.85, "colour": "purple" },
+      "prompt": "Select the card that matches the shape.",
       "explanation": "A turned square is still a square. A kite has unequal sides.",
-      "narration": { "prompt": "What is this shape called?" },
-      "options": [
-        { "id": "a", "label": "Square" },
-        { "id": "b", "label": "Kite" },
-        { "id": "c", "label": "Triangle" },
-        { "id": "d", "label": "Pentagon" }
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "shape": {
+              "name": "square",
+              "rotation": 45,
+              "scale": 0.85,
+              "colour": "purple"
+            }
+          },
+          "right": "Square"
+        }
       ],
-      "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "choices": [
+        "Square",
+        "Kite",
+        "Triangle",
+        "Pentagon"
+      ],
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
       "id": "shapes-3-10",
       "prompt": "Which picture is a sphere?",
       "explanation": "A ball is a sphere. A circle and a tin are not the same.",
-      "narration": { "prompt": "Which picture is a sphere?" },
+      "narration": {
+        "prompt": "Which picture is a sphere?"
+      },
       "options": [
-        { "id": "a", "shape": { "name": "ball", "colour": "orange" } },
-        { "id": "b", "shape": { "name": "circle", "colour": "blue" } },
-        { "id": "c", "shape": { "name": "tin", "colour": "green" } },
-        { "id": "d", "shape": { "name": "dice", "colour": "purple" } }
+        {
+          "id": "a",
+          "shape": {
+            "name": "ball",
+            "colour": "orange"
+          }
+        },
+        {
+          "id": "b",
+          "shape": {
+            "name": "circle",
+            "colour": "blue"
+          }
+        },
+        {
+          "id": "c",
+          "shape": {
+            "name": "tin",
+            "colour": "green"
+          }
+        },
+        {
+          "id": "d",
+          "shape": {
+            "name": "dice",
+            "colour": "purple"
+          }
+        }
       ],
       "correctId": "a",
-      "randomise": { "shuffleOptions": true }
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }

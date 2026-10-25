@@ -26,35 +26,22 @@
   "questions": [
     {
       "id": "c20-3-1",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number is this?",
       "baseTen": {
         "tens": 2,
         "ones": 3,
         "style": "plain"
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "23"
-        },
-        {
-          "id": "c",
-          "label": "32"
-        }
-      ],
-      "correctId": "b",
       "explanation": "2 tens and 3 ones make 23. Not 32 and not 5.",
       "narration": {
         "prompt": "What number is this?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "23",
+        "twenty-three"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-3-2",
@@ -123,57 +110,31 @@
     },
     {
       "id": "c20-3-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes after 29?",
-      "options": [
-        {
-          "id": "a",
-          "label": "28"
-        },
-        {
-          "id": "b",
-          "label": "29"
-        },
-        {
-          "id": "c",
-          "label": "30"
-        }
-      ],
-      "correctId": "c",
       "explanation": "After 29 comes 30. The ones go back to 0.",
       "narration": {
         "prompt": "What number comes after 29?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "30",
+        "thirty"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-3-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 20?",
-      "options": [
-        {
-          "id": "a",
-          "label": "19"
-        },
-        {
-          "id": "b",
-          "label": "20"
-        },
-        {
-          "id": "c",
-          "label": "21"
-        }
-      ],
-      "correctId": "a",
       "explanation": "Before 20 is 19. The ones become 9.",
       "narration": {
         "prompt": "What number comes before 20?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "19",
+        "nineteen"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-3-6",
@@ -182,7 +143,7 @@
       "options": [
         {
           "id": "a",
-          "label": "20"
+          "label": "23"
         },
         {
           "id": "b",
@@ -251,30 +212,17 @@
     },
     {
       "id": "c20-3-9",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "19 is 10 and how many more?",
-      "options": [
-        {
-          "id": "a",
-          "label": "8"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        }
-      ],
-      "correctId": "b",
       "explanation": "19 is 10 and 9. The 1 is the ten, not the extra.",
       "narration": {
         "prompt": "19 is 10 and how many more?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "9",
+        "nine"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-3-10",

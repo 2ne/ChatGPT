@@ -4,7 +4,9 @@
   "summary": "Add, take away and find missing numbers within 20.",
   "subject": "maths",
   "type": "reasoning",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,151 +18,275 @@
     "within": "Q1 is a pictured join. Q2 is a pictured take-away. Q3 finds a whole from two parts. Q4 completes 7 = 4 + ?. Q5 takes away with a picture. Q6 is change unknown. Q7 picks a pair that makes 8. Q8 is a pictured join across 10. Q9 compares who has more. Q10 is a pictured take-away from 12. Hints on Q1 to Q3.",
     "versus": "Easy uses small pictured stories, one balanced sum and a simple compare. Medium adds zero, crossing ten and 3 + 2 = 4 + ?. Hard adds a missing start, two steps and a harder compare."
   },
-  "skills": ["y1-add-sub-20", "addition-within-20", "subtraction-within-20", "missing-number-to-20"],
+  "skills": [
+    "y1-add-sub-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "missing-number-to-20"
+  ],
   "questions": [
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-1-1",
       "prompt": "Mia has 3 ducks. She gets 2 more. How many ducks does she have now?",
-      "visual": { "item": "duck", "count": 3, "added": 2 },
+      "visual": {
+        "item": "duck",
+        "count": 3,
+        "added": 2
+      },
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "6" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "4"
+        }
       ],
       "correctId": "a",
       "hint": "Start at 3. Count on 2 more.",
       "explanation": "3 and 2 more make 5. The first group is not the whole.",
-      "narration": { "prompt": "Mia has three ducks. She gets two more. How many ducks does she have now?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Mia has three ducks. She gets two more. How many ducks does she have now?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-1-2",
       "prompt": "Ben has 6 cars and gives away 2. How many are left?",
-      "visual": { "item": "car", "count": 6, "removed": 2 },
+      "visual": {
+        "item": "car",
+        "count": 6,
+        "removed": 2
+      },
       "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "8" },
-        { "id": "c", "label": "6" },
-        { "id": "d", "label": "3" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "3"
+        }
       ],
       "correctId": "a",
       "hint": "The light red cars are gone.",
       "explanation": "6 take away 2 is 4. Adding would make 8.",
-      "narration": { "prompt": "Ben has six cars and gives away two. How many are left?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Ben has six cars and gives away two. How many are left?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "part-whole",
       "id": "add-and-subtract-to-20-1-3",
       "prompt": "What do 3 and 4 make?",
       "whole": 7,
-      "parts": [3, 4],
+      "parts": [
+        3,
+        4
+      ],
       "missing": "whole",
-      "choices": [7, 4, 8],
+      "choices": [
+        7,
+        4,
+        8
+      ],
       "hint": "Put both parts together.",
       "explanation": "3 and 4 make 7. One part is not the whole.",
-      "narration": { "prompt": "What do three and four make?" }
+      "narration": {
+        "prompt": "What do three and four make?"
+      }
     },
     {
       "kind": "fill-blank",
       "id": "add-and-subtract-to-20-1-4",
       "prompt": "What do you need to add to 4 to make 7?",
       "prefix": "7 = 4 +",
-      "acceptedAnswers": ["3", "three"],
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
       "inputMode": "numeric",
       "explanation": "4 and 3 make 7. The whole can sit on the left.",
-      "narration": { "prompt": "What do you need to add to four to make seven?" }
+      "narration": {
+        "prompt": "What do you need to add to four to make seven?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-1-5",
       "prompt": "What is 9 take away 4?",
-      "visual": { "item": "apple", "count": 9, "removed": 4 },
+      "visual": {
+        "item": "apple",
+        "count": 9,
+        "removed": 4
+      },
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "13" },
-        { "id": "c", "label": "9" },
-        { "id": "d", "label": "6" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "13"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
       ],
       "correctId": "a",
       "explanation": "9 take away 4 is 5. Adding would make 13.",
-      "narration": { "prompt": "What is nine take away four?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is nine take away four?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "add-and-subtract-to-20-1-6",
       "prompt": "Sam has 5 stars. Now he has 8. How many did he get?",
-      "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "13" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "4" }
-      ],
-      "correctId": "a",
       "explanation": "5 and 3 make 8. Adding 5 and 8 is too many.",
-      "narration": { "prompt": "Sam has five stars. Now he has eight. How many did he get?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Sam has five stars. Now he has eight. How many did he get?"
+      },
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "pick-pair",
       "id": "add-and-subtract-to-20-1-7",
       "prompt": "What two numbers make 8?",
       "total": 8,
-      "tiles": [3, 5, 2, 7],
+      "tiles": [
+        3,
+        5,
+        2,
+        7
+      ],
       "showDots": true,
       "explanation": "3 and 5 make 8. 2 and 7 make 9.",
-      "narration": { "prompt": "What two numbers make 8?" }
+      "narration": {
+        "prompt": "What two numbers make 8?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-1-8",
       "prompt": "Ben has 8 frogs. He gets 3 more. How many frogs does he have now?",
-      "visual": { "item": "frog", "count": 8, "added": 3 },
+      "visual": {
+        "item": "frog",
+        "count": 8,
+        "added": 3
+      },
       "options": [
-        { "id": "a", "label": "11" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "8" },
-        { "id": "d", "label": "10" }
+        {
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
       ],
       "correctId": "a",
       "explanation": "8 and 3 more make 11. Taking away would leave 5.",
-      "narration": { "prompt": "Ben has eight frogs. He gets three more. How many frogs does he have now?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Ben has eight frogs. He gets three more. How many frogs does he have now?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "add-and-subtract-to-20-1-9",
       "prompt": "Ben has 4 cars. Mia has 7 cars. How many more cars does Mia have?",
-      "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "11" },
-        { "id": "c", "label": "7" },
-        { "id": "d", "label": "2" }
-      ],
-      "correctId": "a",
       "explanation": "7 take away 4 is 3. Adding the two groups is not how many more.",
-      "narration": { "prompt": "Ben has four cars. Mia has seven cars. How many more cars does Mia have?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Ben has four cars. Mia has seven cars. How many more cars does Mia have?"
+      },
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-1-10",
       "prompt": "Mia has 12 bananas and gives away 3. How many are left?",
-      "visual": { "item": "banana", "count": 12, "removed": 3 },
+      "visual": {
+        "item": "banana",
+        "count": 12,
+        "removed": 3
+      },
       "options": [
-        { "id": "a", "label": "9" },
-        { "id": "b", "label": "15" },
-        { "id": "c", "label": "12" },
-        { "id": "d", "label": "8" }
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "15"
+        },
+        {
+          "id": "c",
+          "label": "12"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
       ],
       "correctId": "a",
       "explanation": "12 take away 3 is 9. Adding would make 15.",
-      "narration": { "prompt": "Mia has twelve bananas and gives away three. How many are left?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Mia has twelve bananas and gives away three. How many are left?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }

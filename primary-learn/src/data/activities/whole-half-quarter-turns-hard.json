@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 to Q2 read position scenes, including right. Q3 to Q5 watch three-quarter and whole turns. Q6 predicts a three-quarter turn from the clock-hand cue. Q7 to Q10 perform different turns from new starts.",
-    "versus": "Easy uses position words, whole and half turns, supported quarter turns and one performed quarter turn. Medium varies starts and uses the clock-hand cue for both ways. Hard adds three-quarter turns and four performed turns. Hard is a new kind of thinking, not only a bigger turn."
+    "within": "Q1 reads a position scene. Q2 types how many quarter turns make a three-quarter turn. Q3 watches a three-quarter turn. Q4 orders the four turn sizes. Q5 taps every three-quarter name. Q6 predicts a three-quarter turn. Q7 performs a three-quarter turn. Q8 and Q9 type how the parts fit. Q10 performs a whole turn.",
+    "versus": "Easy uses position words, whole and half turns, supported quarter turns and one performed quarter turn. Medium varies starts and uses the clock-hand cue for both ways. Hard adds three-quarter turns and asks how the parts fit. Hard is a new kind of thinking, not only a bigger turn."
   },
   "skills": [
     "y1-turns",
@@ -62,37 +62,16 @@
     },
     {
       "id": "turns-3-2",
-      "kind": "multiple-choice",
-      "prompt": "Where is the bird?",
-      "options": [
-        {
-          "id": "a",
-          "label": "To the right of Pip"
-        },
-        {
-          "id": "b",
-          "label": "Behind Pip"
-        },
-        {
-          "id": "c",
-          "label": "In front of Pip"
-        },
-        {
-          "id": "d",
-          "label": "Below Pip"
-        }
+      "kind": "fill-blank",
+      "prompt": "How many quarter turns make a three-quarter turn?",
+      "acceptedAnswers": [
+        "3",
+        "three"
       ],
-      "correctId": "a",
-      "explanation": "The bird is to the right of Pip, not below.",
+      "inputMode": "numeric",
+      "explanation": "Three quarter turns make a three-quarter turn. Four make a whole turn.",
       "narration": {
-        "prompt": "Where is the bird?"
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "position": {
-        "object": "bird",
-        "relation": "right"
+        "prompt": "How many quarter turns make a three-quarter turn?"
       }
     },
     {
@@ -134,76 +113,69 @@
     },
     {
       "id": "turns-3-4",
-      "kind": "multiple-choice",
-      "prompt": "Watch the car turn. How much does it turn?",
-      "options": [
+      "kind": "ordered",
+      "prompt": "Put these turns in order, from smallest to biggest.",
+      "items": [
         {
-          "id": "a",
-          "label": "A quarter turn"
-        },
-        {
-          "id": "b",
-          "label": "A half turn"
-        },
-        {
-          "id": "c",
+          "id": "three",
           "label": "A three-quarter turn"
         },
         {
-          "id": "d",
+          "id": "quarter",
+          "label": "A quarter turn"
+        },
+        {
+          "id": "whole",
           "label": "A whole turn"
+        },
+        {
+          "id": "half",
+          "label": "A half turn"
         }
       ],
-      "correctId": "c",
-      "explanation": "A three-quarter turn is not a half turn and not a whole turn.",
+      "correctOrder": [
+        "quarter",
+        "half",
+        "three",
+        "whole"
+      ],
+      "explanation": "A quarter is smallest. Three quarters sit just before a whole turn.",
       "narration": {
-        "prompt": "Watch the car turn. How much does it turn?"
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "turn": {
-        "start": 2,
-        "quarters": 3,
-        "clockwise": false,
-        "showEnd": true
+        "prompt": "Put these turns in order, from smallest to biggest."
       }
     },
     {
       "id": "turns-3-5",
-      "kind": "multiple-choice",
-      "prompt": "Watch the car turn. How much does it turn?",
+      "kind": "multi-select",
+      "prompt": "Tap every name that means a three-quarter turn.",
       "options": [
         {
           "id": "a",
-          "label": "A quarter turn"
+          "label": "A three-quarter turn"
         },
         {
           "id": "b",
-          "label": "A half turn"
+          "label": "Three quarter turns"
         },
         {
           "id": "c",
-          "label": "A three-quarter turn"
+          "label": "A half turn"
         },
         {
           "id": "d",
           "label": "A whole turn"
         }
       ],
-      "correctId": "d",
-      "explanation": "A whole turn finishes facing the start way.",
+      "correctIds": [
+        "a",
+        "b"
+      ],
+      "explanation": "Three quarter turns make a three-quarter turn. Four make a whole turn.",
       "narration": {
-        "prompt": "Watch the car turn. How much does it turn?"
+        "prompt": "Tap every name that means a three-quarter turn."
       },
       "randomise": {
         "shuffleOptions": true
-      },
-      "turn": {
-        "start": 3,
-        "quarters": 4,
-        "clockwise": false,
-        "showEnd": true
       }
     },
     {
@@ -280,72 +252,30 @@
     },
     {
       "id": "turns-3-8",
-      "kind": "multiple-choice",
-      "prompt": "Make the car do a three-quarter turn this way.",
-      "options": [
-        {
-          "id": "1",
-          "label": "A quarter turn"
-        },
-        {
-          "id": "2",
-          "label": "A half turn"
-        },
-        {
-          "id": "3",
-          "label": "A three-quarter turn"
-        },
-        {
-          "id": "4",
-          "label": "A whole turn"
-        }
+      "kind": "fill-blank",
+      "prompt": "How many quarter turns are left after a three-quarter turn to make a whole turn?",
+      "acceptedAnswers": [
+        "1",
+        "one"
       ],
-      "correctId": "3",
-      "explanation": "Three quarter steps this way. Not a half turn.",
+      "inputMode": "numeric",
+      "explanation": "Three quarters plus one more quarter make a whole turn.",
       "narration": {
-        "prompt": "Make the car do a three-quarter turn this way."
-      },
-      "turn": {
-        "start": 2,
-        "quarters": 3,
-        "clockwise": true,
-        "showEnd": false,
-        "interactive": true
+        "prompt": "How many quarter turns are left after a three-quarter turn to make a whole turn?"
       }
     },
     {
       "id": "turns-3-9",
-      "kind": "multiple-choice",
-      "prompt": "Make the car do a half turn this way.",
-      "options": [
-        {
-          "id": "-1",
-          "label": "A quarter turn"
-        },
-        {
-          "id": "-2",
-          "label": "A half turn"
-        },
-        {
-          "id": "-3",
-          "label": "A three-quarter turn"
-        },
-        {
-          "id": "-4",
-          "label": "A whole turn"
-        }
+      "kind": "fill-blank",
+      "prompt": "How many half turns make two whole turns?",
+      "acceptedAnswers": [
+        "4",
+        "four"
       ],
-      "correctId": "-2",
-      "explanation": "A half turn is two quarter steps. Not three.",
+      "inputMode": "numeric",
+      "explanation": "Each whole turn is two half turns. Two wholes need four.",
       "narration": {
-        "prompt": "Make the car do a half turn this way."
-      },
-      "turn": {
-        "start": 0,
-        "quarters": 2,
-        "clockwise": false,
-        "showEnd": false,
-        "interactive": true
+        "prompt": "How many half turns make two whole turns?"
       }
     },
     {

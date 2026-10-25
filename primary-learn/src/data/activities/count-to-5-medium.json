@@ -107,37 +107,24 @@
       }
     },
     {
-      "kind": "count-objects",
+      "kind": "fill-blank",
       "id": "c5m-count-5",
-      "prompt": "How many {items} can you see?",
+      "prompt": "Type how many {items} you can see.",
       "visual": {
         "item": "star",
         "count": 5
       },
       "layout": "scatter",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        }
-      ],
-      "correctId": "a",
       "hint": "Keep going until every {item} has a number.",
       "explanation": "There are 5 {items}. Each one counts once.",
       "narration": {
-        "prompt": "How many {items} can you see?"
-      }
+        "prompt": "Type how many {items} you can see."
+      },
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "build-set",
@@ -228,31 +215,18 @@
       }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "c5m-next",
       "prompt": "What number comes next? 1, 2, 3, 4, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "6"
-        },
-        {
-          "id": "c",
-          "label": "7"
-        }
-      ],
-      "correctId": "a",
       "explanation": "5 comes after 4. Do not skip a number.",
       "narration": {
         "prompt": "What number comes next? One, two, three, four, blank."
-      }
+      },
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "ordered",

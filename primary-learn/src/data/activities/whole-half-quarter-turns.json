@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 to Q2 read illustrated position scenes, including left. Q3 to Q5 watch how much the car turns. Q6 to Q9 predict the end facing from a clock-hand cue. Q10 performs a quarter turn this way.",
+    "within": "Q1 reads a position scene. Q2 types how many quarter turns make a full turn. Q3 watches a half turn. Q4 orders quarter, half and whole. Q5 watches a quarter turn. Q6 taps every half-turn name. Q7 predicts a quarter turn. Q8 and Q9 type how the parts fit. Q10 performs a quarter turn this way.",
     "versus": "Easy uses position words, whole and half turns, supported quarter turns and one performed quarter turn. Medium varies starts and uses the clock-hand cue for both ways. Hard adds three-quarter turns and four performed turns. Hard is a new kind of thinking, not only a bigger turn."
   },
   "skills": [
@@ -62,37 +62,16 @@
     },
     {
       "id": "turns-1-2",
-      "kind": "multiple-choice",
-      "prompt": "Where is the bird?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Above Pip"
-        },
-        {
-          "id": "b",
-          "label": "Behind Pip"
-        },
-        {
-          "id": "c",
-          "label": "In front of Pip"
-        },
-        {
-          "id": "d",
-          "label": "To the right of Pip"
-        }
+      "kind": "fill-blank",
+      "prompt": "How many quarter turns make a full turn?",
+      "acceptedAnswers": [
+        "4",
+        "four"
       ],
-      "correctId": "a",
-      "explanation": "The bird is above Pip, not to the right.",
+      "inputMode": "numeric",
+      "explanation": "Four quarter turns make a full turn. A half turn is only two.",
       "narration": {
-        "prompt": "Where is the bird?"
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "position": {
-        "object": "bird",
-        "relation": "above"
+        "prompt": "How many quarter turns make a full turn?"
       }
     },
     {
@@ -135,41 +114,31 @@
     },
     {
       "id": "turns-1-4",
-      "kind": "multiple-choice",
-      "prompt": "Watch the car turn. How much does it turn?",
-      "options": [
+      "kind": "ordered",
+      "prompt": "Put these turns in order, from smallest to biggest.",
+      "items": [
         {
-          "id": "a",
-          "label": "A quarter turn"
-        },
-        {
-          "id": "b",
+          "id": "half",
           "label": "A half turn"
         },
         {
-          "id": "c",
-          "label": "A three-quarter turn"
+          "id": "quarter",
+          "label": "A quarter turn"
         },
         {
-          "id": "d",
+          "id": "whole",
           "label": "A whole turn"
         }
       ],
-      "correctId": "d",
-      "explanation": "A whole turn finishes facing the start way.",
+      "correctOrder": [
+        "quarter",
+        "half",
+        "whole"
+      ],
+      "explanation": "A quarter is smallest. A whole turn is four quarters.",
       "narration": {
-        "prompt": "Watch the car turn. How much does it turn?"
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "turn": {
-        "start": 2,
-        "quarters": 4,
-        "clockwise": true,
-        "showEnd": true
-      },
-      "hint": "A whole turn goes all the way round."
+        "prompt": "Put these turns in order, from smallest to biggest."
+      }
     },
     {
       "id": "turns-1-5",
@@ -210,39 +179,36 @@
     },
     {
       "id": "turns-1-6",
-      "kind": "multiple-choice",
-      "prompt": "The car makes a half turn this way. Which way does it point now?",
+      "kind": "multi-select",
+      "prompt": "Tap every name that means a half turn.",
       "options": [
         {
           "id": "a",
-          "label": "Up"
+          "label": "A half turn"
         },
         {
           "id": "b",
-          "label": "Right"
+          "label": "Two quarter turns"
         },
         {
           "id": "c",
-          "label": "Down"
+          "label": "A whole turn"
         },
         {
           "id": "d",
-          "label": "Left"
+          "label": "A quarter turn"
         }
       ],
-      "correctId": "d",
-      "explanation": "A half turn from right faces left, the opposite way.",
+      "correctIds": [
+        "a",
+        "b"
+      ],
+      "explanation": "A half turn is two quarter turns. A whole turn is four.",
       "narration": {
-        "prompt": "The car makes a half turn this way. Which way does it point now?"
+        "prompt": "Tap every name that means a half turn."
       },
       "randomise": {
         "shuffleOptions": true
-      },
-      "turn": {
-        "start": 1,
-        "quarters": 2,
-        "clockwise": true,
-        "showEnd": false
       }
     },
     {
@@ -284,76 +250,30 @@
     },
     {
       "id": "turns-1-8",
-      "kind": "multiple-choice",
-      "prompt": "The car makes a whole turn this way. Which way does it point now?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Up"
-        },
-        {
-          "id": "b",
-          "label": "Right"
-        },
-        {
-          "id": "c",
-          "label": "Down"
-        },
-        {
-          "id": "d",
-          "label": "Left"
-        }
+      "kind": "fill-blank",
+      "prompt": "How many half turns make a full turn?",
+      "acceptedAnswers": [
+        "2",
+        "two"
       ],
-      "correctId": "d",
-      "explanation": "A whole turn finishes the same way it started.",
+      "inputMode": "numeric",
+      "explanation": "Two half turns make a full turn. One half turn is not enough.",
       "narration": {
-        "prompt": "The car makes a whole turn this way. Which way does it point now?"
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "turn": {
-        "start": 3,
-        "quarters": 4,
-        "clockwise": true,
-        "showEnd": false
+        "prompt": "How many half turns make a full turn?"
       }
     },
     {
       "id": "turns-1-9",
-      "kind": "multiple-choice",
-      "prompt": "The car makes a half turn this way. Which way does it point now?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Up"
-        },
-        {
-          "id": "b",
-          "label": "Right"
-        },
-        {
-          "id": "c",
-          "label": "Down"
-        },
-        {
-          "id": "d",
-          "label": "Left"
-        }
+      "kind": "fill-blank",
+      "prompt": "A half turn is how many quarter turns?",
+      "acceptedAnswers": [
+        "2",
+        "two"
       ],
-      "correctId": "c",
-      "explanation": "A half turn from up faces down, the opposite way.",
+      "inputMode": "numeric",
+      "explanation": "A half turn is two quarter turns, not one and not four.",
       "narration": {
-        "prompt": "The car makes a half turn this way. Which way does it point now?"
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "turn": {
-        "start": 0,
-        "quarters": 2,
-        "clockwise": true,
-        "showEnd": false
+        "prompt": "A half turn is how many quarter turns?"
       }
     },
     {

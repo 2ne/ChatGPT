@@ -80,66 +80,36 @@
     },
     {
       "id": "pat-2-2",
-      "kind": "multiple-choice",
-      "prompt": "How many pairs can you see?",
+      "kind": "fill-blank",
+      "prompt": "Type how many pairs you can see.",
       "tenFrame": {
         "count": 10,
         "item": "apple",
         "pairs": true
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "6"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        }
-      ],
-      "correctId": "a",
       "explanation": "10 makes 5 pairs. A pair is two, not one.",
       "narration": {
-        "prompt": "How many pairs can you see?"
+        "prompt": "Type how many pairs you can see."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "pat-2-3",
-      "kind": "multiple-choice",
-      "prompt": "10 is shared onto two plates. How many on each plate?",
-      "tenFrame": {
-        "count": 10,
-        "item": "frog"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        }
-      ],
-      "correctId": "c",
+      "kind": "build-set",
+      "prompt": "Share 10 {items} onto two plates. Make one plate.",
       "explanation": "10 shared equally is 5 on each plate.",
       "narration": {
-        "prompt": "10 is shared onto two plates. How many on each plate?"
+        "prompt": "Share 10 {items} onto two plates. Make one plate."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "visual": {
+        "item": "frog",
+        "count": 5
+      },
+      "bank": 10
     },
     {
       "id": "pat-2-4",
@@ -182,34 +152,17 @@
     },
     {
       "id": "pat-2-5",
-      "kind": "multiple-choice",
-      "prompt": "8 is shared onto two plates. How many on each plate?",
-      "tenFrame": {
-        "count": 8,
-        "item": "car"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        }
-      ],
-      "correctId": "b",
+      "kind": "build-set",
+      "prompt": "Share 8 {items} onto two plates. Make one plate.",
       "explanation": "8 shared equally is 4 on each plate.",
       "narration": {
-        "prompt": "8 is shared onto two plates. How many on each plate?"
+        "prompt": "Share 8 {items} onto two plates. Make one plate."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "visual": {
+        "item": "car",
+        "count": 4
+      },
+      "bank": 8
     },
     {
       "id": "pat-2-6",

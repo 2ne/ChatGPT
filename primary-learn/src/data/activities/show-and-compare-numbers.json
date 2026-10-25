@@ -148,30 +148,40 @@
       }
     },
     {
-      "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
-      "pairs": [
+      "kind": "multiple-choice",
+      "prompt": "Which number belongs at the marked tick?",
+      "options": [
         {
-          "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 5,
-              "item": "apple"
-            }
-          },
-          "right": "5"
+          "id": "0",
+          "label": "11"
+        },
+        {
+          "id": "1",
+          "label": "12"
+        },
+        {
+          "id": "2",
+          "label": "13"
+        },
+        {
+          "id": "3",
+          "label": "14"
         }
       ],
-      "choices": [
-        "4",
-        "5",
-        "6"
-      ],
-      "explanation": "The ten frame has 5 filled cells, so 5 matches. A different number does not.",
-      "id": "represent100-1-3-5",
-      "mode": "one-at-a-time",
+      "correctId": "1",
+      "explanation": "The mark is 12. Each one tick is one more than the tick before.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "numberLine": {
+        "start": 0,
+        "end": 20,
+        "scale": "ones",
+        "marked": 12
+      },
+      "id": "represent100-1-4",
       "narration": {
-        "prompt": "Select the card that matches the picture."
+        "prompt": "Which number belongs at the marked tick?"
       }
     },
     {
@@ -217,40 +227,30 @@
       }
     },
     {
-      "kind": "multiple-choice",
-      "prompt": "Which number belongs at the marked tick?",
-      "options": [
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
         {
-          "id": "0",
-          "label": "11"
-        },
-        {
-          "id": "1",
-          "label": "12"
-        },
-        {
-          "id": "2",
-          "label": "13"
-        },
-        {
-          "id": "3",
-          "label": "14"
+          "id": "p1",
+          "left": {
+            "tenFrame": {
+              "count": 5,
+              "item": "apple"
+            }
+          },
+          "right": "5"
         }
       ],
-      "correctId": "1",
-      "explanation": "The mark is 12. Each one tick is one more than the tick before.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "numberLine": {
-        "start": 0,
-        "end": 20,
-        "scale": "ones",
-        "marked": 12
-      },
-      "id": "represent100-1-4",
+      "choices": [
+        "4",
+        "5",
+        "6"
+      ],
+      "explanation": "The ten frame has 5 filled cells, so 5 matches. A different number does not.",
+      "id": "represent100-1-3-5",
+      "mode": "one-at-a-time",
       "narration": {
-        "prompt": "Which number belongs at the marked tick?"
+        "prompt": "Select the card that matches the picture."
       }
     },
     {

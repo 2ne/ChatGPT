@@ -105,36 +105,23 @@
       }
     },
     {
-      "kind": "count-objects",
+      "kind": "fill-blank",
       "id": "c5e-count-3",
-      "prompt": "How many {items} can you see?",
+      "prompt": "Type how many {items} you can see.",
       "visual": {
         "item": "apple",
         "count": 3
       },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
-          "label": "1"
-        }
-      ],
-      "correctId": "a",
       "hint": "Point to each {item} once and say the next number.",
       "explanation": "There are 3 {items}. Each one counts once.",
       "narration": {
-        "prompt": "How many {items} can you see?"
-      }
+        "prompt": "Type how many {items} you can see."
+      },
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "multiple-choice",
@@ -224,7 +211,7 @@
         },
         {
           "id": "b",
-          "label": "6"
+          "label": "1"
         },
         {
           "id": "c",

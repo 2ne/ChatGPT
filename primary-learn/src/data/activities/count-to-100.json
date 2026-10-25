@@ -26,40 +26,23 @@
   "questions": [
     {
       "id": "c100-1-1",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "Which number goes in the empty cell?",
       "hundredSquare": {
         "start": 21,
         "rows": 3,
         "missing": 25
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "25"
-        },
-        {
-          "id": "b",
-          "label": "26"
-        },
-        {
-          "id": "c",
-          "label": "35"
-        },
-        {
-          "id": "d",
-          "label": "36"
-        }
-      ],
-      "correctId": "a",
       "hint": "Read along the row.",
       "explanation": "The empty cell is 25. The cell to the left is 24, not a ten jump.",
       "narration": {
         "prompt": "Which number goes in the empty cell?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "25",
+        "twenty-five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-1-2",
@@ -111,7 +94,7 @@
       "options": [
         {
           "id": "a",
-          "label": "48"
+          "label": "50"
         },
         {
           "id": "b",
@@ -137,65 +120,31 @@
     },
     {
       "id": "c100-1-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes after 29?",
-      "options": [
-        {
-          "id": "a",
-          "label": "20"
-        },
-        {
-          "id": "b",
-          "label": "28"
-        },
-        {
-          "id": "c",
-          "label": "29"
-        },
-        {
-          "id": "d",
-          "label": "30"
-        }
-      ],
-      "correctId": "d",
       "explanation": "After 29 comes 30. The ones go back to 0 and the tens move on.",
       "narration": {
         "prompt": "What number comes after 29?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "30",
+        "thirty"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-1-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 40?",
-      "options": [
-        {
-          "id": "a",
-          "label": "39"
-        },
-        {
-          "id": "b",
-          "label": "40"
-        },
-        {
-          "id": "c",
-          "label": "41"
-        },
-        {
-          "id": "d",
-          "label": "49"
-        }
-      ],
-      "correctId": "a",
       "explanation": "Before 40 is 39. Do not jump back a whole ten.",
       "narration": {
         "prompt": "What number comes before 40?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "39",
+        "thirty-nine"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-1-6",

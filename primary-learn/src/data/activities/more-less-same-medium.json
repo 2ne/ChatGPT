@@ -76,37 +76,42 @@
       }
     },
     {
-      "id": "mls-2-2",
-      "kind": "multiple-choice",
-      "prompt": "Which group has more {items}?",
-      "options": [
+      "id": "mls-2-6",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "pairs": [
         {
-          "id": "a",
+          "id": "p1",
+          "left": "4",
+          "right": {
+            "dice": {
+              "count": 4
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
           "dice": {
             "count": 3
           }
         },
         {
-          "id": "b",
-          "dice": {
-            "count": 5
-          }
-        },
-        {
-          "id": "c",
           "dice": {
             "count": 4
           }
+        },
+        {
+          "dice": {
+            "count": 5
+          }
         }
       ],
-      "correctId": "b",
-      "explanation": "5 is more than 3 and 4. Face size is not the cue.",
+      "explanation": "4 matches the dice that shows 4, not 5.",
       "narration": {
-        "prompt": "Which group has more {items}?"
+        "prompt": "Select the card that matches the number."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "mode": "one-at-a-time"
     },
     {
       "id": "mls-2-3",
@@ -220,44 +225,6 @@
       }
     },
     {
-      "id": "mls-2-6",
-      "kind": "match-pairs",
-      "prompt": "Select the card that matches the number.",
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "4",
-          "right": {
-            "dice": {
-              "count": 4
-            }
-          }
-        }
-      ],
-      "choices": [
-        {
-          "dice": {
-            "count": 3
-          }
-        },
-        {
-          "dice": {
-            "count": 4
-          }
-        },
-        {
-          "dice": {
-            "count": 5
-          }
-        }
-      ],
-      "explanation": "4 matches the dice that shows 4, not 5.",
-      "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
-    },
-    {
       "id": "mls-2-7",
       "kind": "match-pairs",
       "prompt": "Select the card that matches the picture.",
@@ -283,6 +250,39 @@
         "prompt": "Select the card that matches the picture."
       },
       "mode": "one-at-a-time"
+    },
+    {
+      "id": "mls-2-2",
+      "kind": "multiple-choice",
+      "prompt": "Which group has more {items}?",
+      "options": [
+        {
+          "id": "a",
+          "dice": {
+            "count": 3
+          }
+        },
+        {
+          "id": "b",
+          "dice": {
+            "count": 5
+          }
+        },
+        {
+          "id": "c",
+          "dice": {
+            "count": 4
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "5 is more than 3 and 4. Face size is not the cue.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "mls-2-8",

@@ -52,7 +52,7 @@
           "label": "77"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "Above 67 is 57. That is ten less, not one less.",
       "narration": {
         "prompt": "Which number is above 67?"
@@ -63,39 +63,21 @@
     },
     {
       "id": "c100-2-2",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "Which number goes in the empty cell?",
       "hundredSquare": {
         "start": 61,
         "rows": 3,
         "missing": 73
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "63"
-        },
-        {
-          "id": "b",
-          "label": "71"
-        },
-        {
-          "id": "c",
-          "label": "72"
-        },
-        {
-          "id": "d",
-          "label": "73"
-        }
-      ],
-      "correctId": "d",
       "explanation": "The empty cell is 73. After 72 comes 73, not 63.",
       "narration": {
         "prompt": "Which number goes in the empty cell?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "73"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-2-3",
@@ -136,65 +118,31 @@
     },
     {
       "id": "c100-2-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes after 69?",
-      "options": [
-        {
-          "id": "a",
-          "label": "60"
-        },
-        {
-          "id": "b",
-          "label": "68"
-        },
-        {
-          "id": "c",
-          "label": "69"
-        },
-        {
-          "id": "d",
-          "label": "70"
-        }
-      ],
-      "correctId": "d",
       "explanation": "After 69 comes 70. The ones go back to 0.",
       "narration": {
         "prompt": "What number comes after 69?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "70",
+        "seventy"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-2-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 70?",
-      "options": [
-        {
-          "id": "a",
-          "label": "69"
-        },
-        {
-          "id": "b",
-          "label": "70"
-        },
-        {
-          "id": "c",
-          "label": "71"
-        },
-        {
-          "id": "d",
-          "label": "79"
-        }
-      ],
-      "correctId": "a",
       "explanation": "Before 70 is 69. Not 60 and not 79.",
       "narration": {
         "prompt": "What number comes before 70?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "69",
+        "sixty-nine"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c100-2-6",
@@ -252,7 +200,7 @@
         },
         {
           "id": "d",
-          "label": "90"
+          "label": "60"
         }
       ],
       "correctId": "c",

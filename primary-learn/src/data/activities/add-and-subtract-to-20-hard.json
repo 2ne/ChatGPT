@@ -4,7 +4,9 @@
   "summary": "Add, take away and find missing numbers within 20.",
   "subject": "maths",
   "type": "reasoning",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "greater-depth",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -16,92 +18,148 @@
     "within": "Q1 finds a missing start after more come. Q2 is two steps, add then take away. Q3 compares two amounts. Q4 solves 7 = ? − 9. Q5 balances 8 + 5 = 10 + ?. Q6 finds a missing start after a give-away. Q7 adds 9 and 9. Q8 picks the sum for a take-away story. Q9 finds how many were taken from 20. Q10 finds how many Ben has when he has 3 more than Mia. No hints.",
     "versus": "Easy uses small pictured stories and one balanced sum. Medium adds zero, crossing ten and matching both sides. Hard adds a new kind of thinking: missing starts, two-step stories and compare differences."
   },
-  "skills": ["y1-add-sub-20", "addition-within-20", "subtraction-within-20", "missing-number-to-20"],
+  "skills": [
+    "y1-add-sub-20",
+    "addition-within-20",
+    "subtraction-within-20",
+    "missing-number-to-20"
+  ],
   "questions": [
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "add-and-subtract-to-20-3-1",
       "prompt": "Ben has some cars. 4 more come. Now he has 11. How many cars did he start with?",
-      "options": [
-        { "id": "a", "label": "7" },
-        { "id": "b", "label": "15" },
-        { "id": "c", "label": "11" },
-        { "id": "d", "label": "8" }
-      ],
-      "correctId": "a",
       "explanation": "7 and 4 make 11. Adding 4 to 11 is the new total, not the start.",
-      "narration": { "prompt": "Ben has some cars. Four more come. Now he has eleven. How many cars did he start with?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Ben has some cars. Four more come. Now he has eleven. How many cars did he start with?"
+      },
+      "acceptedAnswers": [
+        "7",
+        "seven"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-3-2",
       "prompt": "Mia has 6 ducks. Then 5 more come. Then 3 go to Ben. How many ducks does Mia have now?",
       "options": [
-        { "id": "a", "label": "8" },
-        { "id": "b", "label": "14" },
-        { "id": "c", "label": "6" },
-        { "id": "d", "label": "9" }
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "9"
+        }
       ],
       "correctId": "a",
       "explanation": "6 and 5 make 11. Then 11 take away 3 is 8.",
-      "narration": { "prompt": "Mia has six ducks. Then five more come. Then three go to Ben. How many ducks does Mia have now?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Mia has six ducks. Then five more come. Then three go to Ben. How many ducks does Mia have now?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-3-3",
       "prompt": "Mia has 14 stars. Ben has 9 stars. How many more stars does Mia have?",
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "23" },
-        { "id": "c", "label": "14" },
-        { "id": "d", "label": "6" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "23"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
       ],
       "correctId": "a",
       "explanation": "14 take away 9 is 5. Adding the two groups is not how many more.",
-      "narration": { "prompt": "Mia has fourteen stars. Ben has nine stars. How many more stars does Mia have?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Mia has fourteen stars. Ben has nine stars. How many more stars does Mia have?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "add-and-subtract-to-20-3-4",
       "prompt": "Which number is missing? 7 = ? − 9",
-      "options": [
-        { "id": "a", "label": "16" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "9" },
-        { "id": "d", "label": "8" }
-      ],
-      "correctId": "a",
       "explanation": "16 take away 9 is 7. 9 take away 7 is the other way round.",
-      "narration": { "prompt": "Which number is missing? seven equals what take away nine?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is missing? seven equals what take away nine?"
+      },
+      "acceptedAnswers": [
+        "16",
+        "sixteen"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "fill-blank",
       "id": "add-and-subtract-to-20-3-5",
       "prompt": "8 plus 5 is the same as 10 plus what?",
       "prefix": "8 + 5 = 10 +",
-      "acceptedAnswers": ["3", "three"],
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
       "inputMode": "numeric",
       "explanation": "8 and 5 make 13. 10 and 3 make 13 too.",
-      "narration": { "prompt": "Eight plus five is the same as ten plus what?" }
+      "narration": {
+        "prompt": "Eight plus five is the same as ten plus what?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-3-6",
       "prompt": "Sam had some apples. He gave 6 away. Now he has 9. How many did he start with?",
       "options": [
-        { "id": "a", "label": "15" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "9" },
-        { "id": "d", "label": "16" }
+        {
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "16"
+        }
       ],
       "correctId": "a",
       "explanation": "9 and 6 make 15. Taking 6 from 9 is what is left, not the start.",
-      "narration": { "prompt": "Sam had some apples. He gave six away. Now he has nine. How many did he start with?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Sam had some apples. He gave six away. Now he has nine. How many did he start with?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "make-total",
@@ -113,60 +171,111 @@
       "gap": "total",
       "mode": "sum-only",
       "options": [
-        { "id": "a", "label": "18" },
-        { "id": "b", "label": "17" },
-        { "id": "c", "label": "9" },
-        { "id": "d", "label": "0" }
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "0"
+        }
       ],
       "explanation": "9 and 9 make 18. Taking 9 from 9 would leave 0.",
-      "narration": { "prompt": "What is nine plus nine?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is nine plus nine?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-3-8",
       "prompt": "Ben has 17 frogs and gives away 9. Which sum shows this?",
-      "visual": { "item": "frog", "count": 17, "removed": 9 },
+      "visual": {
+        "item": "frog",
+        "count": 17,
+        "removed": 9
+      },
       "options": [
-        { "id": "a", "label": "17 − 9 = 8" },
-        { "id": "b", "label": "17 + 9 = 26" },
-        { "id": "c", "label": "17 − 9 = 7" },
-        { "id": "d", "label": "9 − 8 = 1" }
+        {
+          "id": "a",
+          "label": "17 − 9 = 8"
+        },
+        {
+          "id": "b",
+          "label": "17 + 9 = 26"
+        },
+        {
+          "id": "c",
+          "label": "17 − 9 = 7"
+        },
+        {
+          "id": "d",
+          "label": "9 − 8 = 1"
+        }
       ],
       "correctId": "a",
       "explanation": "He gives some away, so take away. 17 take away 9 is 8.",
-      "narration": { "prompt": "Ben has seventeen frogs and gives away nine. Which sum shows this?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Ben has seventeen frogs and gives away nine. Which sum shows this?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "add-and-subtract-to-20-3-9",
       "prompt": "Which number is missing? 20 − ? = 8",
-      "options": [
-        { "id": "a", "label": "12" },
-        { "id": "b", "label": "28" },
-        { "id": "c", "label": "20" },
-        { "id": "d", "label": "13" }
-      ],
-      "correctId": "a",
       "explanation": "20 take away 12 is 8. Adding 20 and 8 is the wrong job.",
-      "narration": { "prompt": "Which number is missing? twenty take away what equals eight?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is missing? twenty take away what equals eight?"
+      },
+      "acceptedAnswers": [
+        "12",
+        "twelve"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-3-10",
       "prompt": "Mia has 8 bananas. Ben has 3 more than Mia. How many bananas does Ben have?",
       "options": [
-        { "id": "a", "label": "11" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "8" },
-        { "id": "d", "label": "10" }
+        {
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
       ],
       "correctId": "a",
       "explanation": "8 and 3 more make 11. Taking 3 from 8 is how many fewer.",
-      "narration": { "prompt": "Mia has eight bananas. Ben has three more than Mia. How many bananas does Ben have?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Mia has eight bananas. Ben has three more than Mia. How many bananas does Ben have?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }

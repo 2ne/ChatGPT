@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 and Q2 cross 10 with two frames. Q3 reads one more on a 0 to 20 line. Q4 asks 12 is one more than. Q5 and Q6 cross 20 both ways. Q7 types one less than 15. Q8 orders 18 to 21. Q9 finds one less on the line. Q10 finds one more than 14.",
+    "within": "Q1 types one more than 10. Q2 crosses 10 with two frames. Q3 reads one more on a 0 to 20 line. Q4 asks 12 is one more than. Q5 and Q6 cross 20 both ways. Q7 types one less than 15. Q8 orders 18 to 21. Q9 finds one less on the line. Q10 finds one more than 14.",
     "versus": "Easy uses ten frames and a 0 to 10 line within 10, then crosses 10. Medium uses two frames and a 0 to 20 line across 10 and 20. Hard adds reverse thinking both ways, one less than 30 and a short story."
   },
   "skills": [
@@ -26,38 +26,21 @@
   "questions": [
     {
       "id": "oml-2-1",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What is one more than 10?",
       "tenFrame": {
         "count": 10,
         "item": "star"
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "11"
-        },
-        {
-          "id": "b",
-          "label": "12"
-        },
-        {
-          "id": "c",
-          "label": "13"
-        },
-        {
-          "id": "d",
-          "label": "14"
-        }
-      ],
-      "correctId": "a",
       "explanation": "One more than 10 is 11. Start a new ten with 1.",
       "narration": {
         "prompt": "What is one more than 10?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "11",
+        "eleven"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-2-2",
@@ -70,11 +53,11 @@
       "options": [
         {
           "id": "a",
-          "label": "8"
+          "label": "7"
         },
         {
           "id": "b",
-          "label": "9"
+          "label": "8"
         },
         {
           "id": "c",
@@ -82,7 +65,7 @@
         },
         {
           "id": "d",
-          "label": "12"
+          "label": "9"
         }
       ],
       "correctId": "c",
@@ -133,69 +116,35 @@
     },
     {
       "id": "oml-2-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "12 is one more than ?",
-      "options": [
-        {
-          "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
-          "label": "10"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "13"
-        }
-      ],
-      "correctId": "c",
       "explanation": "12 is one more than 11. One less than 12 is the number before.",
       "narration": {
         "prompt": "12 is one more than what?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "11",
+        "eleven"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-2-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What is one more than 19?",
       "tenFrame": {
         "count": 19,
         "item": "apple"
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "17"
-        },
-        {
-          "id": "b",
-          "label": "18"
-        },
-        {
-          "id": "c",
-          "label": "19"
-        },
-        {
-          "id": "d",
-          "label": "20"
-        }
-      ],
-      "correctId": "d",
       "explanation": "One more than 19 is 20. The ones go back to 0.",
       "narration": {
         "prompt": "What is one more than 19?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "20",
+        "twenty"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-2-6",
@@ -318,38 +267,21 @@
     },
     {
       "id": "oml-2-10",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What is one more than 14?",
       "tenFrame": {
         "count": 14,
         "item": "duck"
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "13"
-        },
-        {
-          "id": "b",
-          "label": "15"
-        },
-        {
-          "id": "c",
-          "label": "16"
-        },
-        {
-          "id": "d",
-          "label": "24"
-        }
-      ],
-      "correctId": "b",
       "explanation": "One more than 14 is 15. Not a ten jump.",
       "narration": {
         "prompt": "What is one more than 14?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "15",
+        "fifteen"
+      ],
+      "inputMode": "numeric"
     }
   ]
 }

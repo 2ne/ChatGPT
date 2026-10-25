@@ -59,35 +59,22 @@
     },
     {
       "id": "c20-2-2",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "Which number goes in the empty cell?",
       "hundredSquare": {
         "start": 11,
         "rows": 3,
         "missing": 22
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "12"
-        },
-        {
-          "id": "b",
-          "label": "21"
-        },
-        {
-          "id": "c",
-          "label": "22"
-        }
-      ],
-      "correctId": "c",
       "explanation": "The empty cell is 22. After 21 comes 22, not 12.",
       "narration": {
         "prompt": "Which number goes in the empty cell?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "22",
+        "twenty-two"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-2-3",
@@ -124,57 +111,31 @@
     },
     {
       "id": "c20-2-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes after 25?",
-      "options": [
-        {
-          "id": "a",
-          "label": "24"
-        },
-        {
-          "id": "b",
-          "label": "25"
-        },
-        {
-          "id": "c",
-          "label": "26"
-        }
-      ],
-      "correctId": "c",
       "explanation": "After 25 comes 26. Keep the same ten and add one.",
       "narration": {
         "prompt": "What number comes after 25?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "26",
+        "twenty-six"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-2-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 30?",
-      "options": [
-        {
-          "id": "a",
-          "label": "20"
-        },
-        {
-          "id": "b",
-          "label": "29"
-        },
-        {
-          "id": "c",
-          "label": "31"
-        }
-      ],
-      "correctId": "b",
       "explanation": "Before 30 is 29. Not 20 and not 31.",
       "narration": {
         "prompt": "What number comes before 30?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "29",
+        "twenty-nine"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-2-6",

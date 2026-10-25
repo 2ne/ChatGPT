@@ -159,57 +159,31 @@
     },
     {
       "id": "c10-1-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes next? 7, 8, 9, ?",
-      "options": [
-        {
-          "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "10"
-        }
-      ],
-      "correctId": "c",
       "explanation": "10 comes after 9. The next number is one more.",
       "narration": {
         "prompt": "What number comes next? 7, 8, 9, blank."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "10",
+        "ten"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c10-1-6",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "Which number is missing? 6, 7, _, 9, 10",
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        }
-      ],
-      "correctId": "b",
       "explanation": "8 sits after 7 and before 9.",
       "narration": {
         "prompt": "Which number is missing? 6, 7, blank, 9, 10."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "8",
+        "eight"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c10-1-7",
@@ -321,7 +295,7 @@
     },
     {
       "id": "c10-1-10",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "7 is 5 and how many more?",
       "tenFrame": {
         "count": 7,
@@ -331,28 +305,15 @@
           2
         ]
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        }
-      ],
-      "correctId": "b",
       "explanation": "7 is 5 and 2. The extra bit is 2, not 5.",
       "narration": {
         "prompt": "7 is 5 and how many more?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "2",
+        "two"
+      ],
+      "inputMode": "numeric"
     }
   ]
 }

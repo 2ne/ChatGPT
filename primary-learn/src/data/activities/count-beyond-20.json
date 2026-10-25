@@ -26,36 +26,23 @@
   "questions": [
     {
       "id": "c20-1-1",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "Which number goes in the empty cell?",
       "hundredSquare": {
         "start": 11,
         "rows": 3,
         "missing": 16
       },
-      "options": [
-        {
-          "id": "a",
-          "label": "16"
-        },
-        {
-          "id": "b",
-          "label": "17"
-        },
-        {
-          "id": "c",
-          "label": "26"
-        }
-      ],
-      "correctId": "a",
       "hint": "Read along the row.",
       "explanation": "The empty cell is 16. After 15 comes 16, not a ten jump.",
       "narration": {
         "prompt": "Which number goes in the empty cell?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "16",
+        "sixteen"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-1-2",
@@ -104,7 +91,7 @@
       "options": [
         {
           "id": "a",
-          "label": "19"
+          "label": "21"
         },
         {
           "id": "b",
@@ -127,57 +114,31 @@
     },
     {
       "id": "c20-1-4",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes after 19?",
-      "options": [
-        {
-          "id": "a",
-          "label": "18"
-        },
-        {
-          "id": "b",
-          "label": "19"
-        },
-        {
-          "id": "c",
-          "label": "20"
-        }
-      ],
-      "correctId": "c",
       "explanation": "After 19 comes 20. The ones go back to 0.",
       "narration": {
         "prompt": "What number comes after 19?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "20",
+        "twenty"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-1-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 21?",
-      "options": [
-        {
-          "id": "a",
-          "label": "20"
-        },
-        {
-          "id": "b",
-          "label": "21"
-        },
-        {
-          "id": "c",
-          "label": "22"
-        }
-      ],
-      "correctId": "a",
       "explanation": "Before 21 is 20. Do not jump back a whole ten.",
       "narration": {
         "prompt": "What number comes before 21?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "20",
+        "twenty"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c20-1-6",

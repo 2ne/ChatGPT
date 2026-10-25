@@ -76,37 +76,55 @@
       }
     },
     {
-      "id": "mls-3-2",
-      "kind": "multiple-choice",
-      "prompt": "Which group has more {items}?",
-      "options": [
+      "id": "mls-3-6",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
         {
-          "id": "a",
-          "dice": {
-            "count": 5
-          }
-        },
-        {
-          "id": "b",
-          "dice": {
-            "count": 6
-          }
-        },
-        {
-          "id": "c",
-          "dice": {
-            "count": 4
+          "id": "p1",
+          "left": {
+            "tenFrame": {
+              "count": 7,
+              "item": "star"
+            }
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 7
+            },
+            "layout": "scatter"
           }
         }
       ],
-      "correctId": "b",
-      "explanation": "6 is more than 5 and 4. Face size is not the cue.",
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 6
+          },
+          "layout": "scatter"
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 7
+          },
+          "layout": "scatter"
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 8
+          },
+          "layout": "scatter"
+        }
+      ],
+      "explanation": "Both sides show 7. One less or one more is wrong.",
       "narration": {
-        "prompt": "Which group has more {items}?"
+        "prompt": "Select the card that matches the picture."
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "mode": "one-at-a-time"
     },
     {
       "id": "mls-3-3",
@@ -229,57 +247,6 @@
       }
     },
     {
-      "id": "mls-3-6",
-      "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
-      "pairs": [
-        {
-          "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 7,
-              "item": "star"
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 7
-            },
-            "layout": "scatter"
-          }
-        }
-      ],
-      "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 6
-          },
-          "layout": "scatter"
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 7
-          },
-          "layout": "scatter"
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 8
-          },
-          "layout": "scatter"
-        }
-      ],
-      "explanation": "Both sides show 7. One less or one more is wrong.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
-      "mode": "one-at-a-time"
-    },
-    {
       "id": "mls-3-7",
       "kind": "match-pairs",
       "prompt": "Select the card that matches the picture.",
@@ -324,6 +291,39 @@
         "prompt": "Select the card that matches the picture."
       },
       "mode": "one-at-a-time"
+    },
+    {
+      "id": "mls-3-2",
+      "kind": "multiple-choice",
+      "prompt": "Which group has more {items}?",
+      "options": [
+        {
+          "id": "a",
+          "dice": {
+            "count": 5
+          }
+        },
+        {
+          "id": "b",
+          "dice": {
+            "count": 6
+          }
+        },
+        {
+          "id": "c",
+          "dice": {
+            "count": 4
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "6 is more than 5 and 4. Face size is not the cue.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "mls-3-8",

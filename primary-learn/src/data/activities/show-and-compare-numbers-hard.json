@@ -127,32 +127,41 @@
       "mode": "one-at-a-time"
     },
     {
-      "kind": "match-pairs",
-      "id": "represent100-3-3-17",
-      "prompt": "Select the card that matches the picture.",
-      "pairs": [
+      "kind": "multiple-choice",
+      "prompt": "Which number belongs at the marked tick?",
+      "options": [
         {
-          "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 17,
-              "item": "apple"
-            }
-          },
-          "right": "17"
+          "id": "0",
+          "label": "91"
+        },
+        {
+          "id": "1",
+          "label": "92"
+        },
+        {
+          "id": "2",
+          "label": "93"
+        },
+        {
+          "id": "3",
+          "label": "94"
         }
       ],
-      "choices": [
-        "7",
-        "16",
-        "17",
-        "18"
-      ],
-      "explanation": "The frames show 10 and 7 more, so 17 matches. A different number does not.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
+      "correctId": "1",
+      "explanation": "The mark is 92. It sits just after 90, not on 90.",
+      "randomise": {
+        "shuffleOptions": true
       },
-      "mode": "one-at-a-time"
+      "numberLine": {
+        "start": 0,
+        "end": 100,
+        "scale": "tens",
+        "marked": 92
+      },
+      "id": "represent100-3-4",
+      "narration": {
+        "prompt": "Which number belongs at the marked tick?"
+      }
     },
     {
       "kind": "match-pairs",
@@ -208,41 +217,32 @@
       "mode": "one-at-a-time"
     },
     {
-      "kind": "multiple-choice",
-      "prompt": "Which number belongs at the marked tick?",
-      "options": [
+      "kind": "match-pairs",
+      "id": "represent100-3-3-17",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
         {
-          "id": "0",
-          "label": "91"
-        },
-        {
-          "id": "1",
-          "label": "92"
-        },
-        {
-          "id": "2",
-          "label": "93"
-        },
-        {
-          "id": "3",
-          "label": "94"
+          "id": "p1",
+          "left": {
+            "tenFrame": {
+              "count": 17,
+              "item": "apple"
+            }
+          },
+          "right": "17"
         }
       ],
-      "correctId": "1",
-      "explanation": "The mark is 92. It sits just after 90, not on 90.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "numberLine": {
-        "start": 0,
-        "end": 100,
-        "scale": "tens",
-        "marked": 92
-      },
-      "id": "represent100-3-4",
+      "choices": [
+        "7",
+        "16",
+        "17",
+        "18"
+      ],
+      "explanation": "The frames show 10 and 7 more, so 17 matches. A different number does not.",
       "narration": {
-        "prompt": "Which number belongs at the marked tick?"
-      }
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multi-select",

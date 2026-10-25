@@ -95,20 +95,24 @@
       }
     },
     {
-      "kind": "make-total",
+      "kind": "part-whole",
       "id": "b5e-4-plus",
       "prompt": "What do you need to add to 4 to make 5?",
-      "visual": {
-        "item": "duck",
-        "count": 4
-      },
-      "total": 5,
-      "mode": "fill-slots",
-      "randomise": {},
       "explanation": "4 and 1 make 5. One part is not the whole.",
       "narration": {
         "prompt": "What do you need to add to 4 to make 5?"
-      }
+      },
+      "whole": 5,
+      "parts": [
+        4,
+        1
+      ],
+      "missing": "right",
+      "choices": [
+        1,
+        2,
+        3
+      ]
     },
     {
       "kind": "make-total",

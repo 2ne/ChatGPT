@@ -125,7 +125,9 @@ Every question needs `explanation`. Hints are optional and must follow the scaff
 ## Variety
 
 - Use at least **three question kinds** in a 10-question quest.
-- Do not run the same kind more than three times in a row unless the ramp is deliberately fluency (times tables).
+- At most **5** multiple-choice questions in a 10-question quest. Prefer make-total, build-set, pick-pair, part-whole, fill-blank, match-pairs, ordered, multi-select and count-objects.
+- Never run the same kind 3 times in a row.
+- Fade decoration, not interaction. Hard should be harder to think about, not duller to look at. Pictures that are the question, or that carry the information, stay.
 - No more than 3 questions with the same stem shape in a quest, and never 4 in a row. Same shape means the same sentence with only the numbers changed.
 - No two identical stems plus options in one quest.
 - Mix pictures and numerals as the ramp says. Do not hide all the pictures at the back as a surprise.
@@ -193,7 +195,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] Every `explanation` explains the correct answer without instructions and reads naturally after a correct answer; hints contain strategies and match the scaffolding plan
 - [ ] Distractors are named misconceptions, not random
 - [ ] No ambiguous correct answer; fill-blank accepts number words where needed
-- [ ] At least three question kinds in a 10-question quest; same kind not overused
+- [ ] At least three question kinds in a 10-question quest. At most 5 multiple-choice. Never 3 of the same kind in a row. Fade decoration, not interaction.
 - [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
 - [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set. Stars use `STAR_SCORE` (6–7 / 8–9 / 10). No retry loop.
 - [ ] JSON only (no JSX, no per-activity component). File is in `src/data/activities/` and passes `validateActivity` (auto-registered). New behaviour went into a shared question kind with defaults, not a one-off field
@@ -220,8 +222,9 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 13. Every BaseTen question shows the tens-and-ones key (mini bar = 10, mini square = 1). One key per question, not per option. Easy and Medium also say `Each tall bar is 10. Each small square is 1.` Hard may use the key only.
 14. No separate instruction label under the question when the question already says what to do. Multi-select stems must say the job (`Select`, `Tap`) so they never need a helper line.
 15. Every picture must add meaning. Fade by level. Easy shows the representation. Medium simplifies. Hard has no picture unless the picture is the question. A two-part ten frame uses soft purple for the first addend and soft blue stripes plus a dashed outline for the second. Never one colour for both addends.
+16. Fade decoration, not interaction. At most 5 multiple-choice questions in a quest. Never 3 of the same kind in a row. Vary the kinds so Hard stays hands-on.
 
-Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. Rule 14 is CSS for the helper line. Rule 15 Hard repeating pictures fail `check:activities`. Multi-select wording fails `check:activities`.
+Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. Rule 14 is CSS for the helper line. Rule 15 Hard repeating pictures fail `check:activities`. Rule 16 kind mix fails `check:activities`. Multi-select wording fails `check:activities`.
 
 TODO later rewrite (temporary allowlist, do not grow it): Show and compare numbers was just rewritten and skips content rules 1 to 5 and 7. Narration and Hard thinking still apply.
 - [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)

@@ -164,30 +164,17 @@
     },
     {
       "id": "c10-3-5",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What number comes before 10?",
-      "options": [
-        {
-          "id": "a",
-          "label": "8"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        }
-      ],
-      "correctId": "b",
       "explanation": "Before 10 is 9. Not 8 and not 11.",
       "narration": {
         "prompt": "What number comes before 10?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "9",
+        "nine"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "c10-3-6",
@@ -331,30 +318,17 @@
     },
     {
       "id": "c10-3-10",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "6 is 5 and how many more?",
-      "options": [
-        {
-          "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
-          "label": "4"
-        }
-      ],
-      "correctId": "a",
       "explanation": "6 is 5 and 1. The extra bit is 1, not 5.",
       "narration": {
         "prompt": "6 is 5 and how many more?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "1",
+        "one"
+      ],
+      "inputMode": "numeric"
     }
   ]
 }

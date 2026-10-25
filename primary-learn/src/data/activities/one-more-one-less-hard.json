@@ -43,7 +43,7 @@
         },
         {
           "id": "d",
-          "label": "31"
+          "label": "27"
         }
       ],
       "correctId": "c",
@@ -94,34 +94,17 @@
     },
     {
       "id": "oml-3-3",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "20 is one more than ?",
-      "options": [
-        {
-          "id": "a",
-          "label": "17"
-        },
-        {
-          "id": "b",
-          "label": "18"
-        },
-        {
-          "id": "c",
-          "label": "19"
-        },
-        {
-          "id": "d",
-          "label": "21"
-        }
-      ],
-      "correctId": "c",
       "explanation": "20 is one more than 19. One less than 20 is the number before.",
       "narration": {
         "prompt": "20 is one more than what?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "19",
+        "nineteen"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-3-4",
@@ -207,34 +190,17 @@
     },
     {
       "id": "oml-3-7",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "18 is one less than ?",
-      "options": [
-        {
-          "id": "a",
-          "label": "16"
-        },
-        {
-          "id": "b",
-          "label": "17"
-        },
-        {
-          "id": "c",
-          "label": "18"
-        },
-        {
-          "id": "d",
-          "label": "19"
-        }
-      ],
-      "correctId": "d",
       "explanation": "18 is one less than 19. One more than 18 is the next number.",
       "narration": {
         "prompt": "18 is one less than what?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "19",
+        "nineteen"
+      ],
+      "inputMode": "numeric"
     },
     {
       "id": "oml-3-8",
@@ -308,34 +274,17 @@
     },
     {
       "id": "oml-3-10",
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "prompt": "What is one less than 20?",
-      "options": [
-        {
-          "id": "a",
-          "label": "19"
-        },
-        {
-          "id": "b",
-          "label": "20"
-        },
-        {
-          "id": "c",
-          "label": "21"
-        },
-        {
-          "id": "d",
-          "label": "30"
-        }
-      ],
-      "correctId": "a",
       "explanation": "One less than 20 is 19. Not a whole ten less.",
       "narration": {
         "prompt": "What is one less than 20?"
       },
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "acceptedAnswers": [
+        "19",
+        "nineteen"
+      ],
+      "inputMode": "numeric"
     }
   ]
 }

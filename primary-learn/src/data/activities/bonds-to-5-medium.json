@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 What do you need to add to 3 to make 5? Question 2 What do you need to add to 4 to make 5? Question 3 What do you need to add to 0 to make 5? Question 4 What do you need to add to 5 to make 5? Question 5 Ben has 5 {items} and gives away 3. How many are left? Question 6 What two numbers make 5? Question 7 What two numbers make 5? Question 8 What do you need to add to 2 to make 5? Question 9 What is 5 take away 4? Question 10 Mia has 5 {items} and gives them all away. How many are left?",
+    "within": "Question 1 What do you need to add to 3 to make 5? Question 2 What do you need to add to 4 to make 5? Question 3 What do you need to add to 0 to make 5? Question 4 What do you need to add to 5 to make 5? Question 5 Ben has 5 {items} and gives away 3. How many are left? Question 6 What two numbers make 5? Question 7 What two numbers make 5? Question 8 types 3 + 2. Question 9 What is 5 take away 4? Question 10 Mia has 5 {items} and gives them all away. How many are left?",
     "versus": "Easy builds pictured bonds to 5 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
@@ -57,21 +57,25 @@
       }
     },
     {
-      "kind": "make-total",
+      "kind": "part-whole",
       "id": "b5m-5-eq-4",
       "prompt": "What do you need to add to 4 to make 5?",
-      "visual": {
-        "item": "apple",
-        "count": 4
-      },
-      "total": 5,
-      "mode": "fill-slots",
-      "randomise": {},
       "hint": "Start at 4 and count on to 5.",
       "explanation": "4 and 1 make 5. One part is not the whole.",
       "narration": {
         "prompt": "What do you need to add to 4 to make 5?"
-      }
+      },
+      "whole": 5,
+      "parts": [
+        4,
+        1
+      ],
+      "missing": "right",
+      "choices": [
+        1,
+        2,
+        0
+      ]
     },
     {
       "kind": "make-total",
@@ -147,7 +151,7 @@
         },
         {
           "id": "c",
-          "label": "3"
+          "label": "0"
         }
       ],
       "correctId": "a",
@@ -202,35 +206,18 @@
       }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "fill-blank",
       "id": "b5m-reverse",
       "prompt": "3 + 2 is the same family as 2 + 3. What is 3 + 2?",
-      "part": 2,
-      "total": 5,
-      "gap": "left",
-      "mode": "sum-only",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        }
-      ],
       "explanation": "3 + 2 and 2 + 3 both make 5.",
       "narration": {
         "prompt": "Three plus two is the same family as two plus three. What is three plus two?"
       },
-      "correctId": "a"
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
+      "inputMode": "numeric"
     },
     {
       "kind": "multiple-choice",

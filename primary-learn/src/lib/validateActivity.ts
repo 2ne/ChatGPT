@@ -63,6 +63,33 @@ function fail(path: string, message: string): never {
   throw new Error(`Activity ${path}: ${message}`);
 }
 
+/** Fade decoration, not interaction. Warn when a quest is mostly the same tap. */
+export function activityEngagementWarnings(
+  _id: string,
+  questions: Array<{ kind: string }>,
+): string[] {
+  const warnings: string[] = [];
+  const kinds = questions.map((question) => question.kind);
+  const multipleChoice = kinds.filter((kind) => kind === "multiple-choice").length;
+  if (multipleChoice > 5) {
+    warnings.push(
+      `warning: ${multipleChoice} multiple-choice questions (max 5). Fade decoration, not interaction.`,
+    );
+  }
+  let run = 1;
+  for (let index = 1; index < kinds.length; index += 1) {
+    if (kinds[index] === kinds[index - 1]) {
+      run += 1;
+      if (run === 3) {
+        warnings.push(`warning: 3 or more ${kinds[index]} questions in a row`);
+      }
+    } else {
+      run = 1;
+    }
+  }
+  return warnings;
+}
+
 /** Named stories that name one object must not mix a second emoji in extras. */
 function storyNamesOneObject(prompt: string): boolean {
   if (!/\b(Sam|Mia|Ben|Kim|Jo)\b/.test(prompt)) return false;
@@ -1138,6 +1165,10 @@ export function validateActivity(raw: unknown, file: string): Activity {
   }
   const ids = questions.map((question) => question.id);
   if (new Set(ids).size !== ids.length) fail(file, "duplicate question ids");
+
+  for (const warning of activityEngagementWarnings(id, questions)) {
+    fail(file, warning);
+  }
 
   return {
     id,
