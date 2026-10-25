@@ -80,7 +80,7 @@ Every child-facing string (`copy.ts`, activity JSON, component words) must follo
 ## Established wording and interactions
 
 - Feedback explains why the answer is correct, after both correct and incorrect answers. Explanations stay under 20 words and name a known mix-up where there is one. Never put counting or tapping instructions in `explanation`. Hints suggest a method without giving the answer.
-- Pedagogy rules in `QUALITY.md` fail `npm run check:activities`. Reception pickers have 3 options. Year 1 pickers have 4. Year 1 must not say clockwise or anti-clockwise. Every question needs narration. The question speaker and the feedback speaker are 44px. The feedback speaker reads the explanation only after the child has answered.
+- Pedagogy rules in `QUALITY.md` fail `npm run check:activities`. Reception pickers have 3 options. Year 1 pickers have 4. Year 1 must not say clockwise, anti-clockwise or solid. Use 3D or flat for shapes. Every question needs narration. The question speaker and the feedback speaker are 44px. The feedback speaker reads the explanation only after the child has answered.
 - Arithmetic answer choices sit below the coloured sum. Choosing a number fills the yellow tile. Use `make-total` for addition bonds and numeric `multiple-choice` for subtraction results. Number answers for young kids use A/B/C/D (`count-objects` or `multiple-choice`), not typed fill-blank.
 - Keep visible subtraction wording as “take away” and the equation symbol as `−`. Update narration and shared prompt defaults together when changing wording.
 - Optional `BondDemonstration` appears only after a missed addition make-total or part-whole question. It never changes marks or stars.

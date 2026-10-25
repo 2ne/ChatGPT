@@ -1,7 +1,7 @@
 {
   "id": "everyday-shapes",
   "title": "Everyday shapes",
-  "summary": "Find and name flat shapes and solid shapes.",
+  "summary": "Find and name flat shapes and 3D shapes.",
   "subject": "maths",
   "type": "reasoning",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 to Q3 name upright circle, triangle and square with near-miss distractors. Q4 taps every triangle, including a turned one. Q5 names a rectangle. Q6 matches a turned square to its name. Q7 names a cube. Q8 matches a ball to a sphere. Q9 names a cuboid. Q10 taps every sphere. Hint on Q1.",
-    "versus": "Easy names familiar flat shapes and solids, then turns shapes from Q4. Medium treats a square as a rectangle and uses more near misses. Hard mixes 2D and 3D mix-ups and matches real objects to shapes."
+    "within": "Q1 to Q3 name upright circle, triangle and square with near-miss distractors. Q4 taps every triangle, including a turned one. Q5 names a rectangle. Q6 matches a turned square to its name. Q7 names a cube and teaches that 3D means not flat. Q8 matches a ball to a sphere. Q9 names a cuboid as 3D. Q10 taps every sphere and says a sphere is 3D. Hint on Q1.",
+    "versus": "Easy names familiar flat shapes and 3D shapes, then turns shapes from Q4. Medium treats a square as a rectangle and uses more near misses. Hard mixes 2D and 3D mix-ups and matches real objects to shapes."
   },
   "skills": [
     "y1-shapes",
@@ -273,7 +273,7 @@
         "name": "cube",
         "colour": "green"
       },
-      "explanation": "A cube is a solid with square faces. A square is flat.",
+      "explanation": "A cube is 3D. 3D means it is not flat like a square.",
       "narration": {
         "prompt": "What is this shape called?"
       },
@@ -335,7 +335,7 @@
         "name": "cuboid",
         "colour": "purple"
       },
-      "explanation": "A cuboid is a solid box. A rectangle is the flat face.",
+      "explanation": "A cuboid is a 3D box. A rectangle is flat.",
       "narration": {
         "prompt": "What is this shape called?"
       },
@@ -366,7 +366,7 @@
       "kind": "multi-select",
       "id": "shapes-1-10",
       "prompt": "Tap every sphere. There are 2 to choose.",
-      "explanation": "A sphere is solid and can roll. A circle is flat.",
+      "explanation": "A sphere is 3D and can roll. A circle is flat.",
       "narration": {
         "prompt": "Tap every sphere. There are 2 to choose."
       },

@@ -63,7 +63,7 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `add-and-subtract-to-20` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Easy: join, take-away, missing part, change unknown, compare and 7 = 4 + ? |
 | `add-and-subtract-to-20-medium` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Medium: zero, crossing ten, compare and 3 + 2 = 4 + ? |
 | `add-and-subtract-to-20-hard` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Hard: missing start, two-step stories, compare and reversed equality |
-| `everyday-shapes` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Easy: name flat and solid shapes, then turn them, with near misses |
+| `everyday-shapes` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Easy: name flat and 3D shapes, then turn them, with near misses |
 | `everyday-shapes-medium` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Medium: square as a rectangle, squashed triangles, real objects |
 | `everyday-shapes-hard` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Hard: 2D versus 3D mix-ups, cube as cuboid, object to shape |
 

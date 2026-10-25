@@ -54,7 +54,7 @@ Reading age follows the year group, not the adult who is coding.
 
 Use British English: *maths*, *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2* (not 2nd grade). Follow **Writing for children** in `AGENTS.md`: short sentences, no em or en dashes as punctuation, no semicolons, one idea per sentence.
 
-**Year vocabulary.** *Clockwise* and *anti-clockwise* are Year 2 words. Year 1 uses full, half, quarter and three-quarter turns. Show a clock-hand picture when the child needs a direction. Left and right are fine for Year 1 position.
+**Year vocabulary.** *Clockwise* and *anti-clockwise* are Year 2 words. Year 1 uses full, half, quarter and three-quarter turns. Show a clock-hand picture when the child needs a direction. Left and right are fine for Year 1 position. *Solid* is ambiguous (a filled flat shape can look solid). Year 1 says 3D and flat. Teach those words on Easy and Medium before Hard asks which shape is 3D.
 
 ### Stem templates (copy these)
 
@@ -216,7 +216,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 7. Explanations teach in under 20 words and name a known confusion where there is one. Never only restate the answer.
 8. Every question has `narration.prompt`.
 9. Every tappable control is at least 44px, including the speaker button.
-10. Year 1 must not say clockwise or anti-clockwise.
+10. Year 1 must not say clockwise or anti-clockwise. Year 1 must not say solid. Use 3D or flat.
 11. Take-away removed tiles need a second cue besides colour (dashed outline). Keep the no-X rule.
 12. Comparison questions must name what is compared (the object, or the total number for tens and ones).
 13. Every BaseTen question shows the tens-and-ones key (mini bar = 10, mini square = 1). One key per question, not per option. Easy and Medium also say `Each tall bar is 10. Each small square is 1.` Hard may use the key only.

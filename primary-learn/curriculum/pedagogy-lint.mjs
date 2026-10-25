@@ -14,6 +14,7 @@ const JUST_SHIPPED = new Set([
 ]);
 
 const CLOCK_WORDS = /\b(clockwise|anti-clockwise|anticlockwise)\b/i;
+const SOLID_WORDS = /\bsolids?\b/i;
 const HARD_THINKING =
   /\b(think|thinking|kind|mix|mixes|mixing|missing|reverse|famil|direct|represent|story|perform|structur|trap|spot|error|relation|without|not just|fact family|puppet|left|right)\b/i;
 
@@ -184,6 +185,12 @@ function childFacingText(question) {
   for (const option of question.options ?? []) {
     if (option?.label) parts.push(option.label);
   }
+  for (const choice of question.choices ?? []) {
+    if (typeof choice === "string") parts.push(choice);
+  }
+  for (const pair of question.pairs ?? []) {
+    if (typeof pair?.right === "string") parts.push(pair.right);
+  }
   return parts.filter(Boolean).join("\n");
 }
 
@@ -213,6 +220,9 @@ function checkActivity(activity) {
 
     if (year1 && CLOCK_WORDS.test(childFacingText(question))) {
       errors.push(`${path}: Year 1 must not say clockwise or anti-clockwise`);
+    }
+    if (year1 && SOLID_WORDS.test(childFacingText(question))) {
+      errors.push(`${path}: Year 1 must not say solid. Use 3D or flat`);
     }
 
     if (!compareNamesThing(question.prompt)) {

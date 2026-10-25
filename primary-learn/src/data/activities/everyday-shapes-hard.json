@@ -1,7 +1,7 @@
 {
   "id": "everyday-shapes-hard",
   "title": "Everyday shapes",
-  "summary": "Sort flat shapes from solids and spot near misses.",
+  "summary": "Sort flat shapes from 3D shapes and spot near misses.",
   "subject": "maths",
   "type": "reasoning",
   "yearGroups": [
@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 treats a square as a rectangle among near misses. Q2 matches a cube to cuboid. Q3 matches the 3D pyramid to its name. Q4 picks the solid next to flat shapes. Q5 keeps a squashed turned triangle. Q6 matches dice to a cube. Q7 picks a small cube next to a cuboid. Q8 matches a triangular pyramid to its name. Q9 matches a turned square to its name. Q10 picks the ball as a sphere. No hints.",
+    "within": "Q1 treats a square as a rectangle among near misses. Q2 matches a cube to cuboid. Q3 matches the 3D pyramid to its name. Q4 picks the 3D shape next to flat shapes. Q5 keeps a squashed turned triangle. Q6 matches dice to a cube. Q7 picks a small cube next to a cuboid. Q8 matches a triangular pyramid to its name. Q9 matches a turned square to its name. Q10 picks the ball as a sphere. No hints.",
     "versus": "Easy names familiar shapes. Medium treats a square as a rectangle. Hard adds a new kind of thinking: 2D versus 3D mix-ups, a cube as a cuboid, and real objects matched to shapes."
   },
   "skills": [
@@ -134,10 +134,10 @@
     {
       "kind": "multiple-choice",
       "id": "shapes-3-4",
-      "prompt": "Which shape is a solid?",
-      "explanation": "A sphere is solid. The circle, triangle and square are flat.",
+      "prompt": "Which shape is 3D?",
+      "explanation": "A sphere is 3D. The circle, triangle and square are flat.",
       "narration": {
-        "prompt": "Which shape is a solid?"
+        "prompt": "Which shape is 3D?"
       },
       "options": [
         {
@@ -306,7 +306,7 @@
       "kind": "match-pairs",
       "id": "shapes-3-8",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "A pyramid is a solid with a point. A triangle is flat.",
+      "explanation": "A pyramid is 3D and has a point. A triangle is flat.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },

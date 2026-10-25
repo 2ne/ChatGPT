@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 matches a turned triangle. Q2 picks a tilted square next to a kite. Q3 treats a square as a rectangle. Q4 matches a long rectangle to its name. Q5 keeps a squashed triangle as a triangle. Q6 matches dice to a cube. Q7 names a sphere next to a circle. Q8 matches a box to a cuboid. Q9 names a tall cuboid. Q10 taps every rectangle, including a square. No hints.",
+    "within": "Q1 matches a turned triangle. Q2 picks a tilted square next to a kite. Q3 treats a square as a rectangle. Q4 matches a long rectangle to its name. Q5 keeps a squashed triangle as a triangle. Q6 matches dice to a 3D cube. Q7 names a sphere as 3D next to a flat circle. Q8 matches a box to a cuboid. Q9 names a tall cuboid. Q10 taps every rectangle, including a square. No hints.",
     "versus": "Easy names familiar shapes, then turns them from Q4. Medium treats a square as a rectangle and uses kites, pentagons and squashed triangles as near misses. Hard mixes 2D and 3D mix-ups and matches more real objects."
   },
   "skills": [
@@ -229,7 +229,7 @@
       "kind": "match-pairs",
       "id": "shapes-2-6",
       "prompt": "Select the card that matches the picture.",
-      "explanation": "A dice is a cube. Each face is a square.",
+      "explanation": "A dice is a 3D cube. Each face is a square.",
       "narration": {
         "prompt": "Select the card that matches the picture."
       },
@@ -260,7 +260,7 @@
         "name": "sphere",
         "colour": "blue"
       },
-      "explanation": "A sphere is solid and can roll. A circle is flat.",
+      "explanation": "A sphere is 3D and can roll. A circle is flat.",
       "narration": {
         "prompt": "What is this shape called?"
       },
