@@ -4668,6 +4668,7 @@ button.object-token {
 }
 
 .match-turn-target {
+  position: relative;
   display: grid;
   place-items: center;
   width: 100%;
@@ -4751,10 +4752,26 @@ button.object-token {
   border-color: var(--pair-ink, var(--primary));
 }
 
-.match-card.is-wrong .match-card-front {
-  background: var(--red-soft);
-  border-color: var(--red);
-  animation: wrong-shake 320ms ease;
+.match-turn-target.option,
+.match-card-front.option {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: inherit;
+  padding: 12px 8px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.match-turn-target .option-check,
+.match-turn-target .option-cross,
+.match-card-front .option-check,
+.match-card-front .option-cross {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  margin-left: 0;
 }
 
 .match-turn-target .option-content,

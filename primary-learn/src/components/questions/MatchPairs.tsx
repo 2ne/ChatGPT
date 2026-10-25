@@ -13,7 +13,7 @@ import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { ObjectGroup } from "./ObjectGroup";
-import type { Reveal } from "./choice";
+import { choiceClass, markChoice, type Reveal } from "./choice";
 import { ShapePicture } from "./ShapePicture";
 
 export type QuestionPlayControl = {
@@ -67,6 +67,24 @@ function foundPairIds(question: MatchPairsQuestion, map: Record<string, string>)
   );
 }
 
+function ChoiceMark({ marked }: { marked?: "correct" | "wrong" | null }) {
+  if (marked === "correct") {
+    return (
+      <span className="option-check" aria-hidden>
+        ✓
+      </span>
+    );
+  }
+  if (marked === "wrong") {
+    return (
+      <span className="option-cross" aria-hidden>
+        ✕
+      </span>
+    );
+  }
+  return null;
+}
+
 const FLIP_FALLBACK_MS = 200;
 
 function FlipCardButton({
@@ -74,7 +92,7 @@ function FlipCardButton({
   index,
   faceUp,
   found,
-  wrong,
+  marked,
   colour,
   disabled,
   onTap,
@@ -83,7 +101,7 @@ function FlipCardButton({
   index: number;
   faceUp: boolean;
   found: boolean;
-  wrong?: boolean;
+  marked?: "correct" | "wrong" | null;
   colour?: MatchPairColour;
   disabled?: boolean;
   onTap: () => void;
@@ -166,15 +184,16 @@ function FlipCardButton({
       ? copy.cardShowsFound(number, label)
       : copy.cardShows(number, label)
     : copy.cardFaceDown(number);
-  const style = found && colour
+  const playColour = found && colour && !marked;
+  const style = playColour
     ? ({ "--pair-tint": colour.tint, "--pair-ink": colour.ink } as CSSProperties)
     : undefined;
   return (
     <button
       type="button"
       className={`match-card${shownUp ? " is-up" : ""}${squeezing ? " is-squeeze" : ""}${
-        found ? " is-found" : ""
-      }${wrong ? " is-wrong" : ""}`}
+        playColour ? " is-found" : ""
+      }`}
       style={style}
       disabled={disabled}
       aria-label={aria}
@@ -182,8 +201,13 @@ function FlipCardButton({
     >
       <span className="match-card-inner" onTransitionEnd={onFlipEnd}>
         {shownUp ? (
-          <span className="match-card-face match-card-front">
+          <span
+            className={`match-card-face match-card-front${
+              marked ? ` ${choiceClass(false, marked)}` : ""
+            }`}
+          >
             <SideView side={card.content} />
+            <ChoiceMark marked={marked} />
           </span>
         ) : (
           <span className="match-card-face match-card-back">
@@ -331,7 +355,6 @@ function FlipMatch({
       const timer = window.setTimeout(() => {
         pickedRef.current = [];
         setPicked([]);
-        setMissIds([]);
         onChange(markMatchMissed(mapRef.current));
       }, wait);
       timers.current.push(timer);
@@ -364,8 +387,7 @@ function FlipMatch({
       >
         {cards.map((card, index) => {
           const found = foundIds.has(card.pairId);
-          const wrong = missIds.includes(card.id);
-          const showPair = found || revealAll;
+          const marked = missIds.includes(card.id) ? "wrong" : revealAll ? "correct" : null;
           const faceUp = revealAll || looking || found || picked.includes(card.id);
           return (
             <FlipCardButton
@@ -373,9 +395,9 @@ function FlipMatch({
               card={card}
               index={index}
               faceUp={faceUp}
-              found={showPair}
-              wrong={wrong}
-              colour={showPair ? colours[card.pairId] : undefined}
+              found={found && !marked}
+              marked={marked}
+              colour={found && !marked ? colours[card.pairId] : undefined}
               disabled={disabled || preview || peek || locked || found || missed}
               onTap={() => tapCard(card)}
             />
@@ -453,35 +475,38 @@ function OneAtATime({
 
   if (!current) return null;
 
-  const colour = colourForPair(0);
+  const rightKey = matchSideKey(current.right);
+  const chosenKey = map[current.id] || picked;
+  const result = submitted ? (chosenKey === rightKey ? "correct" : "incorrect") : reveal;
+  const pairMark = submitted ? (chosenKey === rightKey ? "correct" : "wrong") : null;
 
   return (
     <div className="match-turn">
       <div className="match-turn-board">
         <div className="match-turn-target-row">
           <div className="match-turn-target-slot">
-            <div className="match-turn-target" aria-label={matchSideLabel(current.left)}>
+            <div
+              className={`match-turn-target${pairMark ? ` ${choiceClass(false, pairMark)}` : ""}`}
+              aria-label={matchSideLabel(current.left)}
+            >
               <SideView side={current.left} />
+              <ChoiceMark marked={pairMark} />
             </div>
           </div>
         </div>
         <div className="match-turn-choices" role="group" aria-label={copy.matchCards}>
           {choices.map((side, index) => {
             const key = matchSideKey(side);
-            const rightKey = matchSideKey(current.right);
-            const chosenKey = map[current.id] || picked;
             const selected = !submitted && picked === key;
-            const found = Boolean(submitted && key === rightKey);
-            const wrong = Boolean(submitted && chosenKey !== rightKey && key === chosenKey);
+            const marked = markChoice(result, key === chosenKey, key === rightKey);
             return (
               <FlipCardButton
                 key={`${current.id}-${key}-${index}`}
                 card={{ id: key, pairId: current.id, content: side }}
                 index={index}
-                faceUp={review || selected || found || wrong}
-                found={found}
-                wrong={wrong}
-                colour={found ? colour : undefined}
+                faceUp={review || selected || Boolean(marked)}
+                found={false}
+                marked={marked}
                 disabled={disabled || submitted || review}
                 onTap={() => {
                   if (disabled || review || submittedRef.current) return;
