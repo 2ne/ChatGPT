@@ -239,7 +239,7 @@ the thin rainbow. Inner words stay padded.
   **not** show a grey uppercase kind label above it (`HOW MANY?`, `TYPE IT IN`,
   `PICK ONE`, and the rest). Kids already see what to do from the question.
   If the prompt has a sequence after the question mark (`What comes next? 1, 2, 3, …`), that sequence sits on the next line. The speaker stays after the question.
-  Do not show a grey `Tap every answer that is right.` line when the prompt already says every.
+  Do not show a grey helper line under the question (`Tap every answer that is right.` or the like). The prompt says what to do.
 - Options carry **letter badges** (A–D), keyboard `1–4` still works. Pictured
   join stories (`visual.added`) with digit answers use those same rows, not a
   separate centred number pad. Number-to-amount picks (`numeral` on

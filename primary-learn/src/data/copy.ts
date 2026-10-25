@@ -36,7 +36,6 @@ export const copy = {
   questComplete: "Quest complete",
   emptyActivity: "This activity has no questions yet.",
   yourAnswer: "Your answer",
-  chooseAll: "Tap every answer that is right.",
   tapThenPartner: "Tap one, then tap its partner.",
   matchCards: "Cards",
   cardFaceDown: (n: number) => `Card ${n}, face down`,

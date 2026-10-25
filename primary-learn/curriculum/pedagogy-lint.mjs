@@ -194,6 +194,10 @@ function checkActivity(activity) {
       errors.push(`${path}: compare questions must name what is compared`);
     }
 
+    if (question.kind === "multi-select" && !/\b(select|tap|choose)\b/i.test(question.prompt)) {
+      errors.push(`${path}: multi-select must say what to do in the question`);
+    }
+
     const expl = String(question.explanation ?? "").trim();
     if (content) {
       const words = wordCount(expl);

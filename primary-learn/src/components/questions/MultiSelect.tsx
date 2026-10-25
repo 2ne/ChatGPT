@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { copy } from "../../data/copy";
 import type { MultiSelectQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { BaseTen } from "./BaseTen";
@@ -27,14 +26,12 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
     onChange(next);
   }
 
-  const alreadySaysEvery = /\bevery\b/i.test(question.prompt);
-
   if (question.shape || question.options.some((option) => option.shape)) {
     return <ShapeChoices question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
   }
 
   return (
-    <div className="option-stack" role="group" aria-label={alreadySaysEvery ? question.prompt : copy.chooseAll}>
+    <div className="option-stack" role="group" aria-label={question.prompt}>
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.visual ? (
@@ -45,7 +42,6 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
           flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
-      {alreadySaysEvery ? null : <p className="t-body">{copy.chooseAll}</p>}
       {question.options.map((option, slot) => {
         const isOn = selected.includes(option.id);
         const marked = markChoice(reveal, isOn, question.correctIds.includes(option.id));
