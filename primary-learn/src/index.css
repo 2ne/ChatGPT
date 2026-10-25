@@ -1353,9 +1353,11 @@ button.learner-chip:focus-visible {
 }
 
 .object-group.is-option .object-token {
+  width: 36px;
+  height: 36px;
   min-width: 36px;
   min-height: 36px;
-  padding: 4px;
+  padding: 0;
   font-size: 22px;
   border-radius: 12px;
 }
@@ -1613,18 +1615,37 @@ button.learner-chip:focus-visible {
 }
 
 .object-glyph {
-  display: block;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 1em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
   line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  /* Apple Color Emoji ink sits a little low and left in the em box. */
+  position: relative;
+  top: -0.04em;
+  left: 0.04em;
 }
 
 .object-token {
   appearance: none;
   position: relative;
+  box-sizing: border-box;
   display: grid;
   place-items: center;
+  width: 56px;
+  height: 56px;
   min-width: 56px;
   min-height: 56px;
-  padding: 6px;
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0;
   border: 2.5px solid transparent;
   border-radius: 18px;
   background: var(--paper-deep);
@@ -1701,13 +1722,28 @@ button.object-token {
   padding: 4px;
 }
 
-.join-story .object-token {
-  min-width: var(--story-tile);
-  min-height: var(--story-tile);
+.story-tile {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
   width: var(--story-tile);
   height: var(--story-tile);
-  padding: 2px;
-  font-size: calc(var(--story-tile) * 0.72);
+  min-width: var(--story-tile);
+  min-height: var(--story-tile);
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0;
+  line-height: 1;
+  font-size: calc(var(--story-tile) * 0.7);
+}
+
+.join-story .object-token {
+  width: var(--story-tile);
+  height: var(--story-tile);
+  min-width: var(--story-tile);
+  min-height: var(--story-tile);
+  padding: 0;
+  font-size: calc(var(--story-tile) * 0.7);
   border-radius: 10px;
 }
 
@@ -1737,12 +1773,12 @@ button.object-token {
 }
 
 .join-story.is-option .object-token {
-  min-width: 36px;
-  min-height: 36px;
-  width: 36px;
-  height: 36px;
-  padding: 4px;
-  font-size: 22px;
+  width: var(--story-tile);
+  height: var(--story-tile);
+  min-width: var(--story-tile);
+  min-height: var(--story-tile);
+  padding: 0;
+  font-size: calc(var(--story-tile) * 0.7);
   border-radius: 12px;
 }
 
@@ -1766,11 +1802,15 @@ button.object-token {
 }
 
 .take-away-token {
+  box-sizing: border-box;
   display: grid;
   place-items: center;
   width: var(--story-tile);
   height: var(--story-tile);
-  font-size: calc(var(--story-tile) * 0.78);
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0;
+  font-size: calc(var(--story-tile) * 0.7);
   line-height: 1;
 }
 
@@ -1789,9 +1829,9 @@ button.object-token {
 }
 
 .take-away-strip.is-option .take-away-token {
-  width: 36px;
-  height: 36px;
-  font-size: 26px;
+  width: var(--story-tile);
+  height: var(--story-tile);
+  font-size: calc(var(--story-tile) * 0.7);
 }
 
 .take-away-strip.is-option .take-away-token.is-gone {
@@ -2158,6 +2198,9 @@ button.object-token {
   flex: none;
   width: var(--make-total-tile, 72px);
   height: var(--make-total-tile, 72px);
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0;
   border-radius: 16px;
   background: var(--paper-deep);
   border: 2.5px solid transparent;

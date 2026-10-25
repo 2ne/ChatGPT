@@ -191,7 +191,7 @@ function StoryTileRows({
           {row.map((index) => {
             const gone = goneFrom != null && index >= goneFrom;
             return (
-              <span key={index} className={`${tokenClass}${gone ? " is-gone" : ""}`}>
+              <span key={index} className={`story-tile ${tokenClass}${gone ? " is-gone" : ""}`}>
                 <span className="object-glyph">{glyph}</span>
               </span>
             );
