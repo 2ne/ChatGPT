@@ -93,12 +93,26 @@ export type TenFrameAsset = {
   item?: ObjectItem;
 };
 
+/**
+ * Structured tens and ones for 21 to 99.
+ * Rods are neutral, not the question objects. Segmented on Easy, plain on Medium.
+ */
+export const BASE_TEN_STYLES = ["segmented", "plain"] as const;
+export type BaseTenStyle = (typeof BASE_TEN_STYLES)[number];
+
+export type BaseTenAsset = {
+  tens: number;
+  ones: number;
+  style?: BaseTenStyle;
+};
+
 export type QuestionOption = {
   id: string;
   shape?: ShapeAsset;
   label?: string;
   visual?: ObjectAsset;
   tenFrame?: TenFrameAsset;
+  baseTen?: BaseTenAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -154,6 +168,8 @@ type QuestionCore = {
   visual?: ObjectAsset;
   /** Optional ten frame above the answers. Do not mix with visual. */
   tenFrame?: TenFrameAsset;
+  /** Optional tens-and-ones picture. Do not mix with visual or tenFrame. */
+  baseTen?: BaseTenAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */
@@ -221,6 +237,7 @@ export type MatchSide =
       label?: string;
       visual?: ObjectAsset;
       tenFrame?: TenFrameAsset;
+      baseTen?: BaseTenAsset;
       shape?: ShapeAsset;
       layout?: ObjectLayout;
     };

@@ -4,7 +4,8 @@ import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
-import type { ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import type { BaseTenAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import { BaseTen } from "./BaseTen";
 import { FingerHand } from "./FingerHand";
 import { FlashReveal } from "./FlashReveal";
 import { TenFrame } from "./TenFrame";
@@ -395,18 +396,21 @@ export function OptionContent({
   label,
   visual,
   tenFrame,
+  baseTen,
   layout,
   pack,
 }: {
   label?: string;
   visual?: ObjectAsset;
   tenFrame?: TenFrameAsset;
+  baseTen?: BaseTenAsset;
   layout?: ObjectLayout;
   pack?: boolean;
 }) {
   return (
     <span className="option-content">
       {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}
+      {baseTen ? <BaseTen model={baseTen} compact /> : null}
       {visual ? <ObjectGroup visual={visual} compact pack={pack} layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
     </span>

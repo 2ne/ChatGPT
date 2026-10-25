@@ -1,4 +1,10 @@
-import { OBJECT_ITEMS, type ObjectAsset, type ObjectItem, type TenFrameAsset } from "../types/activity";
+import {
+  OBJECT_ITEMS,
+  type BaseTenAsset,
+  type ObjectAsset,
+  type ObjectItem,
+  type TenFrameAsset,
+} from "../types/activity";
 
 /** Grammar for object assets. Pictures are drawn by ObjectGroup, not stored in quest JSON. */
 export const OBJECT_GLYPH: Record<ObjectItem, string> = {
@@ -103,6 +109,18 @@ export function describeTenFrame(frame: TenFrameAsset): string {
 
 export function tenFrameKey(frame: TenFrameAsset): string {
   return `ten-frame:${frame.count}:${frame.item ?? "apple"}`;
+}
+
+export function describeBaseTen(model: BaseTenAsset): string {
+  const tens = model.tens === 1 ? "1 ten" : `${model.tens} tens`;
+  const ones = model.ones === 1 ? "1 one" : `${model.ones} ones`;
+  if (model.tens === 0) return ones;
+  if (model.ones === 0) return tens;
+  return `${tens} and ${ones}`;
+}
+
+export function baseTenKey(model: BaseTenAsset): string {
+  return `base-ten:${model.tens}:${model.ones}:${model.style ?? "segmented"}`;
 }
 
 export function visualKey(visual: ObjectAsset): string {

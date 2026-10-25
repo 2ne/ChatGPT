@@ -1984,6 +1984,85 @@ button.object-token {
   visibility: hidden;
 }
 
+.base-ten {
+  --bt-rod-w: 14px;
+  --bt-rod-h: 110px;
+  --bt-one: 14px;
+  --bt-gap: 4px;
+  --bt-rod: #6d7a96;
+  --bt-rod-band: #46516a;
+  --bt-one-fill: #8a95ad;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.base-ten.is-compact {
+  --bt-rod-w: 8px;
+  --bt-rod-h: 72px;
+  --bt-one: 8px;
+  --bt-gap: 2px;
+  gap: 5px;
+}
+
+.base-ten-rods {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--bt-gap);
+}
+
+.base-ten-rod {
+  box-sizing: border-box;
+  width: var(--bt-rod-w);
+  height: var(--bt-rod-h);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.base-ten-rod.is-plain {
+  background: linear-gradient(to top, var(--bt-rod) 0 50%, var(--bt-rod-band) 50% 100%);
+  border: 1px solid #2d3648;
+}
+
+.base-ten-rod.is-segmented {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1px;
+  padding: 1px;
+  background: #2d3648;
+}
+
+.base-ten-seg {
+  flex: 1 1 0;
+  min-height: 0;
+  background: var(--bt-rod);
+}
+
+.base-ten-seg.is-upper {
+  background: var(--bt-rod-band);
+}
+
+.base-ten-ones {
+  display: grid;
+  grid-template-columns: repeat(5, var(--bt-one));
+  gap: 2px;
+  align-content: end;
+}
+
+.base-ten-one {
+  box-sizing: border-box;
+  width: var(--bt-one);
+  height: var(--bt-one);
+  border-radius: 2px;
+  background: var(--bt-one-fill);
+  border: 1px solid #2d3648;
+}
+
 .option-content {
   display: inline-flex;
   flex-wrap: wrap;
@@ -4995,6 +5074,22 @@ button.object-token {
 .match-card-face .ten-frame-cell {
   border-width: 1px;
   border-radius: 2px;
+}
+
+.match-turn-target .base-ten,
+.match-card-face .base-ten {
+  --bt-rod-w: min(7px, calc((100cqw - 24px) / 12));
+  --bt-rod-h: min(88px, calc(100cqh - 10px));
+  --bt-one: min(7px, calc((100cqw - 24px) / 12));
+  --bt-gap: 1px;
+  gap: 3px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.match-turn-target .base-ten-ones,
+.match-card-face .base-ten-ones {
+  gap: 1px;
 }
 
 @media (prefers-reduced-motion: reduce) {

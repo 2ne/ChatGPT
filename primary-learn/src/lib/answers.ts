@@ -1,5 +1,5 @@
-import { describeTenFrame, describeVisual } from "../data/objects";
-import type { Question, TenFrameAsset } from "../types/activity";
+import { describeBaseTen, describeTenFrame, describeVisual } from "../data/objects";
+import type { BaseTenAsset, Question, TenFrameAsset } from "../types/activity";
 import { shapeName } from "./shapes";
 
 function optionLabel(
@@ -9,6 +9,7 @@ function optionLabel(
         shape?: import("../types/shapes").ShapeAsset;
         visual?: import("../types/activity").ObjectAsset;
         tenFrame?: TenFrameAsset;
+        baseTen?: BaseTenAsset;
       }
     | undefined,
   slot: number,
@@ -17,6 +18,7 @@ function optionLabel(
   if (option.label) return option.label;
   if (option.shape) return `${shapeName(option.shape)} (${"ABCD"[slot]})`;
   if (option.tenFrame) return describeTenFrame(option.tenFrame);
+  if (option.baseTen) return describeBaseTen(option.baseTen);
   if (option.visual) return describeVisual(option.visual);
   return null;
 }

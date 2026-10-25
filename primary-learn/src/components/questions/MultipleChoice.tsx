@@ -4,6 +4,7 @@ import { copy } from "../../data/copy";
 import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
+import { BaseTen } from "./BaseTen";
 import { TenFrame } from "./TenFrame";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
@@ -49,7 +50,7 @@ export function MultipleChoice({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked, ["amount-card"])}
               >
-                <OptionContent visual={option.visual} tenFrame={option.tenFrame} layout={option.layout} pack />
+                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} layout={option.layout} pack />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
@@ -67,7 +68,7 @@ export function MultipleChoice({
     );
   }
 
-  const showStem = question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame);
+  const showStem = question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame || question.baseTen);
   const sum = !question.visual && optionsAreNumerals(question.options)
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
@@ -111,6 +112,7 @@ export function MultipleChoice({
         </div>
       ) : null}
       {showStem && question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
+      {showStem && question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {showStem && question.visual ? (
         <ObjectGroup
           visual={question.visual}
@@ -140,6 +142,7 @@ export function MultipleChoice({
                 label={option.label}
                 visual={option.visual}
                 tenFrame={option.tenFrame}
+                baseTen={option.baseTen}
                 layout={option.layout}
               />
               {marked === "correct" ? (

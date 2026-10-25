@@ -1,6 +1,7 @@
 import { copy } from "../../data/copy";
 import type { FillBlankQuestion } from "../../types/activity";
 import { ObjectGroup } from "./ObjectGroup";
+import { BaseTen } from "./BaseTen";
 import { TenFrame } from "./TenFrame";
 import type { Reveal } from "./choice";
 
@@ -17,6 +18,7 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
   return (
     <div className="option-stack">
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
+      {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.visual ? (
         <ObjectGroup
           visual={question.visual}

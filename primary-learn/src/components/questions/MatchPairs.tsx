@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { copy } from "../../data/copy";
-import { matchSideKey, matchSideLabel, matchSideTenFrame, matchSideVisual } from "../../lib/matchSide";
+import { matchSideBaseTen, matchSideKey, matchSideLabel, matchSideTenFrame, matchSideVisual } from "../../lib/matchSide";
 import { seededOrder } from "../../lib/matchPairs";
 import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
@@ -8,6 +8,7 @@ import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { ObjectGroup } from "./ObjectGroup";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 import { ShapePicture } from "./ShapePicture";
+import { BaseTen } from "./BaseTen";
 import { TenFrame } from "./TenFrame";
 
 export type QuestionPlayControl = {
@@ -33,6 +34,7 @@ type FlipCard = {
 function SideView({ side }: { side: MatchSide }) {
   const visual = matchSideVisual(side);
   const tenFrame = matchSideTenFrame(side);
+  const baseTen = matchSideBaseTen(side);
   const label = typeof side === "string" ? side : side.label;
   const layout = typeof side === "string" ? undefined : side.layout;
   const shape = typeof side === "string" ? undefined : side.shape;
@@ -40,9 +42,10 @@ function SideView({ side }: { side: MatchSide }) {
     <span className="option-content">
       {shape ? <ShapePicture shape={shape} compact /> : null}
       {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}
+      {baseTen ? <BaseTen model={baseTen} compact /> : null}
       {visual ? <ObjectGroup visual={visual} compact pack layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
-      {!visual && !tenFrame && !shape && !label ? matchSideLabel(side) : null}
+      {!visual && !tenFrame && !baseTen && !shape && !label ? matchSideLabel(side) : null}
     </span>
   );
 }

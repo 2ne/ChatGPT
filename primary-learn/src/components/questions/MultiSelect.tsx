@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { copy } from "../../data/copy";
 import type { MultiSelectQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
+import { BaseTen } from "./BaseTen";
 import { TenFrame } from "./TenFrame";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
@@ -35,6 +36,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
   return (
     <div className="option-stack" role="group" aria-label={alreadySaysEvery ? question.prompt : copy.chooseAll}>
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
+      {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.visual ? (
         <ObjectGroup
           visual={question.visual}
@@ -63,6 +65,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
               label={option.label}
               visual={option.visual}
               tenFrame={option.tenFrame}
+              baseTen={option.baseTen}
               layout={option.layout}
             />
             {marked === "correct" ? (
