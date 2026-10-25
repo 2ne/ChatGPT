@@ -32,7 +32,6 @@ import { mathsWallpaper } from "./mascot/MathsWallpaper";
 import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
 import type { QuestionPlayControl } from "./questions/MatchPairs";
-import { matchPairsMode } from "../lib/matchPairs";
 import { QuestExitSheet } from "./QuestExitSheet";
 import { BondDemonstration } from "./questions/BondDemonstration";
 
@@ -236,7 +235,6 @@ export function ActivityRunner({
         if (
           currentPhase === "question" &&
           currentQuestion?.kind === "match-pairs" &&
-          matchPairsMode(currentQuestion) === "one-at-a-time" &&
           playControlRef.current?.canConfirm
         ) {
           event.preventDefault();
@@ -338,13 +336,9 @@ export function ActivityRunner({
   const pipMood = phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy";
   const position = Math.min(index + 1, activeQueue.length);
   const promptParts = splitPromptTail(question.prompt);
-  const flipMatch =
-    question.kind === "match-pairs" && matchPairsMode(question) === "flip";
-  const oneAtATimeMatch =
-    question.kind === "match-pairs" && matchPairsMode(question) === "one-at-a-time";
-  const hideCheck = flipMatch && phase === "question";
+  const oneAtATimeMatch = question.kind === "match-pairs";
   const primaryAction =
-    hideCheck ? null : phase === "question" ? (
+    phase === "question" ? (
       <button
         type="button"
         className="btn btn-primary btn-block"
@@ -385,7 +379,7 @@ export function ActivityRunner({
       lookAgainCount={lookAgainCount}
       recordLookAgain={() => setLookAgainCount((n) => n + 1)}
     >
-    <main className={`page page-quest page-with-dock${hideCheck ? " is-no-dock" : ""}`} style={backdrop}>
+    <main className="page page-quest page-with-dock" style={backdrop}>
       <ConfettiBurst burstId={confettiBurst} intensity="pop" />
 
       <div className="quest-shell">

@@ -42,38 +42,6 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "id": "rw20m-14",
-      "prompt": "Which number is fourteen?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "12"
-        },
-        {
-          "id": "b",
-          "label": "14"
-        },
-        {
-          "id": "c",
-          "label": "40"
-        },
-        {
-          "id": "d",
-          "label": "15"
-        }
-      ],
-      "correctId": "b",
-      "hint": "Fourteen is a teen number.",
-      "explanation": "Fourteen is written as 14.",
-      "narration": {
-        "prompt": "Which number is fourteen?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "rw20m-19",
       "prompt": "Which number is nineteen?",
       "randomise": {
@@ -151,31 +119,72 @@
     },
     {
       "kind": "match-pairs",
-      "id": "rw20m-match",
-      "prompt": "Match each word to its number.",
+      "id": "rw20m-match-11",
+      "prompt": "Select the card that matches the word.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
           "left": "eleven",
           "right": "11"
-        },
+        }
+      ],
+      "choices": [
+        "11",
+        "10",
+        "12"
+      ],
+      "explanation": "Eleven is written as 11.",
+      "narration": {
+        "prompt": "Select the card that matches the word."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20m-match-14",
+      "prompt": "Select the card that matches the word.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": "fourteen",
           "right": "14"
-        },
+        }
+      ],
+      "choices": [
+        "13",
+        "14",
+        "15"
+      ],
+      "explanation": "Fourteen is written as 14.",
+      "narration": {
+        "prompt": "Select the card that matches the word."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20m-match-19",
+      "prompt": "Select the card that matches the word.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p3",
+          "id": "p1",
           "left": "nineteen",
           "right": "19"
         }
       ],
-      "explanation": "Each word names its number.",
+      "choices": [
+        "18",
+        "19",
+        "20"
+      ],
+      "explanation": "Nineteen is written as 19.",
       "narration": {
-        "prompt": "Match each word to its number."
+        "prompt": "Select the card that matches the word."
       },
-      "mode": "flip"
+      "mode": "one-at-a-time"
     },
     {
       "kind": "ordered",
@@ -256,37 +265,6 @@
       "explanation": "15 and 18 are teen numbers.",
       "narration": {
         "prompt": "Tap every teen number. There are two to choose."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "rw20m-ten-bit-18",
-      "prompt": "18 is 10 and how many more?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
-          "label": "8"
-        },
-        {
-          "id": "d",
-          "label": "9"
-        }
-      ],
-      "correctId": "c",
-      "explanation": "18 is 10 and 8.",
-      "narration": {
-        "prompt": "eighteen is ten and how many more?"
       }
     },
     {

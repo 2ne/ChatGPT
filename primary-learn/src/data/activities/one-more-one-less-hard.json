@@ -41,68 +41,6 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "id": "oml-h-more-0",
-      "prompt": "What is one more than 0?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "10"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "One more than 0 is 1.",
-      "narration": {
-        "prompt": "What is one more than zero?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "oml-h-less-1",
-      "prompt": "What is one less than 1?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "10"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "One less than 1 is 0.",
-      "narration": {
-        "prompt": "What is one less than one?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "oml-h-more-word",
       "prompt": "What is one more than 13?",
       "randomise": {
@@ -165,37 +103,6 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "oml-h-less-17",
-      "prompt": "What is one less than 17?",
-      "explanation": "One less than 17 is 16.",
-      "narration": {
-        "prompt": "What is one less than seventeen?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "16"
-        },
-        {
-          "id": "b",
-          "label": "15"
-        },
-        {
-          "id": "c",
-          "label": "17"
-        },
-        {
-          "id": "d",
-          "label": "14"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "oml-h-both",
       "prompt": "What is one less than 19?",
       "explanation": "One less than 19 is 18.",
@@ -227,36 +134,99 @@
     },
     {
       "kind": "match-pairs",
-      "id": "oml-h-match",
-      "prompt": "Match each clue to its number.",
+      "id": "oml-h-match-12",
+      "prompt": "Select the card that matches the number.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
           "left": "one more than 11",
           "right": "12"
-        },
+        }
+      ],
+      "choices": [
+        "11",
+        "12",
+        "13",
+        "10"
+      ],
+      "explanation": "One more than 11 is 12.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-h-match-14",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": "one less than 15",
           "right": "14"
-        },
+        }
+      ],
+      "choices": [
+        "15",
+        "14",
+        "13",
+        "16"
+      ],
+      "explanation": "One less than 15 is 14.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-h-match-19",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p3",
+          "id": "p1",
           "left": "one more than 18",
           "right": "19"
-        },
+        }
+      ],
+      "choices": [
+        "18",
+        "19",
+        "20",
+        "17"
+      ],
+      "explanation": "One more than 18 is 19.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-h-match-16",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p4",
+          "id": "p1",
           "left": "one less than 17",
           "right": "16"
         }
       ],
-      "explanation": "Each clue matches its number.",
+      "choices": [
+        "17",
+        "16",
+        "15",
+        "18"
+      ],
+      "explanation": "One less than 17 is 16.",
       "narration": {
-        "prompt": "Match each clue to its number."
+        "prompt": "Select the card that matches the number."
       },
-      "mode": "flip"
+      "mode": "one-at-a-time"
     },
     {
       "kind": "ordered",

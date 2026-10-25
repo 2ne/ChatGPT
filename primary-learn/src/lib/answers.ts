@@ -5,7 +5,6 @@ function optionLabel(option: { label?: string; shape?: import("../types/shapes")
   return option?.label ?? (option?.shape ? `${shapeName(option.shape)} (${"ABCD"[slot]})` : null);
 }
 import { makeTotalMissing } from "./makeTotal";
-import { isMatchMissed } from "./matchPairs";
 import { matchSideKey, matchSideLabel } from "./matchSide";
 import { partWholeAnswer } from "./partWhole";
 import {
@@ -65,7 +64,7 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
       );
     }
     case "match-pairs": {
-      if (!answer || typeof answer !== "object" || isMatchMissed(answer)) return false;
+      if (!answer || typeof answer !== "object") return false;
       const map = answer as Record<string, string>;
       return question.pairs.every((pair) => map[pair.id] === matchSideKey(pair.right));
     }
@@ -200,7 +199,6 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
       return Array.isArray(answer) && answer.length === question.items.length;
     case "match-pairs": {
       if (!answer || typeof answer !== "object") return false;
-      if (isMatchMissed(answer)) return true;
       const map = answer as Record<string, string>;
       return question.pairs.every((pair) => Boolean(map[pair.id]));
     }

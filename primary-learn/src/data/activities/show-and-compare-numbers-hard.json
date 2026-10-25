@@ -99,10 +99,12 @@
     },
     {
       "kind": "match-pairs",
-      "prompt": "Match each group to an equal number of apples.",
+      "id": "represent100-3-3-15",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
       "pairs": [
         {
-          "id": "0",
+          "id": "p1",
           "left": {
             "visual": {
               "item": "apple",
@@ -115,9 +117,48 @@
               "count": 15
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 14
+          }
         },
         {
-          "id": "1",
+          "visual": {
+            "item": "apple",
+            "count": 15
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 16
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 17
+          }
+        }
+      ],
+      "explanation": "Both groups have 15 apples.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "represent100-3-3-17",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "apple",
@@ -130,9 +171,48 @@
               "count": 17
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 16
+          }
         },
         {
-          "id": "2",
+          "visual": {
+            "item": "apple",
+            "count": 17
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 18
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 15
+          }
+        }
+      ],
+      "explanation": "Both groups have 17 apples.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "represent100-3-3-18",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "apple",
@@ -147,9 +227,37 @@
           }
         }
       ],
-      "explanation": "Equal groups have the same number of apples.",
-      "id": "represent100-3-3",
-      "mode": "flip"
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 17
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 19
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 18
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 16
+          }
+        }
+      ],
+      "explanation": "Both groups have 18 apples.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
@@ -183,39 +291,6 @@
         "marked": 92
       },
       "id": "represent100-3-4"
-    },
-    {
-      "kind": "multiple-choice",
-      "prompt": "Which number belongs at the marked tick?",
-      "options": [
-        {
-          "id": "0",
-          "label": "94"
-        },
-        {
-          "id": "1",
-          "label": "95"
-        },
-        {
-          "id": "2",
-          "label": "96"
-        },
-        {
-          "id": "3",
-          "label": "97"
-        }
-      ],
-      "correctId": "1",
-      "explanation": "The marked tick is 95. Each tick is one more than the tick before it.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "numberLine": {
-        "start": 90,
-        "end": 96,
-        "marked": 95
-      },
-      "id": "represent100-3-5"
     },
     {
       "kind": "multi-select",
@@ -275,34 +350,6 @@
         "shuffleOptions": true
       },
       "id": "represent100-3-7"
-    },
-    {
-      "kind": "multiple-choice",
-      "prompt": "Which number is the most?",
-      "options": [
-        {
-          "id": "0",
-          "label": "93"
-        },
-        {
-          "id": "1",
-          "label": "96"
-        },
-        {
-          "id": "2",
-          "label": "98"
-        },
-        {
-          "id": "3",
-          "label": "95"
-        }
-      ],
-      "correctId": "2",
-      "explanation": "98 is the biggest number in this group.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "represent100-3-8"
     },
     {
       "kind": "multiple-choice",

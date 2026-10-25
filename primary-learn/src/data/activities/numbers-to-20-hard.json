@@ -42,37 +42,6 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "id": "rw20h-13",
-      "prompt": "Which number is thirteen?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "13"
-        },
-        {
-          "id": "b",
-          "label": "30"
-        },
-        {
-          "id": "c",
-          "label": "31"
-        },
-        {
-          "id": "d",
-          "label": "12"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "Thirteen is written as 13.",
-      "narration": {
-        "prompt": "Which number is thirteen?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "rw20h-17",
       "prompt": "Which number is seventeen?",
       "randomise": {
@@ -149,36 +118,99 @@
     },
     {
       "kind": "match-pairs",
-      "id": "rw20h-match",
-      "prompt": "Match each number to its word.",
+      "id": "rw20h-match-12",
+      "prompt": "Select the card that matches the number.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
           "left": "12",
           "right": "twelve"
-        },
+        }
+      ],
+      "choices": [
+        "twelve",
+        "eleven",
+        "twenty",
+        "thirteen"
+      ],
+      "explanation": "12 is written as twelve.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20h-match-15",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": "15",
           "right": "fifteen"
-        },
+        }
+      ],
+      "choices": [
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "five"
+      ],
+      "explanation": "15 is written as fifteen.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20h-match-18",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p3",
+          "id": "p1",
           "left": "18",
           "right": "eighteen"
-        },
+        }
+      ],
+      "choices": [
+        "eighteen",
+        "eight",
+        "nineteen",
+        "seventeen"
+      ],
+      "explanation": "18 is written as eighteen.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "rw20h-match-20",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p4",
+          "id": "p1",
           "left": "20",
           "right": "twenty"
         }
       ],
-      "explanation": "Each number matches its word.",
+      "choices": [
+        "twelve",
+        "twenty",
+        "thirty",
+        "ten"
+      ],
+      "explanation": "20 is written as twenty.",
       "narration": {
-        "prompt": "Match each number to its word."
+        "prompt": "Select the card that matches the number."
       },
-      "mode": "flip"
+      "mode": "one-at-a-time"
     },
     {
       "kind": "ordered",
@@ -264,68 +296,6 @@
       "explanation": "11 is eleven. 16 is sixteen.",
       "narration": {
         "prompt": "Tap every correct match. There are two to choose."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "rw20h-ten-bit-11",
-      "prompt": "11 is 10 and how many more?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "11"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "11 is 10 and 1.",
-      "narration": {
-        "prompt": "eleven is ten and how many more?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "rw20h-20-word",
-      "prompt": "What is the word for 20?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "twelve"
-        },
-        {
-          "id": "b",
-          "label": "twenty"
-        },
-        {
-          "id": "c",
-          "label": "two"
-        },
-        {
-          "id": "d",
-          "label": "twenty-one"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "20 is written as twenty.",
-      "narration": {
-        "prompt": "What is the word for 20?"
       }
     }
   ]

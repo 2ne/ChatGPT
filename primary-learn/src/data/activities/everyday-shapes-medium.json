@@ -64,61 +64,6 @@
       "id": "shapes-2-1"
     },
     {
-      "kind": "multiple-choice",
-      "prompt": "Which shape is a square?",
-      "explanation": "A square is still a square when it is tilted.",
-      "narration": {
-        "prompt": "Which shape is a square?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "shape": {
-            "name": "square",
-            "variant": "standard",
-            "rotation": 45,
-            "colour": "blue",
-            "scale": 1
-          }
-        },
-        {
-          "id": "b",
-          "shape": {
-            "name": "rectangle",
-            "variant": "tall",
-            "rotation": 0,
-            "colour": "orange",
-            "scale": 1
-          }
-        },
-        {
-          "id": "c",
-          "shape": {
-            "name": "circle",
-            "variant": "standard",
-            "rotation": 0,
-            "colour": "green",
-            "scale": 1
-          }
-        },
-        {
-          "id": "d",
-          "shape": {
-            "name": "triangle",
-            "variant": "wide",
-            "rotation": 0,
-            "colour": "purple",
-            "scale": 1
-          }
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "shapes-2-2"
-    },
-    {
       "kind": "multi-select",
       "prompt": "Tap every triangle. There are 2 to choose.",
       "explanation": "Both shapes have three straight sides. Triangles can look different from each other.",
@@ -178,11 +123,9 @@
     },
     {
       "kind": "match-pairs",
-      "prompt": "Match each shape to its name.",
-      "explanation": "A shape keeps its name when its size or position changes.",
-      "narration": {
-        "prompt": "Match each shape to its name."
-      },
+      "id": "shapes-2-4-rectangle",
+      "prompt": "Select the card that matches the shape.",
+      "randomise": {},
       "pairs": [
         {
           "id": "p1",
@@ -196,9 +139,27 @@
             }
           },
           "right": "Rectangle"
-        },
+        }
+      ],
+      "choices": [
+        "Rectangle",
+        "Square",
+        "Triangle"
+      ],
+      "explanation": "This shape is a rectangle.",
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "shapes-2-4-triangle",
+      "prompt": "Select the card that matches the shape.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": {
             "shape": {
               "name": "triangle",
@@ -209,9 +170,27 @@
             }
           },
           "right": "Triangle"
-        },
+        }
+      ],
+      "choices": [
+        "Triangle",
+        "Pyramid",
+        "Square"
+      ],
+      "explanation": "This shape is a triangle.",
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "shapes-2-4-circle",
+      "prompt": "Select the card that matches the shape.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p3",
+          "id": "p1",
           "left": {
             "shape": {
               "name": "circle",
@@ -224,46 +203,16 @@
           "right": "Circle"
         }
       ],
-      "id": "shapes-2-4",
-      "mode": "flip"
-    },
-    {
-      "kind": "multiple-choice",
-      "prompt": "What is this shape called?",
-      "explanation": "This is a cube. It has six equal square faces.",
-      "narration": {
-        "prompt": "What is this shape called?"
-      },
-      "shape": {
-        "name": "cube",
-        "variant": "standard",
-        "rotation": 30,
-        "colour": "green",
-        "scale": 1
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "Cube"
-        },
-        {
-          "id": "b",
-          "label": "Sphere"
-        },
-        {
-          "id": "c",
-          "label": "Pyramid"
-        },
-        {
-          "id": "d",
-          "label": "Triangle"
-        }
+      "choices": [
+        "Sphere",
+        "Circle",
+        "Square"
       ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
+      "explanation": "This shape is a circle.",
+      "narration": {
+        "prompt": "Select the card that matches the shape."
       },
-      "id": "shapes-2-5"
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
@@ -379,105 +328,10 @@
       "id": "shapes-2-7"
     },
     {
-      "kind": "multiple-choice",
-      "prompt": "What is this shape called?",
-      "explanation": "A sphere is a solid shape. A circle is flat.",
-      "narration": {
-        "prompt": "What is this shape called?"
-      },
-      "shape": {
-        "name": "sphere",
-        "variant": "standard",
-        "rotation": 0,
-        "colour": "orange",
-        "scale": 0.75
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "Sphere"
-        },
-        {
-          "id": "b",
-          "label": "Circle"
-        },
-        {
-          "id": "c",
-          "label": "Cube"
-        },
-        {
-          "id": "d",
-          "label": "Cuboid"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "shapes-2-8"
-    },
-    {
-      "kind": "multiple-choice",
-      "prompt": "Which solid is shaped like a box?",
-      "explanation": "Many boxes are shaped like cuboids.",
-      "narration": {
-        "prompt": "Which solid is shaped like a box?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "shape": {
-            "name": "cuboid",
-            "variant": "wide",
-            "rotation": 10,
-            "colour": "blue",
-            "scale": 1
-          }
-        },
-        {
-          "id": "b",
-          "shape": {
-            "name": "sphere",
-            "variant": "standard",
-            "rotation": 0,
-            "colour": "green",
-            "scale": 1
-          }
-        },
-        {
-          "id": "c",
-          "shape": {
-            "name": "pyramid",
-            "variant": "standard",
-            "rotation": 0,
-            "colour": "orange",
-            "scale": 1
-          }
-        },
-        {
-          "id": "d",
-          "shape": {
-            "name": "triangle",
-            "variant": "standard",
-            "rotation": 0,
-            "colour": "purple",
-            "scale": 1
-          }
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "shapes-2-9"
-    },
-    {
       "kind": "match-pairs",
-      "prompt": "Match each shape to its name.",
-      "explanation": "These are a cuboid, a sphere and a pyramid. Solids keep their names when viewed from different directions.",
-      "narration": {
-        "prompt": "Match each shape to its name."
-      },
+      "id": "shapes-2-10-cuboid",
+      "prompt": "Select the card that matches the shape.",
+      "randomise": {},
       "pairs": [
         {
           "id": "p1",
@@ -491,9 +345,27 @@
             }
           },
           "right": "Cuboid"
-        },
+        }
+      ],
+      "choices": [
+        "Cuboid",
+        "Cube",
+        "Rectangle"
+      ],
+      "explanation": "This shape is a cuboid.",
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "shapes-2-10-sphere",
+      "prompt": "Select the card that matches the shape.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": {
             "shape": {
               "name": "sphere",
@@ -504,9 +376,27 @@
             }
           },
           "right": "Sphere"
-        },
+        }
+      ],
+      "choices": [
+        "Circle",
+        "Sphere",
+        "Pyramid"
+      ],
+      "explanation": "This shape is a sphere.",
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "shapes-2-10-pyramid",
+      "prompt": "Select the card that matches the shape.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p3",
+          "id": "p1",
           "left": {
             "shape": {
               "name": "pyramid",
@@ -519,8 +409,16 @@
           "right": "Pyramid"
         }
       ],
-      "id": "shapes-2-10",
-      "mode": "flip"
+      "choices": [
+        "Triangle",
+        "Pyramid",
+        "Cuboid"
+      ],
+      "explanation": "This shape is a pyramid.",
+      "narration": {
+        "prompt": "Select the card that matches the shape."
+      },
+      "mode": "one-at-a-time"
     }
   ]
 }

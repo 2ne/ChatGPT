@@ -131,49 +131,6 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "cmp-h-more-3",
-      "prompt": "Which group has more {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "star",
-            "count": 5
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "star",
-            "count": 4
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "star",
-            "count": 6
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 3
-          }
-        }
-      ],
-      "correctId": "c",
-      "explanation": "6 is more than 5, 4 and 3.",
-      "narration": {
-        "prompt": "Which group has more {items}?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "cmp-h-less-1",
       "prompt": "Which group has fewer {items}?",
       "randomise": {
@@ -262,53 +219,6 @@
       }
     },
     {
-      "kind": "multiple-choice",
-      "id": "cmp-h-more-4",
-      "prompt": "Which group has more {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "balloon",
-            "count": 9
-          },
-          "layout": "tens-frame"
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "balloon",
-            "count": 10
-          },
-          "layout": "tens-frame"
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "balloon",
-            "count": 8
-          },
-          "layout": "tens-frame"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "balloon",
-            "count": 7
-          },
-          "layout": "tens-frame"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "10 is more than 9, 8 and 7.",
-      "narration": {
-        "prompt": "Which group has more {items}?"
-      }
-    },
-    {
       "kind": "ordered",
       "id": "cmp-h-order",
       "prompt": "Put the groups in order, from fewest to most.",
@@ -355,8 +265,8 @@
     },
     {
       "kind": "match-pairs",
-      "id": "cmp-h-match",
-      "prompt": "Match each group to another group with the same amount.",
+      "id": "cmp-h-match-5",
+      "prompt": "Select the card that matches the picture.",
       "randomise": {},
       "pairs": [
         {
@@ -374,9 +284,48 @@
               "count": 5
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 4
+          }
         },
         {
-          "id": "p2",
+          "visual": {
+            "item": "apple",
+            "count": 5
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 6
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 7
+          }
+        }
+      ],
+      "explanation": "Both groups have 5.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "cmp-h-match-7",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "star",
@@ -390,9 +339,48 @@
               "count": 7
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 6
+          }
         },
         {
-          "id": "p3",
+          "visual": {
+            "item": "apple",
+            "count": 7
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 8
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 5
+          }
+        }
+      ],
+      "explanation": "Both groups have 7.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "cmp-h-match-9",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "star",
@@ -406,9 +394,48 @@
               "count": 9
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 8
+          }
         },
         {
-          "id": "p4",
+          "visual": {
+            "item": "apple",
+            "count": 10
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 9
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 7
+          }
+        }
+      ],
+      "explanation": "Both groups have 9.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "cmp-h-match-10",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "star",
@@ -424,11 +451,37 @@
           }
         }
       ],
-      "explanation": "Groups with the same count match each other.",
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 9
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 10
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 11
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 8
+          }
+        }
+      ],
+      "explanation": "Both groups have 10.",
       "narration": {
-        "prompt": "Match each group to another group with the same amount."
+        "prompt": "Select the card that matches the picture."
       },
-      "mode": "flip"
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
@@ -475,53 +528,6 @@
       "explanation": "7 is more than Sam's 6 {items}.",
       "narration": {
         "prompt": "Sam has these {items}. Which plate has more?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "cmp-h-same-as",
-      "prompt": "Which group has the same number of {items} as this group?",
-      "visual": {
-        "item": "ladybird",
-        "count": 7
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "ladybird",
-            "count": 6
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "ladybird",
-            "count": 8
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "ladybird",
-            "count": 7
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "ladybird",
-            "count": 9
-          }
-        }
-      ],
-      "correctId": "c",
-      "explanation": "That group also has 7 {items}.",
-      "narration": {
-        "prompt": "Which group has the same number of {items} as this group?"
       }
     }
   ]

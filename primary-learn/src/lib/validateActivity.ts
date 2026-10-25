@@ -662,34 +662,24 @@ function parseQuestion(value: unknown, path: string): Question {
       });
       const writtenMode = expectString(value, "mode", path);
       if (!(MATCH_PAIRS_MODES as readonly string[]).includes(writtenMode)) {
-        fail(path, "mode must be flip or one-at-a-time");
+        fail(path, "mode must be one-at-a-time");
       }
-      let choices: MatchSide[] | undefined;
-      if (writtenMode === "one-at-a-time") {
-        if (pairs.length !== 1) {
-          fail(path, "one-at-a-time matching needs exactly 1 pair");
-        }
-        choices = expectArray(value, "choices", path).map((side, i) =>
-          parseMatchSide(side, `${path}.choices[${i}]`),
-        );
-        if (choices.length !== 3) {
-          fail(path, "one-at-a-time matching needs exactly 3 choices");
-        }
-        const keys = choices.map((side) => matchSideKey(side));
-        if (new Set(keys).size !== keys.length) {
-          fail(path, "choices must be unique");
-        }
-        const rightKey = matchSideKey(pairs[0]!.right);
-        if (!keys.includes(rightKey)) {
-          fail(path, "choices must include the pair's right side");
-        }
-      } else {
-        if (pairs.length < 2 || pairs.length > 4) {
-          fail(path, "match-pairs needs 2 to 4 pairs (at most 8 cards)");
-        }
-        if (value.choices != null) {
-          fail(path, "flip matching must not set choices");
-        }
+      if (pairs.length !== 1) {
+        fail(path, "matching needs exactly 1 pair");
+      }
+      const choices = expectArray(value, "choices", path).map((side, i) =>
+        parseMatchSide(side, `${path}.choices[${i}]`),
+      );
+      if (choices.length !== 3 && choices.length !== 4) {
+        fail(path, "matching needs 3 or 4 choices");
+      }
+      const keys = choices.map((side) => matchSideKey(side));
+      if (new Set(keys).size !== keys.length) {
+        fail(path, "choices must be unique");
+      }
+      const rightKey = matchSideKey(pairs[0]!.right);
+      if (!keys.includes(rightKey)) {
+        fail(path, "choices must include the pair's right side");
       }
       return { ...core, kind, pairs, mode: writtenMode as MatchPairsMode, choices };
     }

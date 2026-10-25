@@ -104,37 +104,6 @@
       }
     },
     {
-      "kind": "multiple-choice",
-      "id": "c20m-next-21",
-      "prompt": "What number comes next? 19, 20, 21, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "20"
-        },
-        {
-          "id": "b",
-          "label": "21"
-        },
-        {
-          "id": "c",
-          "label": "22"
-        },
-        {
-          "id": "d",
-          "label": "23"
-        }
-      ],
-      "correctId": "c",
-      "explanation": "22 comes after 21.",
-      "narration": {
-        "prompt": "What number comes next? Nineteen, twenty, twenty-one, blank."
-      }
-    },
-    {
       "kind": "ordered",
       "id": "c20m-order",
       "prompt": "Put the numbers in order, from smallest to biggest.",
@@ -169,31 +138,72 @@
     },
     {
       "kind": "match-pairs",
-      "id": "c20m-next-match",
-      "prompt": "Match each count to the number that comes next.",
-      "explanation": "Each count matches the next number.",
-      "narration": {
-        "prompt": "Match each count to the number that comes next."
-      },
+      "id": "c20m-match-22",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
       "pairs": [
         {
-          "id": "p0",
+          "id": "p1",
           "left": "20, 21, ?",
           "right": "22"
-        },
+        }
+      ],
+      "choices": [
+        "21",
+        "22",
+        "23"
+      ],
+      "explanation": "22 comes after 21.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c20m-match-23",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
           "id": "p1",
           "left": "21, 22, ?",
           "right": "23"
-        },
+        }
+      ],
+      "choices": [
+        "22",
+        "23",
+        "24"
+      ],
+      "explanation": "23 comes after 22.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "c20m-match-24",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": "22, 23, ?",
           "right": "24"
         }
       ],
-      "randomise": {},
-      "mode": "flip"
+      "choices": [
+        "23",
+        "24",
+        "25"
+      ],
+      "explanation": "24 comes after 23.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
@@ -255,37 +265,6 @@
       "explanation": "17 is 10 and 7.",
       "narration": {
         "prompt": "seventeen is ten and how many more?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-every-next",
-      "prompt": "What number comes next? 20, 21, 22, ?",
-      "explanation": "23 comes after 22.",
-      "narration": {
-        "prompt": "What number comes next? twenty, twenty-one, twenty-two, ?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "23"
-        },
-        {
-          "id": "b",
-          "label": "22"
-        },
-        {
-          "id": "c",
-          "label": "24"
-        },
-        {
-          "id": "d",
-          "label": "21"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
       }
     },
     {

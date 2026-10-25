@@ -265,97 +265,6 @@
       }
     },
     {
-      "kind": "multiple-choice",
-      "id": "cmp-m-more-4",
-      "prompt": "Which group has more {items}?",
-      "layout": "scatter",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "balloon",
-            "count": 9
-          },
-          "layout": "scatter"
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "balloon",
-            "count": 10
-          },
-          "layout": "scatter"
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "balloon",
-            "count": 8
-          },
-          "layout": "scatter"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "balloon",
-            "count": 7
-          },
-          "layout": "scatter"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "10 is more than 9, 8 and 7.",
-      "narration": {
-        "prompt": "Which group has more {items}?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "cmp-m-more-5",
-      "prompt": "Which group has more {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "car",
-            "count": 8
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "car",
-            "count": 9
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "car",
-            "count": 7
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "car",
-            "count": 6
-          }
-        }
-      ],
-      "correctId": "b",
-      "explanation": "9 is more than 8, 7 and 6.",
-      "narration": {
-        "prompt": "Which group has more {items}?"
-      }
-    },
-    {
       "kind": "ordered",
       "id": "cmp-m-order",
       "prompt": "Put the groups in order, from fewest to most.",
@@ -402,8 +311,8 @@
     },
     {
       "kind": "match-pairs",
-      "id": "cmp-m-match",
-      "prompt": "Match each group to another group with the same amount.",
+      "id": "cmp-m-match-4",
+      "prompt": "Select the card that matches the picture.",
       "randomise": {},
       "pairs": [
         {
@@ -421,9 +330,42 @@
               "count": 4
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 3
+          }
         },
         {
-          "id": "p2",
+          "visual": {
+            "item": "apple",
+            "count": 4
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 5
+          }
+        }
+      ],
+      "explanation": "Both groups have 4.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "cmp-m-match-6",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "star",
@@ -437,9 +379,42 @@
               "count": 6
             }
           }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 5
+          }
         },
         {
-          "id": "p3",
+          "visual": {
+            "item": "apple",
+            "count": 6
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 7
+          }
+        }
+      ],
+      "explanation": "Both groups have 6.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "cmp-m-match-8",
+      "prompt": "Select the card that matches the picture.",
+      "randomise": {},
+      "pairs": [
+        {
+          "id": "p1",
           "left": {
             "visual": {
               "item": "star",
@@ -455,11 +430,31 @@
           }
         }
       ],
-      "explanation": "Groups with the same count match each other.",
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 7
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 8
+          }
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 9
+          }
+        }
+      ],
+      "explanation": "Both groups have 8.",
       "narration": {
-        "prompt": "Match each group to another group with the same amount."
+        "prompt": "Select the card that matches the picture."
       },
-      "mode": "flip"
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

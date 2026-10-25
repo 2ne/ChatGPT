@@ -41,42 +41,6 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "id": "oml-m-1",
-      "prompt": "What is one more than 9?",
-      "explanation": "One more than 9 is 10.",
-      "narration": {
-        "prompt": "What is one more than nine?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "10"
-        },
-        {
-          "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "8"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "hint": "Count on one.",
-      "visual": {
-        "item": "apple",
-        "count": 9
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "oml-m-2",
       "prompt": "What is one more than 10?",
       "explanation": "One more than 10 is 11.",
@@ -145,37 +109,6 @@
     },
     {
       "kind": "multiple-choice",
-      "id": "oml-m-4",
-      "prompt": "What is one more than 12?",
-      "explanation": "One more than 12 is 13.",
-      "narration": {
-        "prompt": "What is one more than twelve?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "13"
-        },
-        {
-          "id": "b",
-          "label": "12"
-        },
-        {
-          "id": "c",
-          "label": "14"
-        },
-        {
-          "id": "d",
-          "label": "11"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "multiple-choice",
       "id": "oml-m-5",
       "prompt": "What is one less than 14?",
       "explanation": "One less than 14 is 13.",
@@ -207,31 +140,72 @@
     },
     {
       "kind": "match-pairs",
-      "id": "oml-m-match",
-      "prompt": "Match each number to one more.",
-      "explanation": "One more than 12 is 13. One more than 14 is 15. One more than 16 is 17.",
-      "narration": {
-        "prompt": "Match each number to one more."
-      },
+      "id": "oml-m-match-13",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
       "pairs": [
         {
-          "id": "p0",
+          "id": "p1",
           "left": "12",
           "right": "13"
-        },
+        }
+      ],
+      "choices": [
+        "12",
+        "13",
+        "14"
+      ],
+      "explanation": "One more than 12 is 13.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-m-match-15",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
           "id": "p1",
           "left": "14",
           "right": "15"
-        },
+        }
+      ],
+      "choices": [
+        "14",
+        "15",
+        "16"
+      ],
+      "explanation": "One more than 14 is 15.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "kind": "match-pairs",
+      "id": "oml-m-match-17",
+      "prompt": "Select the card that matches the number.",
+      "randomise": {},
+      "pairs": [
         {
-          "id": "p2",
+          "id": "p1",
           "left": "16",
           "right": "17"
         }
       ],
-      "randomise": {},
-      "mode": "flip"
+      "choices": [
+        "16",
+        "17",
+        "18"
+      ],
+      "explanation": "One more than 16 is 17.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",

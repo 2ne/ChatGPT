@@ -204,17 +204,17 @@ export type OrderedQuestion = QuestionCore & {
 /** A match side is a label, or a picture, or both. Optional layout for glanceable amounts. */
 export type MatchSide = string | { label?: string; visual?: ObjectAsset; shape?: ShapeAsset; layout?: ObjectLayout };
 
-/** Flip memory game, or one face-up card with three choices. */
-export const MATCH_PAIRS_MODES = ["flip", "one-at-a-time"] as const;
+/** Single-pair matching. The only matching mode. */
+export const MATCH_PAIRS_MODES = ["one-at-a-time"] as const;
 export type MatchPairsMode = (typeof MATCH_PAIRS_MODES)[number];
 
 export type MatchPairsQuestion = QuestionCore & {
   kind: "match-pairs";
   pairs: Array<{ id: string; left: MatchSide; right: MatchSide }>;
-  /** Easy uses one-at-a-time. Medium and Hard use the flip game. */
+  /** Always one-at-a-time. Kept so existing JSON stays valid. */
   mode: MatchPairsMode;
-  /** Easy: the three face-down cards. Must include the pair's right side. */
-  choices?: MatchSide[];
+  /** Easy and Medium: 3 sides. Hard: 4 sides. Must include the pair's right side. */
+  choices: MatchSide[];
 };
 
 /** How the child answers a part-whole sum. */
