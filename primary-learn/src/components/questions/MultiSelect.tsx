@@ -66,6 +66,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
               visual={option.visual}
               tenFrame={option.tenFrame}
               baseTen={option.baseTen}
+              dice={option.dice}
               layout={option.layout}
             />
             {marked === "correct" ? (

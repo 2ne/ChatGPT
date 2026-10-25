@@ -10,6 +10,7 @@ function optionLabel(
         visual?: import("../types/activity").ObjectAsset;
         tenFrame?: TenFrameAsset;
         baseTen?: BaseTenAsset;
+        dice?: { count: number };
       }
     | undefined,
   slot: number,
@@ -19,6 +20,7 @@ function optionLabel(
   if (option.shape) return `${shapeName(option.shape)} (${"ABCD"[slot]})`;
   if (option.tenFrame) return describeTenFrame(option.tenFrame);
   if (option.baseTen) return describeBaseTen(option.baseTen);
+  if (option.dice) return `dice showing ${option.dice.count}`;
   if (option.visual) return describeVisual(option.visual);
   return null;
 }

@@ -106,6 +106,11 @@ export type BaseTenAsset = {
   style?: BaseTenStyle;
 };
 
+/** Standard dice face. 1 to 6 pips. Not tappable. */
+export type DiceAsset = {
+  count: number;
+};
+
 export type QuestionOption = {
   id: string;
   shape?: ShapeAsset;
@@ -113,6 +118,7 @@ export type QuestionOption = {
   visual?: ObjectAsset;
   tenFrame?: TenFrameAsset;
   baseTen?: BaseTenAsset;
+  dice?: DiceAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -238,6 +244,7 @@ export type MatchSide =
       visual?: ObjectAsset;
       tenFrame?: TenFrameAsset;
       baseTen?: BaseTenAsset;
+      dice?: DiceAsset;
       shape?: ShapeAsset;
       layout?: ObjectLayout;
     };

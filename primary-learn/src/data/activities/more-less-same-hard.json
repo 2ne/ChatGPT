@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Questions 1 to 3 compare near-equal counts (7 vs 8, 9 vs 10, 5 vs 6). Question 4 picks fewer with a gap of 1. Question 5 finds two matching groups among close distractors. Question 6 asks which has more with scattered tens-frame style. Question 7 orders four groups. Question 8 matches same amounts with mixed objects. Question 9 is a short story compare. Question 10 picks the group that is the same as a shown amount. No hints.",
-    "versus": "Easy compares clear groups with big differences and hints early on. Medium uses closer counts and fewer hints. Hard mixes same amounts, word stems, and near-equal groups within 10."
+    "within": "Questions 1 to 3 compare near-equal ten frames (7 vs 8, 9 vs 10, 5 vs 6). Question 4 finds two matching frames. Question 5 orders four frames. Questions 6 to 9 match a number shown two ways. Question 10 is a short story compare on ten frames. No hints.",
+    "versus": "Easy compares clear ten frames with big differences and hints early on. Medium uses closer counts. Hard mixes near-equal frames and mixed match sides."
   },
   "skills": [
     "eyfs-compare-10",
@@ -43,279 +43,96 @@
       "kind": "multiple-choice",
       "id": "cmp-h-more-1",
       "prompt": "Which group has more {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "apple",
-            "count": 7
-          },
-          "layout": "scatter"
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "apple",
-            "count": 8
-          },
-          "layout": "scatter"
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "apple",
-            "count": 6
-          },
-          "layout": "scatter"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "apple",
-            "count": 5
-          },
-          "layout": "scatter"
-        }
+        { "id": "a", "tenFrame": { "count": 7, "item": "apple" } },
+        { "id": "b", "tenFrame": { "count": 8, "item": "apple" } },
+        { "id": "c", "tenFrame": { "count": 6, "item": "apple" } },
+        { "id": "d", "tenFrame": { "count": 5, "item": "apple" } }
       ],
       "correctId": "b",
       "explanation": "8 is more than 7, 6 and 5.",
-      "narration": {
-        "prompt": "Which group has more {items}?"
-      }
+      "narration": { "prompt": "Which group has more {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "cmp-h-more-2",
       "prompt": "Which group has more {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "duck",
-            "count": 9
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "duck",
-            "count": 10
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "duck",
-            "count": 8
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "duck",
-            "count": 7
-          }
-        }
+        { "id": "a", "tenFrame": { "count": 9, "item": "duck" } },
+        { "id": "b", "tenFrame": { "count": 10, "item": "duck" } },
+        { "id": "c", "tenFrame": { "count": 8, "item": "duck" } },
+        { "id": "d", "tenFrame": { "count": 7, "item": "duck" } }
       ],
       "correctId": "b",
       "explanation": "10 is more than 9, 8 and 7.",
-      "narration": {
-        "prompt": "Which group has more {items}?"
-      }
+      "narration": { "prompt": "Which group has more {items}?" }
     },
     {
       "kind": "multiple-choice",
       "id": "cmp-h-less-1",
       "prompt": "Which group has fewer {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "frog",
-            "count": 8
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "frog",
-            "count": 7
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "frog",
-            "count": 9
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "frog",
-            "count": 10
-          }
-        }
+        { "id": "a", "tenFrame": { "count": 8, "item": "frog" } },
+        { "id": "b", "tenFrame": { "count": 7, "item": "frog" } },
+        { "id": "c", "tenFrame": { "count": 9, "item": "frog" } },
+        { "id": "d", "tenFrame": { "count": 10, "item": "frog" } }
       ],
       "correctId": "b",
       "explanation": "7 is fewer than 8, 9 and 10.",
-      "narration": {
-        "prompt": "Which group has fewer {items}?"
-      }
+      "narration": { "prompt": "Which group has fewer {items}?" }
     },
     {
       "kind": "multi-select",
       "id": "cmp-h-same",
       "prompt": "Tap every group that has the same number of {items}. There are 2 to choose.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "fish",
-            "count": 8
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "fish",
-            "count": 9
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "fish",
-            "count": 8
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "fish",
-            "count": 7
-          }
-        }
+        { "id": "a", "tenFrame": { "count": 8, "item": "fish" } },
+        { "id": "b", "tenFrame": { "count": 9, "item": "fish" } },
+        { "id": "c", "tenFrame": { "count": 8, "item": "fish" } },
+        { "id": "d", "tenFrame": { "count": 7, "item": "fish" } }
       ],
-      "correctIds": [
-        "a",
-        "c"
-      ],
+      "correctIds": ["a", "c"],
       "explanation": "Those two groups both have 8 {items}.",
-      "narration": {
-        "prompt": "Tap every group that has the same number of {items}. There are two to choose."
-      }
+      "narration": { "prompt": "Tap every group that has the same number of {items}. There are two to choose." }
     },
     {
       "kind": "ordered",
       "id": "cmp-h-order",
       "prompt": "Put the groups in order, from fewest to most.",
       "items": [
-        {
-          "id": "g5",
-          "visual": {
-            "item": "car",
-            "count": 10
-          }
-        },
-        {
-          "id": "g3",
-          "visual": {
-            "item": "car",
-            "count": 6
-          }
-        },
-        {
-          "id": "g2",
-          "visual": {
-            "item": "car",
-            "count": 4
-          }
-        },
-        {
-          "id": "g4",
-          "visual": {
-            "item": "car",
-            "count": 8
-          }
-        }
+        { "id": "g5", "tenFrame": { "count": 10, "item": "car" } },
+        { "id": "g3", "tenFrame": { "count": 6, "item": "car" } },
+        { "id": "g2", "tenFrame": { "count": 4, "item": "car" } },
+        { "id": "g4", "tenFrame": { "count": 8, "item": "car" } }
       ],
-      "correctOrder": [
-        "g2",
-        "g3",
-        "g4",
-        "g5"
-      ],
+      "correctOrder": ["g2", "g3", "g4", "g5"],
       "explanation": "The groups go 4, 6, 8 and 10 from fewest to most.",
-      "narration": {
-        "prompt": "Put the groups in order, from fewest to most."
-      }
+      "narration": { "prompt": "Put the groups in order, from fewest to most." }
     },
     {
       "kind": "match-pairs",
       "id": "cmp-h-match-5",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the number.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "star",
-              "count": 5
-            },
-            "layout": "scatter"
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 5
-            }
-          }
+          "left": "5",
+          "right": { "dice": { "count": 5 } }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 4
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 5
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 6
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 7
-          }
-        }
+        { "dice": { "count": 4 } },
+        { "dice": { "count": 5 } },
+        { "dice": { "count": 6 } },
+        { "dice": { "count": 3 } }
       ],
-      "explanation": "Both groups have 5.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "explanation": "5 matches the dice that shows 5.",
+      "narration": { "prompt": "Select the card that matches the number." },
       "mode": "one-at-a-time"
     },
     {
@@ -326,51 +143,13 @@
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "star",
-              "count": 7
-            },
-            "layout": "scatter"
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 7
-            }
-          }
+          "left": { "tenFrame": { "count": 7, "item": "star" } },
+          "right": "7"
         }
       ],
-      "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 6
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 7
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 8
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 5
-          }
-        }
-      ],
-      "explanation": "Both groups have 7.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "choices": ["6", "7", "8", "5"],
+      "explanation": "The ten frame has 7 filled cells, so the match is 7.",
+      "narration": { "prompt": "Select the card that matches the picture." },
       "mode": "one-at-a-time"
     },
     {
@@ -381,154 +160,57 @@
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "star",
-              "count": 9
-            },
-            "layout": "scatter"
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 9
-            }
-          }
+          "left": { "tenFrame": { "count": 9, "item": "star" } },
+          "right": { "visual": { "item": "apple", "count": 9 }, "layout": "scatter" }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 8
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 10
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 9
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 7
-          }
-        }
+        { "visual": { "item": "apple", "count": 8 }, "layout": "scatter" },
+        { "visual": { "item": "apple", "count": 10 }, "layout": "scatter" },
+        { "visual": { "item": "apple", "count": 9 }, "layout": "scatter" },
+        { "visual": { "item": "apple", "count": 7 }, "layout": "scatter" }
       ],
-      "explanation": "Both groups have 9.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "explanation": "Both sides show 9.",
+      "narration": { "prompt": "Select the card that matches the picture." },
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "id": "cmp-h-match-10",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the number.",
       "randomise": {},
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "star",
-              "count": 10
-            },
-            "layout": "scatter"
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 10
-            }
-          }
+          "left": "10",
+          "right": { "tenFrame": { "count": 10, "item": "apple" } }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 9
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 10
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 11
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 8
-          }
-        }
+        { "tenFrame": { "count": 9, "item": "apple" } },
+        { "tenFrame": { "count": 10, "item": "apple" } },
+        { "tenFrame": { "count": 8, "item": "apple" } },
+        { "tenFrame": { "count": 5, "item": "apple" } }
       ],
-      "explanation": "Both groups have 10.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "explanation": "10 matches the full ten frame.",
+      "narration": { "prompt": "Select the card that matches the number." },
       "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
       "id": "cmp-h-sam",
       "prompt": "Sam has these {items}. Which plate has more?",
-      "visual": {
-        "item": "strawberry",
-        "count": 6
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "tenFrame": { "count": 6, "item": "strawberry" },
+      "randomise": { "shuffleOptions": true },
       "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "strawberry",
-            "count": 5
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "strawberry",
-            "count": 6
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "strawberry",
-            "count": 7
-          }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "strawberry",
-            "count": 4
-          }
-        }
+        { "id": "a", "tenFrame": { "count": 5, "item": "strawberry" } },
+        { "id": "b", "tenFrame": { "count": 6, "item": "strawberry" } },
+        { "id": "c", "tenFrame": { "count": 7, "item": "strawberry" } },
+        { "id": "d", "tenFrame": { "count": 4, "item": "strawberry" } }
       ],
       "correctId": "c",
       "explanation": "7 is more than Sam's 6 {items}.",
-      "narration": {
-        "prompt": "Sam has these {items}. Which plate has more?"
-      }
+      "narration": { "prompt": "Sam has these {items}. Which plate has more?" }
     }
   ]
 }

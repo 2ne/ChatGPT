@@ -78,7 +78,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | part-whole | Missing part: `What do you need to add to {known} to make {whole}?`. Missing whole: `What do {a} and {b} make?`. Kind generates this from `parts` / `whole` / `missing`; JSON may override. Spoken uses words. Exactly 3 choices (answer plus two nearby misses). JSON may set `choices` of 3 numbers. One cherry per bond. Do not use match-pairs with `a and b` text for Reception bonds. |
 | multi-select | Number sentences: `Select every correct sum.` Never `Tap every fact that is true.` Pictures: `Tap every group that has {n} {items}.` Pairs: `Tap every pair that makes {n}.` |
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
-| match-pairs | Same thing shown two ways only. Word with number, shape with name, or equal groups. Never next number, missing number, one more or one less. Those are multiple-choice. Prompt `Select the card that matches the {noun}.` Use `number`, `word`, `shape` or `picture`. Number content must say `Select the card that matches the number.` One pair per question. Easy and Medium: 3 choices. Hard: 4 choices in a 2x2 grid. Picture groups use a 5-column grid and shrink tiles so up to 20 objects fit inside the fixed card. Do not crop the picture. First try only. After Check it, colour the pair with the same `option is-correct` / `option is-wrong` marks as multiple choice. Do not use match-pairs to pair a numeral with pictured amounts. Use multiple-choice with `numeral`. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
+| match-pairs | Same thing shown two ways only, and the two sides must never use the same representation. Numeral with ten frame, ten frame with dice, tens-and-ones with numeral, word with number, shape with name. Never picture-to-same-picture. Never next number, missing number, one more or one less. Those are multiple-choice. Prompt `Select the card that matches the {noun}.` Use `number`, `word`, `shape` or `picture`. Number content must say `Select the card that matches the number.` One pair per question. Easy and Medium: 3 choices. Hard: 4 choices in a 2x2 grid. Picture groups use a 5-column grid and shrink tiles so up to 20 objects fit inside the fixed card. Ten frames and tens-and-ones also fit that card. Do not crop the picture. First try only. After Check it, colour the pair with the same `option is-correct` / `option is-wrong` marks as multiple choice. The `numeral` 2x2 amount-pick is still multiple-choice, not matching. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |
 | story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures use `visual.count` `{n}` and `visual.removed` `{m}` in one cream strip. The last `{m}` sit on light red tiles. |
 
@@ -97,6 +97,10 @@ For each item, name the misconception (in your head, or in a comment):
 - Chose a number that appears in the stem
 - Doubled the wrong part
 - Counted groups instead of objects (or the reverse)
+- Off by one on a ten frame
+- Reversed digits on tens and ones (34 vs 43)
+- Ignored the ten (18 shown, chose 8)
+- Counted the ones only (3 tens and 4 ones, chose 7)
 
 Rules:
 

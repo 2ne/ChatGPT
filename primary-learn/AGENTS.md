@@ -36,6 +36,9 @@ Educational content is **pure data**. Presentation is one generic runner plus on
 - Drop a JSON file in `src/data/activities/`. The registry auto-loads it (no hand import). Invalid JSON fails the build via `validateActivity`.
 - Do **not** create a `.tsx` per quest. Do **not** edit `ActivityRunner` unless changing all quests.
 - Pictures: `"visual": { "item": "apple", "count": 3 }` — never emoji strings in JSON.
+- Ten frames: `"tenFrame": { "count": 6, "item": "apple" }` for 0 to 20. Empty cells stay visible. The board keeps a two-frame footprint.
+- Tens and ones: `"baseTen": { "tens": 3, "ones": 4, "style": "plain" }` for 21 to 99. Neutral rods, not the question objects. Numerals only above 20.
+- Matching sides must use two different representations. Never pair a pile with the same pile. Compare questions use ten frames up to 20 and tens-and-ones above 20, not counting chores.
 - Shared phrases (“Correct. Nice!”) live in `copy.ts`, not JSON.
 
 ## Map placement (required)

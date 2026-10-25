@@ -1,7 +1,7 @@
 {
   "id": "show-and-compare-numbers",
   "title": "Show and compare numbers",
-  "summary": "Use pictures and number lines to compare numbers.",
+  "summary": "Use ten frames and number lines to compare numbers.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Start with quantities shown as apples, compare a smaller group, match equal apple groups one at a time, identify two marked number-line positions, then compare more and less before ordering four numbers.",
-    "versus": "Easy uses pictures to 8 and numerals in the teens. Medium uses pictures to 14 and numerals around 40 to 60. Hard uses pictures to 20 and closely spaced numerals around 90 to 100. All levels use the same representations with progressively larger quantities."
+    "within": "Start with a ten frame of 6, compare fewer ten frames of the same size, match 3 then 5 then 6 across a numeral or word and a ten frame, read two teen marks on a number line, then compare more and less before ordering four numbers.",
+    "versus": "Easy uses ten frames to 6 and numerals in the teens. Medium uses ten frames to 12 and tens-and-ones for 34. Hard uses ten frames to 18 and tens-and-ones traps such as 29 and 31."
   },
   "skills": [
     "represent-numbers",
@@ -26,123 +26,55 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "prompt": "How many apples can you see?",
+      "prompt": "How many can you see?",
       "options": [
-        {
-          "id": "0",
-          "label": "5"
-        },
-        {
-          "id": "1",
-          "label": "6"
-        },
-        {
-          "id": "2",
-          "label": "7"
-        },
-        {
-          "id": "3",
-          "label": "8"
-        }
+        { "id": "0", "label": "5" },
+        { "id": "1", "label": "6" },
+        { "id": "2", "label": "7" },
+        { "id": "3", "label": "1" }
       ],
       "correctId": "1",
-      "explanation": "There are 6 apples.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "visual": {
-        "item": "apple",
-        "count": 6
-      },
-      "layout": "row",
+      "explanation": "There are 6. One row is full and one more is filled.",
+      "randomise": { "shuffleOptions": true },
+      "tenFrame": { "count": 6, "item": "apple" },
       "id": "represent100-1-1",
-      "hint": "Count each apple once."
+      "hint": "Count the filled cells."
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer than 6 apples?",
+      "prompt": "Which group has fewer than 6?",
       "options": [
-        {
-          "id": "0",
-          "visual": {
-            "item": "apple",
-            "count": 4
-          }
-        },
-        {
-          "id": "1",
-          "visual": {
-            "item": "apple",
-            "count": 6
-          }
-        },
-        {
-          "id": "2",
-          "visual": {
-            "item": "apple",
-            "count": 7
-          }
-        },
-        {
-          "id": "3",
-          "visual": {
-            "item": "apple",
-            "count": 8
-          }
-        }
+        { "id": "0", "tenFrame": { "count": 4, "item": "apple" } },
+        { "id": "1", "tenFrame": { "count": 6, "item": "apple" } },
+        { "id": "2", "tenFrame": { "count": 7, "item": "apple" } },
+        { "id": "3", "tenFrame": { "count": 5, "item": "apple" } }
       ],
       "correctId": "0",
       "explanation": "4 is less than 6.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-1-2",
-      "hint": "Compare how many apples are in each group."
+      "hint": "Each frame is the same size. Compare the filled cells."
     },
     {
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the number.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "apple",
-              "count": 3
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 3
-            }
-          }
+          "left": "3",
+          "right": { "tenFrame": { "count": 3, "item": "apple" } }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 3
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 5
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 6
-          }
-        }
+        { "tenFrame": { "count": 3, "item": "apple" } },
+        { "tenFrame": { "count": 4, "item": "apple" } },
+        { "tenFrame": { "count": 2, "item": "apple" } }
       ],
-      "explanation": "Both groups have 3 apples.",
+      "explanation": "3 matches the ten frame with 3 filled cells.",
       "id": "represent100-1-3-3",
-      "hint": "Find the group with the same number of apples.",
-      "mode": "one-at-a-time"
+      "hint": "Find the frame with the same number filled.",
+      "mode": "one-at-a-time",
+      "narration": { "prompt": "Select the card that matches the number." }
     },
     {
       "kind": "match-pairs",
@@ -150,240 +82,104 @@
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "apple",
-              "count": 5
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 5
-            }
-          }
+          "left": { "tenFrame": { "count": 5, "item": "apple" } },
+          "right": "5"
         }
       ],
-      "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 3
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 5
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 6
-          }
-        }
-      ],
-      "explanation": "Both groups have 5 apples.",
+      "choices": ["4", "5", "6"],
+      "explanation": "The ten frame has 5 filled cells, so the match is 5.",
       "id": "represent100-1-3-5",
-      "mode": "one-at-a-time"
+      "mode": "one-at-a-time",
+      "narration": { "prompt": "Select the card that matches the picture." }
     },
     {
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the number.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "apple",
-              "count": 6
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 6
-            }
-          }
+          "left": "six",
+          "right": { "tenFrame": { "count": 6, "item": "apple" } }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 3
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 5
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 6
-          }
-        }
+        { "tenFrame": { "count": 5, "item": "apple" } },
+        { "tenFrame": { "count": 6, "item": "apple" } },
+        { "tenFrame": { "count": 10, "item": "apple" } }
       ],
-      "explanation": "Both groups have 6 apples.",
+      "explanation": "Six matches the ten frame with 6 filled cells.",
       "id": "represent100-1-3-6",
-      "mode": "one-at-a-time"
+      "mode": "one-at-a-time",
+      "narration": { "prompt": "Select the card that matches the number." }
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number belongs at the marked tick?",
       "options": [
-        {
-          "id": "0",
-          "label": "11"
-        },
-        {
-          "id": "1",
-          "label": "12"
-        },
-        {
-          "id": "2",
-          "label": "13"
-        },
-        {
-          "id": "3",
-          "label": "14"
-        }
+        { "id": "0", "label": "11" },
+        { "id": "1", "label": "12" },
+        { "id": "2", "label": "13" },
+        { "id": "3", "label": "14" }
       ],
       "correctId": "1",
       "explanation": "The marked tick is 12. Each tick is one more than the tick before it.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "numberLine": {
-        "start": 10,
-        "end": 16,
-        "marked": 12
-      },
+      "randomise": { "shuffleOptions": true },
+      "numberLine": { "start": 10, "end": 16, "marked": 12 },
       "id": "represent100-1-4"
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number belongs at the marked tick?",
       "options": [
-        {
-          "id": "0",
-          "label": "14"
-        },
-        {
-          "id": "1",
-          "label": "15"
-        },
-        {
-          "id": "2",
-          "label": "16"
-        },
-        {
-          "id": "3",
-          "label": "17"
-        }
+        { "id": "0", "label": "14" },
+        { "id": "1", "label": "15" },
+        { "id": "2", "label": "16" },
+        { "id": "3", "label": "17" }
       ],
       "correctId": "1",
       "explanation": "The marked tick is 15. Each tick is one more than the tick before it.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "numberLine": {
-        "start": 10,
-        "end": 16,
-        "marked": 15
-      },
+      "randomise": { "shuffleOptions": true },
+      "numberLine": { "start": 10, "end": 16, "marked": 15 },
       "id": "represent100-1-5"
     },
     {
       "kind": "multi-select",
       "prompt": "Select the two numbers that are more than 16.",
       "options": [
-        {
-          "id": "0",
-          "label": "17"
-        },
-        {
-          "id": "1",
-          "label": "15"
-        },
-        {
-          "id": "2",
-          "label": "18"
-        },
-        {
-          "id": "3",
-          "label": "16"
-        }
+        { "id": "0", "label": "17" },
+        { "id": "1", "label": "15" },
+        { "id": "2", "label": "18" },
+        { "id": "3", "label": "16" }
       ],
       "explanation": "17 and 18 are both more than 16.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-1-6",
-      "correctIds": [
-        "0",
-        "2"
-      ]
+      "correctIds": ["0", "2"]
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number is less than 16?",
       "options": [
-        {
-          "id": "0",
-          "label": "18"
-        },
-        {
-          "id": "1",
-          "label": "16"
-        },
-        {
-          "id": "2",
-          "label": "15"
-        },
-        {
-          "id": "3",
-          "label": "17"
-        }
+        { "id": "0", "label": "18" },
+        { "id": "1", "label": "16" },
+        { "id": "2", "label": "15" },
+        { "id": "3", "label": "17" }
       ],
       "correctId": "2",
       "explanation": "15 is less than 16.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-1-7"
     },
     {
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        {
-          "id": "2",
-          "label": "16"
-        },
-        {
-          "id": "0",
-          "label": "13"
-        },
-        {
-          "id": "3",
-          "label": "19"
-        },
-        {
-          "id": "1",
-          "label": "15"
-        }
+        { "id": "2", "label": "16" },
+        { "id": "0", "label": "13" },
+        { "id": "3", "label": "19" },
+        { "id": "1", "label": "15" }
       ],
-      "correctOrder": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "correctOrder": ["0", "1", "2", "3"],
       "explanation": "The numbers go 13, 15, 16, 19.",
       "id": "represent100-1-10"
     }

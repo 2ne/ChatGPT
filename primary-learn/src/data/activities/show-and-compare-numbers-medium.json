@@ -1,7 +1,7 @@
 {
   "id": "show-and-compare-numbers-medium",
   "title": "Show and compare numbers",
-  "summary": "Use pictures and number lines to compare numbers.",
+  "summary": "Use ten frames, tens and ones, and number lines to compare numbers.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Start with quantities shown as apples, compare fewer and equal groups, identify two marked number-line positions, then compare more, less, most and least before ordering four numbers.",
-    "versus": "Easy uses pictures to 8 and numerals in the teens. Medium uses pictures to 14 and numerals around 40 to 60. Hard uses pictures to 20 and closely spaced numerals around 90 to 100. All levels use the same representations with progressively larger quantities."
+    "within": "Start with a ten frame of 12, compare fewer ten frames, match 9 and 11 across a numeral and a ten frame, match 34 to tens and ones, then use numerals around 40 to 60 on a line, compare, and order.",
+    "versus": "Easy uses ten frames to 6 and numerals in the teens. Medium uses ten frames to 12 and tens-and-ones for 34. Hard uses ten frames to 18 and tens-and-ones traps such as 29 and 31."
   },
   "skills": [
     "represent-numbers",
@@ -26,368 +26,155 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "prompt": "How many apples can you see?",
+      "prompt": "How many can you see?",
       "options": [
-        {
-          "id": "0",
-          "label": "11"
-        },
-        {
-          "id": "1",
-          "label": "12"
-        },
-        {
-          "id": "2",
-          "label": "13"
-        },
-        {
-          "id": "3",
-          "label": "14"
-        }
+        { "id": "0", "label": "2" },
+        { "id": "1", "label": "12" },
+        { "id": "2", "label": "10" },
+        { "id": "3", "label": "11" }
       ],
       "correctId": "1",
-      "explanation": "There are 12 apples.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "visual": {
-        "item": "apple",
-        "count": 12
-      },
-      "layout": "row",
+      "explanation": "There are 12. That is 10 and 2 more.",
+      "randomise": { "shuffleOptions": true },
+      "tenFrame": { "count": 12, "item": "apple" },
       "id": "represent100-2-1"
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer than 12 apples?",
+      "prompt": "Which group has fewer than 12?",
       "options": [
-        {
-          "id": "0",
-          "visual": {
-            "item": "apple",
-            "count": 10
-          }
-        },
-        {
-          "id": "1",
-          "visual": {
-            "item": "apple",
-            "count": 12
-          }
-        },
-        {
-          "id": "2",
-          "visual": {
-            "item": "apple",
-            "count": 13
-          }
-        },
-        {
-          "id": "3",
-          "visual": {
-            "item": "apple",
-            "count": 14
-          }
-        }
+        { "id": "0", "tenFrame": { "count": 10, "item": "apple" } },
+        { "id": "1", "tenFrame": { "count": 12, "item": "apple" } },
+        { "id": "2", "tenFrame": { "count": 13, "item": "apple" } },
+        { "id": "3", "tenFrame": { "count": 11, "item": "apple" } }
       ],
       "correctId": "0",
       "explanation": "10 is less than 12.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-2-2"
     },
     {
       "kind": "match-pairs",
       "id": "represent100-2-3-9",
-      "prompt": "Select the card that matches the picture.",
-      "randomise": {},
+      "prompt": "Select the card that matches the number.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "apple",
-              "count": 9
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 9
-            }
-          }
+          "left": "9",
+          "right": { "tenFrame": { "count": 9, "item": "apple" } }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 8
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 9
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 10
-          }
-        }
+        { "tenFrame": { "count": 8, "item": "apple" } },
+        { "tenFrame": { "count": 9, "item": "apple" } },
+        { "tenFrame": { "count": 10, "item": "apple" } }
       ],
-      "explanation": "Both groups have 9 apples.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "explanation": "9 matches the ten frame with 9 filled cells.",
+      "narration": { "prompt": "Select the card that matches the number." },
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "id": "represent100-2-3-11",
       "prompt": "Select the card that matches the picture.",
-      "randomise": {},
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "apple",
-              "count": 11
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 11
-            }
-          }
+          "left": { "tenFrame": { "count": 11, "item": "apple" } },
+          "right": "11"
         }
       ],
-      "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 10
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 11
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 12
-          }
-        }
-      ],
-      "explanation": "Both groups have 11 apples.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "choices": ["1", "10", "11"],
+      "explanation": "The frames show 10 and 1 more, so the match is 11.",
+      "narration": { "prompt": "Select the card that matches the picture." },
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "id": "represent100-2-3-12",
-      "prompt": "Select the card that matches the picture.",
-      "randomise": {},
+      "prompt": "Select the card that matches the number.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "visual": {
-              "item": "apple",
-              "count": 12
-            }
-          },
-          "right": {
-            "visual": {
-              "item": "apple",
-              "count": 12
-            }
-          }
+          "left": "34",
+          "right": { "baseTen": { "tens": 3, "ones": 4, "style": "plain" } }
         }
       ],
       "choices": [
-        {
-          "visual": {
-            "item": "apple",
-            "count": 11
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 12
-          }
-        },
-        {
-          "visual": {
-            "item": "apple",
-            "count": 13
-          }
-        }
+        { "baseTen": { "tens": 3, "ones": 4, "style": "plain" } },
+        { "baseTen": { "tens": 4, "ones": 3, "style": "plain" } },
+        { "baseTen": { "tens": 0, "ones": 7, "style": "plain" } }
       ],
-      "explanation": "Both groups have 12 apples.",
-      "narration": {
-        "prompt": "Select the card that matches the picture."
-      },
+      "explanation": "34 is 3 tens and 4 ones.",
+      "narration": { "prompt": "Select the card that matches the number." },
       "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number belongs at the marked tick?",
       "options": [
-        {
-          "id": "0",
-          "label": "41"
-        },
-        {
-          "id": "1",
-          "label": "42"
-        },
-        {
-          "id": "2",
-          "label": "43"
-        },
-        {
-          "id": "3",
-          "label": "44"
-        }
+        { "id": "0", "label": "41" },
+        { "id": "1", "label": "42" },
+        { "id": "2", "label": "43" },
+        { "id": "3", "label": "44" }
       ],
       "correctId": "1",
       "explanation": "The marked tick is 42. Each tick is one more than the tick before it.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "numberLine": {
-        "start": 40,
-        "end": 46,
-        "marked": 42
-      },
+      "randomise": { "shuffleOptions": true },
+      "numberLine": { "start": 40, "end": 46, "marked": 42 },
       "id": "represent100-2-4"
     },
     {
       "kind": "multi-select",
       "prompt": "Select the two numbers that are more than 56.",
       "options": [
-        {
-          "id": "0",
-          "label": "57"
-        },
-        {
-          "id": "1",
-          "label": "55"
-        },
-        {
-          "id": "2",
-          "label": "58"
-        },
-        {
-          "id": "3",
-          "label": "56"
-        }
+        { "id": "0", "label": "57" },
+        { "id": "1", "label": "55" },
+        { "id": "2", "label": "58" },
+        { "id": "3", "label": "56" }
       ],
       "explanation": "57 and 58 are both more than 56.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-2-6",
-      "correctIds": [
-        "0",
-        "2"
-      ]
+      "correctIds": ["0", "2"]
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number is less than 56?",
       "options": [
-        {
-          "id": "0",
-          "label": "58"
-        },
-        {
-          "id": "1",
-          "label": "56"
-        },
-        {
-          "id": "2",
-          "label": "55"
-        },
-        {
-          "id": "3",
-          "label": "57"
-        }
+        { "id": "0", "label": "58" },
+        { "id": "1", "label": "56" },
+        { "id": "2", "label": "55" },
+        { "id": "3", "label": "57" }
       ],
       "correctId": "2",
       "explanation": "55 is less than 56.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-2-7"
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which number is the least?",
+      "prompt": "Which group has the fewest?",
       "options": [
-        {
-          "id": "0",
-          "label": "58"
-        },
-        {
-          "id": "1",
-          "label": "54"
-        },
-        {
-          "id": "2",
-          "label": "56"
-        },
-        {
-          "id": "3",
-          "label": "57"
-        }
+        { "id": "0", "baseTen": { "tens": 5, "ones": 8, "style": "plain" } },
+        { "id": "1", "baseTen": { "tens": 5, "ones": 4, "style": "plain" } },
+        { "id": "2", "baseTen": { "tens": 5, "ones": 7, "style": "plain" } }
       ],
       "correctId": "1",
-      "explanation": "54 is the smallest number in this group.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "explanation": "54 is the smallest. Each picture has 5 tens, and 4 ones is the fewest.",
+      "randomise": { "shuffleOptions": true },
       "id": "represent100-2-9"
     },
     {
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        {
-          "id": "2",
-          "label": "56"
-        },
-        {
-          "id": "0",
-          "label": "53"
-        },
-        {
-          "id": "3",
-          "label": "59"
-        },
-        {
-          "id": "1",
-          "label": "55"
-        }
+        { "id": "2", "label": "56" },
+        { "id": "0", "label": "53" },
+        { "id": "3", "label": "59" },
+        { "id": "1", "label": "55" }
       ],
-      "correctOrder": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ],
+      "correctOrder": ["0", "1", "2", "3"],
       "explanation": "The numbers go 53, 55, 56, 59.",
       "id": "represent100-2-10"
     }

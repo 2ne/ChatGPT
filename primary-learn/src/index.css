@@ -2063,6 +2063,41 @@ button.object-token {
   border: 1px solid #2d3648;
 }
 
+.dice-face {
+  --dice-size: 88px;
+  --dice-pip: 14px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
+  width: var(--dice-size);
+  height: var(--dice-size);
+  padding: 10px;
+  border-radius: 16px;
+  background: #fff;
+  border: 2.5px solid var(--ink-soft);
+  box-shadow: inset 0 -3px 0 rgba(35, 41, 70, 0.08);
+}
+
+.dice-face.is-compact {
+  --dice-size: 64px;
+  --dice-pip: 10px;
+  padding: 7px;
+  border-radius: 12px;
+}
+
+.dice-pip {
+  width: var(--dice-pip);
+  height: var(--dice-pip);
+  border-radius: 50%;
+  background: transparent;
+}
+
+.dice-pip.is-on {
+  background: var(--ink);
+}
+
 .option-content {
   display: inline-flex;
   flex-wrap: wrap;
@@ -5090,6 +5125,15 @@ button.object-token {
 .match-turn-target .base-ten-ones,
 .match-card-face .base-ten-ones {
   gap: 1px;
+}
+
+.match-turn-target .dice-face,
+.match-card-face .dice-face {
+  --dice-size: min(72px, calc(100cqh - 12px), calc(100cqw - 12px));
+  --dice-pip: calc(var(--dice-size) * 0.14);
+  padding: calc(var(--dice-size) * 0.1);
+  border-width: 2px;
+  border-radius: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {

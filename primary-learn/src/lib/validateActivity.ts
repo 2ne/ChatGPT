@@ -13,6 +13,7 @@ import {
   type Activity,
   type ActivityRandomise,
   type BaseTenAsset,
+  type DiceAsset,
   type MakeTotalGap,
   type MakeTotalMode,
   type MakeTotalOp,
@@ -28,7 +29,7 @@ import {
 } from "../types/activity";
 import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
-import { matchSideKey } from "./matchSide";
+import { matchSideKey, matchSideRepresentation } from "./matchSide";
 import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
 import { SHAPE_NAMES, SHAPE_COLOURS, type ShapeAsset } from "../types/shapes";
@@ -287,6 +288,20 @@ function optionalBaseTen(record: Record<string, unknown>, path: string): BaseTen
   return parseBaseTen(record.baseTen, `${path}.baseTen`);
 }
 
+function parseDice(value: unknown, path: string): DiceAsset {
+  if (!isRecord(value)) fail(path, "dice must be { count }");
+  const count = expectNumber(value, "count", path);
+  if (!Number.isInteger(count) || count < 1 || count > 6) {
+    fail(path, "dice.count must be a whole number from 1 to 6");
+  }
+  return { count };
+}
+
+function optionalDice(record: Record<string, unknown>, path: string): DiceAsset | undefined {
+  if (record.dice == null) return undefined;
+  return parseDice(record.dice, `${path}.dice`);
+}
+
 function parseLayout(record: Record<string, unknown>, path: string): Question["layout"] {
   if (record.layout == null) return undefined;
   if (typeof record.layout !== "string" || !(OBJECT_LAYOUTS as readonly string[]).includes(record.layout)) {
@@ -319,15 +334,18 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   if (layout === "fingers") assertFingersVisual(visual, path);
   const tenFrame = optionalTenFrame(value, path);
   const baseTen = optionalBaseTen(value, path);
+  const dice = optionalDice(value, path);
   const shape = parseShape(value.shape, `${path}.shape`);
   if (shape && !allowShape) fail(path, "shape options use multiple-choice or multi-select");
   if (shape && visual) fail(path, "option cannot mix object and shape pictures");
-  if (tenFrame && (visual || shape || baseTen)) fail(path, "option cannot mix a ten frame with another picture");
-  if (baseTen && (visual || shape)) fail(path, "option cannot mix tens and ones with another picture");
+  if (tenFrame && (visual || shape || baseTen || dice)) fail(path, "option cannot mix a ten frame with another picture");
+  if (baseTen && (visual || shape || dice)) fail(path, "option cannot mix tens and ones with another picture");
+  if (dice && (visual || shape)) fail(path, "option cannot mix a dice face with another picture");
   if (tenFrame && layout) fail(path, "ten frames do not use layout");
   if (baseTen && layout) fail(path, "tens and ones do not use layout");
-  if (!label && !visual && !shape && !tenFrame && !baseTen) fail(path, "option needs a label or a picture");
-  return { id, label, visual, tenFrame, baseTen, shape, layout };
+  if (dice && layout) fail(path, "dice faces do not use layout");
+  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice) fail(path, "option needs a label or a picture");
+  return { id, label, visual, tenFrame, baseTen, dice, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -345,14 +363,17 @@ function parseMatchSide(value: unknown, path: string): MatchSide {
   if (layout === "fingers") assertFingersVisual(visual, path);
   const tenFrame = optionalTenFrame(value, path);
   const baseTen = optionalBaseTen(value, path);
+  const dice = optionalDice(value, path);
   const shape = parseShape(value.shape, `${path}.shape`);
   if (shape && visual) fail(path, "match side cannot mix object and shape pictures");
-  if (tenFrame && (visual || shape || baseTen)) fail(path, "match side cannot mix a ten frame with another picture");
-  if (baseTen && (visual || shape)) fail(path, "match side cannot mix tens and ones with another picture");
+  if (tenFrame && (visual || shape || baseTen || dice)) fail(path, "match side cannot mix a ten frame with another picture");
+  if (baseTen && (visual || shape || dice)) fail(path, "match side cannot mix tens and ones with another picture");
+  if (dice && (visual || shape)) fail(path, "match side cannot mix a dice face with another picture");
   if (tenFrame && layout) fail(path, "ten frames do not use layout");
   if (baseTen && layout) fail(path, "tens and ones do not use layout");
-  if (!label && !visual && !shape && !tenFrame && !baseTen) fail(path, "match side needs a label or a picture");
-  return { label, visual, tenFrame, baseTen, shape, layout };
+  if (dice && layout) fail(path, "dice faces do not use layout");
+  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice) fail(path, "match side needs a label or a picture");
+  return { label, visual, tenFrame, baseTen, dice, shape, layout };
 }
 
 function parseNarration(value: unknown, path: string): Question["narration"] {
@@ -756,6 +777,14 @@ function parseQuestion(value: unknown, path: string): Question {
       const rightKey = matchSideKey(pairs[0]!.right);
       if (!keys.includes(rightKey)) {
         fail(path, "choices must include the pair's right side");
+      }
+      const leftKind = matchSideRepresentation(pairs[0]!.left);
+      const rightKind = matchSideRepresentation(pairs[0]!.right);
+      if (leftKind === rightKind) {
+        fail(
+          path,
+          `matching sides must use two different representations, not ${leftKind} with ${rightKind}`,
+        );
       }
       return { ...core, kind, pairs, mode: writtenMode as MatchPairsMode, choices };
     }

@@ -50,7 +50,7 @@ export function MultipleChoice({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked, ["amount-card"])}
               >
-                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} layout={option.layout} pack />
+                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} layout={option.layout} pack />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
@@ -143,6 +143,7 @@ export function MultipleChoice({
                 visual={option.visual}
                 tenFrame={option.tenFrame}
                 baseTen={option.baseTen}
+                dice={option.dice}
                 layout={option.layout}
               />
               {marked === "correct" ? (
