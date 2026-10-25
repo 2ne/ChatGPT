@@ -2056,6 +2056,60 @@ button.object-token {
   visibility: hidden;
 }
 
+.base-ten-key {
+  box-sizing: border-box;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 10px;
+  pointer-events: none;
+}
+
+.base-ten-key-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.base-ten-key-rod {
+  box-sizing: border-box;
+  width: 8px;
+  height: 28px;
+  border-radius: 2px;
+  background: var(--violet);
+  border: 1px solid var(--ink-soft);
+}
+
+.base-ten-key-one {
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--violet);
+  border: 1px solid var(--ink-soft);
+}
+
+.base-ten-key-eq {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.base-ten-key-hint {
+  margin: 0;
+  max-width: 22em;
+  font-size: 15px;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
 .base-ten {
   --bt-rod-w: 14px;
   --bt-rod-h: 110px;

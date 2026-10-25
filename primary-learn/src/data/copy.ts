@@ -82,6 +82,8 @@ export const copy = {
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
   pickOne: "Choose one answer",
+  baseTenKeyHint: "Each tall bar is 10. Each small square is 1.",
+  baseTenKeyAria: "A tall bar is 10. A small square is 1.",
   pickTwo: "Tap two numbers",
   addSlot: "Add",
   tapToTakeAway: "Tap one to take it away.",

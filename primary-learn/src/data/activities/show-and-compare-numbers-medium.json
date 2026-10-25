@@ -61,7 +61,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer than 12?",
+      "prompt": "Which group has fewer than 12 apples?",
       "options": [
         {
           "id": "0",
@@ -99,7 +99,7 @@
       },
       "id": "represent100-2-2",
       "narration": {
-        "prompt": "Which group has fewer than 12?"
+        "prompt": "Which group has fewer than 12 apples?"
       }
     },
     {
@@ -321,7 +321,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has the fewest?",
+      "prompt": "Which group shows the smallest number?",
       "options": [
         {
           "id": "0",
@@ -355,7 +355,7 @@
       },
       "id": "represent100-2-9",
       "narration": {
-        "prompt": "Which group has the fewest?"
+        "prompt": "Which group shows the smallest number?"
       }
     },
     {

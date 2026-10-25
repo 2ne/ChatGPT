@@ -61,7 +61,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer?",
+      "prompt": "Which group shows the smaller number?",
       "options": [
         {
           "id": "0",
@@ -95,7 +95,7 @@
       },
       "id": "represent100-3-2",
       "narration": {
-        "prompt": "Which group has fewer?"
+        "prompt": "Which group shows the smaller number?"
       }
     },
     {
@@ -311,7 +311,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has the fewest?",
+      "prompt": "Which group shows the smallest number?",
       "options": [
         {
           "id": "0",
@@ -345,7 +345,7 @@
       },
       "id": "represent100-3-9",
       "narration": {
-        "prompt": "Which group has the fewest?"
+        "prompt": "Which group shows the smallest number?"
       }
     },
     {

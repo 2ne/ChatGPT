@@ -18,7 +18,15 @@ function jumpToActivity(activityId: string) {
   node.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function QuestionBlock({ question, index }: { question: Question; index: number }) {
+function QuestionBlock({
+  question,
+  index,
+  showBaseTenHint,
+}: {
+  question: Question;
+  index: number;
+  showBaseTenHint: boolean;
+}) {
   const answer = correctAnswerFor(question);
   const keyLabel = correctAnswerLabel(question);
   const promptParts = splitPromptTail(question.prompt);
@@ -46,6 +54,7 @@ function QuestionBlock({ question, index }: { question: Question; index: number 
         disabled
         reveal="correct"
         onChange={() => {}}
+        showBaseTenHint={showBaseTenHint}
       />
 
       <dl className="qb-key">
@@ -121,7 +130,12 @@ export function QuestionBank() {
 
             <div className="qb-questions">
               {activity.questions.map((question, index) => (
-                <QuestionBlock key={question.id} question={question} index={index} />
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  index={index}
+                  showBaseTenHint={activity.difficulty < 3}
+                />
               ))}
             </div>
           </section>

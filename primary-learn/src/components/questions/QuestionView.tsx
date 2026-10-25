@@ -1,6 +1,8 @@
 import type { ComponentType } from "react";
 import type { Question, QuestionKind } from "../../types/activity";
 import { copy } from "../../data/copy";
+import { questionUsesBaseTen } from "../../lib/baseTen";
+import { BaseTenKey } from "./BaseTenKey";
 import { BuildSet } from "./BuildSet";
 import { CountObjects } from "./CountObjects";
 import { FillBlank } from "./FillBlank";
@@ -20,6 +22,8 @@ type QuestionViewProps = {
   reveal?: Reveal;
   onChange: (value: unknown) => void;
   onPlayControl?: (control: QuestionPlayControl | null) => void;
+  /** Easy and Medium say the tens-and-ones key in words. Hard uses the pictures only. */
+  showBaseTenHint?: boolean;
 };
 
 type KindView = ComponentType<{
@@ -55,20 +59,24 @@ export function QuestionView({
   reveal = null,
   onChange,
   onPlayControl,
+  showBaseTenHint = false,
 }: QuestionViewProps) {
   const View = QUESTION_VIEWS[question.kind];
   if (!View) {
     return <p className="t-body">{copy.emptyActivity}</p>;
   }
   return (
-    <View
-      key={question.id}
-      question={question as never}
-      answer={answer}
-      disabled={disabled}
-      reveal={reveal}
-      onChange={onChange}
-      onPlayControl={onPlayControl}
-    />
+    <>
+      {questionUsesBaseTen(question) ? <BaseTenKey explain={showBaseTenHint} /> : null}
+      <View
+        key={question.id}
+        question={question as never}
+        answer={answer}
+        disabled={disabled}
+        reveal={reveal}
+        onChange={onChange}
+        onPlayControl={onPlayControl}
+      />
+    </>
   );
 }

@@ -66,6 +66,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | conceptual subitise | `How many can you see in all?` with two pictured parts (`visual` + `extras`, `layout` `row`) and usually `flashMs`. |
 | hidden quantity | `How many {items} are under the cup?` with `layout` `hidden` and `flashMs`. |
 | pick a group | `Which group has {n} {items}?` (single choice). Multi-select: `Which groups have {n} {items}?` or `Tap every group that has {n} {items}.` Do not write `Which group?` alone. |
+| compare groups | Must name what is compared. Tens and ones: `Which group shows the smaller number?` / `Which group shows the bigger number?` / `Which group shows the smallest number?`. Compare the total number, not how many pieces you can see. Ten frames and objects: name the object (`Which group has fewer stars?` / `Which group has more {items}?` / `Which group has fewer than 6 apples?`). Same: `Tap the two groups that have the same number of {items}.` Order: `Put the groups of {items} in order, from fewest to most.` Never `Which group has fewer?` or `Which group has the fewest?` alone. |
 | pick an amount | Number shown, tap the matching group: `Tap the {items} that match the number below.` plus `numeral` (digit on the card). Optional `numeralLabel` only when the card must show a number word. Four picture cards, one correct count, three near misses. Do not use match-pairs for this. |
 | light story | `{Name} has {n} {items} and {action}. How many are left?` / `How many {items} does he have now?` — one step, same numbers as the node. Pictures must show the object named in the text, with matching counts (one emoji; no mixed `extras`). Join stories set `visual.count` (start) and `visual.added` of the same item. Take-away pictures set `visual.count` (start) and `visual.removed` (last N on light red tiles). |
 | build-set | `Make a group of {count} {items}.` |
@@ -215,8 +216,10 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 9. Every tappable control is at least 44px, including the speaker button.
 10. Year 1 must not say clockwise or anti-clockwise.
 11. Take-away removed tiles need a second cue besides colour (dashed outline). Keep the no-X rule.
+12. Comparison questions must name what is compared (the object, or the total number for tens and ones).
+13. Every BaseTen question shows the tens-and-ones key (mini bar = 10, mini square = 1). One key per question, not per option. Easy and Medium also say `Each tall bar is 10. Each small square is 1.` Hard may use the key only.
 
-Rule 9 is CSS. Rule 11 is CSS. The rest fail `check:activities`.
+Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. The rest fail `check:activities`.
 
 TODO later rewrite (temporary allowlist, do not grow it): Show and compare numbers was just rewritten and skips content rules 1 to 5 and 7. Narration and Hard thinking still apply.
 - [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)

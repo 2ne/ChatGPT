@@ -96,6 +96,27 @@ function answerBand(values, answer) {
   return "middle";
 }
 
+function compareNamesThing(prompt) {
+  const text = String(prompt).trim();
+  const isGroupCompare =
+    (/\bwhich group (has|shows)\b/i.test(text) ||
+      /\bput the groups\b/i.test(text) ||
+      /\btap the two groups\b/i.test(text)) &&
+    /\b(fewer|fewest|more|most|least|same|smaller|bigger|smallest|biggest)\b/i.test(text);
+  if (!isGroupCompare) return true;
+  if (/\b(smaller number|bigger number|smallest number|biggest number)\b/i.test(text)) return true;
+  if (/\{items?\}/.test(text)) return true;
+  if (/\bsame number of\b/i.test(text)) return true;
+  if (
+    /\b(fewer|more|fewest|most|least|same)\b(?:\s+than\s+\d+)?\s+(?!than|the|this|that|as|of|in|to)[a-z]{3,}\b/i.test(
+      text,
+    )
+  ) {
+    return true;
+  }
+  return false;
+}
+
 function stemShape(prompt) {
   return String(prompt)
     .toLowerCase()
@@ -167,6 +188,10 @@ function checkActivity(activity) {
 
     if (year1 && CLOCK_WORDS.test(childFacingText(question))) {
       errors.push(`${path}: Year 1 must not say clockwise or anti-clockwise`);
+    }
+
+    if (!compareNamesThing(question.prompt)) {
+      errors.push(`${path}: compare questions must name what is compared`);
     }
 
     const expl = String(question.explanation ?? "").trim();

@@ -17,6 +17,7 @@ import { emptyPickPairAnswer, isPickPairAnswer, togglePickPairTile } from "../li
 import { attemptStars, passedScore, scoreAttempt } from "../lib/mastery";
 import { playSound } from "../lib/sound";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+import { questionUsesBaseTen } from "../lib/baseTen";
 import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
 import { spokenExplanation, spokenPrompt } from "../lib/narration";
@@ -34,6 +35,14 @@ import { QuestionView } from "./questions/QuestionView";
 import type { QuestionPlayControl } from "./questions/MatchPairs";
 import { QuestExitSheet } from "./QuestExitSheet";
 import { BondDemonstration } from "./questions/BondDemonstration";
+
+function hearPrompt(question: Question, difficulty: number): string {
+  const spoken = spokenPrompt(question);
+  if (difficulty < 3 && questionUsesBaseTen(question)) {
+    return `${spoken} ${copy.baseTenKeyHint}`;
+  }
+  return spoken;
+}
 
 function sectionBackdrop(pathNode: string): CSSProperties | undefined {
   const category = categoryForNode(pathNode);
@@ -429,7 +438,7 @@ export function ActivityRunner({
             <h1 ref={promptRef} tabIndex={-1} className="q-prompt">
               <SpokenWords
                 display={promptParts.head}
-                spoken={spokenPrompt(question)}
+                spoken={hearPrompt(question, activity.difficulty)}
                 charIndex={speechTarget === "prompt" && speech.playing ? speech.charIndex : -1}
               />
               {speech.available ? (
@@ -441,7 +450,7 @@ export function ActivityRunner({
                       return;
                     }
                     setSpeechTarget("prompt");
-                    speech.play(spokenPrompt(question));
+                    speech.play(hearPrompt(question, activity.difficulty));
                   }}
                 />
               ) : null}
@@ -456,6 +465,7 @@ export function ActivityRunner({
             reveal={reveal}
             onChange={setAnswer}
             onPlayControl={setPlayControl}
+            showBaseTenHint={activity.difficulty < 3}
           />
 
           {phase === "question" && question.hint ? (

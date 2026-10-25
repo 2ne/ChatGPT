@@ -147,7 +147,7 @@
     {
       "id": "mls-2-4",
       "kind": "multi-select",
-      "prompt": "Tap the two groups that match.",
+      "prompt": "Tap the two groups that have the same number of {items}.",
       "options": [
         {
           "id": "a",
@@ -177,7 +177,7 @@
       ],
       "explanation": "Those two groups both have 6. 7 is one more.",
       "narration": {
-        "prompt": "Tap the two groups that match."
+        "prompt": "Tap the two groups that have the same number of {items}."
       },
       "randomise": {
         "shuffleOptions": true
@@ -379,7 +379,7 @@
     {
       "id": "mls-2-10",
       "kind": "ordered",
-      "prompt": "Put the groups in order, from fewest to most.",
+      "prompt": "Put the groups of {items} in order, from fewest to most.",
       "items": [
         {
           "id": "g4",
@@ -418,7 +418,7 @@
       ],
       "explanation": "The groups go 4, 5, 7, 9 from fewest to most.",
       "narration": {
-        "prompt": "Put the groups in order, from fewest to most."
+        "prompt": "Put the groups of {items} in order, from fewest to most."
       }
     }
   ]

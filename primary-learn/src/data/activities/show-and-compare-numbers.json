@@ -62,7 +62,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer than 6?",
+      "prompt": "Which group has fewer than 6 apples?",
       "options": [
         {
           "id": "0",
@@ -100,7 +100,7 @@
       },
       "id": "represent100-1-2",
       "narration": {
-        "prompt": "Which group has fewer than 6?"
+        "prompt": "Which group has fewer than 6 apples?"
       },
       "hint": "Each frame is the same size. Compare the filled cells."
     },
