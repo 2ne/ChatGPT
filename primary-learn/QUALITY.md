@@ -141,7 +141,9 @@ Every question needs `explanation`. Hints are optional and must follow the scaff
 
 Pre-readers tap the **speaker icon** after the question. Speech uses `question.narration.prompt` and falls back to the visible prompt.
 
-**Question only.** Never read the answer, answer options, how many pictures are on screen, a hint, or the explanation. Those leak the mark to a child who cannot yet read.
+**Question speaker: question only.** Never read the answer, answer options, how many pictures are on screen, or a hint. Those leak the mark to a child who cannot yet read.
+
+**After a mark:** the feedback panel shows the explanation and a 44px speaker that reads that teaching line only. Do not auto-play it.
 
 **Every question needs `narration.prompt`.** Write it whenever the stem has operators or symbols a voice will mangle (`7 + ? = 10`, `10 − 4 =`). Copy the visible prompt when the words already read well.
 

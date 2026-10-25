@@ -118,7 +118,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "A half turn faces the opposite way.",
+      "explanation": "A half turn faces the opposite way. A quarter turn is less.",
       "narration": {
         "prompt": "Watch the car turn. How much does it turn?"
       },
@@ -194,7 +194,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "A quarter turn is one of four equal parts.",
+      "explanation": "A quarter turn is one of four equal parts. A half turn is two of them.",
       "narration": {
         "prompt": "Watch the car turn. How much does it turn?"
       },

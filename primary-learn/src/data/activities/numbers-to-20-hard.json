@@ -182,7 +182,7 @@
         "eighteen"
       ],
       "inputMode": "numeric",
-      "explanation": "Eighteen is 18. That is 10 and 8.",
+      "explanation": "Eighteen is 18. That is 10 and 8, not 80.",
       "narration": {
         "prompt": "Type the number eighteen."
       }
@@ -279,7 +279,7 @@
         "n19",
         "n20"
       ],
-      "explanation": "The numbers go 17, 18, 19, 20.",
+      "explanation": "The numbers go 17, 18, 19, 20. Each one is one more than the last.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

@@ -4,7 +4,9 @@
   "summary": "Compare groups up to 10 using ten frames, dice and numerals of the same size.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,18 +18,403 @@
     "within": "Q1 and Q2 pick more on same-size frames and dice. Q3 picks fewer. Q4 finds two that match. Q5 picks fewer with a clear gap. Q6 to Q9 match a number shown two ways. Q10 orders three frames.",
     "versus": "Easy compares clear gaps and mixed match sides. Medium uses closer counts. Hard uses near-equal groups and mixed representations."
   },
-  "skills": ["eyfs-compare-10", "compare-quantities-to-10", "more-less-same"],
-  "randomise": { "mode": "attempt", "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"] },
+  "skills": [
+    "eyfs-compare-10",
+    "compare-quantities-to-10",
+    "more-less-same"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
   "questions": [
-    { "id": "mls-1-1", "kind": "multiple-choice", "prompt": "Which group has more {items}?", "options": [{ "id": "a", "tenFrame": { "count": 3, "item": "apple" } }, { "id": "b", "tenFrame": { "count": 6, "item": "apple" } }, { "id": "c", "tenFrame": { "count": 2, "item": "apple" } }], "correctId": "b", "hint": "Each frame is the same size. Compare the filled cells.", "explanation": "6 is more than 3 and 2. The frames are the same size.", "narration": { "prompt": "Which group has more {items}?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "mls-1-2", "kind": "multiple-choice", "prompt": "Which group has more {items}?", "options": [{ "id": "a", "dice": { "count": 4 } }, { "id": "b", "dice": { "count": 6 } }, { "id": "c", "dice": { "count": 1 } }], "correctId": "b", "hint": "The dice faces are the same size.", "explanation": "6 is more than 4 and 1. Face size is not the cue.", "narration": { "prompt": "Which group has more {items}?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "mls-1-3", "kind": "multiple-choice", "prompt": "Which group has fewer {items}?", "options": [{ "id": "a", "tenFrame": { "count": 9, "item": "frog" } }, { "id": "b", "tenFrame": { "count": 3, "item": "frog" } }, { "id": "c", "tenFrame": { "count": 7, "item": "frog" } }], "correctId": "b", "explanation": "3 is fewer than 9 and 7. Empty cells help you see it.", "narration": { "prompt": "Which group has fewer {items}?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "mls-1-4", "kind": "multi-select", "prompt": "Tap the two groups that match.", "options": [{ "id": "a", "tenFrame": { "count": 5, "item": "fish" } }, { "id": "b", "tenFrame": { "count": 4, "item": "fish" } }, { "id": "c", "tenFrame": { "count": 5, "item": "fish" } }], "correctIds": ["a", "c"], "explanation": "Those two groups both have 5. 4 is one less.", "narration": { "prompt": "Tap the two groups that match." }, "randomise": { "shuffleOptions": true } },
-    { "id": "mls-1-5", "kind": "multiple-choice", "prompt": "Which group has fewer {items}?", "options": [{ "id": "a", "tenFrame": { "count": 6, "item": "car" } }, { "id": "b", "tenFrame": { "count": 8, "item": "car" } }, { "id": "c", "tenFrame": { "count": 2, "item": "car" } }], "correctId": "c", "explanation": "2 is fewer than 6 and 8. Look at filled cells, not space.", "narration": { "prompt": "Which group has fewer {items}?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "mls-1-6", "kind": "match-pairs", "prompt": "Select the card that matches the number.", "pairs": [{ "id": "p1", "left": "3", "right": { "dice": { "count": 3 } } }], "choices": [{ "dice": { "count": 3 } }, { "dice": { "count": 4 } }, { "dice": { "count": 5 } }], "explanation": "3 matches the dice that shows 3, not 4.", "narration": { "prompt": "Select the card that matches the number." }, "mode": "one-at-a-time" },
-    { "id": "mls-1-7", "kind": "match-pairs", "prompt": "Select the card that matches the picture.", "pairs": [{ "id": "p1", "left": { "tenFrame": { "count": 5, "item": "star" } }, "right": "5" }], "choices": ["3", "5", "6"], "explanation": "The ten frame has 5 filled cells, so the match is 5.", "narration": { "prompt": "Select the card that matches the picture." }, "mode": "one-at-a-time" },
-    { "id": "mls-1-8", "kind": "match-pairs", "prompt": "Select the card that matches the picture.", "pairs": [{ "id": "p1", "left": { "tenFrame": { "count": 7, "item": "star" } }, "right": { "visual": { "item": "apple", "count": 7 }, "layout": "scatter" } }], "choices": [{ "visual": { "item": "apple", "count": 5 }, "layout": "scatter" }, { "visual": { "item": "apple", "count": 7 }, "layout": "scatter" }, { "visual": { "item": "apple", "count": 9 }, "layout": "scatter" }], "explanation": "Both sides show 7. The layout is not the cue.", "narration": { "prompt": "Select the card that matches the picture." }, "mode": "one-at-a-time" },
-    { "id": "mls-1-9", "kind": "match-pairs", "prompt": "Select the card that matches the number.", "pairs": [{ "id": "p1", "left": "9", "right": { "tenFrame": { "count": 9, "item": "apple" } } }], "choices": [{ "tenFrame": { "count": 8, "item": "apple" } }, { "tenFrame": { "count": 10, "item": "apple" } }, { "tenFrame": { "count": 9, "item": "apple" } }], "explanation": "9 matches the frame with 9 filled cells, not 8 or 10.", "narration": { "prompt": "Select the card that matches the number." }, "mode": "one-at-a-time" },
-    { "id": "mls-1-10", "kind": "ordered", "prompt": "Put the groups in order, from fewest to most.", "items": [{ "id": "g3", "tenFrame": { "count": 8, "item": "duck" } }, { "id": "g1", "tenFrame": { "count": 2, "item": "duck" } }, { "id": "g2", "tenFrame": { "count": 5, "item": "duck" } }], "correctOrder": ["g1", "g2", "g3"], "explanation": "2 is fewest, then 5, then 8.", "narration": { "prompt": "Put the groups in order, from fewest to most." } }
+    {
+      "id": "mls-1-1",
+      "kind": "multiple-choice",
+      "prompt": "Which group has more {items}?",
+      "options": [
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 3,
+            "item": "apple"
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 6,
+            "item": "apple"
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 2,
+            "item": "apple"
+          }
+        }
+      ],
+      "correctId": "b",
+      "hint": "Each frame is the same size. Compare the filled cells.",
+      "explanation": "6 is more than 3 and 2. The frames are the same size.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "mls-1-2",
+      "kind": "multiple-choice",
+      "prompt": "Which group has more {items}?",
+      "options": [
+        {
+          "id": "a",
+          "dice": {
+            "count": 4
+          }
+        },
+        {
+          "id": "b",
+          "dice": {
+            "count": 6
+          }
+        },
+        {
+          "id": "c",
+          "dice": {
+            "count": 1
+          }
+        }
+      ],
+      "correctId": "b",
+      "hint": "The dice faces are the same size.",
+      "explanation": "6 is more than 4 and 1. Face size is not the cue.",
+      "narration": {
+        "prompt": "Which group has more {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "mls-1-3",
+      "kind": "multiple-choice",
+      "prompt": "Which group has fewer {items}?",
+      "options": [
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 9,
+            "item": "frog"
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 3,
+            "item": "frog"
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 7,
+            "item": "frog"
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "3 is fewer than 9 and 7. Empty cells show there are fewer.",
+      "narration": {
+        "prompt": "Which group has fewer {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "mls-1-4",
+      "kind": "multi-select",
+      "prompt": "Tap the two groups that match.",
+      "options": [
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 5,
+            "item": "fish"
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 4,
+            "item": "fish"
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 5,
+            "item": "fish"
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "Those two groups both have 5. 4 is one less.",
+      "narration": {
+        "prompt": "Tap the two groups that match."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "mls-1-5",
+      "kind": "multiple-choice",
+      "prompt": "Which group has fewer {items}?",
+      "options": [
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 6,
+            "item": "car"
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 8,
+            "item": "car"
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 2,
+            "item": "car"
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "2 is fewer than 6 and 8. Compare filled cells, not empty space.",
+      "narration": {
+        "prompt": "Which group has fewer {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "mls-1-6",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "3",
+          "right": {
+            "dice": {
+              "count": 3
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
+          "dice": {
+            "count": 3
+          }
+        },
+        {
+          "dice": {
+            "count": 4
+          }
+        },
+        {
+          "dice": {
+            "count": 5
+          }
+        }
+      ],
+      "explanation": "3 matches the dice that shows 3, not 4.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "mls-1-7",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "tenFrame": {
+              "count": 5,
+              "item": "star"
+            }
+          },
+          "right": "5"
+        }
+      ],
+      "choices": [
+        "3",
+        "5",
+        "6"
+      ],
+      "explanation": "The ten frame has 5 filled cells, so 5 matches. A different number does not.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "mls-1-8",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "tenFrame": {
+              "count": 7,
+              "item": "star"
+            }
+          },
+          "right": {
+            "visual": {
+              "item": "apple",
+              "count": 7
+            },
+            "layout": "scatter"
+          }
+        }
+      ],
+      "choices": [
+        {
+          "visual": {
+            "item": "apple",
+            "count": 5
+          },
+          "layout": "scatter"
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 7
+          },
+          "layout": "scatter"
+        },
+        {
+          "visual": {
+            "item": "apple",
+            "count": 9
+          },
+          "layout": "scatter"
+        }
+      ],
+      "explanation": "Both sides show 7. The layout is not the cue.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "mls-1-9",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "9",
+          "right": {
+            "tenFrame": {
+              "count": 9,
+              "item": "apple"
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
+          "tenFrame": {
+            "count": 8,
+            "item": "apple"
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 10,
+            "item": "apple"
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 9,
+            "item": "apple"
+          }
+        }
+      ],
+      "explanation": "9 matches the frame with 9 filled cells, not 8 or 10.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "mls-1-10",
+      "kind": "ordered",
+      "prompt": "Put the groups in order, from fewest to most.",
+      "items": [
+        {
+          "id": "g3",
+          "tenFrame": {
+            "count": 8,
+            "item": "duck"
+          }
+        },
+        {
+          "id": "g1",
+          "tenFrame": {
+            "count": 2,
+            "item": "duck"
+          }
+        },
+        {
+          "id": "g2",
+          "tenFrame": {
+            "count": 5,
+            "item": "duck"
+          }
+        }
+      ],
+      "correctOrder": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "explanation": "2 is fewest, then 5, then 8.",
+      "narration": {
+        "prompt": "Put the groups in order, from fewest to most."
+      }
+    }
   ]
 }

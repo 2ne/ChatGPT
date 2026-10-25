@@ -104,7 +104,7 @@
       ],
       "correctId": "a",
       "hint": "Each column of two is one pair.",
-      "explanation": "4 makes 2 pairs. Do not count each object as a pair.",
+      "explanation": "4 makes 2 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "How many pairs can you see?"
       },
@@ -172,7 +172,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "6 makes 3 pairs. Do not count each object as a pair.",
+      "explanation": "6 makes 3 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "How many pairs can you see?"
       },
@@ -307,7 +307,7 @@
         "four"
       ],
       "inputMode": "numeric",
-      "explanation": "8 makes 4 pairs. Do not count each object as a pair.",
+      "explanation": "8 makes 4 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "Type how many pairs you can see."
       }
@@ -370,7 +370,7 @@
         "n4",
         "n6"
       ],
-      "explanation": "The numbers go 2, 4, 6. Those are even.",
+      "explanation": "The numbers go 2, 4, 6. Those are even. Each makes pairs.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

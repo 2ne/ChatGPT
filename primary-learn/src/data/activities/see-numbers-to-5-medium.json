@@ -4,7 +4,9 @@
   "summary": "See how many without counting, with shorter flashes and mixed pictures.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,18 +18,379 @@
     "within": "Q1 and Q2 flash dice 3 and 5. Q3 shows 4 fingers. Q4 sees 1 and 4 in all. Q5 matches 3 fingers to dice. Q6 sees 2 and 2. Q7 picks a group of 5. Q8 hides 4. Q9 matches 2 fingers to dice. Q10 types 4.",
     "versus": "Easy uses long flashes and clear 2 and 3. Medium shortens the flash and mixes arrangements. Hard uses a quicker flash and reverse matching."
   },
-  "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns", "five-frame", "finger-patterns"],
-  "randomise": { "mode": "attempt", "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"] },
+  "skills": [
+    "eyfs-subitise-5",
+    "subitise-to-5",
+    "numerals-1-to-5",
+    "dice-patterns",
+    "five-frame",
+    "finger-patterns"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
   "questions": [
-    { "id": "s5-2-1", "kind": "multiple-choice", "prompt": "How many {items} can you see?", "visual": { "item": "star", "count": 3 }, "layout": "dice", "flashMs": 1100, "options": [{ "id": "a", "label": "3" }, { "id": "b", "label": "4" }, { "id": "c", "label": "5" }], "correctId": "a", "explanation": "The dice shows 3. The middle pip is not a fourth.", "narration": { "prompt": "How many {items} can you see?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-2", "kind": "multiple-choice", "prompt": "How many {items} can you see?", "visual": { "item": "apple", "count": 5 }, "layout": "dice", "flashMs": 1100, "options": [{ "id": "a", "label": "3" }, { "id": "b", "label": "4" }, { "id": "c", "label": "5" }], "correctId": "c", "explanation": "The dice shows 5. The centre pip makes 5, not 4.", "narration": { "prompt": "How many {items} can you see?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-3", "kind": "multiple-choice", "prompt": "How many fingers can you see?", "visual": { "item": "star", "count": 4 }, "layout": "fingers", "options": [{ "id": "a", "label": "3" }, { "id": "b", "label": "4" }, { "id": "c", "label": "5" }], "correctId": "b", "explanation": "4 fingers are up. The thumb is still down.", "narration": { "prompt": "How many fingers can you see?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-4", "kind": "multiple-choice", "prompt": "How many can you see in all?", "tenFrame": { "count": 5, "item": "apple", "parts": [1, 4] }, "options": [{ "id": "a", "label": "1" }, { "id": "b", "label": "4" }, { "id": "c", "label": "5" }], "correctId": "c", "explanation": "1 and 4 make 5. Add both parts.", "narration": { "prompt": "How many can you see in all?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-5", "kind": "match-pairs", "prompt": "Select the card that matches the picture.", "pairs": [{ "id": "p1", "left": { "visual": { "item": "star", "count": 3 }, "layout": "fingers" }, "right": { "dice": { "count": 3 } } }], "choices": [{ "dice": { "count": 2 } }, { "dice": { "count": 3 } }, { "dice": { "count": 4 } }], "explanation": "3 fingers match the dice that shows 3.", "narration": { "prompt": "Select the card that matches the picture." }, "mode": "one-at-a-time" },
-    { "id": "s5-2-6", "kind": "multiple-choice", "prompt": "How many can you see in all?", "tenFrame": { "count": 4, "item": "frog", "parts": [2, 2] }, "options": [{ "id": "a", "label": "2" }, { "id": "b", "label": "4" }, { "id": "c", "label": "5" }], "correctId": "b", "explanation": "2 and 2 make 4. That is a double, not 2.", "narration": { "prompt": "How many can you see in all?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-7", "kind": "multiple-choice", "prompt": "Which group has 5 {items}?", "options": [{ "id": "a", "visual": { "item": "star", "count": 3 }, "layout": "dice" }, { "id": "b", "visual": { "item": "star", "count": 4 }, "layout": "dice" }, { "id": "c", "visual": { "item": "star", "count": 5 }, "layout": "dice" }], "correctId": "c", "explanation": "The 5 dice has a centre pip. 4 does not.", "narration": { "prompt": "Which group has 5 {items}?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-8", "kind": "multiple-choice", "prompt": "How many {items} are under the cup?", "visual": { "item": "duck", "count": 4 }, "layout": "hidden", "flashMs": 1000, "options": [{ "id": "a", "label": "3" }, { "id": "b", "label": "4" }, { "id": "c", "label": "5" }], "correctId": "b", "explanation": "4 were shown. Hold the picture in your head.", "narration": { "prompt": "How many {items} are under the cup?" }, "randomise": { "shuffleOptions": true } },
-    { "id": "s5-2-9", "kind": "match-pairs", "prompt": "Select the card that matches the picture.", "pairs": [{ "id": "p1", "left": { "visual": { "item": "star", "count": 2 }, "layout": "fingers" }, "right": { "dice": { "count": 2 } } }], "choices": [{ "dice": { "count": 1 } }, { "dice": { "count": 2 } }, { "dice": { "count": 3 } }], "explanation": "2 fingers match the dice that shows 2.", "narration": { "prompt": "Select the card that matches the picture." }, "mode": "one-at-a-time" },
-    { "id": "s5-2-10", "kind": "fill-blank", "prompt": "Type how many you can see.", "tenFrame": { "count": 4, "item": "fish", "parts": [2, 2] }, "acceptedAnswers": ["4", "four"], "inputMode": "numeric", "explanation": "2 and 2 make 4. Add both parts.", "narration": { "prompt": "Type how many you can see." } }
+    {
+      "id": "s5-2-1",
+      "kind": "multiple-choice",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "star",
+        "count": 3
+      },
+      "layout": "dice",
+      "flashMs": 1100,
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The dice shows 3. The middle pip is not a fourth.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-2",
+      "kind": "multiple-choice",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "apple",
+        "count": 5
+      },
+      "layout": "dice",
+      "flashMs": 1100,
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The dice shows 5. The centre pip makes 5, not 4.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-3",
+      "kind": "multiple-choice",
+      "prompt": "How many fingers can you see?",
+      "visual": {
+        "item": "star",
+        "count": 4
+      },
+      "layout": "fingers",
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "4 fingers are up. The thumb is still down.",
+      "narration": {
+        "prompt": "How many fingers can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-4",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 5,
+        "item": "apple",
+        "parts": [
+          1,
+          4
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "1 and 4 make 5. Add both parts.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-5",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "visual": {
+              "item": "star",
+              "count": 3
+            },
+            "layout": "fingers"
+          },
+          "right": {
+            "dice": {
+              "count": 3
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
+          "dice": {
+            "count": 2
+          }
+        },
+        {
+          "dice": {
+            "count": 3
+          }
+        },
+        {
+          "dice": {
+            "count": 4
+          }
+        }
+      ],
+      "explanation": "3 fingers match the dice that shows 3.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "s5-2-6",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 4,
+        "item": "frog",
+        "parts": [
+          2,
+          2
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "2 and 2 make 4. That is a double, not 2.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-7",
+      "kind": "multiple-choice",
+      "prompt": "Which group has 5 {items}?",
+      "options": [
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 3
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 4
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 5
+          },
+          "layout": "dice"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The 5 dice has a centre pip. 4 does not.",
+      "narration": {
+        "prompt": "Which group has 5 {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-8",
+      "kind": "multiple-choice",
+      "prompt": "How many {items} are under the cup?",
+      "visual": {
+        "item": "duck",
+        "count": 4
+      },
+      "layout": "hidden",
+      "flashMs": 1000,
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "4 were shown. Keep the picture in your head. The cup hides it.",
+      "narration": {
+        "prompt": "How many {items} are under the cup?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "s5-2-9",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "visual": {
+              "item": "star",
+              "count": 2
+            },
+            "layout": "fingers"
+          },
+          "right": {
+            "dice": {
+              "count": 2
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
+          "dice": {
+            "count": 1
+          }
+        },
+        {
+          "dice": {
+            "count": 2
+          }
+        },
+        {
+          "dice": {
+            "count": 3
+          }
+        }
+      ],
+      "explanation": "2 fingers match the dice that shows 2.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "s5-2-10",
+      "kind": "fill-blank",
+      "prompt": "Type how many you can see.",
+      "tenFrame": {
+        "count": 4,
+        "item": "fish",
+        "parts": [
+          2,
+          2
+        ]
+      },
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
+      "inputMode": "numeric",
+      "explanation": "2 and 2 make 4. Add both parts.",
+      "narration": {
+        "prompt": "Type how many you can see."
+      }
+    }
   ]
 }

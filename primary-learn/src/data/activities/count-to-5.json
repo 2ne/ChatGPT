@@ -178,7 +178,7 @@
         "count": 5
       },
       "randomise": {},
-      "explanation": "A group of 5 has 5 {items}.",
+      "explanation": "A group of 5 has 5 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 5 {items}."
       }
@@ -205,7 +205,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "4 comes after 3.",
+      "explanation": "4 comes after 3. Do not skip a number.",
       "narration": {
         "prompt": "What number comes next? One, two, three, blank."
       }
@@ -260,7 +260,7 @@
         "n2",
         "n3"
       ],
-      "explanation": "The numbers go 1, 2, 3 from smallest to biggest.",
+      "explanation": "The numbers go 1, 2, 3. Each one is one more than the last.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
@@ -304,7 +304,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "That group has 4 {items}.",
+      "explanation": "That group has 4 {items}. The others have a different number.",
       "narration": {
         "prompt": "Tap the {items} that match the number below."
       }
@@ -340,7 +340,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "That group has 5 {items}.",
+      "explanation": "That group has 5 {items}. The others have a different number.",
       "narration": {
         "prompt": "Which group has 5 {items}?"
       }

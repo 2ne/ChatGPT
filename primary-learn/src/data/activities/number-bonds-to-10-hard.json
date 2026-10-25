@@ -165,7 +165,7 @@
         "count": 10
       },
       "bank": 12,
-      "explanation": "A group of 10 has 10 {items}. This is another way to make 10.",
+      "explanation": "A group of 10 has 10 {items}. A full group of 10 is one way to make 10.",
       "narration": {
         "prompt": "Make a group of 10 {items}."
       }
@@ -241,7 +241,7 @@
         "two"
       ],
       "inputMode": "numeric",
-      "explanation": "8 and 2 make 10. Count on two from 8.",
+      "explanation": "8 and 2 make 10. Keep going 9, 10 from 8.",
       "narration": {
         "prompt": "What do you need to add to 8 to make 10?"
       }

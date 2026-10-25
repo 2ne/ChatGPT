@@ -196,7 +196,7 @@ Content never embeds a new UI. Prefer upgrading an existing kind. A new kind mus
 
 1. Add the kind to `QUESTION_KINDS` and the discriminated union in `src/types/activity.ts`.
 2. Teach `src/lib/answers.ts` (`isAnswerCorrect`, `emptyAnswerFor`, `hasProvidedAnswer`).
-3. Spoken read-aloud is the question prompt only (`spokenPrompt` in `src/lib/narration.ts`). Do not add a path that reads options or answers.
+3. Spoken question read-aloud is the prompt only (`spokenPrompt` in `src/lib/narration.ts`). Do not add a path that reads options or answers. After a mark, `spokenExplanation` may be read from the feedback speaker.
 4. Add a component in `src/components/questions/<Kind>.tsx` (data in, answers out — no quest-specific copy).
 5. Register it in `QUESTION_VIEWS` in `src/components/questions/QuestionView.tsx`.
 6. Extend `src/lib/validateActivity.ts` (and `activity.schema.json` if the top-level shape changes).
@@ -292,9 +292,9 @@ Follow `QUALITY.md` for the full wording templates, distractor rules, variety ru
 
 ## Narration (read aloud)
 
-A small **speaker icon** sits inline, immediately after the question text. Narration is **Web Speech API only** (`speechSynthesis`): free, no paid API, no generated audio files. There are too many questions to record or synthesise offline. The helper in `src/lib/speech.ts` picks a young, warm, happy **UK female** primary-teacher voice: prefer en-GB female natural voices (Microsoft Sonia / Libby / Maisie Online (Natural), Google UK English Female, Apple Serena / Kate / Stephanie / Martha), then other female English, and never prefer known male voices (Daniel, Arthur, George, Ryan, Thomas, Oliver, Google UK English Male). Pitch about 1.1. Rate about 0.95.
+A small **speaker icon** sits inline, immediately after the question text. After a mark, a second 44px speaker sits on the feedback panel and reads the explanation only. Narration is **Web Speech API only** (`speechSynthesis`): free, no paid API, no generated audio files. There are too many questions to record or synthesise offline. The helper in `src/lib/speech.ts` picks a young, warm, happy **UK female** primary-teacher voice: prefer en-GB female natural voices (Microsoft Sonia / Libby / Maisie Online (Natural), Google UK English Female, Apple Serena / Kate / Stephanie / Martha), then other female English, and never prefer known male voices (Daniel, Arthur, George, Ryan, Thomas, Oliver, Google UK English Male). Pitch about 1.1. Rate about 0.95.
 
-**Narration is the question only.** It must never reveal or hint the answer. Do not read options, pictured object counts, fill-blank answers, hints, or teaching feedback.
+**The question speaker is the question only.** It must never reveal or hint the answer. Do not read options, pictured object counts, fill-blank answers, or hints. Teaching feedback is read only from the feedback speaker after the child has answered.
 
 Spoken text is `question.narration.prompt`, falling back to the visible `prompt`. Do not add `audioSrc` files.
 

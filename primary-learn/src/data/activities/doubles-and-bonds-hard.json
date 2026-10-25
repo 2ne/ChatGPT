@@ -264,7 +264,7 @@
         6,
         8
       ],
-      "explanation": "3 and 3 make 6. That is a double.",
+      "explanation": "3 and 3 make 6. Both parts are the same.",
       "narration": {
         "prompt": "What do 3 and 3 make?"
       }
@@ -305,7 +305,7 @@
         "a",
         "c"
       ],
-      "explanation": "2 and 2, and 4 and 4, are doubles.",
+      "explanation": "2 and 2, and 4 and 4, are doubles. Both parts match.",
       "narration": {
         "prompt": "Tap every pair that is a double."
       },

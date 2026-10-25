@@ -173,7 +173,7 @@
         "count": 10
       },
       "bank": 12,
-      "explanation": "A group of 10 has 10 {items}. This is another way to make 10.",
+      "explanation": "A group of 10 has 10 {items}. A full group of 10 is one way to make 10.",
       "narration": {
         "prompt": "Make a group of 10 {items}."
       }
@@ -232,7 +232,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "0 and 10 make 10. Zero adds nothing.",
+      "explanation": "0 and 10 make 10. Zero adds nothing extra.",
       "narration": {
         "prompt": "What do you need to add to 0 to make 10?"
       },
@@ -249,7 +249,7 @@
         "seven"
       ],
       "inputMode": "numeric",
-      "explanation": "3 and 7 make 10. Count on from 3.",
+      "explanation": "3 and 7 make 10. Keep going from 3 until 10.",
       "narration": {
         "prompt": "Type the number that goes with 3 to make 10."
       }

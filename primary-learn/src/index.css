@@ -3067,7 +3067,6 @@ button.object-token {
 .feedback.is-correct {
   background: var(--green-soft);
   border-color: var(--green);
-  align-items: center;
 }
 
 .feedback.is-wrong {
@@ -3114,6 +3113,15 @@ button.object-token {
   font-size: 15.5px;
   line-height: 1.55;
   font-weight: 600;
+}
+
+.feedback-why {
+  margin: 0;
+}
+
+.feedback-why .hear-btn {
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 /* White activity column fills down to the sticky Check / Next dock. */

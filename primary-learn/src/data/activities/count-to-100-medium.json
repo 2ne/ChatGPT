@@ -4,7 +4,9 @@
   "summary": "Count on and back through the higher tens with a hundred square.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "expected",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -16,125 +18,266 @@
     "within": "Q1 to Q3 move a 4-row square for ten less, one more and one less across 80. Q4 and Q5 cross 70 both ways. Q6 spots a forward count that repeats. Q7 reads 80 on the 0 to 100 line. Q8 types the number before 80. Q9 finds 64 on the line. Q10 orders numbers around 90.",
     "versus": "Easy uses a 3-row square and a 0 to 100 line in the twenties to sixties. Medium moves the window higher and counts both ways. Hard adds tens and ones, reverse thinking and counts around 100."
   },
-  "skills": ["count-forwards", "count-backwards", "write-numerals"],
+  "skills": [
+    "count-forwards",
+    "count-backwards",
+    "write-numerals"
+  ],
   "questions": [
     {
       "id": "c100-2-1",
       "kind": "multiple-choice",
       "prompt": "Which number is above 67?",
-      "hundredSquare": { "start": 51, "rows": 4, "missing": 57, "highlight": 67 },
+      "hundredSquare": {
+        "start": 51,
+        "rows": 4,
+        "missing": 57,
+        "highlight": 67
+      },
       "options": [
-        { "id": "a", "label": "57" },
-        { "id": "b", "label": "58" },
-        { "id": "c", "label": "66" },
-        { "id": "d", "label": "77" }
+        {
+          "id": "a",
+          "label": "57"
+        },
+        {
+          "id": "b",
+          "label": "58"
+        },
+        {
+          "id": "c",
+          "label": "66"
+        },
+        {
+          "id": "d",
+          "label": "77"
+        }
       ],
       "correctId": "b",
       "explanation": "Above 67 is 57. That is ten less, not one less.",
-      "narration": { "prompt": "Which number is above 67?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is above 67?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-2",
       "kind": "multiple-choice",
       "prompt": "Which number goes in the empty cell?",
-      "hundredSquare": { "start": 61, "rows": 3, "missing": 73 },
+      "hundredSquare": {
+        "start": 61,
+        "rows": 3,
+        "missing": 73
+      },
       "options": [
-        { "id": "a", "label": "63" },
-        { "id": "b", "label": "71" },
-        { "id": "c", "label": "72" },
-        { "id": "d", "label": "73" }
+        {
+          "id": "a",
+          "label": "63"
+        },
+        {
+          "id": "b",
+          "label": "71"
+        },
+        {
+          "id": "c",
+          "label": "72"
+        },
+        {
+          "id": "d",
+          "label": "73"
+        }
       ],
       "correctId": "d",
       "explanation": "The empty cell is 73. After 72 comes 73, not 63.",
-      "narration": { "prompt": "Which number goes in the empty cell?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number goes in the empty cell?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-3",
       "kind": "multiple-choice",
       "prompt": "Which number is left of 80?",
-      "hundredSquare": { "start": 61, "rows": 3, "missing": 79, "highlight": 80 },
+      "hundredSquare": {
+        "start": 61,
+        "rows": 3,
+        "missing": 79,
+        "highlight": 80
+      },
       "options": [
-        { "id": "a", "label": "69" },
-        { "id": "b", "label": "78" },
-        { "id": "c", "label": "79" },
-        { "id": "d", "label": "81" }
+        {
+          "id": "a",
+          "label": "69"
+        },
+        {
+          "id": "b",
+          "label": "78"
+        },
+        {
+          "id": "c",
+          "label": "79"
+        },
+        {
+          "id": "d",
+          "label": "81"
+        }
       ],
       "correctId": "c",
       "explanation": "Left of 80 is 79. Do not drop a whole ten.",
-      "narration": { "prompt": "Which number is left of 80?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is left of 80?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-4",
       "kind": "multiple-choice",
       "prompt": "What number comes after 69?",
       "options": [
-        { "id": "a", "label": "60" },
-        { "id": "b", "label": "68" },
-        { "id": "c", "label": "69" },
-        { "id": "d", "label": "70" }
+        {
+          "id": "a",
+          "label": "60"
+        },
+        {
+          "id": "b",
+          "label": "68"
+        },
+        {
+          "id": "c",
+          "label": "69"
+        },
+        {
+          "id": "d",
+          "label": "70"
+        }
       ],
       "correctId": "d",
       "explanation": "After 69 comes 70. The ones go back to 0.",
-      "narration": { "prompt": "What number comes after 69?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number comes after 69?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-5",
       "kind": "multiple-choice",
       "prompt": "What number comes before 70?",
       "options": [
-        { "id": "a", "label": "69" },
-        { "id": "b", "label": "70" },
-        { "id": "c", "label": "71" },
-        { "id": "d", "label": "79" }
+        {
+          "id": "a",
+          "label": "69"
+        },
+        {
+          "id": "b",
+          "label": "70"
+        },
+        {
+          "id": "c",
+          "label": "71"
+        },
+        {
+          "id": "d",
+          "label": "79"
+        }
       ],
       "correctId": "a",
       "explanation": "Before 70 is 69. Not 60 and not 79.",
-      "narration": { "prompt": "What number comes before 70?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number comes before 70?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-6",
       "kind": "multiple-choice",
       "prompt": "Which number is wrong? 76, 77, 78, 79, 78",
       "options": [
-        { "id": "a", "label": "78" },
-        { "id": "b", "label": "75" },
-        { "id": "c", "label": "80" },
-        { "id": "d", "label": "70" }
+        {
+          "id": "a",
+          "label": "78"
+        },
+        {
+          "id": "b",
+          "label": "75"
+        },
+        {
+          "id": "c",
+          "label": "80"
+        },
+        {
+          "id": "d",
+          "label": "70"
+        }
       ],
       "correctId": "a",
-      "explanation": "The count went back to 78. After 79 comes 80.",
-      "narration": { "prompt": "Which number is wrong? 76, 77, 78, 79, 78." },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "The run jumps. After 79 comes 80.",
+      "narration": {
+        "prompt": "Which number is wrong? 76, 77, 78, 79, 78."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-7",
       "kind": "multiple-choice",
       "prompt": "Which number sits on the mark?",
-      "numberLine": { "start": 0, "end": 100, "scale": "tens", "marked": 80 },
+      "numberLine": {
+        "start": 0,
+        "end": 100,
+        "scale": "tens",
+        "marked": 80
+      },
       "options": [
-        { "id": "a", "label": "8" },
-        { "id": "b", "label": "70" },
-        { "id": "c", "label": "80" },
-        { "id": "d", "label": "90" }
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "70"
+        },
+        {
+          "id": "c",
+          "label": "80"
+        },
+        {
+          "id": "d",
+          "label": "90"
+        }
       ],
       "correctId": "c",
       "explanation": "The mark is 80. That is 8 tens, not 8.",
-      "narration": { "prompt": "Which number sits on the mark?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number sits on the mark?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-2-8",
       "kind": "fill-blank",
       "prompt": "Type the number before 80.",
-      "acceptedAnswers": ["79", "seventy-nine", "seventy nine"],
+      "acceptedAnswers": [
+        "79",
+        "seventy-nine",
+        "seventy nine"
+      ],
       "inputMode": "numeric",
       "explanation": "Before 80 is 79. The ones become 9.",
-      "narration": { "prompt": "Type the number before 80." }
+      "narration": {
+        "prompt": "Type the number before 80."
+      }
     },
     {
       "id": "c100-2-9",
@@ -145,35 +288,80 @@
         "end": 100,
         "scale": "tens",
         "flags": [
-          { "letter": "A", "at": 50 },
-          { "letter": "B", "at": 60 },
-          { "letter": "C", "at": 64 },
-          { "letter": "D", "at": 70 }
+          {
+            "letter": "A",
+            "at": 50
+          },
+          {
+            "letter": "B",
+            "at": 60
+          },
+          {
+            "letter": "C",
+            "at": 64
+          },
+          {
+            "letter": "D",
+            "at": 70
+          }
         ]
       },
       "options": [
-        { "id": "a", "label": "A" },
-        { "id": "b", "label": "B" },
-        { "id": "c", "label": "C" },
-        { "id": "d", "label": "D" }
+        {
+          "id": "a",
+          "label": "A"
+        },
+        {
+          "id": "b",
+          "label": "B"
+        },
+        {
+          "id": "c",
+          "label": "C"
+        },
+        {
+          "id": "d",
+          "label": "D"
+        }
       ],
       "correctId": "c",
       "explanation": "64 sits just after 60. That flag is C, not B.",
-      "narration": { "prompt": "Which letter is 64?" }
+      "narration": {
+        "prompt": "Which letter is 64?"
+      }
     },
     {
       "id": "c100-2-10",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n91", "label": "91" },
-        { "id": "n89", "label": "89" },
-        { "id": "n90", "label": "90" },
-        { "id": "n88", "label": "88" }
+        {
+          "id": "n91",
+          "label": "91"
+        },
+        {
+          "id": "n89",
+          "label": "89"
+        },
+        {
+          "id": "n90",
+          "label": "90"
+        },
+        {
+          "id": "n88",
+          "label": "88"
+        }
       ],
-      "correctOrder": ["n88", "n89", "n90", "n91"],
+      "correctOrder": [
+        "n88",
+        "n89",
+        "n90",
+        "n91"
+      ],
       "explanation": "The numbers go 88, 89, 90, 91 across the ten.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     }
   ]
 }

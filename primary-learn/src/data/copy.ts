@@ -4,6 +4,7 @@
  */
 export const copy = {
   hearIt: "Hear the question",
+  hearWhy: "Hear why",
   stopReadingAria: "Stop reading",
   soundOn: "Sound on",
   soundOff: "Sound off",

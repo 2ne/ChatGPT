@@ -70,7 +70,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "Count only the {items}. The extras are not part of 10.",
+      "explanation": "Only the {items} are in this group. The extra pictures are not part of 10.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -105,7 +105,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "5 and 2 more make 7. Do not stop at 5.",
+      "explanation": "5 and 2 more make 7. The first 5 is only one part.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -157,7 +157,7 @@
         "count": 10
       },
       "bank": 12,
-      "explanation": "A group of 10 has 10 {items}. Stop at 10.",
+      "explanation": "A group of 10 has 10 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 10 {items}."
       }
@@ -208,7 +208,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "The count went back to 8. After 9 comes 10.",
+      "explanation": "The run jumps. After 9 comes 10.",
       "narration": {
         "prompt": "Which number is wrong? 6, 7, 8, 9, 8."
       },

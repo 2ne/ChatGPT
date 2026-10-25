@@ -293,7 +293,7 @@
         "two"
       ],
       "inputMode": "numeric",
-      "explanation": "1 and 1 make 2. That is a double.",
+      "explanation": "1 and 1 make 2. Both parts are the same.",
       "narration": {
         "prompt": "What is one plus one?"
       }

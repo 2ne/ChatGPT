@@ -208,7 +208,7 @@
         "sixteen"
       ],
       "inputMode": "numeric",
-      "explanation": "Sixteen is 16. That is 10 and 6.",
+      "explanation": "Sixteen is 16. That is 10 and 6, not 60.",
       "narration": {
         "prompt": "Type the number sixteen."
       }
@@ -296,7 +296,7 @@
         "n18",
         "n19"
       ],
-      "explanation": "The numbers go 16, 17, 18, 19.",
+      "explanation": "The numbers go 16, 17, 18, 19. Each one is one more than the last.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

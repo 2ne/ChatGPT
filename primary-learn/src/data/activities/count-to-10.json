@@ -4,7 +4,9 @@
   "summary": "Count to 10 with scatter practice and ten frames that show 5 and a bit.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,112 +18,226 @@
     "within": "Q1 and Q2 scatter count 6 and 7. Q3 reads 8 as 5 and 3 on a ten frame. Q4 counts out 7. Q5 to Q7 use next, missing and order. Q8 matches 10. Q9 picks a group of 10. Q10 reads 7 as 5 and a bit.",
     "versus": "Easy uses tidy scatter then 5 and a bit. Medium uses messier scatter and fuller frames. Hard adds extras to ignore and reverse counting."
   },
-  "skills": ["eyfs-count-10", "count-sequence-to-10", "numerals-1-to-10", "one-to-one-counting"],
+  "skills": [
+    "eyfs-count-10",
+    "count-sequence-to-10",
+    "numerals-1-to-10",
+    "one-to-one-counting"
+  ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "id": "c10-1-1",
       "kind": "count-objects",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "star", "count": 6 },
+      "visual": {
+        "item": "star",
+        "count": 6
+      },
       "layout": "scatter",
       "options": [
-        { "id": "a", "label": "6" },
-        { "id": "b", "label": "7" },
-        { "id": "c", "label": "8" }
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        }
       ],
       "correctId": "a",
       "hint": "Tap each picture once as you count.",
       "explanation": "There are 6 {items}. Each one counts once.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-2",
       "kind": "count-objects",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "balloon", "count": 7 },
+      "visual": {
+        "item": "balloon",
+        "count": 7
+      },
       "layout": "scatter",
       "options": [
-        { "id": "a", "label": "7" },
-        { "id": "b", "label": "8" },
-        { "id": "c", "label": "9" }
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        }
       ],
       "correctId": "a",
       "hint": "Tap each picture once as you count.",
-      "explanation": "There are 7 {items}. Do not count one twice.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "There are 7 {items}. Each one counts once.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-3",
       "kind": "multiple-choice",
       "prompt": "How many {items} can you see?",
-      "tenFrame": { "count": 8, "item": "apple", "parts": [5, 3] },
+      "tenFrame": {
+        "count": 8,
+        "item": "apple",
+        "parts": [
+          5,
+          3
+        ]
+      },
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "8" },
-        { "id": "c", "label": "10" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        }
       ],
       "correctId": "b",
       "hint": "See 5 on the top, then the extra bit.",
-      "explanation": "5 and 3 more make 8. Do not stop at 5.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "5 and 3 more make 8. The first 5 is only one part.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-4",
       "kind": "build-set",
       "prompt": "Make a group of 7 {items}.",
-      "visual": { "item": "frog", "count": 7 },
+      "visual": {
+        "item": "frog",
+        "count": 7
+      },
       "bank": 10,
       "hint": "Stop when you have said 7.",
-      "explanation": "A group of 7 has 7 {items}. Stop at 7.",
-      "narration": { "prompt": "Make a group of 7 {items}." }
+      "explanation": "A group of 7 has 7 {items}. Extra ones are not needed.",
+      "narration": {
+        "prompt": "Make a group of 7 {items}."
+      }
     },
     {
       "id": "c10-1-5",
       "kind": "multiple-choice",
       "prompt": "What number comes next? 7, 8, 9, ?",
       "options": [
-        { "id": "a", "label": "6" },
-        { "id": "b", "label": "9" },
-        { "id": "c", "label": "10" }
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        }
       ],
       "correctId": "c",
-      "explanation": "10 comes after 9. Keep counting on by one.",
-      "narration": { "prompt": "What number comes next? 7, 8, 9, blank." },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "10 comes after 9. The next number is one more.",
+      "narration": {
+        "prompt": "What number comes next? 7, 8, 9, blank."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-6",
       "kind": "multiple-choice",
       "prompt": "Which number is missing? 6, 7, _, 9, 10",
       "options": [
-        { "id": "a", "label": "5" },
-        { "id": "b", "label": "8" },
-        { "id": "c", "label": "11" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "11"
+        }
       ],
       "correctId": "b",
       "explanation": "8 sits after 7 and before 9.",
-      "narration": { "prompt": "Which number is missing? 6, 7, blank, 9, 10." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is missing? 6, 7, blank, 9, 10."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-7",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n9", "label": "9" },
-        { "id": "n7", "label": "7" },
-        { "id": "n8", "label": "8" }
+        {
+          "id": "n9",
+          "label": "9"
+        },
+        {
+          "id": "n7",
+          "label": "7"
+        },
+        {
+          "id": "n8",
+          "label": "8"
+        }
       ],
-      "correctOrder": ["n7", "n8", "n9"],
+      "correctOrder": [
+        "n7",
+        "n8",
+        "n9"
+      ],
       "explanation": "The numbers go 7, 8, 9. Each one is one more.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     },
     {
       "id": "c10-1-8",
@@ -129,44 +245,114 @@
       "prompt": "Tap the {items} that match the number below.",
       "numeral": 10,
       "options": [
-        { "id": "a", "visual": { "item": "star", "count": 8 } },
-        { "id": "b", "visual": { "item": "star", "count": 9 } },
-        { "id": "c", "visual": { "item": "star", "count": 10 } },
-        { "id": "d", "visual": { "item": "star", "count": 7 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 8
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 9
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 10
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 7
+          }
+        }
       ],
       "correctId": "c",
       "explanation": "The card shows 10. That group has 10 {items}.",
-      "narration": { "prompt": "Tap the {items} that match the number below." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Tap the {items} that match the number below."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-9",
       "kind": "multiple-choice",
       "prompt": "Which group has 10 {items}?",
       "options": [
-        { "id": "a", "tenFrame": { "count": 8, "item": "duck" } },
-        { "id": "b", "tenFrame": { "count": 10, "item": "duck" } },
-        { "id": "c", "tenFrame": { "count": 9, "item": "duck" } }
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 8,
+            "item": "duck"
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 10,
+            "item": "duck"
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 9,
+            "item": "duck"
+          }
+        }
       ],
       "correctId": "b",
       "explanation": "A full frame is 10. 8 and 9 still have empty cells.",
-      "narration": { "prompt": "Which group has 10 {items}?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which group has 10 {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c10-1-10",
       "kind": "multiple-choice",
       "prompt": "7 is 5 and how many more?",
-      "tenFrame": { "count": 7, "item": "fish", "parts": [5, 2] },
+      "tenFrame": {
+        "count": 7,
+        "item": "fish",
+        "parts": [
+          5,
+          2
+        ]
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "5" }
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
       "correctId": "b",
       "explanation": "7 is 5 and 2. The extra bit is 2, not 5.",
-      "narration": { "prompt": "7 is 5 and how many more?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "7 is 5 and how many more?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }

@@ -153,7 +153,7 @@
           "max": 4
         }
       },
-      "explanation": "A group of {count} has {count} {items}.",
+      "explanation": "A group of {count} has {count} {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of {count} {items}."
       }
@@ -222,7 +222,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "That group has 4 {items}.",
+      "explanation": "That group has 4 {items}. The others have a different number.",
       "narration": {
         "prompt": "Which group has 4 {items}?"
       }
@@ -249,7 +249,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "5 comes after 4.",
+      "explanation": "5 comes after 4. Do not skip a number.",
       "narration": {
         "prompt": "What number comes next? One, two, three, four, blank."
       }
@@ -282,7 +282,7 @@
         "n3",
         "n4"
       ],
-      "explanation": "The numbers go 1, 2, 3, 4 from smallest to biggest.",
+      "explanation": "The numbers go 1, 2, 3, 4. Each one is one more than the last.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
@@ -326,7 +326,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "That group has 5 {items}.",
+      "explanation": "That group has 5 {items}. The others have a different number.",
       "narration": {
         "prompt": "Tap the {items} that match the number below."
       }

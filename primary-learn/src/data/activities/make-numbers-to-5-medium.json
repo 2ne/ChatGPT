@@ -66,7 +66,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "3 and 1 make 4. Do not stop at 3.",
+      "explanation": "3 and 1 make 4. The first 3 is only one part.",
       "narration": {
         "prompt": "How many can you see in all?"
       },
@@ -82,7 +82,7 @@
       "total": 5,
       "gap": "right",
       "mode": "fill-slots",
-      "explanation": "0 and 5 make 5. Zero adds nothing.",
+      "explanation": "0 and 5 make 5. Zero adds nothing extra.",
       "narration": {
         "prompt": "What do you need to add to 0 to make 5?"
       },
@@ -132,7 +132,7 @@
         "count": 5
       },
       "bank": 7,
-      "explanation": "A group of 5 has 5 {items}. Stop at 5.",
+      "explanation": "A group of 5 has 5 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 5 {items}."
       }
@@ -250,7 +250,7 @@
         "two"
       ],
       "inputMode": "numeric",
-      "explanation": "3 and 2 make 5. Count on two from 3.",
+      "explanation": "3 and 2 make 5. Keep going 4, 5 from 3.",
       "narration": {
         "prompt": "What do you need to add to 3 to make 5?"
       }

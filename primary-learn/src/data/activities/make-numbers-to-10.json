@@ -67,7 +67,7 @@
       ],
       "correctId": "a",
       "hint": "Add both colours.",
-      "explanation": "5 and 1 make 6. Do not stop at 5.",
+      "explanation": "5 and 1 make 6. The first 5 is only one part.",
       "narration": {
         "prompt": "How many can you see in all?"
       },
@@ -170,7 +170,7 @@
         "count": 7
       },
       "bank": 9,
-      "explanation": "A group of 7 has 7 {items}. Stop at 7.",
+      "explanation": "A group of 7 has 7 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 7 {items}."
       }

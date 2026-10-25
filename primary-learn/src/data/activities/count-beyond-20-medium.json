@@ -4,7 +4,9 @@
   "summary": "Count on and back through the twenties with a hundred square.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,146 +18,298 @@
     "within": "Q1 to Q3 move the square for ten less, a gap and one less across 30. Q4 and Q5 cross 25 and 30 both ways. Q6 spots a forward count that repeats. Q7 reads 18 on a 0 to 20 line. Q8 types the number before 26. Q9 spots 10 and a bit. Q10 orders 24 to 27.",
     "versus": "Easy uses a 3-row square and a 0 to 20 line around 20. Medium moves the window higher and counts both ways. Hard adds tens and ones, reverse thinking and counts towards 30."
   },
-  "skills": ["eyfs-count-20plus", "count-beyond-20", "teen-number-pattern"],
+  "skills": [
+    "eyfs-count-20plus",
+    "count-beyond-20",
+    "teen-number-pattern"
+  ],
   "questions": [
     {
       "id": "c20-2-1",
       "kind": "multiple-choice",
       "prompt": "Which number is above 24?",
-      "hundredSquare": { "start": 11, "rows": 3, "missing": 14, "highlight": 24 },
+      "hundredSquare": {
+        "start": 11,
+        "rows": 3,
+        "missing": 14,
+        "highlight": 24
+      },
       "options": [
-        { "id": "a", "label": "14" },
-        { "id": "b", "label": "23" },
-        { "id": "c", "label": "25" }
+        {
+          "id": "a",
+          "label": "14"
+        },
+        {
+          "id": "b",
+          "label": "23"
+        },
+        {
+          "id": "c",
+          "label": "25"
+        }
       ],
       "correctId": "a",
       "explanation": "Above 24 is 14. That is ten less, not one less.",
-      "narration": { "prompt": "Which number is above 24?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is above 24?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-2",
       "kind": "multiple-choice",
       "prompt": "Which number goes in the empty cell?",
-      "hundredSquare": { "start": 11, "rows": 3, "missing": 22 },
+      "hundredSquare": {
+        "start": 11,
+        "rows": 3,
+        "missing": 22
+      },
       "options": [
-        { "id": "a", "label": "12" },
-        { "id": "b", "label": "21" },
-        { "id": "c", "label": "22" }
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "21"
+        },
+        {
+          "id": "c",
+          "label": "22"
+        }
       ],
       "correctId": "c",
       "explanation": "The empty cell is 22. After 21 comes 22, not 12.",
-      "narration": { "prompt": "Which number goes in the empty cell?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number goes in the empty cell?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-3",
       "kind": "multiple-choice",
       "prompt": "Which number is left of 30?",
-      "hundredSquare": { "start": 11, "rows": 3, "missing": 29, "highlight": 30 },
+      "hundredSquare": {
+        "start": 11,
+        "rows": 3,
+        "missing": 29,
+        "highlight": 30
+      },
       "options": [
-        { "id": "a", "label": "19" },
-        { "id": "b", "label": "28" },
-        { "id": "c", "label": "29" }
+        {
+          "id": "a",
+          "label": "19"
+        },
+        {
+          "id": "b",
+          "label": "28"
+        },
+        {
+          "id": "c",
+          "label": "29"
+        }
       ],
       "correctId": "c",
       "explanation": "Left of 30 is 29. Do not drop a whole ten.",
-      "narration": { "prompt": "Which number is left of 30?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is left of 30?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-4",
       "kind": "multiple-choice",
       "prompt": "What number comes after 25?",
       "options": [
-        { "id": "a", "label": "24" },
-        { "id": "b", "label": "25" },
-        { "id": "c", "label": "26" }
+        {
+          "id": "a",
+          "label": "24"
+        },
+        {
+          "id": "b",
+          "label": "25"
+        },
+        {
+          "id": "c",
+          "label": "26"
+        }
       ],
       "correctId": "c",
       "explanation": "After 25 comes 26. Keep the same ten and add one.",
-      "narration": { "prompt": "What number comes after 25?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number comes after 25?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-5",
       "kind": "multiple-choice",
       "prompt": "What number comes before 30?",
       "options": [
-        { "id": "a", "label": "20" },
-        { "id": "b", "label": "29" },
-        { "id": "c", "label": "31" }
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "29"
+        },
+        {
+          "id": "c",
+          "label": "31"
+        }
       ],
       "correctId": "b",
       "explanation": "Before 30 is 29. Not 20 and not 31.",
-      "narration": { "prompt": "What number comes before 30?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number comes before 30?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-6",
       "kind": "multiple-choice",
       "prompt": "Which number is wrong? 23, 24, 25, 26, 25",
       "options": [
-        { "id": "a", "label": "22" },
-        { "id": "b", "label": "25" },
-        { "id": "c", "label": "27" }
+        {
+          "id": "a",
+          "label": "22"
+        },
+        {
+          "id": "b",
+          "label": "25"
+        },
+        {
+          "id": "c",
+          "label": "27"
+        }
       ],
       "correctId": "b",
-      "explanation": "The count went back to 25. After 26 comes 27.",
-      "narration": { "prompt": "Which number is wrong? 23, 24, 25, 26, 25." },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "The run jumps. After 26 comes 27.",
+      "narration": {
+        "prompt": "Which number is wrong? 23, 24, 25, 26, 25."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-7",
       "kind": "multiple-choice",
       "prompt": "Which number sits on the mark?",
-      "numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 18 },
+      "numberLine": {
+        "start": 0,
+        "end": 20,
+        "scale": "ones",
+        "marked": 18
+      },
       "options": [
-        { "id": "a", "label": "8" },
-        { "id": "b", "label": "17" },
-        { "id": "c", "label": "18" }
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "18"
+        }
       ],
       "correctId": "c",
       "explanation": "The mark is 18. That is 10 and 8, not 8.",
-      "narration": { "prompt": "Which number sits on the mark?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number sits on the mark?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-8",
       "kind": "fill-blank",
       "prompt": "Type the number before 26.",
-      "acceptedAnswers": ["25", "twenty-five", "twenty five"],
+      "acceptedAnswers": [
+        "25",
+        "twenty-five",
+        "twenty five"
+      ],
       "inputMode": "numeric",
-      "explanation": "Before 26 is 25. Count back one, not a ten.",
-      "narration": { "prompt": "Type the number before 26." }
+      "explanation": "Before 26 is 25. Move one, not a whole ten.",
+      "narration": {
+        "prompt": "Type the number before 26."
+      }
     },
     {
       "id": "c20-2-9",
       "kind": "multiple-choice",
       "prompt": "17 is 10 and how many more?",
       "options": [
-        { "id": "a", "label": "6" },
-        { "id": "b", "label": "7" },
-        { "id": "c", "label": "8" }
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        }
       ],
       "correctId": "b",
       "explanation": "17 is 10 and 7. The 1 is the ten, not the extra.",
-      "narration": { "prompt": "17 is 10 and how many more?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "17 is 10 and how many more?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c20-2-10",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n26", "label": "26" },
-        { "id": "n24", "label": "24" },
-        { "id": "n25", "label": "25" },
-        { "id": "n27", "label": "27" }
+        {
+          "id": "n26",
+          "label": "26"
+        },
+        {
+          "id": "n24",
+          "label": "24"
+        },
+        {
+          "id": "n25",
+          "label": "25"
+        },
+        {
+          "id": "n27",
+          "label": "27"
+        }
       ],
-      "correctOrder": ["n24", "n25", "n26", "n27"],
+      "correctOrder": [
+        "n24",
+        "n25",
+        "n26",
+        "n27"
+      ],
       "explanation": "The numbers go 24, 25, 26, 27. Each one is one more.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     }
   ]
 }

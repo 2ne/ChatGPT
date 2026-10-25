@@ -175,7 +175,7 @@
         "count": 10
       },
       "bank": 12,
-      "explanation": "A group of 10 has 10 {items}. This is another way to make 10.",
+      "explanation": "A group of 10 has 10 {items}. A full group of 10 is one way to make 10.",
       "narration": {
         "prompt": "Make a group of 10 {items}."
       }
@@ -238,7 +238,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "5 and 5 make 10. That is a double.",
+      "explanation": "5 and 5 make 10. Both parts are the same.",
       "narration": {
         "prompt": "What do you need to add to 5 to make 10?"
       },

@@ -71,7 +71,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "10 and 2 make 12. Do not stop at 10.",
+      "explanation": "10 and 2 make 12. The first 10 is only one part.",
       "narration": {
         "prompt": "How many can you see in all?"
       },

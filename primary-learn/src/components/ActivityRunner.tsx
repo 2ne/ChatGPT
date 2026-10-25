@@ -19,7 +19,7 @@ import { playSound } from "../lib/sound";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { realizeActivity } from "../lib/realize";
 import { copy } from "../data/copy";
-import { spokenPrompt } from "../lib/narration";
+import { spokenExplanation, spokenPrompt } from "../lib/narration";
 import { splitPromptTail } from "../lib/prompt";
 import { categoryForNode, DIFFICULTY_LABELS } from "../lib/path";
 import { yearColours } from "../lib/yearColours";
@@ -105,6 +105,7 @@ export function ActivityRunner({
   const question = playQuestions.find((item) => item.id === currentId);
   const backdrop = sectionBackdrop(activity.pathNode);
   const speech = useNarration(`${playSession}:${currentId ?? "none"}:${phase}`);
+  const [speechTarget, setSpeechTarget] = useState<"prompt" | "why">("prompt");
   const total = playQuestions.length;
   const correctCount = Object.values(results).filter(Boolean).length;
   const mastered = passedScore(correctCount, total);
@@ -429,16 +430,17 @@ export function ActivityRunner({
               <SpokenWords
                 display={promptParts.head}
                 spoken={spokenPrompt(question)}
-                charIndex={speech.playing ? speech.charIndex : -1}
+                charIndex={speechTarget === "prompt" && speech.playing ? speech.charIndex : -1}
               />
               {speech.available ? (
                 <HearButton
-                  playing={speech.playing}
+                  playing={speechTarget === "prompt" && speech.playing}
                   onClick={() => {
-                    if (speech.playing) {
+                    if (speechTarget === "prompt" && speech.playing) {
                       speech.stop();
                       return;
                     }
+                    setSpeechTarget("prompt");
                     speech.play(spokenPrompt(question));
                   }}
                 />
@@ -492,27 +494,43 @@ export function ActivityRunner({
                       : copy.lookedAgainTimes(lookAgainCount)}
                   </p>
                 ) : null}
-                {lastCorrect ? null : (
-                  <>
-                    {rightLabel ? (
-                      <div className="answer-reveal">
-                        <p className="t-body">
-                          <strong>
-                            {question.kind === "ordered"
-                              ? copy.orderLabel
-                              : question.kind === "match-pairs"
-                                ? copy.pairsLabel
-                                : question.kind === "multi-select" || question.kind === "pick-pair"
-                                  ? copy.answersLabel
-                                  : copy.answerLabel}
-                          </strong>
-                        </p>
-                        <p>{rightLabel}</p>
-                      </div>
-                    ) : null}
-                    <p>{question.explanation}</p>
-                  </>
-                )}
+                {lastCorrect ? null : rightLabel ? (
+                  <div className="answer-reveal">
+                    <p className="t-body">
+                      <strong>
+                        {question.kind === "ordered"
+                          ? copy.orderLabel
+                          : question.kind === "match-pairs"
+                            ? copy.pairsLabel
+                            : question.kind === "multi-select" || question.kind === "pick-pair"
+                              ? copy.answersLabel
+                              : copy.answerLabel}
+                      </strong>
+                    </p>
+                    <p>{rightLabel}</p>
+                  </div>
+                ) : null}
+                <p className="feedback-why">
+                  <SpokenWords
+                    display={question.explanation}
+                    spoken={spokenExplanation(question)}
+                    charIndex={speechTarget === "why" && speech.playing ? speech.charIndex : -1}
+                  />
+                  {speech.available ? (
+                    <HearButton
+                      playing={speechTarget === "why" && speech.playing}
+                      label={copy.hearWhy}
+                      onClick={() => {
+                        if (speechTarget === "why" && speech.playing) {
+                          speech.stop();
+                          return;
+                        }
+                        setSpeechTarget("why");
+                        speech.play(spokenExplanation(question));
+                      }}
+                    />
+                  ) : null}
+                </p>
               </div>
             </div>
           ) : null}

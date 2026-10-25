@@ -293,7 +293,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "That group has 4 {items}.",
+      "explanation": "That group has 4 {items}. The others have a different number.",
       "narration": {
         "prompt": "Tap the {items} that match the number below."
       }
@@ -331,7 +331,7 @@
         "n4",
         "n5"
       ],
-      "explanation": "The numbers go 1, 2, 3, 4, 5 from smallest to biggest.",
+      "explanation": "The numbers go 1, 2, 3, 4, 5. Each one is one more than the last.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

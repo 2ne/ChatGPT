@@ -66,7 +66,7 @@
     {
       "kind": "multi-select",
       "prompt": "Tap every triangle. There are 2 to choose.",
-      "explanation": "Both shapes have three straight sides. Triangles can look different from each other.",
+      "explanation": "Both have 3 straight sides. Size or tilt does not change a triangle.",
       "narration": {
         "prompt": "Tap every triangle. There are 2 to choose."
       },
@@ -146,7 +146,7 @@
         "Square",
         "Triangle"
       ],
-      "explanation": "This shape is a rectangle.",
+      "explanation": "A rectangle is flat with 4 square corners. A square is a special rectangle.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -177,7 +177,7 @@
         "Pyramid",
         "Square"
       ],
-      "explanation": "This shape is a triangle.",
+      "explanation": "A triangle is flat with 3 straight sides. A square has 4.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -208,7 +208,7 @@
         "Circle",
         "Square"
       ],
-      "explanation": "This shape is a circle.",
+      "explanation": "A circle is flat and round. A sphere is solid and can roll.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -217,7 +217,7 @@
     {
       "kind": "multiple-choice",
       "prompt": "Which shape is a cuboid?",
-      "explanation": "This tall box shape is a cuboid.",
+      "explanation": "A cuboid is a solid box. Height does not change the name.",
       "narration": {
         "prompt": "Which shape is a cuboid?"
       },
@@ -352,7 +352,7 @@
         "Cube",
         "Rectangle"
       ],
-      "explanation": "This shape is a cuboid.",
+      "explanation": "A cuboid is a solid box. A rectangle is the flat face.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -383,7 +383,7 @@
         "Sphere",
         "Pyramid"
       ],
-      "explanation": "This shape is a sphere.",
+      "explanation": "A sphere is solid and can roll. A circle is flat.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -414,7 +414,7 @@
         "Pyramid",
         "Cuboid"
       ],
-      "explanation": "This shape is a pyramid.",
+      "explanation": "A pyramid is a solid with a point. A triangle is the flat face.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },

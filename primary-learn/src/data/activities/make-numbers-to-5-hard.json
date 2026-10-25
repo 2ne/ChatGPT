@@ -140,7 +140,7 @@
         "count": 5
       },
       "bank": 7,
-      "explanation": "A group of 5 has 5 {items}. Stop at 5.",
+      "explanation": "A group of 5 has 5 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 5 {items}."
       }

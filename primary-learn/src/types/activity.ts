@@ -164,7 +164,8 @@ export type QuestionOption = {
 
 /**
  * Spoken copy for the Web Speech API.
- * Only `prompt` is read aloud — never answers, options, pictured counts, or feedback.
+ * Only `prompt` is read aloud on the question. Never answers, options, or pictured counts.
+ * After a mark, the feedback speaker may read `explanation`.
  * A string is the spoken text. An object lets us later attach a pre-generated audio file.
  */
 export type NarrationLine = string | { text: string; audioSrc?: string };

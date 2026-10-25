@@ -102,7 +102,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "10 makes 5 pairs. Do not count each object as a pair.",
+      "explanation": "10 makes 5 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "How many pairs can you see?"
       },
@@ -243,7 +243,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "4 makes 2 pairs. Do not count each object as a pair.",
+      "explanation": "4 makes 2 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "How many pairs can you see?"
       },
@@ -366,7 +366,7 @@
         "n6",
         "n10"
       ],
-      "explanation": "The numbers go 2, 6, 10. Those are even.",
+      "explanation": "The numbers go 2, 6, 10. Those are even. Each makes pairs.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

@@ -109,7 +109,7 @@
         "Rectangle",
         "Square"
       ],
-      "explanation": "This shape is a triangle.",
+      "explanation": "A triangle is flat with 3 straight sides. A square has 4.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -141,7 +141,7 @@
         "Rectangle",
         "Triangle"
       ],
-      "explanation": "This shape is a rectangle.",
+      "explanation": "A rectangle is flat with 4 square corners. A square is a special rectangle.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -173,7 +173,7 @@
         "Square",
         "Rectangle"
       ],
-      "explanation": "This shape is a circle.",
+      "explanation": "A circle is flat and round. A sphere is solid and can roll.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -182,7 +182,7 @@
     {
       "kind": "multi-select",
       "prompt": "Tap every rectangle. There are 3 to choose.",
-      "explanation": "Squares are rectangles too. All three rectangles have four square corners.",
+      "explanation": "A square is a rectangle too. All 4 corners are square.",
       "narration": {
         "prompt": "Tap every rectangle. There are 3 to choose."
       },
@@ -322,7 +322,7 @@
         "Cuboid",
         "Sphere"
       ],
-      "explanation": "This shape is a pyramid.",
+      "explanation": "A pyramid is a solid with a point. A triangle is the flat face.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -354,7 +354,7 @@
         "Cube",
         "Pyramid"
       ],
-      "explanation": "This shape is a sphere.",
+      "explanation": "A sphere is solid and can roll. A circle is flat.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -386,7 +386,7 @@
         "Rectangle",
         "Square"
       ],
-      "explanation": "This shape is a cuboid.",
+      "explanation": "A cuboid is a solid box. A rectangle is the flat face.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },

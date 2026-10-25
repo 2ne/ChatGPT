@@ -4,7 +4,9 @@
   "summary": "Count around 100, read tens and ones, and spot a count that goes wrong.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "greater-depth",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -16,125 +18,266 @@
     "within": "Q1 reads tens and ones. Q2 and Q3 use the square for ten more and one less near 100. Q4 and Q5 cross 100 both ways. Q6 spots a repeat around 100. Q7 reads 100 on the line. Q8 types the number after 99. Q9 finds 92 with flags. Q10 orders numbers that cross 100.",
     "versus": "Easy uses a 3-row square and a 0 to 100 line in the twenties to sixties. Medium moves the window higher and counts both ways. Hard adds tens and ones, reverse thinking and counts around 100. Hard is a new kind of thinking, not just bigger numbers."
   },
-  "skills": ["count-forwards", "count-backwards", "write-numerals"],
+  "skills": [
+    "count-forwards",
+    "count-backwards",
+    "write-numerals"
+  ],
   "questions": [
     {
       "id": "c100-3-1",
       "kind": "multiple-choice",
       "prompt": "What number is this?",
-      "baseTen": { "tens": 3, "ones": 4, "style": "plain" },
+      "baseTen": {
+        "tens": 3,
+        "ones": 4,
+        "style": "plain"
+      },
       "options": [
-        { "id": "a", "label": "7" },
-        { "id": "b", "label": "30" },
-        { "id": "c", "label": "33" },
-        { "id": "d", "label": "34" }
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "30"
+        },
+        {
+          "id": "c",
+          "label": "33"
+        },
+        {
+          "id": "d",
+          "label": "34"
+        }
       ],
       "correctId": "d",
       "explanation": "3 tens and 4 ones make 34. Not 7 and not 30.",
-      "narration": { "prompt": "What number is this?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number is this?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-2",
       "kind": "multiple-choice",
       "prompt": "Which number is under 89?",
-      "hundredSquare": { "start": 71, "rows": 3, "missing": 99, "highlight": 89 },
+      "hundredSquare": {
+        "start": 71,
+        "rows": 3,
+        "missing": 99,
+        "highlight": 89
+      },
       "options": [
-        { "id": "a", "label": "79" },
-        { "id": "b", "label": "88" },
-        { "id": "c", "label": "90" },
-        { "id": "d", "label": "99" }
+        {
+          "id": "a",
+          "label": "79"
+        },
+        {
+          "id": "b",
+          "label": "88"
+        },
+        {
+          "id": "c",
+          "label": "90"
+        },
+        {
+          "id": "d",
+          "label": "99"
+        }
       ],
       "correctId": "d",
       "explanation": "Under 89 is 99. That is ten more, not one more.",
-      "narration": { "prompt": "Which number is under 89?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is under 89?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-3",
       "kind": "multiple-choice",
       "prompt": "Which number is left of 100?",
-      "hundredSquare": { "start": 71, "rows": 3, "missing": 99, "highlight": 100 },
+      "hundredSquare": {
+        "start": 71,
+        "rows": 3,
+        "missing": 99,
+        "highlight": 100
+      },
       "options": [
-        { "id": "a", "label": "90" },
-        { "id": "b", "label": "98" },
-        { "id": "c", "label": "99" },
-        { "id": "d", "label": "101" }
+        {
+          "id": "a",
+          "label": "90"
+        },
+        {
+          "id": "b",
+          "label": "98"
+        },
+        {
+          "id": "c",
+          "label": "99"
+        },
+        {
+          "id": "d",
+          "label": "101"
+        }
       ],
       "correctId": "c",
       "explanation": "Left of 100 is 99. Do not jump to 90.",
-      "narration": { "prompt": "Which number is left of 100?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number is left of 100?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-4",
       "kind": "multiple-choice",
       "prompt": "What number comes after 99?",
       "options": [
-        { "id": "a", "label": "90" },
-        { "id": "b", "label": "98" },
-        { "id": "c", "label": "99" },
-        { "id": "d", "label": "100" }
+        {
+          "id": "a",
+          "label": "90"
+        },
+        {
+          "id": "b",
+          "label": "98"
+        },
+        {
+          "id": "c",
+          "label": "99"
+        },
+        {
+          "id": "d",
+          "label": "100"
+        }
       ],
       "correctId": "d",
       "explanation": "After 99 comes 100. That is 10 tens.",
-      "narration": { "prompt": "What number comes after 99?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number comes after 99?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-5",
       "kind": "multiple-choice",
       "prompt": "What number comes before 100?",
       "options": [
-        { "id": "a", "label": "99" },
-        { "id": "b", "label": "100" },
-        { "id": "c", "label": "101" },
-        { "id": "d", "label": "110" }
+        {
+          "id": "a",
+          "label": "99"
+        },
+        {
+          "id": "b",
+          "label": "100"
+        },
+        {
+          "id": "c",
+          "label": "101"
+        },
+        {
+          "id": "d",
+          "label": "110"
+        }
       ],
       "correctId": "a",
       "explanation": "Before 100 is 99. Not 90 and not 101.",
-      "narration": { "prompt": "What number comes before 100?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What number comes before 100?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-6",
       "kind": "multiple-choice",
       "prompt": "Which number is wrong? 98, 99, 100, 101, 100",
       "options": [
-        { "id": "a", "label": "100" },
-        { "id": "b", "label": "97" },
-        { "id": "c", "label": "102" },
-        { "id": "d", "label": "110" }
+        {
+          "id": "a",
+          "label": "100"
+        },
+        {
+          "id": "b",
+          "label": "97"
+        },
+        {
+          "id": "c",
+          "label": "102"
+        },
+        {
+          "id": "d",
+          "label": "110"
+        }
       ],
       "correctId": "a",
-      "explanation": "The count went back to 100. After 101 comes 102.",
-      "narration": { "prompt": "Which number is wrong? 98, 99, 100, 101, 100." },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "The run jumps. After 101 comes 102.",
+      "narration": {
+        "prompt": "Which number is wrong? 98, 99, 100, 101, 100."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-7",
       "kind": "multiple-choice",
       "prompt": "Which number sits on the mark?",
-      "numberLine": { "start": 0, "end": 100, "scale": "tens", "marked": 100 },
+      "numberLine": {
+        "start": 0,
+        "end": 100,
+        "scale": "tens",
+        "marked": 100
+      },
       "options": [
-        { "id": "a", "label": "10" },
-        { "id": "b", "label": "90" },
-        { "id": "c", "label": "99" },
-        { "id": "d", "label": "100" }
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "90"
+        },
+        {
+          "id": "c",
+          "label": "99"
+        },
+        {
+          "id": "d",
+          "label": "100"
+        }
       ],
       "correctId": "d",
       "explanation": "The last tick is 100. That is 10 tens, not 10.",
-      "narration": { "prompt": "Which number sits on the mark?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which number sits on the mark?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "c100-3-8",
       "kind": "fill-blank",
       "prompt": "Type the number after 99.",
-      "acceptedAnswers": ["100", "one hundred", "a hundred"],
+      "acceptedAnswers": [
+        "100",
+        "one hundred",
+        "a hundred"
+      ],
       "inputMode": "numeric",
       "explanation": "After 99 comes 100. The ones and tens both roll over.",
-      "narration": { "prompt": "Type the number after 99." }
+      "narration": {
+        "prompt": "Type the number after 99."
+      }
     },
     {
       "id": "c100-3-9",
@@ -145,35 +288,80 @@
         "end": 100,
         "scale": "tens",
         "flags": [
-          { "letter": "A", "at": 80 },
-          { "letter": "B", "at": 90 },
-          { "letter": "C", "at": 92 },
-          { "letter": "D", "at": 100 }
+          {
+            "letter": "A",
+            "at": 80
+          },
+          {
+            "letter": "B",
+            "at": 90
+          },
+          {
+            "letter": "C",
+            "at": 92
+          },
+          {
+            "letter": "D",
+            "at": 100
+          }
         ]
       },
       "options": [
-        { "id": "a", "label": "A" },
-        { "id": "b", "label": "B" },
-        { "id": "c", "label": "C" },
-        { "id": "d", "label": "D" }
+        {
+          "id": "a",
+          "label": "A"
+        },
+        {
+          "id": "b",
+          "label": "B"
+        },
+        {
+          "id": "c",
+          "label": "C"
+        },
+        {
+          "id": "d",
+          "label": "D"
+        }
       ],
       "correctId": "c",
       "explanation": "92 sits just after 90. That flag is C, not B.",
-      "narration": { "prompt": "Which letter is 92?" }
+      "narration": {
+        "prompt": "Which letter is 92?"
+      }
     },
     {
       "id": "c100-3-10",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n101", "label": "101" },
-        { "id": "n99", "label": "99" },
-        { "id": "n100", "label": "100" },
-        { "id": "n98", "label": "98" }
+        {
+          "id": "n101",
+          "label": "101"
+        },
+        {
+          "id": "n99",
+          "label": "99"
+        },
+        {
+          "id": "n100",
+          "label": "100"
+        },
+        {
+          "id": "n98",
+          "label": "98"
+        }
       ],
-      "correctOrder": ["n98", "n99", "n100", "n101"],
+      "correctOrder": [
+        "n98",
+        "n99",
+        "n100",
+        "n101"
+      ],
       "explanation": "The numbers go 98, 99, 100, 101 across 100.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     }
   ]
 }

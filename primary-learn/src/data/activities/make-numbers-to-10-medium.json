@@ -66,7 +66,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "5 and 3 make 8. Do not stop at 5.",
+      "explanation": "5 and 3 make 8. The first 5 is only one part.",
       "narration": {
         "prompt": "How many can you see in all?"
       },
@@ -82,7 +82,7 @@
       "total": 10,
       "gap": "right",
       "mode": "fill-slots",
-      "explanation": "0 and 10 make 10. Zero adds nothing.",
+      "explanation": "0 and 10 make 10. Zero adds nothing extra.",
       "narration": {
         "prompt": "What do you need to add to 0 to make 10?"
       },
@@ -132,7 +132,7 @@
         "count": 9
       },
       "bank": 11,
-      "explanation": "A group of 9 has 9 {items}. Stop at 9.",
+      "explanation": "A group of 9 has 9 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 9 {items}."
       }
@@ -250,7 +250,7 @@
         "three"
       ],
       "inputMode": "numeric",
-      "explanation": "7 and 3 make 10. Count on three from 7.",
+      "explanation": "7 and 3 make 10. Keep going 8, 9, 10 from 7.",
       "narration": {
         "prompt": "What do you need to add to 7 to make 10?"
       }

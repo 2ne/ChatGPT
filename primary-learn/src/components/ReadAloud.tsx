@@ -33,17 +33,18 @@ export function SpokenWords({ display, spoken, charIndex }: SpokenWordsProps) {
 type HearButtonProps = {
   playing: boolean;
   onClick: () => void;
+  label?: string;
 };
 
-/** Small speaker after the question text. Icon only — label is aria. */
-export function HearButton({ playing, onClick }: HearButtonProps) {
+/** Small speaker after the question or the teaching line. Icon only. 44px. */
+export function HearButton({ playing, onClick, label }: HearButtonProps) {
   return (
     <button
       type="button"
       className={`hear-btn${playing ? " is-on" : ""}`}
       onClick={onClick}
       aria-pressed={playing}
-      aria-label={playing ? copy.stopReadingAria : copy.hearIt}
+      aria-label={playing ? copy.stopReadingAria : label ?? copy.hearIt}
     >
       {playing ? <VolumeX size={20} aria-hidden /> : <Volume2 size={20} aria-hidden />}
     </button>

@@ -28,31 +28,75 @@
       "kind": "multiple-choice",
       "prompt": "How many can you see?",
       "options": [
-        { "id": "0", "label": "8" },
-        { "id": "1", "label": "18" },
-        { "id": "2", "label": "17" },
-        { "id": "3", "label": "10" }
+        {
+          "id": "0",
+          "label": "8"
+        },
+        {
+          "id": "1",
+          "label": "18"
+        },
+        {
+          "id": "2",
+          "label": "17"
+        },
+        {
+          "id": "3",
+          "label": "10"
+        }
       ],
       "correctId": "1",
       "explanation": "There are 18. That is 10 and 8 more.",
-      "randomise": { "shuffleOptions": true },
-      "tenFrame": { "count": 18, "item": "apple" },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "tenFrame": {
+        "count": 18,
+        "item": "apple"
+      },
       "id": "represent100-3-1",
-      "narration": { "prompt": "How many can you see?" }
+      "narration": {
+        "prompt": "How many can you see?"
+      }
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which group has fewer?",
       "options": [
-        { "id": "0", "baseTen": { "tens": 2, "ones": 9, "style": "plain" } },
-        { "id": "1", "baseTen": { "tens": 3, "ones": 1, "style": "plain" } },
-        { "id": "2", "baseTen": { "tens": 3, "ones": 9, "style": "plain" } }
+        {
+          "id": "0",
+          "baseTen": {
+            "tens": 2,
+            "ones": 9,
+            "style": "plain"
+          }
+        },
+        {
+          "id": "1",
+          "baseTen": {
+            "tens": 3,
+            "ones": 1,
+            "style": "plain"
+          }
+        },
+        {
+          "id": "2",
+          "baseTen": {
+            "tens": 3,
+            "ones": 9,
+            "style": "plain"
+          }
+        }
       ],
       "correctId": "0",
       "explanation": "29 is fewer than 31 and 39. Compare the tens first.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "id": "represent100-3-2",
-      "narration": { "prompt": "Which group has fewer?" }
+      "narration": {
+        "prompt": "Which group has fewer?"
+      }
     },
     {
       "kind": "match-pairs",
@@ -61,13 +105,25 @@
       "pairs": [
         {
           "id": "p1",
-          "left": { "tenFrame": { "count": 15, "item": "apple" } },
+          "left": {
+            "tenFrame": {
+              "count": 15,
+              "item": "apple"
+            }
+          },
           "right": "15"
         }
       ],
-      "choices": ["5", "14", "15", "16"],
-      "explanation": "The frames show 10 and 5 more, so the match is 15.",
-      "narration": { "prompt": "Select the card that matches the picture." },
+      "choices": [
+        "5",
+        "14",
+        "15",
+        "16"
+      ],
+      "explanation": "The frames show 10 and 5 more, so 15 matches. A different number does not.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
       "mode": "one-at-a-time"
     },
     {
@@ -77,13 +133,25 @@
       "pairs": [
         {
           "id": "p1",
-          "left": { "tenFrame": { "count": 17, "item": "apple" } },
+          "left": {
+            "tenFrame": {
+              "count": 17,
+              "item": "apple"
+            }
+          },
           "right": "17"
         }
       ],
-      "choices": ["7", "16", "17", "18"],
-      "explanation": "The frames show 10 and 7 more, so the match is 17.",
-      "narration": { "prompt": "Select the card that matches the picture." },
+      "choices": [
+        "7",
+        "16",
+        "17",
+        "18"
+      ],
+      "explanation": "The frames show 10 and 7 more, so 17 matches. A different number does not.",
+      "narration": {
+        "prompt": "Select the card that matches the picture."
+      },
       "mode": "one-at-a-time"
     },
     {
@@ -94,91 +162,224 @@
         {
           "id": "p1",
           "left": "34",
-          "right": { "baseTen": { "tens": 3, "ones": 4, "style": "plain" } }
+          "right": {
+            "baseTen": {
+              "tens": 3,
+              "ones": 4,
+              "style": "plain"
+            }
+          }
         }
       ],
       "choices": [
-        { "baseTen": { "tens": 3, "ones": 4, "style": "plain" } },
-        { "baseTen": { "tens": 4, "ones": 3, "style": "plain" } },
-        { "baseTen": { "tens": 3, "ones": 3, "style": "plain" } },
-        { "baseTen": { "tens": 0, "ones": 7, "style": "plain" } }
+        {
+          "baseTen": {
+            "tens": 3,
+            "ones": 4,
+            "style": "plain"
+          }
+        },
+        {
+          "baseTen": {
+            "tens": 4,
+            "ones": 3,
+            "style": "plain"
+          }
+        },
+        {
+          "baseTen": {
+            "tens": 3,
+            "ones": 3,
+            "style": "plain"
+          }
+        },
+        {
+          "baseTen": {
+            "tens": 0,
+            "ones": 7,
+            "style": "plain"
+          }
+        }
       ],
       "explanation": "34 is 3 tens and 4 ones.",
-      "narration": { "prompt": "Select the card that matches the number." },
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      },
       "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number belongs at the marked tick?",
       "options": [
-        { "id": "0", "label": "91" },
-        { "id": "1", "label": "92" },
-        { "id": "2", "label": "93" },
-        { "id": "3", "label": "94" }
+        {
+          "id": "0",
+          "label": "91"
+        },
+        {
+          "id": "1",
+          "label": "92"
+        },
+        {
+          "id": "2",
+          "label": "93"
+        },
+        {
+          "id": "3",
+          "label": "94"
+        }
       ],
       "correctId": "1",
       "explanation": "The mark is 92. It sits just after 90, not on 90.",
-      "randomise": { "shuffleOptions": true },
-      "numberLine": { "start": 0, "end": 100, "scale": "tens", "marked": 92 },
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "numberLine": {
+        "start": 0,
+        "end": 100,
+        "scale": "tens",
+        "marked": 92
+      },
       "id": "represent100-3-4",
-      "narration": { "prompt": "Which number belongs at the marked tick?" }
+      "narration": {
+        "prompt": "Which number belongs at the marked tick?"
+      }
     },
     {
       "kind": "multi-select",
       "prompt": "Select the two numbers that are more than 96.",
       "options": [
-        { "id": "0", "label": "97" },
-        { "id": "1", "label": "95" },
-        { "id": "2", "label": "98" },
-        { "id": "3", "label": "96" }
+        {
+          "id": "0",
+          "label": "97"
+        },
+        {
+          "id": "1",
+          "label": "95"
+        },
+        {
+          "id": "2",
+          "label": "98"
+        },
+        {
+          "id": "3",
+          "label": "96"
+        }
       ],
       "explanation": "97 and 98 are both more than 96.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "id": "represent100-3-6",
-      "correctIds": ["0", "2"],
-      "narration": { "prompt": "Select the two numbers that are more than 96." }
+      "correctIds": [
+        "0",
+        "2"
+      ],
+      "narration": {
+        "prompt": "Select the two numbers that are more than 96."
+      }
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which number is less than 96?",
       "options": [
-        { "id": "0", "label": "98" },
-        { "id": "1", "label": "96" },
-        { "id": "2", "label": "95" },
-        { "id": "3", "label": "97" }
+        {
+          "id": "0",
+          "label": "98"
+        },
+        {
+          "id": "1",
+          "label": "96"
+        },
+        {
+          "id": "2",
+          "label": "95"
+        },
+        {
+          "id": "3",
+          "label": "97"
+        }
       ],
       "correctId": "2",
       "explanation": "95 is less than 96.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "id": "represent100-3-7",
-      "narration": { "prompt": "Which number is less than 96?" }
+      "narration": {
+        "prompt": "Which number is less than 96?"
+      }
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which group has the fewest?",
       "options": [
-        { "id": "0", "baseTen": { "tens": 3, "ones": 1, "style": "plain" } },
-        { "id": "1", "baseTen": { "tens": 2, "ones": 9, "style": "plain" } },
-        { "id": "2", "baseTen": { "tens": 3, "ones": 9, "style": "plain" } }
+        {
+          "id": "0",
+          "baseTen": {
+            "tens": 3,
+            "ones": 1,
+            "style": "plain"
+          }
+        },
+        {
+          "id": "1",
+          "baseTen": {
+            "tens": 2,
+            "ones": 9,
+            "style": "plain"
+          }
+        },
+        {
+          "id": "2",
+          "baseTen": {
+            "tens": 3,
+            "ones": 9,
+            "style": "plain"
+          }
+        }
       ],
       "correctId": "1",
       "explanation": "29 is the smallest. It has fewer tens than 31 and 39.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "id": "represent100-3-9",
-      "narration": { "prompt": "Which group has the fewest?" }
+      "narration": {
+        "prompt": "Which group has the fewest?"
+      }
     },
     {
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "2", "label": "96" },
-        { "id": "0", "label": "93" },
-        { "id": "3", "label": "99" },
-        { "id": "1", "label": "95" }
+        {
+          "id": "2",
+          "label": "96"
+        },
+        {
+          "id": "0",
+          "label": "93"
+        },
+        {
+          "id": "3",
+          "label": "99"
+        },
+        {
+          "id": "1",
+          "label": "95"
+        }
       ],
-      "correctOrder": ["0", "1", "2", "3"],
-      "explanation": "The numbers go 93, 95, 96, 99.",
+      "correctOrder": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "explanation": "The numbers go 93, 95, 96, 99. Each one is one more than the last.",
       "id": "represent100-3-10",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
-    }]
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    }
+  ]
 }

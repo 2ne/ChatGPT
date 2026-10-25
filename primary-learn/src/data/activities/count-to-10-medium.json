@@ -96,7 +96,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "There are 9 {items}. Do not stop one early.",
+      "explanation": "There are 9 {items}. The last one still counts.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -131,7 +131,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "5 and 5 make 10. Do not stop at 5.",
+      "explanation": "5 and 5 make 10. The first 5 is only one part.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -148,7 +148,7 @@
         "count": 8
       },
       "bank": 10,
-      "explanation": "A group of 8 has 8 {items}. Stop at 8.",
+      "explanation": "A group of 8 has 8 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 8 {items}."
       }
@@ -172,7 +172,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "9 comes after 8. Keep counting on by one.",
+      "explanation": "9 comes after 8. The next number is one more.",
       "narration": {
         "prompt": "What number comes next? 6, 7, 8, blank."
       },

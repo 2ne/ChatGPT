@@ -102,7 +102,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "8 makes 4 pairs. Do not count each object as a pair.",
+      "explanation": "8 makes 4 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "How many pairs can you see?"
       },
@@ -176,7 +176,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "1 has no pair. That is odd.",
+      "explanation": "1 has no pair left over. That is odd.",
       "narration": {
         "prompt": "Which group has one left over after pairing?"
       },
@@ -235,7 +235,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "10 makes 5 pairs. Do not count each object as a pair.",
+      "explanation": "10 makes 5 pairs. A pair is two, not one.",
       "narration": {
         "prompt": "How many pairs can you see?"
       },
@@ -346,7 +346,7 @@
         "n8",
         "n10"
       ],
-      "explanation": "The numbers go 4, 8, 10. Those are even.",
+      "explanation": "The numbers go 4, 8, 10. Those are even. Each makes pairs.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

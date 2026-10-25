@@ -16,6 +16,7 @@ export function narrationAudio(line: NarrationLine | undefined): string | undefi
 /**
  * Spoken question only. Never options, pictured counts, hints, or explanations —
  * those give the answer away to pre-readers.
+ * After the child answers, `spokenExplanation` may be read from the feedback panel.
  */
 export function spokenPrompt(question: Question): string {
   if (question.kind === "make-total") {
@@ -47,4 +48,9 @@ export function spokenPrompt(question: Question): string {
     }
   }
   return narrationText(question.narration?.prompt, question.prompt);
+}
+
+/** Teaching line after a mark. Never read this until the child has answered. */
+export function spokenExplanation(question: Question): string {
+  return question.explanation.trim();
 }

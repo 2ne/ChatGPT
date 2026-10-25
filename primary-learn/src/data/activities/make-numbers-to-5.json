@@ -103,7 +103,7 @@
       ],
       "correctId": "b",
       "hint": "Add both colours.",
-      "explanation": "2 and 1 make 3. Do not stop at 2.",
+      "explanation": "2 and 1 make 3. The first 2 is only one part.",
       "narration": {
         "prompt": "How many can you see in all?"
       },
@@ -170,7 +170,7 @@
         "count": 4
       },
       "bank": 6,
-      "explanation": "A group of 4 has 4 {items}. Stop at 4.",
+      "explanation": "A group of 4 has 4 {items}. Extra ones are not needed.",
       "narration": {
         "prompt": "Make a group of 4 {items}."
       }

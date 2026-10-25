@@ -28,7 +28,7 @@
     {
       "kind": "multiple-choice",
       "prompt": "Which shape is a circle?",
-      "explanation": "The circle is flat and round.",
+      "explanation": "A circle is flat and round. A sphere is solid and can roll.",
       "narration": {
         "prompt": "Which shape is a circle?"
       },
@@ -84,7 +84,7 @@
     {
       "kind": "match-pairs",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "The round shape is a circle.",
+      "explanation": "A circle is flat and round. A sphere is solid and can roll.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -103,14 +103,18 @@
           "right": "Circle"
         }
       ],
-      "choices": ["Circle", "Triangle", "Square"],
+      "choices": [
+        "Circle",
+        "Triangle",
+        "Square"
+      ],
       "id": "shapes-1-4-circle",
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "This shape is a triangle.",
+      "explanation": "A triangle is flat with 3 straight sides. A square has 4.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -129,14 +133,18 @@
           "right": "Triangle"
         }
       ],
-      "choices": ["Circle", "Triangle", "Square"],
+      "choices": [
+        "Circle",
+        "Triangle",
+        "Square"
+      ],
       "id": "shapes-1-4-triangle",
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "This shape is a square.",
+      "explanation": "A square is a rectangle with 4 equal sides. Turning it does not change that.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -155,14 +163,18 @@
           "right": "Square"
         }
       ],
-      "choices": ["Circle", "Triangle", "Square"],
+      "choices": [
+        "Circle",
+        "Triangle",
+        "Square"
+      ],
       "id": "shapes-1-4-square",
       "mode": "one-at-a-time"
     },
     {
       "kind": "multiple-choice",
       "prompt": "Which shape is a rectangle?",
-      "explanation": "This rectangle has four square corners and two longer sides.",
+      "explanation": "A rectangle has 4 square corners. A square has equal sides.",
       "narration": {
         "prompt": "Which shape is a rectangle?"
       },
@@ -275,7 +287,7 @@
     {
       "kind": "multiple-choice",
       "prompt": "What is this shape called?",
-      "explanation": "This is a cuboid. Many boxes are shaped like cuboids.",
+      "explanation": "A cuboid is a solid box. A rectangle is the flat face.",
       "narration": {
         "prompt": "What is this shape called?"
       },
@@ -313,7 +325,7 @@
     {
       "kind": "match-pairs",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "This solid is a cube.",
+      "explanation": "A cube is a solid with 6 square faces. A square is flat.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -332,14 +344,18 @@
           "right": "Cube"
         }
       ],
-      "choices": ["Cube", "Sphere", "Pyramid"],
+      "choices": [
+        "Cube",
+        "Sphere",
+        "Pyramid"
+      ],
       "id": "shapes-1-10-cube",
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "This solid is a sphere.",
+      "explanation": "A sphere is solid and can roll. A circle is flat.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -358,14 +374,18 @@
           "right": "Sphere"
         }
       ],
-      "choices": ["Cube", "Sphere", "Pyramid"],
+      "choices": [
+        "Cube",
+        "Sphere",
+        "Pyramid"
+      ],
       "id": "shapes-1-10-sphere",
       "mode": "one-at-a-time"
     },
     {
       "kind": "match-pairs",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "This solid is a pyramid.",
+      "explanation": "A pyramid is a solid with a point. A triangle is the flat face.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },
@@ -384,7 +404,11 @@
           "right": "Pyramid"
         }
       ],
-      "choices": ["Cube", "Sphere", "Pyramid"],
+      "choices": [
+        "Cube",
+        "Sphere",
+        "Pyramid"
+      ],
       "id": "shapes-1-10-pyramid",
       "mode": "one-at-a-time"
     }

@@ -4,7 +4,9 @@
   "summary": "Find one more and one less both ways, including one less than 30.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "greater-depth",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -16,155 +18,333 @@
     "within": "Q1 finds one less than 30. Q2 reads one more across 20 on a line. Q3 and Q7 reverse both ways. Q4 finds one more than 29. Q5 types one less than 30. Q6 is a one more story. Q8 orders around 30. Q9 finds one less on a 0 to 100 line. Q10 finds one less than 20.",
     "versus": "Easy uses ten frames and a 0 to 10 line within 10, then crosses 10. Medium uses two frames and a 0 to 20 line across 10 and 20. Hard adds reverse thinking both ways, one less than 30 and a short story. Hard is a new kind of thinking, not just bigger numbers."
   },
-  "skills": ["y1-1-more-less", "one-more", "one-less"],
+  "skills": [
+    "y1-1-more-less",
+    "one-more",
+    "one-less"
+  ],
   "questions": [
     {
       "id": "oml-3-1",
       "kind": "multiple-choice",
       "prompt": "What is one less than 30?",
-      "baseTen": { "tens": 3, "ones": 0, "style": "plain" },
+      "baseTen": {
+        "tens": 3,
+        "ones": 0,
+        "style": "plain"
+      },
       "options": [
-        { "id": "a", "label": "20" },
-        { "id": "b", "label": "28" },
-        { "id": "c", "label": "29" },
-        { "id": "d", "label": "31" }
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "28"
+        },
+        {
+          "id": "c",
+          "label": "29"
+        },
+        {
+          "id": "d",
+          "label": "31"
+        }
       ],
       "correctId": "c",
       "explanation": "One less than 30 is 29. Not a whole ten less.",
-      "narration": { "prompt": "What is one less than 30?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is one less than 30?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-2",
       "kind": "multiple-choice",
       "prompt": "What is one more than the marked number?",
-      "numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 19 },
+      "numberLine": {
+        "start": 0,
+        "end": 20,
+        "scale": "ones",
+        "marked": 19
+      },
       "options": [
-        { "id": "a", "label": "20" },
-        { "id": "b", "label": "21" },
-        { "id": "c", "label": "22" },
-        { "id": "d", "label": "23" }
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "21"
+        },
+        {
+          "id": "c",
+          "label": "22"
+        },
+        {
+          "id": "d",
+          "label": "23"
+        }
       ],
       "correctId": "a",
       "explanation": "The mark is 19. One more is 20, the last tick.",
-      "narration": { "prompt": "What is one more than the marked number?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is one more than the marked number?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-3",
       "kind": "multiple-choice",
       "prompt": "20 is one more than ?",
       "options": [
-        { "id": "a", "label": "17" },
-        { "id": "b", "label": "18" },
-        { "id": "c", "label": "19" },
-        { "id": "d", "label": "21" }
+        {
+          "id": "a",
+          "label": "17"
+        },
+        {
+          "id": "b",
+          "label": "18"
+        },
+        {
+          "id": "c",
+          "label": "19"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
       ],
       "correctId": "c",
-      "explanation": "20 is one more than 19. Count back one from 20.",
-      "narration": { "prompt": "20 is one more than what?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "20 is one more than 19. One less than 20 is the number before.",
+      "narration": {
+        "prompt": "20 is one more than what?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-4",
       "kind": "multiple-choice",
       "prompt": "What is one more than 29?",
       "options": [
-        { "id": "a", "label": "30" },
-        { "id": "b", "label": "31" },
-        { "id": "c", "label": "32" },
-        { "id": "d", "label": "39" }
+        {
+          "id": "a",
+          "label": "30"
+        },
+        {
+          "id": "b",
+          "label": "31"
+        },
+        {
+          "id": "c",
+          "label": "32"
+        },
+        {
+          "id": "d",
+          "label": "39"
+        }
       ],
       "correctId": "a",
       "explanation": "One more than 29 is 30. The ones go back to 0.",
-      "narration": { "prompt": "What is one more than 29?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is one more than 29?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-5",
       "kind": "fill-blank",
       "prompt": "Type one less than 30.",
-      "acceptedAnswers": ["29", "twenty-nine", "twenty nine"],
+      "acceptedAnswers": [
+        "29",
+        "twenty-nine",
+        "twenty nine"
+      ],
       "inputMode": "numeric",
       "explanation": "One less than 30 is 29. The ones become 9.",
-      "narration": { "prompt": "Type one less than 30." }
+      "narration": {
+        "prompt": "Type one less than 30."
+      }
     },
     {
       "id": "oml-3-6",
       "kind": "multiple-choice",
       "prompt": "Mia has 19 frogs. She gets 1 more. How many frogs does she have now?",
-      "visual": { "item": "frog", "count": 19, "added": 1 },
+      "visual": {
+        "item": "frog",
+        "count": 19,
+        "added": 1
+      },
       "options": [
-        { "id": "a", "label": "18" },
-        { "id": "b", "label": "19" },
-        { "id": "c", "label": "20" },
-        { "id": "d", "label": "21" }
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
       ],
       "correctId": "c",
       "explanation": "19 and 1 more makes 20. Not the start number.",
-      "narration": { "prompt": "Mia has nineteen frogs. She gets one more. How many frogs does she have now?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Mia has nineteen frogs. She gets one more. How many frogs does she have now?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-7",
       "kind": "multiple-choice",
       "prompt": "18 is one less than ?",
       "options": [
-        { "id": "a", "label": "16" },
-        { "id": "b", "label": "17" },
-        { "id": "c", "label": "18" },
-        { "id": "d", "label": "19" }
+        {
+          "id": "a",
+          "label": "16"
+        },
+        {
+          "id": "b",
+          "label": "17"
+        },
+        {
+          "id": "c",
+          "label": "18"
+        },
+        {
+          "id": "d",
+          "label": "19"
+        }
       ],
       "correctId": "d",
-      "explanation": "18 is one less than 19. Count on one from 18.",
-      "narration": { "prompt": "18 is one less than what?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "18 is one less than 19. One more than 18 is the next number.",
+      "narration": {
+        "prompt": "18 is one less than what?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-8",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n30", "label": "30" },
-        { "id": "n28", "label": "28" },
-        { "id": "n29", "label": "29" },
-        { "id": "n31", "label": "31" }
+        {
+          "id": "n30",
+          "label": "30"
+        },
+        {
+          "id": "n28",
+          "label": "28"
+        },
+        {
+          "id": "n29",
+          "label": "29"
+        },
+        {
+          "id": "n31",
+          "label": "31"
+        }
       ],
-      "correctOrder": ["n28", "n29", "n30", "n31"],
+      "correctOrder": [
+        "n28",
+        "n29",
+        "n30",
+        "n31"
+      ],
       "explanation": "The numbers go 28, 29, 30, 31 across 30.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     },
     {
       "id": "oml-3-9",
       "kind": "multiple-choice",
       "prompt": "What is one less than the marked number?",
-      "numberLine": { "start": 0, "end": 100, "scale": "tens", "marked": 30 },
+      "numberLine": {
+        "start": 0,
+        "end": 100,
+        "scale": "tens",
+        "marked": 30
+      },
       "options": [
-        { "id": "a", "label": "20" },
-        { "id": "b", "label": "29" },
-        { "id": "c", "label": "31" },
-        { "id": "d", "label": "40" }
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "29"
+        },
+        {
+          "id": "c",
+          "label": "31"
+        },
+        {
+          "id": "d",
+          "label": "40"
+        }
       ],
       "correctId": "b",
       "explanation": "The mark is 30. One less is 29, not a whole ten.",
-      "narration": { "prompt": "What is one less than the marked number?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is one less than the marked number?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "oml-3-10",
       "kind": "multiple-choice",
       "prompt": "What is one less than 20?",
-      "tenFrame": { "count": 20, "item": "duck" },
+      "tenFrame": {
+        "count": 20,
+        "item": "duck"
+      },
       "options": [
-        { "id": "a", "label": "19" },
-        { "id": "b", "label": "20" },
-        { "id": "c", "label": "21" },
-        { "id": "d", "label": "30" }
+        {
+          "id": "a",
+          "label": "19"
+        },
+        {
+          "id": "b",
+          "label": "20"
+        },
+        {
+          "id": "c",
+          "label": "21"
+        },
+        {
+          "id": "d",
+          "label": "30"
+        }
       ],
       "correctId": "a",
       "explanation": "One less than 20 is 19. Not a whole ten less.",
-      "narration": { "prompt": "What is one less than 20?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What is one less than 20?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }

@@ -98,7 +98,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "5 and 5 make 10. That is a double.",
+      "explanation": "5 and 5 make 10. Both parts are the same.",
       "narration": {
         "prompt": "What is five plus five?"
       },
@@ -291,7 +291,7 @@
         "four"
       ],
       "inputMode": "numeric",
-      "explanation": "2 and 2 make 4. That is a double.",
+      "explanation": "2 and 2 make 4. Both parts are the same.",
       "narration": {
         "prompt": "What is two plus two?"
       }
@@ -319,7 +319,7 @@
         "n6",
         "n10"
       ],
-      "explanation": "The numbers go 4, 6, 10. Those are doubles.",
+      "explanation": "The numbers go 4, 6, 10. Those are doubles. Both parts match.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
