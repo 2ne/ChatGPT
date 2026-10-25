@@ -31,7 +31,7 @@
   "difficulty": 2,
   "difficultyRamp": {
     "within": "Q1 completes 4. Q2 picks a pair. Q3 completes 1. Q4 is a fact family with take-away. Q5 builds 10. Q6 is 10 take away 6. Q7 completes 0. Q8 types the missing part for 3. Q9 is a take-away story. Q10 is missing whole 2 and 8.",
-    "versus": "Easy uses empty cells on a ten frame, then a fact family and a new way to make 10. Medium mixes take-away. Hard recalls missing parts without pictures. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy uses empty cells on a ten frame, then a fact family and a new way to make 10. Medium mixes take-away and drops empty-cell frames that give the answer away. Hard recalls missing parts without pictures. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "y1-bonds-10",
@@ -44,10 +44,6 @@
       "id": "nb10-2-1",
       "kind": "multiple-choice",
       "prompt": "What do you need to add to 4 to make 10?",
-      "tenFrame": {
-        "count": 4,
-        "item": "star"
-      },
       "options": [
         {
           "id": "a",
@@ -67,7 +63,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "4 and 6 make 10. The empty cells are 6.",
+      "explanation": "4 and 6 make 10. Not 7.",
       "narration": {
         "prompt": "What do you need to add to 4 to make 10?"
       },
@@ -99,10 +95,6 @@
       "id": "nb10-2-3",
       "kind": "multiple-choice",
       "prompt": "What do you need to add to 1 to make 10?",
-      "tenFrame": {
-        "count": 1,
-        "item": "apple"
-      },
       "options": [
         {
           "id": "a",
@@ -122,7 +114,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "1 and 9 make 10. Nine empty cells are left.",
+      "explanation": "1 and 9 make 10. Not 8.",
       "narration": {
         "prompt": "What do you need to add to 1 to make 10?"
       },

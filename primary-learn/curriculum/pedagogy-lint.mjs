@@ -21,6 +21,31 @@ function skipContent(id) {
   return LATER_REWRITE.has(id) || JUST_SHIPPED.has(id);
 }
 
+/** Picture is the job, so Hard may keep it. */
+const PICTURE_IS_QUESTION =
+  /\b(how many|can you see|which group|tap the|tap every|select the card|under the cup|make a group|puppet|which sum|marked|sits on the mark|which letter|what number is this|what is this shape|empty cell|belongs at)\b/i;
+
+/** Numerals already state the job. A stem picture would only repeat or leak. */
+const NUMERAL_ONLY_JOB =
+  /^(what is \d+|what is one (more|less) than \d+|what is half of \d+|what do you need to add to \d+ to make \d+|\d+ is \d+ and how many more|\d+ is shared onto|\d+ is double)/i;
+
+function isStoryPrompt(prompt) {
+  return /\b(has|gets|gives away|gave)\b/i.test(prompt) && /\b(now|left|sum|start)\b/i.test(prompt);
+}
+
+function hardPictureRepeatsNumerals(question) {
+  const prompt = String(question.prompt ?? "").trim();
+  if (PICTURE_IS_QUESTION.test(prompt) || isStoryPrompt(prompt)) return false;
+  if (question.kind === "build-set" || question.kind === "count-objects") return false;
+  if (question.numberLine || question.hundredSquare || question.shape || question.turn || question.position) {
+    return false;
+  }
+  const hasPicture = Boolean(question.tenFrame || question.baseTen || question.visual);
+  const fillSlotsRepeat = question.kind === "make-total" && question.mode === "fill-slots";
+  if (!hasPicture && !fillSlotsRepeat) return false;
+  return NUMERAL_ONLY_JOB.test(prompt);
+}
+
 function spokenLine(question) {
   const n = question.narration?.prompt;
   if (typeof n === "string") return n.trim();
@@ -196,6 +221,10 @@ function checkActivity(activity) {
 
     if (question.kind === "multi-select" && !/\b(select|tap|choose)\b/i.test(question.prompt)) {
       errors.push(`${path}: multi-select must say what to do in the question`);
+    }
+
+    if (activity.difficulty === 3 && hardPictureRepeatsNumerals(question)) {
+      errors.push(`${path}: Hard must not show a picture that only repeats the numerals`);
     }
 
     const expl = String(question.explanation ?? "").trim();

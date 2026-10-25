@@ -135,11 +135,7 @@
       "prompt": "15 is 10 and how many more?",
       "tenFrame": {
         "count": 15,
-        "item": "frog",
-        "parts": [
-          10,
-          5
-        ]
+        "item": "frog"
       },
       "options": [
         {

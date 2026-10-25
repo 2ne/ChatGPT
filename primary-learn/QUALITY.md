@@ -19,7 +19,7 @@ Change **one or two** dimensions at a time. Never jump all of them at once.
 | --- | --- | --- | --- |
 | Number range | Smallest range that still teaches the node (e.g. to 5, to 10) | Same idea, slightly wider or less tidy numbers | Full range the node allows; awkward numbers (0, near-doubles, near-tens) |
 | Steps | One step, one idea | One step plus a tiny extra (order reversed, picture then numeral) | Two steps the node actually teaches — not a new topic |
-| Representation | Objects / emoji groups the child can touch-count | Mix of pictures and numerals | Numerals or a short story. Number-word reading and spelling only when the node explicitly teaches them. Pictures allowed for stories, not tappable, rows of 10 for totals over 10 |
+| Representation | Objects / emoji groups the child can touch-count. Pictures must add meaning, not copy the numerals | Mix of pictures and numerals. Medium simplifies the picture (one colour, or fewer scaffolds) | Numerals or a short story. Number-word reading and spelling only when the node explicitly teaches them. No picture that only repeats numbers already on screen. Keep a picture only when the picture is the question (how many you can see, a number line mark, a frame to match, or a story that carries the information) |
 | Scaffolding | Hint on the first third of items; stem names the strategy (“count each one”) | Hints only on the last third, or none | No hints unless the item is a new representation |
 | Question kind | Tap-to-count, build-set, make-total fill-slots, pick-pair with dots, part-whole, multiple-choice or fill-blank | Mix two or three kinds, including make-total fill-slots or sum-only, pick-pair with harder numbers, or part-whole | Include make-total sum-only, pick-pair with harder numbers (still with dots), part-whole with a missing whole, multi-select, ordered, match, or a one-step story if the node supports it |
 
@@ -197,7 +197,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] `narration.prompt` written for `+`, `−`, `=`, `?`. Spoken text is the question only — no answer, options, or pictured counts
 - [ ] Exactly 10 questions unless `extraQuestions.reason` justifies a longer set. Stars use `STAR_SCORE` (6–7 / 8–9 / 10). No retry loop.
 - [ ] JSON only (no JSX, no per-activity component). File is in `src/data/activities/` and passes `validateActivity` (auto-registered). New behaviour went into a shared question kind with defaults, not a one-off field
-- [ ] Pictures use `visual: { item, count }`, not emoji in the prompt
+- [ ] Pictures use `visual: { item, count }`, not emoji in the prompt. Every picture adds meaning and fades by level (Easy shows it, Medium simplifies, Hard drops a copy of the numerals)
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
 - [ ] No shared phrases (“Correct. Nice!”, “Need a hint?”) copied into the JSON. Those live in `src/data/copy.ts`
 - [ ] Child-facing wording follows **Writing for children** in `AGENTS.md` (UK English, short sentences, no em/en dashes as punctuation)
@@ -219,8 +219,9 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 12. Comparison questions must name what is compared (the object, or the total number for tens and ones).
 13. Every BaseTen question shows the tens-and-ones key (mini bar = 10, mini square = 1). One key per question, not per option. Easy and Medium also say `Each tall bar is 10. Each small square is 1.` Hard may use the key only.
 14. No separate instruction label under the question when the question already says what to do. Multi-select stems must say the job (`Select`, `Tap`) so they never need a helper line.
+15. Every picture must add meaning. Fade by level. Easy shows the representation. Medium simplifies. Hard has no picture unless the picture is the question. A two-part ten frame uses soft purple for the first addend and soft blue stripes plus a dashed outline for the second. Never one colour for both addends.
 
-Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. Rule 14 is CSS for the helper line. Multi-select wording fails `check:activities`.
+Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. Rule 14 is CSS for the helper line. Rule 15 Hard repeating pictures fail `check:activities`. Multi-select wording fails `check:activities`.
 
 TODO later rewrite (temporary allowlist, do not grow it): Show and compare numbers was just rewritten and skips content rules 1 to 5 and 7. Narration and Hard thinking still apply.
 - [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)

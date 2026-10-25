@@ -152,10 +152,9 @@
       "prompt": "2 + 3 and 3 + 2 make the same total. What is 5 take away 2?",
       "visual": {
         "item": "balloon",
-        "count": 2
+        "count": 5,
+        "removed": 2
       },
-      "total": 5,
-      "mode": "fill-slots",
       "randomise": {},
       "explanation": "2 + 3, 3 + 2 and 5 take away 2 are one family.",
       "narration": {

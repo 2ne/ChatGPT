@@ -30,7 +30,7 @@
   "pathNode": "eyfs-count-10",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 counts 10 and ignores extras. Q2 and Q3 read 7 and 9 as 5 and a bit. Q4 counts out 10. Q5 asks what comes before 10. Q6 spots a repeat. Q7 orders. Q8 matches 7. Q9 picks 8 among near misses. Q10 reads 6 as 5 and a bit.",
+    "within": "Q1 counts 10 and ignores extras. Q2 and Q3 read 7 and 9 as 5 and a bit. Q4 counts out 10. Q5 asks what comes before 10. Q6 spots a repeat. Q7 orders. Q8 matches 7. Q9 picks 8 among near misses. Q10 asks 6 is 5 and how many more, with no picture.",
     "versus": "Easy uses tidy scatter then 5 and a bit. Medium uses messier scatter and fuller frames. Hard adds extras to ignore and reverse counting. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -333,14 +333,6 @@
       "id": "c10-3-10",
       "kind": "multiple-choice",
       "prompt": "6 is 5 and how many more?",
-      "tenFrame": {
-        "count": 6,
-        "item": "strawberry",
-        "parts": [
-          5,
-          1
-        ]
-      },
       "options": [
         {
           "id": "a",

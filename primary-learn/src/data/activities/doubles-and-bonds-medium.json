@@ -31,7 +31,7 @@
   "difficulty": 2,
   "difficultyRamp": {
     "within": "Q1 sees double 3. Q2 adds 5 and 5. Q3 asks half of 10. Q4 completes 2 to make 10. Q5 picks a pair for 10. Q6 sees double 4. Q7 asks half of 6. Q8 is part-whole 8. Q9 types double 2. Q10 orders 4, 6, 10.",
-    "versus": "Easy shows doubles as two equal parts, then bonds to 10. Medium links double to half. Hard reverses double and half. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy shows doubles as two equal parts, then bonds to 10 with a frame. Medium links double to half and drops pictures that give the answer away. Hard reverses double and half with no repeating picture. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "eyfs-bonds-10-some",
@@ -112,11 +112,7 @@
       "prompt": "What is half of 10?",
       "tenFrame": {
         "count": 10,
-        "item": "frog",
-        "parts": [
-          5,
-          5
-        ]
+        "item": "frog"
       },
       "options": [
         {
@@ -145,10 +141,6 @@
       "id": "db-2-4",
       "kind": "multiple-choice",
       "prompt": "What do you need to add to 2 to make 10?",
-      "tenFrame": {
-        "count": 2,
-        "item": "fish"
-      },
       "options": [
         {
           "id": "a",
@@ -164,7 +156,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "2 and 8 make 10. The empty cells show 8.",
+      "explanation": "2 and 8 make 10. Not another 2.",
       "narration": {
         "prompt": "What do you need to add to 2 to make 10?"
       },
@@ -233,11 +225,7 @@
       "prompt": "What is half of 6?",
       "tenFrame": {
         "count": 6,
-        "item": "duck",
-        "parts": [
-          3,
-          3
-        ]
+        "item": "duck"
       },
       "options": [
         {

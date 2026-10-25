@@ -30,7 +30,7 @@
   "pathNode": "eyfs-compose-5",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 sees 5 as 1 and 4. Q2 asks what 2 and 3 make. Q3 completes 4 to make 5. Q4 picks a pair for 3. Q5 builds 5. Q6 reverses 5 = 3 + ?. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 5. Q10 orders parts.",
+    "within": "Q1 sees 5 as 1 and 4. Q2 asks what 2 and 3 make. Q3 completes 4 to make 5 with number boxes. Q4 picks a pair for 3. Q5 builds 5. Q6 reverses 5 = 3 + ?. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 5. Q10 orders parts.",
     "versus": "Easy builds totals 2 to 5 with two-colour parts. Medium includes zero and a take-away story. Hard reverses parts and uses a change-unknown story."
   },
   "skills": [
@@ -101,14 +101,28 @@
       "part": 4,
       "total": 5,
       "gap": "right",
-      "mode": "fill-slots",
+      "mode": "sum-only",
       "explanation": "4 and 1 make 5. The missing part is 1.",
       "narration": {
         "prompt": "What do you need to add to 4 to make 5?"
       },
-      "visual": {
-        "item": "star",
-        "count": 4
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {

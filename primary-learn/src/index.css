@@ -1996,8 +1996,8 @@ button.object-token {
   --tf-cell: 22px;
   --tf-gap: 3px;
   --tf-band: 6px;
-  --tf-fill: var(--violet);
-  --tf-fill-b: var(--sky);
+  --tf-fill: color-mix(in srgb, var(--violet) 40%, #fff);
+  --tf-fill-b: color-mix(in srgb, var(--sky) 42%, #fff);
   box-sizing: border-box;
   display: grid;
   grid-template-columns: max-content max-content;

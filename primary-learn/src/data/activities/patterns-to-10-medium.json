@@ -31,7 +31,7 @@
   "difficulty": 2,
   "difficultyRamp": {
     "within": "Q1 picks a pair group of 8. Q2 sees 10 in pairs. Q3 shares 10. Q4 spots odd 7. Q5 shares 8. Q6 sees 2 pairs in 4. Q7 spots odd 9. Q8 types half of 6. Q9 picks even 10. Q10 orders 2, 6, 10.",
-    "versus": "Easy pairs small numbers and shares 4, 6 and 8. Medium uses numbers to 10. Hard mixes odd leftover, sharing and reverse thinking. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy pairs small numbers and shares 4, 6 and 8 with two-colour parts. Medium uses numbers to 10 and a one-colour frame. Hard mixes odd leftover, sharing and reverse thinking with no picture that gives the share away. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "eyfs-patterns-10",
@@ -116,11 +116,7 @@
       "prompt": "10 is shared onto two plates. How many on each plate?",
       "tenFrame": {
         "count": 10,
-        "item": "frog",
-        "parts": [
-          5,
-          5
-        ]
+        "item": "frog"
       },
       "options": [
         {
@@ -190,11 +186,7 @@
       "prompt": "8 is shared onto two plates. How many on each plate?",
       "tenFrame": {
         "count": 8,
-        "item": "car",
-        "parts": [
-          4,
-          4
-        ]
+        "item": "car"
       },
       "options": [
         {

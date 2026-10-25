@@ -30,7 +30,7 @@
   "pathNode": "eyfs-patterns-10",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 picks even 6 among near odds. Q2 sees 8 in pairs. Q3 shares 10. Q4 spots odd 1. Q5 asks if 9 can be shared equally. Q6 sees 5 pairs. Q7 reverse: which number is odd. Q8 types half of 8. Q9 picks leftover 7. Q10 orders 4, 8, 10.",
+    "within": "Q1 picks even 6 among near odds. Q2 sees 8 in pairs. Q3 shares 10 with no picture. Q4 spots odd 1. Q5 asks if 9 can be shared equally. Q6 sees 5 pairs. Q7 reverse: which number is odd. Q8 types half of 8. Q9 picks leftover 7. Q10 orders 4, 8, 10.",
     "versus": "Easy pairs small numbers and shares 4, 6 and 8. Medium uses numbers to 10. Hard mixes odd leftover, sharing and reverse thinking. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -114,14 +114,6 @@
       "id": "pat-3-3",
       "kind": "multiple-choice",
       "prompt": "10 is shared onto two plates. How many on each plate?",
-      "tenFrame": {
-        "count": 10,
-        "item": "frog",
-        "parts": [
-          5,
-          5
-        ]
-      },
       "options": [
         {
           "id": "a",

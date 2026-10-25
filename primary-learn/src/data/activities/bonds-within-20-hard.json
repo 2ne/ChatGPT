@@ -30,8 +30,8 @@
   "pathNode": "y1-bonds-20",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 bridges 8 + 6. Q2 asks what 9 and 7 make. Q3 completes 6 to make 15. Q4 is 20 take away 4. Q5 completes 5 to make 13. Q6 picks a pair for 18. Q7 reverses 14 take away 5. Q8 sees 17. Q9 types 8 + 7. Q10 is missing whole 11.",
-    "versus": "Easy uses two frames and bridging through ten like 8 + 5. Medium varies the known part. Hard mixes missing wholes and take-away. Hard is a new kind of thinking, not just bigger numbers."
+    "within": "Q1 is 8 + 6 with number boxes only. Q2 asks what 9 and 7 make. Q3 completes 6 to make 15 with number boxes. Q4 is 20 take away 4. Q5 completes 5 to make 13. Q6 picks a pair for 18. Q7 reverses 14 take away 5. Q8 sees 17. Q9 types 8 + 7. Q10 is missing whole 11.",
+    "versus": "Easy shows two-colour frames with the sum. Medium keeps the frame but varies the known part. Hard drops pictures that only repeat the numbers. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "y1-bonds-20",
@@ -44,14 +44,6 @@
       "id": "b20-3-1",
       "kind": "multiple-choice",
       "prompt": "What is 8 + 6?",
-      "tenFrame": {
-        "count": 14,
-        "item": "apple",
-        "parts": [
-          8,
-          6
-        ]
-      },
       "options": [
         {
           "id": "a",
@@ -106,14 +98,32 @@
       "part": 6,
       "total": 15,
       "gap": "right",
-      "mode": "fill-slots",
+      "mode": "sum-only",
       "explanation": "6 and 9 make 15. 6 needs 4 to make 10, then 5 more.",
       "narration": {
         "prompt": "What do you need to add to 6 to make 15?"
       },
-      "visual": {
-        "item": "star",
-        "count": 6
+      "options": [
+        {
+          "id": "a",
+          "label": "9"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {

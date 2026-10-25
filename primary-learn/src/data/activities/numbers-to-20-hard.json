@@ -30,7 +30,7 @@
   "pathNode": "y1-read-write-20",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 picks eighteen. Q2 matches a frame to 13. Q3 reverses 14 is 10 and ?. Q4 picks twelve not twenty. Q5 types eighteen. Q6 matches 15 to its word. Q7 picks 10 and 8 more. Q8 orders around 20. Q9 matches 11. Q10 types thirteen.",
+    "within": "Q1 picks eighteen. Q2 matches a frame to 13. Q3 reverses 14 is 10 and ? with no picture. Q4 picks twelve not twenty. Q5 types eighteen. Q6 matches 15 to its word. Q7 picks 10 and 8 more. Q8 orders around 20. Q9 matches 11. Q10 types thirteen.",
     "versus": "Easy matches teen words to numerals with thirteen and thirty traps, plus ten and a bit. Medium stretches to 20. Hard reverses word and numeral and uses awkward teens. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -107,14 +107,6 @@
       "id": "n20-3-3",
       "kind": "multiple-choice",
       "prompt": "14 is 10 and how many more?",
-      "tenFrame": {
-        "count": 14,
-        "item": "frog",
-        "parts": [
-          10,
-          4
-        ]
-      },
       "options": [
         {
           "id": "a",

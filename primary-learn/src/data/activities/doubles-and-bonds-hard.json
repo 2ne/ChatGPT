@@ -30,7 +30,7 @@
   "pathNode": "eyfs-bonds-10-some",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 sees double 4. Q2 asks 10 is double what. Q3 asks half of 8. Q4 completes 9 to make 10. Q5 picks a pair for 10. Q6 reverses half of 10. Q7 sees double 1 on fingers. Q8 is part-whole missing whole. Q9 types half of 4. Q10 taps every double.",
+    "within": "Q1 sees double 4. Q2 asks 10 is double what. Q3 asks half of 8 with no picture. Q4 completes 9 to make 10 with no picture. Q5 picks a pair for 10. Q6 reverses half of 10. Q7 sees double 1. Q8 is part-whole missing whole. Q9 types half of 4. Q10 taps every double.",
     "versus": "Easy shows doubles as two equal parts, then bonds to 10. Medium links double to half. Hard reverses double and half. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -105,14 +105,6 @@
       "id": "db-3-3",
       "kind": "multiple-choice",
       "prompt": "What is half of 8?",
-      "tenFrame": {
-        "count": 8,
-        "item": "frog",
-        "parts": [
-          4,
-          4
-        ]
-      },
       "options": [
         {
           "id": "a",
@@ -140,10 +132,6 @@
       "id": "db-3-4",
       "kind": "multiple-choice",
       "prompt": "What do you need to add to 9 to make 10?",
-      "tenFrame": {
-        "count": 9,
-        "item": "fish"
-      },
       "options": [
         {
           "id": "a",

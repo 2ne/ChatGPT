@@ -30,7 +30,7 @@
   "pathNode": "eyfs-compose-10",
   "difficulty": 3,
   "difficultyRamp": {
-    "within": "Q1 sees 10 as 7 and 3. Q2 asks what 4 and 5 make. Q3 completes 9 to make 10. Q4 picks a pair for 7. Q5 builds 10. Q6 reverses a missing part. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 10. Q10 orders parts.",
+    "within": "Q1 sees 10 as 7 and 3. Q2 asks what 4 and 5 make. Q3 completes 9 to make 10 with number boxes. Q4 picks a pair for 7. Q5 builds 10. Q6 reverses a missing part. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 10. Q10 orders parts.",
     "versus": "Easy builds 6 to 9 with two-colour parts. Medium includes 10, zero and a take-away story. Hard reverses parts and uses a change-unknown story."
   },
   "skills": [
@@ -101,14 +101,28 @@
       "part": 9,
       "total": 10,
       "gap": "right",
-      "mode": "fill-slots",
+      "mode": "sum-only",
       "explanation": "9 and 1 make 10. The missing part is 1.",
       "narration": {
         "prompt": "What do you need to add to 9 to make 10?"
       },
-      "visual": {
-        "item": "star",
-        "count": 9
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        }
+      ],
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {

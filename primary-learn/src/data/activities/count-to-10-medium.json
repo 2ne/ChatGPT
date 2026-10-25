@@ -326,11 +326,7 @@
       "prompt": "9 is 5 and how many more?",
       "tenFrame": {
         "count": 9,
-        "item": "fish",
-        "parts": [
-          5,
-          4
-        ]
+        "item": "fish"
       },
       "options": [
         {

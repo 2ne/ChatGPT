@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Q1 finds one less than 30. Q2 reads one more across 20 on a line. Q3 and Q7 reverse both ways. Q4 finds one more than 29. Q5 types one less than 30. Q6 is a one more story. Q8 orders around 30. Q9 finds one less on a 0 to 100 line. Q10 finds one less than 20.",
-    "versus": "Easy uses ten frames and a 0 to 10 line within 10, then crosses 10. Medium uses two frames and a 0 to 20 line across 10 and 20. Hard adds reverse thinking both ways, one less than 30 and a short story. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy uses ten frames and a 0 to 10 line within 10, then crosses 10. Medium uses two frames and a 0 to 20 line across 10 and 20. Hard uses numerals for one more and one less, plus a marked line and a short story. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "y1-1-more-less",
@@ -28,11 +28,6 @@
       "id": "oml-3-1",
       "kind": "multiple-choice",
       "prompt": "What is one less than 30?",
-      "baseTen": {
-        "tens": 3,
-        "ones": 0,
-        "style": "plain"
-      },
       "options": [
         {
           "id": "a",
@@ -315,10 +310,6 @@
       "id": "oml-3-10",
       "kind": "multiple-choice",
       "prompt": "What is one less than 20?",
-      "tenFrame": {
-        "count": 20,
-        "item": "duck"
-      },
       "options": [
         {
           "id": "a",
