@@ -1926,6 +1926,64 @@ button.object-token {
   margin: 0;
 }
 
+.ten-frame-board {
+  --tf-cell: 22px;
+  --tf-gap: 3px;
+  --tf-band: 6px;
+  --tf-fill: #e03131;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.ten-frame-board.is-compact {
+  --tf-cell: 12px;
+  --tf-gap: 2px;
+  --tf-band: 4px;
+  gap: 6px;
+}
+
+.ten-frame,
+.ten-frame-slot {
+  box-sizing: border-box;
+}
+
+.ten-frame {
+  display: grid;
+  grid-template-columns: repeat(5, var(--tf-cell));
+  grid-template-rows: var(--tf-cell) var(--tf-cell);
+  column-gap: var(--tf-gap);
+  row-gap: var(--tf-band);
+  padding: 4px;
+  border: 2px solid var(--ink-soft);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ten-frame-cell {
+  box-sizing: border-box;
+  width: var(--tf-cell);
+  height: var(--tf-cell);
+  border-radius: 3px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+}
+
+.ten-frame-cell.is-filled {
+  background: var(--tf-fill);
+  border-color: color-mix(in srgb, var(--tf-fill) 65%, #000);
+}
+
+.ten-frame-slot.is-pad {
+  visibility: hidden;
+}
+
 .option-content {
   display: inline-flex;
   flex-wrap: wrap;
@@ -4910,6 +4968,33 @@ button.object-token {
 .match-card-face .object-group.is-scatter .object-token {
   margin-top: 0;
   transform: none;
+}
+
+.match-turn-target .ten-frame-board,
+.match-card-face .ten-frame-board {
+  --tf-cell: min(
+    11px,
+    calc((100cqh - 18px) / 2),
+    calc((100cqw - 18px) / 11)
+  );
+  --tf-gap: 1px;
+  --tf-band: 3px;
+  gap: 4px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.match-turn-target .ten-frame,
+.match-card-face .ten-frame {
+  padding: 2px;
+  border-width: 1.5px;
+  border-radius: 4px;
+}
+
+.match-turn-target .ten-frame-cell,
+.match-card-face .ten-frame-cell {
+  border-width: 1px;
+  border-radius: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

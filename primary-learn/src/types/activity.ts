@@ -83,11 +83,22 @@ export const OBJECT_LAYOUTS = [
 ] as const;
 export type ObjectLayout = (typeof OBJECT_LAYOUTS)[number];
 
+/**
+ * Structured ten frame. 1 frame for 0 to 10, 2 frames for 11 to 20.
+ * Empty cells are shown. Filled cells use the object colour.
+ * Not tappable. Fixed 2-frame footprint so options stay the same size.
+ */
+export type TenFrameAsset = {
+  count: number;
+  item?: ObjectItem;
+};
+
 export type QuestionOption = {
   id: string;
   shape?: ShapeAsset;
   label?: string;
   visual?: ObjectAsset;
+  tenFrame?: TenFrameAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -141,6 +152,8 @@ type QuestionCore = {
   narration?: QuestionNarration;
   /** Optional object picture above the answers (also required on count-objects). */
   visual?: ObjectAsset;
+  /** Optional ten frame above the answers. Do not mix with visual. */
+  tenFrame?: TenFrameAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */
@@ -202,7 +215,15 @@ export type OrderedQuestion = QuestionCore & {
 };
 
 /** A match side is a label, or a picture, or both. Optional layout for glanceable amounts. */
-export type MatchSide = string | { label?: string; visual?: ObjectAsset; shape?: ShapeAsset; layout?: ObjectLayout };
+export type MatchSide =
+  | string
+  | {
+      label?: string;
+      visual?: ObjectAsset;
+      tenFrame?: TenFrameAsset;
+      shape?: ShapeAsset;
+      layout?: ObjectLayout;
+    };
 
 /** Single-pair matching. The only matching mode. */
 export const MATCH_PAIRS_MODES = ["one-at-a-time"] as const;

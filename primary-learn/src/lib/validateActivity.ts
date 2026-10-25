@@ -22,6 +22,7 @@ import {
   type Question,
   type QuestionOption,
   type RandomiseSpec,
+  type TenFrameAsset,
 } from "../types/activity";
 import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
@@ -238,6 +239,27 @@ function parseMakeTotalExtras(record: Record<string, unknown>, path: string): Ob
   });
 }
 
+function parseTenFrame(value: unknown, path: string): TenFrameAsset {
+  if (!isRecord(value)) fail(path, "tenFrame must be { count }");
+  const count = expectNumber(value, "count", path);
+  if (!Number.isInteger(count) || count < 0 || count > 20) {
+    fail(path, "tenFrame.count must be a whole number from 0 to 20");
+  }
+  let item: ObjectItem | undefined;
+  if (value.item != null) {
+    if (!isString(value.item) || !(OBJECT_ITEMS as readonly string[]).includes(value.item)) {
+      fail(path, `tenFrame.item must be one of ${OBJECT_ITEMS.join(", ")}`);
+    }
+    item = value.item as ObjectItem;
+  }
+  return item ? { count, item } : { count };
+}
+
+function optionalTenFrame(record: Record<string, unknown>, path: string): TenFrameAsset | undefined {
+  if (record.tenFrame == null) return undefined;
+  return parseTenFrame(record.tenFrame, `${path}.tenFrame`);
+}
+
 function parseLayout(record: Record<string, unknown>, path: string): Question["layout"] {
   if (record.layout == null) return undefined;
   if (typeof record.layout !== "string" || !(OBJECT_LAYOUTS as readonly string[]).includes(record.layout)) {
@@ -268,11 +290,14 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   }
   const visual = optionalVisual(value, path, false, layout === "fingers");
   if (layout === "fingers") assertFingersVisual(visual, path);
+  const tenFrame = optionalTenFrame(value, path);
   const shape = parseShape(value.shape, `${path}.shape`);
   if (shape && !allowShape) fail(path, "shape options use multiple-choice or multi-select");
   if (shape && visual) fail(path, "option cannot mix object and shape pictures");
-  if (!label && !visual && !shape) fail(path, "option needs a label or a picture");
-  return { id, label, visual, shape, layout };
+  if (tenFrame && (visual || shape)) fail(path, "option cannot mix a ten frame with another picture");
+  if (tenFrame && layout) fail(path, "ten frames do not use layout");
+  if (!label && !visual && !shape && !tenFrame) fail(path, "option needs a label or a picture");
+  return { id, label, visual, tenFrame, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -288,10 +313,13 @@ function parseMatchSide(value: unknown, path: string): MatchSide {
   }
   const visual = optionalVisual(value, path, false, layout === "fingers");
   if (layout === "fingers") assertFingersVisual(visual, path);
+  const tenFrame = optionalTenFrame(value, path);
   const shape = parseShape(value.shape, `${path}.shape`);
   if (shape && visual) fail(path, "match side cannot mix object and shape pictures");
-  if (!label && !visual && !shape) fail(path, "match side needs a label or a picture");
-  return { label, visual, shape, layout };
+  if (tenFrame && (visual || shape)) fail(path, "match side cannot mix a ten frame with another picture");
+  if (tenFrame && layout) fail(path, "ten frames do not use layout");
+  if (!label && !visual && !shape && !tenFrame) fail(path, "match side needs a label or a picture");
+  return { label, visual, tenFrame, shape, layout };
 }
 
 function parseNarration(value: unknown, path: string): Question["narration"] {
@@ -376,6 +404,7 @@ function parseQuestion(value: unknown, path: string): Question {
     kind === "make-total"
       ? parseMakeTotalVisual(value.visual, `${path}.visual`)
       : optionalVisual(value, path, true, layout === "fingers");
+  const tenFrame = optionalTenFrame(value, path);
   const flashMs = parseFlashMs(value, path);
   if (layout === "hidden" && flashMs == null) {
     fail(path, "layout hidden needs flashMs so the child can peek");
@@ -472,13 +501,19 @@ function parseQuestion(value: unknown, path: string): Question {
     fail(path, "do not randomise count on a take-away picture");
   }
   const shape = parseShape(value.shape, `${path}.shape`);
-  if (shape && (visual || extras || layout || flashMs != null)) fail(path, "shape stems cannot mix object picture fields");
+  if (shape && (visual || extras || layout || flashMs != null || tenFrame)) fail(path, "shape stems cannot mix object picture fields");
   if (shape && kind !== "multiple-choice" && kind !== "multi-select") fail(path, "shape stems use choice questions");
+  if (tenFrame && (visual || extras || layout || flashMs != null)) {
+    fail(path, "ten frame stems cannot mix object picture fields");
+  }
+  if (tenFrame && kind !== "multiple-choice" && kind !== "multi-select" && kind !== "fill-blank") {
+    fail(path, "ten frame stems use choice or fill-blank questions");
+  }
   let turn: import("../types/activity").TurnDiagram | undefined;
   if (value.turn != null) {
     const t = value.turn;
     if (!isRecord(t) || ![0, 1, 2, 3].includes(t.start as number) || ![1, 2, 3, 4].includes(t.quarters as number) || typeof t.clockwise !== "boolean" || typeof t.showEnd !== "boolean") fail(path, "invalid turn diagram");
-    if (kind !== "multiple-choice" || visual || shape || extras || layout || flashMs != null) fail(path, "turn diagrams use multiple-choice without other stem pictures");
+    if (kind !== "multiple-choice" || visual || shape || extras || layout || flashMs != null || tenFrame) fail(path, "turn diagrams use multiple-choice without other stem pictures");
     turn = { start: t.start as 0 | 1 | 2 | 3, quarters: t.quarters as 1 | 2 | 3 | 4, clockwise: t.clockwise, showEnd: t.showEnd, interactive: t.interactive === true };
     if (t.interactive != null && typeof t.interactive !== "boolean") fail(path, "interactive must be boolean");
     if (t.interactive && t.showEnd) fail(path, "interactive turns must not show the answer");
@@ -487,7 +522,7 @@ function parseQuestion(value: unknown, path: string): Question {
   if (value.position != null) {
     const p = value.position;
     if (!isRecord(p) || !["tree", "box", "kite", "bird"].includes(p.object as string) || !["behind", "in-front", "above", "below"].includes(p.relation as string)) fail(path, "invalid position scene");
-    if (kind !== "multiple-choice" || turn || shape || visual || extras || layout || flashMs != null) fail(path, "position scenes use choice questions without other pictures");
+    if (kind !== "multiple-choice" || turn || shape || visual || extras || layout || flashMs != null || tenFrame) fail(path, "position scenes use choice questions without other pictures");
     position = p as unknown as typeof position;
   }
   let numberLine: { start: number; end: number; marked: number } | undefined;
@@ -496,9 +531,10 @@ function parseQuestion(value: unknown, path: string): Question {
     if (!isRecord(n) || !Number.isInteger(n.start) || !Number.isInteger(n.end) || !Number.isInteger(n.marked)) fail(path, "number line needs whole numbers");
     const start = n.start as number, end = n.end as number, marked = n.marked as number;
     if (start < 0 || end > 100 || end <= start || end - start > 10 || marked <= start || marked >= end || kind !== "multiple-choice") fail(path, "invalid number line range");
+    if (tenFrame) fail(path, "number lines cannot mix with a ten frame");
     numberLine = { start, end, marked };
   }
-  const core = { numberLine, id, prompt, explanation, hint, narration, visual, shape, turn, position, extras, layout, flashMs, randomise };
+  const core = { numberLine, id, prompt, explanation, hint, narration, visual, tenFrame, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,

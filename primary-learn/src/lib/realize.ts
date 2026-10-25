@@ -7,6 +7,7 @@ import type {
   ObjectAsset,
   ObjectItem,
   Question,
+  TenFrameAsset,
   QuestionNarration,
   QuestionOption,
   RandomiseSpec,
@@ -66,7 +67,7 @@ function capitalize(value: string): string {
 
 function sideItem(side: MatchSide): ObjectItem | undefined {
   if (typeof side === "string") return undefined;
-  return side.visual?.item;
+  return side.visual?.item ?? side.tenFrame?.item;
 }
 
 /** Distinct object items that appear on a question, in first-seen order. */
@@ -76,14 +77,21 @@ export function collectItems(question: Question): ObjectItem[] {
     if (item && !found.includes(item)) found.push(item);
   };
   if (question.visual) add(question.visual.item);
+  if (question.tenFrame?.item) add(question.tenFrame.item);
   if (question.extras) {
     for (const extra of question.extras) add(extra.item);
   }
   if ("options" in question && question.options) {
-    for (const option of question.options) add(option.visual?.item);
+    for (const option of question.options) {
+      add(option.visual?.item);
+      add(option.tenFrame?.item);
+    }
   }
   if (question.kind === "ordered") {
-    for (const item of question.items) add(item.visual?.item);
+    for (const item of question.items) {
+      add(item.visual?.item);
+      add(item.tenFrame?.item);
+    }
   }
   if (question.kind === "match-pairs") {
     for (const pair of question.pairs) {
@@ -127,11 +135,21 @@ function remapVisual(
   return next;
 }
 
+function remapTenFrame(
+  frame: TenFrameAsset | undefined,
+  itemMap: Map<ObjectItem, ObjectItem>,
+): TenFrameAsset | undefined {
+  if (!frame) return undefined;
+  const item = frame.item ?? "apple";
+  return { count: frame.count, item: itemMap.get(item) ?? item };
+}
+
 function remapSide(side: MatchSide, itemMap: Map<ObjectItem, ObjectItem>): MatchSide {
   if (typeof side === "string") return side;
   return {
     ...side,
     visual: remapVisual(side.visual, itemMap),
+    tenFrame: remapTenFrame(side.tenFrame, itemMap),
   };
 }
 
@@ -320,6 +338,7 @@ function realizeQuestion(
     itemMap,
     question.kind === "make-total" ? undefined : count,
   );
+  next.tenFrame = remapTenFrame(next.tenFrame, itemMap);
   if (next.extras) {
     next.extras = next.extras.map((asset) => remapVisual(asset, itemMap) ?? asset);
   }
@@ -328,12 +347,14 @@ function realizeQuestion(
     next.options = next.options.map((option) => ({
       ...option,
       visual: remapVisual(option.visual, itemMap),
+      tenFrame: remapTenFrame(option.tenFrame, itemMap),
     }));
   }
   if (next.kind === "ordered") {
     next.items = next.items.map((item) => ({
       ...item,
       visual: remapVisual(item.visual, itemMap),
+      tenFrame: remapTenFrame(item.tenFrame, itemMap),
     }));
   }
   if (next.kind === "match-pairs") {

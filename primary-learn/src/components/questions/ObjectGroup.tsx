@@ -4,9 +4,10 @@ import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
-import type { ObjectAsset, ObjectItem, ObjectLayout } from "../../types/activity";
+import type { ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
 import { FingerHand } from "./FingerHand";
 import { FlashReveal } from "./FlashReveal";
+import { TenFrame } from "./TenFrame";
 
 type Token = {
   key: string;
@@ -393,16 +394,19 @@ export function ObjectGroup({
 export function OptionContent({
   label,
   visual,
+  tenFrame,
   layout,
   pack,
 }: {
   label?: string;
   visual?: ObjectAsset;
+  tenFrame?: TenFrameAsset;
   layout?: ObjectLayout;
   pack?: boolean;
 }) {
   return (
     <span className="option-content">
+      {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}
       {visual ? <ObjectGroup visual={visual} compact pack={pack} layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
     </span>

@@ -1,6 +1,7 @@
 import { copy } from "../../data/copy";
 import type { FillBlankQuestion } from "../../types/activity";
 import { ObjectGroup } from "./ObjectGroup";
+import { TenFrame } from "./TenFrame";
 import type { Reveal } from "./choice";
 
 type FillBlankProps = {
@@ -15,6 +16,7 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
   const tone = reveal === "correct" ? "is-correct" : reveal === "incorrect" ? "is-wrong" : "";
   return (
     <div className="option-stack">
+      {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.visual ? (
         <ObjectGroup
           visual={question.visual}

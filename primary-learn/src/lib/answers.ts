@@ -1,8 +1,24 @@
-import type { Question } from "../types/activity";
+import { describeTenFrame, describeVisual } from "../data/objects";
+import type { Question, TenFrameAsset } from "../types/activity";
 import { shapeName } from "./shapes";
 
-function optionLabel(option: { label?: string; shape?: import("../types/shapes").ShapeAsset } | undefined, slot: number): string | null {
-  return option?.label ?? (option?.shape ? `${shapeName(option.shape)} (${"ABCD"[slot]})` : null);
+function optionLabel(
+  option:
+    | {
+        label?: string;
+        shape?: import("../types/shapes").ShapeAsset;
+        visual?: import("../types/activity").ObjectAsset;
+        tenFrame?: TenFrameAsset;
+      }
+    | undefined,
+  slot: number,
+): string | null {
+  if (!option) return null;
+  if (option.label) return option.label;
+  if (option.shape) return `${shapeName(option.shape)} (${"ABCD"[slot]})`;
+  if (option.tenFrame) return describeTenFrame(option.tenFrame);
+  if (option.visual) return describeVisual(option.visual);
+  return null;
 }
 import { makeTotalMissing } from "./makeTotal";
 import { matchSideKey, matchSideLabel } from "./matchSide";

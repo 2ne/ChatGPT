@@ -4,6 +4,7 @@ import { copy } from "../../data/copy";
 import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
+import { TenFrame } from "./TenFrame";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
 
@@ -48,7 +49,7 @@ export function MultipleChoice({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked, ["amount-card"])}
               >
-                <OptionContent visual={option.visual} layout={option.layout} pack />
+                <OptionContent visual={option.visual} tenFrame={option.tenFrame} layout={option.layout} pack />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
@@ -66,7 +67,7 @@ export function MultipleChoice({
     );
   }
 
-  const showStem = question.kind !== "count-objects" && Boolean(question.visual);
+  const showStem = question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame);
   const sum = !question.visual && optionsAreNumerals(question.options)
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
@@ -109,6 +110,7 @@ export function MultipleChoice({
           <span className="make-total-box is-gap" aria-label={copy.yourAnswer}>{selectedLabel ?? "?"}</span>
         </div>
       ) : null}
+      {showStem && question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {showStem && question.visual ? (
         <ObjectGroup
           visual={question.visual}
@@ -137,6 +139,7 @@ export function MultipleChoice({
               <OptionContent
                 label={option.label}
                 visual={option.visual}
+                tenFrame={option.tenFrame}
                 layout={option.layout}
               />
               {marked === "correct" ? (

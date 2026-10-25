@@ -1,4 +1,4 @@
-import { OBJECT_ITEMS, type ObjectAsset, type ObjectItem } from "../types/activity";
+import { OBJECT_ITEMS, type ObjectAsset, type ObjectItem, type TenFrameAsset } from "../types/activity";
 
 /** Grammar for object assets. Pictures are drawn by ObjectGroup, not stored in quest JSON. */
 export const OBJECT_GLYPH: Record<ObjectItem, string> = {
@@ -18,6 +18,21 @@ export const OBJECT_GLYPH: Record<ObjectItem, string> = {
 export function objectGlyph(item: ObjectItem): string {
   return OBJECT_GLYPH[item];
 }
+
+/** Fill colour for ten-frame cells. Keep these vivid and distinct. */
+export const OBJECT_FILL: Record<ObjectItem, string> = {
+  apple: "#e03131",
+  banana: "#f4c430",
+  star: "#ffb100",
+  balloon: "#e64980",
+  car: "#228be6",
+  duck: "#f08c00",
+  ladybird: "#c92a2a",
+  frog: "#2f9e44",
+  fish: "#0c8599",
+  strawberry: "#f03e3e",
+  sparkle: "#fab005",
+};
 
 export const OBJECT_WORDS: Record<ObjectItem, { singular: string; plural: string }> = {
   apple: { singular: "apple", plural: "apples" },
@@ -77,6 +92,17 @@ export function describeVisual(visual: ObjectAsset): string {
     return `${visual.count} ${noun}, ${visual.removed} ${takenNoun} taken away`;
   }
   return `${visual.count} ${noun}`;
+}
+
+export function describeTenFrame(frame: TenFrameAsset): string {
+  const item = frame.item ?? "apple";
+  const words = OBJECT_WORDS[item];
+  const noun = frame.count === 1 ? words.singular : words.plural;
+  return `ten frame showing ${frame.count} ${noun}`;
+}
+
+export function tenFrameKey(frame: TenFrameAsset): string {
+  return `ten-frame:${frame.count}:${frame.item ?? "apple"}`;
 }
 
 export function visualKey(visual: ObjectAsset): string {
