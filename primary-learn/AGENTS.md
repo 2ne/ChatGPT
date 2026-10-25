@@ -40,7 +40,8 @@ Educational content is **pure data**. Presentation is one generic runner plus on
 - Tens and ones: `"baseTen": { "tens": 3, "ones": 4, "style": "plain" }` for 21 to 99. Neutral rods, not the question objects. Numerals only above 20.
 - Number line: `"numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 12 }` for 0 to 10 or 0 to 20, or `end` 100 with `scale` `tens`. A marked tick shows ?. Flags A to D sit on an unmarked line and are not tappable. Answers stay as A/B/C/D rows.
 - Hundred square window: `"hundredSquare": { "start": 21, "rows": 3, "missing": 25, "highlight": 32 }` shows 3 or 4 rows. Numerals only. Not tappable. Not scrolling.
-- Matching sides must use two different representations. Never pair a pile with the same pile. Compare questions use ten frames up to 20 and tens-and-ones above 20, not counting chores.
+- Matching sides must use two different representations. Never pair a pile with the same pile. Shape matching is shape to name, or a real object to a shape. Compare questions use ten frames up to 20 and tens-and-ones above 20, not counting chores.
+- Shape pictures: kite, pentagon and wonky are near misses. Ball, box, tin, cone-hat and dice are real-object pictures. A squashed rectangle or triangle stays that shape.
 - Shared phrases (“Correct. Nice!”) live in `copy.ts`, not JSON.
 
 ## Map placement (required)

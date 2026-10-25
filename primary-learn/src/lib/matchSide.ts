@@ -7,7 +7,7 @@ import {
   visualKey,
 } from "../data/objects";
 import type { BaseTenAsset, DiceAsset, MatchSide, ObjectAsset, TenFrameAsset } from "../types/activity";
-import { shapeName } from "./shapes";
+import { isRealObject, shapeName } from "./shapes";
 
 export function matchSideVisual(side: MatchSide): ObjectAsset | undefined {
   if (typeof side === "string") return undefined;
@@ -39,7 +39,7 @@ export function matchSideRepresentation(side: MatchSide): string {
   if (side.tenFrame) return "ten-frame";
   if (side.baseTen) return "base-ten";
   if (side.dice) return "dice";
-  if (side.shape) return "shape";
+  if (side.shape) return isRealObject(side.shape) ? "real-object" : "shape";
   if (side.visual) return `objects-${side.layout ?? "row"}`;
   if (side.label) return isNumeralLabel(side.label) ? "numeral" : "word";
   return "unknown";

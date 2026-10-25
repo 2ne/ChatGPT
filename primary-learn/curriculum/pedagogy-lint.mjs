@@ -3,12 +3,8 @@
  * Temporary allowlists are TODOs for later rewrites. Do not grow them.
  */
 
-/** Later rewrite: Count to 100, Count beyond 20, Everyday shapes. */
-const LATER_REWRITE = new Set([
-  "everyday-shapes",
-  "everyday-shapes-medium",
-  "everyday-shapes-hard",
-]);
+/** Later rewrite: none. Do not grow this list. */
+const LATER_REWRITE = new Set([]);
 
 /** Just shipped. Only narration and year-vocabulary apply. */
 const JUST_SHIPPED = new Set([
@@ -278,4 +274,4 @@ export function lintActivities(activities) {
 }
 
 export const pedagogyAllowlistNote =
-  "TODO later rewrite: everyday-shapes. Just-shipped allowlist: show-and-compare-numbers.";
+  "Just-shipped allowlist: show-and-compare-numbers.";

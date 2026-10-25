@@ -351,7 +351,11 @@ Shared phrases (“Choose all that apply.”, “Correct. Nice!”) live in `src
 Multiple-choice and multi-select stems and options, and match-pair sides,
 may use `shape: { name, variant?, colour?, rotation?, scale? }`. Shape names
 are circle, triangle, square, rectangle, cube, cuboid, pyramid and sphere.
+Near misses are kite, pentagon and wonky (curved sides). Real objects are ball,
+box, tin, cone-hat and dice. Matching may pair a shape with a name, or a real
+object with a shape name, never the same picture with the same picture.
 Allowed variants depend on the shape and are validated in `src/lib/shapes.ts`.
+Use `squashed` for a very flat rectangle or triangle.
 Do not combine a shape with an object picture on the same stem or option.
 Do not use shape assets on numeric question kinds or ordered items.
 
