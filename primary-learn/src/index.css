@@ -4660,9 +4660,15 @@ button.object-token {
 .profile-editor .field input { min-height: 64px; font-size: 22px; }
 .profile-editor .avatar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-/* Matching cards keep a fixed footprint. Face and back share one height. */
+/* Matching cards keep a fixed footprint. Face and back share one height.
+   Picture tiles shrink so up to 20 objects fit in a 5 by 4 grid. */
 .match-turn {
   --match-card-h: 120px;
+  --match-face-pad: 6px;
+  --match-obj-gap: 2px;
+  --match-obj-cols: 5;
+  --match-obj-rows: 4;
+  --match-obj-tile: 16px;
   display: grid;
   gap: 12px;
   justify-items: center;
@@ -4712,12 +4718,13 @@ button.object-token {
   height: var(--match-card-h);
   min-height: var(--match-card-h);
   max-height: var(--match-card-h);
-  padding: 10px 8px;
+  padding: var(--match-face-pad);
   border: 2.5px solid var(--line);
   border-radius: 18px;
   background: var(--card);
   overflow: hidden;
   pointer-events: none;
+  container-type: size;
 }
 
 .match-card {
@@ -4765,10 +4772,11 @@ button.object-token {
   height: 100%;
   min-height: 100%;
   max-height: 100%;
-  padding: 10px 8px;
+  padding: var(--match-face-pad);
   border: 2.5px solid var(--line);
   border-radius: 18px;
   overflow: hidden;
+  container-type: size;
 }
 
 .match-card-back {
@@ -4801,7 +4809,7 @@ button.object-token {
   height: 100%;
   min-height: 100%;
   max-height: 100%;
-  padding: 10px 8px;
+  padding: var(--match-face-pad);
   text-align: center;
   pointer-events: none;
 }
@@ -4826,7 +4834,7 @@ button.object-token {
   min-width: 0;
   max-width: 100%;
   max-height: 100%;
-  overflow: hidden;
+  overflow: visible;
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 700;
@@ -4855,22 +4863,53 @@ button.object-token {
   max-height: 100%;
 }
 
-.match-card .object-group.is-amount .object-token {
-  min-width: 16px;
-  min-height: 16px;
-  width: 16px;
-  height: 16px;
-  font-size: calc(16px * 0.6);
+.match-turn-target .object-group.is-amount,
+.match-turn-target .object-group.is-option,
+.match-card-face .object-group.is-amount,
+.match-card-face .object-group.is-option {
+  --match-obj-tile: min(
+    20px,
+    calc((100cqh - (var(--match-obj-rows) - 1) * var(--match-obj-gap)) / var(--match-obj-rows)),
+    calc((100cqw - (var(--match-obj-cols) - 1) * var(--match-obj-gap)) / var(--match-obj-cols))
+  );
+  display: grid;
+  grid-template-columns: repeat(var(--match-obj-cols), var(--match-obj-tile));
+  gap: var(--match-obj-gap);
+  place-content: center;
+  justify-content: center;
+  align-content: center;
+  width: max-content;
+  max-width: 100%;
   padding: 0;
-  border-radius: 5px;
 }
 
-.match-card .object-row {
-  gap: 2px;
+.match-turn-target .object-group.is-amount .object-row,
+.match-turn-target .object-group.is-option .object-row,
+.match-card-face .object-group.is-amount .object-row,
+.match-card-face .object-group.is-option .object-row {
+  display: contents;
 }
 
-.match-card .object-group.is-amount {
-  gap: 3px;
+.match-turn-target .object-group.is-amount .object-token,
+.match-turn-target .object-group.is-option .object-token,
+.match-card-face .object-group.is-amount .object-token,
+.match-card-face .object-group.is-option .object-token {
+  box-sizing: border-box;
+  width: var(--match-obj-tile);
+  height: var(--match-obj-tile);
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  font-size: calc(var(--match-obj-tile) * 0.6);
+  border-radius: 4px;
+  transform: none;
+}
+
+.match-turn-target .object-group.is-scatter .object-token,
+.match-card-face .object-group.is-scatter .object-token {
+  margin-top: 0;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
