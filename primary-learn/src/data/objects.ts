@@ -7,6 +7,7 @@ import {
   type ObjectItem,
   type TenFrameAsset,
 } from "../types/activity";
+import { visibleNumberLine } from "../lib/numberLine";
 
 /** Grammar for object assets. Pictures are drawn by ObjectGroup, not stored in quest JSON. */
 export const OBJECT_GLYPH: Record<ObjectItem, string> = {
@@ -115,13 +116,13 @@ export function baseTenKey(model: BaseTenAsset): string {
 }
 
 export function describeNumberLine(line: NumberLineAsset): string {
-  const scale = line.scale ?? (line.end <= 20 ? "ones" : "tens");
-  const ticks = scale === "tens" ? "a tick every ten" : "a tick every one";
+  const view = visibleNumberLine(line);
+  const ticks = line.end === 100 ? "a tick every one and tens labelled" : "a tick every one";
   if (line.flags?.length) {
     const flags = line.flags.map((flag) => `flag ${flag.letter}`).join(", ");
-    return `Number line from ${line.start} to ${line.end} with ${ticks}. ${flags}. The flags are not buttons.`;
+    return `Number line from ${view.start} to ${view.end} with ${ticks}. ${flags}. The flags are not buttons.`;
   }
-  return `Number line from ${line.start} to ${line.end} with ${ticks}. One mark is a question mark.`;
+  return `Number line from ${view.start} to ${view.end} with ${ticks}. One mark is a question mark above the line.`;
 }
 
 export function describeHundredSquare(square: HundredSquareAsset): string {

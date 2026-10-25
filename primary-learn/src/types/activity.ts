@@ -120,7 +120,9 @@ export type DiceAsset = {
 
 /**
  * Real number line. 0 to 10 or 0 to 20 with a tick every one.
- * 0 to 100 with a tick every ten. A marked tick shows ?.
+ * 0 to 100 is stored as the full line, then shown as a zoomed window
+ * (0 to 50, 50 to 100, or two tens either side of flags). Ticks every one,
+ * tens labelled. A marked tick shows ? above the line. Labels stay below.
  * Flags A to D sit on an unmarked line and are not tappable.
  */
 export const NUMBER_LINE_SCALES = ["ones", "tens"] as const;
