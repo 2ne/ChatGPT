@@ -1,29 +1,8 @@
 {
-  "id": "numbers-to-20-hard",
-  "title": "Numbers to 20",
-  "summary": "Read and write tricky numbers to 20, and use ten and a bit.",
   "subject": "maths",
-  "type": "place-value",
-  "yearGroups": [
-    "Year1"
-  ],
-  "ability": "greater-depth",
-  "estimatedMinutes": 6,
+  "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
-  "curriculumRef": "y1-read-write-20",
-  "pathNode": "y1-read-write-20",
-  "difficulty": 3,
   "questionCount": 10,
-  "difficultyRamp": {
-    "within": "Questions 1 to 2 catch lookalike errors (15 vs 50 style avoided, use 13 vs 30, 17 vs 71). Question 3 writes nineteen. Question 4 is ten and a bit for 19. Question 5 matches reverse. Question 6 orders mixed. Question 7 fills twelve as a word. Question 8 multi-select. Question 9 is ten and a bit for 11. Question 10 picks the word for 20. No hints.",
-    "versus": "Easy matches numerals and words to 12 with clear teens. Medium stretches to 20 and ten-and-a-bit. Hard mixes reverse matching, fill-blank words and awkward teens."
-  },
-  "skills": [
-    "y1-read-write-20",
-    "numerals-to-20",
-    "number-words-to-20",
-    "ten-and-a-bit"
-  ],
   "randomise": {
     "mode": "attempt",
     "items": [
@@ -39,182 +18,242 @@
       "strawberry"
     ]
   },
+  "id": "numbers-to-20-hard",
+  "title": "Numbers to 20",
+  "summary": "Read and write numbers to 20, and see teens as ten and a bit.",
+  "type": "place-value",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "curriculumRef": "y1-read-write-20",
+  "pathNode": "y1-read-write-20",
+  "difficulty": 3,
+  "difficultyRamp": {
+    "within": "Q1 picks eighteen. Q2 matches a frame to 13. Q3 reverses 14 is 10 and ?. Q4 picks twelve not twenty. Q5 types eighteen. Q6 matches 15 to its word. Q7 picks 10 and 8 more. Q8 orders around 20. Q9 matches 11. Q10 types thirteen.",
+    "versus": "Easy matches teen words to numerals with thirteen and thirty traps, plus ten and a bit. Medium stretches to 20. Hard reverses word and numeral and uses awkward teens. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "y1-read-write-20",
+    "numerals-to-20",
+    "number-words-to-20",
+    "ten-and-a-bit"
+  ],
   "questions": [
     {
+      "id": "n20-3-1",
       "kind": "multiple-choice",
-      "id": "rw20h-17",
-      "prompt": "Which number is seventeen?",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "prompt": "Which number is eighteen?",
       "options": [
         {
           "id": "a",
-          "label": "17"
-        },
-        {
-          "id": "b",
           "label": "18"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "19"
         },
         {
+          "id": "c",
+          "label": "20"
+        },
+        {
           "id": "d",
-          "label": "71"
+          "label": "80"
         }
       ],
       "correctId": "a",
-      "explanation": "Seventeen is written as 17.",
+      "explanation": "Eighteen is 18, not 80. The tens digit is 1.",
       "narration": {
-        "prompt": "Which number is seventeen?"
-      }
-    },
-    {
-      "kind": "fill-blank",
-      "id": "rw20h-write-19",
-      "prompt": "Type the number nineteen.",
-      "acceptedAnswers": [
-        "19",
-        "nineteen"
-      ],
-      "inputMode": "numeric",
-      "explanation": "Nineteen is written as 19.",
-      "narration": {
-        "prompt": "Type the number nineteen."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "rw20h-ten-bit-19",
-      "prompt": "19 is 10 and how many more?",
+        "prompt": "Which number is eighteen?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
-          "label": "10"
-        },
-        {
-          "id": "d",
-          "label": "7"
-        }
-      ],
-      "correctId": "a",
-      "explanation": "19 is 10 and 9.",
-      "narration": {
-        "prompt": "nineteen is ten and how many more?"
       }
     },
     {
+      "id": "n20-3-2",
       "kind": "match-pairs",
-      "id": "rw20h-match-12",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
+      "prompt": "Select the card that matches the picture.",
       "pairs": [
         {
           "id": "p1",
-          "left": "12",
-          "right": "twelve"
+          "left": {
+            "tenFrame": {
+              "count": 13,
+              "item": "apple",
+              "parts": [
+                10,
+                3
+              ]
+            }
+          },
+          "right": "13"
         }
       ],
       "choices": [
-        "twelve",
-        "eleven",
-        "twenty",
-        "thirteen"
+        "13",
+        "30",
+        "14",
+        "3"
       ],
-      "explanation": "12 is written as twelve.",
+      "explanation": "10 and 3 make 13, not 30.",
       "narration": {
-        "prompt": "Select the card that matches the number."
+        "prompt": "Select the card that matches the picture."
       },
       "mode": "one-at-a-time"
     },
     {
+      "id": "n20-3-3",
+      "kind": "multiple-choice",
+      "prompt": "14 is 10 and how many more?",
+      "tenFrame": {
+        "count": 14,
+        "item": "frog",
+        "parts": [
+          10,
+          4
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "14 is 10 and 4. The extra bit is 4, not 1.",
+      "narration": {
+        "prompt": "14 is 10 and how many more?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "n20-3-4",
+      "kind": "multiple-choice",
+      "prompt": "Which number is twelve?",
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "13"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "20"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Twelve is 12, not 20. Those words sound close.",
+      "narration": {
+        "prompt": "Which number is twelve?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "n20-3-5",
+      "kind": "fill-blank",
+      "prompt": "Type the number eighteen.",
+      "acceptedAnswers": [
+        "18",
+        "eighteen"
+      ],
+      "inputMode": "numeric",
+      "explanation": "Eighteen is 18. That is 10 and 8.",
+      "narration": {
+        "prompt": "Type the number eighteen."
+      }
+    },
+    {
+      "id": "n20-3-6",
       "kind": "match-pairs",
-      "id": "rw20h-match-15",
       "prompt": "Select the card that matches the number.",
-      "randomise": {},
       "pairs": [
         {
           "id": "p1",
           "left": "15",
-          "right": "fifteen"
+          "right": {
+            "label": "fifteen"
+          }
         }
       ],
       "choices": [
-        "fourteen",
-        "fifteen",
-        "sixteen",
-        "five"
+        {
+          "label": "fifteen"
+        },
+        {
+          "label": "fifty"
+        },
+        {
+          "label": "fourteen"
+        },
+        {
+          "label": "five"
+        }
       ],
-      "explanation": "15 is written as fifteen.",
+      "explanation": "15 is fifteen, not fifty.",
       "narration": {
         "prompt": "Select the card that matches the number."
       },
       "mode": "one-at-a-time"
     },
     {
-      "kind": "match-pairs",
-      "id": "rw20h-match-18",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "id": "n20-3-7",
+      "kind": "multiple-choice",
+      "prompt": "Which number is 10 and 8 more?",
+      "options": [
         {
-          "id": "p1",
-          "left": "18",
-          "right": "eighteen"
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "18"
         }
       ],
-      "choices": [
-        "eighteen",
-        "eight",
-        "nineteen",
-        "seventeen"
-      ],
-      "explanation": "18 is written as eighteen.",
+      "correctId": "d",
+      "explanation": "10 and 8 more is 18, not 80.",
       "narration": {
-        "prompt": "Select the card that matches the number."
+        "prompt": "Which number is 10 and 8 more?"
       },
-      "mode": "one-at-a-time"
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "match-pairs",
-      "id": "rw20h-match-20",
-      "prompt": "Find the word for this number.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "20",
-          "right": "twenty"
-        }
-      ],
-      "choices": [
-        "twelve",
-        "twenty",
-        "thirty",
-        "ten"
-      ],
-      "explanation": "20 is written as twenty.",
-      "narration": {
-        "prompt": "Find the word for this number."
-      },
-      "mode": "one-at-a-time"
-    },
-    {
+      "id": "n20-3-8",
       "kind": "ordered",
-      "id": "rw20h-order",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
         {
@@ -222,80 +261,103 @@
           "label": "20"
         },
         {
-          "id": "n11",
-          "label": "11"
+          "id": "n17",
+          "label": "17"
+        },
+        {
+          "id": "n19",
+          "label": "19"
         },
         {
           "id": "n18",
           "label": "18"
-        },
-        {
-          "id": "n15",
-          "label": "15"
-        },
-        {
-          "id": "n13",
-          "label": "13"
         }
       ],
       "correctOrder": [
-        "n11",
-        "n13",
-        "n15",
+        "n17",
         "n18",
+        "n19",
         "n20"
       ],
-      "explanation": "The numbers go 11, 13, 15, 18, 20 from smallest to biggest.",
+      "explanation": "The numbers go 17, 18, 19, 20.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
     },
     {
-      "kind": "fill-blank",
-      "id": "rw20h-twelve-word",
-      "prompt": "Type the word for 12.",
-      "acceptedAnswers": [
-        "twelve",
-        "12"
-      ],
-      "inputMode": "text",
-      "explanation": "12 is written as twelve.",
-      "narration": {
-        "prompt": "Type the word for 12."
-      }
-    },
-    {
-      "kind": "multi-select",
-      "id": "rw20h-correct",
-      "prompt": "Tap every correct match. There are 2 to choose.",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
+      "id": "n20-3-9",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "pairs": [
         {
-          "id": "a",
-          "label": "11 = eleven"
-        },
-        {
-          "id": "b",
-          "label": "15 = fifty"
-        },
-        {
-          "id": "c",
-          "label": "16 = sixteen"
-        },
-        {
-          "id": "d",
-          "label": "20 = twelve"
+          "id": "p1",
+          "left": {
+            "label": "eleven"
+          },
+          "right": {
+            "tenFrame": {
+              "count": 11,
+              "item": "duck",
+              "parts": [
+                10,
+                1
+              ]
+            }
+          }
         }
       ],
-      "correctIds": [
-        "a",
-        "c"
+      "choices": [
+        {
+          "tenFrame": {
+            "count": 11,
+            "item": "duck",
+            "parts": [
+              10,
+              1
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 12,
+            "item": "duck",
+            "parts": [
+              10,
+              2
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 10,
+            "item": "duck"
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 20,
+            "item": "duck"
+          }
+        }
       ],
-      "explanation": "11 is eleven. 16 is sixteen.",
+      "explanation": "Eleven is 10 and 1, not 12.",
       "narration": {
-        "prompt": "Tap every correct match. There are two to choose."
+        "prompt": "Select the card that matches the number."
+      },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "n20-3-10",
+      "kind": "fill-blank",
+      "prompt": "Type the number thirteen.",
+      "acceptedAnswers": [
+        "13",
+        "thirteen"
+      ],
+      "inputMode": "numeric",
+      "explanation": "Thirteen is 13, not 30.",
+      "narration": {
+        "prompt": "Type the number thirteen."
       }
     }
   ]

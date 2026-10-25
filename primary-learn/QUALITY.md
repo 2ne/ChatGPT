@@ -216,7 +216,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 
 Rule 9 is CSS. Rule 11 is CSS. The rest fail `check:activities`.
 
-TODO later rewrite (temporary allowlist, do not grow it): Everyday shapes still uses repeated stems and copied-number distractors. That family skips content rules 1 to 5 and 7 until its rewrite. Show and compare numbers and More, less, same were just rewritten. They skip the same content rules. Narration and Hard thinking still apply.
+TODO later rewrite (temporary allowlist, do not grow it): Everyday shapes still uses repeated stems and copied-number distractors. That family skips content rules 1 to 5 and 7 until its rewrite. Show and compare numbers was just rewritten and skips the same content rules. Narration and Hard thinking still apply.
 - [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)
 
 ## Elevating written sentences (later)

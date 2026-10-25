@@ -2040,6 +2040,18 @@ button.object-token {
   border-color: color-mix(in srgb, var(--tf-fill) 65%, #000);
 }
 
+.ten-frame-cell.is-part-b {
+  --tf-fill-b: #0ea5e9;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--tf-fill-b) 0 3px,
+    #fff 3px 6px
+  );
+  border: 2px solid #0369a1;
+  outline: 1.5px dashed #0369a1;
+  outline-offset: -3px;
+}
+
 .ten-frame-slot.is-pad {
   visibility: hidden;
 }

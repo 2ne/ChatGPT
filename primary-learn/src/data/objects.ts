@@ -106,11 +106,15 @@ export function describeTenFrame(frame: TenFrameAsset): string {
   const item = frame.item ?? "apple";
   const words = OBJECT_WORDS[item];
   const noun = frame.count === 1 ? words.singular : words.plural;
-  return `ten frame showing ${frame.count} ${noun}`;
+  const parts = frame.parts ? ` in two parts, ${frame.parts[0]} and ${frame.parts[1]}` : "";
+  const pairs = frame.pairs ? " grouped in pairs" : "";
+  return `ten frame showing ${frame.count} ${noun}${parts}${pairs}`;
 }
 
 export function tenFrameKey(frame: TenFrameAsset): string {
-  return `ten-frame:${frame.count}:${frame.item ?? "apple"}`;
+  const parts = frame.parts ? `:${frame.parts[0]}-${frame.parts[1]}` : "";
+  const pairs = frame.pairs ? ":pairs" : "";
+  return `ten-frame:${frame.count}:${frame.item ?? "apple"}${parts}${pairs}`;
 }
 
 export function describeBaseTen(model: BaseTenAsset): string {

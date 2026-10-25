@@ -1,22 +1,37 @@
 {
+  "subject": "maths",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "questionCount": 10,
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
   "id": "bonds-within-20-hard",
   "title": "Bonds within 20",
-  "summary": "Find pairs of numbers within 20 and use them to take away.",
-  "subject": "maths",
+  "summary": "Find pairs within 20, including bonds that bridge through ten.",
   "type": "number-bonds",
   "yearGroups": [
     "Year1"
   ],
   "ability": "greater-depth",
-  "estimatedMinutes": 6,
-  "masteryThreshold": 0.8,
   "curriculumRef": "y1-bonds-20",
   "pathNode": "y1-bonds-20",
   "difficulty": 3,
-  "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 completes 20 with zero. Q2 recalls 20 take away zero. Q3 finds 17 from zero and 17. Q4 reverses a missing part for 16. Q5 uses the related subtraction 16 take away 9. Q6 selects parts of 18. Q7 completes 19 from 8. Q8 finds a missing part of 20. Q9 recalls 20 take away 13. Q10 applies the bond 8 and 12 in a take-away story. No hints.",
-    "versus": "Easy represents totals from 11 to 20 using a known ten and pictures, then related subtraction. Medium varies the known part and reverses the missing part in totals to 20. Hard mixes less familiar bonds, missing wholes and related subtraction. The take-away story uses a look-only picture. All totals stay within 20."
+    "within": "Q1 bridges 8 + 6. Q2 asks what 9 and 7 make. Q3 completes 6 to make 15. Q4 is 20 take away 4. Q5 completes 5 to make 13. Q6 picks a pair for 18. Q7 reverses 14 take away 5. Q8 sees 17. Q9 types 8 + 7. Q10 is missing whole 11.",
+    "versus": "Easy uses two frames and bridging through ten like 8 + 5. Medium varies the known part. Hard mixes missing wholes and take-away. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "y1-bonds-20",
@@ -26,190 +41,214 @@
   ],
   "questions": [
     {
-      "kind": "make-total",
-      "prompt": "What do you need to add to 20 to make 20?",
-      "explanation": "20 and 0 make 20.",
-      "narration": {
-        "prompt": "What do you need to add to twenty to make twenty?"
-      },
-      "total": 20,
-      "gap": "right",
-      "mode": "sum-only",
-      "part": 20,
-      "options": [
-        {
-          "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
-          "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "20"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-1"
-    },
-    {
+      "id": "b20-3-1",
       "kind": "multiple-choice",
-      "prompt": "What is 20 take away 0?",
-      "explanation": "20 take away 0 is 20. 20 and 0 make 20.",
-      "narration": {
-        "prompt": "What is twenty take away zero?"
+      "prompt": "What is 8 + 6?",
+      "tenFrame": {
+        "count": 14,
+        "item": "apple",
+        "parts": [
+          8,
+          6
+        ]
       },
       "options": [
         {
           "id": "a",
-          "label": "20"
+          "label": "14"
         },
         {
           "id": "b",
-          "label": "19"
+          "label": "15"
         },
         {
           "id": "c",
-          "label": "21"
+          "label": "16"
         },
         {
           "id": "d",
-          "label": "18"
+          "label": "86"
         }
       ],
       "correctId": "a",
+      "explanation": "8 and 2 make 10, then 4 more is 14.",
+      "narration": {
+        "prompt": "What is eight plus six?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-2"
+      }
     },
     {
+      "id": "b20-3-2",
       "kind": "part-whole",
-      "prompt": "What do 0 and 17 make?",
-      "explanation": "0 and 17 make 17.",
-      "narration": {
-        "prompt": "What do zero and seventeen make?"
-      },
-      "whole": 17,
+      "prompt": "What do 9 and 7 make?",
+      "whole": 16,
       "parts": [
-        0,
-        17
+        9,
+        7
       ],
       "missing": "whole",
       "choices": [
-        17,
+        15,
         16,
-        18
+        17
       ],
-      "id": "bonds-within-20-3-3"
+      "explanation": "9 and 1 make 10, then 6 more is 16.",
+      "narration": {
+        "prompt": "What do 9 and 7 make?"
+      }
     },
     {
+      "id": "b20-3-3",
       "kind": "make-total",
-      "prompt": "What do you need to add to 7 to make 16?",
-      "explanation": "7 and 9 make 16.",
+      "prompt": "What do you need to add to 6 to make 15?",
+      "part": 6,
+      "total": 15,
+      "gap": "right",
+      "mode": "fill-slots",
+      "explanation": "6 and 9 make 15. 6 needs 4 to make 10, then 5 more.",
       "narration": {
-        "prompt": "What do you need to add to seven to make sixteen?"
+        "prompt": "What do you need to add to 6 to make 15?"
       },
-      "total": 16,
-      "gap": "left",
-      "mode": "sum-only",
-      "part": 7,
-      "options": [
-        {
-          "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
-          "label": "7"
-        },
-        {
-          "id": "d",
-          "label": "6"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-4"
+      "visual": {
+        "item": "star",
+        "count": 6
+      }
     },
     {
+      "id": "b20-3-4",
       "kind": "multiple-choice",
-      "prompt": "What is 16 take away 9?",
-      "explanation": "16 take away 9 is 7. 7 and 9 make 16.",
-      "narration": {
-        "prompt": "What is sixteen take away nine?"
-      },
+      "prompt": "What is 20 take away 4?",
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "16"
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "17"
         },
         {
           "id": "c",
-          "label": "9"
+          "label": "18"
         },
         {
           "id": "d",
-          "label": "25"
+          "label": "24"
         }
       ],
       "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-5"
-    },
-    {
-      "kind": "pick-pair",
-      "prompt": "What two numbers make 18?",
-      "explanation": "7 and 11 make 18.",
+      "explanation": "20 take away 4 is 16. Not 24.",
       "narration": {
-        "prompt": "What two numbers make eighteen?"
+        "prompt": "What is 20 take away 4?"
       },
-      "total": 18,
-      "tiles": [
-        7,
-        11,
-        3,
-        4
-      ],
-      "showDots": true,
       "randomise": {
         "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-6"
+      }
     },
     {
+      "id": "b20-3-5",
       "kind": "make-total",
-      "prompt": "What do you need to add to 8 to make 19?",
-      "explanation": "8 and 11 make 19.",
-      "narration": {
-        "prompt": "What do you need to add to eight to make nineteen?"
-      },
-      "total": 19,
+      "prompt": "What do you need to add to 5 to make 13?",
+      "part": 5,
+      "total": 13,
       "gap": "right",
       "mode": "sum-only",
-      "part": 8,
       "options": [
         {
           "id": "a",
-          "label": "11"
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "5 and 8 make 13. Not another 5.",
+      "narration": {
+        "prompt": "What do you need to add to 5 to make 13?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "b20-3-6",
+      "kind": "pick-pair",
+      "prompt": "What two numbers make 18?",
+      "total": 18,
+      "tiles": [
+        10,
+        8,
+        9,
+        7
+      ],
+      "showDots": true,
+      "explanation": "10 and 8 make 18. 9 and 7 do not.",
+      "narration": {
+        "prompt": "What two numbers make 18?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "b20-3-7",
+      "kind": "multiple-choice",
+      "prompt": "What is 14 take away 5?",
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "19"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "14 take away 4 is 10, then one more off is 9.",
+      "narration": {
+        "prompt": "What is 14 take away 5?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "b20-3-8",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 17,
+        "item": "fish",
+        "parts": [
+          10,
+          7
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
         },
         {
           "id": "b",
@@ -221,100 +260,51 @@
         },
         {
           "id": "d",
-          "label": "9"
+          "label": "17"
         }
       ],
+      "correctId": "d",
+      "explanation": "10 and 7 make 17. Add both frames.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-7"
+      }
     },
     {
+      "id": "b20-3-9",
+      "kind": "fill-blank",
+      "prompt": "What is 8 + 7?",
+      "acceptedAnswers": [
+        "15",
+        "fifteen"
+      ],
+      "inputMode": "numeric",
+      "explanation": "8 and 2 make 10, then 5 more is 15.",
+      "narration": {
+        "prompt": "What is eight plus seven?"
+      }
+    },
+    {
+      "id": "b20-3-10",
       "kind": "part-whole",
-      "prompt": "11 and what make 20?",
-      "explanation": "9 and 11 make 20.",
-      "narration": {
-        "prompt": "11 and what make 20?"
-      },
-      "whole": 20,
+      "prompt": "What do 11 and 4 make?",
+      "whole": 15,
       "parts": [
-        9,
-        11
+        11,
+        4
       ],
-      "missing": "left",
+      "missing": "whole",
       "choices": [
-        9,
-        8,
-        10
+        14,
+        15,
+        16
       ],
-      "id": "bonds-within-20-3-8"
-    },
-    {
-      "kind": "multiple-choice",
-      "prompt": "What is 20 take away 13?",
-      "explanation": "20 take away 13 is 7. 7 and 13 make 20.",
+      "explanation": "11 and 4 make 15. Not 14.",
       "narration": {
-        "prompt": "What is twenty take away thirteen?"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "7"
-        },
-        {
-          "id": "b",
-          "label": "6"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        },
-        {
-          "id": "d",
-          "label": "4"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-9"
-    },
-    {
-      "kind": "multiple-choice",
-      "prompt": "Sam has 20 apples and gives away 8. How many are left?",
-      "explanation": "8 and 12 make 20. Taking 8 away from 20 leaves 12 apples.",
-      "narration": {
-        "prompt": "Sam has twenty apples and gives away eight. How many are left?"
-      },
-      "visual": {
-        "item": "apple",
-        "count": 20,
-        "removed": 8
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "12"
-        },
-        {
-          "id": "b",
-          "label": "13"
-        },
-        {
-          "id": "c",
-          "label": "14"
-        },
-        {
-          "id": "d",
-          "label": "21"
-        }
-      ],
-      "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "id": "bonds-within-20-3-10"
+        "prompt": "What do 11 and 4 make?"
+      }
     }
   ]
 }

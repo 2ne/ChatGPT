@@ -30,12 +30,12 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `bonds-to-5` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Easy: partners that make 5, then related take-away |
 | `bonds-to-5-medium` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Medium: 0, reverse 5 = blank + n, more take-away |
 | `bonds-to-5-hard` | `eyfs-bonds-5` (node 4, category `cat-r-to-5`) | done — Hard: recall bonds and related subtraction with numeric choices |
-| `count-to-10` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Easy: tidy tap-count 6 to 10, tens-frame, build 10, sequence and match |
+| `count-to-10` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Easy: scatter practice, 5 and a bit, count out 7 |
 | `count-to-10-medium` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Medium: scattered groups, build 8, tens-frame 10, order 7 to 10 |
 | `count-to-10-hard` | `eyfs-count-10` (node 5, category `cat-r-to-10`) | done — Hard: count one kind among mixed objects, numeral match, order 6 to 10 |
-| `more-less-same` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Easy: more, fewer and same with clear gaps |
+| `more-less-same` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Easy: same-size frames and dice, mixed match sides |
 | `more-less-same-medium` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Medium: closer counts, scatter, order four groups |
-| `more-less-same-hard` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Hard: near-equal groups, same-as, story compare |
+| `more-less-same-hard` | `eyfs-compare-10` (node 6, category `cat-r-to-10`) | done — Hard: near-equal groups, mixed match sides, no 2-to-choose hint |
 | `make-numbers-to-10` | `eyfs-compose-10` (node 7, category `cat-r-to-10`) | done — Easy: composition parts to 8, pick-pair, story join |
 | `make-numbers-to-10-medium` | `eyfs-compose-10` (node 7, category `cat-r-to-10`) | done — Medium: 8 to 10 including 0, reverse-friendly tiles |
 | `make-numbers-to-10-hard` | `eyfs-compose-10` (node 7, category `cat-r-to-10`) | done — Hard: compose 6 to 10 with zero, reversed parts and missing wholes |

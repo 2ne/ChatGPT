@@ -1,28 +1,8 @@
 {
-  "id": "doubles-and-bonds-medium",
-  "title": "Doubles and bonds",
-  "summary": "Practise doubles, then pairs of numbers that make 10.",
   "subject": "maths",
-  "type": "number-bonds",
-  "yearGroups": [
-    "Reception"
-  ],
-  "ability": "expected",
-  "estimatedMinutes": 6,
+  "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
-  "curriculumRef": "eyfs-bonds-10-some",
-  "pathNode": "eyfs-bonds-10-some",
-  "difficulty": 2,
   "questionCount": 10,
-  "difficultyRamp": {
-    "within": "Questions 1 to 4 practise doubles in ascending order. The next questions practise bonds to 10, including the double 5. Pictures, part-whole diagrams and four-tile pairs support the transition to bond recall.",
-    "versus": "Easy practises doubles 1 to 4 before pictured bonds to 10. Medium starts with doubles to 10, then practises bonds 2 and 8 and 5 and 5. Hard mixes doubles and bonds after short blocks, without number words or unrelated subtraction."
-  },
-  "skills": [
-    "eyfs-bonds-10-some",
-    "doubles-within-10",
-    "some-bonds-to-10"
-  ],
   "randomise": {
     "mode": "attempt",
     "items": [
@@ -38,51 +18,39 @@
       "strawberry"
     ]
   },
+  "id": "doubles-and-bonds-medium",
+  "title": "Doubles and bonds",
+  "summary": "See doubles as two equal parts and recall some bonds to 10.",
+  "type": "number-bonds",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "expected",
+  "curriculumRef": "eyfs-bonds-10-some",
+  "pathNode": "eyfs-bonds-10-some",
+  "difficulty": 2,
+  "difficultyRamp": {
+    "within": "Q1 sees double 3. Q2 adds 5 and 5. Q3 asks half of 10. Q4 completes 2 to make 10. Q5 picks a pair for 10. Q6 sees double 4. Q7 asks half of 6. Q8 is part-whole 8. Q9 types double 2. Q10 orders 4, 6, 10.",
+    "versus": "Easy shows doubles as two equal parts, then bonds to 10. Medium links double to half. Hard reverses double and half. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "eyfs-bonds-10-some",
+    "doubles-within-10",
+    "some-bonds-to-10"
+  ],
   "questions": [
     {
-      "kind": "make-total",
-      "id": "db-m-double-2",
-      "prompt": "What is 2 + 2?",
-      "explanation": "2 and 2 make 4.",
-      "narration": {
-        "prompt": "What is two plus two?"
+      "id": "db-2-1",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 6,
+        "item": "apple",
+        "parts": [
+          3,
+          3
+        ]
       },
-      "part": 2,
-      "other": 2,
-      "total": 4,
-      "gap": "total",
-      "mode": "sum-only",
-      "options": [
-        {
-          "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
-          "label": "6"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "db-m-double-3",
-      "prompt": "What is 3 + 3?",
-      "explanation": "3 and 3 make 6.",
-      "narration": {
-        "prompt": "What is three plus three?"
-      },
-      "part": 3,
-      "other": 3,
-      "total": 6,
-      "gap": "total",
-      "mode": "sum-only",
       "options": [
         {
           "id": "a",
@@ -90,56 +58,26 @@
         },
         {
           "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
           "label": "7"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "db-m-double-4",
-      "prompt": "What is 4 + 4?",
-      "explanation": "4 and 4 make 8.",
-      "narration": {
-        "prompt": "What is four plus four?"
-      },
-      "part": 4,
-      "other": 4,
-      "total": 8,
-      "gap": "total",
-      "mode": "sum-only",
-      "options": [
+        },
         {
-          "id": "a",
+          "id": "c",
           "label": "8"
-        },
-        {
-          "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
-          "label": "6"
         }
       ],
+      "correctId": "a",
+      "explanation": "3 and 3 make 6. That is a double, not 3.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
       "randomise": {
         "shuffleOptions": true
       }
     },
     {
+      "id": "db-2-2",
       "kind": "make-total",
-      "id": "db-m-double-5",
-      "prompt": "What do 5 and 5 make?",
-      "explanation": "5 and 5 make 10.",
-      "narration": {
-        "prompt": "What do five and five make?"
-      },
+      "prompt": "What is 5 + 5?",
       "part": 5,
       "other": 5,
       "total": 10,
@@ -148,85 +86,38 @@
       "options": [
         {
           "id": "a",
-          "label": "10"
+          "label": "8"
         },
         {
           "id": "b",
-          "label": "11"
+          "label": "10"
         },
         {
           "id": "c",
-          "label": "12"
+          "label": "9"
         }
       ],
+      "correctId": "b",
+      "explanation": "5 and 5 make 10. That is a double.",
+      "narration": {
+        "prompt": "What is five plus five?"
+      },
       "randomise": {
         "shuffleOptions": true
       }
     },
     {
-      "kind": "make-total",
-      "id": "db-m-bond-2",
-      "prompt": "What do you need to add to 2 to make 10?",
-      "explanation": "2 and 8 make 10.",
-      "narration": {
-        "prompt": "What do you need to add to two to make ten?"
+      "id": "db-2-3",
+      "kind": "multiple-choice",
+      "prompt": "What is half of 10?",
+      "tenFrame": {
+        "count": 10,
+        "item": "frog",
+        "parts": [
+          5,
+          5
+        ]
       },
-      "visual": {
-        "item": "apple",
-        "count": 2
-      },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {}
-    },
-    {
-      "kind": "make-total",
-      "id": "db-m-bond-8",
-      "prompt": "What do you need to add to 8 to make 10?",
-      "explanation": "8 and 2 make 10.",
-      "narration": {
-        "prompt": "What do you need to add to eight to make ten?"
-      },
-      "visual": {
-        "item": "apple",
-        "count": 8
-      },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {}
-    },
-    {
-      "kind": "pick-pair",
-      "id": "db-m-pair-10",
-      "prompt": "What two numbers make 10?",
-      "explanation": "2 and 8 make 10.",
-      "narration": {
-        "prompt": "What two numbers make ten?"
-      },
-      "total": 10,
-      "tiles": [
-        2,
-        8,
-        0,
-        3
-      ],
-      "showDots": true,
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "db-m-bond-5",
-      "prompt": "What do you need to add to 5 to make 10?",
-      "explanation": "5 and 5 make 10.",
-      "narration": {
-        "prompt": "What do you need to add to five to make ten?"
-      },
-      "part": 5,
-      "total": 10,
-      "gap": "right",
-      "mode": "sum-only",
       "options": [
         {
           "id": "a",
@@ -234,65 +125,203 @@
         },
         {
           "id": "b",
-          "label": "4"
+          "label": "6"
         },
         {
           "id": "c",
-          "label": "6"
+          "label": "8"
         }
       ],
+      "correctId": "a",
+      "explanation": "Half of 10 is 5. Each equal part is 5.",
+      "narration": {
+        "prompt": "What is half of 10?"
+      },
       "randomise": {
         "shuffleOptions": true
       }
     },
     {
-      "kind": "part-whole",
-      "id": "db-m-whole-10",
-      "prompt": "What do 5 and 5 make?",
-      "explanation": "5 and 5 make 10.",
-      "narration": {
-        "prompt": "What do five and five make?"
+      "id": "db-2-4",
+      "kind": "multiple-choice",
+      "prompt": "What do you need to add to 2 to make 10?",
+      "tenFrame": {
+        "count": 2,
+        "item": "fish"
       },
-      "whole": 10,
-      "parts": [
-        5,
-        5
-      ],
-      "missing": "whole",
-      "choices": [
-        10,
-        9,
-        11
-      ]
-    },
-    {
-      "kind": "make-total",
-      "id": "db-m-bond-2-recall",
-      "prompt": "2 and what make 10?",
-      "explanation": "2 and 8 make 10.",
-      "narration": {
-        "prompt": "2 and what make 10?"
-      },
-      "part": 2,
-      "total": 10,
-      "gap": "right",
-      "mode": "sum-only",
       "options": [
         {
           "id": "a",
-          "label": "8"
+          "label": "7"
         },
         {
           "id": "b",
-          "label": "7"
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "2 and 8 make 10. The empty cells show 8.",
+      "narration": {
+        "prompt": "What do you need to add to 2 to make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "db-2-5",
+      "kind": "pick-pair",
+      "prompt": "What two numbers make 10?",
+      "total": 10,
+      "tiles": [
+        7,
+        3,
+        4,
+        9
+      ],
+      "showDots": true,
+      "explanation": "7 and 3 make 10. 4 and 9 do not.",
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "db-2-6",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 8,
+        "item": "apple",
+        "parts": [
+          4,
+          4
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "8"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "4 and 4 make 8. That is a double, not 4.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "db-2-7",
+      "kind": "multiple-choice",
+      "prompt": "What is half of 6?",
+      "tenFrame": {
+        "count": 6,
+        "item": "duck",
+        "parts": [
+          3,
+          3
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
         },
         {
           "id": "c",
           "label": "6"
         }
       ],
+      "correctId": "b",
+      "explanation": "Half of 6 is 3. Each equal part is 3.",
+      "narration": {
+        "prompt": "What is half of 6?"
+      },
       "randomise": {
         "shuffleOptions": true
+      }
+    },
+    {
+      "id": "db-2-8",
+      "kind": "part-whole",
+      "prompt": "What do you need to add to 8 to make 10?",
+      "whole": 10,
+      "parts": [
+        8,
+        2
+      ],
+      "missing": "right",
+      "choices": [
+        1,
+        2,
+        3
+      ],
+      "explanation": "8 and 2 make 10. Not 1.",
+      "narration": {
+        "prompt": "What do you need to add to 8 to make 10?"
+      }
+    },
+    {
+      "id": "db-2-9",
+      "kind": "fill-blank",
+      "prompt": "What is 2 + 2?",
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
+      "inputMode": "numeric",
+      "explanation": "2 and 2 make 4. That is a double.",
+      "narration": {
+        "prompt": "What is two plus two?"
+      }
+    },
+    {
+      "id": "db-2-10",
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        },
+        {
+          "id": "n6",
+          "label": "6"
+        }
+      ],
+      "correctOrder": [
+        "n4",
+        "n6",
+        "n10"
+      ],
+      "explanation": "The numbers go 4, 6, 10. Those are doubles.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
       }
     }
   ]

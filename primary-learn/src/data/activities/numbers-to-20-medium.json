@@ -1,29 +1,8 @@
 {
-  "id": "numbers-to-20-medium",
-  "title": "Numbers to 20",
-  "summary": "Read and write numbers to 20, and break teens into ten and a bit.",
   "subject": "maths",
-  "type": "place-value",
-  "yearGroups": [
-    "Year1"
-  ],
-  "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
-  "curriculumRef": "y1-read-write-20",
-  "pathNode": "y1-read-write-20",
-  "difficulty": 2,
   "questionCount": 10,
-  "difficultyRamp": {
-    "within": "Questions 1 to 2 match awkward teens (14, 19). Question 3 writes 17. Question 4 is ten and a bit for 14. Question 5 matches words across teens. Question 6 orders to 20. Question 7 fills eighteen. Question 8 multi-select numerals that are teens. Question 9 is ten and a bit for 18. Question 10 matches reverse numeral to word.",
-    "versus": "Easy matches numerals and words to 12 with clear teens. Medium stretches to 20 and ten-and-a-bit. Hard mixes reverse matching, fill-blank words and awkward teens."
-  },
-  "skills": [
-    "y1-read-write-20",
-    "numerals-to-20",
-    "number-words-to-20",
-    "ten-and-a-bit"
-  ],
   "randomise": {
     "mode": "attempt",
     "items": [
@@ -39,14 +18,160 @@
       "strawberry"
     ]
   },
+  "id": "numbers-to-20-medium",
+  "title": "Numbers to 20",
+  "summary": "Read and write numbers to 20, and see teens as ten and a bit.",
+  "type": "place-value",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "curriculumRef": "y1-read-write-20",
+  "pathNode": "y1-read-write-20",
+  "difficulty": 2,
+  "difficultyRamp": {
+    "within": "Q1 picks seventeen. Q2 matches 12 to a frame. Q3 sees 15 as 10 and 5. Q4 picks nineteen. Q5 types 16. Q6 matches sixteen. Q7 picks 10 and 7 more. Q8 orders 16 to 19. Q9 matches 20. Q10 picks 10 and 9 more.",
+    "versus": "Easy matches teen words to numerals with thirteen and thirty traps, plus ten and a bit. Medium stretches to 20. Hard reverses word and numeral and uses awkward teens. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "y1-read-write-20",
+    "numerals-to-20",
+    "number-words-to-20",
+    "ten-and-a-bit"
+  ],
   "questions": [
     {
+      "id": "n20-2-1",
       "kind": "multiple-choice",
-      "id": "rw20m-19",
-      "prompt": "Which number is nineteen?",
+      "prompt": "Which number is seventeen?",
+      "options": [
+        {
+          "id": "a",
+          "label": "17"
+        },
+        {
+          "id": "b",
+          "label": "18"
+        },
+        {
+          "id": "c",
+          "label": "19"
+        },
+        {
+          "id": "d",
+          "label": "70"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Seventeen is 17, not 70. The tens digit is 1.",
+      "narration": {
+        "prompt": "Which number is seventeen?"
+      },
       "randomise": {
         "shuffleOptions": true
+      }
+    },
+    {
+      "id": "n20-2-2",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "12",
+          "right": {
+            "tenFrame": {
+              "count": 12,
+              "item": "apple",
+              "parts": [
+                10,
+                2
+              ]
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
+          "tenFrame": {
+            "count": 11,
+            "item": "apple",
+            "parts": [
+              10,
+              1
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 12,
+            "item": "apple",
+            "parts": [
+              10,
+              2
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 13,
+            "item": "apple",
+            "parts": [
+              10,
+              3
+            ]
+          }
+        }
+      ],
+      "explanation": "12 is 10 and 2. Not 11 or 20.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
       },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "n20-2-3",
+      "kind": "multiple-choice",
+      "prompt": "15 is 10 and how many more?",
+      "tenFrame": {
+        "count": 15,
+        "item": "frog",
+        "parts": [
+          10,
+          5
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "15 is 10 and 5. The extra bit is 5, not 1.",
+      "narration": {
+        "prompt": "15 is 10 and how many more?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "n20-2-4",
+      "kind": "multiple-choice",
+      "prompt": "Which number is nineteen?",
       "options": [
         {
           "id": "a",
@@ -62,146 +187,103 @@
         },
         {
           "id": "d",
-          "label": "91"
+          "label": "90"
         }
       ],
       "correctId": "a",
-      "hint": "Nineteen comes just before twenty.",
-      "explanation": "Nineteen is written as 19.",
+      "explanation": "Nineteen is 19, not 90. The tens digit is 1.",
       "narration": {
         "prompt": "Which number is nineteen?"
-      }
-    },
-    {
-      "kind": "fill-blank",
-      "id": "rw20m-write-17",
-      "prompt": "Type the number seventeen.",
-      "acceptedAnswers": [
-        "17",
-        "seventeen"
-      ],
-      "inputMode": "numeric",
-      "explanation": "Seventeen is written as 17.",
-      "narration": {
-        "prompt": "Type the number seventeen."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "rw20m-ten-bit-14",
-      "prompt": "14 is 10 and how many more?",
+      },
       "randomise": {
         "shuffleOptions": true
+      }
+    },
+    {
+      "id": "n20-2-5",
+      "kind": "fill-blank",
+      "prompt": "Type the number sixteen.",
+      "acceptedAnswers": [
+        "16",
+        "sixteen"
+      ],
+      "inputMode": "numeric",
+      "explanation": "Sixteen is 16. That is 10 and 6.",
+      "narration": {
+        "prompt": "Type the number sixteen."
+      }
+    },
+    {
+      "id": "n20-2-6",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "label": "sixteen"
+          },
+          "right": "16"
+        }
+      ],
+      "choices": [
+        "16",
+        "17",
+        "60"
+      ],
+      "explanation": "Sixteen is 16, not 60.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
       },
+      "mode": "one-at-a-time"
+    },
+    {
+      "id": "n20-2-7",
+      "kind": "multiple-choice",
+      "prompt": "Which number is 10 and 7 more?",
       "options": [
         {
           "id": "a",
-          "label": "4"
+          "label": "17"
         },
         {
           "id": "b",
-          "label": "3"
+          "label": "18"
         },
         {
           "id": "c",
-          "label": "5"
+          "label": "19"
         },
         {
           "id": "d",
-          "label": "2"
+          "label": "70"
         }
       ],
       "correctId": "a",
-      "explanation": "14 is 10 and 4.",
+      "explanation": "10 and 7 more is 17, not 70.",
       "narration": {
-        "prompt": "fourteen is ten and how many more?"
+        "prompt": "Which number is 10 and 7 more?"
+      },
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
-      "kind": "match-pairs",
-      "id": "rw20m-match-11",
-      "prompt": "Select the card that matches the word.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "eleven",
-          "right": "11"
-        }
-      ],
-      "choices": [
-        "11",
-        "10",
-        "12"
-      ],
-      "explanation": "Eleven is written as 11.",
-      "narration": {
-        "prompt": "Select the card that matches the word."
-      },
-      "mode": "one-at-a-time"
-    },
-    {
-      "kind": "match-pairs",
-      "id": "rw20m-match-14",
-      "prompt": "Select the card that matches the word.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "fourteen",
-          "right": "14"
-        }
-      ],
-      "choices": [
-        "13",
-        "14",
-        "15"
-      ],
-      "explanation": "Fourteen is written as 14.",
-      "narration": {
-        "prompt": "Select the card that matches the word."
-      },
-      "mode": "one-at-a-time"
-    },
-    {
-      "kind": "match-pairs",
-      "id": "rw20m-match-19",
-      "prompt": "Select the card that matches the word.",
-      "randomise": {},
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "nineteen",
-          "right": "19"
-        }
-      ],
-      "choices": [
-        "18",
-        "19",
-        "20"
-      ],
-      "explanation": "Nineteen is written as 19.",
-      "narration": {
-        "prompt": "Select the card that matches the word."
-      },
-      "mode": "one-at-a-time"
-    },
-    {
+      "id": "n20-2-8",
       "kind": "ordered",
-      "id": "rw20m-order",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
         {
-          "id": "n20",
-          "label": "20"
+          "id": "n19",
+          "label": "19"
         },
         {
           "id": "n16",
           "label": "16"
         },
         {
-          "id": "n19",
-          "label": "19"
+          "id": "n18",
+          "label": "18"
         },
         {
           "id": "n17",
@@ -211,35 +293,45 @@
       "correctOrder": [
         "n16",
         "n17",
-        "n19",
-        "n20"
+        "n18",
+        "n19"
       ],
-      "explanation": "The numbers go 16, 17, 19, 20 from smallest to biggest.",
+      "explanation": "The numbers go 16, 17, 18, 19.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
     },
     {
-      "kind": "fill-blank",
-      "id": "rw20m-eighteen",
-      "prompt": "Type the number for eighteen.",
-      "acceptedAnswers": [
-        "18",
-        "eighteen"
+      "id": "n20-2-9",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the picture.",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": {
+            "tenFrame": {
+              "count": 20,
+              "item": "duck"
+            }
+          },
+          "right": "20"
+        }
       ],
-      "inputMode": "numeric",
-      "explanation": "Eighteen is written as 18.",
+      "choices": [
+        "12",
+        "18",
+        "20"
+      ],
+      "explanation": "Two full frames make 20, not 10.",
       "narration": {
-        "prompt": "Type the number for eighteen."
-      }
+        "prompt": "Select the card that matches the picture."
+      },
+      "mode": "one-at-a-time"
     },
     {
-      "kind": "multi-select",
-      "id": "rw20m-teen-nums",
-      "prompt": "Tap every teen number. There are 2 to choose.",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "id": "n20-2-10",
+      "kind": "multiple-choice",
+      "prompt": "Which number is 10 and 9 more?",
       "options": [
         {
           "id": "a",
@@ -247,55 +339,24 @@
         },
         {
           "id": "b",
-          "label": "15"
+          "label": "16"
         },
         {
           "id": "c",
-          "label": "20"
+          "label": "18"
         },
         {
           "id": "d",
-          "label": "18"
+          "label": "19"
         }
       ],
-      "correctIds": [
-        "b",
-        "d"
-      ],
-      "explanation": "15 and 18 are teen numbers.",
+      "correctId": "d",
+      "explanation": "10 and 9 more is 19, not 90.",
       "narration": {
-        "prompt": "Tap every teen number. There are two to choose."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "rw20m-word-for",
-      "prompt": "What is the word for 13?",
+        "prompt": "Which number is 10 and 9 more?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "thirty"
-        },
-        {
-          "id": "b",
-          "label": "thirteen"
-        },
-        {
-          "id": "c",
-          "label": "three"
-        },
-        {
-          "id": "d",
-          "label": "twelve"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "13 is written as thirteen.",
-      "narration": {
-        "prompt": "What is the word for 13?"
       }
     }
   ]

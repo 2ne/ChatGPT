@@ -1,29 +1,8 @@
 {
-  "id": "number-bonds-to-10",
-  "title": "Number bonds to 10",
-  "summary": "Know the pairs that make 10, and the take-away facts that go with them.",
   "subject": "maths",
-  "type": "number-bonds",
-  "yearGroups": [
-    "Year1"
-  ],
-  "ability": "emerging",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
-  "curriculumRef": "y1-bonds-10",
-  "pathNode": "y1-bonds-10",
-  "difficulty": 1,
   "questionCount": 10,
-  "difficultyRamp": {
-    "within": "Question 1 What do you need to add to 6 to make 10? Question 2 What two numbers make 10? Question 3 What do you need to add to 8 to make 10? Question 4 What do you need to add to 7 to make 10? Question 5 What do you need to add to 5 to make 10? Question 6 What do you need to add to 0 to make 10? Question 7 What do you need to add to 9 to make 10? Question 8 What two numbers make 10? Question 9 Sam has 10 {items} and gives away 2. How many are left? Question 10 What is 10 take away 4?",
-    "versus": "Easy builds pictured bonds to 10 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
-  },
-  "skills": [
-    "y1-bonds-10",
-    "number-bonds-to-10",
-    "addition-within-10",
-    "subtraction-within-10"
-  ],
   "randomise": {
     "mode": "attempt",
     "items": [
@@ -39,27 +18,67 @@
       "strawberry"
     ]
   },
+  "id": "number-bonds-to-10",
+  "title": "Number bonds to 10",
+  "summary": "Know the pairs that make 10, and the take-away facts that go with them.",
+  "type": "number-bonds",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "curriculumRef": "y1-bonds-10",
+  "pathNode": "y1-bonds-10",
+  "difficulty": 1,
+  "difficultyRamp": {
+    "within": "Q1 completes 6 using empty cells. Q2 picks a pair. Q3 completes 8. Q4 is a fact family. Q5 builds a different way to make 10. Q6 is 10 take away 2. Q7 completes 5. Q8 types the missing part for 9. Q9 is a take-away story. Q10 is part-whole 7.",
+    "versus": "Easy uses empty cells on a ten frame, then a fact family and a new way to make 10. Medium mixes take-away. Hard recalls missing parts without pictures. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "y1-bonds-10",
+    "number-bonds-to-10",
+    "addition-within-10",
+    "subtraction-within-10"
+  ],
   "questions": [
     {
-      "kind": "make-total",
-      "id": "nb10-with-6",
+      "id": "nb10-1-1",
+      "kind": "multiple-choice",
       "prompt": "What do you need to add to 6 to make 10?",
-      "visual": {
-        "item": "star",
-        "count": 6
+      "tenFrame": {
+        "count": 6,
+        "item": "star"
       },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {},
-      "hint": "Count on from the first part. Add one object for each step.",
-      "explanation": "6 and 4 make 10.",
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "7"
+        }
+      ],
+      "correctId": "a",
+      "hint": "The empty cells show the missing part.",
+      "explanation": "6 and 4 make 10. The empty cells are 4, not 5.",
       "narration": {
         "prompt": "What do you need to add to 6 to make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
+      "id": "nb10-1-2",
       "kind": "pick-pair",
-      "id": "nb10-pair",
       "prompt": "What two numbers make 10?",
       "total": 10,
       "tiles": [
@@ -69,132 +88,102 @@
         5
       ],
       "showDots": true,
-      "randomise": {
-        "shuffleOptions": true
-      },
       "hint": "Find two numbers that add to 10.",
-      "explanation": "6 and 4 make 10.",
+      "explanation": "6 and 4 make 10. 2 and 5 do not.",
       "narration": {
         "prompt": "What two numbers make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
-      "kind": "make-total",
-      "id": "nb10-with-8",
+      "id": "nb10-1-3",
+      "kind": "multiple-choice",
       "prompt": "What do you need to add to 8 to make 10?",
-      "visual": {
-        "item": "apple",
-        "count": 8
+      "tenFrame": {
+        "count": 8,
+        "item": "apple"
       },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {},
-      "hint": "Start at 8 and count on to 10.",
-      "explanation": "8 and 2 make 10.",
+      "options": [
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "8 and 2 make 10. Two empty cells are left.",
       "narration": {
         "prompt": "What do you need to add to 8 to make 10?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "nb10-with-7",
-      "prompt": "What do you need to add to 7 to make 10?",
-      "visual": {
-        "item": "duck",
-        "count": 7
       },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {},
-      "explanation": "7 and 3 make 10.",
-      "narration": {
-        "prompt": "What do you need to add to 7 to make 10?"
+      "randomise": {
+        "shuffleOptions": true
       }
     },
     {
-      "kind": "make-total",
-      "id": "nb10-with-5",
-      "prompt": "5 and what make 10?",
+      "id": "nb10-1-4",
+      "kind": "multi-select",
+      "prompt": "Select every correct sum.",
+      "options": [
+        {
+          "id": "a",
+          "label": "7 + 3 = 10"
+        },
+        {
+          "id": "b",
+          "label": "3 + 7 = 10"
+        },
+        {
+          "id": "c",
+          "label": "7 + 2 = 10"
+        },
+        {
+          "id": "d",
+          "label": "10 + 7 = 3"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "b"
+      ],
+      "explanation": "7 and 3, either way, make 10. 7 and 2 do not.",
+      "narration": {
+        "prompt": "Select every correct sum."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "nb10-1-5",
+      "kind": "build-set",
+      "prompt": "Make a group of 10 {items}.",
       "visual": {
         "item": "frog",
-        "count": 5
+        "count": 10
       },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {},
-      "explanation": "5 and 5 make 10. This is double 5.",
+      "bank": 12,
+      "explanation": "A group of 10 has 10 {items}. This is another way to make 10.",
       "narration": {
-        "prompt": "5 and what make 10?"
+        "prompt": "Make a group of 10 {items}."
       }
     },
     {
-      "kind": "part-whole",
-      "id": "nb10-pw-0",
-      "prompt": "0 and what make 10?",
-      "whole": 10,
-      "parts": [
-        0,
-        10
-      ],
-      "missing": "right",
-      "choices": [
-        9,
-        10,
-        11
-      ],
-      "explanation": "0 and 10 make 10.",
-      "narration": {
-        "prompt": "0 and what make 10?"
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "nb10-with-9",
-      "prompt": "9 and what make 10?",
-      "visual": {
-        "item": "balloon",
-        "count": 9
-      },
-      "total": 10,
-      "mode": "fill-slots",
-      "randomise": {},
-      "explanation": "9 and 1 make 10.",
-      "narration": {
-        "prompt": "9 and what make 10?"
-      }
-    },
-    {
-      "kind": "pick-pair",
-      "id": "nb10-every",
-      "prompt": "What two numbers make 10?",
-      "explanation": "4 and 6 make 10.",
-      "narration": {
-        "prompt": "What two numbers make ten?"
-      },
-      "total": 10,
-      "tiles": [
-        4,
-        6,
-        0,
-        3
-      ],
-      "showDots": true,
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
+      "id": "nb10-1-6",
       "kind": "multiple-choice",
-      "id": "nb10-take-2",
-      "prompt": "Sam has 10 {items} and gives away 2. How many are left?",
-      "visual": {
-        "item": "apple",
-        "count": 10,
-        "removed": 2
-      },
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "prompt": "What is 10 take away 2?",
       "options": [
         {
           "id": "a",
@@ -206,7 +195,7 @@
         },
         {
           "id": "c",
-          "label": "10"
+          "label": "11"
         },
         {
           "id": "d",
@@ -214,31 +203,30 @@
         }
       ],
       "correctId": "a",
-      "explanation": "Because 2 + 8 = 10, 10 take away 2 is 8.",
+      "explanation": "10 take away 2 is 8. That bond is 8 and 2.",
       "narration": {
-        "prompt": "Sam has ten {items} and gives away two. How many are left?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "nb10-minus-4",
-      "prompt": "What is 10 take away 4?",
-      "visual": {
-        "item": "apple",
-        "count": 10,
-        "removed": 4
+        "prompt": "What is 10 take away 2?"
       },
       "randomise": {
         "shuffleOptions": true
+      }
+    },
+    {
+      "id": "nb10-1-7",
+      "kind": "multiple-choice",
+      "prompt": "What do you need to add to 5 to make 10?",
+      "tenFrame": {
+        "count": 5,
+        "item": "fish"
       },
       "options": [
         {
           "id": "a",
-          "label": "6"
+          "label": "5"
         },
         {
           "id": "b",
-          "label": "5"
+          "label": "6"
         },
         {
           "id": "c",
@@ -246,13 +234,86 @@
         },
         {
           "id": "d",
-          "label": "4"
+          "label": "8"
         }
       ],
       "correctId": "a",
-      "explanation": "Because 4 + 6 = 10, 10 take away 4 is 6.",
+      "explanation": "5 and 5 make 10. That is a double.",
       "narration": {
-        "prompt": "What is ten take away four?"
+        "prompt": "What do you need to add to 5 to make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "nb10-1-8",
+      "kind": "fill-blank",
+      "prompt": "Type the number that goes with 9 to make 10.",
+      "acceptedAnswers": [
+        "1",
+        "one"
+      ],
+      "inputMode": "numeric",
+      "explanation": "9 and 1 make 10. One empty cell is left.",
+      "narration": {
+        "prompt": "Type the number that goes with 9 to make 10."
+      }
+    },
+    {
+      "id": "nb10-1-9",
+      "kind": "multiple-choice",
+      "prompt": "Sam has 10 stars and gives away 2. How many are left?",
+      "visual": {
+        "item": "star",
+        "count": 10,
+        "removed": 2
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "10 take away 2 is 8. Not 12.",
+      "narration": {
+        "prompt": "Sam has 10 stars and gives away 2. How many are left?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "nb10-1-10",
+      "kind": "part-whole",
+      "prompt": "What do 7 and 3 make?",
+      "whole": 10,
+      "parts": [
+        7,
+        3
+      ],
+      "missing": "whole",
+      "choices": [
+        9,
+        10,
+        11
+      ],
+      "explanation": "7 and 3 make 10. Not 9 or 11.",
+      "narration": {
+        "prompt": "What do 7 and 3 make?"
       }
     }
   ]

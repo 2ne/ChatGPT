@@ -91,6 +91,13 @@ export type ObjectLayout = (typeof OBJECT_LAYOUTS)[number];
 export type TenFrameAsset = {
   count: number;
   item?: ObjectItem;
+  /**
+   * Two-colour split that must add to `count`.
+   * The second part uses a stripe pattern and an outline, not colour alone.
+   */
+  parts?: [number, number];
+  /** Fill down columns so pairs sit together (odd and even). */
+  pairs?: boolean;
 };
 
 /**

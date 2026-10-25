@@ -1,22 +1,37 @@
 {
+  "subject": "maths",
+  "estimatedMinutes": 5,
+  "masteryThreshold": 0.8,
+  "questionCount": 10,
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
   "id": "bonds-within-20",
   "title": "Bonds within 20",
-  "summary": "Find pairs of numbers within 20 and use them to take away.",
-  "subject": "maths",
+  "summary": "Find pairs within 20, including bonds that bridge through ten.",
   "type": "number-bonds",
   "yearGroups": [
     "Year1"
   ],
   "ability": "emerging",
-  "estimatedMinutes": 5,
-  "masteryThreshold": 0.8,
   "curriculumRef": "y1-bonds-20",
   "pathNode": "y1-bonds-20",
   "difficulty": 1,
-  "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 builds 11 from 10. Q2 builds 12 from 10. Q3 completes the parts of 13. Q4 uses pictured 12 take away 2. Q5 builds 14 from 10. Q6 selects parts of 15. Q7 completes the parts of 16. Q8 builds 18 from 10. Q9 recalls 18 take away 8. Q10 builds 20 from 10. Hints on Q1 to Q3.",
-    "versus": "Easy represents totals from 11 to 20 using a known ten and pictures, then related subtraction. Medium varies the known part and reverses the missing part in totals to 20. Hard mixes less familiar bonds, missing wholes and related subtraction without pictures. All totals stay within 20."
+    "within": "Q1 sees 11 as 10 and 1. Q2 bridges 8 + 5. Q3 completes 10 to make 13. Q4 is 12 take away 2. Q5 completes 10 to make 14. Q6 picks a pair for 15. Q7 completes 10 to make 16. Q8 sees 18 as 10 and 8. Q9 is 18 take away 8. Q10 completes 10 to make 20.",
+    "versus": "Easy uses two frames and bridging through ten like 8 + 5. Medium varies the known part. Hard mixes missing wholes and take-away. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "y1-bonds-20",
@@ -26,69 +41,107 @@
   ],
   "questions": [
     {
-      "kind": "make-total",
-      "prompt": "What do you need to add to 10 to make 11?",
-      "explanation": "10 and 1 make 11.",
-      "narration": {
-        "prompt": "What do you need to add to ten to make eleven?"
-      },
-      "total": 11,
-      "gap": "right",
-      "mode": "fill-slots",
-      "visual": {
+      "id": "b20-1-1",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 11,
         "item": "apple",
-        "count": 10
+        "parts": [
+          10,
+          1
+        ]
       },
-      "randomise": {},
-      "id": "bonds-within-20-1-1",
-      "hint": "Start at ten and count on."
+      "options": [
+        {
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "14"
+        }
+      ],
+      "correctId": "a",
+      "hint": "A full frame is 10. Then add the extra bit.",
+      "explanation": "10 and 1 make 11. Do not stop at 10.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "make-total",
-      "prompt": "What do you need to add to 10 to make 12?",
-      "explanation": "10 and 2 make 12.",
+      "id": "b20-1-2",
+      "kind": "multiple-choice",
+      "prompt": "What is 8 + 5?",
+      "tenFrame": {
+        "count": 13,
+        "item": "frog",
+        "parts": [
+          8,
+          5
+        ]
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "13"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "85"
+        }
+      ],
+      "correctId": "a",
+      "hint": "8 needs 2 more to make 10, then 3 more.",
+      "explanation": "8 and 2 make 10, then 3 more is 13.",
       "narration": {
-        "prompt": "What do you need to add to ten to make twelve?"
+        "prompt": "What is eight plus five?"
       },
-      "total": 12,
-      "gap": "right",
-      "mode": "fill-slots",
-      "visual": {
-        "item": "apple",
-        "count": 10
-      },
-      "randomise": {},
-      "id": "bonds-within-20-1-2",
-      "hint": "Start at ten and count on."
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "part-whole",
+      "id": "b20-1-3",
+      "kind": "make-total",
       "prompt": "What do you need to add to 10 to make 13?",
-      "explanation": "10 and 3 make 13.",
+      "part": 10,
+      "total": 13,
+      "gap": "right",
+      "mode": "fill-slots",
+      "hint": "Start at ten and count on.",
+      "explanation": "10 and 3 make 13. The extra bit is 3.",
       "narration": {
-        "prompt": "What do you need to add to ten to make thirteen?"
+        "prompt": "What do you need to add to 10 to make 13?"
       },
-      "whole": 13,
-      "parts": [
-        10,
-        3
-      ],
-      "missing": "right",
-      "choices": [
-        3,
-        2,
-        4
-      ],
-      "id": "bonds-within-20-1-3",
-      "hint": "Start at ten and count on."
+      "visual": {
+        "item": "star",
+        "count": 10
+      }
     },
     {
+      "id": "b20-1-4",
       "kind": "multiple-choice",
       "prompt": "What is 12 take away 2?",
-      "explanation": "12 take away 2 is 10. 10 and 2 make 12.",
-      "narration": {
-        "prompt": "What is twelve take away two?"
-      },
       "options": [
         {
           "id": "a",
@@ -108,105 +161,141 @@
         }
       ],
       "correctId": "a",
+      "explanation": "12 take away 2 is 10. Back to a full ten.",
+      "narration": {
+        "prompt": "What is 12 take away 2?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "visual": {
-        "item": "apple",
-        "count": 12,
-        "removed": 2
-      },
-      "id": "bonds-within-20-1-4"
+      }
     },
     {
-      "kind": "make-total",
-      "prompt": "10 and what make 14?",
-      "explanation": "10 and 4 make 14.",
+      "id": "b20-1-5",
+      "kind": "part-whole",
+      "prompt": "What do 10 and 4 make?",
+      "whole": 14,
+      "parts": [
+        10,
+        4
+      ],
+      "missing": "whole",
+      "choices": [
+        13,
+        14,
+        15
+      ],
+      "explanation": "10 and 4 make 14. Not 13 or 15.",
       "narration": {
-        "prompt": "10 and what make 14?"
-      },
-      "total": 14,
-      "gap": "right",
-      "mode": "fill-slots",
-      "visual": {
-        "item": "apple",
-        "count": 10
-      },
-      "randomise": {},
-      "id": "bonds-within-20-1-5"
+        "prompt": "What do 10 and 4 make?"
+      }
     },
     {
+      "id": "b20-1-6",
       "kind": "pick-pair",
       "prompt": "What two numbers make 15?",
-      "explanation": "10 and 5 make 15.",
-      "narration": {
-        "prompt": "What two numbers make fifteen?"
-      },
       "total": 15,
       "tiles": [
         10,
         5,
-        3,
-        7
+        8,
+        4
       ],
       "showDots": true,
+      "explanation": "10 and 5 make 15. 8 and 4 do not.",
+      "narration": {
+        "prompt": "What two numbers make 15?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "id": "bonds-within-20-1-6"
+      }
     },
     {
-      "kind": "part-whole",
-      "prompt": "10 and what make 16?",
-      "explanation": "10 and 6 make 16.",
-      "narration": {
-        "prompt": "10 and what make 16?"
-      },
-      "whole": 16,
-      "parts": [
-        10,
-        6
-      ],
-      "missing": "right",
-      "choices": [
-        6,
-        5,
-        7
-      ],
-      "id": "bonds-within-20-1-7"
-    },
-    {
+      "id": "b20-1-7",
       "kind": "make-total",
-      "prompt": "10 and what make 18?",
-      "explanation": "10 and 8 make 18.",
+      "prompt": "What is 10 + 6?",
+      "part": 10,
+      "other": 6,
+      "total": 16,
+      "gap": "total",
+      "mode": "sum-only",
+      "options": [
+        {
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "10 and 6 make 16. Not another 10.",
       "narration": {
-        "prompt": "10 and what make 18?"
+        "prompt": "What is ten plus six?"
       },
-      "total": 18,
-      "gap": "right",
-      "mode": "fill-slots",
-      "visual": {
-        "item": "apple",
-        "count": 10
-      },
-      "randomise": {},
-      "id": "bonds-within-20-1-8"
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
+      "id": "b20-1-8",
       "kind": "multiple-choice",
-      "prompt": "What is 18 take away 8?",
-      "explanation": "18 take away 8 is 10. 10 and 8 make 18.",
-      "narration": {
-        "prompt": "What is eighteen take away eight?"
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 18,
+        "item": "fish",
+        "parts": [
+          10,
+          8
+        ]
       },
       "options": [
         {
           "id": "a",
-          "label": "10"
+          "label": "8"
         },
         {
           "id": "b",
-          "label": "9"
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "12"
+        },
+        {
+          "id": "d",
+          "label": "18"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "10 and 8 make 18. Add both frames.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "b20-1-9",
+      "kind": "multiple-choice",
+      "prompt": "What is 18 take away 8?",
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "10"
         },
         {
           "id": "c",
@@ -214,31 +303,31 @@
         },
         {
           "id": "d",
-          "label": "8"
+          "label": "26"
         }
       ],
-      "correctId": "a",
+      "correctId": "b",
+      "explanation": "18 take away 8 is 10. Back to a full ten.",
+      "narration": {
+        "prompt": "What is 18 take away 8?"
+      },
       "randomise": {
         "shuffleOptions": true
-      },
-      "id": "bonds-within-20-1-9"
+      }
     },
     {
-      "kind": "make-total",
-      "prompt": "How many more from 10 make 20?",
-      "explanation": "10 and 10 make 20.",
+      "id": "b20-1-10",
+      "kind": "fill-blank",
+      "prompt": "What is 10 + 10?",
+      "acceptedAnswers": [
+        "20",
+        "twenty"
+      ],
+      "inputMode": "numeric",
+      "explanation": "10 and 10 make 20. That is a double.",
       "narration": {
-        "prompt": "How many more from 10 make 20?"
-      },
-      "total": 20,
-      "gap": "right",
-      "mode": "fill-slots",
-      "visual": {
-        "item": "apple",
-        "count": 10
-      },
-      "randomise": {},
-      "id": "bonds-within-20-1-10"
+        "prompt": "What is ten plus ten?"
+      }
     }
   ]
 }

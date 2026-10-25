@@ -332,7 +332,7 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 
 Structured pictures (look-only, never tappable):
 
-- `tenFrame: { count, item? }` — 0 to 20. One 2×5 frame, or two frames for 11 to 20. Empty cells stay visible. Filled cells use the object colour. Fixed two-frame footprint.
+- `tenFrame: { count, item?, parts?, pairs? }` — 0 to 20. One 2×5 frame, or two frames for 11 to 20. Empty cells stay visible. Filled cells use the object colour. `parts: [a, b]` must add to `count`. The second part uses a stripe pattern and an outline. `pairs: true` fills down columns so pairs sit together. Fixed two-frame footprint.
 - `baseTen: { tens, ones, style? }` — tens 0 to 9, ones 0 to 9. Neutral rods, not the question objects. `style` is `segmented` (Easy) or `plain` (Medium and Hard). Use for 21 to 99. Numerals only above 20.
 - `dice: { count }` — 1 to 6 pips on a dice face.
 - `numberLine: { start, end, scale?, marked?, flags? }` — `start` 0 and `end` 10 or 20 with `scale` `ones`, or `end` 100 with `scale` `tens`. A marked tick shows ?. Flags A to D sit on an unmarked line and are not tappable. Answers stay as A/B/C/D rows. Multiple-choice or fill-blank only. Do not mix with other stem pictures.

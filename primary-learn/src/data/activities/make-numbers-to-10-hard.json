@@ -1,28 +1,8 @@
 {
-  "id": "make-numbers-to-10-hard",
-  "title": "Make numbers to 10",
-  "summary": "Explore different ways to make numbers to 10, including zero and missing parts.",
   "subject": "maths",
-  "type": "counting",
-  "yearGroups": [
-    "Reception"
-  ],
-  "ability": "greater-depth",
-  "estimatedMinutes": 6,
+  "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
-  "curriculumRef": "eyfs-compose-10",
-  "pathNode": "eyfs-compose-10",
-  "difficulty": 3,
   "questionCount": 10,
-  "difficultyRamp": {
-    "within": "Questions 1 and 2 compose 6. Questions 3 and 4 compose 7 with a missing whole or reversed part. Questions 5 and 6 compose 8 including zero. Questions 7 and 8 compose 9. Questions 9 and 10 compose 10 with a reversed missing part and missing whole. No hints.",
-    "versus": "Easy builds totals 6 to 9 with pictures and small parts. Medium explores totals 8 to 10 including zero. Hard varies totals 6 to 10 with reversed parts and missing wholes. Bonds to a fixed total are practised separately."
-  },
-  "skills": [
-    "eyfs-compose-10",
-    "composition-to-10",
-    "part-part-whole-to-10"
-  ],
   "randomise": {
     "mode": "attempt",
     "items": [
@@ -38,246 +18,267 @@
       "strawberry"
     ]
   },
+  "id": "make-numbers-to-10-hard",
+  "title": "Make numbers to 10",
+  "summary": "See numbers to 10 as two parts on a ten frame.",
+  "type": "counting",
+  "yearGroups": [
+    "Reception"
+  ],
+  "ability": "greater-depth",
+  "curriculumRef": "eyfs-compose-10",
+  "pathNode": "eyfs-compose-10",
+  "difficulty": 3,
+  "difficultyRamp": {
+    "within": "Q1 sees 10 as 7 and 3. Q2 asks what 4 and 5 make. Q3 completes 9 to make 10. Q4 picks a pair for 7. Q5 builds 10. Q6 reverses a missing part. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 10. Q10 orders parts.",
+    "versus": "Easy builds 6 to 9 with two-colour parts. Medium includes 10 and zero. Hard reverses parts and finds a missing whole. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "eyfs-compose-10",
+    "composition-to-10",
+    "part-part-whole-to-10"
+  ],
   "questions": [
     {
-      "kind": "part-whole",
-      "id": "m10h-whole-6",
-      "prompt": "What do 2 and 4 make?",
-      "explanation": "2 and 4 make 6.",
-      "narration": {
-        "prompt": "What do two and four make?"
+      "id": "m10-3-1",
+      "kind": "multiple-choice",
+      "prompt": "How many can you see in all?",
+      "tenFrame": {
+        "count": 10,
+        "item": "apple",
+        "parts": [
+          7,
+          3
+        ]
       },
-      "whole": 6,
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "7 and 3 make 10. Add both parts.",
+      "narration": {
+        "prompt": "How many can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "m10-3-2",
+      "kind": "part-whole",
+      "prompt": "What do 4 and 5 make?",
+      "whole": 9,
       "parts": [
-        2,
-        4
+        4,
+        5
       ],
       "missing": "whole",
       "choices": [
-        6,
-        5,
-        7
-      ]
+        8,
+        9,
+        10
+      ],
+      "explanation": "4 and 5 make 9. Not 8 and not 10.",
+      "narration": {
+        "prompt": "What do 4 and 5 make?"
+      }
     },
     {
+      "id": "m10-3-3",
       "kind": "make-total",
-      "id": "m10h-part-6",
-      "prompt": "What do you need to add to 1 to make 6?",
-      "explanation": "1 and 5 make 6.",
+      "prompt": "What do you need to add to 9 to make 10?",
+      "part": 9,
+      "total": 10,
+      "gap": "right",
+      "mode": "fill-slots",
+      "explanation": "9 and 1 make 10. The missing part is 1.",
       "narration": {
-        "prompt": "What do you need to add to one to make six?"
+        "prompt": "What do you need to add to 9 to make 10?"
       },
-      "part": 1,
-      "total": 6,
+      "visual": {
+        "item": "star",
+        "count": 9
+      }
+    },
+    {
+      "id": "m10-3-4",
+      "kind": "pick-pair",
+      "prompt": "What two numbers make 7?",
+      "total": 7,
+      "tiles": [
+        2,
+        5,
+        1,
+        8
+      ],
+      "showDots": true,
+      "explanation": "2 and 5 make 7. 1 and 8 do not.",
+      "narration": {
+        "prompt": "What two numbers make 7?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "m10-3-5",
+      "kind": "build-set",
+      "prompt": "Make a group of 10 {items}.",
+      "visual": {
+        "item": "frog",
+        "count": 10
+      },
+      "bank": 12,
+      "explanation": "A group of 10 has 10 {items}. Stop at 10.",
+      "narration": {
+        "prompt": "Make a group of 10 {items}."
+      }
+    },
+    {
+      "id": "m10-3-6",
+      "kind": "make-total",
+      "prompt": "What do you need to add to 8 to make 10?",
+      "part": 8,
+      "total": 10,
       "gap": "right",
       "mode": "sum-only",
       "options": [
         {
           "id": "a",
-          "label": "5"
+          "label": "1"
         },
         {
           "id": "b",
-          "label": "6"
+          "label": "2"
         },
         {
           "id": "c",
+          "label": "8"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "8 and 2 make 10. Not another 8.",
+      "narration": {
+        "prompt": "What do you need to add to 8 to make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "m10-3-7",
+      "kind": "multiple-choice",
+      "prompt": "Sam has 6 stars. He gets 3 more. How many stars does he have now?",
+      "visual": {
+        "item": "star",
+        "count": 6,
+        "added": 3
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "6 and 3 more makes 9. Not 10.",
+      "narration": {
+        "prompt": "Sam has 6 stars. He gets 3 more. How many stars does he have now?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "m10-3-8",
+      "kind": "fill-blank",
+      "prompt": "What do 2 and 8 make?",
+      "acceptedAnswers": [
+        "10",
+        "ten"
+      ],
+      "inputMode": "numeric",
+      "explanation": "2 and 8 make 10. Add both parts.",
+      "narration": {
+        "prompt": "What do 2 and 8 make?"
+      }
+    },
+    {
+      "id": "m10-3-9",
+      "kind": "multi-select",
+      "prompt": "Tap every pair that makes 10.",
+      "options": [
+        {
+          "id": "a",
+          "label": "1 and 9"
+        },
+        {
+          "id": "b",
+          "label": "4 and 5"
+        },
+        {
+          "id": "c",
+          "label": "0 and 10"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "1 and 9, and 0 and 10, both make 10.",
+      "narration": {
+        "prompt": "Tap every pair that makes 10."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "m10-3-10",
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n3",
+          "label": "3"
+        },
+        {
+          "id": "n7",
           "label": "7"
         }
       ],
-      "randomise": {
-        "shuffleOptions": true
+      "correctOrder": [
+        "n3",
+        "n7",
+        "n10"
+      ],
+      "explanation": "The numbers go 3, 7, 10. Those parts make 10.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
       }
-    },
-    {
-      "kind": "part-whole",
-      "id": "m10h-whole-7",
-      "prompt": "What do 3 and 4 make?",
-      "explanation": "3 and 4 make 7.",
-      "narration": {
-        "prompt": "What do three and four make?"
-      },
-      "whole": 7,
-      "parts": [
-        3,
-        4
-      ],
-      "missing": "whole",
-      "choices": [
-        7,
-        6,
-        8
-      ]
-    },
-    {
-      "kind": "make-total",
-      "id": "m10h-reverse-7",
-      "prompt": "What do you need to add to 2 to make 7?",
-      "explanation": "2 and 5 make 7.",
-      "narration": {
-        "prompt": "What do you need to add to two to make seven?"
-      },
-      "part": 2,
-      "total": 7,
-      "gap": "left",
-      "mode": "sum-only",
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "6"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "pick-pair",
-      "id": "m10h-pair-8",
-      "prompt": "What two numbers make 8?",
-      "explanation": "3 and 5 make 8.",
-      "narration": {
-        "prompt": "What two numbers make eight?"
-      },
-      "total": 8,
-      "tiles": [
-        3,
-        5,
-        0,
-        2
-      ],
-      "showDots": true,
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "part-whole",
-      "id": "m10h-zero-8",
-      "prompt": "What do you need to add to 8 to make 8?",
-      "explanation": "0 and 8 make 8.",
-      "narration": {
-        "prompt": "What do you need to add to eight to make eight?"
-      },
-      "whole": 8,
-      "parts": [
-        0,
-        8
-      ],
-      "missing": "left",
-      "choices": [
-        0,
-        1,
-        2
-      ]
-    },
-    {
-      "kind": "make-total",
-      "id": "m10h-part-9",
-      "prompt": "4 and what make 9?",
-      "explanation": "4 and 5 make 9.",
-      "narration": {
-        "prompt": "4 and what make 9?"
-      },
-      "part": 4,
-      "total": 9,
-      "gap": "right",
-      "mode": "sum-only",
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "3"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "pick-pair",
-      "id": "m10h-pair-9",
-      "prompt": "What two numbers make 9?",
-      "explanation": "3 and 6 make 9.",
-      "narration": {
-        "prompt": "What two numbers make nine?"
-      },
-      "total": 9,
-      "tiles": [
-        3,
-        6,
-        0,
-        2
-      ],
-      "showDots": true,
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "make-total",
-      "id": "m10h-reverse-10",
-      "prompt": "7 and what make 10?",
-      "explanation": "7 and 3 make 10.",
-      "narration": {
-        "prompt": "7 and what make 10?"
-      },
-      "part": 7,
-      "total": 10,
-      "gap": "left",
-      "mode": "sum-only",
-      "options": [
-        {
-          "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "5"
-        }
-      ],
-      "randomise": {
-        "shuffleOptions": true
-      }
-    },
-    {
-      "kind": "part-whole",
-      "id": "m10h-whole-10",
-      "prompt": "What do 4 and 6 make?",
-      "explanation": "4 and 6 make 10.",
-      "narration": {
-        "prompt": "What do four and six make?"
-      },
-      "whole": 10,
-      "parts": [
-        4,
-        6
-      ],
-      "missing": "whole",
-      "choices": [
-        10,
-        9,
-        11
-      ]
     }
   ]
 }

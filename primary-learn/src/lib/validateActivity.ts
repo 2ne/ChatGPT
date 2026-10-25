@@ -255,7 +255,24 @@ function parseTenFrame(value: unknown, path: string): TenFrameAsset {
     }
     item = value.item as ObjectItem;
   }
-  return item ? { count, item } : { count };
+  let parts: [number, number] | undefined;
+  if (value.parts != null) {
+    const list = expectArray(value, "parts", path);
+    if (list.length !== 2) fail(path, "tenFrame.parts must be two whole numbers");
+    const a = list[0];
+    const b = list[1];
+    if (typeof a !== "number" || typeof b !== "number" || !Number.isInteger(a) || !Number.isInteger(b) || a < 0 || b < 0) {
+      fail(path, "tenFrame.parts must be two whole numbers from 0");
+    }
+    if (a + b !== count) fail(path, "tenFrame.parts must add to count");
+    parts = [a, b];
+  }
+  let pairs: boolean | undefined;
+  if (value.pairs != null) {
+    if (typeof value.pairs !== "boolean") fail(path, "tenFrame.pairs must be boolean");
+    pairs = value.pairs;
+  }
+  return { count, item, parts, pairs };
 }
 
 function optionalTenFrame(record: Record<string, unknown>, path: string): TenFrameAsset | undefined {

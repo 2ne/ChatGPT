@@ -36,7 +36,7 @@ Educational content is **pure data**. Presentation is one generic runner plus on
 - Drop a JSON file in `src/data/activities/`. The registry auto-loads it (no hand import). Invalid JSON fails the build via `validateActivity`.
 - Do **not** create a `.tsx` per quest. Do **not** edit `ActivityRunner` unless changing all quests.
 - Pictures: `"visual": { "item": "apple", "count": 3 }` — never emoji strings in JSON.
-- Ten frames: `"tenFrame": { "count": 6, "item": "apple" }` for 0 to 20. Empty cells stay visible. The board keeps a two-frame footprint.
+- Ten frames: `"tenFrame": { "count": 6, "item": "apple" }` for 0 to 20. Empty cells stay visible. The board keeps a two-frame footprint. Two-colour parts: `"parts": [5, 2]` (must add to count). The second part uses stripes and an outline, not colour alone. `"pairs": true` fills down columns for odd and even.
 - Tens and ones: `"baseTen": { "tens": 3, "ones": 4, "style": "plain" }` for 21 to 99. Neutral rods, not the question objects. Numerals only above 20.
 - Number line: `"numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 12 }` for 0 to 10 or 0 to 20, or `end` 100 with `scale` `tens`. A marked tick shows ?. Flags A to D sit on an unmarked line and are not tappable. Answers stay as A/B/C/D rows.
 - Hundred square window: `"hundredSquare": { "start": 21, "rows": 3, "missing": 25, "highlight": 32 }` shows 3 or 4 rows. Numerals only. Not tappable. Not scrolling.

@@ -15,9 +15,6 @@ const JUST_SHIPPED = new Set([
   "show-and-compare-numbers",
   "show-and-compare-numbers-medium",
   "show-and-compare-numbers-hard",
-  "more-less-same",
-  "more-less-same-medium",
-  "more-less-same-hard",
 ]);
 
 const CLOCK_WORDS = /\b(clockwise|anti-clockwise|anticlockwise)\b/i;
@@ -281,4 +278,4 @@ export function lintActivities(activities) {
 }
 
 export const pedagogyAllowlistNote =
-  "TODO later rewrite: everyday-shapes. Just-shipped allowlist: show-and-compare-numbers, more-less-same.";
+  "TODO later rewrite: everyday-shapes. Just-shipped allowlist: show-and-compare-numbers.";
