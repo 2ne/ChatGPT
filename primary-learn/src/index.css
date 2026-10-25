@@ -2027,10 +2027,9 @@ button.object-token {
   grid-template-rows: var(--tf-cell) var(--tf-cell);
   column-gap: var(--tf-gap);
   row-gap: var(--tf-band);
-  padding: 4px;
-  border: 2px solid var(--ink-soft);
-  border-radius: 8px;
-  background: #fff;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .ten-frame-cell {
@@ -2038,7 +2037,7 @@ button.object-token {
   width: var(--tf-cell);
   height: var(--tf-cell);
   border-radius: 3px;
-  border: 1.5px solid var(--line-strong);
+  border: 1.5px solid var(--line);
   background: #fff;
 }
 
@@ -5246,9 +5245,8 @@ button.object-token {
 
 .match-turn-target .ten-frame,
 .match-card-face .ten-frame {
-  padding: 2px;
-  border-width: 1.5px;
-  border-radius: 4px;
+  padding: 0;
+  border: 0;
 }
 
 .match-turn-target .ten-frame-cell,

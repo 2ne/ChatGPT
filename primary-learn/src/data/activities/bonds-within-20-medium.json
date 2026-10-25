@@ -43,7 +43,7 @@
     {
       "id": "b20-2-1",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 12,
         "item": "apple",
@@ -73,7 +73,7 @@
       "correctId": "a",
       "explanation": "10 and 2 make 12. The first 10 is only one part.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "How many blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -244,7 +244,7 @@
     {
       "id": "b20-2-8",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 19,
         "item": "fish",
@@ -274,7 +274,7 @@
       "correctId": "d",
       "explanation": "10 and 9 make 19. Add both frames.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "How many blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true

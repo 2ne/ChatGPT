@@ -42,7 +42,7 @@
     {
       "id": "m10-3-1",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 10,
         "item": "apple",
@@ -68,7 +68,7 @@
       "correctId": "c",
       "explanation": "7 and 3 make 10. Add both parts.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "How many blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true

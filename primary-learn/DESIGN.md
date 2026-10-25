@@ -328,7 +328,7 @@ the thin rainbow. Inner words stay padded.
   the numbers on screen. Fill-blank result blanks (`5 − 2 = __`) and bare
   equation prompts use the same stem, not `What is the missing number?`.
   Spoken uses words (`plus` / `take away`).
-  Pictured totals use `How many can you see in all?`.
+  Pictured totals use `How many blocks can you see in all?` or `How many {items} can you see in all?`.
   Known tiles, added tiles and empty slots use one
   identical tile size. Adding
   or removing a tile replaces a slot in place. Always more slots than the

@@ -42,7 +42,7 @@
     {
       "id": "m5-2-1",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 4,
         "item": "apple",
@@ -68,7 +68,7 @@
       "correctId": "a",
       "explanation": "3 and 1 make 4. The first 3 is only one part.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "How many blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true

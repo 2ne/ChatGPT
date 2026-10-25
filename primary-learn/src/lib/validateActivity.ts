@@ -78,6 +78,19 @@ function fail(path: string, message: string): never {
   throw new Error(`Activity ${path}: ${message}`);
 }
 
+const COUNTED_NOUN =
+  /\b(blocks?|counters?|fingers?|pairs?|apples?|bananas?|stars?|balloons?|cars?|ducks?|ladybirds?|frogs?|fish|strawberr(?:y|ies)|spots?|dots?)\b/i;
+
+/** Count stems that ask how many you can see must name the pictured thing. */
+export function countPromptNamesThing(prompt: string): boolean {
+  const text = prompt.trim();
+  const seeCount = /\bhow many\b/i.test(text) && /\bcan you see\b/i.test(text);
+  const bare = /^(type )?how many( in all)?\??\.?$/i.test(text);
+  if (!seeCount && !bare) return true;
+  if (/\{items?\}/.test(text)) return true;
+  return COUNTED_NOUN.test(text);
+}
+
 /** Fade decoration, not interaction. Warn when a quest is mostly the same tap. */
 export function activityEngagementWarnings(
   _id: string,
@@ -497,6 +510,12 @@ function parseQuestion(value: unknown, path: string): Question {
   }
   const id = expectString(value, "id", path);
   const prompt = expectString(value, "prompt", path);
+  if (!countPromptNamesThing(prompt)) {
+    fail(
+      path,
+      "count questions must name the thing. Write How many blocks can you see? not How many can you see in all?",
+    );
+  }
   const explanation = expectString(value, "explanation", path);
   const hint = value.hint == null ? undefined : expectString(value, "hint", path);
   const narration = parseNarration(value.narration, `${path}.narration`);
@@ -509,7 +528,15 @@ function parseQuestion(value: unknown, path: string): Question {
       : narration && typeof narration.prompt === "object"
         ? narration.prompt.text
         : "";
-  if (spokenLine) assertNoFactTrueWording(spokenLine, path, "narration");
+  if (spokenLine) {
+    assertNoFactTrueWording(spokenLine, path, "narration");
+    if (!countPromptNamesThing(spokenLine)) {
+      fail(
+        path,
+        "count narration must name the thing. Write How many blocks can you see? not How many can you see in all?",
+      );
+    }
+  }
   const extras =
     kind === "make-total" ? parseMakeTotalExtras(value, path) : parseExtras(value, path);
   const layout = parseLayout(value, path);

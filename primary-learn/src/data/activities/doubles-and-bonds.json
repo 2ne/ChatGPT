@@ -42,35 +42,56 @@
     {
       "id": "db-1-1",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 4,
         "item": "apple",
-        "parts": [2, 2]
+        "parts": [
+          2,
+          2
+        ]
       },
       "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "6" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        }
       ],
       "correctId": "a",
       "hint": "A double has two equal parts.",
       "explanation": "2 and 2 make 4. That is a double, not 2.",
-      "narration": { "prompt": "How many can you see in all?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many blocks can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-1-2",
       "kind": "make-total",
       "prompt": "What do you need to add to 2 to make 4?",
-      "visual": { "item": "ladybird", "count": 2 },
+      "visual": {
+        "item": "ladybird",
+        "count": 2
+      },
       "part": 2,
       "total": 4,
       "gap": "right",
       "mode": "fill-slots",
       "hint": "Add the same number again.",
       "explanation": "2 and 2 make 4. Both parts match.",
-      "narration": { "prompt": "What do you need to add to 2 to make 4?" }
+      "narration": {
+        "prompt": "What do you need to add to 2 to make 4?"
+      }
     },
     {
       "id": "db-1-3",
@@ -81,98 +102,219 @@
           "id": "p1",
           "left": "2 + 2",
           "right": {
-            "tenFrame": { "count": 4, "item": "star", "parts": [2, 2] }
+            "tenFrame": {
+              "count": 4,
+              "item": "star",
+              "parts": [
+                2,
+                2
+              ]
+            }
           }
         }
       ],
       "mode": "one-at-a-time",
       "choices": [
-        { "tenFrame": { "count": 3, "item": "star", "parts": [1, 2] } },
-        { "tenFrame": { "count": 4, "item": "star", "parts": [2, 2] } },
-        { "tenFrame": { "count": 5, "item": "star", "parts": [2, 3] } }
+        {
+          "tenFrame": {
+            "count": 3,
+            "item": "star",
+            "parts": [
+              1,
+              2
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 4,
+            "item": "star",
+            "parts": [
+              2,
+              2
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 5,
+            "item": "star",
+            "parts": [
+              2,
+              3
+            ]
+          }
+        }
       ],
       "explanation": "2 and 2 make 4. The two parts match.",
-      "narration": { "prompt": "Select the card that matches the number." }
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      }
     },
     {
       "id": "db-1-4",
       "kind": "build-set",
       "prompt": "Share 8 {items} onto two plates. Make one plate.",
-      "visual": { "item": "apple", "count": 4 },
+      "visual": {
+        "item": "apple",
+        "count": 4
+      },
       "bank": 8,
       "hint": "Both plates get the same number.",
       "explanation": "8 shared equally is 4 on each plate. Not all 8 on one.",
-      "narration": { "prompt": "Share 8 {items} onto two plates. Make one plate." }
+      "narration": {
+        "prompt": "Share 8 {items} onto two plates. Make one plate."
+      }
     },
     {
       "id": "db-1-5",
       "kind": "pick-pair",
       "prompt": "What two numbers make 10?",
       "total": 10,
-      "tiles": [6, 4, 3, 8],
+      "tiles": [
+        6,
+        4,
+        3,
+        8
+      ],
       "showDots": true,
       "explanation": "6 and 4 make 10. 3 and 8 do not.",
-      "narration": { "prompt": "What two numbers make 10?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-1-6",
       "kind": "make-total",
       "prompt": "What do you need to add to 6 to make 10?",
-      "visual": { "item": "fish", "count": 6 },
+      "visual": {
+        "item": "fish",
+        "count": 6
+      },
       "part": 6,
       "total": 10,
       "gap": "right",
       "mode": "fill-slots",
       "explanation": "6 and 4 make 10. The missing part is 4.",
-      "narration": { "prompt": "What do you need to add to 6 to make 10?" }
+      "narration": {
+        "prompt": "What do you need to add to 6 to make 10?"
+      }
     },
     {
       "id": "db-1-7",
       "kind": "multi-select",
       "prompt": "Tap every frame that is a double.",
       "options": [
-        { "id": "a", "tenFrame": { "count": 4, "item": "frog", "parts": [2, 2] } },
-        { "id": "b", "tenFrame": { "count": 5, "item": "frog", "parts": [2, 3] } },
-        { "id": "c", "tenFrame": { "count": 6, "item": "frog", "parts": [3, 3] } }
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 4,
+            "item": "frog",
+            "parts": [
+              2,
+              2
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 5,
+            "item": "frog",
+            "parts": [
+              2,
+              3
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 6,
+            "item": "frog",
+            "parts": [
+              3,
+              3
+            ]
+          }
+        }
       ],
-      "correctIds": ["a", "c"],
+      "correctIds": [
+        "a",
+        "c"
+      ],
       "explanation": "2 and 2, and 3 and 3, are doubles. Both parts match.",
-      "narration": { "prompt": "Tap every frame that is a double." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Tap every frame that is a double."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-1-8",
       "kind": "part-whole",
       "prompt": "What do 5 and 5 make?",
       "whole": 10,
-      "parts": [5, 5],
+      "parts": [
+        5,
+        5
+      ],
       "missing": "whole",
-      "choices": [8, 10, 12],
+      "choices": [
+        8,
+        10,
+        12
+      ],
       "explanation": "5 and 5 make 10. That is double 5.",
-      "narration": { "prompt": "What do 5 and 5 make?" }
+      "narration": {
+        "prompt": "What do 5 and 5 make?"
+      }
     },
     {
       "id": "db-1-9",
       "kind": "fill-blank",
       "prompt": "What is 1 + 1?",
-      "acceptedAnswers": ["2", "two"],
+      "acceptedAnswers": [
+        "2",
+        "two"
+      ],
       "inputMode": "numeric",
       "explanation": "1 and 1 make 2. Both parts are the same.",
-      "narration": { "prompt": "What is one plus one?" }
+      "narration": {
+        "prompt": "What is one plus one?"
+      }
     },
     {
       "id": "db-1-10",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n8", "label": "8" },
-        { "id": "n2", "label": "2" },
-        { "id": "n4", "label": "4" }
+        {
+          "id": "n8",
+          "label": "8"
+        },
+        {
+          "id": "n2",
+          "label": "2"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        }
       ],
-      "correctOrder": ["n2", "n4", "n8"],
+      "correctOrder": [
+        "n2",
+        "n4",
+        "n8"
+      ],
       "explanation": "The numbers go 2, 4, 8. Each one is a double.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     }
   ]
 }

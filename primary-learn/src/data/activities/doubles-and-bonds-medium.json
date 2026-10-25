@@ -42,64 +42,108 @@
     {
       "id": "db-2-1",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 6,
         "item": "apple",
-        "parts": [3, 3]
+        "parts": [
+          3,
+          3
+        ]
       },
       "options": [
-        { "id": "a", "label": "6" },
-        { "id": "b", "label": "7" },
-        { "id": "c", "label": "8" }
+        {
+          "id": "a",
+          "label": "6"
+        },
+        {
+          "id": "b",
+          "label": "7"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        }
       ],
       "correctId": "a",
       "explanation": "3 and 3 make 6. That is a double, not 3.",
-      "narration": { "prompt": "How many can you see in all?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many blocks can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-2-2",
       "kind": "make-total",
       "prompt": "What do you need to add to 4 to make 8?",
-      "visual": { "item": "ladybird", "count": 4 },
+      "visual": {
+        "item": "ladybird",
+        "count": 4
+      },
       "part": 4,
       "total": 8,
       "gap": "right",
       "mode": "fill-slots",
       "explanation": "4 and 4 make 8. Both parts match.",
-      "narration": { "prompt": "What do you need to add to 4 to make 8?" }
+      "narration": {
+        "prompt": "What do you need to add to 4 to make 8?"
+      }
     },
     {
       "id": "db-2-3",
       "kind": "build-set",
       "prompt": "Share 10 {items} onto two plates. Make one plate.",
-      "visual": { "item": "frog", "count": 5 },
+      "visual": {
+        "item": "frog",
+        "count": 5
+      },
       "bank": 10,
       "explanation": "10 shared equally is 5 on each plate. Not all 10 on one.",
-      "narration": { "prompt": "Share 10 {items} onto two plates. Make one plate." }
+      "narration": {
+        "prompt": "Share 10 {items} onto two plates. Make one plate."
+      }
     },
     {
       "id": "db-2-4",
       "kind": "part-whole",
       "prompt": "What do you need to add to 2 to make 10?",
       "whole": 10,
-      "parts": [2, 8],
+      "parts": [
+        2,
+        8
+      ],
       "missing": "right",
-      "choices": [7, 8, 2],
+      "choices": [
+        7,
+        8,
+        2
+      ],
       "explanation": "2 and 8 make 10. Not another 2.",
-      "narration": { "prompt": "What do you need to add to 2 to make 10?" }
+      "narration": {
+        "prompt": "What do you need to add to 2 to make 10?"
+      }
     },
     {
       "id": "db-2-5",
       "kind": "pick-pair",
       "prompt": "What two numbers make 10?",
       "total": 10,
-      "tiles": [7, 3, 4, 9],
+      "tiles": [
+        7,
+        3,
+        4,
+        9
+      ],
       "showDots": true,
       "explanation": "7 and 3 make 10. 4 and 9 do not.",
-      "narration": { "prompt": "What two numbers make 10?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-2-6",
@@ -110,63 +154,161 @@
           "id": "p1",
           "left": "5 + 5",
           "right": {
-            "tenFrame": { "count": 10, "item": "star", "parts": [5, 5] }
+            "tenFrame": {
+              "count": 10,
+              "item": "star",
+              "parts": [
+                5,
+                5
+              ]
+            }
           }
         }
       ],
       "mode": "one-at-a-time",
       "choices": [
-        { "tenFrame": { "count": 8, "item": "star", "parts": [4, 4] } },
-        { "tenFrame": { "count": 10, "item": "star", "parts": [5, 5] } },
-        { "tenFrame": { "count": 9, "item": "star", "parts": [4, 5] } }
+        {
+          "tenFrame": {
+            "count": 8,
+            "item": "star",
+            "parts": [
+              4,
+              4
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 10,
+            "item": "star",
+            "parts": [
+              5,
+              5
+            ]
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 9,
+            "item": "star",
+            "parts": [
+              4,
+              5
+            ]
+          }
+        }
       ],
       "explanation": "5 and 5 make 10. The two parts match.",
-      "narration": { "prompt": "Select the card that matches the number." }
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      }
     },
     {
       "id": "db-2-7",
       "kind": "fill-blank",
       "prompt": "What is half of 6?",
-      "acceptedAnswers": ["3", "three"],
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
       "inputMode": "numeric",
       "explanation": "Half of 6 is 3. Each equal part is 3.",
-      "narration": { "prompt": "What is half of 6?" }
+      "narration": {
+        "prompt": "What is half of 6?"
+      }
     },
     {
       "id": "db-2-8",
       "kind": "multi-select",
       "prompt": "Tap every frame that is a double.",
       "options": [
-        { "id": "a", "tenFrame": { "count": 2, "item": "duck", "parts": [1, 1] } },
-        { "id": "b", "tenFrame": { "count": 7, "item": "duck", "parts": [3, 4] } },
-        { "id": "c", "tenFrame": { "count": 8, "item": "duck", "parts": [4, 4] } }
+        {
+          "id": "a",
+          "tenFrame": {
+            "count": 2,
+            "item": "duck",
+            "parts": [
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "tenFrame": {
+            "count": 7,
+            "item": "duck",
+            "parts": [
+              3,
+              4
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "tenFrame": {
+            "count": 8,
+            "item": "duck",
+            "parts": [
+              4,
+              4
+            ]
+          }
+        }
       ],
-      "correctIds": ["a", "c"],
+      "correctIds": [
+        "a",
+        "c"
+      ],
       "explanation": "1 and 1, and 4 and 4, are doubles. Both parts match.",
-      "narration": { "prompt": "Tap every frame that is a double." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Tap every frame that is a double."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-2-9",
       "kind": "fill-blank",
       "prompt": "What is 2 + 2?",
-      "acceptedAnswers": ["4", "four"],
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
       "inputMode": "numeric",
       "explanation": "2 and 2 make 4. Both parts are the same.",
-      "narration": { "prompt": "What is two plus two?" }
+      "narration": {
+        "prompt": "What is two plus two?"
+      }
     },
     {
       "id": "db-2-10",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n10", "label": "10" },
-        { "id": "n4", "label": "4" },
-        { "id": "n6", "label": "6" }
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        },
+        {
+          "id": "n6",
+          "label": "6"
+        }
       ],
-      "correctOrder": ["n4", "n6", "n10"],
+      "correctOrder": [
+        "n4",
+        "n6",
+        "n10"
+      ],
       "explanation": "The numbers go 4, 6, 10. Those are doubles. Both parts match.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     }
   ]
 }

@@ -89,9 +89,7 @@ export function describeVisual(visual: ObjectAsset): string {
 }
 
 export function describeTenFrame(frame: TenFrameAsset): string {
-  const item = frame.item ?? "apple";
-  const words = OBJECT_WORDS[item];
-  const noun = frame.count === 1 ? words.singular : words.plural;
+  const noun = frame.count === 1 ? "block" : "blocks";
   const parts = frame.parts ? ` in two parts, ${frame.parts[0]} and ${frame.parts[1]}` : "";
   const pairs = frame.pairs ? " grouped in pairs" : "";
   return `ten frame showing ${frame.count} ${noun}${parts}${pairs}`;

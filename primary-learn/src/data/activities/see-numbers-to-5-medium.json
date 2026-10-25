@@ -117,7 +117,7 @@
     {
       "id": "s5-2-4",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
+      "prompt": "How many blocks can you see in all?",
       "tenFrame": {
         "count": 5,
         "item": "apple",
@@ -143,7 +143,7 @@
       "correctId": "c",
       "explanation": "1 and 4 make 5. Add both parts.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "How many blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -196,7 +196,7 @@
     {
       "id": "s5-2-6",
       "kind": "fill-blank",
-      "prompt": "Type how many you can see in all.",
+      "prompt": "Type how many blocks you can see in all.",
       "tenFrame": {
         "count": 4,
         "item": "frog",
@@ -207,7 +207,7 @@
       },
       "explanation": "2 and 2 make 4. That is a double, not 2.",
       "narration": {
-        "prompt": "Type how many you can see in all."
+        "prompt": "Type how many blocks you can see in all."
       },
       "acceptedAnswers": [
         "4",
@@ -334,7 +334,7 @@
     {
       "id": "s5-2-10",
       "kind": "fill-blank",
-      "prompt": "Type how many you can see.",
+      "prompt": "Type how many blocks you can see.",
       "tenFrame": {
         "count": 4,
         "item": "fish",
@@ -350,7 +350,7 @@
       "inputMode": "numeric",
       "explanation": "2 and 2 make 4. Add both parts.",
       "narration": {
-        "prompt": "Type how many you can see."
+        "prompt": "Type how many blocks you can see."
       }
     }
   ]
