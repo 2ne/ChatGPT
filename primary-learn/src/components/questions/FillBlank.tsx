@@ -2,6 +2,8 @@ import { copy } from "../../data/copy";
 import type { FillBlankQuestion } from "../../types/activity";
 import { ObjectGroup } from "./ObjectGroup";
 import { BaseTen } from "./BaseTen";
+import { HundredSquare } from "./HundredSquare";
+import { NumberLine } from "./NumberLine";
 import { TenFrame } from "./TenFrame";
 import type { Reveal } from "./choice";
 
@@ -17,6 +19,8 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
   const tone = reveal === "correct" ? "is-correct" : reveal === "incorrect" ? "is-wrong" : "";
   return (
     <div className="option-stack">
+      {question.numberLine ? <NumberLine line={question.numberLine} /> : null}
+      {question.hundredSquare ? <HundredSquare square={question.hundredSquare} /> : null}
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.visual ? (

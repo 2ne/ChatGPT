@@ -5,6 +5,8 @@ import { describeVisual } from "../../data/objects";
 import type { CountObjectsQuestion, MultipleChoiceQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { BaseTen } from "./BaseTen";
+import { HundredSquare } from "./HundredSquare";
+import { NumberLine } from "./NumberLine";
 import { TenFrame } from "./TenFrame";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
@@ -75,32 +77,8 @@ export function MultipleChoice({
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
     <div className="option-stack">
-      {question.numberLine ? (
-        <svg viewBox="0 0 360 116" role="img"
-          aria-label={`Number line from ${question.numberLine.start} to ${question.numberLine.end}, with a missing label at the marked tick. Each tick is one number apart.`}
-          style={{ display: "block", width: "100%", maxWidth: 440, margin: "0 auto 8px", fontFamily: "var(--font-display)" }}>
-          <line x1="20" y1="42" x2="340" y2="42" stroke="var(--ink-soft)" strokeWidth="3" strokeLinecap="round" />
-          {Array.from({ length: question.numberLine.end - question.numberLine.start + 1 }, (_, i) => {
-            const n = question.numberLine!;
-            const value = n.start + i;
-            const x = 20 + i * 320 / (n.end - n.start);
-            const marked = value === n.marked;
-            const tileWidth = Math.min(38, 320 / (n.end - n.start) - 5);
-            return (
-              <g key={value}>
-                {marked ? <path d={`M ${x - 5} 18 L ${x + 5} 18 L ${x} 26 Z`} fill="var(--primary)" /> : null}
-                <line x1={x} x2={x} y1={marked ? 31 : 36} y2="49"
-                  stroke={marked ? "var(--primary)" : "var(--ink-soft)"} strokeWidth={marked ? 4 : 3} strokeLinecap="round" />
-                <rect x={x - tileWidth / 2} y="62" width={tileWidth} height="36" rx="10"
-                  fill={marked ? "var(--sun-soft)" : "var(--paper)"}
-                  stroke={marked ? "var(--gold)" : "var(--line)"} strokeWidth={marked ? 2 : 1} />
-                <text x={x} y="86" textAnchor="middle" fontSize={marked ? 23 : 19} fontWeight="800"
-                  fill={marked ? "var(--primary-deep)" : "var(--ink)"}>{marked ? "?" : value}</text>
-              </g>
-            );
-          })}
-        </svg>
-      ) : null}
+      {question.numberLine ? <NumberLine line={question.numberLine} /> : null}
+      {question.hundredSquare ? <HundredSquare square={question.hundredSquare} /> : null}
       {question.position ? <PositionPicture scene={question.position} /> : null}
       {sum ? (
         <div className={`make-total-sum${reveal === "correct" ? " is-correct" : reveal === "incorrect" ? " is-wrong" : ""}`}>

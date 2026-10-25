@@ -111,6 +111,38 @@ export type DiceAsset = {
   count: number;
 };
 
+/**
+ * Real number line. 0 to 10 or 0 to 20 with a tick every one.
+ * 0 to 100 with a tick every ten. A marked tick shows ?.
+ * Flags A to D sit on an unmarked line and are not tappable.
+ */
+export const NUMBER_LINE_SCALES = ["ones", "tens"] as const;
+export type NumberLineScale = (typeof NUMBER_LINE_SCALES)[number];
+
+export type NumberLineFlag = {
+  letter: "A" | "B" | "C" | "D";
+  at: number;
+};
+
+export type NumberLineAsset = {
+  start: number;
+  end: number;
+  scale?: NumberLineScale;
+  marked?: number;
+  flags?: NumberLineFlag[];
+};
+
+/**
+ * A 3 or 4 row window of a 1 to 100 square. Numerals only. Not tappable.
+ * `start` is the first cell (1, 11, 21...). `missing` is the ? cell.
+ */
+export type HundredSquareAsset = {
+  start: number;
+  rows: 3 | 4;
+  missing: number;
+  highlight?: number;
+};
+
 export type QuestionOption = {
   id: string;
   shape?: ShapeAsset;
@@ -161,7 +193,8 @@ export type PositionScene = { object: "tree" | "box" | "kite" | "bird"; relation
 export type TurnDiagram = { start: 0 | 1 | 2 | 3; quarters: 1 | 2 | 3 | 4; clockwise: boolean; showEnd: boolean; interactive?: boolean };
 
 type QuestionCore = {
-  numberLine?: { start: number; end: number; marked: number };
+  numberLine?: NumberLineAsset;
+  hundredSquare?: HundredSquareAsset;
   position?: PositionScene;
   turn?: TurnDiagram;
   id: string;

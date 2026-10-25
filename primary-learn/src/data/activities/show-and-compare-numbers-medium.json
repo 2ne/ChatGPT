@@ -121,9 +121,9 @@
         { "id": "3", "label": "44" }
       ],
       "correctId": "1",
-      "explanation": "The marked tick is 42. Each tick is one more than the tick before it.",
+      "explanation": "The mark is 42. It sits just after 40, not on 40.",
       "randomise": { "shuffleOptions": true },
-      "numberLine": { "start": 40, "end": 46, "marked": 42 },
+      "numberLine": { "start": 0, "end": 100, "scale": "tens", "marked": 42 },
       "id": "represent100-2-4",
       "narration": { "prompt": "Which number belongs at the marked tick?" }
     },

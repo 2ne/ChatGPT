@@ -1,12 +1,10 @@
 {
   "id": "count-beyond-20-medium",
   "title": "Count beyond 20",
-  "summary": "Count on, fill missing numbers and notice the pattern across 20.",
+  "summary": "Count on and back through the twenties with a hundred square.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": [
-    "Reception"
-  ],
+  "yearGroups": ["Reception"],
   "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -15,343 +13,149 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 Which number is missing? 16, _, 18, 19 Question 2 Which number is missing? 19, 20, _, 22 Question 3 Put the numbers in order, from smallest to biggest. Questions 4 to 6 ask what number comes next after 20, 21 and 22. Question 7 What number comes next? 22, 23, 24, ? Question 8 17 is 10 and how many more? Question 9 Which number is missing? 23, 24, _ Question 10 What number comes next? 24, 25, ?",
-    "versus": "Easy counts from teens across 20 with early hints. Medium fills gaps and counts from 20 to 26. Hard fills gaps and orders numbers up to 30. Difficulty comes from the counting pattern rather than reading number words."
+    "within": "Q1 to Q3 move the square for ten less, a gap and one less across 30. Q4 and Q5 cross 25 and 30 both ways. Q6 spots a forward count that repeats. Q7 reads 18 on a 0 to 20 line. Q8 types the number before 26. Q9 spots 10 and a bit. Q10 orders 24 to 27.",
+    "versus": "Easy uses a 3-row square and a 0 to 20 line around 20. Medium moves the window higher and counts both ways. Hard adds tens and ones, reverse thinking and counts towards 30."
   },
-  "skills": [
-    "eyfs-count-20plus",
-    "count-beyond-20",
-    "teen-number-pattern"
-  ],
-  "randomise": {
-    "mode": "attempt",
-    "items": [
-      "apple",
-      "banana",
-      "star",
-      "balloon",
-      "car",
-      "duck",
-      "ladybird",
-      "frog",
-      "fish",
-      "strawberry"
-    ]
-  },
+  "skills": ["eyfs-count-20plus", "count-beyond-20", "teen-number-pattern"],
   "questions": [
     {
+      "id": "c20-2-1",
       "kind": "multiple-choice",
-      "id": "c20m-gap-1",
-      "prompt": "Which number is missing? 16, _, 18, 19",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "prompt": "Which number is above 24?",
+      "hundredSquare": { "start": 11, "rows": 3, "missing": 14, "highlight": 24 },
       "options": [
-        {
-          "id": "a",
-          "label": "15"
-        },
-        {
-          "id": "b",
-          "label": "17"
-        },
-        {
-          "id": "c",
-          "label": "20"
-        },
-        {
-          "id": "d",
-          "label": "18"
-        }
-      ],
-      "correctId": "b",
-      "hint": "Count on from 16.",
-      "explanation": "17 comes after 16 and before 18.",
-      "narration": {
-        "prompt": "Which number is missing? Sixteen, blank, eighteen, nineteen."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-gap-2",
-      "prompt": "Which number is missing? 19, 20, _, 22",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "18"
-        },
-        {
-          "id": "b",
-          "label": "21"
-        },
-        {
-          "id": "c",
-          "label": "23"
-        },
-        {
-          "id": "d",
-          "label": "20"
-        }
-      ],
-      "correctId": "b",
-      "hint": "Keep counting past 20.",
-      "explanation": "21 comes after 20 and before 22.",
-      "narration": {
-        "prompt": "Which number is missing? Nineteen, twenty, blank, twenty-two."
-      }
-    },
-    {
-      "kind": "ordered",
-      "id": "c20m-order",
-      "prompt": "Put the numbers in order, from smallest to biggest.",
-      "items": [
-        {
-          "id": "n21",
-          "label": "21"
-        },
-        {
-          "id": "n18",
-          "label": "18"
-        },
-        {
-          "id": "n20",
-          "label": "20"
-        },
-        {
-          "id": "n19",
-          "label": "19"
-        }
-      ],
-      "correctOrder": [
-        "n18",
-        "n19",
-        "n20",
-        "n21"
-      ],
-      "explanation": "The numbers go 18, 19, 20, 21 from smallest to biggest.",
-      "narration": {
-        "prompt": "Put the numbers in order, from smallest to biggest."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-match-22",
-      "prompt": "What number comes next? 20, 21, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "21"
-        },
-        {
-          "id": "b",
-          "label": "22"
-        },
-        {
-          "id": "c",
-          "label": "23"
-        },
-        {
-          "id": "d",
-          "label": "20"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "22 comes after 21.",
-      "narration": {
-        "prompt": "What number comes next? Twenty, twenty-one, blank."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-match-23",
-      "prompt": "What number comes next? 21, 22, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "22"
-        },
-        {
-          "id": "b",
-          "label": "23"
-        },
-        {
-          "id": "c",
-          "label": "24"
-        },
-        {
-          "id": "d",
-          "label": "21"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "23 comes after 22.",
-      "narration": {
-        "prompt": "What number comes next? Twenty-one, twenty-two, blank."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-match-24",
-      "prompt": "What number comes next? 22, 23, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "23"
-        },
-        {
-          "id": "b",
-          "label": "24"
-        },
-        {
-          "id": "c",
-          "label": "25"
-        },
-        {
-          "id": "d",
-          "label": "22"
-        }
-      ],
-      "correctId": "b",
-      "explanation": "24 comes after 23.",
-      "narration": {
-        "prompt": "What number comes next? Twenty-two, twenty-three, blank."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-next-24",
-      "prompt": "What number comes next? 22, 23, 24, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "23"
-        },
-        {
-          "id": "b",
-          "label": "24"
-        },
-        {
-          "id": "c",
-          "label": "25"
-        },
-        {
-          "id": "d",
-          "label": "26"
-        }
-      ],
-      "correctId": "c",
-      "explanation": "25 comes after 24.",
-      "narration": {
-        "prompt": "What number comes next? Twenty-two, twenty-three, twenty-four, blank."
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-teen-bit",
-      "prompt": "17 is 10 and how many more?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "5"
-        },
-        {
-          "id": "b",
-          "label": "6"
-        },
-        {
-          "id": "c",
-          "label": "7"
-        },
-        {
-          "id": "d",
-          "label": "8"
-        }
-      ],
-      "correctId": "c",
-      "explanation": "17 is 10 and 7.",
-      "narration": {
-        "prompt": "seventeen is ten and how many more?"
-      }
-    },
-    {
-      "kind": "multiple-choice",
-      "id": "c20m-blank",
-      "prompt": "Which number is missing? 23, 24, _",
-      "explanation": "25 comes after 24.",
-      "narration": {
-        "prompt": "Which number is missing? twenty-three, twenty-four, _"
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "25"
-        },
-        {
-          "id": "b",
-          "label": "24"
-        },
-        {
-          "id": "c",
-          "label": "26"
-        },
-        {
-          "id": "d",
-          "label": "23"
-        }
+        { "id": "a", "label": "14" },
+        { "id": "b", "label": "23" },
+        { "id": "c", "label": "25" }
       ],
       "correctId": "a",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "explanation": "Above 24 is 14. That is ten less, not one less.",
+      "narration": { "prompt": "Which number is above 24?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
+      "id": "c20-2-2",
       "kind": "multiple-choice",
-      "id": "c20m-next-26",
-      "prompt": "What number comes next? 24, 25, ?",
-      "randomise": {
-        "shuffleOptions": true
-      },
+      "prompt": "Which number goes in the empty cell?",
+      "hundredSquare": { "start": 11, "rows": 3, "missing": 22 },
       "options": [
-        {
-          "id": "a",
-          "label": "23"
-        },
-        {
-          "id": "b",
-          "label": "26"
-        },
-        {
-          "id": "c",
-          "label": "27"
-        },
-        {
-          "id": "d",
-          "label": "25"
-        }
+        { "id": "a", "label": "12" },
+        { "id": "b", "label": "21" },
+        { "id": "c", "label": "22" }
+      ],
+      "correctId": "c",
+      "explanation": "The empty cell is 22. After 21 comes 22, not 12.",
+      "narration": { "prompt": "Which number goes in the empty cell?" },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-3",
+      "kind": "multiple-choice",
+      "prompt": "Which number is left of 30?",
+      "hundredSquare": { "start": 11, "rows": 3, "missing": 29, "highlight": 30 },
+      "options": [
+        { "id": "a", "label": "19" },
+        { "id": "b", "label": "28" },
+        { "id": "c", "label": "29" }
+      ],
+      "correctId": "c",
+      "explanation": "Left of 30 is 29. Do not drop a whole ten.",
+      "narration": { "prompt": "Which number is left of 30?" },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-4",
+      "kind": "multiple-choice",
+      "prompt": "What number comes after 25?",
+      "options": [
+        { "id": "a", "label": "24" },
+        { "id": "b", "label": "25" },
+        { "id": "c", "label": "26" }
+      ],
+      "correctId": "c",
+      "explanation": "After 25 comes 26. Keep the same ten and add one.",
+      "narration": { "prompt": "What number comes after 25?" },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-5",
+      "kind": "multiple-choice",
+      "prompt": "What number comes before 30?",
+      "options": [
+        { "id": "a", "label": "20" },
+        { "id": "b", "label": "29" },
+        { "id": "c", "label": "31" }
       ],
       "correctId": "b",
-      "explanation": "26 comes after 25.",
-      "narration": {
-        "prompt": "What number comes next? Twenty-four, twenty-five, blank."
-      }
+      "explanation": "Before 30 is 29. Not 20 and not 31.",
+      "narration": { "prompt": "What number comes before 30?" },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-6",
+      "kind": "multiple-choice",
+      "prompt": "Which number is wrong? 23, 24, 25, 26, 25",
+      "options": [
+        { "id": "a", "label": "22" },
+        { "id": "b", "label": "25" },
+        { "id": "c", "label": "27" }
+      ],
+      "correctId": "b",
+      "explanation": "The count went back to 25. After 26 comes 27.",
+      "narration": { "prompt": "Which number is wrong? 23, 24, 25, 26, 25." },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-7",
+      "kind": "multiple-choice",
+      "prompt": "Which number sits on the mark?",
+      "numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 18 },
+      "options": [
+        { "id": "a", "label": "8" },
+        { "id": "b", "label": "17" },
+        { "id": "c", "label": "18" }
+      ],
+      "correctId": "c",
+      "explanation": "The mark is 18. That is 10 and 8, not 8.",
+      "narration": { "prompt": "Which number sits on the mark?" },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-8",
+      "kind": "fill-blank",
+      "prompt": "Type the number before 26.",
+      "acceptedAnswers": ["25", "twenty-five", "twenty five"],
+      "inputMode": "numeric",
+      "explanation": "Before 26 is 25. Count back one, not a ten.",
+      "narration": { "prompt": "Type the number before 26." }
+    },
+    {
+      "id": "c20-2-9",
+      "kind": "multiple-choice",
+      "prompt": "17 is 10 and how many more?",
+      "options": [
+        { "id": "a", "label": "6" },
+        { "id": "b", "label": "7" },
+        { "id": "c", "label": "8" }
+      ],
+      "correctId": "b",
+      "explanation": "17 is 10 and 7. The 1 is the ten, not the extra.",
+      "narration": { "prompt": "17 is 10 and how many more?" },
+      "randomise": { "shuffleOptions": true }
+    },
+    {
+      "id": "c20-2-10",
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        { "id": "n26", "label": "26" },
+        { "id": "n24", "label": "24" },
+        { "id": "n25", "label": "25" },
+        { "id": "n27", "label": "27" }
+      ],
+      "correctOrder": ["n24", "n25", "n26", "n27"],
+      "explanation": "The numbers go 24, 25, 26, 27. Each one is one more.",
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     }
   ]
 }

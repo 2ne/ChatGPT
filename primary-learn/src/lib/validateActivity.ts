@@ -586,16 +586,73 @@ function parseQuestion(value: unknown, path: string): Question {
     if (kind !== "multiple-choice" || turn || shape || visual || extras || layout || flashMs != null || tenFrame || baseTen) fail(path, "position scenes use choice questions without other pictures");
     position = p as unknown as typeof position;
   }
-  let numberLine: { start: number; end: number; marked: number } | undefined;
+  let numberLine: import("../types/activity").NumberLineAsset | undefined;
   if (value.numberLine != null) {
     const n = value.numberLine;
-    if (!isRecord(n) || !Number.isInteger(n.start) || !Number.isInteger(n.end) || !Number.isInteger(n.marked)) fail(path, "number line needs whole numbers");
-    const start = n.start as number, end = n.end as number, marked = n.marked as number;
-    if (start < 0 || end > 100 || end <= start || end - start > 10 || marked <= start || marked >= end || kind !== "multiple-choice") fail(path, "invalid number line range");
-    if (tenFrame || baseTen) fail(path, "number lines cannot mix with a ten frame or tens and ones");
-    numberLine = { start, end, marked };
+    if (!isRecord(n) || !Number.isInteger(n.start) || !Number.isInteger(n.end)) fail(path, "number line needs whole numbers");
+    const start = n.start as number;
+    const end = n.end as number;
+    if (start !== 0 || (end !== 10 && end !== 20 && end !== 100)) fail(path, "number line is 0 to 10, 0 to 20 or 0 to 100");
+    const scale = n.scale == null ? (end <= 20 ? "ones" : "tens") : n.scale;
+    if (scale !== "ones" && scale !== "tens") fail(path, "number line scale must be ones or tens");
+    if (end <= 20 && scale !== "ones") fail(path, "0 to 10 and 0 to 20 use a tick every one");
+    if (end === 100 && scale !== "tens") fail(path, "0 to 100 uses a tick every ten");
+    let marked: number | undefined;
+    if (n.marked != null) {
+      marked = expectNumber(n, "marked", `${path}.numberLine`);
+      if (!Number.isInteger(marked) || marked < start || marked > end) fail(path, "marked tick must sit on the line");
+    }
+    let flags: import("../types/activity").NumberLineFlag[] | undefined;
+    if (n.flags != null) {
+      const list = expectArray(n, "flags", `${path}.numberLine`);
+      if (list.length !== 4) fail(path, "number line flags need A, B, C and D");
+      const letters = new Set<string>();
+      flags = list.map((flag, i) => {
+        const fp = `${path}.numberLine.flags[${i}]`;
+        if (!isRecord(flag) || !["A", "B", "C", "D"].includes(flag.letter as string) || !Number.isInteger(flag.at)) {
+          fail(fp, "flag needs letter A to D and a whole number");
+        }
+        if (letters.has(flag.letter as string)) fail(fp, "flag letters must be unique");
+        letters.add(flag.letter as string);
+        if ((flag.at as number) < start || (flag.at as number) > end) fail(fp, "flag must sit on the line");
+        return { letter: flag.letter as "A" | "B" | "C" | "D", at: flag.at as number };
+      });
+      if (letters.size !== 4) fail(path, "number line flags need A, B, C and D");
+    }
+    if (marked == null && !flags) fail(path, "number line needs a marked tick or flags");
+    if (kind !== "multiple-choice" && kind !== "fill-blank") fail(path, "number lines use choice or fill-blank questions");
+    if (visual || extras || layout || flashMs != null || tenFrame || baseTen || shape || turn || position) {
+      fail(path, "number lines cannot mix with other stem pictures");
+    }
+    numberLine = { start, end, scale, marked, flags };
   }
-  const core = { numberLine, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, shape, turn, position, extras, layout, flashMs, randomise };
+  let hundredSquare: import("../types/activity").HundredSquareAsset | undefined;
+  if (value.hundredSquare != null) {
+    const s = value.hundredSquare;
+    if (!isRecord(s) || !Number.isInteger(s.start) || !Number.isInteger(s.rows) || !Number.isInteger(s.missing)) {
+      fail(path, "hundred square needs start, rows and missing");
+    }
+    const start = s.start as number;
+    const rows = s.rows as number;
+    const missing = s.missing as number;
+    if (start < 1 || start > 91 || (start - 1) % 10 !== 0) fail(path, "hundred square start must be 1, 11, 21...");
+    if (rows !== 3 && rows !== 4) fail(path, "hundred square shows 3 or 4 rows");
+    const last = start + rows * 10 - 1;
+    if (last > 100) fail(path, "hundred square window must stay inside 1 to 100");
+    if (missing < start || missing > last) fail(path, "missing cell must sit in the window");
+    let highlight: number | undefined;
+    if (s.highlight != null) {
+      highlight = expectNumber(s, "highlight", `${path}.hundredSquare`);
+      if (!Number.isInteger(highlight) || highlight < start || highlight > last) fail(path, "highlight must sit in the window");
+      if (highlight === missing) fail(path, "highlight cannot be the missing cell");
+    }
+    if (kind !== "multiple-choice" && kind !== "fill-blank") fail(path, "hundred squares use choice or fill-blank questions");
+    if (numberLine || visual || extras || layout || flashMs != null || tenFrame || baseTen || shape || turn || position) {
+      fail(path, "hundred squares cannot mix with other stem pictures");
+    }
+    hundredSquare = { start, rows: rows as 3 | 4, missing, highlight };
+  }
+  const core = { numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,

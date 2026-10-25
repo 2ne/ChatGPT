@@ -1,6 +1,8 @@
 import {
   OBJECT_ITEMS,
   type BaseTenAsset,
+  type HundredSquareAsset,
+  type NumberLineAsset,
   type ObjectAsset,
   type ObjectItem,
   type TenFrameAsset,
@@ -121,6 +123,22 @@ export function describeBaseTen(model: BaseTenAsset): string {
 
 export function baseTenKey(model: BaseTenAsset): string {
   return `base-ten:${model.tens}:${model.ones}:${model.style ?? "segmented"}`;
+}
+
+export function describeNumberLine(line: NumberLineAsset): string {
+  const scale = line.scale ?? (line.end <= 20 ? "ones" : "tens");
+  const ticks = scale === "tens" ? "a tick every ten" : "a tick every one";
+  if (line.flags?.length) {
+    const flags = line.flags.map((flag) => `flag ${flag.letter}`).join(", ");
+    return `Number line from ${line.start} to ${line.end} with ${ticks}. ${flags}. The flags are not buttons.`;
+  }
+  return `Number line from ${line.start} to ${line.end} with ${ticks}. One mark is a question mark.`;
+}
+
+export function describeHundredSquare(square: HundredSquareAsset): string {
+  const last = square.start + square.rows * 10 - 1;
+  const extra = square.highlight != null ? " One cell is highlighted." : "";
+  return `A hundred square from ${square.start} to ${last}. One cell is a question mark.${extra}`;
 }
 
 export function visualKey(visual: ObjectAsset): string {

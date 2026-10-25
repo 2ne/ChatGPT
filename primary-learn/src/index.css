@@ -1928,6 +1928,64 @@ button.object-token {
   margin: 0;
 }
 
+.number-line {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  margin: 0 auto 12px;
+}
+
+.number-line-label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.number-line-flag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.hundred-square {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 12px;
+}
+
+.hundred-square-cell {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 6px;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.hundred-square-cell.is-missing {
+  background: var(--sun-soft);
+  border: 2px dashed var(--gold);
+  color: var(--primary-deep);
+  font-size: 14px;
+}
+
+.hundred-square-cell.is-on {
+  background: var(--primary-soft);
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
 .ten-frame-board {
   --tf-cell: 22px;
   --tf-gap: 3px;

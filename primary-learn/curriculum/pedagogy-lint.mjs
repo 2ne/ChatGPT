@@ -5,12 +5,6 @@
 
 /** Later rewrite: Count to 100, Count beyond 20, Everyday shapes. */
 const LATER_REWRITE = new Set([
-  "count-to-100",
-  "count-to-100-medium",
-  "count-to-100-hard",
-  "count-beyond-20",
-  "count-beyond-20-medium",
-  "count-beyond-20-hard",
   "everyday-shapes",
   "everyday-shapes-medium",
   "everyday-shapes-hard",
@@ -136,6 +130,7 @@ function optionFingerprint(question) {
     numeral: question.numeral ?? null,
     turn: question.turn ?? null,
     numberLine: question.numberLine ?? null,
+    hundredSquare: question.hundredSquare ?? null,
     pairs: question.pairs ?? null,
   });
 }
@@ -286,4 +281,4 @@ export function lintActivities(activities) {
 }
 
 export const pedagogyAllowlistNote =
-  "TODO later rewrite: count-to-100, count-beyond-20, everyday-shapes. Just-shipped allowlist: show-and-compare-numbers, more-less-same.";
+  "TODO later rewrite: everyday-shapes. Just-shipped allowlist: show-and-compare-numbers, more-less-same.";

@@ -1,306 +1,179 @@
 {
   "id": "count-to-100-medium",
   "title": "Count to 100",
-  "summary": "Count forwards and backwards and fill in missing numbers.",
+  "summary": "Count on and back through the higher tens with a hundred square.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": [
-    "Year1"
-  ],
+  "yearGroups": ["Year1"],
   "ability": "expected",
-  "estimatedMinutes": 5,
+  "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
   "curriculumRef": "y1-count-100",
   "pathNode": "y1-count-100",
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "1. What number comes next? 51, 52, 53, ? 2. What number comes next? 58, 57, 56, ? 3. What number comes next? 61, 62, 63, ? 4. What number comes next? 68, 67, 66, ? 5. Put the numbers in order, from smallest to biggest. 6. What number comes next? 78, 77, 76, ? 7. What number comes next? 81, 82, 83, ? 8. What number comes next? 88, 87, 86, ? 9. Put the numbers in order, from smallest to biggest. 10. What number comes next? 98, 97, 96, ?",
-    "versus": "Easy practises short counts from 21 to the sixties with early hints. Medium counts through higher tens up to 100. Hard counts forwards and backwards around 100, including crossing 100. Each level mixes choosing, writing and ordering numerals."
+    "within": "Q1 to Q3 move a 4-row square for ten less, one more and one less across 80. Q4 and Q5 cross 70 both ways. Q6 spots a forward count that repeats. Q7 reads 80 on the 0 to 100 line. Q8 types the number before 80. Q9 finds 64 on the line. Q10 orders numbers around 90.",
+    "versus": "Easy uses a 3-row square and a 0 to 100 line in the twenties to sixties. Medium moves the window higher and counts both ways. Hard adds tens and ones, reverse thinking and counts around 100."
   },
-  "skills": [
-    "count-forwards",
-    "count-backwards",
-    "write-numerals"
-  ],
+  "skills": ["count-forwards", "count-backwards", "write-numerals"],
   "questions": [
     {
       "id": "c100-2-1",
-      "prompt": "What number comes next? 51, 52, 53, ?",
-      "explanation": "Counting forwards in ones gives 51, 52, 53, 54.",
-      "narration": {
-        "prompt": "What number comes next? 51, 52, 53."
-      },
       "kind": "multiple-choice",
+      "prompt": "Which number is above 67?",
+      "hundredSquare": { "start": 51, "rows": 4, "missing": 57, "highlight": 67 },
       "options": [
-        {
-          "id": "0",
-          "label": "54"
-        },
-        {
-          "id": "1",
-          "label": "53"
-        },
-        {
-          "id": "2",
-          "label": "55"
-        },
-        {
-          "id": "3",
-          "label": "56"
-        }
+        { "id": "a", "label": "57" },
+        { "id": "b", "label": "58" },
+        { "id": "c", "label": "66" },
+        { "id": "d", "label": "77" }
       ],
-      "correctId": "0",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "correctId": "b",
+      "explanation": "Above 67 is 57. That is ten less, not one less.",
+      "narration": { "prompt": "Which number is above 67?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-2",
-      "prompt": "What number comes next? 58, 57, 56, ?",
-      "explanation": "Counting backwards in ones gives 58, 57, 56, 55.",
-      "narration": {
-        "prompt": "What number comes next? 58, 57, 56."
-      },
       "kind": "multiple-choice",
+      "prompt": "Which number goes in the empty cell?",
+      "hundredSquare": { "start": 61, "rows": 3, "missing": 73 },
       "options": [
-        {
-          "id": "0",
-          "label": "55"
-        },
-        {
-          "id": "1",
-          "label": "56"
-        },
-        {
-          "id": "2",
-          "label": "54"
-        },
-        {
-          "id": "3",
-          "label": "53"
-        }
+        { "id": "a", "label": "63" },
+        { "id": "b", "label": "71" },
+        { "id": "c", "label": "72" },
+        { "id": "d", "label": "73" }
       ],
-      "correctId": "0",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "correctId": "d",
+      "explanation": "The empty cell is 73. After 72 comes 73, not 63.",
+      "narration": { "prompt": "Which number goes in the empty cell?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-3",
-      "prompt": "What number comes next? 61, 62, 63, ?",
-      "explanation": "Counting forwards in ones gives 61, 62, 63, 64.",
-      "narration": {
-        "prompt": "What number comes next? 61, 62, 63."
-      },
       "kind": "multiple-choice",
+      "prompt": "Which number is left of 80?",
+      "hundredSquare": { "start": 61, "rows": 3, "missing": 79, "highlight": 80 },
       "options": [
-        {
-          "id": "0",
-          "label": "64"
-        },
-        {
-          "id": "1",
-          "label": "63"
-        },
-        {
-          "id": "2",
-          "label": "65"
-        },
-        {
-          "id": "3",
-          "label": "66"
-        }
+        { "id": "a", "label": "69" },
+        { "id": "b", "label": "78" },
+        { "id": "c", "label": "79" },
+        { "id": "d", "label": "81" }
       ],
-      "correctId": "0",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "correctId": "c",
+      "explanation": "Left of 80 is 79. Do not drop a whole ten.",
+      "narration": { "prompt": "Which number is left of 80?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-4",
-      "prompt": "What number comes next? 68, 67, 66, ?",
-      "explanation": "Counting backwards in ones gives 68, 67, 66, 65.",
-      "narration": {
-        "prompt": "What number comes next? 68, 67, 66."
-      },
-      "kind": "fill-blank",
-      "acceptedAnswers": [
-        "65",
-        "sixty-five",
-        "sixty five"
+      "kind": "multiple-choice",
+      "prompt": "What number comes after 69?",
+      "options": [
+        { "id": "a", "label": "60" },
+        { "id": "b", "label": "68" },
+        { "id": "c", "label": "69" },
+        { "id": "d", "label": "70" }
       ],
-      "inputMode": "numeric"
+      "correctId": "d",
+      "explanation": "After 69 comes 70. The ones go back to 0.",
+      "narration": { "prompt": "What number comes after 69?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-5",
-      "prompt": "Put the numbers in order, from smallest to biggest.",
-      "explanation": "The numbers go 71, 72, 73, 74.",
-      "kind": "ordered",
-      "items": [
-        {
-          "id": "c",
-          "label": "73"
-        },
-        {
-          "id": "a",
-          "label": "71"
-        },
-        {
-          "id": "d",
-          "label": "74"
-        },
-        {
-          "id": "b",
-          "label": "72"
-        }
+      "kind": "multiple-choice",
+      "prompt": "What number comes before 70?",
+      "options": [
+        { "id": "a", "label": "69" },
+        { "id": "b", "label": "70" },
+        { "id": "c", "label": "71" },
+        { "id": "d", "label": "79" }
       ],
-      "correctOrder": [
-        "a",
-        "b",
-        "c",
-        "d"
-      ],
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "correctId": "a",
+      "explanation": "Before 70 is 69. Not 60 and not 79.",
+      "narration": { "prompt": "What number comes before 70?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-6",
-      "prompt": "What number comes next? 78, 77, 76, ?",
-      "explanation": "Counting backwards in ones gives 78, 77, 76, 75.",
-      "narration": {
-        "prompt": "What number comes next? 78, 77, 76."
-      },
       "kind": "multiple-choice",
+      "prompt": "Which number is wrong? 76, 77, 78, 79, 78",
       "options": [
-        {
-          "id": "0",
-          "label": "75"
-        },
-        {
-          "id": "1",
-          "label": "76"
-        },
-        {
-          "id": "2",
-          "label": "74"
-        },
-        {
-          "id": "3",
-          "label": "73"
-        }
+        { "id": "a", "label": "78" },
+        { "id": "b", "label": "75" },
+        { "id": "c", "label": "80" },
+        { "id": "d", "label": "70" }
       ],
-      "correctId": "0",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "correctId": "a",
+      "explanation": "The count went back to 78. After 79 comes 80.",
+      "narration": { "prompt": "Which number is wrong? 76, 77, 78, 79, 78." },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-7",
-      "prompt": "What number comes next? 81, 82, 83, ?",
-      "explanation": "Counting forwards in ones gives 81, 82, 83, 84.",
-      "narration": {
-        "prompt": "What number comes next? 81, 82, 83."
-      },
       "kind": "multiple-choice",
+      "prompt": "Which number sits on the mark?",
+      "numberLine": { "start": 0, "end": 100, "scale": "tens", "marked": 80 },
       "options": [
-        {
-          "id": "0",
-          "label": "84"
-        },
-        {
-          "id": "1",
-          "label": "83"
-        },
-        {
-          "id": "2",
-          "label": "85"
-        },
-        {
-          "id": "3",
-          "label": "86"
-        }
+        { "id": "a", "label": "8" },
+        { "id": "b", "label": "70" },
+        { "id": "c", "label": "80" },
+        { "id": "d", "label": "90" }
       ],
-      "correctId": "0",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "correctId": "c",
+      "explanation": "The mark is 80. That is 8 tens, not 8.",
+      "narration": { "prompt": "Which number sits on the mark?" },
+      "randomise": { "shuffleOptions": true }
     },
     {
       "id": "c100-2-8",
-      "prompt": "What number comes next? 88, 87, 86, ?",
-      "explanation": "Counting backwards in ones gives 88, 87, 86, 85.",
-      "narration": {
-        "prompt": "What number comes next? 88, 87, 86."
-      },
       "kind": "fill-blank",
-      "acceptedAnswers": [
-        "85",
-        "eighty-five",
-        "eighty five"
-      ],
-      "inputMode": "numeric"
+      "prompt": "Type the number before 80.",
+      "acceptedAnswers": ["79", "seventy-nine", "seventy nine"],
+      "inputMode": "numeric",
+      "explanation": "Before 80 is 79. The ones become 9.",
+      "narration": { "prompt": "Type the number before 80." }
     },
     {
       "id": "c100-2-9",
-      "prompt": "Put the numbers in order, from smallest to biggest.",
-      "explanation": "The numbers go 91, 92, 93, 94.",
-      "kind": "ordered",
-      "items": [
-        {
-          "id": "c",
-          "label": "93"
-        },
-        {
-          "id": "a",
-          "label": "91"
-        },
-        {
-          "id": "d",
-          "label": "94"
-        },
-        {
-          "id": "b",
-          "label": "92"
-        }
+      "kind": "multiple-choice",
+      "prompt": "Which letter is 64?",
+      "numberLine": {
+        "start": 0,
+        "end": 100,
+        "scale": "tens",
+        "flags": [
+          { "letter": "A", "at": 50 },
+          { "letter": "B", "at": 60 },
+          { "letter": "C", "at": 64 },
+          { "letter": "D", "at": 70 }
+        ]
+      },
+      "options": [
+        { "id": "a", "label": "A" },
+        { "id": "b", "label": "B" },
+        { "id": "c", "label": "C" },
+        { "id": "d", "label": "D" }
       ],
-      "correctOrder": [
-        "a",
-        "b",
-        "c",
-        "d"
-      ],
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "correctId": "c",
+      "explanation": "64 sits just after 60. That flag is C, not B.",
+      "narration": { "prompt": "Which letter is 64?" }
     },
     {
       "id": "c100-2-10",
-      "prompt": "What number comes next? 98, 97, 96, ?",
-      "explanation": "Counting backwards in ones gives 98, 97, 96, 95.",
-      "narration": {
-        "prompt": "What number comes next? 98, 97, 96."
-      },
-      "kind": "multiple-choice",
-      "options": [
-        {
-          "id": "0",
-          "label": "95"
-        },
-        {
-          "id": "1",
-          "label": "96"
-        },
-        {
-          "id": "2",
-          "label": "94"
-        },
-        {
-          "id": "3",
-          "label": "93"
-        }
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        { "id": "n91", "label": "91" },
+        { "id": "n89", "label": "89" },
+        { "id": "n90", "label": "90" },
+        { "id": "n88", "label": "88" }
       ],
-      "correctId": "0",
-      "randomise": {
-        "shuffleOptions": true
-      }
+      "correctOrder": ["n88", "n89", "n90", "n91"],
+      "explanation": "The numbers go 88, 89, 90, 91 across the ten.",
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     }
   ]
 }

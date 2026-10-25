@@ -45,15 +45,15 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `patterns-to-10` | `eyfs-patterns-10` (node 9, category `cat-r-to-10`) | done — Easy: pair small groups, spot leftovers and share into two groups |
 | `patterns-to-10-medium` | `eyfs-patterns-10` (node 9, category `cat-r-to-10`) | done — Medium: odds and evens to 10, two-choice selection and sharing into two groups |
 | `patterns-to-10-hard` | `eyfs-patterns-10` (node 9, category `cat-r-to-10`) | done — Hard: odd/even reasoning, ordered evens and sharing whole objects into two groups |
-| `count-beyond-20` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Easy: teen next/gap, past 20, ten and a bit |
-| `count-beyond-20-medium` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Medium: numeric sequences and gaps across 20 to 26 |
-| `count-beyond-20-hard` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Hard: numeric gaps, count matching and ordering towards 30 |
+| `count-beyond-20` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Easy: hundred square, cross 20, spot a repeat, 0 to 20 line |
+| `count-beyond-20-medium` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Medium: higher hundred square, both ways, 0 to 20 line |
+| `count-beyond-20-hard` | `eyfs-count-20plus` (node 10, category `cat-r-count-on`) | done — Hard: tens and ones, reverse count, towards 30 |
 | `numbers-to-20` | `y1-read-write-20` (node 11, category `cat-y1-to-20`) | done — Easy: read/write teens, ten and a bit, match words |
 | `numbers-to-20-medium` | `y1-read-write-20` (node 11, category `cat-y1-to-20`) | done — Medium: awkward teens, write 17/18, reverse word |
 | `numbers-to-20-hard` | `y1-read-write-20` (node 11, category `cat-y1-to-20`) | done — Hard: lookalike errors, type twelve, ten and a bit |
-| `one-more-one-less` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Easy: one more/less within 10 with pictures |
-| `one-more-one-less-medium` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Medium: bridge 9, 10 and 11 before teens, number matching and ordering |
-| `one-more-one-less-hard` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Hard: numeric questions, zero boundary and a one-step story |
+| `one-more-one-less` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Easy: ten frames, 0 to 10 line, then cross 10 |
+| `one-more-one-less-medium` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Medium: two frames and a 0 to 20 line across 10 and 20 |
+| `one-more-one-less-hard` | `y1-1-more-less` (node 12, category `cat-y1-to-20`) | done — Hard: reverse both ways, one less than 30, story |
 | `number-bonds-to-10` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Easy: fill-slots and pick-pair bonds to 10, part-whole for 0, take-away pictures |
 | `number-bonds-to-10-medium` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Medium: fill-slots then sum-only, 0 and reverse parts, more take-away |
 | `number-bonds-to-10-hard` | `y1-bonds-10` (node 13, category `cat-y1-to-20`) | done — Hard: missing parts, four-tile pairs with dots and related subtraction |
@@ -72,9 +72,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `whole-half-quarter-turns-hard` | `y1-turns` (node 17, category `cat-y1-shape`) | done — Hard: three-quarter and whole car turns, including performed movements |
 
 
-| `count-to-100` | `y1-count-100` (node 18) | done — Easy counting sequences, written numerals and ordering |
-| `count-to-100-medium` | `y1-count-100` (node 18) | done — Medium counting sequences, written numerals and ordering |
-| `count-to-100-hard` | `y1-count-100` (node 18) | done — Hard counting sequences, written numerals and ordering |
+| `count-to-100` | `y1-count-100` (node 18) | done — Easy: 3-row square, cross tens, spot a repeat, 0 to 100 line |
+| `count-to-100-medium` | `y1-count-100` (node 18) | done — Medium: higher square, both ways, flags |
+| `count-to-100-hard` | `y1-count-100` (node 18) | done — Hard: tens and ones, reverse thinking, around 100 |
 
 | `show-and-compare-numbers` | `y1-represent-100` (node 19) | done — Easy pictures, number lines and comparisons |
 | `show-and-compare-numbers-medium` | `y1-represent-100` (node 19) | done — Medium pictures, number lines and comparisons |

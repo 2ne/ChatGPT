@@ -124,9 +124,9 @@
         { "id": "3", "label": "14" }
       ],
       "correctId": "1",
-      "explanation": "The marked tick is 12. Each tick is one more than the tick before it.",
+      "explanation": "The mark is 12. Each one tick is one more than the tick before.",
       "randomise": { "shuffleOptions": true },
-      "numberLine": { "start": 10, "end": 16, "marked": 12 },
+      "numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 12 },
       "id": "represent100-1-4",
       "narration": { "prompt": "Which number belongs at the marked tick?" }
     },
@@ -140,9 +140,9 @@
         { "id": "3", "label": "17" }
       ],
       "correctId": "1",
-      "explanation": "The marked tick is 15. Each tick is one more than the tick before it.",
+      "explanation": "The mark is 15. Each one tick is one more than the tick before.",
       "randomise": { "shuffleOptions": true },
-      "numberLine": { "start": 10, "end": 16, "marked": 15 },
+      "numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 15 },
       "id": "represent100-1-5",
       "narration": { "prompt": "Which number belongs at the marked tick?" }
     },
