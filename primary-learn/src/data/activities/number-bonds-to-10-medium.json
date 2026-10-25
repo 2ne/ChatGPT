@@ -87,19 +87,19 @@
       "options": [
         {
           "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
           "label": "10"
         },
         {
+          "id": "b",
+          "label": "11"
+        },
+        {
           "id": "c",
-          "label": "0"
+          "label": "12"
         },
         {
           "id": "d",
-          "label": "8"
+          "label": "13"
         }
       ],
       "hint": "Adding zero does not change a number.",
@@ -111,7 +111,7 @@
     {
       "kind": "part-whole",
       "id": "nb10m-pw-10",
-      "prompt": "What do you need to add to 10 to make 10?",
+      "prompt": "10 and what make 10?",
       "whole": 10,
       "parts": [
         10,
@@ -125,7 +125,7 @@
       ],
       "explanation": "10 and 0 make 10.",
       "narration": {
-        "prompt": "What do you need to add to ten to make ten?"
+        "prompt": "10 and what make 10?"
       }
     },
     {
@@ -138,7 +138,7 @@
       "options": [
         {
           "id": "a",
-          "label": "5"
+          "label": "7"
         },
         {
           "id": "b",
@@ -146,14 +146,14 @@
         },
         {
           "id": "c",
-          "label": "7"
+          "label": "8"
         },
         {
           "id": "d",
-          "label": "8"
+          "label": "5"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "Because 3 + 7 = 10, 10 take away 3 is 7.",
       "narration": {
         "prompt": "What is ten take away three?"
@@ -207,7 +207,7 @@
     {
       "kind": "make-total",
       "id": "nb10m-reverse",
-      "prompt": "What do you need to add to 7 to make 10?",
+      "prompt": "7 and what make 10?",
       "part": 7,
       "total": 10,
       "gap": "left",
@@ -218,24 +218,24 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
           "label": "3"
         },
         {
+          "id": "b",
+          "label": "2"
+        },
+        {
           "id": "c",
-          "label": "4"
+          "label": "1"
         },
         {
           "id": "d",
-          "label": "5"
+          "label": "0"
         }
       ],
       "explanation": "7 and 3 make 10.",
       "narration": {
-        "prompt": "What do you need to add to 7 to make 10?"
+        "prompt": "7 and what make 10?"
       }
     },
     {
@@ -253,15 +253,15 @@
         },
         {
           "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
           "label": "5"
         },
         {
+          "id": "c",
+          "label": "6"
+        },
+        {
           "id": "d",
-          "label": "0"
+          "label": "16"
         }
       ],
       "correctId": "a",
@@ -298,11 +298,11 @@
         },
         {
           "id": "c",
-          "label": "10"
+          "label": "2"
         },
         {
           "id": "d",
-          "label": "5"
+          "label": "10"
         }
       ],
       "correctId": "a",

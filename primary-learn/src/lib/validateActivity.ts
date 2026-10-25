@@ -582,7 +582,7 @@ function parseQuestion(value: unknown, path: string): Question {
   let position: import("../types/activity").PositionScene | undefined;
   if (value.position != null) {
     const p = value.position;
-    if (!isRecord(p) || !["tree", "box", "kite", "bird"].includes(p.object as string) || !["behind", "in-front", "above", "below"].includes(p.relation as string)) fail(path, "invalid position scene");
+    if (!isRecord(p) || !["tree", "box", "kite", "bird"].includes(p.object as string) || !["behind", "in-front", "above", "below", "left", "right"].includes(p.relation as string)) fail(path, "invalid position scene");
     if (kind !== "multiple-choice" || turn || shape || visual || extras || layout || flashMs != null || tenFrame || baseTen) fail(path, "position scenes use choice questions without other pictures");
     position = p as unknown as typeof position;
   }
@@ -637,7 +637,18 @@ function parseQuestion(value: unknown, path: string): Question {
       }
       if (turn?.interactive) {
         const expected = String((turn.clockwise ? 1 : -1) * turn.quarters);
-        if (correctId !== expected || options.length !== 8 || new Set(options.map(o => o.id)).size !== 8 || options.some(o => !["-4","-3","-2","-1","1","2","3","4"].includes(o.id))) fail(path, "interactive turn options must encode all eight signed movements and the requested correct movement");
+        const ids = options.map((option) => option.id);
+        const signed = new Set(["-4", "-3", "-2", "-1", "1", "2", "3", "4"]);
+        if (
+          correctId !== expected ||
+          options.length < 3 ||
+          options.length > 4 ||
+          new Set(ids).size !== options.length ||
+          !ids.includes(expected) ||
+          options.some((option) => !signed.has(option.id))
+        ) {
+          fail(path, "interactive turn options must encode 3 or 4 signed movements including the requested correct movement");
+        }
       }
       if (storyNamesOneObject(prompt)) {
         const items = options.flatMap((option) => (option.visual ? [option.visual.item] : []));

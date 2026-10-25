@@ -54,18 +54,14 @@
       "options": [
         {
           "id": "a",
-          "label": "1"
-        },
-        {
-          "id": "b",
           "label": "2"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "3"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "4"
         }
       ],
@@ -90,19 +86,15 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
+          "label": "3"
         },
         {
           "id": "b",
-          "label": "3"
+          "label": "2"
         },
         {
           "id": "c",
           "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "5"
         }
       ],
       "explanation": "2 and 1 make 3.",
@@ -126,7 +118,7 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
+          "label": "4"
         },
         {
           "id": "b",
@@ -134,11 +126,7 @@
         },
         {
           "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "5"
+          "label": "2"
         }
       ],
       "explanation": "2 and 2 make 4. This is double 2.",
@@ -216,10 +204,6 @@
         {
           "id": "c",
           "label": "3 and 3"
-        },
-        {
-          "id": "d",
-          "label": "1 and 2"
         }
       ],
       "correctId": "a",
@@ -233,9 +217,16 @@
       "id": "m5e-pw-5",
       "prompt": "What do you need to add to 4 to make 5?",
       "whole": 5,
-      "parts": [4, 1],
+      "parts": [
+        4,
+        1
+      ],
       "missing": "right",
-      "choices": [0, 1, 2],
+      "choices": [
+        0,
+        1,
+        2
+      ],
       "explanation": "4 and 1 make 5.",
       "narration": {
         "prompt": "What do you need to add to four to make five?"
@@ -257,22 +248,18 @@
       "options": [
         {
           "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
           "label": "4"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "5"
         },
         {
-          "id": "d",
-          "label": "2"
+          "id": "c",
+          "label": "6"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "1 {item} and 3 more make 4 {items}.",
       "narration": {
         "prompt": "Sam has 1 {item}. He gets 3 more. How many {items} does he have now?"

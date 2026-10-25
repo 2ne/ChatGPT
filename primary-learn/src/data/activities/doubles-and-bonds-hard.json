@@ -59,15 +59,11 @@
         },
         {
           "id": "b",
-          "label": "5"
-        },
-        {
-          "id": "c",
           "label": "7"
         },
         {
-          "id": "d",
-          "label": "4"
+          "id": "c",
+          "label": "8"
         }
       ],
       "randomise": {
@@ -99,10 +95,6 @@
         {
           "id": "c",
           "label": "9"
-        },
-        {
-          "id": "d",
-          "label": "6"
         }
       ],
       "randomise": {
@@ -133,10 +125,6 @@
         },
         {
           "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
           "label": "8"
         }
       ],
@@ -163,15 +151,11 @@
         },
         {
           "id": "b",
-          "label": "6"
-        },
-        {
-          "id": "c",
           "label": "8"
         },
         {
-          "id": "d",
-          "label": "5"
+          "id": "c",
+          "label": "9"
         }
       ],
       "randomise": {
@@ -202,10 +186,6 @@
         {
           "id": "c",
           "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "1"
         }
       ],
       "randomise": {
@@ -235,10 +215,10 @@
     {
       "kind": "make-total",
       "id": "db-h-double-4-review",
-      "prompt": "What is 4 + 4?",
+      "prompt": "What do 4 and 4 make?",
       "explanation": "4 and 4 make 8.",
       "narration": {
-        "prompt": "What is four plus four?"
+        "prompt": "What do four and four make?"
       },
       "part": 4,
       "other": 4,
@@ -256,10 +236,6 @@
         },
         {
           "id": "c",
-          "label": "9"
-        },
-        {
-          "id": "d",
           "label": "6"
         }
       ],
@@ -306,15 +282,11 @@
         },
         {
           "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
           "label": "9"
         },
         {
-          "id": "d",
-          "label": "6"
+          "id": "c",
+          "label": "10"
         }
       ],
       "randomise": {
@@ -324,10 +296,10 @@
     {
       "kind": "make-total",
       "id": "db-h-bond-8",
-      "prompt": "What do you need to add to 8 to make 10?",
+      "prompt": "8 and what make 10?",
       "explanation": "8 and 2 make 10.",
       "narration": {
-        "prompt": "What do you need to add to eight to make ten?"
+        "prompt": "8 and what make 10?"
       },
       "part": 8,
       "total": 10,
@@ -345,10 +317,6 @@
         {
           "id": "c",
           "label": "3"
-        },
-        {
-          "id": "d",
-          "label": "0"
         }
       ],
       "randomise": {

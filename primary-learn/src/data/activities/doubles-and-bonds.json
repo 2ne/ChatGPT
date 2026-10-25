@@ -59,15 +59,11 @@
         },
         {
           "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
           "label": "3"
         },
         {
-          "id": "d",
-          "label": "0"
+          "id": "c",
+          "label": "4"
         }
       ],
       "randomise": {
@@ -100,10 +96,6 @@
         {
           "id": "c",
           "label": "5"
-        },
-        {
-          "id": "d",
-          "label": "2"
         }
       ],
       "randomise": {
@@ -135,10 +127,6 @@
         },
         {
           "id": "c",
-          "label": "7"
-        },
-        {
-          "id": "d",
           "label": "4"
         }
       ],
@@ -150,10 +138,10 @@
     {
       "kind": "make-total",
       "id": "db-e-double-4",
-      "prompt": "What is 4 + 4?",
+      "prompt": "What do 4 and 4 make?",
       "explanation": "4 and 4 make 8.",
       "narration": {
-        "prompt": "What is four plus four?"
+        "prompt": "What do four and four make?"
       },
       "part": 4,
       "other": 4,
@@ -167,15 +155,11 @@
         },
         {
           "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
           "label": "9"
         },
         {
-          "id": "d",
-          "label": "6"
+          "id": "c",
+          "label": "10"
         }
       ],
       "randomise": {
@@ -277,10 +261,10 @@
     {
       "kind": "make-total",
       "id": "db-e-bond-5-recall",
-      "prompt": "What do you need to add to 5 to make 10?",
+      "prompt": "5 and what make 10?",
       "explanation": "5 and 5 make 10.",
       "narration": {
-        "prompt": "What do you need to add to five to make ten?"
+        "prompt": "5 and what make 10?"
       },
       "part": 5,
       "total": 10,
@@ -298,10 +282,6 @@
         {
           "id": "c",
           "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "3"
         }
       ],
       "randomise": {

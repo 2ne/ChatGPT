@@ -54,23 +54,19 @@
       "options": [
         {
           "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
           "label": "7"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "8"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "9"
         }
       ],
-      "correctId": "b",
-      "explanation": "There are 7 {items}.",
+      "correctId": "a",
+      "explanation": "There are 7 {items}. Each one counts once.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -91,23 +87,19 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "8"
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "7"
         },
         {
           "id": "c",
           "label": "9"
-        },
-        {
-          "id": "d",
-          "label": "10"
         }
       ],
-      "correctId": "b",
-      "explanation": "There are 8 {items}.",
+      "correctId": "a",
+      "explanation": "There are 8 {items}. Each one counts once.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -128,23 +120,19 @@
       "options": [
         {
           "id": "a",
-          "label": "8"
-        },
-        {
-          "id": "b",
           "label": "9"
         },
         {
-          "id": "c",
-          "label": "10"
+          "id": "b",
+          "label": "8"
         },
         {
-          "id": "d",
-          "label": "11"
+          "id": "c",
+          "label": "7"
         }
       ],
-      "correctId": "b",
-      "explanation": "There are 9 {items}.",
+      "correctId": "a",
+      "explanation": "There are 9 {items}. Each one counts once.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -168,7 +156,7 @@
     {
       "kind": "count-objects",
       "id": "c10m-10-frame",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many {items} are here?",
       "visual": {
         "item": "balloon",
         "count": 10
@@ -179,25 +167,21 @@
       "options": [
         {
           "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
           "label": "10"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "11"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "12"
         }
       ],
-      "correctId": "b",
-      "explanation": "There are 10 {items}.",
+      "correctId": "a",
+      "explanation": "There are 10 {items}. Each one counts once.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many {items} are here?"
       },
       "layout": "tens-frame"
     },
@@ -229,13 +213,6 @@
             "item": "frog",
             "count": 9
           }
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "frog",
-            "count": 10
-          }
         }
       ],
       "correctId": "c",
@@ -254,7 +231,7 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "10"
         },
         {
           "id": "b",
@@ -262,14 +239,10 @@
         },
         {
           "id": "c",
-          "label": "10"
-        },
-        {
-          "id": "d",
           "label": "11"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "10 comes after 9.",
       "narration": {
         "prompt": "What number comes next? Eight, nine, blank."
@@ -313,21 +286,49 @@
       "id": "c10m-match",
       "prompt": "Tap the {items} that match the number below.",
       "numeral": 8,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "fish", "count": 7 } },
-        { "id": "b", "visual": { "item": "fish", "count": 8 } },
-        { "id": "c", "visual": { "item": "fish", "count": 9 } },
-        { "id": "d", "visual": { "item": "fish", "count": 10 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "fish",
+            "count": 7
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "fish",
+            "count": 8
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "fish",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "fish",
+            "count": 10
+          }
+        }
       ],
       "correctId": "b",
       "explanation": "That group has 8 {items}.",
-      "narration": { "prompt": "Tap the {items} that match the number below." }
+      "narration": {
+        "prompt": "Tap the {items} that match the number below."
+      }
     },
     {
       "kind": "count-objects",
       "id": "c10m-messy-10",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many {items} are here?",
       "visual": {
         "item": "strawberry",
         "count": 10
@@ -338,25 +339,21 @@
       "options": [
         {
           "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
           "label": "10"
         },
         {
-          "id": "c",
-          "label": "11"
+          "id": "b",
+          "label": "9"
         },
         {
-          "id": "d",
-          "label": "12"
+          "id": "c",
+          "label": "8"
         }
       ],
-      "correctId": "b",
-      "explanation": "There are 10 {items}.",
+      "correctId": "a",
+      "explanation": "There are 10 {items}. Each one counts once.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many {items} are here?"
       },
       "layout": "scatter"
     }

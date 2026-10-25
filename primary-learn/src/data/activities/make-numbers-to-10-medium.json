@@ -58,14 +58,10 @@
         },
         {
           "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
           "label": "9"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "10"
         }
       ],
@@ -99,10 +95,6 @@
         {
           "id": "c",
           "label": "10"
-        },
-        {
-          "id": "d",
-          "label": "11"
         }
       ],
       "explanation": "6 and 3 make 9.",
@@ -134,11 +126,7 @@
         },
         {
           "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "12"
+          "label": "8"
         }
       ],
       "explanation": "7 and 3 make 10.",
@@ -287,22 +275,18 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
-        },
-        {
-          "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
           "label": "9"
         },
         {
-          "id": "d",
+          "id": "b",
           "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "11"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "5 {items} and 4 more make 9 {items}.",
       "narration": {
         "prompt": "Sam has 5 {items}. He gets 4 more. How many {items} does he have now?"

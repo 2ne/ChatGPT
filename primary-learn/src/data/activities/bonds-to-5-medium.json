@@ -86,19 +86,15 @@
       "options": [
         {
           "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
           "label": "5"
         },
         {
-          "id": "c",
-          "label": "0"
+          "id": "b",
+          "label": "6"
         },
         {
-          "id": "d",
-          "label": "3"
+          "id": "c",
+          "label": "7"
         }
       ],
       "hint": "Adding zero does not change a number.",
@@ -110,7 +106,7 @@
     {
       "kind": "part-whole",
       "id": "b5m-pw-5",
-      "prompt": "What do you need to add to 5 to make 5?",
+      "prompt": "5 and what make 5?",
       "whole": 5,
       "parts": [
         5,
@@ -124,7 +120,7 @@
       ],
       "explanation": "5 and 0 make 5.",
       "narration": {
-        "prompt": "What do you need to add to five to make five?"
+        "prompt": "5 and what make 5?"
       }
     },
     {
@@ -143,22 +139,18 @@
       "options": [
         {
           "id": "a",
-          "label": "1"
+          "label": "2"
         },
         {
           "id": "b",
-          "label": "2"
+          "label": "1"
         },
         {
           "id": "c",
           "label": "3"
-        },
-        {
-          "id": "d",
-          "label": "4"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "Because 3 + 2 = 5, 5 take away 3 is 2.",
       "narration": {
         "prompt": "Sam has 5 {items} and gives away 3. How many are left?"
@@ -210,9 +202,9 @@
       }
     },
     {
-      "kind": "make-total",
+      "kind": "multiple-choice",
       "id": "b5m-reverse",
-      "prompt": "What do you need to add to 2 to make 5?",
+      "prompt": "3 + 2 is the same family as 2 + 3. What is 3 + 2?",
       "part": 2,
       "total": 5,
       "gap": "left",
@@ -223,25 +215,22 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
+          "label": "5"
         },
         {
           "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
           "label": "4"
         },
         {
-          "id": "d",
-          "label": "1"
+          "id": "c",
+          "label": "3"
         }
       ],
-      "explanation": "2 and 3 make 5.",
+      "explanation": "3 + 2 and 2 + 3 both make 5.",
       "narration": {
-        "prompt": "What do you need to add to 2 to make 5?"
-      }
+        "prompt": "Three plus two is the same family as two plus three. What is three plus two?"
+      },
+      "correctId": "a"
     },
     {
       "kind": "multiple-choice",
@@ -258,11 +247,11 @@
         },
         {
           "id": "b",
-          "label": "0"
+          "label": "2"
         },
         {
           "id": "c",
-          "label": "2"
+          "label": "3"
         }
       ],
       "correctId": "a",
@@ -299,10 +288,6 @@
         },
         {
           "id": "c",
-          "label": "5"
-        },
-        {
-          "id": "d",
           "label": "2"
         }
       ],

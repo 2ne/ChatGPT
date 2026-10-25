@@ -78,15 +78,11 @@
         },
         {
           "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
           "label": "6"
         },
         {
-          "id": "d",
-          "label": "3"
+          "id": "c",
+          "label": "7"
         }
       ],
       "randomise": {
@@ -137,10 +133,6 @@
         {
           "id": "c",
           "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "3"
         }
       ],
       "randomise": {
@@ -190,10 +182,10 @@
     {
       "kind": "make-total",
       "id": "m10h-part-9",
-      "prompt": "What do you need to add to 4 to make 9?",
+      "prompt": "4 and what make 9?",
       "explanation": "4 and 5 make 9.",
       "narration": {
-        "prompt": "What do you need to add to four to make nine?"
+        "prompt": "4 and what make 9?"
       },
       "part": 4,
       "total": 9,
@@ -210,10 +202,6 @@
         },
         {
           "id": "c",
-          "label": "6"
-        },
-        {
-          "id": "d",
           "label": "3"
         }
       ],
@@ -244,10 +232,10 @@
     {
       "kind": "make-total",
       "id": "m10h-reverse-10",
-      "prompt": "What do you need to add to 7 to make 10?",
+      "prompt": "7 and what make 10?",
       "explanation": "7 and 3 make 10.",
       "narration": {
-        "prompt": "What do you need to add to seven to make ten?"
+        "prompt": "7 and what make 10?"
       },
       "part": 7,
       "total": 10,
@@ -260,15 +248,11 @@
         },
         {
           "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
           "label": "4"
         },
         {
-          "id": "d",
-          "label": "1"
+          "id": "c",
+          "label": "5"
         }
       ],
       "randomise": {

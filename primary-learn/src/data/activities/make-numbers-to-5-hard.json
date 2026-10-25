@@ -48,7 +48,10 @@
         "prompt": "What do one and two make?"
       },
       "whole": 3,
-      "parts": [1, 2],
+      "parts": [
+        1,
+        2
+      ],
       "missing": "whole",
       "choices": [
         3,
@@ -75,15 +78,11 @@
         },
         {
           "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
           "label": "3"
         },
         {
-          "id": "d",
-          "label": "0"
+          "id": "c",
+          "label": "4"
         }
       ],
       "randomise": {
@@ -134,10 +133,6 @@
         {
           "id": "c",
           "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "1"
         }
       ],
       "randomise": {
@@ -173,17 +168,24 @@
         "prompt": "What do you need to add to four to make four?"
       },
       "whole": 4,
-      "parts": [0, 4],
+      "parts": [
+        0,
+        4
+      ],
       "missing": "left",
-      "choices": [0, 1, 2]
+      "choices": [
+        0,
+        1,
+        2
+      ]
     },
     {
       "kind": "make-total",
       "id": "m5h-part-5",
-      "prompt": "What do you need to add to 2 to make 5?",
+      "prompt": "2 and what make 5?",
       "explanation": "2 and 3 make 5.",
       "narration": {
-        "prompt": "What do you need to add to two to make five?"
+        "prompt": "2 and what make 5?"
       },
       "part": 2,
       "total": 5,
@@ -200,10 +202,6 @@
         },
         {
           "id": "c",
-          "label": "4"
-        },
-        {
-          "id": "d",
           "label": "1"
         }
       ],
@@ -234,10 +232,10 @@
     {
       "kind": "make-total",
       "id": "m5h-reverse-5",
-      "prompt": "What do you need to add to 3 to make 5?",
+      "prompt": "3 and what make 5?",
       "explanation": "3 and 2 make 5.",
       "narration": {
-        "prompt": "What do you need to add to three to make five?"
+        "prompt": "3 and what make 5?"
       },
       "part": 3,
       "total": 5,
@@ -250,15 +248,11 @@
         },
         {
           "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
           "label": "3"
         },
         {
-          "id": "d",
-          "label": "0"
+          "id": "c",
+          "label": "4"
         }
       ],
       "randomise": {

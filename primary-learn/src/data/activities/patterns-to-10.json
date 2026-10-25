@@ -71,14 +71,6 @@
             "count": 3
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 5
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "a",
@@ -119,14 +111,6 @@
             "count": 5
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 1
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "b",
@@ -150,15 +134,11 @@
         },
         {
           "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
           "label": "3"
         },
         {
-          "id": "d",
-          "label": "0"
+          "id": "c",
+          "label": "4"
         }
       ],
       "correctId": "a",
@@ -203,14 +183,6 @@
             "count": 6
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 7
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "c",
@@ -247,15 +219,7 @@
           "id": "c",
           "visual": {
             "item": "star",
-            "count": 4
-          },
-          "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 6
+            "count": 5
           },
           "layout": "dice"
         }
@@ -285,10 +249,6 @@
         {
           "id": "c",
           "label": "4"
-        },
-        {
-          "id": "d",
-          "label": "1"
         }
       ],
       "correctId": "a",
@@ -332,14 +292,6 @@
             "count": 5
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 6
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "c",
@@ -350,10 +302,10 @@
     {
       "kind": "multiple-choice",
       "id": "pat-e-pair-8",
-      "prompt": "Which group can be put into pairs with none left over?",
-      "explanation": "8 makes 4 pairs with none left over.",
+      "prompt": "Which group is an even group?",
+      "explanation": "An even group makes pairs with none left over.",
       "narration": {
-        "prompt": "Which group can be put into pairs with none left over?"
+        "prompt": "Which group is an even group?"
       },
       "options": [
         {
@@ -377,14 +329,6 @@
           "visual": {
             "item": "star",
             "count": 8
-          },
-          "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 9
           },
           "layout": "dice"
         }
@@ -413,10 +357,6 @@
         },
         {
           "id": "c",
-          "label": "5"
-        },
-        {
-          "id": "d",
           "label": "2"
         }
       ],

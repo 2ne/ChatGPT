@@ -71,14 +71,6 @@
             "count": 8
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 9
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "c",
@@ -115,15 +107,7 @@
           "id": "c",
           "visual": {
             "item": "star",
-            "count": 8
-          },
-          "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 10
+            "count": 5
           },
           "layout": "dice"
         }
@@ -148,15 +132,11 @@
         },
         {
           "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
           "label": "5"
         },
         {
-          "id": "d",
-          "label": "2"
+          "id": "c",
+          "label": "6"
         }
       ],
       "correctId": "a",
@@ -217,15 +197,11 @@
         },
         {
           "id": "b",
-          "label": "4"
+          "label": "3"
         },
         {
           "id": "c",
-          "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "3"
+          "label": "4"
         }
       ],
       "correctId": "a",
@@ -297,14 +273,6 @@
           "layout": "dice"
         },
         {
-          "id": "c",
-          "visual": {
-            "item": "star",
-            "count": 9
-          },
-          "layout": "dice"
-        },
-        {
           "id": "d",
           "visual": {
             "item": "star",
@@ -362,22 +330,18 @@
       "options": [
         {
           "id": "a",
-          "label": "0"
+          "label": "1"
         },
         {
           "id": "b",
-          "label": "1"
+          "label": "0"
         },
         {
           "id": "c",
           "label": "2"
-        },
-        {
-          "id": "d",
-          "label": "4"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "randomise": {
         "shuffleOptions": true
       },
@@ -397,22 +361,18 @@
       "options": [
         {
           "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
           "label": "1"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "2"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "3"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "randomise": {
         "shuffleOptions": true
       },

@@ -50,22 +50,22 @@
       "options": [
         {
           "id": "a",
-          "label": "10"
-        },
-        {
-          "id": "b",
           "label": "11"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "12"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "14"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Eleven comes after ten.",
       "explanation": "Eleven is written as 11.",
       "narration": {
@@ -82,11 +82,11 @@
       "options": [
         {
           "id": "a",
-          "label": "11"
+          "label": "12"
         },
         {
           "id": "b",
-          "label": "12"
+          "label": "11"
         },
         {
           "id": "c",
@@ -94,10 +94,10 @@
         },
         {
           "id": "d",
-          "label": "20"
+          "label": "10"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Twelve comes after eleven.",
       "explanation": "Twelve is written as 12.",
       "narration": {
@@ -130,7 +130,11 @@
           "right": "15"
         }
       ],
-      "choices": ["15", "16", "17"],
+      "choices": [
+        "15",
+        "16",
+        "17"
+      ],
       "explanation": "Fifteen is written as 15.",
       "narration": {
         "prompt": "Select the card that matches the word."
@@ -149,7 +153,11 @@
           "right": "16"
         }
       ],
-      "choices": ["15", "16", "18"],
+      "choices": [
+        "15",
+        "16",
+        "18"
+      ],
       "explanation": "Sixteen is written as 16.",
       "narration": {
         "prompt": "Select the card that matches the word."
@@ -168,7 +176,11 @@
           "right": "17"
         }
       ],
-      "choices": ["16", "17", "18"],
+      "choices": [
+        "16",
+        "17",
+        "18"
+      ],
       "explanation": "Seventeen is written as 17.",
       "narration": {
         "prompt": "Select the card that matches the word."
@@ -178,7 +190,7 @@
     {
       "kind": "match-pairs",
       "id": "rw20e-match-18",
-      "prompt": "Select the card that matches the word.",
+      "prompt": "Find the number for this word.",
       "randomise": {},
       "pairs": [
         {
@@ -187,10 +199,14 @@
           "right": "18"
         }
       ],
-      "choices": ["16", "17", "18"],
+      "choices": [
+        "16",
+        "17",
+        "18"
+      ],
       "explanation": "Eighteen is written as 18.",
       "narration": {
-        "prompt": "Select the card that matches the word."
+        "prompt": "Find the number for this word."
       },
       "mode": "one-at-a-time"
     },
@@ -204,7 +220,7 @@
       "options": [
         {
           "id": "a",
-          "label": "4"
+          "label": "6"
         },
         {
           "id": "b",
@@ -212,14 +228,14 @@
         },
         {
           "id": "c",
-          "label": "6"
+          "label": "4"
         },
         {
           "id": "d",
-          "label": "7"
+          "label": "3"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "16 is 10 and 6.",
       "narration": {
         "prompt": "sixteen is ten and how many more?"
@@ -268,22 +284,22 @@
       "options": [
         {
           "id": "a",
-          "label": "12"
-        },
-        {
-          "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
           "label": "20"
         },
         {
-          "id": "d",
+          "id": "b",
+          "label": "21"
+        },
+        {
+          "id": "c",
           "label": "22"
+        },
+        {
+          "id": "d",
+          "label": "23"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "Twenty is written as 20.",
       "narration": {
         "prompt": "Which number is twenty?"

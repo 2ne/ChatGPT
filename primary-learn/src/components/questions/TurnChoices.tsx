@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { RotateCw } from "lucide-react";
 import type { MultipleChoiceQuestion } from "../../types/activity";
-import { TurnPicture, ToyCar, directions } from "./TurnPicture";
+import { ClockHand, TurnPicture, ToyCar, directions } from "./TurnPicture";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 function QuarterTurnIcon({ clockwise }: { clockwise: boolean }) {
   return <svg className="quarter-turn-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
@@ -22,13 +22,26 @@ export function TurnChoices({ question, answer, disabled, reveal, onChange }: {q
       // IDs encode the performed movement, not just the final orientation.
       onChange(next === 0 ? null : String(next));
     };
-    return <div className="option-stack"><TurnPicture turn={turn} steps={steps}/>
-      <div className="turn-controls"><button type="button" className="btn btn-secondary" aria-label="Quarter turn anti-clockwise" disabled={disabled || steps <= -4} onClick={() => move(-1)}><QuarterTurnIcon clockwise={false}/></button><button type="button" className="btn btn-secondary" aria-label="Quarter turn clockwise" disabled={disabled || steps >= 4} onClick={() => move(1)}><QuarterTurnIcon clockwise/></button></div>
+    const thisWay = turn.clockwise ? 1 : -1;
+    return <div className="option-stack">
+      <div className="turn-with-hand">
+        <TurnPicture turn={turn} steps={steps}/>
+        <ClockHand clockwise={turn.clockwise} />
+      </div>
+      <div className="turn-controls">
+        <button type="button" className="btn btn-secondary" aria-label={thisWay < 0 ? "Quarter turn this way" : "Quarter turn the other way"} disabled={disabled || steps <= -4} onClick={() => move(-1)}><QuarterTurnIcon clockwise={false}/></button>
+        <button type="button" className="btn btn-secondary" aria-label={thisWay > 0 ? "Quarter turn this way" : "Quarter turn the other way"} disabled={disabled || steps >= 4} onClick={() => move(1)}><QuarterTurnIcon clockwise/></button>
+      </div>
       <button type="button" className="btn btn-ghost" disabled={disabled || !steps} onClick={() => {current.current = 0;setSteps(0);onChange(null);}}><RotateCw size={20} aria-hidden />Start again</button>
     </div>;
   }
   const pictures = !turn.showEnd;
-  return <div className="option-stack"><TurnPicture turn={turn}/><div role="radiogroup" aria-label={question.prompt} className={pictures ? "shape-choice-grid" : "option-stack"}>
+  return <div className="option-stack">
+    <div className="turn-with-hand">
+      <TurnPicture turn={turn}/>
+      {pictures ? <ClockHand clockwise={turn.clockwise} /> : null}
+    </div>
+    <div role="radiogroup" aria-label={question.prompt} className={pictures ? "shape-choice-grid" : "option-stack"}>
     {question.options.map((option, slot) => {const selected = answer === option.id; const marked = markChoice(reveal,selected,option.id === question.correctId);return <button type="button" key={option.id} role="radio" aria-checked={selected} disabled={disabled} className={choiceClass(selected, marked, pictures ? ["shape-choice", "car-choice"] : [])} onClick={() => onChange(option.id)}>
       <span className="option-letter" aria-hidden>{"ABCD"[slot]}</span>{pictures ? <><ToyCar direction={directions.indexOf(option.label ?? "")}/><span>{option.label}</span></> : <span>{option.label}</span>}{marked && <span className={marked === "correct" ? "option-check" : "option-cross"} aria-hidden>{marked === "correct" ? "✓" : "✕"}</span>}
     </button>;})}

@@ -43,15 +43,15 @@
         },
         {
           "id": "b",
-          "label": "20"
-        },
-        {
-          "id": "c",
           "label": "1"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "20"
         }
       ],
       "randomise": {
@@ -73,11 +73,11 @@
         },
         {
           "id": "b",
-          "label": "0"
+          "label": "19"
         },
         {
           "id": "c",
-          "label": "19"
+          "label": "21"
         },
         {
           "id": "d",
@@ -128,15 +128,15 @@
         },
         {
           "id": "b",
-          "label": "7"
-        },
-        {
-          "id": "c",
           "label": "8"
         },
         {
+          "id": "c",
+          "label": "7"
+        },
+        {
           "id": "d",
-          "label": "10"
+          "label": "6"
         }
       ],
       "randomise": {
@@ -158,7 +158,7 @@
         },
         {
           "id": "b",
-          "label": "16"
+          "label": "8"
         },
         {
           "id": "c",
@@ -166,7 +166,7 @@
         },
         {
           "id": "d",
-          "label": "6"
+          "label": "25"
         }
       ],
       "correctId": "a",
@@ -213,15 +213,15 @@
         },
         {
           "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
           "label": "10"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "12"
+        },
+        {
+          "id": "d",
+          "label": "9"
         }
       ],
       "randomise": {
@@ -231,10 +231,10 @@
     },
     {
       "kind": "part-whole",
-      "prompt": "What do you need to add to 11 to make 20?",
+      "prompt": "11 and what make 20?",
       "explanation": "9 and 11 make 20.",
       "narration": {
-        "prompt": "What do you need to add to eleven to make twenty?"
+        "prompt": "11 and what make 20?"
       },
       "whole": 20,
       "parts": [
@@ -263,15 +263,15 @@
         },
         {
           "id": "b",
-          "label": "20"
+          "label": "6"
         },
         {
           "id": "c",
-          "label": "13"
+          "label": "5"
         },
         {
           "id": "d",
-          "label": "6"
+          "label": "4"
         }
       ],
       "correctId": "a",
@@ -299,15 +299,15 @@
         },
         {
           "id": "b",
-          "label": "20"
+          "label": "13"
         },
         {
           "id": "c",
-          "label": "8"
+          "label": "14"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "21"
         }
       ],
       "correctId": "a",

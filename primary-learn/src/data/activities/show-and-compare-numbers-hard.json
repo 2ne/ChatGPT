@@ -37,7 +37,8 @@
       "explanation": "There are 18. That is 10 and 8 more.",
       "randomise": { "shuffleOptions": true },
       "tenFrame": { "count": 18, "item": "apple" },
-      "id": "represent100-3-1"
+      "id": "represent100-3-1",
+      "narration": { "prompt": "How many can you see?" }
     },
     {
       "kind": "multiple-choice",
@@ -50,7 +51,8 @@
       "correctId": "0",
       "explanation": "29 is fewer than 31 and 39. Compare the tens first.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-3-2"
+      "id": "represent100-3-2",
+      "narration": { "prompt": "Which group has fewer?" }
     },
     {
       "kind": "match-pairs",
@@ -118,7 +120,8 @@
       "explanation": "The marked tick is 92. Each tick is one more than the tick before it.",
       "randomise": { "shuffleOptions": true },
       "numberLine": { "start": 90, "end": 96, "marked": 92 },
-      "id": "represent100-3-4"
+      "id": "represent100-3-4",
+      "narration": { "prompt": "Which number belongs at the marked tick?" }
     },
     {
       "kind": "multi-select",
@@ -132,7 +135,8 @@
       "explanation": "97 and 98 are both more than 96.",
       "randomise": { "shuffleOptions": true },
       "id": "represent100-3-6",
-      "correctIds": ["0", "2"]
+      "correctIds": ["0", "2"],
+      "narration": { "prompt": "Select the two numbers that are more than 96." }
     },
     {
       "kind": "multiple-choice",
@@ -146,7 +150,8 @@
       "correctId": "2",
       "explanation": "95 is less than 96.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-3-7"
+      "id": "represent100-3-7",
+      "narration": { "prompt": "Which number is less than 96?" }
     },
     {
       "kind": "multiple-choice",
@@ -159,7 +164,8 @@
       "correctId": "1",
       "explanation": "29 is the smallest. It has fewer tens than 31 and 39.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-3-9"
+      "id": "represent100-3-9",
+      "narration": { "prompt": "Which group has the fewest?" }
     },
     {
       "kind": "ordered",
@@ -172,7 +178,7 @@
       ],
       "correctOrder": ["0", "1", "2", "3"],
       "explanation": "The numbers go 93, 95, 96, 99.",
-      "id": "represent100-3-10"
-    }
-  ]
+      "id": "represent100-3-10",
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+    }]
 }

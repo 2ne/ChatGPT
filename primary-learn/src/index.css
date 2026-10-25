@@ -1282,10 +1282,10 @@ button.learner-chip:focus-visible {
   vertical-align: -0.15em;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  min-height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   margin-left: 8px;
   padding: 0;
   border-radius: 9999px;
@@ -1808,6 +1808,8 @@ button.object-token {
 .take-away-token.is-gone {
   border-radius: 10px;
   background: var(--take-away);
+  outline: 2px dashed var(--ink-soft);
+  outline-offset: -3px;
 }
 
 .take-away-strip.is-option {
@@ -4777,8 +4779,14 @@ button.object-token {
 .position-scene.is-above .position-pip { top: 119px; left: 90px; }
 .position-scene.is-below .position-object { width: 100px; height: 110px; top: 145px; left: 50%; transform: translateX(-50%); }
 .position-scene.is-below .position-pip { top: 0; width: 130px; left: 50%; transform: translateX(-50%); }
+.position-scene.is-left .position-object { left: 4px; top: 36px; }
+.position-scene.is-left .position-pip { left: 168px; top: 88px; }
+.position-scene.is-right .position-object { left: 176px; top: 36px; }
+.position-scene.is-right .position-pip { left: 16px; top: 88px; }
 .car-turn { margin: 0 auto 12px; width: min(100%, 280px); text-align: center; }
 .car-turn-stage { position: relative; width: 230px; height: 230px; margin: auto; border-radius: 50%; border: 2px dashed var(--line-strong); background: var(--paper); }
+.clock-hand-cue { display: block; width: 72px; height: 72px; margin: 8px auto 0; color: var(--ink); }
+.turn-with-hand { display: grid; justify-items: center; gap: 4px; }
 .car-turn-car, .car-turn-ghost { position: absolute; inset: 25px; }
 .car-turn-car { transition: transform var(--turn-duration) ease-in-out; }
 .car-turn-ghost { opacity: .18; }

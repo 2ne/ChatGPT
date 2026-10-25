@@ -54,19 +54,15 @@
       "options": [
         {
           "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
           "label": "4"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "5"
         },
         {
-          "id": "d",
-          "label": "2"
+          "id": "c",
+          "label": "6"
         }
       ],
       "explanation": "1 and 3 make 4.",
@@ -90,19 +86,15 @@
       "options": [
         {
           "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
           "label": "5"
         },
         {
-          "id": "c",
-          "label": "3"
+          "id": "b",
+          "label": "4"
         },
         {
-          "id": "d",
-          "label": "2"
+          "id": "c",
+          "label": "6"
         }
       ],
       "explanation": "4 and 1 make 5.",
@@ -126,19 +118,15 @@
       "options": [
         {
           "id": "a",
-          "label": "4"
+          "label": "5"
         },
         {
           "id": "b",
-          "label": "5"
+          "label": "4"
         },
         {
           "id": "c",
           "label": "3"
-        },
-        {
-          "id": "d",
-          "label": "6"
         }
       ],
       "explanation": "3 and 2 make 5.",
@@ -152,9 +140,16 @@
       "id": "m5m-pw-4",
       "prompt": "What do you need to add to 2 to make 4?",
       "whole": 4,
-      "parts": [2, 2],
+      "parts": [
+        2,
+        2
+      ],
       "missing": "left",
-      "choices": [1, 2, 3],
+      "choices": [
+        1,
+        2,
+        3
+      ],
       "explanation": "2 and 2 make 4.",
       "narration": {
         "prompt": "What do you need to add to two to make four?"
@@ -181,7 +176,12 @@
       "id": "m5m-pair-0-5",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [0, 5, 1, 2],
+      "tiles": [
+        0,
+        5,
+        1,
+        2
+      ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
@@ -196,7 +196,12 @@
       "id": "m5m-pair-1-4",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [1, 4, 0, 2],
+      "tiles": [
+        1,
+        4,
+        0,
+        2
+      ],
       "showDots": true,
       "randomise": {
         "shuffleOptions": true
@@ -272,22 +277,18 @@
       "options": [
         {
           "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
           "label": "5"
         },
         {
-          "id": "d",
-          "label": "2"
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "2 {items} and 3 more make 5 {items}.",
       "narration": {
         "prompt": "Sam has 2 {items}. He gets 3 more. How many {items} does he have now?"

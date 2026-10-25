@@ -45,7 +45,7 @@ export function HearButton({ playing, onClick }: HearButtonProps) {
       aria-pressed={playing}
       aria-label={playing ? copy.stopReadingAria : copy.hearIt}
     >
-      {playing ? <VolumeX size={18} aria-hidden /> : <Volume2 size={18} aria-hidden />}
+      {playing ? <VolumeX size={20} aria-hidden /> : <Volume2 size={20} aria-hidden />}
     </button>
   );
 }

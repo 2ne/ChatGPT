@@ -54,22 +54,18 @@
       "options": [
         {
           "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
           "label": "7"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "8"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "9"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 7 {items}. Count only the {items}.",
       "narration": {
         "prompt": "How many {items} can you see?"
@@ -96,22 +92,18 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "8"
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "7"
         },
         {
           "id": "c",
           "label": "9"
-        },
-        {
-          "id": "d",
-          "label": "10"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 8 {items}. Count only the {items}.",
       "narration": {
         "prompt": "How many {items} can you see?"
@@ -138,22 +130,18 @@
       "options": [
         {
           "id": "a",
-          "label": "8"
-        },
-        {
-          "id": "b",
           "label": "9"
         },
         {
-          "id": "c",
-          "label": "10"
+          "id": "b",
+          "label": "8"
         },
         {
-          "id": "d",
-          "label": "11"
+          "id": "c",
+          "label": "7"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 9 {items}. Count only the {items}.",
       "narration": {
         "prompt": "How many {items} can you see?"
@@ -169,7 +157,7 @@
     {
       "kind": "count-objects",
       "id": "c10h-mix-10",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many {items} are here?",
       "visual": {
         "item": "fish",
         "count": 10
@@ -180,25 +168,21 @@
       "options": [
         {
           "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
           "label": "10"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "11"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "12"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 10 {items}. Count only the {items}.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many {items} are here?"
       },
       "layout": "scatter",
       "extras": [
@@ -274,16 +258,44 @@
       "id": "c10h-match",
       "prompt": "Tap the {items} that match the number below.",
       "numeral": 9,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "star", "count": 8 } },
-        { "id": "b", "visual": { "item": "star", "count": 10 } },
-        { "id": "c", "visual": { "item": "star", "count": 9 } },
-        { "id": "d", "visual": { "item": "star", "count": 7 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "star",
+            "count": 8
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 10
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 9
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "star",
+            "count": 7
+          }
+        }
       ],
       "correctId": "c",
       "explanation": "That group has 9 {items}.",
-      "narration": { "prompt": "Tap the {items} that match the number below." }
+      "narration": {
+        "prompt": "Tap the {items} that match the number below."
+      }
     },
     {
       "kind": "ordered",
@@ -344,7 +356,7 @@
       "options": [
         {
           "id": "a",
-          "label": "6"
+          "label": "8"
         },
         {
           "id": "b",
@@ -352,14 +364,10 @@
         },
         {
           "id": "c",
-          "label": "8"
-        },
-        {
-          "id": "d",
-          "label": "12"
+          "label": "9"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "There are 8 {items}. Count only the {items}.",
       "narration": {
         "prompt": "Sam only wants the {items}. How many {items} can you see?"
@@ -384,11 +392,7 @@
         },
         {
           "id": "c",
-          "label": "11"
-        },
-        {
-          "id": "d",
-          "label": "8"
+          "label": "1"
         }
       ],
       "correctId": "a",

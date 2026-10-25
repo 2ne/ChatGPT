@@ -4,7 +4,9 @@
   "summary": "Count one kind among mixed things, build 5, and match a numeral to a group. Still within 5.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "greater-depth",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -42,97 +44,211 @@
       "kind": "count-objects",
       "id": "c5h-mix-2",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "duck", "count": 2 },
-      "extras": [{ "item": "frog", "count": 2 }],
+      "visual": {
+        "item": "duck",
+        "count": 2
+      },
+      "extras": [
+        {
+          "item": "frog",
+          "count": 2
+        }
+      ],
       "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "1" }
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        }
       ],
       "correctId": "a",
       "hint": "Count only the {items}. Leave the {items2}.",
       "explanation": "There are {count} {items}. The {items2} are not part of this group.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "count-objects",
       "id": "c5h-mix-3",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "apple", "count": 3 },
-      "extras": [{ "item": "banana", "count": 2 }],
-      "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+      "visual": {
+        "item": "apple",
+        "count": 3
+      },
+      "extras": [
+        {
+          "item": "banana",
+          "count": 2
+        }
       ],
-      "correctId": "b",
+      "layout": "scatter",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        }
+      ],
+      "correctId": "a",
       "explanation": "There are {count} {items}. The {items2} are not part of this group.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "count-objects",
       "id": "c5h-mix-4",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "star", "count": 4 },
-      "extras": [{ "item": "balloon", "count": 1 }],
-      "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+      "visual": {
+        "item": "star",
+        "count": 4
+      },
+      "extras": [
+        {
+          "item": "balloon",
+          "count": 1
+        }
       ],
-      "correctId": "b",
+      "layout": "scatter",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        }
+      ],
+      "correctId": "a",
       "explanation": "There are {count} {items}. The {items2} are not part of this group.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
-      "kind": "count-objects",
+      "kind": "multiple-choice",
       "id": "c5h-mix-5",
-      "prompt": "How many {items} can you see?",
-      "visual": { "item": "fish", "count": 5 },
-      "extras": [{ "item": "car", "count": 2 }],
+      "prompt": "The puppet counts 1, 3, 4. Is that right?",
+      "visual": {
+        "item": "fish",
+        "count": 5
+      },
+      "extras": [
+        {
+          "item": "car",
+          "count": 2
+        }
+      ],
       "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "7" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        },
+        {
+          "id": "c",
+          "label": "The puppet said 5"
+        }
       ],
       "correctId": "b",
       "hint": "Only count the {items}. Leave the {items2} out.",
-      "explanation": "There are 5 {items}. The {items2} are not part of the count.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "explanation": "The puppet missed a number. Say each number once.",
+      "narration": {
+        "prompt": "The puppet counts 1, 3, 4. Is that right?"
+      }
     },
     {
       "kind": "build-set",
       "id": "c5h-build-5",
       "prompt": "Make a group of 5 {items}.",
-      "visual": { "item": "ladybird", "count": 5 },
+      "visual": {
+        "item": "ladybird",
+        "count": 5
+      },
       "randomise": {},
       "explanation": "A group of 5 has 5 {items}. The extra {items} are not needed.",
-      "narration": { "prompt": "Make a group of 5 {items}." }
+      "narration": {
+        "prompt": "Make a group of 5 {items}."
+      }
     },
     {
       "kind": "multi-select",
       "id": "c5h-every-5",
       "prompt": "Tap every group that has 5 {items}. There are 2 to choose.",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "frog", "count": 5 } },
-        { "id": "b", "visual": { "item": "frog", "count": 4 } },
-        { "id": "c", "visual": { "item": "frog", "count": 5 } },
-        { "id": "d", "visual": { "item": "frog", "count": 3 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "frog",
+            "count": 5
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "frog",
+            "count": 4
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "frog",
+            "count": 5
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "frog",
+            "count": 3
+          }
+        }
       ],
-      "correctIds": ["a", "c"],
+      "correctIds": [
+        "a",
+        "c"
+      ],
       "explanation": "Two groups have 5 {items}. The others have 4 and 3.",
       "narration": {
         "prompt": "Tap every group that has five {items}. There are two to choose."
@@ -143,62 +259,143 @@
       "id": "c5h-match",
       "prompt": "Tap the {items} that match the number below.",
       "numeral": 4,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "strawberry", "count": 5 } },
-        { "id": "b", "visual": { "item": "strawberry", "count": 3 } },
-        { "id": "c", "visual": { "item": "strawberry", "count": 4 } },
-        { "id": "d", "visual": { "item": "strawberry", "count": 2 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "strawberry",
+            "count": 5
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "strawberry",
+            "count": 3
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "strawberry",
+            "count": 4
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "strawberry",
+            "count": 2
+          }
+        }
       ],
       "correctId": "c",
       "explanation": "That group has 4 {items}.",
-      "narration": { "prompt": "Tap the {items} that match the number below." }
+      "narration": {
+        "prompt": "Tap the {items} that match the number below."
+      }
     },
     {
       "kind": "ordered",
       "id": "c5h-order",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n5", "label": "5" },
-        { "id": "n1", "label": "1" },
-        { "id": "n4", "label": "4" },
-        { "id": "n2", "label": "2" },
-        { "id": "n3", "label": "3" }
+        {
+          "id": "n5",
+          "label": "5"
+        },
+        {
+          "id": "n1",
+          "label": "1"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        },
+        {
+          "id": "n2",
+          "label": "2"
+        },
+        {
+          "id": "n3",
+          "label": "3"
+        }
       ],
-      "correctOrder": ["n1", "n2", "n3", "n4", "n5"],
+      "correctOrder": [
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5"
+      ],
       "explanation": "The numbers go 1, 2, 3, 4, 5 from smallest to biggest.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5h-sam-mix",
       "prompt": "Sam only wants {items}. How many can he take?",
-      "visual": { "item": "balloon", "count": 4 },
-      "extras": [{ "item": "car", "count": 2 }],
-      "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
-      "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "6" }
+      "visual": {
+        "item": "balloon",
+        "count": 4
+      },
+      "extras": [
+        {
+          "item": "car",
+          "count": 2
+        }
       ],
-      "correctId": "b",
+      "layout": "scatter",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        }
+      ],
+      "correctId": "a",
       "explanation": "There are 4 {items} for Sam. The {items2} are not part of his group.",
-      "narration": { "prompt": "Sam only wants {items}. How many can he take?" }
+      "narration": {
+        "prompt": "Sam only wants {items}. How many can he take?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5h-gap",
       "prompt": "Which number is missing? 1, 2, 3, 4, _",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "6" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "hint": "Say the numbers in order. What comes after 4?",
       "explanation": "5 comes after 4. The numbers go 1, 2, 3, 4, 5.",
       "narration": {

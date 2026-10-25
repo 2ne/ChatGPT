@@ -483,7 +483,7 @@ Do not set `{ "min": 1, "max": 12 }` on a to-5 node.
 ## Definition of done for a new activity
 
 1. `QUALITY.md` self-review checklist is all ticks.
-2. `npm run check:activities` then `npm run build` succeed in `primary-learn/` (no lint, no tests).
+2. `npm run check:activities` then `npm run build` succeed in `primary-learn/` (no lint, no tests). Pedagogy rules in `QUALITY.md` fail the activities check.
 3. The quest appears on the path map at the right node, on the right Easy / Medium / Hard row, and is playable at once.
 4. The speaker reads the question only (no options, counts, or answers). A miss shows teaching feedback on screen.
 5. Completing it updates local progress (best score / stars / cup) and survives a refresh.

@@ -39,15 +39,15 @@
         },
         {
           "id": "b",
-          "label": "3"
+          "label": "6"
         },
         {
           "id": "c",
-          "label": "2"
+          "label": "7"
         },
         {
           "id": "d",
-          "label": "4"
+          "label": "8"
         }
       ],
       "correctId": "a",
@@ -76,15 +76,15 @@
         },
         {
           "id": "b",
-          "label": "6"
+          "label": "3"
         },
         {
           "id": "c",
-          "label": "2"
+          "label": "5"
         },
         {
           "id": "d",
-          "label": "3"
+          "label": "2"
         }
       ],
       "correctId": "a",
@@ -139,15 +139,15 @@
         },
         {
           "id": "b",
-          "label": "5"
+          "label": "7"
         },
         {
           "id": "c",
-          "label": "3"
+          "label": "6"
         },
         {
           "id": "d",
-          "label": "7"
+          "label": "2"
         }
       ],
       "randomise": {
@@ -169,15 +169,15 @@
         },
         {
           "id": "b",
-          "label": "9"
+          "label": "6"
         },
         {
           "id": "c",
-          "label": "4"
+          "label": "7"
         },
         {
           "id": "d",
-          "label": "6"
+          "label": "13"
         }
       ],
       "correctId": "a",
@@ -245,11 +245,11 @@
         },
         {
           "id": "b",
-          "label": "5"
+          "label": "3"
         },
         {
           "id": "c",
-          "label": "3"
+          "label": "5"
         },
         {
           "id": "d",
@@ -275,15 +275,15 @@
         },
         {
           "id": "b",
-          "label": "12"
+          "label": "9"
         },
         {
           "id": "c",
-          "label": "2"
+          "label": "8"
         },
         {
           "id": "d",
-          "label": "9"
+          "label": "1"
         }
       ],
       "correctId": "a",
@@ -316,15 +316,15 @@
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "12"
         },
         {
           "id": "c",
-          "label": "3"
+          "label": "13"
         },
         {
           "id": "d",
-          "label": "10"
+          "label": "14"
         }
       ],
       "randomise": {
@@ -346,15 +346,15 @@
         },
         {
           "id": "b",
-          "label": "12"
+          "label": "8"
         },
         {
           "id": "c",
-          "label": "3"
+          "label": "10"
         },
         {
           "id": "d",
-          "label": "8"
+          "label": "7"
         }
       ],
       "correctId": "a",

@@ -43,15 +43,15 @@
         },
         {
           "id": "b",
-          "label": "0"
+          "label": "13"
         },
         {
           "id": "c",
-          "label": "11"
+          "label": "14"
         },
         {
           "id": "d",
-          "label": "13"
+          "label": "21"
         }
       ],
       "randomise": {
@@ -93,15 +93,15 @@
         },
         {
           "id": "b",
-          "label": "14"
+          "label": "9"
         },
         {
           "id": "c",
-          "label": "4"
+          "label": "11"
         },
         {
           "id": "d",
-          "label": "9"
+          "label": "8"
         }
       ],
       "correctId": "a",
@@ -128,15 +128,15 @@
         },
         {
           "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
           "label": "5"
         },
         {
+          "id": "c",
+          "label": "4"
+        },
+        {
           "id": "d",
-          "label": "7"
+          "label": "3"
         }
       ],
       "randomise": {
@@ -178,7 +178,7 @@
         },
         {
           "id": "b",
-          "label": "16"
+          "label": "8"
         },
         {
           "id": "c",
@@ -186,7 +186,7 @@
         },
         {
           "id": "d",
-          "label": "6"
+          "label": "25"
         }
       ],
       "correctId": "a",
@@ -217,10 +217,10 @@
     },
     {
       "kind": "make-total",
-      "prompt": "What do you need to add to 11 to make 19?",
+      "prompt": "11 and what make 19?",
       "explanation": "11 and 8 make 19.",
       "narration": {
-        "prompt": "What do you need to add to eleven to make nineteen?"
+        "prompt": "11 and what make 19?"
       },
       "total": 19,
       "gap": "right",
@@ -233,15 +233,15 @@
         },
         {
           "id": "b",
-          "label": "11"
-        },
-        {
-          "id": "c",
           "label": "7"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "6"
         }
       ],
       "randomise": {
@@ -263,15 +263,15 @@
         },
         {
           "id": "b",
-          "label": "19"
+          "label": "7"
         },
         {
           "id": "c",
-          "label": "11"
+          "label": "6"
         },
         {
           "id": "d",
-          "label": "7"
+          "label": "5"
         }
       ],
       "correctId": "a",

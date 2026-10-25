@@ -49,22 +49,22 @@
       "options": [
         {
           "id": "a",
-          "label": "12"
-        },
-        {
-          "id": "b",
-          "label": "13"
-        },
-        {
-          "id": "c",
           "label": "14"
         },
         {
-          "id": "d",
+          "id": "b",
           "label": "15"
+        },
+        {
+          "id": "c",
+          "label": "16"
+        },
+        {
+          "id": "d",
+          "label": "41"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "One more than 13 is 14.",
       "narration": {
         "prompt": "What is one more than thirteen?"
@@ -80,11 +80,11 @@
       "options": [
         {
           "id": "a",
-          "label": "14"
+          "label": "15"
         },
         {
           "id": "b",
-          "label": "15"
+          "label": "14"
         },
         {
           "id": "c",
@@ -92,10 +92,10 @@
         },
         {
           "id": "d",
-          "label": "17"
+          "label": "13"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "One less than 16 is 15.",
       "narration": {
         "prompt": "What is one less than sixteen?"
@@ -120,11 +120,11 @@
         },
         {
           "id": "c",
-          "label": "19"
+          "label": "16"
         },
         {
           "id": "d",
-          "label": "16"
+          "label": "15"
         }
       ],
       "correctId": "a",
@@ -142,22 +142,22 @@
       "options": [
         {
           "id": "a",
-          "label": "10"
-        },
-        {
-          "id": "b",
-          "label": "11"
-        },
-        {
-          "id": "c",
           "label": "12"
         },
         {
-          "id": "d",
+          "id": "b",
           "label": "13"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "21"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "One more than 11 is 12.",
       "narration": {
         "prompt": "What is one more than eleven?"
@@ -173,22 +173,22 @@
       "options": [
         {
           "id": "a",
-          "label": "15"
-        },
-        {
-          "id": "b",
           "label": "14"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "13"
         },
         {
+          "id": "c",
+          "label": "15"
+        },
+        {
           "id": "d",
-          "label": "16"
+          "label": "12"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "One less than 15 is 14.",
       "narration": {
         "prompt": "What is one less than fifteen?"
@@ -204,7 +204,7 @@
       "options": [
         {
           "id": "a",
-          "label": "17"
+          "label": "19"
         },
         {
           "id": "b",
@@ -212,14 +212,14 @@
         },
         {
           "id": "c",
-          "label": "19"
+          "label": "17"
         },
         {
           "id": "d",
-          "label": "20"
+          "label": "16"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "One more than 18 is 19.",
       "narration": {
         "prompt": "What is one more than eighteen?"
@@ -228,32 +228,32 @@
     {
       "kind": "multiple-choice",
       "id": "oml-h-match-16",
-      "prompt": "What is one less than 17?",
+      "prompt": "13 is one less than ?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "17"
+          "label": "14"
         },
         {
           "id": "b",
-          "label": "16"
-        },
-        {
-          "id": "c",
           "label": "15"
         },
         {
+          "id": "c",
+          "label": "16"
+        },
+        {
           "id": "d",
-          "label": "18"
+          "label": "41"
         }
       ],
-      "correctId": "b",
-      "explanation": "One less than 17 is 16.",
+      "correctId": "a",
+      "explanation": "13 is one less than 14. Not the same number.",
       "narration": {
-        "prompt": "What is one less than seventeen?"
+        "prompt": "13 is one less than what?"
       }
     },
     {
@@ -292,10 +292,10 @@
     {
       "kind": "multiple-choice",
       "id": "oml-h-more-19",
-      "prompt": "What is one more than 19?",
-      "explanation": "One more than 19 is 20.",
+      "prompt": "21 is one more than ?",
+      "explanation": "21 is one more than 20. Not the same number.",
       "narration": {
-        "prompt": "What is one more than nineteen?"
+        "prompt": "21 is one more than what?"
       },
       "options": [
         {
@@ -335,7 +335,7 @@
       "options": [
         {
           "id": "a",
-          "label": "14"
+          "label": "16"
         },
         {
           "id": "b",
@@ -343,14 +343,14 @@
         },
         {
           "id": "c",
-          "label": "16"
+          "label": "14"
         },
         {
           "id": "d",
-          "label": "17"
+          "label": "13"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "15 {items} and 1 more make 16 {items}.",
       "narration": {
         "prompt": "Sam has fifteen {items}. He gets one more. How many {items} does he have now?"

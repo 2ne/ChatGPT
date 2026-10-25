@@ -1,7 +1,7 @@
 {
   "id": "whole-half-quarter-turns-medium",
   "title": "Whole, half and quarter turns",
-  "summary": "Use position words and explore turns in both directions.",
+  "summary": "Use position words and explore turns both ways with a clock-hand cue.",
   "subject": "maths",
   "type": "reasoning",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 to Q2 read illustrated position scenes. Q3 onwards watch turns or predict the car picture. The last two questions perform quarter turns.",
-    "versus": "Easy uses illustrated position scenes, whole and half turns, supported quarter turns and one performed quarter turn. Medium varies starts and direction with quarter and half turns and two performed turns. Hard adds three-quarter turns and four performed turns. Picture choices reduce reading. Signed quarter steps distinguish whole turns from no movement."
+    "within": "Q1 to Q2 read position scenes, including left. Q3 to Q5 watch quarter and half turns from new starts. Q6 to Q8 predict the end facing from the clock-hand cue. Q9 and Q10 perform a quarter turn each way.",
+    "versus": "Easy uses position words, whole and half turns, supported quarter turns and one performed quarter turn. Medium varies starts and uses the clock-hand cue for both ways. Hard adds three-quarter turns and four performed turns. Hard is a new kind of thinking, not only a bigger turn."
   },
   "skills": [
     "y1-turns",
@@ -41,10 +41,17 @@
         {
           "id": "c",
           "label": "Above Pip"
+        },
+        {
+          "id": "d",
+          "label": "To the left of Pip"
         }
       ],
       "correctId": "a",
-      "explanation": "The box is in front Pip.",
+      "explanation": "The box is in front of Pip, not to the left.",
+      "narration": {
+        "prompt": "Where is the box?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -60,7 +67,7 @@
       "options": [
         {
           "id": "a",
-          "label": "Above Pip"
+          "label": "To the left of Pip"
         },
         {
           "id": "b",
@@ -69,16 +76,23 @@
         {
           "id": "c",
           "label": "In front of Pip"
+        },
+        {
+          "id": "d",
+          "label": "Above Pip"
         }
       ],
       "correctId": "a",
-      "explanation": "The kite is above Pip.",
+      "explanation": "The kite is to the left of Pip, not above.",
+      "narration": {
+        "prompt": "Where is the kite?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
       "position": {
         "object": "kite",
-        "relation": "above"
+        "relation": "left"
       }
     },
     {
@@ -96,11 +110,18 @@
         },
         {
           "id": "c",
+          "label": "A three-quarter turn"
+        },
+        {
+          "id": "d",
           "label": "A whole turn"
         }
       ],
       "correctId": "a",
-      "explanation": "A quarter turn goes one of four equal parts of the way round.",
+      "explanation": "A quarter turn is one of four equal parts.",
+      "narration": {
+        "prompt": "Watch the car turn. How much does it turn?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -126,11 +147,18 @@
         },
         {
           "id": "c",
+          "label": "A three-quarter turn"
+        },
+        {
+          "id": "d",
           "label": "A whole turn"
         }
       ],
       "correctId": "b",
-      "explanation": "A half turn goes halfway round.",
+      "explanation": "A half turn faces the opposite way.",
+      "narration": {
+        "prompt": "Watch the car turn. How much does it turn?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -156,11 +184,18 @@
         },
         {
           "id": "c",
+          "label": "A three-quarter turn"
+        },
+        {
+          "id": "d",
           "label": "A whole turn"
         }
       ],
       "correctId": "a",
-      "explanation": "A quarter turn goes one of four equal parts of the way round.",
+      "explanation": "A quarter turn is one of four equal parts.",
+      "narration": {
+        "prompt": "Watch the car turn. How much does it turn?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -174,7 +209,7 @@
     {
       "id": "turns-2-6",
       "kind": "multiple-choice",
-      "prompt": "The car makes a quarter turn clockwise. Which way does it point now?",
+      "prompt": "The car makes a quarter turn this way. Which way does it point now?",
       "options": [
         {
           "id": "a",
@@ -194,7 +229,10 @@
         }
       ],
       "correctId": "a",
-      "explanation": "From facing left, a quarter turn clockwise finishes facing up.",
+      "explanation": "From left, a quarter turn this way faces up.",
+      "narration": {
+        "prompt": "The car makes a quarter turn this way. Which way does it point now?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -208,7 +246,7 @@
     {
       "id": "turns-2-7",
       "kind": "multiple-choice",
-      "prompt": "The car makes a quarter turn anti-clockwise. Which way does it point now?",
+      "prompt": "The car makes a quarter turn this way. Which way does it point now?",
       "options": [
         {
           "id": "a",
@@ -228,7 +266,10 @@
         }
       ],
       "correctId": "a",
-      "explanation": "From facing right, a quarter turn anti-clockwise finishes facing up.",
+      "explanation": "From right, a quarter turn this way faces up.",
+      "narration": {
+        "prompt": "The car makes a quarter turn this way. Which way does it point now?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -242,7 +283,7 @@
     {
       "id": "turns-2-8",
       "kind": "multiple-choice",
-      "prompt": "The car makes a half turn anti-clockwise. Which way does it point now?",
+      "prompt": "The car makes a half turn this way. Which way does it point now?",
       "options": [
         {
           "id": "a",
@@ -262,7 +303,10 @@
         }
       ],
       "correctId": "a",
-      "explanation": "From facing down, a half turn anti-clockwise finishes facing up.",
+      "explanation": "A half turn from down faces up, the opposite way.",
+      "narration": {
+        "prompt": "The car makes a half turn this way. Which way does it point now?"
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -276,43 +320,30 @@
     {
       "id": "turns-2-9",
       "kind": "multiple-choice",
-      "prompt": "Make the car do a quarter turn anti-clockwise.",
+      "prompt": "Make the car do a quarter turn this way.",
       "options": [
         {
           "id": "-1",
-          "label": "A quarter turn anti-clockwise"
+          "label": "A quarter turn"
         },
         {
           "id": "-2",
-          "label": "A half turn anti-clockwise"
+          "label": "A half turn"
         },
         {
           "id": "-3",
-          "label": "A three-quarter turn anti-clockwise"
+          "label": "A three-quarter turn"
         },
         {
           "id": "-4",
-          "label": "A whole turn anti-clockwise"
-        },
-        {
-          "id": "1",
-          "label": "A quarter turn clockwise"
-        },
-        {
-          "id": "2",
-          "label": "A half turn clockwise"
-        },
-        {
-          "id": "3",
-          "label": "A three-quarter turn clockwise"
-        },
-        {
-          "id": "4",
-          "label": "A whole turn clockwise"
+          "label": "A whole turn"
         }
       ],
       "correctId": "-1",
-      "explanation": "A quarter turn anti-clockwise is 1 quarter step.",
+      "explanation": "A quarter turn is one step this way, not a half turn.",
+      "narration": {
+        "prompt": "Make the car do a quarter turn this way."
+      },
       "turn": {
         "start": 3,
         "quarters": 1,
@@ -324,43 +355,30 @@
     {
       "id": "turns-2-10",
       "kind": "multiple-choice",
-      "prompt": "Make the car do a quarter turn clockwise.",
+      "prompt": "Make the car do a quarter turn this way.",
       "options": [
         {
-          "id": "-1",
-          "label": "A quarter turn anti-clockwise"
-        },
-        {
-          "id": "-2",
-          "label": "A half turn anti-clockwise"
-        },
-        {
-          "id": "-3",
-          "label": "A three-quarter turn anti-clockwise"
-        },
-        {
-          "id": "-4",
-          "label": "A whole turn anti-clockwise"
-        },
-        {
           "id": "1",
-          "label": "A quarter turn clockwise"
+          "label": "A quarter turn"
         },
         {
           "id": "2",
-          "label": "A half turn clockwise"
+          "label": "A half turn"
         },
         {
           "id": "3",
-          "label": "A three-quarter turn clockwise"
+          "label": "A three-quarter turn"
         },
         {
           "id": "4",
-          "label": "A whole turn clockwise"
+          "label": "A whole turn"
         }
       ],
       "correctId": "1",
-      "explanation": "A quarter turn clockwise is 1 quarter step.",
+      "explanation": "A quarter turn is one step this way, not a half turn.",
+      "narration": {
+        "prompt": "Make the car do a quarter turn this way."
+      },
       "turn": {
         "start": 2,
         "quarters": 1,

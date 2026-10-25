@@ -5,6 +5,24 @@ import type { TurnDiagram } from "../../types/activity";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
 export const directions = ["Up", "Right", "Down", "Left"];
+
+export function ClockHand({ clockwise }: { clockwise: boolean }) {
+  return (
+    <svg className="clock-hand-cue" viewBox="0 0 80 80" role="img" aria-label="The turn goes this way.">
+      <circle cx="40" cy="40" r="36" fill="#fff8ee" stroke="#232946" strokeWidth="3" />
+      <line x1="40" y1="6" x2="40" y2="14" stroke="#232946" strokeWidth="3" />
+      <line x1="74" y1="40" x2="66" y2="40" stroke="#232946" strokeWidth="3" />
+      <line x1="40" y1="74" x2="40" y2="66" stroke="#232946" strokeWidth="3" />
+      <line x1="6" y1="40" x2="14" y2="40" stroke="#232946" strokeWidth="3" />
+      <circle cx="40" cy="40" r="4" fill="#232946" />
+      <g transform={clockwise ? undefined : "translate(80 0) scale(-1 1)"} fill="none" stroke="#c45c26" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M40 40 L40 16" />
+        <path d="M40 18 A22 22 0 0 1 62 40" />
+        <path d="M54 34 L62 40 L54 46" />
+      </g>
+    </svg>
+  );
+}
 export function ToyCar({ direction = 0 }: { direction?: number }) {
   return <svg viewBox="0 0 180 180" role="img" aria-label={`Car facing ${directions[((direction % 4) + 4) % 4]?.toLowerCase() ?? "up"}`}>
     <g transform={`rotate(${direction * 90} 90 90)`}>
@@ -34,7 +52,7 @@ export function TurnPicture({ turn, steps }: { turn: TurnDiagram; steps?: number
   }, [turn.start, turn.quarters, turn.showEnd, delta, reduced, replay]);
   const end = (turn.start + delta + 8) % 4;
   return <figure className="car-turn">
-    <div className="car-turn-stage" role="img" aria-label={`The car starts facing ${directions[turn.start].toLowerCase()}.${turn.showEnd ? ` It turns ${Math.abs(delta)} quarter steps ${delta < 0 ? "anti-clockwise" : "clockwise"} and finishes facing ${directions[end].toLowerCase()}.` : steps != null ? ` It now faces ${directions[end].toLowerCase()}.` : ""}`}>
+    <div className="car-turn-stage" role="img" aria-label={`The car starts facing ${directions[turn.start].toLowerCase()}.${turn.showEnd ? ` It turns ${Math.abs(delta)} quarter steps this way and finishes facing ${directions[end].toLowerCase()}.` : steps != null ? ` It now faces ${directions[end].toLowerCase()}.` : ""}`}>
       <div className="car-turn-ghost" style={{ transform: `rotate(${turn.start * 90}deg)` }} aria-hidden><ToyCar /></div>
       <div ref={car} className="car-turn-car" style={{ transform: `rotate(${(turn.start + delta) * 90}deg)`, "--turn-duration": steps != null ? "250ms" : "0ms" } as CSSProperties} aria-hidden><ToyCar /></div>
     </div>

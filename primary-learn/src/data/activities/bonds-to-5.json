@@ -4,7 +4,9 @@
   "summary": "Know the pairs that make 5, and the take-away facts that go with them.",
   "subject": "maths",
   "type": "number-bonds",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,91 +18,164 @@
     "within": "Question 1 What do you need to add to 2 to make 5? Question 2 What two numbers make 5? Question 3 What do you need to add to 3 to make 5? Question 4 What do you need to add to 4 to make 5? Question 5 What do you need to add to 1 to make 5? Question 6 What do you need to add to 0 to make 5? Question 7 What do you need to add to 2 to make 5? Question 8 What two numbers make 5? Question 9 Sam has 5 {items} and gives away 1. How many are left? Question 10 What is 5 take away 2?",
     "versus": "Easy builds pictured bonds to 5 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
-  "skills": ["eyfs-bonds-5", "number-bonds-to-5", "subtraction-within-5"],
+  "skills": [
+    "eyfs-bonds-5",
+    "number-bonds-to-5",
+    "subtraction-within-5"
+  ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "kind": "make-total",
       "id": "b5e-with-2",
       "prompt": "What do you need to add to 2 to make 5?",
-      "visual": { "item": "star", "count": 2 },
+      "visual": {
+        "item": "star",
+        "count": 2
+      },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Count on from the first part. Add one object for each step.",
       "explanation": "2 and 3 make 5.",
-      "narration": { "prompt": "What do you need to add to 2 to make 5?" }
+      "narration": {
+        "prompt": "What do you need to add to 2 to make 5?"
+      }
     },
     {
       "kind": "pick-pair",
       "id": "b5e-pair",
       "prompt": "What two numbers make 5?",
       "total": 5,
-      "tiles": [2, 3, 1, 5],
+      "tiles": [
+        2,
+        3,
+        1,
+        5
+      ],
       "showDots": true,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "hint": "Find two numbers that add to 5.",
       "explanation": "2 and 3 make 5.",
-      "narration": { "prompt": "What two numbers make 5?" }
+      "narration": {
+        "prompt": "What two numbers make 5?"
+      }
     },
     {
       "kind": "make-total",
       "id": "b5e-3-plus",
       "prompt": "What do you need to add to 3 to make 5?",
-      "visual": { "item": "apple", "count": 3 },
+      "visual": {
+        "item": "apple",
+        "count": 3
+      },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 3 and count on to 5.",
       "explanation": "3 and 2 make 5.",
-      "narration": { "prompt": "What do you need to add to 3 to make 5?" }
+      "narration": {
+        "prompt": "What do you need to add to 3 to make 5?"
+      }
     },
     {
       "kind": "make-total",
       "id": "b5e-4-plus",
       "prompt": "What do you need to add to 4 to make 5?",
-      "visual": { "item": "duck", "count": 4 },
+      "visual": {
+        "item": "duck",
+        "count": 4
+      },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "4 and 1 make 5.",
-      "narration": { "prompt": "What do you need to add to 4 to make 5?" }
+      "narration": {
+        "prompt": "What do you need to add to 4 to make 5?"
+      }
     },
     {
       "kind": "make-total",
       "id": "b5e-1-plus",
-      "prompt": "What do you need to add to 1 to make 5?",
-      "visual": { "item": "frog", "count": 1 },
+      "prompt": "1 and what make 5?",
+      "visual": {
+        "item": "frog",
+        "count": 1
+      },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "1 and 4 make 5.",
-      "narration": { "prompt": "What do you need to add to 1 to make 5?" }
+      "narration": {
+        "prompt": "1 and what make 5?"
+      }
     },
     {
       "kind": "part-whole",
       "id": "b5e-pw-0",
-      "prompt": "What do you need to add to 0 to make 5?",
+      "prompt": "0 and what make 5?",
       "whole": 5,
-      "parts": [0, 5],
+      "parts": [
+        0,
+        5
+      ],
       "missing": "right",
-      "choices": [4, 5, 6],
+      "choices": [
+        4,
+        5,
+        6
+      ],
       "explanation": "0 and 5 make 5.",
-      "narration": { "prompt": "What do you need to add to zero to make five?" }
+      "narration": {
+        "prompt": "0 and what make 5?"
+      }
     },
     {
-      "kind": "make-total",
+      "kind": "multiple-choice",
       "id": "b5e-5-eq",
-      "prompt": "What do you need to add to 2 to make 5?",
-      "visual": { "item": "balloon", "count": 2 },
+      "prompt": "2 + 3 and 3 + 2 make the same total. What is 5 take away 2?",
+      "visual": {
+        "item": "balloon",
+        "count": 2
+      },
       "total": 5,
       "mode": "fill-slots",
       "randomise": {},
-      "explanation": "2 and 3 make 5.",
-      "narration": { "prompt": "What do you need to add to 2 to make 5?" }
+      "explanation": "2 + 3, 3 + 2 and 5 take away 2 are one family.",
+      "narration": {
+        "prompt": "Two plus three and three plus two make the same total. What is five take away two?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
+      ],
+      "correctId": "a"
     },
     {
       "kind": "pick-pair",
@@ -126,17 +201,33 @@
       "kind": "multiple-choice",
       "id": "b5e-take-1",
       "prompt": "Sam has 5 {items} and gives away 1. How many are left?",
-      "visual": { "item": "apple", "count": 5, "removed": 1 },
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "apple",
+        "count": 5,
+        "removed": 1
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "Because 1 + 4 = 5, 5 take away 1 is 4.",
-      "narration": { "prompt": "Sam has 5 {items} and gives away 1. How many are left?" }
+      "narration": {
+        "prompt": "Sam has 5 {items} and gives away 1. How many are left?"
+      }
     },
     {
       "kind": "multiple-choice",
@@ -153,22 +244,18 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
           "label": "3"
         },
         {
-          "id": "c",
-          "label": "4"
+          "id": "b",
+          "label": "2"
         },
         {
-          "id": "d",
-          "label": "5"
+          "id": "c",
+          "label": "1"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "Because 2 + 3 = 5, 5 take away 2 is 3.",
       "narration": {
         "prompt": "What is five take away two?"

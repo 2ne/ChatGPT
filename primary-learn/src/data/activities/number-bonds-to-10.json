@@ -4,7 +4,9 @@
   "summary": "Know the pairs that make 10, and the take-away facts that go with them.",
   "subject": "maths",
   "type": "number-bonds",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -16,91 +18,150 @@
     "within": "Question 1 What do you need to add to 6 to make 10? Question 2 What two numbers make 10? Question 3 What do you need to add to 8 to make 10? Question 4 What do you need to add to 7 to make 10? Question 5 What do you need to add to 5 to make 10? Question 6 What do you need to add to 0 to make 10? Question 7 What do you need to add to 9 to make 10? Question 8 What two numbers make 10? Question 9 Sam has 10 {items} and gives away 2. How many are left? Question 10 What is 10 take away 4?",
     "versus": "Easy builds pictured bonds to 10 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
-  "skills": ["y1-bonds-10", "number-bonds-to-10", "addition-within-10", "subtraction-within-10"],
+  "skills": [
+    "y1-bonds-10",
+    "number-bonds-to-10",
+    "addition-within-10",
+    "subtraction-within-10"
+  ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "kind": "make-total",
       "id": "nb10-with-6",
       "prompt": "What do you need to add to 6 to make 10?",
-      "visual": { "item": "star", "count": 6 },
+      "visual": {
+        "item": "star",
+        "count": 6
+      },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Count on from the first part. Add one object for each step.",
       "explanation": "6 and 4 make 10.",
-      "narration": { "prompt": "What do you need to add to 6 to make 10?" }
+      "narration": {
+        "prompt": "What do you need to add to 6 to make 10?"
+      }
     },
     {
       "kind": "pick-pair",
       "id": "nb10-pair",
       "prompt": "What two numbers make 10?",
       "total": 10,
-      "tiles": [6, 4, 2, 5],
+      "tiles": [
+        6,
+        4,
+        2,
+        5
+      ],
       "showDots": true,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "hint": "Find two numbers that add to 10.",
       "explanation": "6 and 4 make 10.",
-      "narration": { "prompt": "What two numbers make 10?" }
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-8",
       "prompt": "What do you need to add to 8 to make 10?",
-      "visual": { "item": "apple", "count": 8 },
+      "visual": {
+        "item": "apple",
+        "count": 8
+      },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "hint": "Start at 8 and count on to 10.",
       "explanation": "8 and 2 make 10.",
-      "narration": { "prompt": "What do you need to add to 8 to make 10?" }
+      "narration": {
+        "prompt": "What do you need to add to 8 to make 10?"
+      }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-7",
       "prompt": "What do you need to add to 7 to make 10?",
-      "visual": { "item": "duck", "count": 7 },
+      "visual": {
+        "item": "duck",
+        "count": 7
+      },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "7 and 3 make 10.",
-      "narration": { "prompt": "What do you need to add to 7 to make 10?" }
+      "narration": {
+        "prompt": "What do you need to add to 7 to make 10?"
+      }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-5",
-      "prompt": "What do you need to add to 5 to make 10?",
-      "visual": { "item": "frog", "count": 5 },
+      "prompt": "5 and what make 10?",
+      "visual": {
+        "item": "frog",
+        "count": 5
+      },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "5 and 5 make 10. This is double 5.",
-      "narration": { "prompt": "What do you need to add to 5 to make 10?" }
+      "narration": {
+        "prompt": "5 and what make 10?"
+      }
     },
     {
       "kind": "part-whole",
       "id": "nb10-pw-0",
-      "prompt": "What do you need to add to 0 to make 10?",
+      "prompt": "0 and what make 10?",
       "whole": 10,
-      "parts": [0, 10],
+      "parts": [
+        0,
+        10
+      ],
       "missing": "right",
-      "choices": [9, 10, 11],
+      "choices": [
+        9,
+        10,
+        11
+      ],
       "explanation": "0 and 10 make 10.",
-      "narration": { "prompt": "What do you need to add to zero to make ten?" }
+      "narration": {
+        "prompt": "0 and what make 10?"
+      }
     },
     {
       "kind": "make-total",
       "id": "nb10-with-9",
-      "prompt": "What do you need to add to 9 to make 10?",
-      "visual": { "item": "balloon", "count": 9 },
+      "prompt": "9 and what make 10?",
+      "visual": {
+        "item": "balloon",
+        "count": 9
+      },
       "total": 10,
       "mode": "fill-slots",
       "randomise": {},
       "explanation": "9 and 1 make 10.",
-      "narration": { "prompt": "What do you need to add to 9 to make 10?" }
+      "narration": {
+        "prompt": "9 and what make 10?"
+      }
     },
     {
       "kind": "pick-pair",
@@ -126,17 +187,33 @@
       "kind": "multiple-choice",
       "id": "nb10-take-2",
       "prompt": "Sam has 10 {items} and gives away 2. How many are left?",
-      "visual": { "item": "apple", "count": 10, "removed": 2 },
+      "visual": {
+        "item": "apple",
+        "count": 10,
+        "removed": 2
+      },
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
-        { "id": "a", "label": "6" },
-        { "id": "b", "label": "7" },
-        { "id": "c", "label": "8" },
-        { "id": "d", "label": "9" }
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "9"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "Because 2 + 8 = 10, 10 take away 2 is 8.",
       "narration": {
         "prompt": "Sam has ten {items} and gives away two. How many are left?"
@@ -157,11 +234,11 @@
       "options": [
         {
           "id": "a",
-          "label": "5"
+          "label": "6"
         },
         {
           "id": "b",
-          "label": "6"
+          "label": "5"
         },
         {
           "id": "c",
@@ -172,7 +249,7 @@
           "label": "4"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "Because 4 + 6 = 10, 10 take away 4 is 6.",
       "narration": {
         "prompt": "What is ten take away four?"

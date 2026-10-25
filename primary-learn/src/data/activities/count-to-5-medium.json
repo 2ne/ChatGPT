@@ -4,7 +4,9 @@
   "summary": "Count messy groups to 5, build a set, and match numerals to amounts.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "expected",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -42,159 +44,324 @@
       "kind": "count-objects",
       "id": "c5m-count-3",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "apple", "count": 3 },
+      "visual": {
+        "item": "apple",
+        "count": 3
+      },
       "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "hint": "Tap each {item} once, even when they are spread out.",
       "explanation": "There are 3 {items}. Each one counts once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "count-objects",
       "id": "c5m-count-4",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "car", "count": 4 },
+      "visual": {
+        "item": "car",
+        "count": 4
+      },
       "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "hint": "Say a new number for each tap.",
       "explanation": "There are 4 {items}. Each one counts once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "count-objects",
       "id": "c5m-count-5",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "star", "count": 5 },
+      "visual": {
+        "item": "star",
+        "count": 5
+      },
       "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "hint": "Keep going until every {item} has a number.",
       "explanation": "There are 5 {items}. Each one counts once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "build-set",
       "id": "c5m-build",
       "prompt": "Make a group of {count} {items}.",
-      "visual": { "item": "duck", "count": 4 },
-      "randomise": { "count": { "min": 3, "max": 4 } },
+      "visual": {
+        "item": "duck",
+        "count": 4
+      },
+      "randomise": {
+        "count": {
+          "min": 3,
+          "max": 4
+        }
+      },
       "explanation": "A group of {count} has {count} {items}.",
-      "narration": { "prompt": "Make a group of {count} {items}." }
+      "narration": {
+        "prompt": "Make a group of {count} {items}."
+      }
     },
     {
-      "kind": "count-objects",
-      "id": "c5m-fb",
-      "prompt": "How many {items} can you see?",
-      "visual": { "item": "balloon", "count": 5 },
+      "kind": "multiple-choice",
+      "id": "c5m-puppet",
+      "prompt": "The puppet counts 1, 2, 3, 5. Is that right?",
+      "visual": {
+        "item": "balloon",
+        "count": 5
+      },
       "layout": "scatter",
-      "randomise": { "count": { "min": 4, "max": 5 }, "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        },
+        {
+          "id": "c",
+          "label": "The puppet said 5"
+        }
       ],
-      "correctId": "c",
+      "correctId": "b",
       "hint": "Keep going until every {item} has a number.",
-      "explanation": "There are {count} {items}. Each one counts once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "explanation": "The puppet missed a number. Say each number once.",
+      "narration": {
+        "prompt": "The puppet counts 1, 2, 3, 5. Is that right?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5m-sam-4",
       "prompt": "Which group has 4 {items}?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "frog", "count": 3 } },
-        { "id": "b", "visual": { "item": "frog", "count": 5 } },
-        { "id": "c", "visual": { "item": "frog", "count": 4 } },
-        { "id": "d", "visual": { "item": "frog", "count": 2 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "frog",
+            "count": 3
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "frog",
+            "count": 5
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "frog",
+            "count": 4
+          }
+        }
       ],
       "correctId": "c",
       "explanation": "That group has 4 {items}.",
-      "narration": { "prompt": "Which group has 4 {items}?" }
+      "narration": {
+        "prompt": "Which group has 4 {items}?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5m-next",
       "prompt": "What number comes next? 1, 2, 3, 4, ?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "5 comes after 4.",
-      "narration": { "prompt": "What number comes next? One, two, three, four, blank." }
+      "narration": {
+        "prompt": "What number comes next? One, two, three, four, blank."
+      }
     },
     {
       "kind": "ordered",
       "id": "c5m-order",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n3", "label": "3" },
-        { "id": "n1", "label": "1" },
-        { "id": "n4", "label": "4" },
-        { "id": "n2", "label": "2" }
+        {
+          "id": "n3",
+          "label": "3"
+        },
+        {
+          "id": "n1",
+          "label": "1"
+        },
+        {
+          "id": "n4",
+          "label": "4"
+        },
+        {
+          "id": "n2",
+          "label": "2"
+        }
       ],
-      "correctOrder": ["n1", "n2", "n3", "n4"],
+      "correctOrder": [
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ],
       "explanation": "The numbers go 1, 2, 3, 4 from smallest to biggest.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5m-match",
       "prompt": "Tap the {items} that match the number below.",
       "numeral": 5,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "fish", "count": 4 } },
-        { "id": "b", "visual": { "item": "fish", "count": 5 } },
-        { "id": "c", "visual": { "item": "fish", "count": 3 } },
-        { "id": "d", "visual": { "item": "fish", "count": 2 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "fish",
+            "count": 4
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "fish",
+            "count": 5
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "fish",
+            "count": 3
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "fish",
+            "count": 2
+          }
+        }
       ],
       "correctId": "b",
       "explanation": "That group has 5 {items}.",
-      "narration": { "prompt": "Tap the {items} that match the number below." }
+      "narration": {
+        "prompt": "Tap the {items} that match the number below."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5m-last",
-      "prompt": "How many {items} can you see?",
-      "visual": { "item": "strawberry", "count": 5 },
+      "prompt": "How many {items} are in this group?",
+      "visual": {
+        "item": "strawberry",
+        "count": 5
+      },
       "layout": "scatter",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "1" }
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 5 {items}. Each one counts once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} are in this group?"
+      }
     }
   ]
 }

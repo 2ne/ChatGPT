@@ -37,7 +37,8 @@
       "explanation": "There are 12. That is 10 and 2 more.",
       "randomise": { "shuffleOptions": true },
       "tenFrame": { "count": 12, "item": "apple" },
-      "id": "represent100-2-1"
+      "id": "represent100-2-1",
+      "narration": { "prompt": "How many can you see?" }
     },
     {
       "kind": "multiple-choice",
@@ -51,7 +52,8 @@
       "correctId": "0",
       "explanation": "10 is less than 12.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-2-2"
+      "id": "represent100-2-2",
+      "narration": { "prompt": "Which group has fewer than 12?" }
     },
     {
       "kind": "match-pairs",
@@ -122,7 +124,8 @@
       "explanation": "The marked tick is 42. Each tick is one more than the tick before it.",
       "randomise": { "shuffleOptions": true },
       "numberLine": { "start": 40, "end": 46, "marked": 42 },
-      "id": "represent100-2-4"
+      "id": "represent100-2-4",
+      "narration": { "prompt": "Which number belongs at the marked tick?" }
     },
     {
       "kind": "multi-select",
@@ -136,7 +139,8 @@
       "explanation": "57 and 58 are both more than 56.",
       "randomise": { "shuffleOptions": true },
       "id": "represent100-2-6",
-      "correctIds": ["0", "2"]
+      "correctIds": ["0", "2"],
+      "narration": { "prompt": "Select the two numbers that are more than 56." }
     },
     {
       "kind": "multiple-choice",
@@ -150,7 +154,8 @@
       "correctId": "2",
       "explanation": "55 is less than 56.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-2-7"
+      "id": "represent100-2-7",
+      "narration": { "prompt": "Which number is less than 56?" }
     },
     {
       "kind": "multiple-choice",
@@ -163,7 +168,8 @@
       "correctId": "1",
       "explanation": "54 is the smallest. Each picture has 5 tens, and 4 ones is the fewest.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-2-9"
+      "id": "represent100-2-9",
+      "narration": { "prompt": "Which group has the fewest?" }
     },
     {
       "kind": "ordered",
@@ -176,7 +182,7 @@
       ],
       "correctOrder": ["0", "1", "2", "3"],
       "explanation": "The numbers go 53, 55, 56, 59.",
-      "id": "represent100-2-10"
-    }
-  ]
+      "id": "represent100-2-10",
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+    }]
 }

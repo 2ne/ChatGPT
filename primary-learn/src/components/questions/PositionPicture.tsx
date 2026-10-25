@@ -13,7 +13,13 @@ export function PositionPicture({ scene }: { scene: PositionScene }) {
       <path d="M29 86 L42 92 M29 91 L38 95" stroke="#b99a73" strokeWidth="2" strokeLinecap="round"/>
     </g> : scene.object === "kite" ? <><path d="M70 8 L117 59 L70 116 L23 59 Z" fill="#7567e8"/><path d="M70 8 V116 M23 59 H117" stroke="#fff" strokeWidth="3"/><path d="M70 116 Q100 133 70 155" fill="none" stroke="#5b5e7a" strokeWidth="3"/></> : <><ellipse cx="72" cy="83" rx="44" ry="28" fill="#469ad4"/><circle cx="101" cy="58" r="24" fill="#469ad4"/><path d="M120 58 L138 67 L120 73" fill="#e9a34c"/><circle cx="108" cy="54" r="4" fill="#232946"/><path d="M44 79 Q71 17 84 83" fill="#83c8ee"/><path d="M35 86 L8 63 L14 100 Z" fill="#469ad4"/></>}
   </svg>;
-  return <figure className={`position-scene is-${scene.relation}`} role="img" aria-label={`The ${scene.object} is ${scene.relation.replace("-", " ")} Pip.`}>
+  const relationLabel =
+    scene.relation === "left"
+      ? "to the left of"
+      : scene.relation === "right"
+        ? "to the right of"
+        : scene.relation.replace("-", " ");
+  return <figure className={`position-scene is-${scene.relation}`} role="img" aria-label={`The ${scene.object} is ${relationLabel} Pip.`}>
     <div className="position-ground" aria-hidden />
     <div className="position-object" aria-hidden>{object}</div>
     <div className="position-pip" aria-hidden><Pip size={130}/></div>

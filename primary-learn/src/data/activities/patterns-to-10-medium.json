@@ -71,14 +71,6 @@
             "count": 6
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 7
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "c",
@@ -115,15 +107,7 @@
           "id": "c",
           "visual": {
             "item": "star",
-            "count": 6
-          },
-          "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 8
+            "count": 3
           },
           "layout": "dice"
         }
@@ -148,15 +132,11 @@
         },
         {
           "id": "b",
-          "label": "2"
-        },
-        {
-          "id": "c",
           "label": "4"
         },
         {
-          "id": "d",
-          "label": "1"
+          "id": "c",
+          "label": "5"
         }
       ],
       "correctId": "a",
@@ -200,14 +180,6 @@
             "count": 8
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 9
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "c",
@@ -235,10 +207,6 @@
         {
           "id": "c",
           "label": "5"
-        },
-        {
-          "id": "d",
-          "label": "2"
         }
       ],
       "correctId": "a",
@@ -316,14 +284,6 @@
             "count": 9
           },
           "layout": "dice"
-        },
-        {
-          "id": "d",
-          "visual": {
-            "item": "star",
-            "count": 10
-          },
-          "layout": "dice"
         }
       ],
       "correctId": "c",
@@ -350,10 +310,6 @@
         },
         {
           "id": "c",
-          "label": "6"
-        },
-        {
-          "id": "d",
           "label": "3"
         }
       ],

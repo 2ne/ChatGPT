@@ -4,7 +4,9 @@
   "summary": "Count up to 5 things, say the numbers in order and spot the numerals 1 to 5.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 4,
   "masteryThreshold": 0.8,
@@ -42,153 +44,306 @@
       "kind": "count-objects",
       "id": "c5e-count-1",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "star", "count": 1 },
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "star",
+        "count": 1
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        }
       ],
       "correctId": "a",
       "hint": "Tap each picture once as you count.",
-      "explanation": "There is 1 {item}.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "explanation": "There is 1 {item}. Each one counts once.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "count-objects",
       "id": "c5e-count-2",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "balloon", "count": 2 },
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "balloon",
+        "count": 2
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "There are 2 {items}.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "explanation": "There are 2 {items}. Each one counts once.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "count-objects",
       "id": "c5e-count-3",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "apple", "count": 3 },
-      "randomise": { "shuffleOptions": true },
+      "visual": {
+        "item": "apple",
+        "count": 3
+      },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "1"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Point to each {item} once and say the next number.",
-      "explanation": "There are 3 {items}.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "explanation": "There are 3 {items}. Each one counts once.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
-      "kind": "count-objects",
-      "id": "c5e-fb-4",
-      "prompt": "How many {items} can you see?",
-      "visual": { "item": "duck", "count": 4 },
+      "kind": "multiple-choice",
+      "id": "c5e-puppet",
+      "prompt": "The puppet counts 1, 2, 4. Is that right?",
+      "visual": {
+        "item": "duck",
+        "count": 4
+      },
       "layout": "five-frame",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        },
+        {
+          "id": "c",
+          "label": "The puppet said 5"
+        }
       ],
-      "correctId": "c",
+      "correctId": "b",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "There are 4 {items}.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "explanation": "The puppet missed a number. Say each number once.",
+      "narration": {
+        "prompt": "The puppet counts 1, 2, 4. Is that right?"
+      }
     },
     {
       "kind": "build-set",
       "id": "c5e-build-5",
       "prompt": "Make a group of 5 {items}.",
-      "visual": { "item": "ladybird", "count": 5 },
+      "visual": {
+        "item": "ladybird",
+        "count": 5
+      },
       "randomise": {},
       "explanation": "A group of 5 has 5 {items}.",
-      "narration": { "prompt": "Make a group of 5 {items}." }
+      "narration": {
+        "prompt": "Make a group of 5 {items}."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5e-next",
       "prompt": "What number comes next? 1, 2, 3, ?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "4 comes after 3.",
-      "narration": { "prompt": "What number comes next? One, two, three, blank." }
+      "narration": {
+        "prompt": "What number comes next? One, two, three, blank."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5e-gap",
       "prompt": "Which number is missing? 1, 2, _, 4, 5",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "6"
+        },
+        {
+          "id": "c",
+          "label": "0"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "3 comes after 2 and before 4.",
-      "narration": { "prompt": "Which number is missing? One, two, blank, four, five." }
+      "narration": {
+        "prompt": "Which number is missing? One, two, blank, four, five."
+      }
     },
     {
       "kind": "ordered",
       "id": "c5e-order",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n3", "label": "3" },
-        { "id": "n1", "label": "1" },
-        { "id": "n2", "label": "2" }
+        {
+          "id": "n3",
+          "label": "3"
+        },
+        {
+          "id": "n1",
+          "label": "1"
+        },
+        {
+          "id": "n2",
+          "label": "2"
+        }
       ],
-      "correctOrder": ["n1", "n2", "n3"],
+      "correctOrder": [
+        "n1",
+        "n2",
+        "n3"
+      ],
       "explanation": "The numbers go 1, 2, 3 from smallest to biggest.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5e-match",
       "prompt": "Tap the {items} that match the number below.",
       "numeral": 4,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "fish", "count": 3 } },
-        { "id": "b", "visual": { "item": "fish", "count": 5 } },
-        { "id": "c", "visual": { "item": "fish", "count": 4 } },
-        { "id": "d", "visual": { "item": "fish", "count": 2 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "fish",
+            "count": 3
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "fish",
+            "count": 5
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "fish",
+            "count": 4
+          }
+        },
+        {
+          "id": "d",
+          "visual": {
+            "item": "fish",
+            "count": 2
+          }
+        }
       ],
       "correctId": "c",
       "explanation": "That group has 4 {items}.",
-      "narration": { "prompt": "Tap the {items} that match the number below." }
+      "narration": {
+        "prompt": "Tap the {items} that match the number below."
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "c5e-sam-5",
       "prompt": "Which group has 5 {items}?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "frog", "count": 4 } },
-        { "id": "b", "visual": { "item": "frog", "count": 3 } },
-        { "id": "c", "visual": { "item": "frog", "count": 5 } },
-        { "id": "d", "visual": { "item": "frog", "count": 2 } }
+        {
+          "id": "a",
+          "visual": {
+            "item": "frog",
+            "count": 4
+          }
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "frog",
+            "count": 3
+          }
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "frog",
+            "count": 5
+          }
+        }
       ],
       "correctId": "c",
       "explanation": "That group has 5 {items}.",
-      "narration": { "prompt": "Which group has 5 {items}?" }
+      "narration": {
+        "prompt": "Which group has 5 {items}?"
+      }
     }
   ]
 }

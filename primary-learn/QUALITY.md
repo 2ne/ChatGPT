@@ -23,7 +23,7 @@ Change **one or two** dimensions at a time. Never jump all of them at once.
 | Scaffolding | Hint on the first third of items; stem names the strategy (“count each one”) | Hints only on the last third, or none | No hints unless the item is a new representation |
 | Question kind | Tap-to-count, build-set, make-total fill-slots, pick-pair with dots, part-whole, multiple-choice or fill-blank | Mix two or three kinds, including make-total fill-slots or sum-only, pick-pair with harder numbers, or part-whole | Include make-total sum-only, pick-pair with harder numbers (still with dots), part-whole with a missing whole, multi-select, ordered, match, or a one-step story if the node supports it |
 
-**Easy < Medium < Hard** on the same node must be obvious if you put the three quests side by side. Medium is not “Easy plus one trick question”. Hard is not a different topic.
+**Easy < Medium < Hard** on the same node must be obvious if you put the three quests side by side. Medium is not “Easy plus one trick question”. Hard is not a different topic. Hard must add a new kind of thinking, not only bigger numbers. Say that kind of thinking in `difficultyRamp.versus`.
 
 ### Ramp inside one quest
 
@@ -54,6 +54,8 @@ Reading age follows the year group, not the adult who is coding.
 
 Use British English: *maths*, *practise* (verb), *metre*, *colour*, *number bonds*, *times tables*, *Year 2* (not 2nd grade). Follow **Writing for children** in `AGENTS.md`: short sentences, no em or en dashes as punctuation, no semicolons, one idea per sentence.
 
+**Year vocabulary.** *Clockwise* and *anti-clockwise* are Year 2 words. Year 1 uses full, half, quarter and three-quarter turns. Show a clock-hand picture when the child needs a direction. Left and right are fine for Year 1 position.
+
 ### Stem templates (copy these)
 
 Keep the same shape inside a quest so the child learns the maths, not a new sentence each time.
@@ -80,7 +82,7 @@ Keep the same shape inside a quest so the child learns the maths, not a new sent
 | ordered | `Put the numbers in order, from smallest to biggest.` Explanation: `The numbers go 1, 2, 3.` |
 | match-pairs | Same thing shown two ways only, and the two sides must never use the same representation. Numeral with ten frame, ten frame with dice, tens-and-ones with numeral, word with number, shape with name. Never picture-to-same-picture. Never next number, missing number, one more or one less. Those are multiple-choice. Prompt `Select the card that matches the {noun}.` Use `number`, `word`, `shape` or `picture`. Number content must say `Select the card that matches the number.` One pair per question. Easy and Medium: 3 choices. Hard: 4 choices in a 2x2 grid. Picture groups use a 5-column grid and shrink tiles so up to 20 objects fit inside the fixed card. Ten frames and tens-and-ones also fit that card. Do not crop the picture. First try only. After Check it, colour the pair with the same `option is-correct` / `option is-wrong` marks as multiple choice. The `numeral` 2x2 amount-pick is still multiple-choice, not matching. Do not write Reception bond items as `5` / `1 and 4`. Use `part-whole`. |
 | story (join) | `{Name} has {n} {items}. He gets {m} more. How many {items} does he have now?` One character. Pictures show start + added of the same item. Feedback: `{n} and {m} more makes {total} {items}.` |
-| story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures use `visual.count` `{n}` and `visual.removed` `{m}` in one cream strip. The last `{m}` sit on light red tiles. |
+| story (take away) | `{Name} has {n} {items} and gives away {m}. How many are left?` Pictures use `visual.count` `{n}` and `visual.removed` `{m}` in one cream strip. The last `{m}` sit on light red tiles with a dashed outline. Colour alone is not enough. Never put an X on removed tiles. |
 
 Do not invent a clever riddle. Do not write “Can you figure out…” or “Look carefully!”. Do not write clipped stems (`How many ducks?`, `Which group?`).
 
@@ -104,7 +106,9 @@ For each item, name the misconception (in your head, or in a comment):
 
 Rules:
 
-- 3 or 4 options for multiple-choice. One correct.
+- Reception pickers have **3** options. Year 1 pickers have **4**. Never more than 4. (`numeral` 2x2 amount-picks stay at 4.)
+- Every wrong option is one named error. At most **one** distractor may copy a number from the stem.
+- Do not build 4-option numeric sets as n-1, n+1, n+2. That parks the answer in the middle. Across a quest, the correct number should be the smallest, a middle value, or the largest at roughly equal rates.
 - Multi-select: 2 correct, 2 wrong, unless the node needs otherwise. State how many choices to select in the prompt. Use single-choice or pick-pair before introducing multi-select arithmetic. Never “all of them” unless that is the taught idea.
 - Do not use joke options, huge outliers, or two options that are both acceptable.
 - Fill-blank: put number words in `acceptedAnswers` for Reception and Year 1 (`"4"`, `"four"`).
@@ -114,14 +118,16 @@ Rules:
 Every question needs `explanation`. Hints are optional and must follow the scaffolding row above.
 
 - **Hint:** a strategy, never the answer. “Point to each apple and say a number.”
-- **Explanation:** explain why the answer is correct in one or two short sentences. This text appears after both correct and incorrect answers. State the count, relationship or maths fact. For example, “There are 3 apples. Each one counts once.” Never give instructions such as “Count”, “Tap”, “Look”, “See” or “Stop”. Put strategies and instructions in the hint instead. For a single object, “There is 1 apple.” is enough. Explain the correct choices rather than listing every wrong option.
+- **Explanation:** teach in under 20 words. Name a known confusion where there is one (counted twice, added instead of take away, reversed digits). Never only restate the answer. This text appears after both correct and incorrect answers. For example, “There are 3 apples. Each one counts once.” Never give instructions such as “Count”, “Tap”, “Look”, “See” or “Stop”. Put strategies and instructions in the hint instead. Explain the correct choices rather than listing every wrong option.
 - After a miss the child sees the correct answer under its own label, followed by this explanation. Write it so it teaches, not scolds. No “you forgot”. Do not add shared feedback phrases to the explanation.
 
 ## Variety
 
 - Use at least **three question kinds** in a 10-question quest.
 - Do not run the same kind more than three times in a row unless the ramp is deliberately fluency (times tables).
-- Mix pictures and numerals as the ramp says — do not hide all the pictures at the back as a surprise.
+- No more than 3 questions with the same stem shape in a quest, and never 4 in a row. Same shape means the same sentence with only the numbers changed.
+- No two identical stems plus options in one quest.
+- Mix pictures and numerals as the ramp says. Do not hide all the pictures at the back as a surprise.
 - Names, objects and stories should feel like the same classroom, not a new theme every item.
 
 ## No ambiguous answers
@@ -137,7 +143,7 @@ Pre-readers tap the **speaker icon** after the question. Speech uses `question.n
 
 **Question only.** Never read the answer, answer options, how many pictures are on screen, a hint, or the explanation. Those leak the mark to a child who cannot yet read.
 
-Write `narration.prompt` whenever the stem has operators or symbols a voice will mangle (`7 + ? = 10`, `10 − 4 =`).
+**Every question needs `narration.prompt`.** Write it whenever the stem has operators or symbols a voice will mangle (`7 + ? = 10`, `10 − 4 =`). Copy the visible prompt when the words already read well.
 
 - Say numbers and signs in words: “7 plus what equals 10?”, “10 take away 4 equals what?”
 - Same meaning as the on-screen prompt. Do not add “count the three pictures” or option lists.
@@ -157,12 +163,11 @@ Copy the shape of this item from `count-to-5.json`. It is Easy, first third of t
   "options": [
     { "id": "a", "label": "1" },
     { "id": "b", "label": "2" },
-    { "id": "c", "label": "3" },
-    { "id": "d", "label": "4" }
+    { "id": "c", "label": "3" }
   ],
   "correctId": "a",
   "hint": "Tap each picture once as you count.",
-  "explanation": "There is 1 {item}.",
+  "explanation": "There is 1 {item}. Each one counts once.",
   "narration": { "prompt": "How many {items} can you see?" }
 }
 ```
@@ -193,7 +198,25 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 - [ ] If `randomise` is on, stems use `{item}` / `{items}` (and `{count}` if the count can move). The draw stays inside this level — Easy Count to 5 does not randomise how many
 - [ ] No shared phrases (“Correct. Nice!”, “Need a hint?”) copied into the JSON. Those live in `src/data/copy.ts`
 - [ ] Child-facing wording follows **Writing for children** in `AGENTS.md` (UK English, short sentences, no em/en dashes as punctuation)
-- [ ] `npm run check:activities` then `npm run build` in `primary-learn/` succeed
+- [ ] Pedagogy rules below all hold. `npm run check:activities` then `npm run build` in `primary-learn/` succeed
+
+## Pedagogy rules (`check:activities` fails the build)
+
+1. Every wrong option is one named error. At most one distractor may copy a stem number.
+2. Across a quest, numeric answers mix smallest, middle and largest. Do not park the answer in the middle by habit.
+3. 3 options for Reception pickers, 4 for Year 1, never more than 4.
+4. No more than 3 questions with the same stem shape in a quest. Never 4 in a row.
+5. No two identical stems plus options in one quest.
+6. Hard adds a new kind of thinking, stated in `difficultyRamp`.
+7. Explanations teach in under 20 words and name a known confusion where there is one. Never only restate the answer.
+8. Every question has `narration.prompt`.
+9. Every tappable control is at least 44px, including the speaker button.
+10. Year 1 must not say clockwise or anti-clockwise.
+11. Take-away removed tiles need a second cue besides colour (dashed outline). Keep the no-X rule.
+
+Rule 9 is CSS. Rule 11 is CSS. The rest fail `check:activities`.
+
+TODO later rewrite (temporary allowlist, do not grow it): Count to 100, Count beyond 20, Everyday shapes still use repeated stems and copied-number distractors. Those three families skip content rules 1 to 5 and 7 until their rewrite. Show and compare numbers and More, less, same were just rewritten. They skip the same content rules. Narration and Hard thinking still apply.
 - [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)
 
 ## Elevating written sentences (later)

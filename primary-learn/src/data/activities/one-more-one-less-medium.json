@@ -54,15 +54,15 @@
         },
         {
           "id": "b",
-          "label": "10"
-        },
-        {
-          "id": "c",
           "label": "12"
         },
         {
+          "id": "c",
+          "label": "13"
+        },
+        {
           "id": "d",
-          "label": "9"
+          "label": "14"
         }
       ],
       "correctId": "a",
@@ -126,11 +126,11 @@
         },
         {
           "id": "c",
-          "label": "14"
+          "label": "11"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "10"
         }
       ],
       "correctId": "a",
@@ -148,22 +148,22 @@
       "options": [
         {
           "id": "a",
-          "label": "11"
-        },
-        {
-          "id": "b",
-          "label": "12"
-        },
-        {
-          "id": "c",
           "label": "13"
         },
         {
-          "id": "d",
+          "id": "b",
           "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "31"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "One more than 12 is 13.",
       "narration": {
         "prompt": "What is one more than twelve?"
@@ -172,49 +172,49 @@
     {
       "kind": "multiple-choice",
       "id": "oml-m-match-15",
-      "prompt": "What is one more than 14?",
+      "prompt": "13 is one more than ?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "13"
+          "label": "12"
         },
         {
           "id": "b",
-          "label": "14"
+          "label": "11"
         },
         {
           "id": "c",
-          "label": "15"
+          "label": "13"
         },
         {
           "id": "d",
-          "label": "16"
+          "label": "10"
         }
       ],
-      "correctId": "c",
-      "explanation": "One more than 14 is 15.",
+      "correctId": "a",
+      "explanation": "13 is one more than 12. Not the same number.",
       "narration": {
-        "prompt": "What is one more than fourteen?"
+        "prompt": "13 is one more than what?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "oml-m-match-17",
-      "prompt": "What is one more than 16?",
+      "prompt": "20 is one more than ?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "15"
+          "label": "19"
         },
         {
           "id": "b",
-          "label": "16"
+          "label": "18"
         },
         {
           "id": "c",
@@ -222,13 +222,13 @@
         },
         {
           "id": "d",
-          "label": "18"
+          "label": "16"
         }
       ],
-      "correctId": "c",
-      "explanation": "One more than 16 is 17.",
+      "correctId": "a",
+      "explanation": "20 is one more than 19. Not the same number.",
       "narration": {
-        "prompt": "What is one more than sixteen?"
+        "prompt": "20 is one more than what?"
       }
     },
     {
@@ -246,15 +246,15 @@
         },
         {
           "id": "b",
-          "label": "14"
-        },
-        {
-          "id": "c",
           "label": "16"
         },
         {
+          "id": "c",
+          "label": "17"
+        },
+        {
           "id": "d",
-          "label": "13"
+          "label": "51"
         }
       ],
       "correctId": "a",
@@ -324,27 +324,27 @@
     {
       "kind": "multiple-choice",
       "id": "oml-m-10",
-      "prompt": "What is one less than 20?",
-      "explanation": "One less than 20 is 19.",
+      "prompt": "20 is one less than ?",
+      "explanation": "20 is one less than 21. Not the same number.",
       "narration": {
-        "prompt": "What is one less than twenty?"
+        "prompt": "20 is one less than what?"
       },
       "options": [
         {
           "id": "a",
-          "label": "19"
+          "label": "21"
         },
         {
           "id": "b",
-          "label": "18"
-        },
-        {
-          "id": "c",
           "label": "20"
         },
         {
+          "id": "c",
+          "label": "19"
+        },
+        {
           "id": "d",
-          "label": "17"
+          "label": "12"
         }
       ],
       "correctId": "a",

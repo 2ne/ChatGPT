@@ -38,6 +38,7 @@
       "randomise": { "shuffleOptions": true },
       "tenFrame": { "count": 6, "item": "apple" },
       "id": "represent100-1-1",
+      "narration": { "prompt": "How many can you see?" },
       "hint": "Count the filled cells."
     },
     {
@@ -53,6 +54,7 @@
       "explanation": "4 is less than 6.",
       "randomise": { "shuffleOptions": true },
       "id": "represent100-1-2",
+      "narration": { "prompt": "Which group has fewer than 6?" },
       "hint": "Each frame is the same size. Compare the filled cells."
     },
     {
@@ -125,7 +127,8 @@
       "explanation": "The marked tick is 12. Each tick is one more than the tick before it.",
       "randomise": { "shuffleOptions": true },
       "numberLine": { "start": 10, "end": 16, "marked": 12 },
-      "id": "represent100-1-4"
+      "id": "represent100-1-4",
+      "narration": { "prompt": "Which number belongs at the marked tick?" }
     },
     {
       "kind": "multiple-choice",
@@ -140,7 +143,8 @@
       "explanation": "The marked tick is 15. Each tick is one more than the tick before it.",
       "randomise": { "shuffleOptions": true },
       "numberLine": { "start": 10, "end": 16, "marked": 15 },
-      "id": "represent100-1-5"
+      "id": "represent100-1-5",
+      "narration": { "prompt": "Which number belongs at the marked tick?" }
     },
     {
       "kind": "multi-select",
@@ -154,7 +158,8 @@
       "explanation": "17 and 18 are both more than 16.",
       "randomise": { "shuffleOptions": true },
       "id": "represent100-1-6",
-      "correctIds": ["0", "2"]
+      "correctIds": ["0", "2"],
+      "narration": { "prompt": "Select the two numbers that are more than 16." }
     },
     {
       "kind": "multiple-choice",
@@ -168,7 +173,8 @@
       "correctId": "2",
       "explanation": "15 is less than 16.",
       "randomise": { "shuffleOptions": true },
-      "id": "represent100-1-7"
+      "id": "represent100-1-7",
+      "narration": { "prompt": "Which number is less than 16?" }
     },
     {
       "kind": "ordered",
@@ -181,7 +187,7 @@
       ],
       "correctOrder": ["0", "1", "2", "3"],
       "explanation": "The numbers go 13, 15, 16, 19.",
-      "id": "represent100-1-10"
-    }
-  ]
+      "id": "represent100-1-10",
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+    }]
 }

@@ -50,22 +50,22 @@
       "options": [
         {
           "id": "a",
-          "label": "71"
-        },
-        {
-          "id": "b",
           "label": "17"
         },
         {
+          "id": "b",
+          "label": "18"
+        },
+        {
           "id": "c",
-          "label": "16"
+          "label": "19"
         },
         {
           "id": "d",
-          "label": "70"
+          "label": "71"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "Seventeen is written as 17.",
       "narration": {
         "prompt": "Which number is seventeen?"
@@ -95,7 +95,7 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "9"
         },
         {
           "id": "b",
@@ -103,14 +103,14 @@
         },
         {
           "id": "c",
-          "label": "9"
+          "label": "10"
         },
         {
           "id": "d",
-          "label": "10"
+          "label": "7"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "19 is 10 and 9.",
       "narration": {
         "prompt": "nineteen is ten and how many more?"
@@ -191,7 +191,7 @@
     {
       "kind": "match-pairs",
       "id": "rw20h-match-20",
-      "prompt": "Select the card that matches the number.",
+      "prompt": "Find the word for this number.",
       "randomise": {},
       "pairs": [
         {
@@ -208,7 +208,7 @@
       ],
       "explanation": "20 is written as twenty.",
       "narration": {
-        "prompt": "Select the card that matches the number."
+        "prompt": "Find the word for this number."
       },
       "mode": "one-at-a-time"
     },

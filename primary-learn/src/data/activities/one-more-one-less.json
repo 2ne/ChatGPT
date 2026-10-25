@@ -49,22 +49,22 @@
       "options": [
         {
           "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
           "label": "1"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "2"
         },
         {
+          "id": "c",
+          "label": "3"
+        },
+        {
           "id": "d",
-          "label": "10"
+          "label": "4"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "One more than 0 is 1.",
       "narration": {
         "prompt": "What is one more than zero?"
@@ -84,7 +84,7 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
+          "label": "4"
         },
         {
           "id": "b",
@@ -92,14 +92,14 @@
         },
         {
           "id": "c",
-          "label": "4"
+          "label": "5"
         },
         {
           "id": "d",
-          "label": "5"
+          "label": "2"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "hint": "Count on one from 3.",
       "explanation": "One more than 3 is 4.",
       "narration": {
@@ -120,22 +120,22 @@
       "options": [
         {
           "id": "a",
-          "label": "4"
-        },
-        {
-          "id": "b",
           "label": "5"
         },
         {
+          "id": "b",
+          "label": "4"
+        },
+        {
           "id": "c",
-          "label": "6"
+          "label": "3"
         },
         {
           "id": "d",
-          "label": "7"
+          "label": "2"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "One less than 6 is 5.",
       "narration": {
         "prompt": "What is one less than six?"
@@ -179,22 +179,22 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
           "label": "3"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "4"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "6"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "One more than 2 is 3.",
       "narration": {
         "prompt": "What is one more than two?"
@@ -203,18 +203,18 @@
     {
       "kind": "multiple-choice",
       "id": "oml-e-match-4",
-      "prompt": "What is one more than 4?",
+      "prompt": "5 is one more than ?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "3"
+          "label": "4"
         },
         {
           "id": "b",
-          "label": "4"
+          "label": "3"
         },
         {
           "id": "c",
@@ -222,30 +222,30 @@
         },
         {
           "id": "d",
-          "label": "6"
+          "label": "2"
         }
       ],
-      "correctId": "c",
-      "explanation": "One more than 4 is 5.",
+      "correctId": "a",
+      "explanation": "5 is one more than 4. Not the same number.",
       "narration": {
-        "prompt": "What is one more than four?"
+        "prompt": "5 is one more than what?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "oml-e-match-6",
-      "prompt": "What is one more than 6?",
+      "prompt": "10 is one more than ?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "5"
+          "label": "9"
         },
         {
           "id": "b",
-          "label": "6"
+          "label": "8"
         },
         {
           "id": "c",
@@ -253,44 +253,44 @@
         },
         {
           "id": "d",
-          "label": "8"
+          "label": "6"
         }
       ],
-      "correctId": "c",
-      "explanation": "One more than 6 is 7.",
+      "correctId": "a",
+      "explanation": "10 is one more than 9. Not the same number.",
       "narration": {
-        "prompt": "What is one more than six?"
+        "prompt": "10 is one more than what?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "oml-e-match-9",
-      "prompt": "What is one more than 9?",
+      "prompt": "7 is one more than ?",
       "randomise": {
         "shuffleOptions": true
       },
       "options": [
         {
           "id": "a",
-          "label": "8"
+          "label": "6"
         },
         {
           "id": "b",
-          "label": "9"
+          "label": "7"
         },
         {
           "id": "c",
-          "label": "10"
+          "label": "8"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "9"
         }
       ],
-      "correctId": "c",
-      "explanation": "One more than 9 is 10.",
+      "correctId": "a",
+      "explanation": "7 is one more than 6. Not the same number.",
       "narration": {
-        "prompt": "What is one more than nine?"
+        "prompt": "7 is one more than what?"
       }
     },
     {
@@ -304,11 +304,11 @@
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "8"
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "7"
         },
         {
           "id": "c",
@@ -316,10 +316,10 @@
         },
         {
           "id": "d",
-          "label": "10"
+          "label": "6"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "randomise": {
         "shuffleOptions": true
       },
@@ -342,22 +342,22 @@
       "options": [
         {
           "id": "a",
-          "label": "8"
-        },
-        {
-          "id": "b",
           "label": "9"
         },
         {
+          "id": "b",
+          "label": "8"
+        },
+        {
           "id": "c",
-          "label": "10"
+          "label": "7"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "6"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "One less than 10 is 9.",
       "narration": {
         "prompt": "What is one less than ten?"

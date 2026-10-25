@@ -50,22 +50,22 @@
       "options": [
         {
           "id": "a",
-          "label": "18"
-        },
-        {
-          "id": "b",
           "label": "19"
         },
         {
+          "id": "b",
+          "label": "20"
+        },
+        {
           "id": "c",
-          "label": "91"
+          "label": "21"
         },
         {
           "id": "d",
-          "label": "20"
+          "label": "91"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Nineteen comes just before twenty.",
       "explanation": "Nineteen is written as 19.",
       "narration": {
@@ -96,7 +96,7 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
+          "label": "4"
         },
         {
           "id": "b",
@@ -104,14 +104,14 @@
         },
         {
           "id": "c",
-          "label": "4"
+          "label": "5"
         },
         {
           "id": "d",
-          "label": "5"
+          "label": "2"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "14 is 10 and 4.",
       "narration": {
         "prompt": "fourteen is ten and how many more?"

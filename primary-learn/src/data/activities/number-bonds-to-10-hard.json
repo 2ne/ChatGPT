@@ -38,19 +38,19 @@
       "options": [
         {
           "id": "a",
-          "label": "3"
-        },
-        {
-          "id": "b",
           "label": "4"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "5"
         },
         {
+          "id": "c",
+          "label": "6"
+        },
+        {
           "id": "d",
-          "label": "2"
+          "label": "16"
         }
       ],
       "explanation": "6 and 4 make 10.",
@@ -81,7 +81,7 @@
         },
         {
           "id": "d",
-          "label": "0"
+          "label": "4"
         }
       ],
       "correctId": "a",
@@ -143,15 +143,15 @@
       "options": [
         {
           "id": "a",
-          "label": "9"
-        },
-        {
-          "id": "b",
           "label": "10"
         },
         {
+          "id": "b",
+          "label": "9"
+        },
+        {
           "id": "c",
-          "label": "0"
+          "label": "8"
         },
         {
           "id": "d",
@@ -173,22 +173,22 @@
       "options": [
         {
           "id": "a",
-          "label": "0"
-        },
-        {
-          "id": "b",
-          "label": "1"
-        },
-        {
-          "id": "c",
           "label": "10"
         },
         {
+          "id": "b",
+          "label": "11"
+        },
+        {
+          "id": "c",
+          "label": "12"
+        },
+        {
           "id": "d",
-          "label": "9"
+          "label": "13"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "Taking away 0 leaves all 10.",
       "narration": {
         "prompt": "What is ten take away zero?"
@@ -208,11 +208,11 @@
       "options": [
         {
           "id": "a",
-          "label": "1"
+          "label": "2"
         },
         {
           "id": "b",
-          "label": "2"
+          "label": "1"
         },
         {
           "id": "c",
@@ -220,7 +220,7 @@
         },
         {
           "id": "d",
-          "label": "8"
+          "label": "0"
         }
       ],
       "explanation": "8 and 2 make 10.",
@@ -258,22 +258,22 @@
       "options": [
         {
           "id": "a",
-          "label": "2"
-        },
-        {
-          "id": "b",
           "label": "3"
         },
         {
+          "id": "b",
+          "label": "2"
+        },
+        {
           "id": "c",
-          "label": "4"
+          "label": "1"
         },
         {
           "id": "d",
-          "label": "5"
+          "label": "0"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "10 take away 7 is 3. 7 and 3 make 10.",
       "narration": {
         "prompt": "What is ten take away seven?"
@@ -294,22 +294,22 @@
       "options": [
         {
           "id": "a",
-          "label": "6"
-        },
-        {
-          "id": "b",
           "label": "7"
         },
         {
-          "id": "c",
+          "id": "b",
           "label": "8"
         },
         {
+          "id": "c",
+          "label": "9"
+        },
+        {
           "id": "d",
-          "label": "3"
+          "label": "13"
         }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "10 take away 3 is 7. 3 and 7 make 10.",
       "narration": {
         "prompt": "Sam has 10 apples. He gives away 3. How many apples are left?"

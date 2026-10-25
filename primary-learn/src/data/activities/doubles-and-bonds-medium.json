@@ -59,15 +59,11 @@
         },
         {
           "id": "b",
-          "label": "3"
-        },
-        {
-          "id": "c",
           "label": "5"
         },
         {
-          "id": "d",
-          "label": "2"
+          "id": "c",
+          "label": "6"
         }
       ],
       "randomise": {
@@ -99,10 +95,6 @@
         {
           "id": "c",
           "label": "7"
-        },
-        {
-          "id": "d",
-          "label": "4"
         }
       ],
       "randomise": {
@@ -133,10 +125,6 @@
         },
         {
           "id": "c",
-          "label": "9"
-        },
-        {
-          "id": "d",
           "label": "6"
         }
       ],
@@ -147,10 +135,10 @@
     {
       "kind": "make-total",
       "id": "db-m-double-5",
-      "prompt": "What is 5 + 5?",
+      "prompt": "What do 5 and 5 make?",
       "explanation": "5 and 5 make 10.",
       "narration": {
-        "prompt": "What is five plus five?"
+        "prompt": "What do five and five make?"
       },
       "part": 5,
       "other": 5,
@@ -164,15 +152,11 @@
         },
         {
           "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
           "label": "11"
         },
         {
-          "id": "d",
-          "label": "8"
+          "id": "c",
+          "label": "12"
         }
       ],
       "randomise": {
@@ -255,10 +239,6 @@
         {
           "id": "c",
           "label": "6"
-        },
-        {
-          "id": "d",
-          "label": "3"
         }
       ],
       "randomise": {
@@ -288,10 +268,10 @@
     {
       "kind": "make-total",
       "id": "db-m-bond-2-recall",
-      "prompt": "What do you need to add to 2 to make 10?",
+      "prompt": "2 and what make 10?",
       "explanation": "2 and 8 make 10.",
       "narration": {
-        "prompt": "What do you need to add to two to make ten?"
+        "prompt": "2 and what make 10?"
       },
       "part": 2,
       "total": 10,
@@ -308,10 +288,6 @@
         },
         {
           "id": "c",
-          "label": "9"
-        },
-        {
-          "id": "d",
           "label": "6"
         }
       ],

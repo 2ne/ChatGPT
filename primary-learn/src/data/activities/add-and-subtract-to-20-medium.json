@@ -44,15 +44,15 @@
         },
         {
           "id": "b",
-          "label": "0"
+          "label": "13"
         },
         {
           "id": "c",
-          "label": "11"
+          "label": "14"
         },
         {
           "id": "d",
-          "label": "13"
+          "label": "21"
         }
       ],
       "randomise": {
@@ -74,15 +74,15 @@
         },
         {
           "id": "b",
-          "label": "0"
-        },
-        {
-          "id": "c",
           "label": "11"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "10"
         }
       ],
       "correctId": "a",
@@ -130,15 +130,15 @@
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "14"
         },
         {
           "id": "c",
-          "label": "7"
+          "label": "13"
         },
         {
           "id": "d",
-          "label": "14"
+          "label": "1"
         }
       ],
       "randomise": {
@@ -160,15 +160,15 @@
         },
         {
           "id": "b",
-          "label": "15"
-        },
-        {
-          "id": "c",
           "label": "8"
         },
         {
+          "id": "c",
+          "label": "9"
+        },
+        {
           "id": "d",
-          "label": "6"
+          "label": "23"
         }
       ],
       "correctId": "a",
@@ -195,15 +195,15 @@
         },
         {
           "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
           "label": "6"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "5"
         }
       ],
       "randomise": {
@@ -225,15 +225,15 @@
         },
         {
           "id": "b",
-          "label": "9"
+          "label": "7"
         },
         {
           "id": "c",
-          "label": "17"
+          "label": "6"
         },
         {
           "id": "d",
-          "label": "7"
+          "label": "5"
         }
       ],
       "correctId": "a",
@@ -292,15 +292,15 @@
         },
         {
           "id": "b",
-          "label": "19"
+          "label": "13"
         },
         {
           "id": "c",
-          "label": "7"
+          "label": "14"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "21"
         }
       ],
       "correctId": "a",
@@ -328,15 +328,15 @@
         },
         {
           "id": "b",
-          "label": "20"
+          "label": "11"
         },
         {
           "id": "c",
-          "label": "8"
+          "label": "13"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "10"
         }
       ],
       "correctId": "a",

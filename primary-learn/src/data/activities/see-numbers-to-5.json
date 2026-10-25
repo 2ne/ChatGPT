@@ -4,7 +4,9 @@
   "summary": "Know how many without counting, for groups of 1 to 5. Brief flash, tidy groups and fingers.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Reception"],
+  "yearGroups": [
+    "Reception"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 5,
   "masteryThreshold": 0.8,
@@ -16,153 +18,305 @@
     "within": "Question 1 How many {items} can you see? Question 2 How many {items} can you see? Question 3 How many {items} can you see? Question 4 How many {items} can you see? Question 5 How many {items} can you see? Question 6 How many can you see in all? Question 7 Which group has 5 {items}? Question 8 Which group has 5 {items}? Question 9 How many fingers can you see? Question 10 How many {items} are under the cup?",
     "versus": "Easy uses familiar arrangements and longer flashes with early hints. Medium mixes arrangements and small groups within 5 using shorter flashes. Hard uses quicker flashes and combines two pictured parts within 5. Numeric answers throughout."
   },
-  "skills": ["eyfs-subitise-5", "subitise-to-5", "numerals-1-to-5", "dice-patterns", "five-frame", "finger-patterns"],
+  "skills": [
+    "eyfs-subitise-5",
+    "subitise-to-5",
+    "numerals-1-to-5",
+    "dice-patterns",
+    "five-frame",
+    "finger-patterns"
+  ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "kind": "multiple-choice",
       "id": "s5e-1",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "star", "count": 1 },
+      "visual": {
+        "item": "star",
+        "count": 1
+      },
       "layout": "dice",
       "flashMs": 1800,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "1"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        }
       ],
       "correctId": "a",
       "hint": "Just look. Do not count one by one.",
       "explanation": "There is 1 {item}. You can see it in one look.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-2",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "balloon", "count": 2 },
+      "visual": {
+        "item": "balloon",
+        "count": 2
+      },
       "layout": "dice",
       "flashMs": 1800,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "1" },
-        { "id": "b", "label": "2" },
-        { "id": "c", "label": "3" },
-        { "id": "d", "label": "4" }
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "1"
+        },
+        {
+          "id": "c",
+          "label": "3"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Look at the whole group in one look.",
       "explanation": "There are 2 {items}. You can see both at once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-3",
       "prompt": "How many {items} can you see?",
-      "visual": { "item": "apple", "count": 3 },
+      "visual": {
+        "item": "apple",
+        "count": 3
+      },
       "layout": "dice",
       "flashMs": 1800,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "1"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "See the whole group in one look.",
       "explanation": "There are 3 {items}. You can see the whole group at once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-frame-3",
-      "prompt": "How many {items} can you see?",
-      "visual": { "item": "duck", "count": 3 },
+      "prompt": "How many {items} are here?",
+      "visual": {
+        "item": "duck",
+        "count": 3
+      },
       "layout": "five-frame",
       "flashMs": 1800,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 3 {items}. You can see the whole group at once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} are here?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-4",
-      "prompt": "How many {items} can you see?",
-      "visual": { "item": "frog", "count": 4 },
+      "prompt": "How many {items} are here?",
+      "visual": {
+        "item": "frog",
+        "count": 4
+      },
       "layout": "dice",
       "flashMs": 1600,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "There are 4 {items}. You can see the whole group at once.",
-      "narration": { "prompt": "How many {items} can you see?" }
+      "narration": {
+        "prompt": "How many {items} are here?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-parts-4",
       "prompt": "How many can you see in all?",
-      "visual": { "item": "fish", "count": 2 },
-      "extras": [{ "item": "car", "count": 2 }],
+      "visual": {
+        "item": "fish",
+        "count": 2
+      },
+      "extras": [
+        {
+          "item": "car",
+          "count": 2
+        }
+      ],
       "layout": "row",
       "flashMs": 1800,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "2"
+        }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "The two groups have 2 and 2. Together they make 4.",
-      "narration": { "prompt": "How many can you see in all?" }
+      "narration": {
+        "prompt": "How many can you see in all?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-sam-5",
       "prompt": "Which group has 5 {items}?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "ladybird", "count": 3 }, "layout": "dice" },
-        { "id": "b", "visual": { "item": "ladybird", "count": 4 }, "layout": "dice" },
-        { "id": "c", "visual": { "item": "ladybird", "count": 5 }, "layout": "dice" },
-        { "id": "d", "visual": { "item": "ladybird", "count": 2 }, "layout": "dice" }
+        {
+          "id": "a",
+          "visual": {
+            "item": "ladybird",
+            "count": 3
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "ladybird",
+            "count": 4
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "ladybird",
+            "count": 5
+          },
+          "layout": "dice"
+        }
       ],
       "correctId": "c",
       "explanation": "That group has 5 {items}.",
-      "narration": { "prompt": "Which group has 5 {items}?" }
+      "narration": {
+        "prompt": "Which group has 5 {items}?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-every-5",
       "prompt": "Which group has 5 {items}?",
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "visual": { "item": "star", "count": 5 }, "layout": "dice" },
-        { "id": "b", "visual": { "item": "star", "count": 4 }, "layout": "dice" },
-        { "id": "c", "visual": { "item": "star", "count": 3 }, "layout": "dice" },
         {
-          "id": "d",
+          "id": "a",
           "visual": {
             "item": "star",
-            "count": 6
+            "count": 5
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "b",
+          "visual": {
+            "item": "star",
+            "count": 4
+          },
+          "layout": "dice"
+        },
+        {
+          "id": "c",
+          "visual": {
+            "item": "star",
+            "count": 3
           },
           "layout": "dice"
         }
@@ -177,38 +331,68 @@
       "kind": "multiple-choice",
       "id": "s5e-fingers-4",
       "prompt": "How many fingers can you see?",
-      "visual": { "item": "star", "count": 4 },
+      "visual": {
+        "item": "star",
+        "count": 4
+      },
       "layout": "fingers",
       "flashMs": 1600,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "5" },
-        { "id": "d", "label": "2" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "hint": "Look quickly. How many fingers are up?",
       "explanation": "Four fingers are up. That is 4.",
-      "narration": { "prompt": "How many fingers can you see?" }
+      "narration": {
+        "prompt": "How many fingers can you see?"
+      }
     },
     {
       "kind": "multiple-choice",
       "id": "s5e-hidden-3",
       "prompt": "How many {items} are under the cup?",
-      "visual": { "item": "strawberry", "count": 3 },
+      "visual": {
+        "item": "strawberry",
+        "count": 3
+      },
       "layout": "hidden",
       "flashMs": 1500,
-      "randomise": { "shuffleOptions": true },
+      "randomise": {
+        "shuffleOptions": true
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "4" },
-        { "id": "d", "label": "5" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        }
       ],
-      "correctId": "b",
+      "correctId": "a",
       "explanation": "There are 3 {items} under the cup. Hiding them does not change how many there are.",
-      "narration": { "prompt": "How many {items} are under the cup?" }
+      "narration": {
+        "prompt": "How many {items} are under the cup?"
+      }
     }
   ]
 }

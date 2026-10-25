@@ -44,15 +44,15 @@
         },
         {
           "id": "b",
-          "label": "0"
+          "label": "18"
         },
         {
           "id": "c",
-          "label": "16"
+          "label": "19"
         },
         {
           "id": "d",
-          "label": "18"
+          "label": "71"
         }
       ],
       "randomise": {
@@ -74,15 +74,15 @@
         },
         {
           "id": "b",
-          "label": "17"
-        },
-        {
-          "id": "c",
           "label": "1"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "2"
+        },
+        {
+          "id": "d",
+          "label": "17"
         }
       ],
       "correctId": "a",
@@ -130,15 +130,15 @@
         },
         {
           "id": "b",
-          "label": "9"
-        },
-        {
-          "id": "c",
           "label": "17"
         },
         {
+          "id": "c",
+          "label": "16"
+        },
+        {
           "id": "d",
-          "label": "19"
+          "label": "9"
         }
       ],
       "randomise": {
@@ -160,15 +160,15 @@
         },
         {
           "id": "b",
-          "label": "18"
+          "label": "10"
         },
         {
           "id": "c",
-          "label": "8"
+          "label": "11"
         },
         {
           "id": "d",
-          "label": "10"
+          "label": "18"
         }
       ],
       "correctId": "a",
@@ -195,15 +195,15 @@
         },
         {
           "id": "b",
-          "label": "8"
-        },
-        {
-          "id": "c",
           "label": "10"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "12"
+        },
+        {
+          "id": "d",
+          "label": "9"
         }
       ],
       "randomise": {
@@ -225,15 +225,15 @@
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "11"
         },
         {
           "id": "c",
-          "label": "20"
+          "label": "10"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "9"
         }
       ],
       "correctId": "a",
@@ -292,15 +292,15 @@
         },
         {
           "id": "b",
-          "label": "7"
+          "label": "17"
         },
         {
           "id": "c",
-          "label": "9"
+          "label": "18"
         },
         {
           "id": "d",
-          "label": "15"
+          "label": "61"
         }
       ],
       "correctId": "a",
@@ -327,15 +327,15 @@
         },
         {
           "id": "b",
-          "label": "12"
-        },
-        {
-          "id": "c",
           "label": "7"
         },
         {
-          "id": "d",
+          "id": "c",
           "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "6"
         }
       ],
       "randomise": {

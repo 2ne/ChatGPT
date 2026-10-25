@@ -160,7 +160,8 @@
         "b",
         "c",
         "d"
-      ]
+      ],
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
       "id": "c100-2-6",
@@ -267,7 +268,8 @@
         "b",
         "c",
         "d"
-      ]
+      ],
+      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
     },
     {
       "id": "c100-2-10",

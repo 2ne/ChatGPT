@@ -9,6 +9,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { createServer } from "vite";
+import { lintActivities, pedagogyAllowlistNote } from "./pedagogy-lint.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -46,7 +47,14 @@ try {
     if (slots.has(slot)) throw new Error(`Duplicate map slot: ${slot} (${activity.id})`);
     slots.add(slot);
   }
+  const pedagogy = lintActivities(list);
+  if (pedagogy.length) {
+    for (const line of pedagogy) console.error(line);
+    console.error(`\n${pedagogy.length} pedagogy checks failed. ${pedagogyAllowlistNote}`);
+    throw new Error("pedagogy lint failed");
+  }
   console.log(`OK ${list.length} activities validated`);
+  console.log(pedagogyAllowlistNote);
 } catch (err) {
   console.error(err instanceof Error ? err.message : err);
   await server.close();
