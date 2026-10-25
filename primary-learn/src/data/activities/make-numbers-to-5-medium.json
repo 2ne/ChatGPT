@@ -31,7 +31,7 @@
   "difficulty": 2,
   "difficultyRamp": {
     "within": "Q1 sees 4 as 3 and 1. Q2 completes 0 to make 5. Q3 adds 4 and 1. Q4 builds 5. Q5 picks a pair for 5. Q6 completes 1 to make 4. Q7 sees 5 as 4 and 1. Q8 is a join story. Q9 types the missing part. Q10 taps every pair that makes 4.",
-    "versus": "Easy builds totals 2 to 5 with two-colour parts. Medium includes zero. Hard reverses parts and finds a missing whole."
+    "versus": "Easy builds totals 2 to 5 with two-colour parts. Medium includes zero and a take-away story. Hard reverses parts and uses a change-unknown story."
   },
   "skills": [
     "eyfs-compose-5",
@@ -180,14 +180,11 @@
     {
       "id": "m5-2-7",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
-      "tenFrame": {
-        "count": 5,
+      "prompt": "Mia has 5 {items} and gives away 1. How many are left?",
+      "visual": {
         "item": "fish",
-        "parts": [
-          4,
-          1
-        ]
+        "count": 5,
+        "removed": 1
       },
       "options": [
         {
@@ -200,13 +197,13 @@
         },
         {
           "id": "c",
-          "label": "1"
+          "label": "6"
         }
       ],
-      "correctId": "b",
-      "explanation": "4 and 1 make 5. Add both parts.",
+      "correctId": "a",
+      "explanation": "5 take away 1 is 4. The start number is not what is left.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "Mia has 5 {items} and gives away 1. How many are left?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -215,7 +212,7 @@
     {
       "id": "m5-2-8",
       "kind": "multiple-choice",
-      "prompt": "Sam has 2 stars. He gets 2 more. How many stars does he have now?",
+      "prompt": "Ben has 2 {items}. He gets 2 more. How many {items} does he have now?",
       "visual": {
         "item": "star",
         "count": 2,
@@ -236,9 +233,9 @@
         }
       ],
       "correctId": "c",
-      "explanation": "2 and 2 more makes 4. Not the start number.",
+      "explanation": "2 and 2 more make 4. The start number is not the whole.",
       "narration": {
-        "prompt": "Sam has 2 stars. He gets 2 more. How many stars does he have now?"
+        "prompt": "Ben has 2 {items}. He gets 2 more. How many {items} does he have now?"
       },
       "randomise": {
         "shuffleOptions": true

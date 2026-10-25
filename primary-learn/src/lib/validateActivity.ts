@@ -63,9 +63,9 @@ function fail(path: string, message: string): never {
   throw new Error(`Activity ${path}: ${message}`);
 }
 
-/** Sam/Mia stories that name one object must not mix a second emoji in extras. */
+/** Named stories that name one object must not mix a second emoji in extras. */
 function storyNamesOneObject(prompt: string): boolean {
-  if (!/\b(Sam|Mia)\b/.test(prompt)) return false;
+  if (!/\b(Sam|Mia|Ben|Kim|Jo)\b/.test(prompt)) return false;
   if (!/\{items?\}/.test(prompt)) return false;
   if (/\{items?2\}/.test(prompt)) return false;
   if (/only wants|can he take/i.test(prompt)) return false;

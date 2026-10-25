@@ -92,8 +92,8 @@
     {
       "id": "oml-3-6",
       "kind": "multiple-choice",
-      "prompt": "Sam has 19 stars. He gets 1 more. How many stars does he have now?",
-      "visual": { "item": "star", "count": 19, "added": 1 },
+      "prompt": "Mia has 19 frogs. She gets 1 more. How many frogs does she have now?",
+      "visual": { "item": "frog", "count": 19, "added": 1 },
       "options": [
         { "id": "a", "label": "18" },
         { "id": "b", "label": "19" },
@@ -102,7 +102,7 @@
       ],
       "correctId": "c",
       "explanation": "19 and 1 more makes 20. Not the start number.",
-      "narration": { "prompt": "Sam has 19 stars. He gets 1 more. How many stars does he have now?" },
+      "narration": { "prompt": "Mia has nineteen frogs. She gets one more. How many frogs does she have now?" },
       "randomise": { "shuffleOptions": true }
     },
     {

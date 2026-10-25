@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 What do you need to add to 4 to make 5? Question 2 What is 5 take away 2? Question 3 What do 2 and 3 make? Question 4 What two numbers make 5? Question 5 What do you need to add to 0 to make 5? Question 6 What is 5 take away 0? Question 7 What do you need to add to 4 to make 5? Question 8 What two numbers make 5? Question 9 What is 5 take away 3? Question 10 What is 5 take away 1?",
+    "within": "Question 1 What do you need to add to 4 to make 5? Question 2 What is 5 take away 2? Question 3 What do 2 and 3 make? Question 4 What two numbers make 5? Question 5 What do you need to add to 0 to make 5? Question 6 What is 5 take away 0? Question 7 What do you need to add to 4 to make 5? Question 8 What two numbers make 5? Question 9 What is 5 take away 3? Question 10 Kim has 5 {items} and gives away 1. How many are left?",
     "versus": "Easy builds pictured bonds to 5 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
@@ -258,7 +258,12 @@
     {
       "kind": "multiple-choice",
       "id": "b5h-match-take",
-      "prompt": "5 take away 1 leaves ?",
+      "prompt": "Kim has 5 {items} and gives away 1. How many are left?",
+      "visual": {
+        "item": "apple",
+        "count": 5,
+        "removed": 1
+      },
       "randomise": {
         "shuffleOptions": true
       },
@@ -277,9 +282,9 @@
         }
       ],
       "correctId": "a",
-      "explanation": "Because 1 + 4 = 5, 5 − 1 = 4.",
+      "explanation": "5 take away 1 is 4. 1 and 4 make 5.",
       "narration": {
-        "prompt": "Five take away one leaves what?"
+        "prompt": "Kim has 5 {items} and gives away 1. How many are left?"
       }
     }
   ]

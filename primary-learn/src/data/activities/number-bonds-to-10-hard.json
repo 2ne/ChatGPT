@@ -249,9 +249,9 @@
     {
       "id": "nb10-3-9",
       "kind": "multiple-choice",
-      "prompt": "Sam has 10 stars and gives away 4. How many are left?",
+      "prompt": "Sam has 10 apples and gives away 4. How many are left?",
       "visual": {
-        "item": "star",
+        "item": "apple",
         "count": 10,
         "removed": 4
       },
@@ -276,7 +276,7 @@
       "correctId": "b",
       "explanation": "10 take away 4 is 6. Not 14.",
       "narration": {
-        "prompt": "Sam has 10 stars and gives away 4. How many are left?"
+        "prompt": "Sam has ten apples and gives away four. How many are left?"
       },
       "randomise": {
         "shuffleOptions": true

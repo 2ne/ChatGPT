@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 What do you need to add to 3 to make 5? Question 2 What do you need to add to 4 to make 5? Question 3 What do you need to add to 0 to make 5? Question 4 What do you need to add to 5 to make 5? Question 5 Sam has 5 {items} and gives away 3. How many are left? Question 6 What two numbers make 5? Question 7 What two numbers make 5? Question 8 What do you need to add to 2 to make 5? Question 9 What is 5 take away 4? Question 10 Sam has 5 {items} and gives them all away. How many are left?",
+    "within": "Question 1 What do you need to add to 3 to make 5? Question 2 What do you need to add to 4 to make 5? Question 3 What do you need to add to 0 to make 5? Question 4 What do you need to add to 5 to make 5? Question 5 Ben has 5 {items} and gives away 3. How many are left? Question 6 What two numbers make 5? Question 7 What two numbers make 5? Question 8 What do you need to add to 2 to make 5? Question 9 What is 5 take away 4? Question 10 Mia has 5 {items} and gives them all away. How many are left?",
     "versus": "Easy builds pictured bonds to 5 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
@@ -126,7 +126,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5m-take-3",
-      "prompt": "Sam has 5 {items} and gives away 3. How many are left?",
+      "prompt": "Ben has 5 {items} and gives away 3. How many are left?",
       "randomise": {
         "shuffleOptions": true,
         "items": [
@@ -153,7 +153,7 @@
       "correctId": "a",
       "explanation": "Because 3 + 2 = 5, 5 take away 3 is 2.",
       "narration": {
-        "prompt": "Sam has 5 {items} and gives away 3. How many are left?"
+        "prompt": "Ben has 5 {items} and gives away 3. How many are left?"
       },
       "visual": {
         "item": "apple",
@@ -267,7 +267,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5m-take-5",
-      "prompt": "Sam has 5 {items} and gives them all away. How many are left?",
+      "prompt": "Mia has 5 {items} and gives them all away. How many are left?",
       "randomise": {
         "shuffleOptions": true,
         "items": [
@@ -294,7 +294,7 @@
       "correctId": "a",
       "explanation": "Taking away all 5 leaves 0.",
       "narration": {
-        "prompt": "Sam has 5 {items} and gives them all away. How many are left?"
+        "prompt": "Mia has 5 {items} and gives them all away. How many are left?"
       },
       "visual": {
         "item": "apple",

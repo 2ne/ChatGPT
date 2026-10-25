@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 What do you need to add to 2 to make 5? Question 2 What two numbers make 5? Question 3 What do you need to add to 3 to make 5? Question 4 What do you need to add to 4 to make 5? Question 5 What do you need to add to 1 to make 5? Question 6 What do you need to add to 0 to make 5? Question 7 What do you need to add to 2 to make 5? Question 8 What two numbers make 5? Question 9 Sam has 5 {items} and gives away 1. How many are left? Question 10 What is 5 take away 2?",
+    "within": "Question 1 What do you need to add to 2 to make 5? Question 2 What two numbers make 5? Question 3 What do you need to add to 3 to make 5? Question 4 What do you need to add to 4 to make 5? Question 5 What do you need to add to 1 to make 5? Question 6 What do you need to add to 0 to make 5? Question 7 What do you need to add to 2 to make 5? Question 8 What two numbers make 5? Question 9 Mia has 5 {items} and gives away 1. How many are left? Question 10 What is 5 take away 2?",
     "versus": "Easy builds pictured bonds to 5 and introduces related subtraction. Medium mixes missing parts, zero and subtraction with picture support. Hard recalls missing parts and subtraction with numeric answers. No spelling or multi-statement checking is required."
   },
   "skills": [
@@ -200,7 +200,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5e-take-1",
-      "prompt": "Sam has 5 {items} and gives away 1. How many are left?",
+      "prompt": "Mia has 5 {items} and gives away 1. How many are left?",
       "visual": {
         "item": "apple",
         "count": 5,
@@ -226,7 +226,7 @@
       "correctId": "a",
       "explanation": "Because 1 + 4 = 5, 5 take away 1 is 4.",
       "narration": {
-        "prompt": "Sam has 5 {items} and gives away 1. How many are left?"
+        "prompt": "Mia has 5 {items} and gives away 1. How many are left?"
       }
     },
     {

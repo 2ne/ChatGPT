@@ -31,7 +31,7 @@
   "difficulty": 3,
   "difficultyRamp": {
     "within": "Q1 sees 10 as 7 and 3. Q2 asks what 4 and 5 make. Q3 completes 9 to make 10. Q4 picks a pair for 7. Q5 builds 10. Q6 reverses a missing part. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 10. Q10 orders parts.",
-    "versus": "Easy builds 6 to 9 with two-colour parts. Medium includes 10 and zero. Hard reverses parts and finds a missing whole. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy builds 6 to 9 with two-colour parts. Medium includes 10, zero and a take-away story. Hard reverses parts and uses a change-unknown story."
   },
   "skills": [
     "eyfs-compose-10",
@@ -179,12 +179,7 @@
     {
       "id": "m10-3-7",
       "kind": "multiple-choice",
-      "prompt": "Sam has 6 stars. He gets 3 more. How many stars does he have now?",
-      "visual": {
-        "item": "star",
-        "count": 6,
-        "added": 3
-      },
+      "prompt": "Sam has 6 {items}. Now he has 9. How many did he get?",
       "options": [
         {
           "id": "a",
@@ -192,17 +187,17 @@
         },
         {
           "id": "b",
-          "label": "9"
+          "label": "3"
         },
         {
           "id": "c",
-          "label": "10"
+          "label": "6"
         }
       ],
       "correctId": "b",
-      "explanation": "6 and 3 more makes 9. Not 10.",
+      "explanation": "6 and 3 make 9. The new total is not how many he got.",
       "narration": {
-        "prompt": "Sam has 6 stars. He gets 3 more. How many stars does he have now?"
+        "prompt": "Sam has 6 {items}. Now he has 9. How many did he get?"
       },
       "randomise": {
         "shuffleOptions": true

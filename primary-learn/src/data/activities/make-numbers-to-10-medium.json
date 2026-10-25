@@ -31,7 +31,7 @@
   "difficulty": 2,
   "difficultyRamp": {
     "within": "Q1 sees 8 as 5 and 3. Q2 completes 0 to make 10. Q3 adds 6 and 4. Q4 builds 9. Q5 picks a pair for 10. Q6 completes 2 to make 9. Q7 sees 10 as 6 and 4. Q8 is a join story. Q9 types the missing part. Q10 taps every pair that makes 8.",
-    "versus": "Easy builds 6 to 9 with two-colour parts. Medium includes 10 and zero. Hard reverses parts and finds a missing whole. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy builds 6 to 9 with two-colour parts. Medium includes 10, zero and a take-away story. Hard reverses parts and uses a change-unknown story."
   },
   "skills": [
     "eyfs-compose-10",
@@ -180,14 +180,11 @@
     {
       "id": "m10-2-7",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
-      "tenFrame": {
-        "count": 10,
+      "prompt": "Mia has 10 {items} and gives away 4. How many are left?",
+      "visual": {
         "item": "fish",
-        "parts": [
-          6,
-          4
-        ]
+        "count": 10,
+        "removed": 4
       },
       "options": [
         {
@@ -196,17 +193,17 @@
         },
         {
           "id": "b",
-          "label": "4"
+          "label": "7"
         },
         {
           "id": "c",
           "label": "10"
         }
       ],
-      "correctId": "c",
-      "explanation": "6 and 4 make 10. Add both parts.",
+      "correctId": "a",
+      "explanation": "10 take away 4 is 6. The start number is not what is left.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "Mia has 10 {items} and gives away 4. How many are left?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -215,7 +212,7 @@
     {
       "id": "m10-2-8",
       "kind": "multiple-choice",
-      "prompt": "Sam has 5 stars. He gets 4 more. How many stars does he have now?",
+      "prompt": "Ben has 5 {items}. He gets 4 more. How many {items} does he have now?",
       "visual": {
         "item": "star",
         "count": 5,
@@ -236,9 +233,9 @@
         }
       ],
       "correctId": "b",
-      "explanation": "5 and 4 more makes 9. Not 10.",
+      "explanation": "5 and 4 more make 9. 10 is the next ten, not this total.",
       "narration": {
-        "prompt": "Sam has 5 stars. He gets 4 more. How many stars does he have now?"
+        "prompt": "Ben has 5 {items}. He gets 4 more. How many {items} does he have now?"
       },
       "randomise": {
         "shuffleOptions": true

@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 and Q2 see two-colour parts. Q3 completes 1 to make 3. Q4 adds 2 and 2. Q5 builds 4. Q6 picks a pair for 4. Q7 completes 2 to make 5. Q8 sees 2 and 3. Q9 is a join story. Q10 taps every pair that makes 5.",
+    "within": "Q1 and Q2 see two-colour parts. Q3 completes 1 to make 3. Q4 adds 2 and 2. Q5 builds 4. Q6 picks a pair for 4. Q7 completes 2 to make 5. Q8 is a missing-part story. Q9 is a join story. Q10 taps every pair that makes 5.",
     "versus": "Easy builds totals 2 to 5 with two-colour parts. Medium includes zero. Hard reverses parts and finds a missing whole."
   },
   "skills": [
@@ -218,19 +218,15 @@
     {
       "id": "m5-1-8",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
-      "tenFrame": {
-        "count": 5,
-        "item": "fish",
-        "parts": [
-          2,
-          3
-        ]
+      "prompt": "Ben has 5 {items}. 2 are in one group. How many are in the other group?",
+      "visual": {
+        "item": "duck",
+        "count": 5
       },
       "options": [
         {
           "id": "a",
-          "label": "2"
+          "label": "4"
         },
         {
           "id": "b",
@@ -241,10 +237,10 @@
           "label": "5"
         }
       ],
-      "correctId": "c",
-      "explanation": "2 and 3 make 5. Add both parts.",
+      "correctId": "b",
+      "explanation": "2 and 3 make 5. The whole 5 is not the missing part.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "Ben has 5 {items}. 2 are in one group. How many are in the other group?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -253,7 +249,7 @@
     {
       "id": "m5-1-9",
       "kind": "multiple-choice",
-      "prompt": "Sam has 1 star. He gets 3 more. How many stars does he have now?",
+      "prompt": "Mia has 1 {item}. She gets 3 more. How many {items} does she have now?",
       "visual": {
         "item": "star",
         "count": 1,
@@ -270,13 +266,13 @@
         },
         {
           "id": "c",
-          "label": "5"
+          "label": "2"
         }
       ],
       "correctId": "b",
-      "explanation": "1 and 3 more makes 4. Not the extra group alone.",
+      "explanation": "1 and 3 more make 4. The extra group is not the whole.",
       "narration": {
-        "prompt": "Sam has 1 star. He gets 3 more. How many stars does he have now?"
+        "prompt": "Mia has 1 {item}. She gets 3 more. How many {items} does she have now?"
       },
       "randomise": {
         "shuffleOptions": true

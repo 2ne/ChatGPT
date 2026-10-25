@@ -263,9 +263,9 @@
     {
       "id": "nb10-1-9",
       "kind": "multiple-choice",
-      "prompt": "Sam has 10 stars and gives away 2. How many are left?",
+      "prompt": "Mia has 10 ducks and gives away 2. How many are left?",
       "visual": {
-        "item": "star",
+        "item": "duck",
         "count": 10,
         "removed": 2
       },
@@ -290,7 +290,7 @@
       "correctId": "d",
       "explanation": "10 take away 2 is 8. Not 12.",
       "narration": {
-        "prompt": "Sam has 10 stars and gives away 2. How many are left?"
+        "prompt": "Mia has ten ducks and gives away two. How many are left?"
       },
       "randomise": {
         "shuffleOptions": true

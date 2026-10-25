@@ -218,19 +218,15 @@
     {
       "id": "m10-1-8",
       "kind": "multiple-choice",
-      "prompt": "How many can you see in all?",
-      "tenFrame": {
-        "count": 9,
+      "prompt": "Ben has 9 {items}. 5 are in one group. How many are in the other group?",
+      "visual": {
         "item": "fish",
-        "parts": [
-          5,
-          4
-        ]
+        "count": 9
       },
       "options": [
         {
           "id": "a",
-          "label": "5"
+          "label": "6"
         },
         {
           "id": "b",
@@ -241,10 +237,10 @@
           "label": "9"
         }
       ],
-      "correctId": "c",
-      "explanation": "5 and 4 make 9. Add both parts.",
+      "correctId": "b",
+      "explanation": "5 and 4 make 9. The whole 9 is not the missing part.",
       "narration": {
-        "prompt": "How many can you see in all?"
+        "prompt": "Ben has 9 {items}. 5 are in one group. How many are in the other group?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -253,7 +249,7 @@
     {
       "id": "m10-1-9",
       "kind": "multiple-choice",
-      "prompt": "Sam has 4 stars. He gets 3 more. How many stars does he have now?",
+      "prompt": "Mia has 4 {items}. She gets 3 more. How many {items} does she have now?",
       "visual": {
         "item": "star",
         "count": 4,
@@ -274,9 +270,9 @@
         }
       ],
       "correctId": "b",
-      "explanation": "4 and 3 more makes 7. Not the extra group alone.",
+      "explanation": "4 and 3 more make 7. The extra group is not the whole.",
       "narration": {
-        "prompt": "Sam has 4 stars. He gets 3 more. How many stars does he have now?"
+        "prompt": "Mia has 4 {items}. She gets 3 more. How many {items} does she have now?"
       },
       "randomise": {
         "shuffleOptions": true

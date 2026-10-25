@@ -60,9 +60,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `bonds-within-20` | `y1-bonds-20` (node 14, category `cat-y1-to-20`) | done — Easy: known ten, pictured missing parts and related subtraction |
 | `bonds-within-20-medium` | `y1-bonds-20` (node 14, category `cat-y1-to-20`) | done — Medium: varied parts, zero, reversed parts and related subtraction |
 | `bonds-within-20-hard` | `y1-bonds-20` (node 14, category `cat-y1-to-20`) | done — Hard: mixed bonds, missing wholes and subtraction without pictures |
-| `add-and-subtract-to-20` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Easy: pictured problems, number sentences and calculations to 12 |
-| `add-and-subtract-to-20-medium` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Medium: zero, crossing ten, missing parts and one-step problems |
-| `add-and-subtract-to-20-hard` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Hard: mixed operations, missing subtraction parts and reversed equality |
+| `add-and-subtract-to-20` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Easy: join, take-away, missing part, change unknown, compare and 7 = 4 + ? |
+| `add-and-subtract-to-20-medium` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Medium: zero, crossing ten, compare and 3 + 2 = 4 + ? |
+| `add-and-subtract-to-20-hard` | `y1-add-sub-20` (node 15, category `cat-y1-to-20`) | done — Hard: missing start, two-step stories, compare and reversed equality |
 | `everyday-shapes` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Easy: name familiar 2D and 3D shapes |
 | `everyday-shapes-medium` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Medium: varied sizes, proportions and orientations |
 | `everyday-shapes-hard` | `y1-shapes` (node 16, category `cat-y1-shape`) | done — Hard: shape families including squares as rectangles and cubes as cuboids |

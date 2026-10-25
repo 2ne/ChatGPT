@@ -31,7 +31,7 @@
   "difficulty": 3,
   "difficultyRamp": {
     "within": "Q1 sees 5 as 1 and 4. Q2 asks what 2 and 3 make. Q3 completes 4 to make 5. Q4 picks a pair for 3. Q5 builds 5. Q6 reverses 5 = 3 + ?. Q7 is a join story. Q8 types the whole. Q9 taps every pair that makes 5. Q10 orders parts.",
-    "versus": "Easy builds totals 2 to 5 with two-colour parts. Medium includes zero. Hard reverses parts and finds a missing whole. Hard is a new kind of thinking, not just bigger numbers."
+    "versus": "Easy builds totals 2 to 5 with two-colour parts. Medium includes zero and a take-away story. Hard reverses parts and uses a change-unknown story."
   },
   "skills": [
     "eyfs-compose-5",
@@ -179,16 +179,11 @@
     {
       "id": "m5-3-7",
       "kind": "multiple-choice",
-      "prompt": "Sam has 3 stars. He gets 1 more. How many stars does he have now?",
-      "visual": {
-        "item": "star",
-        "count": 3,
-        "added": 1
-      },
+      "prompt": "Sam has 3 {items}. Now he has 4. How many did he get?",
       "options": [
         {
           "id": "a",
-          "label": "3"
+          "label": "2"
         },
         {
           "id": "b",
@@ -196,13 +191,13 @@
         },
         {
           "id": "c",
-          "label": "5"
+          "label": "1"
         }
       ],
-      "correctId": "b",
-      "explanation": "3 and 1 more makes 4. Not the start number.",
+      "correctId": "c",
+      "explanation": "3 and 1 make 4. The new total is not how many he got.",
       "narration": {
-        "prompt": "Sam has 3 stars. He gets 1 more. How many stars does he have now?"
+        "prompt": "Sam has 3 {items}. Now he has 4. How many did he get?"
       },
       "randomise": {
         "shuffleOptions": true
