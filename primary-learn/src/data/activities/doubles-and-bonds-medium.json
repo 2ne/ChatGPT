@@ -30,7 +30,7 @@
   "pathNode": "eyfs-bonds-10-some",
   "difficulty": 2,
   "difficultyRamp": {
-    "within": "Q1 sees double 3. Q2 builds double 4. Q3 shares 10 onto two plates. Q4 completes 2 to make 10. Q5 picks a pair for 10. Q6 matches 5 + 5 to its picture. Q7 types half of 6. Q8 taps every double frame. Q9 types 2 + 2. Q10 orders 4, 6, 10.",
+    "within": "Q1 sees double 3. Q2 builds double 4. Q3 shares 10 onto two plates. Q4 completes 2 to make 10. Q5 picks a pair for 10. Q6 matches 5 + 5 to 10. Q7 types half of 6. Q8 taps every double frame. Q9 types 2 + 2. Q10 orders 4, 6, 10.",
     "versus": "Easy shows doubles as two equal parts the child can build and match. Medium links double to half with sharing and a one-colour frame. Hard reverses double and half with numerals, plus one bag story. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -153,50 +153,14 @@
         {
           "id": "p1",
           "left": "5 + 5",
-          "right": {
-            "tenFrame": {
-              "count": 10,
-              "item": "star",
-              "parts": [
-                5,
-                5
-              ]
-            }
-          }
+          "right": "10"
         }
       ],
       "mode": "one-at-a-time",
       "choices": [
-        {
-          "tenFrame": {
-            "count": 8,
-            "item": "star",
-            "parts": [
-              4,
-              4
-            ]
-          }
-        },
-        {
-          "tenFrame": {
-            "count": 10,
-            "item": "star",
-            "parts": [
-              5,
-              5
-            ]
-          }
-        },
-        {
-          "tenFrame": {
-            "count": 9,
-            "item": "star",
-            "parts": [
-              4,
-              5
-            ]
-          }
-        }
+        "10",
+        "8",
+        "9"
       ],
       "explanation": "5 and 5 make 10. The two parts match.",
       "narration": {

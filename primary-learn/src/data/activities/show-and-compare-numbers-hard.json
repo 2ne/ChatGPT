@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Start with a ten frame of 18, compare 29 and 31 with tens first, match 15 and 17 across a ten frame and a numeral, match 34 to tens and ones with a swapped-digit trap, then use close numerals around 90 to 100.",
+    "within": "Start with a ten frame of 18, compare 29 and 31 with tens first, match 15 and 17 to their words, match 34 to thirty-four with a swapped-digit trap, then use close numerals around 90 to 100.",
     "versus": "Easy uses ten frames to 6 and numerals in the teens. Medium uses ten frames to 12 and tens-and-ones for 34. Hard uses ten frames to 18 and tens-and-ones traps such as 29 and 31."
   },
   "skills": [
@@ -101,16 +101,11 @@
     {
       "kind": "match-pairs",
       "id": "represent100-3-3-15",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the word.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 15,
-              "item": "apple"
-            }
-          },
+          "left": "fifteen",
           "right": "15"
         }
       ],
@@ -120,9 +115,9 @@
         "15",
         "16"
       ],
-      "explanation": "The frames show 10 and 5 more, so 15 matches. A different number does not.",
+      "explanation": "Fifteen is 15. That is 10 and 5 more.",
       "narration": {
-        "prompt": "Select the card that matches the picture."
+        "prompt": "Select the card that matches the word."
       },
       "mode": "one-at-a-time"
     },
@@ -171,44 +166,14 @@
         {
           "id": "p1",
           "left": "34",
-          "right": {
-            "baseTen": {
-              "tens": 3,
-              "ones": 4,
-              "style": "plain"
-            }
-          }
+          "right": "thirty-four"
         }
       ],
       "choices": [
-        {
-          "baseTen": {
-            "tens": 3,
-            "ones": 4,
-            "style": "plain"
-          }
-        },
-        {
-          "baseTen": {
-            "tens": 4,
-            "ones": 3,
-            "style": "plain"
-          }
-        },
-        {
-          "baseTen": {
-            "tens": 3,
-            "ones": 3,
-            "style": "plain"
-          }
-        },
-        {
-          "baseTen": {
-            "tens": 0,
-            "ones": 7,
-            "style": "plain"
-          }
-        }
+        "thirty-four",
+        "forty-three",
+        "thirty-three",
+        "seven"
       ],
       "explanation": "34 is 3 tens and 4 ones.",
       "narration": {
@@ -219,16 +184,11 @@
     {
       "kind": "match-pairs",
       "id": "represent100-3-3-17",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the word.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 17,
-              "item": "apple"
-            }
-          },
+          "left": "seventeen",
           "right": "17"
         }
       ],
@@ -238,9 +198,9 @@
         "17",
         "18"
       ],
-      "explanation": "The frames show 10 and 7 more, so 17 matches. A different number does not.",
+      "explanation": "Seventeen is 17. That is 10 and 7 more.",
       "narration": {
-        "prompt": "Select the card that matches the picture."
+        "prompt": "Select the card that matches the word."
       },
       "mode": "one-at-a-time"
     },

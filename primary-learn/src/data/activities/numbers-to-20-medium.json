@@ -30,7 +30,7 @@
   "pathNode": "y1-read-write-20",
   "difficulty": 2,
   "difficultyRamp": {
-    "within": "Q1 picks seventeen. Q2 matches 12 to a frame. Q3 sees 15 as 10 and 5. Q4 picks nineteen. Q5 types 16. Q6 matches sixteen. Q7 picks 10 and 7 more. Q8 orders 16 to 19. Q9 matches 20. Q10 picks 10 and 9 more.",
+    "within": "Q1 picks seventeen. Q2 matches 12 to twelve. Q3 sees 15 as 10 and 5. Q4 picks nineteen. Q5 types 16. Q6 matches sixteen. Q7 picks 10 and 7 more. Q8 orders 16 to 19. Q9 matches twenty to 20. Q10 picks 10 and 9 more.",
     "versus": "Easy matches teen words to numerals with thirteen and thirty traps, plus ten and a bit. Medium stretches to 20. Hard reverses word and numeral and uses awkward teens. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -79,49 +79,13 @@
         {
           "id": "p1",
           "left": "12",
-          "right": {
-            "tenFrame": {
-              "count": 12,
-              "item": "apple",
-              "parts": [
-                10,
-                2
-              ]
-            }
-          }
+          "right": "twelve"
         }
       ],
       "choices": [
-        {
-          "tenFrame": {
-            "count": 11,
-            "item": "apple",
-            "parts": [
-              10,
-              1
-            ]
-          }
-        },
-        {
-          "tenFrame": {
-            "count": 12,
-            "item": "apple",
-            "parts": [
-              10,
-              2
-            ]
-          }
-        },
-        {
-          "tenFrame": {
-            "count": 13,
-            "item": "apple",
-            "parts": [
-              10,
-              3
-            ]
-          }
-        }
+        "twelve",
+        "eleven",
+        "thirteen"
       ],
       "explanation": "12 is 10 and 2. Not 11 or 20.",
       "narration": {
@@ -300,16 +264,11 @@
     {
       "id": "n20-2-9",
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the word.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 20,
-              "item": "duck"
-            }
-          },
+          "left": "twenty",
           "right": "20"
         }
       ],
@@ -318,9 +277,9 @@
         "18",
         "20"
       ],
-      "explanation": "Two full frames make 20, not 10.",
+      "explanation": "Twenty is 20. That is 2 tens, not 12.",
       "narration": {
-        "prompt": "Select the card that matches the picture."
+        "prompt": "Select the card that matches the word."
       },
       "mode": "one-at-a-time"
     },

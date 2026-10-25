@@ -5153,25 +5153,25 @@ button.object-token {
   max-height: 100%;
   overflow: visible;
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   overflow-wrap: anywhere;
   text-align: center;
 }
 
 .match-turn-target .shape-picture.is-compact,
 .match-card .shape-picture.is-compact {
-  width: min(64px, 100%);
-  max-width: 64px;
-  max-height: 64px;
+  width: min(100px, calc(100cqh - 8px), calc(100cqw - 8px));
+  max-width: 100%;
+  max-height: calc(100cqh - 8px);
   flex: none;
 }
 
 .match-turn-target .shape-picture.is-compact .shape-art,
 .match-card .shape-picture.is-compact .shape-art {
   width: 100%;
-  max-height: 64px;
+  max-height: calc(100cqh - 8px);
 }
 
 .match-turn-target .object-group,
@@ -5184,10 +5184,13 @@ button.object-token {
 .match-turn-target .object-group.is-option,
 .match-card-face .object-group.is-amount,
 .match-card-face .object-group.is-option {
-  --match-obj-tile: min(
-    20px,
-    calc((100cqh - (var(--match-obj-rows) - 1) * var(--match-obj-gap)) / var(--match-obj-rows)),
-    calc((100cqw - (var(--match-obj-cols) - 1) * var(--match-obj-gap)) / var(--match-obj-cols))
+  --match-obj-tile: max(
+    16px,
+    min(
+      24px,
+      calc((100cqh - (var(--match-obj-rows) - 1) * var(--match-obj-gap)) / var(--match-obj-rows)),
+      calc((100cqw - (var(--match-obj-cols) - 1) * var(--match-obj-gap)) / var(--match-obj-cols))
+    )
   );
   display: grid;
   grid-template-columns: repeat(var(--match-obj-cols), var(--match-obj-tile));
@@ -5230,15 +5233,20 @@ button.object-token {
 }
 
 .match-turn-target .ten-frame-board,
-.match-card-face .ten-frame-board {
-  --tf-cell: min(
-    11px,
-    calc((100cqh - 18px) / 2),
-    calc((100cqw - 18px) / 11)
+.match-card-face .ten-frame-board,
+.ten-frame-board.is-card {
+  --tf-cell: max(
+    16px,
+    min(
+      28px,
+      calc((100cqh - 8px) / 2),
+      calc((100cqw - 12px) / 5)
+    )
   );
-  --tf-gap: 1px;
-  --tf-band: 3px;
-  gap: 4px;
+  --tf-gap: 3px;
+  --tf-band: 6px;
+  grid-template-columns: max-content;
+  gap: 8px;
   max-width: 100%;
   max-height: 100%;
 }
@@ -5273,11 +5281,17 @@ button.object-token {
 
 .match-turn-target .dice-face,
 .match-card-face .dice-face {
-  --dice-size: min(72px, calc(100cqh - 12px), calc(100cqw - 12px));
+  --dice-size: min(100px, calc(100cqh - 8px), calc(100cqw - 8px));
   --dice-pip: calc(var(--dice-size) * 0.14);
   padding: calc(var(--dice-size) * 0.1);
   border-width: 2px;
   border-radius: 12px;
+}
+
+.match-turn-target .object-group.is-fingers .finger-hand,
+.match-card-face .object-group.is-fingers .finger-hand {
+  width: min(108px, calc(100cqw - 8px));
+  height: min(88px, calc(100cqh - 8px));
 }
 
 @media (prefers-reduced-motion: reduce) {

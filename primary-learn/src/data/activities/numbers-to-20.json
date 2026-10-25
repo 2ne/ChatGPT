@@ -30,7 +30,7 @@
   "pathNode": "y1-read-write-20",
   "difficulty": 1,
   "difficultyRamp": {
-    "within": "Q1 picks thirteen not thirty. Q2 matches 14 to a ten frame. Q3 sees 16 as 10 and 6. Q4 picks fifteen not fifty. Q5 types 14. Q6 matches eleven. Q7 picks 10 and 3 more. Q8 orders teens. Q9 matches 18. Q10 picks twenty.",
+    "within": "Q1 picks thirteen not thirty. Q2 matches 14 to fourteen. Q3 sees 16 as 10 and 6. Q4 picks fifteen not fifty. Q5 types 14. Q6 matches eleven. Q7 picks 10 and 3 more. Q8 orders teens. Q9 matches eighteen to 18. Q10 picks twenty.",
     "versus": "Easy matches teen words to numerals with thirteen and thirty traps, plus ten and a bit. Medium stretches to 20. Hard reverses word and numeral and uses awkward teens. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -80,49 +80,13 @@
         {
           "id": "p1",
           "left": "14",
-          "right": {
-            "tenFrame": {
-              "count": 14,
-              "item": "apple",
-              "parts": [
-                10,
-                4
-              ]
-            }
-          }
+          "right": "fourteen"
         }
       ],
       "choices": [
-        {
-          "tenFrame": {
-            "count": 13,
-            "item": "apple",
-            "parts": [
-              10,
-              3
-            ]
-          }
-        },
-        {
-          "tenFrame": {
-            "count": 14,
-            "item": "apple",
-            "parts": [
-              10,
-              4
-            ]
-          }
-        },
-        {
-          "tenFrame": {
-            "count": 15,
-            "item": "apple",
-            "parts": [
-              10,
-              5
-            ]
-          }
-        }
+        "fourteen",
+        "thirteen",
+        "fifteen"
       ],
       "explanation": "14 is 10 and 4. Not 13 or 15.",
       "narration": {
@@ -305,20 +269,11 @@
     {
       "id": "n20-1-9",
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the word.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 18,
-              "item": "duck",
-              "parts": [
-                10,
-                8
-              ]
-            }
-          },
+          "left": "eighteen",
           "right": "18"
         }
       ],
@@ -327,9 +282,9 @@
         "18",
         "20"
       ],
-      "explanation": "The frames show 10 and 8, so the number is 18.",
+      "explanation": "Eighteen is 18. That is 10 and 8.",
       "narration": {
-        "prompt": "Select the card that matches the picture."
+        "prompt": "Select the card that matches the word."
       },
       "mode": "one-at-a-time"
     },

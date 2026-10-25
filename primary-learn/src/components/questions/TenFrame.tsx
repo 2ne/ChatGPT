@@ -7,8 +7,10 @@ const PAIR_RANK = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
 type TenFrameProps = {
   frame: TenFrameAsset;
-  /** Smaller cells for A/B/C/D and match cards. */
+  /** Smaller cells for A/B/C/D cards. */
   compact?: boolean;
+  /** Fill a match card. One frame when the count is 10 or less. */
+  fit?: "card";
 };
 
 function cellClass(rank: number, count: number, partA: number | null): string {
@@ -45,21 +47,24 @@ function Frame({
   );
 }
 
-export function TenFrame({ frame, compact }: TenFrameProps) {
+export function TenFrame({ frame, compact, fit }: TenFrameProps) {
   const count = Math.max(0, Math.min(20, Math.floor(frame.count)));
   const item: ObjectItem = frame.item ?? "apple";
   const partA = frame.parts ? frame.parts[0] : null;
   const pairs = frame.pairs === true;
   const two = count > 10;
+  const card = fit === "card";
   return (
     <span
-      className={`ten-frame-board${compact ? " is-compact" : ""}`}
+      className={`ten-frame-board${compact ? " is-compact" : ""}${card ? " is-card" : ""}`}
       aria-label={describeTenFrame({ count, item, parts: frame.parts, pairs })}
     >
       <Frame offset={0} count={count} partA={partA} pairs={pairs} />
-      <span className={`ten-frame-slot${two ? "" : " is-pad"}`} aria-hidden>
-        <Frame offset={10} count={count} partA={partA} pairs={pairs} />
-      </span>
+      {two || !card ? (
+        <span className={`ten-frame-slot${two ? "" : " is-pad"}`} aria-hidden>
+          <Frame offset={10} count={count} partA={partA} pairs={pairs} />
+        </span>
+      ) : null}
     </span>
   );
 }

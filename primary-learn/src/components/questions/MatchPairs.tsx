@@ -43,7 +43,7 @@ function SideView({ side }: { side: MatchSide }) {
   return (
     <span className="option-content">
       {shape ? <ShapePicture shape={shape} compact /> : null}
-      {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}
+      {tenFrame ? <TenFrame frame={tenFrame} fit="card" /> : null}
       {baseTen ? <BaseTen model={baseTen} compact /> : null}
       {dice ? <DiceFace face={dice} compact /> : null}
       {visual ? <ObjectGroup visual={visual} compact pack layout={layout} /> : null}

@@ -29,7 +29,7 @@ import {
 } from "../types/activity";
 import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
-import { matchSideKey, matchSideRepresentation } from "./matchSide";
+import { matchSideFitsCard, matchSideKey, matchSideRepresentation } from "./matchSide";
 import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
 import { SHAPE_NAMES, SHAPE_COLOURS, type ShapeAsset } from "../types/shapes";
@@ -947,6 +947,14 @@ function parseQuestion(value: unknown, path: string): Question {
           path,
           `matching sides must use two different representations, not ${leftKind} with ${rightKind}`,
         );
+      }
+      for (const [name, side] of [
+        ["left", pairs[0]!.left],
+        ["right", pairs[0]!.right],
+        ...choices.map((side, i) => [`choices[${i}]`, side] as const),
+      ] as Array<[string, MatchSide]>) {
+        const sizeError = matchSideFitsCard(side);
+        if (sizeError) fail(path, `${name}: ${sizeError}`);
       }
       const left = pairs[0]!.left;
       const right = pairs[0]!.right;

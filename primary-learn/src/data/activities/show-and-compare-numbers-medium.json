@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Start with a ten frame of 12, compare fewer ten frames, match 9 and 11 across a numeral and a ten frame, match 34 to tens and ones, then use numerals around 40 to 60 on a line, compare, and order.",
+    "within": "Start with a ten frame of 12, compare fewer ten frames, match 9 to a ten frame, match 11 and 34 to their words, then use numerals around 40 to 60 on a line, compare, and order.",
     "versus": "Easy uses ten frames to 6 and numerals in the teens. Medium uses ten frames to 12 and tens-and-ones for 34. Hard uses ten frames to 18 and tens-and-ones traps such as 29 and 31."
   },
   "skills": [
@@ -189,37 +189,13 @@
         {
           "id": "p1",
           "left": "34",
-          "right": {
-            "baseTen": {
-              "tens": 3,
-              "ones": 4,
-              "style": "plain"
-            }
-          }
+          "right": "thirty-four"
         }
       ],
       "choices": [
-        {
-          "baseTen": {
-            "tens": 3,
-            "ones": 4,
-            "style": "plain"
-          }
-        },
-        {
-          "baseTen": {
-            "tens": 4,
-            "ones": 3,
-            "style": "plain"
-          }
-        },
-        {
-          "baseTen": {
-            "tens": 0,
-            "ones": 7,
-            "style": "plain"
-          }
-        }
+        "thirty-four",
+        "forty-three",
+        "seven"
       ],
       "explanation": "34 is 3 tens and 4 ones.",
       "narration": {
@@ -230,16 +206,11 @@
     {
       "kind": "match-pairs",
       "id": "represent100-2-3-11",
-      "prompt": "Select the card that matches the picture.",
+      "prompt": "Select the card that matches the word.",
       "pairs": [
         {
           "id": "p1",
-          "left": {
-            "tenFrame": {
-              "count": 11,
-              "item": "apple"
-            }
-          },
+          "left": "eleven",
           "right": "11"
         }
       ],
@@ -248,9 +219,9 @@
         "10",
         "11"
       ],
-      "explanation": "The frames show 10 and 1 more, so 11 matches. A different number does not.",
+      "explanation": "Eleven is 11. That is 10 and 1 more.",
       "narration": {
-        "prompt": "Select the card that matches the picture."
+        "prompt": "Select the card that matches the word."
       },
       "mode": "one-at-a-time"
     },

@@ -33,16 +33,50 @@ function isNumeralLabel(label: string): boolean {
   return /^\d+$/.test(label.trim());
 }
 
+function isEquationLabel(label: string): boolean {
+  return /^\d+\s*[+\u2212\-]\s*\d+$/.test(label.trim());
+}
+
+function sideLabel(side: MatchSide): string | undefined {
+  if (typeof side === "string") return side;
+  return side.label;
+}
+
+function labelRepresentation(label: string): string {
+  if (isNumeralLabel(label)) return "numeral";
+  if (isEquationLabel(label)) return "equation";
+  return "word";
+}
+
 /** How this side shows the number. Matched pairs must use two different kinds. */
 export function matchSideRepresentation(side: MatchSide): string {
-  if (typeof side === "string") return isNumeralLabel(side) ? "numeral" : "word";
+  const label = sideLabel(side);
+  if (typeof side === "string") return labelRepresentation(side);
   if (side.tenFrame) return "ten-frame";
   if (side.baseTen) return "base-ten";
   if (side.dice) return "dice";
   if (side.shape) return isRealObject(side.shape) ? "real-object" : "shape";
   if (side.visual) return `objects-${side.layout ?? "row"}`;
-  if (side.label) return isNumeralLabel(side.label) ? "numeral" : "word";
+  if (label) return labelRepresentation(label);
   return "unknown";
+}
+
+/**
+ * Match cards are 120px high. A picture must stay readable:
+ * cells or counters at least 16px, or use a numeral or word instead.
+ */
+export function matchSideFitsCard(side: MatchSide): string | null {
+  if (typeof side === "string") return null;
+  if (side.baseTen) {
+    return "tens and ones are too small on a match card. Use a numeral or a word";
+  }
+  if (side.tenFrame && side.tenFrame.count > 10) {
+    return "a ten frame above 10 needs two frames and is too small on a match card. Use a numeral or a word";
+  }
+  if (side.visual && side.visual.count > 20) {
+    return "more than 20 objects cannot stay 16px on a match card";
+  }
+  return null;
 }
 
 export function matchSideLabel(side: MatchSide): string {
