@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 What is one more than 9? Question 2 What is one more than 10? Question 3 What is one less than 11? Question 4 What is one more than 12? Question 5 What is one less than 14? Question 6 Match each number to one more. Question 7 What is one less than 16? Question 8 What is one more than 18? Question 9 Put the numbers in order, from smallest to biggest. Question 10 What is one less than 20?",
+    "within": "Question 1 What is one more than 10? Question 2 What is one less than 11? Question 3 What is one less than 14? Questions 4 to 6 ask one more than 12, 14 and 16. Question 7 What is one less than 16? Question 8 What is one more than 18? Question 9 Put the numbers in order, from smallest to biggest. Question 10 What is one less than 20?",
     "versus": "Easy uses pictures within 10 and includes zero. Medium bridges 9, 10 and 11 before moving through the teens. Hard mixes both directions across 0 to 20 with a short story and no number-word reading."
   },
   "skills": [

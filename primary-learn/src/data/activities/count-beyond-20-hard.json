@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 Which number is missing? 21, _, 23, 24 Question 2 Which number is missing? 26, 27, _, 29 Question 3 Put the numbers in order, from smallest to biggest. Question 4 Match each count to the number that comes next. Question 5 Which number is missing? 27, 28, _ Question 6 14 is 10 and how many more? Question 7 What number comes next? 24, 25, 26, ? Question 8 What number comes next? 26, 27, 28, ? Question 9 What number comes just before 23? Question 10 What number comes next? 28, 29, ?",
+    "within": "Question 1 Which number is missing? 21, _, 23, 24 Question 2 Which number is missing? 26, 27, _, 29 Question 3 Put the numbers in order, from smallest to biggest. Questions 4 to 7 ask what number comes next after 24, 25, 26 and 27. Question 8 Which number is missing? 27, 28, _ Question 9 What number comes just before 23? Question 10 What number comes next? 28, 29, ?",
     "versus": "Easy counts from teens across 20 with early hints. Medium fills gaps and counts from 20 to 26. Hard fills gaps and orders numbers up to 30. Difficulty comes from the counting pattern rather than reading number words."
   },
   "skills": [
