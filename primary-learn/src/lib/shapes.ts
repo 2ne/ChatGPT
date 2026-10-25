@@ -20,8 +20,64 @@ export const SHAPE_VARIANTS: Record<ShapeName, readonly string[]> = {
   dice: ["standard"],
 };
 
+export const THREE_SOLID_NAMES = ["cube", "cuboid", "pyramid", "sphere"] as const;
+
+/** Everyday object pictures and the solid they really are. */
+export const REAL_OBJECT_SOLID: Record<string, string> = {
+  ball: "sphere",
+  box: "cuboid",
+  dice: "cube",
+  "cone-hat": "cone",
+  tin: "cylinder",
+};
+
+const SHAPE_LABEL_FAMILY: Record<string, string> = {
+  circle: "circle",
+  triangle: "triangle",
+  square: "square",
+  rectangle: "rectangle",
+  cube: "cube",
+  cuboid: "cuboid",
+  pyramid: "pyramid",
+  sphere: "sphere",
+  cone: "cone",
+  cylinder: "cylinder",
+  prism: "prism",
+  kite: "kite",
+  pentagon: "pentagon",
+  ball: "sphere",
+  box: "cuboid",
+  dice: "cube",
+  tin: "cylinder",
+  "cone-hat": "cone",
+  "party hat": "cone",
+};
+
 export function isSolidShape(shape: ShapeAsset): boolean {
-  return ["cube", "cuboid", "pyramid", "sphere"].includes(shape.name);
+  return (THREE_SOLID_NAMES as readonly string[]).includes(shape.name);
+}
+
+/** The solid or flat family this picture belongs to. */
+export function shapeFamily(name: string): string {
+  return REAL_OBJECT_SOLID[name] ?? name;
+}
+
+export function shapeLabelFamily(label: string): string | null {
+  return SHAPE_LABEL_FAMILY[label.trim().toLowerCase()] ?? null;
+}
+
+/**
+ * A picture must not be labelled as a different solid.
+ * Cube may be called a cuboid. Square may be called a rectangle.
+ */
+export function shapeLabelMatchesPicture(shapeName: string, label: string): boolean {
+  const named = shapeLabelFamily(label);
+  if (!named) return true;
+  const picture = shapeFamily(shapeName);
+  if (picture === named) return true;
+  if (picture === "cube" && named === "cuboid") return true;
+  if (picture === "square" && named === "rectangle") return true;
+  return false;
 }
 
 export function isRealObject(shape: ShapeAsset): boolean {

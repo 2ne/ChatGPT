@@ -33,7 +33,22 @@ import { matchSideKey, matchSideRepresentation } from "./matchSide";
 import { defaultPartWholeChoices, partWholeAnswer } from "./partWhole";
 import { canDrawPickPair } from "./pickPair";
 import { SHAPE_NAMES, SHAPE_COLOURS, type ShapeAsset } from "../types/shapes";
-import { SHAPE_VARIANTS } from "./shapes";
+import { SHAPE_VARIANTS, shapeLabelMatchesPicture } from "./shapes";
+
+const PROMPT_SHAPE_NAME =
+  /\b(circle|triangle|square|rectangle|cube|cuboid|pyramid|sphere|cone|cylinder|prism|kite|pentagon)\b/i;
+
+function assertShapeLabel(path: string, shape: ShapeAsset | undefined, label: string | undefined) {
+  if (!shape || !label) return;
+  if (!shapeLabelMatchesPicture(shape.name, label)) {
+    fail(path, `picture ${shape.name} must not be labelled ${label}`);
+  }
+}
+
+function promptShapeLabel(prompt: string): string | undefined {
+  const match = prompt.match(PROMPT_SHAPE_NAME);
+  return match?.[1];
+}
 
 function parseShape(value: unknown, path: string): ShapeAsset | undefined {
   if (value == null) return undefined;
@@ -795,6 +810,10 @@ function parseQuestion(value: unknown, path: string): Question {
           numeralLabel = expectString(value, "numeralLabel", path);
         }
       }
+      const correct = options.find((option) => option.id === correctId);
+      const named = promptShapeLabel(prompt);
+      assertShapeLabel(path, shape, correct?.label ?? named);
+      assertShapeLabel(path, correct?.shape, named);
       return { ...core, kind, options, correctId, numeral, numeralLabel };
     }
     case "multi-select": {
@@ -808,6 +827,10 @@ function parseQuestion(value: unknown, path: string): Question {
       }
       for (const id of correctIds) {
         if (!options.some((option) => option.id === id)) fail(path, `correctIds unknown id ${id}`);
+      }
+      const named = promptShapeLabel(prompt);
+      for (const option of options) {
+        if (correctIds.includes(option.id)) assertShapeLabel(path, option.shape, named);
       }
       return { ...core, kind, options, correctIds: correctIds as string[] };
     }
@@ -898,6 +921,11 @@ function parseQuestion(value: unknown, path: string): Question {
           `matching sides must use two different representations, not ${leftKind} with ${rightKind}`,
         );
       }
+      const left = pairs[0]!.left;
+      const right = pairs[0]!.right;
+      const leftShape = typeof left === "string" ? undefined : left.shape;
+      const rightLabel = typeof right === "string" ? right : right.label;
+      assertShapeLabel(path, leftShape, rightLabel);
       return { ...core, kind, pairs, mode: writtenMode as MatchPairsMode, choices };
     }
     case "make-total": {

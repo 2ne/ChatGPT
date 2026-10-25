@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 treats a square as a rectangle among near misses. Q2 matches a cube to cuboid. Q3 matches a party hat to a pyramid. Q4 picks the solid next to flat shapes. Q5 keeps a squashed turned triangle. Q6 matches dice to a cube. Q7 picks a small cube next to a cuboid. Q8 matches a pyramid to its name. Q9 matches a turned square to its name. Q10 picks the ball as a sphere. No hints.",
+    "within": "Q1 treats a square as a rectangle among near misses. Q2 matches a cube to cuboid. Q3 matches the 3D pyramid to its name. Q4 picks the solid next to flat shapes. Q5 keeps a squashed turned triangle. Q6 matches dice to a cube. Q7 picks a small cube next to a cuboid. Q8 matches a triangular pyramid to its name. Q9 matches a turned square to its name. Q10 picks the ball as a sphere. No hints.",
     "versus": "Easy names familiar shapes. Medium treats a square as a rectangle. Hard adds a new kind of thinking: 2D versus 3D mix-ups, a cube as a cuboid, and real objects matched to shapes."
   },
   "skills": [
@@ -107,7 +107,7 @@
       "kind": "match-pairs",
       "id": "shapes-3-3",
       "prompt": "Select the card that matches the picture.",
-      "explanation": "A party hat is a pyramid. A triangle is the flat face.",
+      "explanation": "A pyramid has a flat base and flat sides that meet at a point.",
       "narration": {
         "prompt": "Select the card that matches the picture."
       },
@@ -116,7 +116,7 @@
           "id": "p1",
           "left": {
             "shape": {
-              "name": "cone-hat",
+              "name": "pyramid",
               "colour": "orange"
             }
           },

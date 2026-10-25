@@ -41,7 +41,7 @@ Educational content is **pure data**. Presentation is one generic runner plus on
 - Number line: `"numberLine": { "start": 0, "end": 20, "scale": "ones", "marked": 12 }` for 0 to 10 or 0 to 20, or `end` 100 with `scale` `tens`. A 0 to 100 line zooms to the useful half (or two tens either side of flags). Ticks every one. Tens labelled. The marker and ? sit above the line. Flags A to D sit on an unmarked line and are not tappable. Answers stay as A/B/C/D rows.
 - Hundred square window: `"hundredSquare": { "start": 21, "rows": 3, "missing": 25, "highlight": 32 }` shows 3 or 4 rows. Numerals only. Not tappable. Not scrolling.
 - Matching sides must use two different representations. Never pair a pile with the same pile. Shape matching is shape to name, or a real object to a shape. Compare questions use ten frames up to 20 and tens-and-ones above 20, not counting chores.
-- Shape pictures: kite, pentagon and wonky are near misses. Ball, box, tin, cone-hat and dice are real-object pictures. A squashed rectangle or triangle stays that shape.
+- Shape pictures: kite, pentagon and wonky are near misses. Ball, box, tin, cone-hat and dice are real-object pictures. A ball is a sphere, a dice is a cube, a box is a cuboid, a party hat is a cone. Never label a party hat as a pyramid. Solids use the three.js shape. A squashed rectangle or triangle stays that shape.
 - Shared phrases (“Correct. Nice!”) live in `copy.ts`, not JSON.
 
 ## Map placement (required)

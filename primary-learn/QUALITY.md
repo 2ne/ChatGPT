@@ -223,8 +223,9 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 14. No separate instruction label under the question when the question already says what to do. Multi-select stems must say the job (`Select`, `Tap`) so they never need a helper line.
 15. Every picture must add meaning. Fade by level. Easy shows the representation. Medium simplifies. Hard has no picture unless the picture is the question. A two-part ten frame uses soft purple for the first addend and soft blue stripes plus a dashed outline for the second. Never one colour for both addends.
 16. Fade decoration, not interaction. At most 5 multiple-choice questions in a quest. Never 3 of the same kind in a row. Vary the kinds so Hard stays hands-on.
+17. A shape picture must match its name. Solids use the three.js shape (`cube`, `cuboid`, `pyramid`, `sphere`). A party hat is a cone, not a pyramid. A ball is a sphere. A dice is a cube. A box is a cuboid.
 
-Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. Rule 14 is CSS for the helper line. Rule 15 Hard repeating pictures fail `check:activities`. Rule 16 kind mix fails `check:activities`. Multi-select wording fails `check:activities`.
+Rule 9 is CSS. Rule 11 is CSS. Rule 13 is CSS. Rule 14 is CSS for the helper line. Rule 15 Hard repeating pictures fail `check:activities`. Rule 16 kind mix fails `check:activities`. Rule 17 picture-to-name mismatches fail `check:activities`. Multi-select wording fails `check:activities`.
 
 TODO later rewrite (temporary allowlist, do not grow it): Show and compare numbers was just rewritten and skips content rules 1 to 5 and 7. Narration and Hard thinking still apply.
 - [ ] Do **not** open the app unless James asked. Rely on validate + build. Optional review: `#/question-bank` (speaker = question only; miss shows explanation; map row via `pathNode` + `difficulty`)
