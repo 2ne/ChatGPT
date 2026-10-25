@@ -140,7 +140,6 @@ export function ActivityRunner({
 
   function checkAnswer() {
     if (!question) return;
-    if (question.kind === "match-pairs" && !isAnswerCorrect(question, answer)) return;
     const correct = isAnswerCorrect(question, answer);
     playSound(correct ? "correct" : "wrong");
     setLastCorrect(correct);
@@ -152,7 +151,6 @@ export function ActivityRunner({
 
   function goNext() {
     if (!question) return;
-    if (question.kind === "match-pairs" && lastCorrect !== true) return;
     const nextIndex = index + 1;
     if (nextIndex < activeQueue.length) {
       const nextQuestion = playQuestions.find((item) => item.id === activeQueue[nextIndex]);
@@ -198,7 +196,6 @@ export function ActivityRunner({
     if (phase !== "question" || !question) return;
     if (question.kind !== "match-pairs") return;
     if (!hasProvidedAnswer(question, answer)) return;
-    if (!isAnswerCorrect(question, answer)) return;
     if (autoCheckedRef.current === question.id) return;
     autoCheckedRef.current = question.id;
     checkAnswer();
@@ -346,10 +343,8 @@ export function ActivityRunner({
   const oneAtATimeMatch =
     question.kind === "match-pairs" && matchPairsMode(question) === "one-at-a-time";
   const hideCheck = flipMatch && phase === "question";
-  const matchNeedsRetry =
-    (flipMatch || oneAtATimeMatch) && phase === "feedback" && lastCorrect === false;
   const primaryAction =
-    hideCheck || matchNeedsRetry ? null : phase === "question" ? (
+    hideCheck ? null : phase === "question" ? (
       <button
         type="button"
         className="btn btn-primary btn-block"

@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { copy } from "../../data/copy";
 import { matchSideKey, matchSideLabel, matchSideVisual } from "../../lib/matchSide";
-import { colourForPair, matchPairsMode, seededOrder, type MatchPairColour } from "../../lib/matchPairs";
+import {
+  colourForPair,
+  isMatchMissed,
+  markMatchMissed,
+  matchPairsMode,
+  seededOrder,
+  type MatchPairColour,
+} from "../../lib/matchPairs";
 import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
@@ -67,6 +74,7 @@ function FlipCardButton({
   index,
   faceUp,
   found,
+  wrong,
   colour,
   disabled,
   onTap,
@@ -75,6 +83,7 @@ function FlipCardButton({
   index: number;
   faceUp: boolean;
   found: boolean;
+  wrong?: boolean;
   colour?: MatchPairColour;
   disabled?: boolean;
   onTap: () => void;
@@ -165,7 +174,7 @@ function FlipCardButton({
       type="button"
       className={`match-card${shownUp ? " is-up" : ""}${squeezing ? " is-squeeze" : ""}${
         found ? " is-found" : ""
-      }`}
+      }${wrong ? " is-wrong" : ""}`}
       style={style}
       disabled={disabled}
       aria-label={aria}
@@ -221,6 +230,7 @@ function FlipMatch({
   const [preview, setPreview] = useState(!review);
   const [peek, setPeek] = useState(false);
   const [picked, setPicked] = useState<string[]>([]);
+  const [missIds, setMissIds] = useState<string[]>([]);
   const [locked, setLocked] = useState(false);
   const mapRef = useRef(map);
   const previewRef = useRef(preview);
@@ -251,6 +261,7 @@ function FlipMatch({
     lockedRef.current = false;
     peekRef.current = false;
     setPicked([]);
+    setMissIds([]);
     setLocked(false);
     setPeek(false);
     if (review) {
@@ -271,7 +282,15 @@ function FlipMatch({
   }, [question.id]);
 
   function showAllAgain() {
-    if (disabled || previewRef.current || peekRef.current || lockedRef.current) return;
+    if (
+      disabled ||
+      previewRef.current ||
+      peekRef.current ||
+      lockedRef.current ||
+      isMatchMissed(mapRef.current)
+    ) {
+      return;
+    }
     pickedRef.current = [];
     setPicked([]);
     peekRef.current = true;
@@ -285,7 +304,15 @@ function FlipMatch({
   }
 
   function tapCard(card: FlipCard) {
-    if (disabled || previewRef.current || peekRef.current || lockedRef.current) return;
+    if (
+      disabled ||
+      previewRef.current ||
+      peekRef.current ||
+      lockedRef.current ||
+      isMatchMissed(mapRef.current)
+    ) {
+      return;
+    }
     if (foundRef.current.has(card.pairId)) return;
     if (pickedRef.current.includes(card.id)) return;
     if (pickedRef.current.length >= 2) return;
@@ -299,12 +326,13 @@ function FlipMatch({
     if (!first || !second || first.pairId !== second.pairId) {
       lockedRef.current = true;
       setLocked(true);
+      setMissIds(next);
       const wait = reducedMotion ? 350 : 1000;
       const timer = window.setTimeout(() => {
         pickedRef.current = [];
-        lockedRef.current = false;
         setPicked([]);
-        setLocked(false);
+        setMissIds([]);
+        onChange(markMatchMissed(mapRef.current));
       }, wait);
       timers.current.push(timer);
       return;
@@ -325,6 +353,8 @@ function FlipMatch({
 
   const looking = preview || peek;
   const foundIds = foundRef.current;
+  const missed = isMatchMissed(map);
+  const revealAll = review || missed;
   return (
     <div className="match-flip">
       <div
@@ -334,22 +364,25 @@ function FlipMatch({
       >
         {cards.map((card, index) => {
           const found = foundIds.has(card.pairId);
-          const faceUp = review || looking || found || picked.includes(card.id);
+          const wrong = missIds.includes(card.id);
+          const showPair = found || revealAll;
+          const faceUp = revealAll || looking || found || picked.includes(card.id);
           return (
             <FlipCardButton
               key={card.id}
               card={card}
               index={index}
               faceUp={faceUp}
-              found={found}
-              colour={colours[card.pairId]}
-              disabled={disabled || preview || peek || locked || found}
+              found={showPair}
+              wrong={wrong}
+              colour={showPair ? colours[card.pairId] : undefined}
+              disabled={disabled || preview || peek || locked || found || missed}
               onTap={() => tapCard(card)}
             />
           );
         })}
       </div>
-      {review ? null : (
+      {review || missed || locked ? null : (
         <button
           type="button"
           className="btn-text match-peek"
@@ -378,20 +411,15 @@ function OneAtATime({
   onChange: (value: unknown) => void;
   onPlayControl?: (control: QuestionPlayControl | null) => void;
 }) {
-  const reducedMotion = usePrefersReducedMotion();
   const review = Boolean(disabled && reveal);
   const current = question.pairs[0];
-  const done = Boolean(current && map[current.id] === matchSideKey(current.right));
+  const submitted = Boolean(current && map[current.id]);
   const [picked, setPicked] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
   const pickedRef = useRef<string | null>(null);
-  const busyRef = useRef(false);
-  const doneRef = useRef(done);
+  const submittedRef = useRef(submitted);
   const confirmRef = useRef<() => void>(() => {});
-  const busyTimer = useRef<number | null>(null);
   pickedRef.current = picked;
-  busyRef.current = busy;
-  doneRef.current = done;
+  submittedRef.current = submitted;
 
   const choices = useMemo(() => {
     const sides = question.choices ?? [];
@@ -399,55 +427,29 @@ function OneAtATime({
   }, [question]);
 
   useEffect(() => {
-    if (busyTimer.current != null) window.clearTimeout(busyTimer.current);
-    busyTimer.current = null;
     pickedRef.current = null;
-    busyRef.current = false;
     setPicked(null);
-    setBusy(false);
   }, [question.id]);
 
-  useEffect(() => {
-    return () => {
-      if (busyTimer.current != null) window.clearTimeout(busyTimer.current);
-    };
-  }, []);
-
   function confirmPick() {
-    if (!current || pickedRef.current == null || busyRef.current || disabled || doneRef.current) return;
-    const rightKey = matchSideKey(current.right);
-    if (pickedRef.current === rightKey) {
-      playSound("tap");
-      doneRef.current = true;
-      onChange({ ...map, [current.id]: pickedRef.current });
-      return;
-    }
-    busyRef.current = true;
-    setBusy(true);
-    playSound("wrong");
-    const wait = reducedMotion ? 280 : 800;
-    if (busyTimer.current != null) window.clearTimeout(busyTimer.current);
-    busyTimer.current = window.setTimeout(() => {
-      pickedRef.current = null;
-      busyRef.current = false;
-      setPicked(null);
-      setBusy(false);
-    }, wait);
+    if (!current || pickedRef.current == null || disabled || submittedRef.current) return;
+    submittedRef.current = true;
+    onChange({ ...map, [current.id]: pickedRef.current });
   }
 
   confirmRef.current = confirmPick;
 
   useEffect(() => {
-    if (review || disabled || done) {
+    if (review || disabled || submitted) {
       onPlayControl?.(null);
       return;
     }
     onPlayControl?.({
-      canConfirm: picked != null && !busy,
+      canConfirm: picked != null,
       confirm: () => confirmRef.current(),
     });
     return () => onPlayControl?.(null);
-  }, [review, disabled, done, picked, busy, onPlayControl]);
+  }, [review, disabled, submitted, picked, onPlayControl]);
 
   if (!current) return null;
 
@@ -466,19 +468,23 @@ function OneAtATime({
         <div className="match-turn-choices" role="group" aria-label={copy.matchCards}>
           {choices.map((side, index) => {
             const key = matchSideKey(side);
-            const selected = picked === key;
-            const found = map[current.id] === key;
+            const rightKey = matchSideKey(current.right);
+            const chosenKey = map[current.id] || picked;
+            const selected = !submitted && picked === key;
+            const found = Boolean(submitted && key === rightKey);
+            const wrong = Boolean(submitted && chosenKey !== rightKey && key === chosenKey);
             return (
               <FlipCardButton
                 key={`${current.id}-${key}-${index}`}
                 card={{ id: key, pairId: current.id, content: side }}
                 index={index}
-                faceUp={review || selected || found}
+                faceUp={review || selected || found || wrong}
                 found={found}
+                wrong={wrong}
                 colour={found ? colour : undefined}
-                disabled={disabled || busy || review}
+                disabled={disabled || submitted || review}
                 onTap={() => {
-                  if (disabled || busyRef.current || review || doneRef.current) return;
+                  if (disabled || review || submittedRef.current) return;
                   playSound("tap");
                   const next = key === pickedRef.current ? null : key;
                   pickedRef.current = next;

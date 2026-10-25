@@ -16,6 +16,17 @@ export function matchPairsMode(question: MatchPairsQuestion): MatchPairsMode {
   return question.mode;
 }
 
+/** Set on a match-pairs answer when the child misses on the first try. */
+export const MATCH_MISS_KEY = "_missed";
+
+export function isMatchMissed(answer: unknown): boolean {
+  return Boolean(answer && typeof answer === "object" && MATCH_MISS_KEY in (answer as object));
+}
+
+export function markMatchMissed(map: Record<string, string>): Record<string, string> {
+  return { ...map, [MATCH_MISS_KEY]: "1" };
+}
+
 export function colourForPair(index: number): MatchPairColour {
   const colour = MATCH_PAIR_COLOURS[index % MATCH_PAIR_COLOURS.length];
   return colour ?? MATCH_PAIR_COLOURS[0]!;
