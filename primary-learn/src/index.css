@@ -1990,7 +1990,8 @@ button.object-token {
   --tf-cell: 22px;
   --tf-gap: 3px;
   --tf-band: 6px;
-  --tf-fill: #e03131;
+  --tf-fill: var(--violet);
+  --tf-fill-b: var(--sky);
   box-sizing: border-box;
   display: grid;
   grid-template-columns: max-content max-content;
@@ -2037,18 +2038,17 @@ button.object-token {
 
 .ten-frame-cell.is-filled {
   background: var(--tf-fill);
-  border-color: color-mix(in srgb, var(--tf-fill) 65%, #000);
+  border-color: color-mix(in srgb, var(--tf-fill) 55%, var(--ink-soft));
 }
 
 .ten-frame-cell.is-part-b {
-  --tf-fill-b: #0ea5e9;
   background: repeating-linear-gradient(
     -45deg,
     var(--tf-fill-b) 0 3px,
     #fff 3px 6px
   );
-  border: 2px solid #0369a1;
-  outline: 1.5px dashed #0369a1;
+  border-color: color-mix(in srgb, var(--tf-fill-b) 55%, var(--ink-soft));
+  outline: 1.5px dashed var(--ink-soft);
   outline-offset: -3px;
 }
 
@@ -2061,9 +2061,9 @@ button.object-token {
   --bt-rod-h: 110px;
   --bt-one: 14px;
   --bt-gap: 4px;
-  --bt-rod: #6d7a96;
-  --bt-rod-band: #46516a;
-  --bt-one-fill: #8a95ad;
+  --bt-rod: var(--violet);
+  --bt-rod-band: var(--primary);
+  --bt-one-fill: var(--violet);
   box-sizing: border-box;
   display: flex;
   align-items: flex-end;
@@ -2098,7 +2098,7 @@ button.object-token {
 
 .base-ten-rod.is-plain {
   background: linear-gradient(to top, var(--bt-rod) 0 50%, var(--bt-rod-band) 50% 100%);
-  border: 1px solid #2d3648;
+  border: 1px solid var(--ink-soft);
 }
 
 .base-ten-rod.is-segmented {
@@ -2106,7 +2106,7 @@ button.object-token {
   flex-direction: column-reverse;
   gap: 1px;
   padding: 1px;
-  background: #2d3648;
+  background: var(--ink-soft);
 }
 
 .base-ten-seg {
@@ -2132,7 +2132,7 @@ button.object-token {
   height: var(--bt-one);
   border-radius: 2px;
   background: var(--bt-one-fill);
-  border: 1px solid #2d3648;
+  border: 1px solid var(--ink-soft);
 }
 
 .dice-face {

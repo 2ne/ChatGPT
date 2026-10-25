@@ -1,5 +1,4 @@
-import type { CSSProperties } from "react";
-import { OBJECT_FILL, describeTenFrame } from "../../data/objects";
+import { describeTenFrame } from "../../data/objects";
 import type { ObjectItem, TenFrameAsset } from "../../types/activity";
 
 const CELLS = 10;
@@ -56,7 +55,6 @@ export function TenFrame({ frame, compact }: TenFrameProps) {
     <span
       className={`ten-frame-board${compact ? " is-compact" : ""}`}
       aria-label={describeTenFrame({ count, item, parts: frame.parts, pairs })}
-      style={{ "--tf-fill": OBJECT_FILL[item] } as CSSProperties}
     >
       <Frame offset={0} count={count} partA={partA} pairs={pairs} />
       <span className={`ten-frame-slot${two ? "" : " is-pad"}`} aria-hidden>

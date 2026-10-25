@@ -27,21 +27,6 @@ export function objectGlyph(item: ObjectItem): string {
   return OBJECT_GLYPH[item];
 }
 
-/** Fill colour for ten-frame cells. Keep these vivid and distinct. */
-export const OBJECT_FILL: Record<ObjectItem, string> = {
-  apple: "#e03131",
-  banana: "#f4c430",
-  star: "#ffb100",
-  balloon: "#e64980",
-  car: "#228be6",
-  duck: "#f08c00",
-  ladybird: "#c92a2a",
-  frog: "#2f9e44",
-  fish: "#0c8599",
-  strawberry: "#f03e3e",
-  sparkle: "#fab005",
-};
-
 export const OBJECT_WORDS: Record<ObjectItem, { singular: string; plural: string }> = {
   apple: { singular: "apple", plural: "apples" },
   banana: { singular: "banana", plural: "bananas" },

@@ -526,8 +526,8 @@ Cards show pictures, shapes, numbers or words with the existing SideView. Pictur
 
 ### Structured number pictures
 
-`TenFrame` (`tenFrame: { count, item? }`) is the ten frame for 0 to 20. One frame is 2 rows of 5, banded as 5 and 5. Empty cells stay visible. Filled cells use the object colour. Counts 11 to 20 add a second frame (10 and a bit). The board always keeps a two-frame footprint so options stay one size. Not tappable. Small enough for `--match-card-h`.
+`TenFrame` (`tenFrame: { count, item? }`) is the ten frame for 0 to 20. One frame is 2 rows of 5, banded as 5 and 5. Empty cells stay visible. Filled cells use `--violet` (Check it purple). Two-part frames use `--sky` (rainbow blue) with stripes and a dashed outline. Do not use `--green` or `--red`. Counts 11 to 20 add a second frame (10 and a bit). The board always keeps a two-frame footprint so options stay one size. Not tappable. Small enough for `--match-card-h`.
 
-`BaseTen` (`baseTen: { tens, ones, style? }`) is tens and ones for 21 to 99. Rods are a neutral colour, not the question objects. Each rod is a vertical bar of 10, banded 5 and 5. Loose ones sit in a 5-wide grid of small squares. Easy uses segmented rods. Medium and Hard use plain rods. About 9 rods fit the match card with nothing clipped. Above 20, labels are numerals only. No number words.
+`BaseTen` (`baseTen: { tens, ones, style? }`) is tens and ones for 21 to 99. Rods and ones use `--violet` with a `--primary` band, matching the ten frame. Not red or feedback green. Each rod is a vertical bar of 10, banded 5 and 5. Loose ones sit in a 5-wide grid of small squares. Easy uses segmented rods. Medium and Hard use plain rods. About 9 rods fit the match card with nothing clipped. Above 20, labels are numerals only. No number words.
 
 Compare questions use structure, not piles of singles. Ten frames up to 20, all the same size. Tens and ones above 20, at most 3 options. Some compares change the tens and use the ones digit as a trap, such as 29 vs 31. Every wrong option is one named mistake: off by one, reversed digits, ignoring the ten, or counting the ones only.

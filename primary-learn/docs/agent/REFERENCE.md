@@ -332,8 +332,8 @@ Defined in `src/types/activity.ts`. Each has one component under `src/components
 
 Structured pictures (look-only, never tappable):
 
-- `tenFrame: { count, item?, parts?, pairs? }` — 0 to 20. One 2×5 frame, or two frames for 11 to 20. Empty cells stay visible. Filled cells use the object colour. `parts: [a, b]` must add to `count`. The second part uses a stripe pattern and an outline. `pairs: true` fills down columns so pairs sit together. Fixed two-frame footprint.
-- `baseTen: { tens, ones, style? }` — tens 0 to 9, ones 0 to 9. Neutral rods, not the question objects. `style` is `segmented` (Easy) or `plain` (Medium and Hard). Use for 21 to 99. Numerals only above 20.
+- `tenFrame: { count, item?, parts?, pairs? }` — 0 to 20. One 2×5 frame, or two frames for 11 to 20. Empty cells stay visible. Filled cells use `--violet`. Two-part frames use `--sky` with stripes and a dashed outline. Do not use `--green` or `--red`. `parts: [a, b]` must add to `count`. `pairs: true` fills down columns so pairs sit together. Fixed two-frame footprint.
+- `baseTen: { tens, ones, style? }` — tens 0 to 9, ones 0 to 9. Rods and ones use `--violet` with a `--primary` band. Not red or feedback green. `style` is `segmented` (Easy) or `plain` (Medium and Hard). Use for 21 to 99. Numerals only above 20.
 - `dice: { count }` — 1 to 6 pips on a dice face.
 - `numberLine: { start, end, scale?, marked?, flags? }` — `start` 0 and `end` 10 or 20 with `scale` `ones`, or `end` 100 with `scale` `tens`. A marked tick shows ?. Flags A to D sit on an unmarked line and are not tappable. Answers stay as A/B/C/D rows. Multiple-choice or fill-blank only. Do not mix with other stem pictures.
 - `hundredSquare: { start, rows, missing, highlight? }` — a 3 or 4 row window of the 1 to 100 square. `start` is 1, 11, 21... Numerals only. Not tappable. Not scrolling. Multiple-choice or fill-blank only. Do not mix with other stem pictures, including a number line.
