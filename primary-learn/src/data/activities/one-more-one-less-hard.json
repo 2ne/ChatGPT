@@ -133,100 +133,128 @@
       }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-h-match-12",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one more than 11?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "one more than 11",
-          "right": "12"
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "11"
+        },
+        {
+          "id": "c",
+          "label": "12"
+        },
+        {
+          "id": "d",
+          "label": "13"
         }
       ],
-      "choices": [
-        "11",
-        "12",
-        "13",
-        "10"
-      ],
+      "correctId": "c",
       "explanation": "One more than 11 is 12.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one more than eleven?"
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-h-match-14",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one less than 15?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "one less than 15",
-          "right": "14"
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "16"
         }
       ],
-      "choices": [
-        "15",
-        "14",
-        "13",
-        "16"
-      ],
+      "correctId": "b",
       "explanation": "One less than 15 is 14.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one less than fifteen?"
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-h-match-19",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one more than 18?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "one more than 18",
-          "right": "19"
+          "id": "a",
+          "label": "17"
+        },
+        {
+          "id": "b",
+          "label": "18"
+        },
+        {
+          "id": "c",
+          "label": "19"
+        },
+        {
+          "id": "d",
+          "label": "20"
         }
       ],
-      "choices": [
-        "18",
-        "19",
-        "20",
-        "17"
-      ],
+      "correctId": "c",
       "explanation": "One more than 18 is 19.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one more than eighteen?"
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-h-match-16",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one less than 17?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "one less than 17",
-          "right": "16"
+          "id": "a",
+          "label": "17"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "18"
         }
       ],
-      "choices": [
-        "17",
-        "16",
-        "15",
-        "18"
-      ],
+      "correctId": "b",
       "explanation": "One less than 17 is 16.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one less than seventeen?"
+      }
     },
     {
       "kind": "ordered",

@@ -168,61 +168,97 @@
       }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20e-next-match-19",
-      "prompt": "Select the card that matches the number.",
+      "prompt": "What number comes next? 17, 18, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "18"
+        },
+        {
+          "id": "b",
+          "label": "19"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "21"
+        }
+      ],
+      "correctId": "b",
       "explanation": "19 comes after 18.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "17, 18, ?",
-          "right": "19"
-        }
-      ],
-      "choices": ["19", "20", "21"],
-      "randomise": {},
-      "mode": "one-at-a-time"
+        "prompt": "What number comes next? Seventeen, eighteen, blank."
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20e-next-match-20",
-      "prompt": "Select the card that matches the number.",
+      "prompt": "What number comes next? 18, 19, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "19"
+        },
+        {
+          "id": "b",
+          "label": "20"
+        },
+        {
+          "id": "c",
+          "label": "21"
+        },
+        {
+          "id": "d",
+          "label": "18"
+        }
+      ],
+      "correctId": "b",
       "explanation": "20 comes after 19.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "pairs": [
-        {
-          "id": "p1",
-          "left": "18, 19, ?",
-          "right": "20"
-        }
-      ],
-      "choices": ["19", "20", "21"],
-      "randomise": {},
-      "mode": "one-at-a-time"
+        "prompt": "What number comes next? Eighteen, nineteen, blank."
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20e-next-match-21",
-      "prompt": "Select the card that matches the number.",
-      "explanation": "21 comes after 20.",
-      "narration": {
-        "prompt": "Select the card that matches the number."
+      "prompt": "What number comes next? 19, 20, ?",
+      "randomise": {
+        "shuffleOptions": true
       },
-      "pairs": [
+      "options": [
         {
-          "id": "p1",
-          "left": "19, 20, ?",
-          "right": "21"
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "21"
+        },
+        {
+          "id": "c",
+          "label": "22"
+        },
+        {
+          "id": "d",
+          "label": "19"
         }
       ],
-      "choices": ["20", "21", "22"],
-      "randomise": {},
-      "mode": "one-at-a-time"
+      "correctId": "b",
+      "explanation": "21 comes after 20.",
+      "narration": {
+        "prompt": "What number comes next? Nineteen, twenty, blank."
+      }
     },
     {
       "kind": "multiple-choice",

@@ -139,73 +139,97 @@
       }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-m-match-13",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one more than 12?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "12",
-          "right": "13"
+          "id": "a",
+          "label": "11"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "14"
         }
       ],
-      "choices": [
-        "12",
-        "13",
-        "14"
-      ],
+      "correctId": "c",
       "explanation": "One more than 12 is 13.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one more than twelve?"
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-m-match-15",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one more than 14?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "14",
-          "right": "15"
+          "id": "a",
+          "label": "13"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "16"
         }
       ],
-      "choices": [
-        "14",
-        "15",
-        "16"
-      ],
+      "correctId": "c",
       "explanation": "One more than 14 is 15.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one more than fourteen?"
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "oml-m-match-17",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What is one more than 16?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "16",
-          "right": "17"
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "17"
+        },
+        {
+          "id": "d",
+          "label": "18"
         }
       ],
-      "choices": [
-        "16",
-        "17",
-        "18"
-      ],
+      "correctId": "c",
       "explanation": "One more than 16 is 17.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What is one more than sixteen?"
+      }
     },
     {
       "kind": "multiple-choice",

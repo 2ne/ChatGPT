@@ -135,100 +135,128 @@
       }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20h-match-26",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What number comes next? 24, 25, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "24, 25, ?",
-          "right": "26"
+          "id": "a",
+          "label": "25"
+        },
+        {
+          "id": "b",
+          "label": "26"
+        },
+        {
+          "id": "c",
+          "label": "27"
+        },
+        {
+          "id": "d",
+          "label": "24"
         }
       ],
-      "choices": [
-        "25",
-        "26",
-        "27",
-        "24"
-      ],
+      "correctId": "b",
       "explanation": "26 comes after 25.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What number comes next? Twenty-four, twenty-five, blank."
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20h-match-27",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What number comes next? 25, 26, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "25, 26, ?",
-          "right": "27"
+          "id": "a",
+          "label": "26"
+        },
+        {
+          "id": "b",
+          "label": "27"
+        },
+        {
+          "id": "c",
+          "label": "28"
+        },
+        {
+          "id": "d",
+          "label": "25"
         }
       ],
-      "choices": [
-        "26",
-        "27",
-        "28",
-        "25"
-      ],
+      "correctId": "b",
       "explanation": "27 comes after 26.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What number comes next? Twenty-five, twenty-six, blank."
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20h-match-28",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What number comes next? 26, 27, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "26, 27, ?",
-          "right": "28"
+          "id": "a",
+          "label": "27"
+        },
+        {
+          "id": "b",
+          "label": "28"
+        },
+        {
+          "id": "c",
+          "label": "29"
+        },
+        {
+          "id": "d",
+          "label": "26"
         }
       ],
-      "choices": [
-        "27",
-        "28",
-        "29",
-        "26"
-      ],
+      "correctId": "b",
       "explanation": "28 comes after 27.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What number comes next? Twenty-six, twenty-seven, blank."
+      }
     },
     {
-      "kind": "match-pairs",
+      "kind": "multiple-choice",
       "id": "c20h-match-29",
-      "prompt": "Select the card that matches the number.",
-      "randomise": {},
-      "pairs": [
+      "prompt": "What number comes next? 27, 28, ?",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": "27, 28, ?",
-          "right": "29"
+          "id": "a",
+          "label": "28"
+        },
+        {
+          "id": "b",
+          "label": "29"
+        },
+        {
+          "id": "c",
+          "label": "30"
+        },
+        {
+          "id": "d",
+          "label": "27"
         }
       ],
-      "choices": [
-        "28",
-        "29",
-        "30",
-        "27"
-      ],
+      "correctId": "b",
       "explanation": "29 comes after 28.",
       "narration": {
-        "prompt": "Select the card that matches the number."
-      },
-      "mode": "one-at-a-time"
+        "prompt": "What number comes next? Twenty-seven, twenty-eight, blank."
+      }
     },
     {
       "kind": "multiple-choice",

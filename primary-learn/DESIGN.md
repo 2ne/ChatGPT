@@ -520,6 +520,6 @@ Matching is the same single-pair game at every level. One flat target card sits 
 
 Easy and Medium show three answer cards in one row. Hard shows four answer cards in a 2x2 grid. The target card stays the same size as each answer card and sits centred above. All cards share `--match-card-h`. The answers flip with scaleX (not rotateY) so the face stays visible on iOS. Do not show Card X of N, progress dots, or a grey instruction line. Keep it on one phone screen.
 
-The prompt is `Select the card that matches the {noun}.` Use `number`, `word`, `shape` or `picture`. Difficulty is in the content. Medium uses closer near misses. Hard uses four close near misses.
+The prompt is `Select the card that matches the {noun}.` Use `number`, `word`, `shape` or `picture`. Matching is only for the same thing shown two ways. A word with its number. A shape with its name. Equal groups. Do not use matching for next number, missing number, one more or one less. Those are ordinary choice questions. Difficulty is in the content. Medium uses closer near misses. Hard uses four close near misses.
 
 Cards show pictures, shapes, numbers or words with the existing SideView. Compact object groups use rows of at most five. Content is centred and scaled to fit. Shapes stay inside the card. The grid must not reflow when a card flips. Keep the answer as pairId to the right key.
