@@ -4626,9 +4626,10 @@ button.object-token {
 .profile-editor .field input { min-height: 64px; font-size: 22px; }
 .profile-editor .avatar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-/* Matching cards keep their content and footprint throughout selection. */
+/* Matching cards keep a fixed footprint. Face and back share one height. */
 .match-flip,
 .match-turn {
+  --match-card-h: 120px;
   display: grid;
   gap: 12px;
   justify-items: center;
@@ -4637,6 +4638,8 @@ button.object-token {
 .match-flip-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-auto-rows: var(--match-card-h);
+  align-items: stretch;
   gap: 10px;
   width: 100%;
 }
@@ -4651,31 +4654,31 @@ button.object-token {
 .match-turn-choices {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: var(--match-card-h);
+  align-items: stretch;
   gap: 10px;
   width: 100%;
 }
 
 .match-turn-target-slot {
   grid-column: 2;
-}
-
-.match-turn-target,
-.match-turn .match-card,
-.match-turn .match-card-inner,
-.match-turn .match-card-face {
-  min-height: 120px;
-  height: 120px;
+  min-width: 0;
 }
 
 .match-turn-target {
   position: relative;
+  box-sizing: border-box;
   display: grid;
   place-items: center;
   width: 100%;
-  padding: 12px 8px;
+  height: var(--match-card-h);
+  min-height: var(--match-card-h);
+  max-height: var(--match-card-h);
+  padding: 10px 8px;
   border: 2.5px solid var(--line);
   border-radius: 18px;
   background: var(--card);
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -4691,12 +4694,16 @@ button.object-token {
 .match-card {
   appearance: none;
   position: relative;
+  box-sizing: border-box;
   width: 100%;
-  min-width: 44px;
-  min-height: 96px;
+  min-width: 0;
+  height: var(--match-card-h);
+  min-height: var(--match-card-h);
+  max-height: var(--match-card-h);
   padding: 0;
   border: 0;
   background: transparent;
+  overflow: hidden;
   cursor: pointer;
 }
 
@@ -4707,9 +4714,12 @@ button.object-token {
 }
 
 .match-card-inner {
+  box-sizing: border-box;
   display: grid;
   width: 100%;
-  min-height: 96px;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
   transform: scaleX(1);
   transition: transform 150ms ease;
 }
@@ -4719,12 +4729,17 @@ button.object-token {
 }
 
 .match-card-face {
+  box-sizing: border-box;
   display: grid;
   place-items: center;
-  min-height: 96px;
-  padding: 12px 8px;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  padding: 10px 8px;
   border: 2.5px solid var(--line);
   border-radius: 18px;
+  overflow: hidden;
 }
 
 .match-card-back {
@@ -4755,11 +4770,14 @@ button.object-token {
 .match-turn-target.option,
 .match-card-front.option {
   position: relative;
+  box-sizing: border-box;
   display: grid;
   place-items: center;
   width: 100%;
-  min-height: inherit;
-  padding: 12px 8px;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  padding: 10px 8px;
   text-align: center;
   pointer-events: none;
 }
@@ -4780,9 +4798,11 @@ button.object-token {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
   max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 700;
@@ -4791,9 +4811,24 @@ button.object-token {
   text-align: center;
 }
 
+.match-turn-target .shape-picture.is-compact,
 .match-card .shape-picture.is-compact {
-  width: 72px;
+  width: min(64px, 100%);
+  max-width: 64px;
+  max-height: 64px;
+  flex: none;
+}
+
+.match-turn-target .shape-picture.is-compact .shape-art,
+.match-card .shape-picture.is-compact .shape-art {
+  width: 100%;
+  max-height: 64px;
+}
+
+.match-turn-target .object-group,
+.match-card .object-group {
   max-width: 100%;
+  max-height: 100%;
 }
 
 .match-card .object-group.is-amount .object-token {
