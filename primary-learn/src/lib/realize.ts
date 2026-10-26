@@ -308,10 +308,12 @@ function realizeQuestion(
   activityRandomise: ActivityRandomise | undefined,
   rng: Rng,
 ): Question {
-  if (question.kind === "pick-pair") return realizePickPair(question, rng);
-
   const spec: RandomiseSpec | undefined = question.randomise;
-  if (!spec) return question;
+  if (!spec || question.kind === "pick-pair") {
+    const items = collectItems(question);
+    const next = question.kind === "pick-pair" ? realizePickPair(question, rng) : question;
+    return applyStrings(next, templateVars(items[0], items[1], question.visual?.count));
+  }
 
   const pool = spec.items ?? activityRandomise?.items ?? [];
   const originals = collectItems(question);

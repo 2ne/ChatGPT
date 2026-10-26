@@ -41,6 +41,8 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 ## Adding activities
 
+Object wording placeholders such as `{items}` resolve from the pictured objects in prompts, narration, hints and feedback, including questions without randomisation.
+
 Follow **`docs/agent/ADD-ACTIVITY.md`** and **`QUALITY.md`** strictly. Each activity is built once — write `difficultyRamp` first, climb Easy < Medium < Hard, and run the self-review checklist before you push.
 
 1. Add `src/data/activities/<kebab-id>.json` (pure data — no JSX). See `activity.schema.json`. No hand import; the registry auto-loads and validates.
