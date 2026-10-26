@@ -41,6 +41,8 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 ## Adding activities
 
+Count to 5 uses tap choices and hands-on activities at every difficulty, with no typed number answers.
+
 Object wording placeholders such as `{items}` resolve from the pictured objects in prompts, narration, hints and feedback, including questions without randomisation.
 Randomised ten frames preserve their two-colour parts and paired layouts so doubles and equal groups remain visible.
 Doubles and bonds Easy asks children to recognise repeated addends using explicit sums rather than interpreting colour groups in a ten frame.

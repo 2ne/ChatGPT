@@ -105,9 +105,9 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c5e-count-3",
-      "prompt": "Type how many {items} you can see.",
+      "prompt": "How many {items} can you see?",
       "visual": {
         "item": "apple",
         "count": 3
@@ -115,18 +115,31 @@
       "hint": "Point to each {item} once and say the next number.",
       "explanation": "There are 3 {items}. Each one counts once.",
       "narration": {
-        "prompt": "Type how many {items} you can see."
+        "prompt": "How many {items} can you see?"
       },
-      "acceptedAnswers": [
-        "3",
-        "three"
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "2"
+        },
+        {
+          "id": "c",
+          "label": "4"
+        }
       ],
-      "inputMode": "numeric"
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "count-objects",
       "id": "c5e-puppet",
-      "prompt": "The puppet counts 1, 2, 4. Is that right?",
+      "prompt": "How many {items} are in this group?",
       "visual": {
         "item": "duck",
         "count": 4
@@ -138,22 +151,22 @@
       "options": [
         {
           "id": "a",
-          "label": "Yes"
+          "label": "3"
         },
         {
           "id": "b",
-          "label": "No"
+          "label": "4"
         },
         {
           "id": "c",
-          "label": "The puppet said 5"
+          "label": "2"
         }
       ],
       "correctId": "b",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "The puppet missed a number. Say each number once.",
+      "explanation": "There are 4 {items}. Each one counts once.",
       "narration": {
-        "prompt": "The puppet counts 1, 2, 4. Is that right?"
+        "prompt": "How many {items} are in this group?"
       }
     },
     {

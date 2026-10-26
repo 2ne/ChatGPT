@@ -118,9 +118,9 @@
       }
     },
     {
-      "kind": "fill-blank",
+      "kind": "multiple-choice",
       "id": "c5h-mix-4",
-      "prompt": "Type how many {items} you can see.",
+      "prompt": "How many {items} can you see?",
       "visual": {
         "item": "star",
         "count": 4
@@ -134,13 +134,26 @@
       "layout": "scatter",
       "explanation": "There are {count} {items}. The {items2} are not part of this group.",
       "narration": {
-        "prompt": "Type how many {items} you can see."
+        "prompt": "How many {items} can you see?"
       },
-      "acceptedAnswers": [
-        "4",
-        "four"
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        }
       ],
-      "inputMode": "numeric"
+      "correctId": "a",
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "multiple-choice",
