@@ -30,7 +30,7 @@
   "pathNode": "eyfs-bonds-10-some",
   "difficulty": 1,
   "difficultyRamp": {
-    "within": "Q1 sees double 2 on a frame. Q2 builds double 2 by adding spots. Q3 matches 2 + 2 to 4. Q4 shares 8 onto two plates. Q5 picks a pair for 10. Q6 completes 6 to make 10. Q7 taps every double frame. Q8 is part-whole 5 and 5. Q9 types 1 + 1. Q10 orders 2, 4, 8.",
+    "within": "Q1 sees double 2 on a frame. Q2 builds double 2 by adding spots. Q3 matches 2 + 2 to 4. Q4 shares 8 onto two plates. Q5 picks a pair for 10. Q6 completes 6 to make 10. Q7 selects the two sums that add the same number twice. Q8 is part-whole 5 and 5. Q9 types 1 + 1. Q10 orders 2, 4, 8.",
     "versus": "Easy shows doubles as two equal parts the child can build and match. Medium links double to half with sharing. Hard reverses double and half with numerals, plus one bag story. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -170,49 +170,28 @@
     {
       "id": "db-1-7",
       "kind": "multi-select",
-      "prompt": "Tap the two frames that show two equal groups.",
+      "prompt": "Tap the two sums that add the same number twice.",
       "options": [
         {
           "id": "a",
-          "tenFrame": {
-            "count": 4,
-            "item": "frog",
-            "parts": [
-              2,
-              2
-            ]
-          }
+          "label": "2 + 2"
         },
         {
           "id": "b",
-          "tenFrame": {
-            "count": 5,
-            "item": "frog",
-            "parts": [
-              2,
-              3
-            ]
-          }
+          "label": "2 + 3"
         },
         {
           "id": "c",
-          "tenFrame": {
-            "count": 6,
-            "item": "frog",
-            "parts": [
-              3,
-              3
-            ]
-          }
+          "label": "3 + 3"
         }
       ],
       "correctIds": [
         "a",
         "c"
       ],
-      "explanation": "2 and 2, and 3 and 3, are doubles. Both parts match.",
+      "explanation": "A double adds the same number twice. 2 plus 3 uses different numbers.",
       "narration": {
-        "prompt": "Tap the two frames that show two equal groups."
+        "prompt": "Tap the two sums that add the same number twice."
       },
       "randomise": {
         "shuffleOptions": true
