@@ -43,6 +43,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 Count to 5 uses tap choices and hands-on activities at every difficulty, with no typed number answers.
 Yes/No questions use exactly those two choices rather than adding a third unrelated answer.
+Number-to-picture matching cards enlarge the objects to fit the card width, up to 48px tiles.
 
 Object wording placeholders such as `{items}` resolve from the pictured objects in prompts, narration, hints and feedback, including questions without randomisation.
 Randomised ten frames preserve their two-colour parts and paired layouts so doubles and equal groups remain visible.

@@ -1428,6 +1428,7 @@ button.learner-chip:focus-visible {
 }
 
 .option.amount-card {
+  container-type: inline-size;
   position: relative;
   display: flex;
   align-items: center;
@@ -1437,6 +1438,16 @@ button.learner-chip:focus-visible {
   min-height: 148px;
   padding: 10px 8px;
   text-align: center;
+}
+
+.amount-card .object-group.is-amount .object-token {
+  --amount-object-size: clamp(18px, calc((100cqw - 20px) / 5), 48px);
+  width: var(--amount-object-size);
+  height: var(--amount-object-size);
+  min-width: var(--amount-object-size);
+  min-height: var(--amount-object-size);
+  font-size: calc(var(--amount-object-size) * 0.75);
+  border-radius: 12px;
 }
 
 .option.amount-card .option-content {
