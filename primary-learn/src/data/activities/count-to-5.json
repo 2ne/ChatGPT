@@ -137,14 +137,9 @@
       }
     },
     {
-      "kind": "count-objects",
+      "kind": "multiple-choice",
       "id": "c5e-puppet",
       "prompt": "Pip counts 1, 2, 4. Is that right?",
-      "visual": {
-        "item": "duck",
-        "count": 4
-      },
-      "layout": "five-frame",
       "randomise": {
         "shuffleOptions": true
       },
@@ -159,11 +154,16 @@
         }
       ],
       "correctId": "b",
-      "hint": "Tap each {item} and say a number.",
-      "explanation": "Pip missed 3. The numbers go 1, 2, 3, 4.",
+      "hint": "Say the counting numbers in order.",
+      "explanation": "Pip missed 3. We count 1, 2, 3, 4.",
       "narration": {
         "prompt": "Pip counts one, two, four. Is that right?"
-      }
+      },
+      "numberSequence": [
+        1,
+        2,
+        4
+      ]
     },
     {
       "kind": "build-set",
