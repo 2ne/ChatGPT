@@ -161,7 +161,7 @@
     {
       "kind": "count-objects",
       "id": "c5m-puppet",
-      "prompt": "The puppet counts 1, 2, 3, 5. Is that right?",
+      "prompt": "Pip counts 1, 2, 3, 5. Is that right?",
       "visual": {
         "item": "balloon",
         "count": 5
@@ -178,17 +178,13 @@
         {
           "id": "b",
           "label": "No"
-        },
-        {
-          "id": "c",
-          "label": "The puppet said 5"
         }
       ],
       "correctId": "b",
       "hint": "Keep going until every {item} has a number.",
-      "explanation": "The puppet missed a number. Say each number once.",
+      "explanation": "Pip missed 4. The numbers go 1, 2, 3, 4, 5.",
       "narration": {
-        "prompt": "The puppet counts 1, 2, 3, 5. Is that right?"
+        "prompt": "Pip counts one, two, three, five. Is that right?"
       }
     },
     {

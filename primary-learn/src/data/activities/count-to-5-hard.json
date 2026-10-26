@@ -158,7 +158,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5h-mix-5",
-      "prompt": "The puppet counts 1, 3, 4. Is that right?",
+      "prompt": "Pip counts 1, 3, 4. Is that right?",
       "visual": {
         "item": "fish",
         "count": 5
@@ -181,17 +181,13 @@
         {
           "id": "b",
           "label": "No"
-        },
-        {
-          "id": "c",
-          "label": "The puppet said 5"
         }
       ],
       "correctId": "b",
       "hint": "Only count the {items}. Leave the {items2} out.",
-      "explanation": "The puppet missed a number. Say each number once.",
+      "explanation": "Pip missed 2. The numbers go 1, 2, 3, 4.",
       "narration": {
-        "prompt": "The puppet counts 1, 3, 4. Is that right?"
+        "prompt": "Pip counts one, three, four. Is that right?"
       }
     },
     {
