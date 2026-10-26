@@ -306,40 +306,19 @@
       }
     },
     {
-      "kind": "multiple-choice",
+      "kind": "build-set",
       "id": "c5e-sam-5",
-      "prompt": "Which group has 5 {items}?",
-      "randomise": {
-        "shuffleOptions": true
-      },
-      "options": [
-        {
-          "id": "a",
-          "visual": {
-            "item": "frog",
-            "count": 4
-          }
-        },
-        {
-          "id": "b",
-          "visual": {
-            "item": "frog",
-            "count": 3
-          }
-        },
-        {
-          "id": "c",
-          "visual": {
-            "item": "frog",
-            "count": 5
-          }
-        }
-      ],
-      "correctId": "c",
-      "explanation": "That group has 5 {items}. The others have a different number.",
+      "prompt": "Make a group of 5 {items}.",
+      "randomise": {},
+      "explanation": "A group of 5 has 5 {items}.",
       "narration": {
-        "prompt": "Which group has 5 {items}?"
-      }
+        "prompt": "Make a group of 5 {items}."
+      },
+      "visual": {
+        "item": "frog",
+        "count": 5
+      },
+      "bank": 7
     }
   ]
 }
