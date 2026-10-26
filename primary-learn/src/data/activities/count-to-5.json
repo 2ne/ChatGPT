@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Question 1 How many {items} can you see? Question 2 How many {items} can you see? Question 3 How many {items} can you see? Question 4 How many {items} can you see? Question 5 Make a group of 5 {items}. Question 6 What number comes next? 1, 2, 3, ? Question 7 Which number is missing? 1, 2, _, 4, 5 Question 8 Put the numbers in order, from smallest to biggest. Question 9 Tap the {items} that match the number below. Question 10 Which group has 5 {items}?",
+    "within": "Question 1 How many {items} can you see? Question 2 How many {items} can you see? Question 3 How many {items} can you see? Question 4 checks whether the puppet skips a number with Yes or No. Question 5 Make a group of 5 {items}. Question 6 What number comes next? 1, 2, 3, ? Question 7 Which number is missing? 1, 2, _, 4, 5 Question 8 Put the numbers in order, from smallest to biggest. Question 9 Tap the {items} that match the number below. Question 10 Which group has 5 {items}?",
     "versus": "Easy: tidy rows, tap to count, one step, hints on the first three items. Medium uses scattered groups, mixed pictures and numerals, and count draws inside 2 to 5. Hard mixes in extra objects to ignore, a numeral match, and a full 1 to 5 order, still within 5. Hard does not teach bonds or composition of 5."
   },
   "skills": [
@@ -139,7 +139,7 @@
     {
       "kind": "count-objects",
       "id": "c5e-puppet",
-      "prompt": "How many {items} are in this group?",
+      "prompt": "The puppet counts 1, 2, 4. Is that right?",
       "visual": {
         "item": "duck",
         "count": 4
@@ -151,22 +151,18 @@
       "options": [
         {
           "id": "a",
-          "label": "3"
+          "label": "Yes"
         },
         {
           "id": "b",
-          "label": "4"
-        },
-        {
-          "id": "c",
-          "label": "2"
+          "label": "No"
         }
       ],
       "correctId": "b",
       "hint": "Tap each {item} and say a number.",
-      "explanation": "There are 4 {items}. Each one counts once.",
+      "explanation": "The puppet missed 3. The numbers go 1, 2, 3, 4.",
       "narration": {
-        "prompt": "How many {items} are in this group?"
+        "prompt": "The puppet counts one, two, four. Is that right?"
       }
     },
     {

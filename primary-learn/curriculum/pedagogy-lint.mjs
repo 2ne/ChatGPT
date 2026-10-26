@@ -254,7 +254,10 @@ function checkActivity(activity) {
     }
 
     const options = pickerOptions(question);
-    if (content && options && !question.turn?.interactive && question.numeral == null) {
+    const yesNo = options?.length === 2 &&
+      ['yes', 'no'].every(label => options.some(option =>
+        option.label?.trim().toLowerCase() === label && !option.visual && !option.tenFrame && !option.shape));
+    if (content && options && !yesNo && !question.turn?.interactive && question.numeral == null) {
       if (options.length > 4) {
         errors.push(`${path}: never more than 4 options`);
       } else if (reception && options.length !== 3) {
