@@ -141,7 +141,7 @@ function remapTenFrame(
 ): TenFrameAsset | undefined {
   if (!frame) return undefined;
   const item = frame.item ?? "apple";
-  return { count: frame.count, item: itemMap.get(item) ?? item };
+  return { ...frame, item: itemMap.get(item) ?? item };
 }
 
 function remapSide(side: MatchSide, itemMap: Map<ObjectItem, ObjectItem>): MatchSide {

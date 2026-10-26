@@ -170,7 +170,7 @@
     {
       "id": "db-1-7",
       "kind": "multi-select",
-      "prompt": "Tap every frame that is a double.",
+      "prompt": "Tap the two frames that show two equal groups.",
       "options": [
         {
           "id": "a",
@@ -212,7 +212,7 @@
       ],
       "explanation": "2 and 2, and 3 and 3, are doubles. Both parts match.",
       "narration": {
-        "prompt": "Tap every frame that is a double."
+        "prompt": "Tap the two frames that show two equal groups."
       },
       "randomise": {
         "shuffleOptions": true
