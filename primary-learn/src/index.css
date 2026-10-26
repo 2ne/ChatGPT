@@ -1993,14 +1993,14 @@ button.object-token {
 }
 
 .ten-frame-board {
-  --tf-cell: 22px;
-  --tf-gap: 3px;
+  --tf-cell: clamp(16px, calc((100vw - 120px) / 10), 32px);
+  --tf-gap: 4px;
   --tf-band: 6px;
   --tf-fill: color-mix(in srgb, var(--violet) 40%, #fff);
   --tf-fill-b: color-mix(in srgb, var(--sky) 42%, #fff);
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: max-content max-content;
+  grid-template-columns: repeat(2, calc(5 * var(--tf-cell) + 4 * var(--tf-gap)));
   gap: 10px;
   justify-content: center;
   align-items: center;
@@ -2010,8 +2010,8 @@ button.object-token {
 }
 
 .ten-frame-board.is-compact {
-  --tf-cell: 12px;
-  --tf-gap: 2px;
+  --tf-cell: 20px;
+  --tf-gap: 3px;
   --tf-band: 4px;
   gap: 6px;
 }
@@ -2050,14 +2050,21 @@ button.object-token {
   background: repeating-linear-gradient(
     -45deg,
     var(--tf-fill-b) 0 3px,
-    #fff 3px 6px
+    color-mix(in srgb, var(--tf-fill-b) 50%, #fff) 3px 6px
   );
   border-color: color-mix(in srgb, var(--tf-fill-b) 55%, var(--ink-soft));
-  outline: 1.5px dashed var(--ink-soft);
-  outline-offset: -3px;
+  border-style: dashed;
+}
+
+.ten-frame-board:has(> .ten-frame-slot.is-pad) > .ten-frame {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: center;
 }
 
 .ten-frame-slot.is-pad {
+  grid-column: 2;
+  grid-row: 1;
   visibility: hidden;
 }
 

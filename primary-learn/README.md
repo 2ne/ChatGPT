@@ -43,6 +43,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 Object wording placeholders such as `{items}` resolve from the pictured objects in prompts, narration, hints and feedback, including questions without randomisation.
 Randomised ten frames preserve their two-colour parts and paired layouts so doubles and equal groups remain visible.
+Ten frames use larger cells, centred single frames and soft blue stripes with dashed borders for the second group.
 
 Follow **`docs/agent/ADD-ACTIVITY.md`** and **`QUALITY.md`** strictly. Each activity is built once — write `difficultyRamp` first, climb Easy < Medium < Hard, and run the self-review checklist before you push.
 
