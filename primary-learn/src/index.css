@@ -2047,11 +2047,7 @@ button.object-token {
 }
 
 .ten-frame-cell.is-part-b {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--tf-fill-b) 0 3px,
-    color-mix(in srgb, var(--tf-fill-b) 50%, #fff) 3px 6px
-  );
+  background: var(--tf-fill-b);
   border-color: color-mix(in srgb, var(--tf-fill-b) 55%, var(--ink-soft));
   border-style: dashed;
 }
