@@ -14,6 +14,12 @@ type CountObjectsProps = {
 /** How-many pictures: tap each object to count it, then pick the number. */
 export function CountObjects(props: CountObjectsProps) {
   const { question } = props;
+  // A counting check tests number order rather than a pictured quantity.
+  const countCheck = question.prompt.match(/^Pip counts ((?:\d+\s*,\s*)+\d+)\. Is that right\?$/);
+  if (countCheck) {
+    const numberSequence = countCheck[1].split(",").map(value => Number(value.trim()));
+    return <MultipleChoice {...props} question={{ ...question, numberSequence }} />;
+  }
   return (
     <div className="option-stack">
       <ObjectGroup

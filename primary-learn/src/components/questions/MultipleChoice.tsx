@@ -70,15 +70,17 @@ export function MultipleChoice({
     );
   }
 
-  const showStem = question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame || question.baseTen);
+  const countCheck = question.prompt.match(/^Pip counts ((?:\d+\s*,\s*)+\d+)\. Is that right\?$/);
+  const numberSequence = question.numberSequence ?? (countCheck ? countCheck[1].split(",").map(value => Number(value.trim())) : undefined);
+  const showStem = !numberSequence && question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame || question.baseTen);
   const sum = !question.visual && optionsAreNumerals(question.options)
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
     <div className="option-stack">
-      {question.numberSequence ? <div className="number-sequence" role="group" aria-label="Number sequence">
-        {question.numberSequence.map((number, index) => <span key={index} className={`number-sequence-tile${number === null ? " is-gap" : ""}`} aria-label={number === null ? "Missing number" : undefined}>{number ?? "?"}</span>)}
+      {numberSequence ? <div className="number-sequence" role="group" aria-label="Number sequence">
+        {numberSequence.map((number, index) => <span key={index} className={`number-sequence-tile${number === null ? " is-gap" : ""}`} aria-label={number === null ? "Missing number" : undefined}>{number ?? "?"}</span>)}
       </div> : null}
       {question.numberLine ? <NumberLine line={question.numberLine} /> : null}
       {question.hundredSquare ? <HundredSquare square={question.hundredSquare} /> : null}
