@@ -5289,5 +5289,5 @@ button.object-token {
 /* Counting sequences use the same tiles as Pip's count checks. */
 .number-sequence { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
 .number-sequence-tile { display: grid; place-items: center; flex: 0 0 56px; height: 56px; border-radius: 16px; background: var(--paper); color: var(--ink); font-family: var(--font-display); font-size: 32px; font-weight: 800; }
-.number-sequence-tile.is-gap { background: var(--sun-soft); border: 2px dashed var(--line-strong); }
+.number-sequence-tile.is-gap { background: #f2f3f6; border: 2px dashed #c9cbd5; }
 @media (max-width: 360px) { .number-sequence { gap: 8px; } .number-sequence-tile { flex-basis: 44px; height: 48px; font-size: 26px; border-radius: 12px; } }
