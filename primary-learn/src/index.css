@@ -1890,54 +1890,25 @@ button.object-token {
   }
 }
 
-.build-set {
-  display: grid;
-  gap: 16px;
-  justify-items: center;
+.build-set { display: grid; gap: 16px; justify-items: center; width: 100%; }
+.build-set > div { width: min(100%, 360px); }
+.build-label { margin: 0 0 8px; text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--ink); }
+.build-group, .build-tray {
+  position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px; align-content: start; justify-items: center;
+  min-block-size: calc(var(--build-rows) * 52px + (var(--build-rows) - 1) * 8px + 28px);
+  width: 100%; padding: 12px; border: 2.5px dashed var(--line-strong); border-radius: 20px; background: var(--paper-deep);
+  transition: background-color 180ms ease, border-color 180ms ease;
 }
-
-.build-label {
-  margin: 0 0 8px;
-  text-align: center;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 16px;
-  color: var(--ink);
-}
-
-.build-group,
-.build-tray {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  min-height: 76px;
-  min-width: min(100%, 280px);
-  padding: 12px;
-  border: 2.5px dashed var(--line-strong);
-  border-radius: 20px;
-  background: var(--paper-deep);
-}
-
-.build-group.is-filled {
-  border-style: solid;
-  background: #fff;
-}
-
-.build-group.is-correct {
-  border-color: var(--green);
-  background: var(--green-soft);
-}
-
-.build-group.is-wrong {
-  border-color: var(--red);
-  background: var(--red-soft);
-}
-
-.build-empty {
-  margin: 0;
-}
+.build-set .object-token { width: 100%; max-width: 52px; min-width: 0; height: 52px; min-height: 52px; padding: 4px; font-size: 30px; position: relative; z-index: 1; }
+.build-group.is-filled { border-style: solid; background: #fff; }
+.build-group.is-correct { border-color: var(--green); background: var(--green-soft); }
+.build-group.is-wrong { border-color: var(--red); background: var(--red-soft); }
+.build-empty { position: absolute; inset: 12px; display: grid; place-items: center; text-align: center; margin: 0; pointer-events: none; transition: opacity 160ms ease, display 160ms allow-discrete; }
+.build-empty[hidden] { display: none; opacity: 0; }
+@starting-style { .build-empty { opacity: 0; } }
+.build-reset { min-height: 44px; display: grid; place-items: center; }
+@media (prefers-reduced-motion: reduce) { .build-group, .build-tray, .build-empty { transition: none; } }
 
 .number-line {
   display: block;
