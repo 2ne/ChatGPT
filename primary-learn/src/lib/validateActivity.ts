@@ -738,11 +738,11 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     hundredSquare = { start, rows: rows as 3 | 4, missing, highlight };
   }
-  let numberSequence: number[] | undefined;
+  let numberSequence: (number | null)[] | undefined;
   if (value.numberSequence != null) {
-    if (!Array.isArray(value.numberSequence) || value.numberSequence.length < 2 || value.numberSequence.length > 10 || !value.numberSequence.every(n => typeof n === "number" && Number.isInteger(n) && n >= 0 && n <= 100)) fail(path, "numberSequence needs 2 to 10 whole numbers from 0 to 100");
+    if (!Array.isArray(value.numberSequence) || value.numberSequence.length < 2 || value.numberSequence.length > 10 || !value.numberSequence.every(n => n === null || (typeof n === "number" && Number.isInteger(n) && n >= 0 && n <= 110))) fail(path, "numberSequence needs 2 to 10 whole numbers from 0 to 110 or null for a gap");
     if (kind !== "multiple-choice" || visual) fail(path, "numberSequence uses choice questions without object pictures");
-    numberSequence = value.numberSequence as number[];
+    numberSequence = value.numberSequence as (number | null)[];
   }
   const core = { numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {

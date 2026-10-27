@@ -77,8 +77,8 @@ export function MultipleChoice({
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
   return (
     <div className="option-stack">
-      {question.numberSequence ? <div role="group" aria-label="Pip's counting" style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 10, marginBottom: 8 }}>
-        {question.numberSequence.map((number, index) => <span key={index} style={{ display: "grid", placeItems: "center", width: 56, height: 56, borderRadius: 16, background: "var(--paper)", color: "var(--ink)", fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 800 }}>{number}</span>)}
+      {question.numberSequence ? <div className="number-sequence" role="group" aria-label="Number sequence">
+        {question.numberSequence.map((number, index) => <span key={index} className={`number-sequence-tile${number === null ? " is-gap" : ""}`} aria-label={number === null ? "Missing number" : undefined}>{number ?? "?"}</span>)}
       </div> : null}
       {question.numberLine ? <NumberLine line={question.numberLine} /> : null}
       {question.hundredSquare ? <HundredSquare square={question.hundredSquare} /> : null}

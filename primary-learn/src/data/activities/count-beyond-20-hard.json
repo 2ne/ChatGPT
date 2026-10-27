@@ -139,7 +139,7 @@
     {
       "id": "c20-3-6",
       "kind": "multiple-choice",
-      "prompt": "Which number is wrong? 24, 23, 22, 21, 22",
+      "prompt": "Which number is wrong?",
       "options": [
         {
           "id": "a",
@@ -161,7 +161,14 @@
       },
       "randomise": {
         "shuffleOptions": true
-      }
+      },
+      "numberSequence": [
+        24,
+        23,
+        22,
+        21,
+        22
+      ]
     },
     {
       "id": "c20-3-7",

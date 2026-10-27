@@ -147,7 +147,7 @@
     {
       "id": "c100-2-6",
       "kind": "multiple-choice",
-      "prompt": "Which number is wrong? 76, 77, 78, 79, 78",
+      "prompt": "Which number is wrong?",
       "options": [
         {
           "id": "a",
@@ -173,7 +173,14 @@
       },
       "randomise": {
         "shuffleOptions": true
-      }
+      },
+      "numberSequence": [
+        76,
+        77,
+        78,
+        79,
+        78
+      ]
     },
     {
       "id": "c100-2-7",

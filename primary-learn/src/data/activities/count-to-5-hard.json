@@ -373,7 +373,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5h-gap",
-      "prompt": "Which number is missing? 1, 2, 3, 4, _",
+      "prompt": "Which number is missing?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -396,7 +396,14 @@
       "explanation": "5 comes after 4. The numbers go 1, 2, 3, 4, 5.",
       "narration": {
         "prompt": "Which number is missing? 1, 2, 3, 4, _"
-      }
+      },
+      "numberSequence": [
+        1,
+        2,
+        3,
+        4,
+        null
+      ]
     }
   ]
 }

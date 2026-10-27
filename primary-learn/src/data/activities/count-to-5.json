@@ -182,7 +182,7 @@
     {
       "kind": "multiple-choice",
       "id": "c5e-next",
-      "prompt": "What number comes next? 1, 2, 3, ?",
+      "prompt": "What number comes next?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -204,12 +204,18 @@
       "explanation": "4 comes after 3. Do not skip a number.",
       "narration": {
         "prompt": "What number comes next? One, two, three, blank."
-      }
+      },
+      "numberSequence": [
+        1,
+        2,
+        3,
+        null
+      ]
     },
     {
       "kind": "multiple-choice",
       "id": "c5e-gap",
-      "prompt": "Which number is missing? 1, 2, _, 4, 5",
+      "prompt": "Which number is missing?",
       "randomise": {
         "shuffleOptions": true
       },
@@ -231,7 +237,14 @@
       "explanation": "3 comes after 2 and before 4.",
       "narration": {
         "prompt": "Which number is missing? One, two, blank, four, five."
-      }
+      },
+      "numberSequence": [
+        1,
+        2,
+        null,
+        4,
+        5
+      ]
     },
     {
       "kind": "ordered",

@@ -179,7 +179,7 @@
     {
       "id": "c10-3-6",
       "kind": "multiple-choice",
-      "prompt": "Which number is wrong? 6, 7, 8, 9, 8",
+      "prompt": "Which number is wrong?",
       "options": [
         {
           "id": "a",
@@ -201,7 +201,14 @@
       },
       "randomise": {
         "shuffleOptions": true
-      }
+      },
+      "numberSequence": [
+        6,
+        7,
+        8,
+        9,
+        8
+      ]
     },
     {
       "id": "c10-3-7",
