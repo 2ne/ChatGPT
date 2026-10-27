@@ -1480,28 +1480,31 @@ button.learner-chip:focus-visible {
   align-items: flex-end;
   justify-content: center;
   box-sizing: border-box;
-  width: 148px;
-  height: 88px;
+  width: 140px;
+  height: 148px;
   padding: 4px 10px 6px;
   border-radius: 24px 24px 18px 18px;
   background: var(--paper-deep);
   border: 3px solid var(--line);
 }
 
-.finger-hand-svg {
+.finger-hand-image {
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  object-fit: contain;
+  object-position: center bottom;
 }
+
+.finger-hand-zero { font-family: var(--font-display); font-size: 40px; font-weight: 800; }
 
 .object-group.is-fingers.is-option {
   padding: 0;
 }
 
 .object-group.is-fingers.is-option .finger-hand {
-  width: 96px;
-  height: 64px;
+  width: 88px;
+  height: 96px;
   padding: 2px 6px 4px;
   border-width: 2px;
   border-radius: 16px 16px 12px 12px;
