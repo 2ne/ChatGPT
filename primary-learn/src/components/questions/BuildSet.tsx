@@ -88,7 +88,6 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
   return (
     <div className="build-set" ref={root} style={{ "--build-rows": Math.ceil(bank / 5) } as CSSProperties}>
       <div>
-        <p className="build-label">{copy.yourGroup}</p>
         <div
           className={`build-group${selected.length ? " is-filled" : ""}${marked}`}
           role="group"
@@ -100,7 +99,7 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
                 key={`${question.id}-${id}`}
                 type="button"
                 data-build-id={id}
-                className="object-token is-lit"
+                className="object-token"
                 disabled={disabled}
                 aria-label={`${words.singular}. Tap to take it out.`}
                 onPointerDown={(event) => activateRemove(id, event)}
