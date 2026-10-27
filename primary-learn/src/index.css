@@ -1483,9 +1483,8 @@ button.learner-chip:focus-visible {
   width: 140px;
   height: 148px;
   padding: 4px 10px 6px;
-  border-radius: 24px 24px 18px 18px;
-  background: var(--paper-deep);
-  border: 3px solid var(--line);
+  background: transparent;
+  border: 0;
 }
 
 .finger-hand-image {
@@ -1506,8 +1505,6 @@ button.learner-chip:focus-visible {
   width: 88px;
   height: 96px;
   padding: 2px 6px 4px;
-  border-width: 2px;
-  border-radius: 16px 16px 12px 12px;
 }
 
 /* Picture stays in flow so size does not jump. Flip shows a purple Look again face. */
