@@ -6,6 +6,7 @@ export function useNarration(resetKey: string) {
   const [playing, setPlaying] = useState(false);
   const [charIndex, setCharIndex] = useState(-1);
   const generation = useRef(0);
+  const preserveReset = useRef<string | null>(null);
 
   useEffect(() => {
     if (!speechSupported()) {
@@ -21,6 +22,11 @@ export function useNarration(resetKey: string) {
   }, []);
 
   useEffect(() => {
+    if (preserveReset.current === resetKey) {
+      preserveReset.current = null;
+      return;
+    }
+    preserveReset.current = null;
     generation.current += 1;
     cancelSpeech();
     setPlaying(false);
@@ -66,7 +72,13 @@ export function useNarration(resetKey: string) {
     });
   }
 
+  function playForReset(text: string, nextResetKey: string) {
+    play(text);
+    preserveReset.current = nextResetKey;
+  }
+
   function stop() {
+    preserveReset.current = null;
     generation.current += 1;
     cancelSpeech();
     setPlaying(false);
@@ -78,5 +90,5 @@ export function useNarration(resetKey: string) {
     else play(text, extra);
   }
 
-  return { available, playing, charIndex, play, stop, toggle };
+  return { available, playing, charIndex, play, playForReset, stop, toggle };
 }

@@ -6,11 +6,15 @@ const CHILD_RATE = 0.95;
 const CHILD_PITCH = 1.1;
 
 const FEMALE_NAMES =
-  /\b(Sonia|Libby|Maisie|Serena|Kate|Stephanie|Martha)\b/i;
+  /\b(Sonia|Libby|Maisie|Serena|Kate|Stephanie|Martha|Flo|Shelley|Sandy|Grandma|Samantha)\b/i;
 const MALE_NAMES =
-  /\b(Daniel|Arthur|George|Ryan|Thomas|Oliver)\b/i;
+  /\b(Daniel|Arthur|George|Ryan|Thomas|Oliver|Eddy|Reed|Rocko|Grandpa)\b/i;
 
 let voices: SpeechSynthesisVoice[] = [];
+// Keep the utterance alive until the browser finishes speaking.
+let activeUtterance: SpeechSynthesisUtterance | null = null;
+let pendingSpeech: SpeakOptions | null = null;
+let retryBound = false;
 let voicesBound = false;
 
 function refreshVoices() {
@@ -79,12 +83,25 @@ function scoreVoice(voice: SpeechSynthesisVoice): number {
 }
 
 export function pickUkVoice(list = loadVoices()): SpeechSynthesisVoice | undefined {
-  if (list.length === 0) return undefined;
-  return [...list].sort((a, b) => scoreVoice(b) - scoreVoice(a))[0];
+  // Prefer a recognised female UK voice, then a female English fallback.
+  // Never explicitly select a recognised male voice.
+  const ukVoices = list.filter(voice => {
+    const lang = voice.lang.replaceAll("_", "-").toLowerCase();
+    return lang === "en-gb" || lang.startsWith("en-gb-") ||
+      (/^en(?:-|$)/.test(lang) && /UK English|United Kingdom/i.test(voice.name));
+  });
+  const femaleUk = ukVoices.filter(voice => isFemaleVoice(voice.name));
+  const femaleEnglish = list.filter(voice =>
+    /^en(?:-|$)/i.test(voice.lang.replaceAll("_", "-")) && isFemaleVoice(voice.name));
+  const unclassifiedUk = ukVoices.filter(voice => !isMaleVoice(voice.name));
+  const candidates = femaleUk.length ? femaleUk : femaleEnglish.length ? femaleEnglish : unclassifiedUk;
+  return [...candidates].sort((a, b) => scoreVoice(b) - scoreVoice(a))[0];
 }
 
 export function cancelSpeech() {
   if (!speechSupported()) return;
+  pendingSpeech = null;
+  activeUtterance = null;
   speechSynthesis.cancel();
 }
 
@@ -107,8 +124,24 @@ export function speak(options: SpeakOptions) {
     return;
   }
 
+  if (!retryBound) {
+    retryBound = true;
+    // Retry a browser-blocked initial read inside a real interaction.
+    document.addEventListener("pointerup", () => {
+      if (pendingSpeech && !speechSynthesis.speaking) speak(pendingSpeech);
+    });
+    document.addEventListener("keydown", () => {
+      if (pendingSpeech && !speechSynthesis.speaking) speak(pendingSpeech);
+    });
+  }
+  activeUtterance = null;
   speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(options.text.trim());
+  pendingSpeech = options;
+  const text = options.text.trim();
+  const positiveFeedback = /^Correct[.!]\s*Nice!$/i.test(text);
+  const negativeFeedback = /^Not quite[.!]?$/i.test(text);
+  const utter = new SpeechSynthesisUtterance(positiveFeedback ? "Correct! Nice!" : text);
+  activeUtterance = utter;
   const voice = pickUkVoice();
   if (voice) {
     utter.voice = voice;
@@ -116,16 +149,26 @@ export function speak(options: SpeakOptions) {
   } else {
     utter.lang = "en-GB";
   }
-  utter.rate = CHILD_RATE;
-  utter.pitch = CHILD_PITCH;
+  utter.rate = positiveFeedback ? 1.02 : negativeFeedback ? 0.92 : CHILD_RATE;
+  utter.pitch = positiveFeedback ? 1.15 : negativeFeedback ? 1.04 : CHILD_PITCH;
 
+  utter.onstart = () => { if (activeUtterance === utter) pendingSpeech = null; };
   utter.onboundary = (event) => {
     if (event.name && event.name !== "word") return;
     options.onBoundary?.(event.charIndex);
   };
-  utter.onend = () => options.onEnd?.();
-  utter.onerror = () => options.onEnd?.();
+  const finish = () => {
+    if (activeUtterance !== utter) return;
+    activeUtterance = null;
+    options.onEnd?.();
+  };
+  utter.onend = () => {
+    if (activeUtterance === utter) pendingSpeech = null;
+    finish();
+  };
+  utter.onerror = finish;
 
+  if (speechSynthesis.paused) speechSynthesis.resume();
   speechSynthesis.speak(utter);
 }
 
