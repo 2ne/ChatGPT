@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
+import { RotateCw } from "lucide-react";
 import { copy } from "../../data/copy";
 import { OBJECT_WORDS, objectGlyph } from "../../data/objects";
 import type { BuildSetQuestion } from "../../types/activity";
@@ -114,8 +115,7 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
             ))}
         </div>
       </div>
-      <div>
-        <p className="build-label">{copy.tapToAdd}</p>
+      <div className="build-source">
         <div className="build-tray" role="group" aria-label={copy.tapToAdd}>
           {ids.map((id) => (
             <button
@@ -145,7 +145,7 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
         <button type="button" className="btn-text" disabled={disabled || !selected.length}
           style={{ visibility: selected.length && !disabled ? "visible" : "hidden" }}
           onClick={() => { selected.forEach(remember); onChange([]); }}>
-          {copy.startGroupAgain}
+          <RotateCw size={18} aria-hidden /> Start again
         </button>
       </div>
     </div>

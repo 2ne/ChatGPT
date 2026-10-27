@@ -1901,9 +1901,9 @@ button.object-token {
   transition: background-color 180ms ease, border-color 180ms ease;
 }
 .build-set .object-token { width: 100%; max-width: 52px; min-width: 0; height: 52px; min-height: 52px; padding: 4px; font-size: 30px; position: relative; z-index: 1; }
-.build-group.is-filled { border-style: solid; background: #fff; }
-.build-group.is-correct { border-color: var(--green); background: var(--green-soft); }
-.build-group.is-wrong { border-color: var(--red); background: var(--red-soft); }
+.build-group { border-color: #c9cbd5; border-style: dashed; background: #f2f3f6; }
+.build-source { padding-block-start: 32px; }
+.build-reset .btn-text { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; }
 .build-empty { position: absolute; inset: 12px; display: grid; place-items: center; text-align: center; margin: 0; pointer-events: none; transition: opacity 160ms ease, display 160ms allow-discrete; }
 .build-empty[hidden] { display: none; opacity: 0; }
 @starting-style { .build-empty { opacity: 0; } }
