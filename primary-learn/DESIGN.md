@@ -539,5 +539,3 @@ BuildSet reserves the same full-width, five-column footprint for the group and t
 Number-sequence choice questions show their sequence in shared number tiles below a short question. Use numberSequence with null for the missing-number tile. Keep the full sequence in question narration. Wrong-number checks and Pip checks use the same tiles. Do not fill the missing tile before checking.
 
 Finger displays use the five supplied transparent WebP hand images in src/assets/hands via FingerHand. All crops share one canvas and wrist baseline. Use these assets for stems and compact answer/matching cards. Keep object-fit contain to preserve fingers and proportions. Zero has no supplied hand artwork and uses a numeral fallback.
-
-Automatic narration starts directly inside Check it, Next question and retry interactions for iOS. Preserve that utterance through the matching phase reset and suppress duplicate effect playback. Initial browser-blocked speech retries on the next real interaction. Cancel speech on exit and unmount. Speaker buttons remain available.

@@ -114,33 +114,7 @@ export function ActivityRunner({
   const question = playQuestions.find((item) => item.id === currentId);
   const backdrop = sectionBackdrop(activity.pathNode);
   const speech = useNarration(`${playSession}:${currentId ?? "none"}:${phase}`);
-  const [speechTarget, setSpeechTarget] = useState<"prompt" | "why" | "feedback">("prompt");
-  const spokenScreen = useRef<string | null>(null);
-  const narrationRef = useRef(speech);
-  narrationRef.current = speech;
-
-  useEffect(() => {
-    if (!question || exitOpen || phase === "summary") return;
-    if (spokenScreen.current === `${playSession}:${currentId}:${phase}`) return;
-    // Run after useNarration has cancelled the previous question or phase.
-    const timer = window.setTimeout(() => {
-      if (phase === "question") {
-        setSpeechTarget("prompt");
-        narrationRef.current.play(hearPrompt(question, activity.difficulty));
-      } else if (lastCorrect !== null) {
-        setSpeechTarget("feedback");
-        narrationRef.current.play(lastCorrect ? copy.feedbackCorrect : copy.feedbackWrong);
-      }
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, [currentId, playSession, phase, lastCorrect, activity.difficulty]);
-
-  function narrateNextScreen(text: string, key: string, target: "prompt" | "feedback") {
-    spokenScreen.current = key;
-    setSpeechTarget(target);
-    speech.playForReset(text, key);
-  }
-
+  const [speechTarget, setSpeechTarget] = useState<"prompt" | "why">("prompt");
   const total = playQuestions.length;
   const correctCount = Object.values(results).filter(Boolean).length;
   const mastered = passedScore(correctCount, total);
@@ -153,7 +127,6 @@ export function ActivityRunner({
     setExitOpen(false);
     const realized = realizeActivity(activity);
     const first = realized.questions[0];
-    if (first) narrateNextScreen(hearPrompt(first, activity.difficulty), `${playSession + 1}:${first.id}:question`, "prompt");
     setPlayQuestions(realized.questions);
     setActiveQueue(realized.questions.map((item) => item.id));
     setIndex(0);
@@ -177,7 +150,6 @@ export function ActivityRunner({
   function checkAnswer() {
     if (!question) return;
     const correct = isAnswerCorrect(question, answer);
-    narrateNextScreen(correct ? copy.feedbackCorrect : copy.feedbackWrong, `${playSession}:${currentId}:feedback`, "feedback");
     playSound(correct ? "correct" : "wrong");
     setLastCorrect(correct);
     setStreak((prev) => (correct ? prev + 1 : 0));
@@ -191,7 +163,6 @@ export function ActivityRunner({
     const nextIndex = index + 1;
     if (nextIndex < activeQueue.length) {
       const nextQuestion = playQuestions.find((item) => item.id === activeQueue[nextIndex]);
-      if (nextQuestion) narrateNextScreen(hearPrompt(nextQuestion, activity.difficulty), `${playSession}:${nextQuestion.id}:question`, "prompt");
       setIndex(nextIndex);
       setAnswer(nextQuestion ? emptyAnswerFor(nextQuestion) : null);
       setShowHint(false);
