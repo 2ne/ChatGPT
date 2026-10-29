@@ -254,6 +254,11 @@ function checkActivity(activity) {
     }
 
     const options = pickerOptions(question);
+    const hasYesAndNo = ['yes', 'no'].every(label => options?.some(option =>
+      String(option.label ?? '').trim().toLowerCase() === label));
+    if (hasYesAndNo && options.length !== 2) {
+      errors.push(`${path}: yes/no questions must have only Yes and No answers`);
+    }
     const yesNo = options?.length === 2 &&
       ['yes', 'no'].every(label => options.some(option =>
         option.label?.trim().toLowerCase() === label && !option.visual && !option.tenFrame && !option.shape));

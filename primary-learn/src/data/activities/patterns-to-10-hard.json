@@ -165,14 +165,10 @@
         {
           "id": "b",
           "label": "No"
-        },
-        {
-          "id": "c",
-          "label": "Only if one plate has 5"
         }
       ],
       "correctId": "b",
-      "explanation": "9 is odd. One plate would have one more.",
+      "explanation": "One group would have 5 and the other 4, so they would not be equal.",
       "narration": {
         "prompt": "Can 9 be shared equally onto two plates?"
       },
