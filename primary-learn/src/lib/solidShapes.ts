@@ -23,6 +23,7 @@ function model(shape: ShapeAsset) {
   const variant = shape.variant ?? "standard";
   let geometry: THREE.BufferGeometry;
   switch (shape.name) {
+    case "dice":
     case "cube": geometry = new THREE.BoxGeometry(1.3, 1.3, 1.3); break;
     case "cuboid": geometry = variant === "tall" ? new THREE.BoxGeometry(0.9, 1.9, 0.9) : new THREE.BoxGeometry(1.9, 0.95, 0.95); break;
     case "pyramid": geometry = new THREE.ConeGeometry(1.05, variant === "tall" ? 2 : 1.65, variant === "triangular" ? 3 : 4); break;
@@ -40,6 +41,39 @@ function model(shape: ShapeAsset) {
   group.add(new THREE.Mesh(geometry, material));
   if (shape.name !== "sphere") {
     group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: "#343568" })));
+  }
+  if (shape.name === "dice") {
+    // Opposite faces total seven. Each pip sits just above its square face.
+    const patterns: [number, number][][] = [
+      [[0, 0]],
+      [[-1, 1], [1, -1]],
+      [[-1, 1], [0, 0], [1, -1]],
+      [[-1, -1], [-1, 1], [1, -1], [1, 1]],
+      [[-1, -1], [-1, 1], [0, 0], [1, -1], [1, 1]],
+      [[-1, -1], [-1, 0], [-1, 1], [1, -1], [1, 0], [1, 1]],
+    ];
+    const faces: { value: number; normal: THREE.Vector3 }[] = [
+      { value: 1, normal: new THREE.Vector3(0, 1, 0) },
+      { value: 6, normal: new THREE.Vector3(0, -1, 0) },
+      { value: 2, normal: new THREE.Vector3(0, 0, 1) },
+      { value: 5, normal: new THREE.Vector3(0, 0, -1) },
+      { value: 3, normal: new THREE.Vector3(1, 0, 0) },
+      { value: 4, normal: new THREE.Vector3(-1, 0, 0) },
+    ];
+    for (const { value, normal } of faces) {
+      const face = new THREE.Group();
+      face.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+      face.position.copy(normal).multiplyScalar(0.652);
+      for (const [x, y] of patterns[value - 1]) {
+        const pip = new THREE.Mesh(
+          new THREE.CircleGeometry(0.085, 24),
+          new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.5 }),
+        );
+        pip.position.set(x * 0.31, y * 0.31, 0);
+        face.add(pip);
+      }
+      group.add(face);
+    }
   }
   group.rotation.y = startingRotation(shape);
   group.scale.setScalar(shape.scale ?? 1);
