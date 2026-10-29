@@ -103,10 +103,10 @@
     {
       "id": "pat-3-3",
       "kind": "build-set",
-      "prompt": "Share 10 {items} onto two plates. Make one plate.",
-      "explanation": "10 shared equally is 5 on each plate.",
+      "prompt": "Share 10 {items} equally between two groups.",
+      "explanation": "10 shared equally between two groups is 5 in each group.",
       "narration": {
-        "prompt": "Share 10 {items} onto two plates. Make one plate."
+        "prompt": "Share 10 {items} equally between two groups."
       },
       "visual": {
         "item": "frog",
