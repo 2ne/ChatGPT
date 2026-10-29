@@ -117,7 +117,7 @@
     {
       "kind": "make-total",
       "id": "b5e-1-plus",
-      "prompt": "1 and what make 5?",
+      "prompt": "What do you need to add to 1 to make 5?",
       "visual": {
         "item": "frog",
         "count": 1
@@ -127,13 +127,13 @@
       "randomise": {},
       "explanation": "1 and 4 make 5. One part is not the whole.",
       "narration": {
-        "prompt": "1 and what make 5?"
+        "prompt": "What do you need to add to 1 to make 5?"
       }
     },
     {
       "kind": "part-whole",
       "id": "b5e-pw-0",
-      "prompt": "0 and what make 5?",
+      "prompt": "What do you need to add to 0 to make 5?",
       "whole": 5,
       "parts": [
         0,
@@ -147,22 +147,22 @@
       ],
       "explanation": "0 and 5 make 5. One part is not the whole.",
       "narration": {
-        "prompt": "0 and what make 5?"
+        "prompt": "What do you need to add to 0 to make 5?"
       }
     },
     {
       "kind": "multiple-choice",
       "id": "b5e-5-eq",
-      "prompt": "2 + 3 and 3 + 2 make the same total. What is 5 take away 2?",
+      "prompt": "What is 5 take away 2?",
       "visual": {
         "item": "balloon",
         "count": 5,
         "removed": 2
       },
       "randomise": {},
-      "explanation": "2 + 3, 3 + 2 and 5 take away 2 are one family.",
+      "explanation": "2 and 3 make 5, so taking away 2 leaves 3.",
       "narration": {
-        "prompt": "Two plus three and three plus two make the same total. What is five take away two?"
+        "prompt": "What is 5 take away 2?"
       },
       "options": [
         {

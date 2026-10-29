@@ -42,7 +42,7 @@
     {
       "id": "pat-2-1",
       "kind": "multiple-choice",
-      "prompt": "Which group can be put into pairs with none left over?",
+      "prompt": "Which group has a pair for every block?",
       "options": [
         {
           "id": "a",
@@ -72,7 +72,7 @@
       "correctId": "b",
       "explanation": "8 makes 4 pairs with none left over.",
       "narration": {
-        "prompt": "Which group can be put into pairs with none left over?"
+        "prompt": "Which group has a pair for every block?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -100,10 +100,10 @@
     {
       "id": "pat-2-3",
       "kind": "build-set",
-      "prompt": "Share 10 {items} onto two plates. Make one plate.",
-      "explanation": "10 shared equally is 5 on each plate.",
+      "prompt": "Share 10 {items} equally between two groups.",
+      "explanation": "10 shared equally between two groups is 5 in each group.",
       "narration": {
-        "prompt": "Share 10 {items} onto two plates. Make one plate."
+        "prompt": "Share 10 {items} equally between two groups."
       },
       "visual": {
         "item": "frog",
@@ -114,7 +114,7 @@
     {
       "id": "pat-2-4",
       "kind": "multiple-choice",
-      "prompt": "Which group has one left over after pairing?",
+      "prompt": "Which group has a block without a pair?",
       "options": [
         {
           "id": "a",
@@ -144,7 +144,7 @@
       "correctId": "c",
       "explanation": "7 makes 3 pairs and one left over. That is odd.",
       "narration": {
-        "prompt": "Which group has one left over after pairing?"
+        "prompt": "Which group has a block without a pair?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -153,10 +153,10 @@
     {
       "id": "pat-2-5",
       "kind": "build-set",
-      "prompt": "Share 8 {items} onto two plates. Make one plate.",
-      "explanation": "8 shared equally is 4 on each plate.",
+      "prompt": "Share 8 {items} equally between two groups.",
+      "explanation": "8 shared equally between two groups is 4 in each group.",
       "narration": {
-        "prompt": "Share 8 {items} onto two plates. Make one plate."
+        "prompt": "Share 8 {items} equally between two groups."
       },
       "visual": {
         "item": "car",
@@ -199,7 +199,7 @@
     {
       "id": "pat-2-7",
       "kind": "multiple-choice",
-      "prompt": "Which group has one left over after pairing?",
+      "prompt": "Which group has a block without a pair?",
       "options": [
         {
           "id": "a",
@@ -229,7 +229,7 @@
       "correctId": "c",
       "explanation": "9 makes 4 pairs and one left over. That is odd.",
       "narration": {
-        "prompt": "Which group has one left over after pairing?"
+        "prompt": "Which group has a block without a pair?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -238,21 +238,21 @@
     {
       "id": "pat-2-8",
       "kind": "fill-blank",
-      "prompt": "6 is shared onto two plates. Type how many on each plate.",
+      "prompt": "6 is shared equally between two groups. How many are in each group?",
       "acceptedAnswers": [
         "3",
         "three"
       ],
       "inputMode": "numeric",
-      "explanation": "6 shared equally is 3 on each plate.",
+      "explanation": "6 shared equally is 3 in each group.",
       "narration": {
-        "prompt": "6 is shared onto two plates. Type how many on each plate."
+        "prompt": "6 is shared equally between two groups. How many are in each group?"
       }
     },
     {
       "id": "pat-2-9",
       "kind": "multiple-choice",
-      "prompt": "Which group can be put into pairs with none left over?",
+      "prompt": "Which group has a pair for every block?",
       "options": [
         {
           "id": "a",
@@ -282,7 +282,7 @@
       "correctId": "b",
       "explanation": "10 makes 5 pairs with none left over.",
       "narration": {
-        "prompt": "Which group can be put into pairs with none left over?"
+        "prompt": "Which group has a pair for every block?"
       },
       "randomise": {
         "shuffleOptions": true

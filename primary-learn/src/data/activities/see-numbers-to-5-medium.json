@@ -45,7 +45,7 @@
     {
       "id": "s5-2-1",
       "kind": "fill-blank",
-      "prompt": "Type how many {items} you can see.",
+      "prompt": "Type how many dots you can see.",
       "visual": {
         "item": "star",
         "count": 3
@@ -54,7 +54,7 @@
       "flashMs": 1100,
       "explanation": "The dice shows 3. The middle pip is not a fourth.",
       "narration": {
-        "prompt": "Type how many {items} you can see."
+        "prompt": "Type how many dots you can see."
       },
       "acceptedAnswers": [
         "3",
@@ -65,7 +65,7 @@
     {
       "id": "s5-2-2",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many dots can you see?",
       "visual": {
         "item": "apple",
         "count": 5
@@ -89,7 +89,7 @@
       "correctId": "c",
       "explanation": "The dice shows 5. The centre pip makes 5, not 4.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many dots can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -141,7 +141,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "1 and 4 make 5. Add both parts.",
+      "explanation": "1 and 4 make 5. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },
@@ -279,7 +279,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "4 were shown. Keep the picture in your head. The cup hides it.",
+      "explanation": "4 were shown. The cup hides the same group. None were added or taken away.",
       "narration": {
         "prompt": "How many {items} are under the cup?"
       },
@@ -348,7 +348,7 @@
         "four"
       ],
       "inputMode": "numeric",
-      "explanation": "2 and 2 make 4. Add both parts.",
+      "explanation": "2 and 2 make 4. Both parts count towards the total.",
       "narration": {
         "prompt": "Type how many blocks you can see."
       }

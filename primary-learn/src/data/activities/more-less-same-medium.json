@@ -42,7 +42,7 @@
     {
       "id": "mls-2-1",
       "kind": "multiple-choice",
-      "prompt": "Which group has more {items}?",
+      "prompt": "Which group has the most blocks?",
       "options": [
         {
           "id": "a",
@@ -69,7 +69,7 @@
       "correctId": "b",
       "explanation": "7 is more than 5 and 4. The frames are the same size.",
       "narration": {
-        "prompt": "Which group has more {items}?"
+        "prompt": "Which group has the most blocks?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -116,7 +116,7 @@
     {
       "id": "mls-2-3",
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer {items}?",
+      "prompt": "Which group has the fewest blocks?",
       "options": [
         {
           "id": "a",
@@ -141,9 +141,9 @@
         }
       ],
       "correctId": "c",
-      "explanation": "5 is fewer than 6 and 8. One empty cell more means fewer.",
+      "explanation": "5 is fewer than 6 and 8. 5 has fewer filled cells than 6 or 8.",
       "narration": {
-        "prompt": "Which group has fewer {items}?"
+        "prompt": "Which group has the fewest blocks?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -152,7 +152,7 @@
     {
       "id": "mls-2-4",
       "kind": "multi-select",
-      "prompt": "Tap the two groups that have the same number of {items}.",
+      "prompt": "Tap the two groups that have the same number of blocks.",
       "options": [
         {
           "id": "a",
@@ -182,7 +182,7 @@
       ],
       "explanation": "Those two groups both have 6. 7 is one more.",
       "narration": {
-        "prompt": "Tap the two groups that have the same number of {items}."
+        "prompt": "Tap the two groups that have the same number of blocks."
       },
       "randomise": {
         "shuffleOptions": true
@@ -191,7 +191,7 @@
     {
       "id": "mls-2-5",
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer {items}?",
+      "prompt": "Which group has the fewest blocks?",
       "options": [
         {
           "id": "a",
@@ -218,7 +218,7 @@
       "correctId": "b",
       "explanation": "7 is fewer than 9 and 8. Compare the filled cells.",
       "narration": {
-        "prompt": "Which group has fewer {items}?"
+        "prompt": "Which group has the fewest blocks?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -254,7 +254,7 @@
     {
       "id": "mls-2-2",
       "kind": "multiple-choice",
-      "prompt": "Which group has more {items}?",
+      "prompt": "Which group has the most dots?",
       "options": [
         {
           "id": "a",
@@ -278,7 +278,7 @@
       "correctId": "b",
       "explanation": "5 is more than 3 and 4. Face size is not the cue.",
       "narration": {
-        "prompt": "Which group has more {items}?"
+        "prompt": "Which group has the most dots?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -379,7 +379,7 @@
     {
       "id": "mls-2-10",
       "kind": "ordered",
-      "prompt": "Put the groups of {items} in order, from fewest to most.",
+      "prompt": "Put the groups of blocks in order, from fewest to most.",
       "items": [
         {
           "id": "g4",
@@ -418,7 +418,7 @@
       ],
       "explanation": "The groups go 4, 5, 7, 9 from fewest to most.",
       "narration": {
-        "prompt": "Put the groups of {items} in order, from fewest to most."
+        "prompt": "Put the groups of blocks in order, from fewest to most."
       }
     }
   ]

@@ -250,7 +250,7 @@
         "two"
       ],
       "inputMode": "numeric",
-      "explanation": "3 and 2 make 5. Keep going 4, 5 from 3.",
+      "explanation": "3 and 2 make 5. The missing part completes the total.",
       "narration": {
         "prompt": "What do you need to add to 3 to make 5?"
       }

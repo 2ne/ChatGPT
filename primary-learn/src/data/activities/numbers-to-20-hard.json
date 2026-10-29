@@ -262,7 +262,7 @@
         "n19",
         "n20"
       ],
-      "explanation": "The numbers go 17, 18, 19, 20. Each one is one more than the last.",
+      "explanation": "The numbers go 17, 18, 19, 20. Each number is bigger than the one before.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }

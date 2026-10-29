@@ -81,7 +81,7 @@
     {
       "id": "c10-3-2",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many blocks can you see?",
       "tenFrame": {
         "count": 7,
         "item": "apple",
@@ -107,7 +107,7 @@
       "correctId": "a",
       "explanation": "5 and 2 more make 7. The first 5 is only one part.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -116,7 +116,7 @@
     {
       "id": "c10-3-3",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many blocks can you see?",
       "tenFrame": {
         "count": 9,
         "item": "frog",
@@ -142,7 +142,7 @@
       "correctId": "c",
       "explanation": "5 and 4 more make 9. Empty cells are not counted.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -187,7 +187,7 @@
         },
         {
           "id": "b",
-          "label": "8"
+          "label": "11"
         },
         {
           "id": "c",
@@ -197,7 +197,7 @@
       "correctId": "b",
       "explanation": "The run jumps. After 9 comes 10.",
       "narration": {
-        "prompt": "Which number is wrong? 6, 7, 8, 9, 8."
+        "prompt": "Which number is wrong? 6, 7, 8, 9, 11."
       },
       "randomise": {
         "shuffleOptions": true
@@ -207,7 +207,7 @@
         7,
         8,
         9,
-        8
+        11
       ]
     },
     {
@@ -290,7 +290,7 @@
     {
       "id": "c10-3-9",
       "kind": "multiple-choice",
-      "prompt": "Which group has 8 {items}?",
+      "prompt": "Which group has 8 blocks?",
       "options": [
         {
           "id": "a",
@@ -317,7 +317,7 @@
       "correctId": "c",
       "explanation": "8 leaves two empty cells. 10 is full.",
       "narration": {
-        "prompt": "Which group has 8 {items}?"
+        "prompt": "Which group has 8 blocks?"
       },
       "randomise": {
         "shuffleOptions": true

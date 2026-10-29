@@ -250,7 +250,7 @@
         "three"
       ],
       "inputMode": "numeric",
-      "explanation": "7 and 3 make 10. Keep going 8, 9, 10 from 7.",
+      "explanation": "7 and 3 make 10. The missing part completes the total.",
       "narration": {
         "prompt": "What do you need to add to 7 to make 10?"
       }

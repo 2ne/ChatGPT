@@ -61,7 +61,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group shows the smaller number?",
+      "prompt": "Which group shows the smallest number?",
       "options": [
         {
           "id": "0",
@@ -95,7 +95,7 @@
       },
       "id": "represent100-3-2",
       "narration": {
-        "prompt": "Which group shows the smaller number?"
+        "prompt": "Which group shows the smallest number?"
       }
     },
     {
@@ -335,7 +335,7 @@
         "2",
         "3"
       ],
-      "explanation": "The numbers go 93, 95, 96, 99. Each one is one more than the last.",
+      "explanation": "The numbers go 93, 95, 96, 99. Each number is bigger than the one before.",
       "id": "represent100-3-10",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."

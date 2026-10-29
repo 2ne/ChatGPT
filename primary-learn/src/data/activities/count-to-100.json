@@ -40,7 +40,8 @@
       },
       "acceptedAnswers": [
         "25",
-        "twenty-five"
+        "twenty-five",
+        "twenty five"
       ],
       "inputMode": "numeric"
     },
@@ -142,7 +143,8 @@
       },
       "acceptedAnswers": [
         "39",
-        "thirty-nine"
+        "thirty-nine",
+        "thirty nine"
       ],
       "inputMode": "numeric"
     },
@@ -153,7 +155,7 @@
       "options": [
         {
           "id": "a",
-          "label": "31"
+          "label": "28"
         },
         {
           "id": "b",
@@ -171,7 +173,7 @@
       "correctId": "a",
       "explanation": "The run jumps. After 30 comes 29.",
       "narration": {
-        "prompt": "Which number is wrong? 33, 32, 31, 30, 31."
+        "prompt": "Which number is wrong? 33, 32, 31, 30, 28."
       },
       "randomise": {
         "shuffleOptions": true
@@ -181,7 +183,7 @@
         32,
         31,
         30,
-        31
+        28
       ]
     },
     {

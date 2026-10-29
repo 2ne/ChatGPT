@@ -180,7 +180,7 @@
       "kind": "multiple-choice",
       "id": "shapes-3-5",
       "prompt": "Which shape is a triangle?",
-      "explanation": "3 straight sides make a triangle. Curved or 5 sides do not.",
+      "explanation": "A triangle has 3 straight sides. Turning or stretching it does not change that.",
       "narration": {
         "prompt": "Which shape is a triangle?"
       },
@@ -249,7 +249,7 @@
       ],
       "choices": [
         "Cube",
-        "Cuboid",
+        "Triangle",
         "Sphere",
         "Square"
       ],
@@ -335,7 +335,7 @@
       "kind": "match-pairs",
       "id": "shapes-3-9",
       "prompt": "Select the card that matches the shape.",
-      "explanation": "A turned square is still a square. A kite has unequal sides.",
+      "explanation": "A square has four equal sides and four square corners, even when it is turned.",
       "narration": {
         "prompt": "Select the card that matches the shape."
       },

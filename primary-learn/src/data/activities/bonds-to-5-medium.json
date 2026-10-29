@@ -110,7 +110,7 @@
     {
       "kind": "part-whole",
       "id": "b5m-pw-5",
-      "prompt": "5 and what make 5?",
+      "prompt": "What do you need to add to 5 to make 5?",
       "whole": 5,
       "parts": [
         5,
@@ -124,7 +124,7 @@
       ],
       "explanation": "5 and 0 make 5. One part is not the whole.",
       "narration": {
-        "prompt": "5 and what make 5?"
+        "prompt": "What do you need to add to 5 to make 5?"
       }
     },
     {
@@ -208,10 +208,10 @@
     {
       "kind": "fill-blank",
       "id": "b5m-reverse",
-      "prompt": "3 + 2 is the same family as 2 + 3. What is 3 + 2?",
+      "prompt": "What is 3 + 2?",
       "explanation": "3 + 2 and 2 + 3 both make 5.",
       "narration": {
-        "prompt": "Three plus two is the same family as two plus three. What is three plus two?"
+        "prompt": "What is 3 + 2?"
       },
       "acceptedAnswers": [
         "5",

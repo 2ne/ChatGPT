@@ -107,7 +107,7 @@
     {
       "id": "c10-2-3",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many blocks can you see?",
       "tenFrame": {
         "count": 10,
         "item": "apple",
@@ -133,7 +133,7 @@
       "correctId": "b",
       "explanation": "5 and 5 make 10. The first 5 is only one part.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -261,7 +261,7 @@
     {
       "id": "c10-2-9",
       "kind": "multiple-choice",
-      "prompt": "Which group has 9 {items}?",
+      "prompt": "Which group has 9 blocks?",
       "options": [
         {
           "id": "a",
@@ -288,7 +288,7 @@
       "correctId": "c",
       "explanation": "9 leaves one empty cell. 10 is full and 8 is two short.",
       "narration": {
-        "prompt": "Which group has 9 {items}?"
+        "prompt": "Which group has 9 blocks?"
       },
       "randomise": {
         "shuffleOptions": true

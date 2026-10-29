@@ -42,7 +42,7 @@
     {
       "id": "mls-3-1",
       "kind": "multiple-choice",
-      "prompt": "Which group has more {items}?",
+      "prompt": "Which group has the most blocks?",
       "options": [
         {
           "id": "a",
@@ -69,7 +69,7 @@
       "correctId": "b",
       "explanation": "8 is one more than 7. The frames are the same size.",
       "narration": {
-        "prompt": "Which group has more {items}?"
+        "prompt": "Which group has the most blocks?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -129,7 +129,7 @@
     {
       "id": "mls-3-3",
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer {items}?",
+      "prompt": "Which group has the fewest blocks?",
       "options": [
         {
           "id": "a",
@@ -154,9 +154,9 @@
         }
       ],
       "correctId": "c",
-      "explanation": "8 is fewer than 9 and 10. One empty cell is the clue.",
+      "explanation": "8 is fewer than 9 and 10. Two empty cells show that the group has 8.",
       "narration": {
-        "prompt": "Which group has fewer {items}?"
+        "prompt": "Which group has the fewest blocks?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -165,7 +165,7 @@
     {
       "id": "mls-3-4",
       "kind": "multi-select",
-      "prompt": "Tap the two groups that have the same number of {items}.",
+      "prompt": "Tap the two groups that have the same number of blocks.",
       "options": [
         {
           "id": "a",
@@ -195,7 +195,7 @@
       ],
       "explanation": "Those two groups both have 8. 9 is one more.",
       "narration": {
-        "prompt": "Tap the two groups that have the same number of {items}."
+        "prompt": "Tap the two groups that have the same number of blocks."
       },
       "randomise": {
         "shuffleOptions": true
@@ -204,7 +204,7 @@
     {
       "id": "mls-3-5",
       "kind": "ordered",
-      "prompt": "Put the groups of {items} in order, from fewest to most.",
+      "prompt": "Put the groups of blocks in order, from fewest to most.",
       "items": [
         {
           "id": "g4",
@@ -243,7 +243,7 @@
       ],
       "explanation": "The groups go 4, 6, 8, 10 from fewest to most.",
       "narration": {
-        "prompt": "Put the groups of {items} in order, from fewest to most."
+        "prompt": "Put the groups of blocks in order, from fewest to most."
       }
     },
     {
@@ -295,7 +295,7 @@
     {
       "id": "mls-3-2",
       "kind": "multiple-choice",
-      "prompt": "Which group has more {items}?",
+      "prompt": "Which group has the most dots?",
       "options": [
         {
           "id": "a",
@@ -319,7 +319,7 @@
       "correctId": "b",
       "explanation": "6 is more than 5 and 4. Face size is not the cue.",
       "narration": {
-        "prompt": "Which group has more {items}?"
+        "prompt": "Which group has the most dots?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -408,7 +408,7 @@
     {
       "id": "mls-3-10",
       "kind": "multiple-choice",
-      "prompt": "Which group has the same number of {items} as this frame?",
+      "prompt": "Which group has the same number of blocks as this frame?",
       "tenFrame": {
         "count": 6,
         "item": "strawberry"
@@ -436,7 +436,7 @@
       "correctId": "b",
       "explanation": "The frame has 6. The 6 dice matches. A 5 dice does not.",
       "narration": {
-        "prompt": "Which group has the same number of {items} as this frame?"
+        "prompt": "Which group has the same number of blocks as this frame?"
       },
       "randomise": {
         "shuffleOptions": true

@@ -72,7 +72,8 @@
       },
       "acceptedAnswers": [
         "22",
-        "twenty-two"
+        "twenty-two",
+        "twenty two"
       ],
       "inputMode": "numeric"
     },
@@ -119,7 +120,8 @@
       },
       "acceptedAnswers": [
         "26",
-        "twenty-six"
+        "twenty-six",
+        "twenty six"
       ],
       "inputMode": "numeric"
     },
@@ -133,7 +135,8 @@
       },
       "acceptedAnswers": [
         "29",
-        "twenty-nine"
+        "twenty-nine",
+        "twenty nine"
       ],
       "inputMode": "numeric"
     },
@@ -148,7 +151,7 @@
         },
         {
           "id": "b",
-          "label": "25"
+          "label": "28"
         },
         {
           "id": "c",
@@ -158,7 +161,7 @@
       "correctId": "b",
       "explanation": "The run jumps. After 26 comes 27.",
       "narration": {
-        "prompt": "Which number is wrong? 23, 24, 25, 26, 25."
+        "prompt": "Which number is wrong? 23, 24, 25, 26, 28."
       },
       "randomise": {
         "shuffleOptions": true
@@ -168,7 +171,7 @@
         24,
         25,
         26,
-        25
+        28
       ]
     },
     {

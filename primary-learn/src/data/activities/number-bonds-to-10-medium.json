@@ -241,7 +241,7 @@
         "seven"
       ],
       "inputMode": "numeric",
-      "explanation": "3 and 7 make 10. Keep going from 3 until 10.",
+      "explanation": "3 and 7 make 10. The missing part completes the total.",
       "narration": {
         "prompt": "Type the number that goes with 3 to make 10."
       }

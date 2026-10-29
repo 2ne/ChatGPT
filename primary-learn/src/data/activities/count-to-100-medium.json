@@ -140,7 +140,8 @@
       },
       "acceptedAnswers": [
         "69",
-        "sixty-nine"
+        "sixty-nine",
+        "sixty nine"
       ],
       "inputMode": "numeric"
     },
@@ -151,7 +152,7 @@
       "options": [
         {
           "id": "a",
-          "label": "78"
+          "label": "81"
         },
         {
           "id": "b",
@@ -169,7 +170,7 @@
       "correctId": "a",
       "explanation": "The run jumps. After 79 comes 80.",
       "narration": {
-        "prompt": "Which number is wrong? 76, 77, 78, 79, 78."
+        "prompt": "Which number is wrong? 76, 77, 78, 79, 81."
       },
       "randomise": {
         "shuffleOptions": true
@@ -179,7 +180,7 @@
         77,
         78,
         79,
-        78
+        81
       ]
     },
     {

@@ -45,7 +45,7 @@
     {
       "id": "s5-3-1",
       "kind": "fill-blank",
-      "prompt": "Type how many {items} you can see.",
+      "prompt": "Type how many dots you can see.",
       "visual": {
         "item": "star",
         "count": 1
@@ -54,7 +54,7 @@
       "flashMs": 600,
       "explanation": "The dice shows 1. One pip is not 2.",
       "narration": {
-        "prompt": "Type how many {items} you can see."
+        "prompt": "Type how many dots you can see."
       },
       "acceptedAnswers": [
         "1",
@@ -65,7 +65,7 @@
     {
       "id": "s5-3-2",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many dots can you see?",
       "visual": {
         "item": "apple",
         "count": 5
@@ -89,7 +89,7 @@
       "correctId": "b",
       "explanation": "The dice shows 5. The centre pip makes 5.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many dots can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -141,7 +141,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "3 and 2 make 5. Add both parts, not one part.",
+      "explanation": "3 and 2 make 5. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },
@@ -285,7 +285,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "5 were shown. Keep the picture in your head. The cup hides it.",
+      "explanation": "5 were shown. The cup hides the same group. None were added or taken away.",
       "narration": {
         "prompt": "How many {items} are under the cup?"
       },
@@ -360,7 +360,7 @@
         "three"
       ],
       "inputMode": "numeric",
-      "explanation": "2 and 1 make 3. Add both parts.",
+      "explanation": "2 and 1 make 3. Both parts count towards the total.",
       "narration": {
         "prompt": "Type how many blocks you can see."
       }

@@ -1,3 +1,4 @@
+import { OptionContent } from "./questions/ObjectGroup";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   ArrowLeft,
@@ -342,6 +343,11 @@ export function ActivityRunner({
 
   /* ——— Question / feedback ——— */
   const rightLabel = lastCorrect === false ? correctAnswerLabel(question) : null;
+  const rightOption = question.kind === "multiple-choice" || question.kind === "count-objects"
+    ? question.options.find(option => option.id === question.correctId)
+    : undefined;
+  const pictureAnswer = rightOption && !rightOption.label &&
+    (rightOption.tenFrame || rightOption.baseTen || rightOption.visual || rightOption.dice);
   const reveal = phase === "feedback" ? (lastCorrect ? "correct" : "incorrect") : null;
   const pipMood = phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy";
   const position = Math.min(index + 1, activeQueue.length);
@@ -517,7 +523,7 @@ export function ActivityRunner({
                               : copy.answerLabel}
                       </strong>
                     </p>
-                    <p>{rightLabel}</p>
+                    {pictureAnswer ? <OptionContent {...rightOption} /> : <p>{rightLabel}</p>}
                   </div>
                 ) : null}
                 <p className="feedback-why">

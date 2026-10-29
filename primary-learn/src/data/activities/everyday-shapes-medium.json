@@ -58,7 +58,7 @@
       "kind": "multiple-choice",
       "id": "shapes-2-2",
       "prompt": "Which shape is a square?",
-      "explanation": "A tilted square still has 4 equal sides. A kite does not.",
+      "explanation": "A tilted square still has 4 equal sides and 4 square corners.",
       "narration": {
         "prompt": "Which shape is a square?"
       },
@@ -247,7 +247,7 @@
       ],
       "choices": [
         "Cube",
-        "Cuboid",
+        "Triangle",
         "Sphere"
       ],
       "mode": "one-at-a-time"

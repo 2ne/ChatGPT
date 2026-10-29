@@ -66,7 +66,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "1 and 4 make 5. Add both parts.",
+      "explanation": "1 and 4 make 5. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },
@@ -193,7 +193,7 @@
     {
       "id": "m5-3-7",
       "kind": "multiple-choice",
-      "prompt": "Sam has 3 {items}. Now he has 4. How many did he get?",
+      "prompt": "Sam has 3 apples. Now he has 4. How many did he get?",
       "options": [
         {
           "id": "a",
@@ -211,7 +211,7 @@
       "correctId": "c",
       "explanation": "3 and 1 make 4. The new total is not how many he got.",
       "narration": {
-        "prompt": "Sam has 3 {items}. Now he has 4. How many did he get?"
+        "prompt": "Sam has 3 apples. Now he has 4. How many did he get?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -226,7 +226,7 @@
         "five"
       ],
       "inputMode": "numeric",
-      "explanation": "1 and 4 make 5. Add both parts.",
+      "explanation": "1 and 4 make 5. Both parts count towards the total.",
       "narration": {
         "prompt": "What do 1 and 4 make?"
       }

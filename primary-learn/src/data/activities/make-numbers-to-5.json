@@ -67,7 +67,7 @@
       ],
       "correctId": "a",
       "hint": "Add both colours.",
-      "explanation": "1 and 1 make 2. Add both parts, not one part.",
+      "explanation": "1 and 1 make 2. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },

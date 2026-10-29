@@ -91,7 +91,9 @@ export function describeVisual(visual: ObjectAsset): string {
 export function describeTenFrame(frame: TenFrameAsset): string {
   const noun = frame.count === 1 ? "block" : "blocks";
   const parts = frame.parts ? ` in two parts, ${frame.parts[0]} and ${frame.parts[1]}` : "";
-  const pairs = frame.pairs ? " grouped in pairs" : "";
+  const pairs = frame.pairs
+    ? `, arranged as ${Math.floor(frame.count / 2)} pairs${frame.count % 2 ? " and one block without a pair" : ""}`
+    : "";
   return `ten frame showing ${frame.count} ${noun}${parts}${pairs}`;
 }
 

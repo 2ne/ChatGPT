@@ -274,7 +274,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "10 and 7 make 17. Add both frames.",
+      "explanation": "10 and 7 make 17. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },

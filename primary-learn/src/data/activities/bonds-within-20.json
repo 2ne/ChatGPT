@@ -276,7 +276,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "10 and 8 make 18. Add both frames.",
+      "explanation": "10 and 8 make 18. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },

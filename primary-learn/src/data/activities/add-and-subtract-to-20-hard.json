@@ -29,7 +29,7 @@
       "kind": "fill-blank",
       "id": "add-and-subtract-to-20-3-1",
       "prompt": "Ben has some cars. 4 more come. Now he has 11. How many cars did he start with?",
-      "explanation": "7 and 4 make 11. Adding 4 to 11 is the new total, not the start.",
+      "explanation": "7 and 4 make 11. The starting group has 7 cars.",
       "narration": {
         "prompt": "Ben has some cars. Four more come. Now he has eleven. How many cars did he start with?"
       },
@@ -42,7 +42,7 @@
     {
       "kind": "multiple-choice",
       "id": "add-and-subtract-to-20-3-2",
-      "prompt": "Mia has 6 ducks. Then 5 more come. Then 3 go to Ben. How many ducks does Mia have now?",
+      "prompt": "Mia has 6 ducks. She gets 2 more. How many ducks does she have now?",
       "options": [
         {
           "id": "a",
@@ -62,12 +62,17 @@
         }
       ],
       "correctId": "a",
-      "explanation": "6 and 5 make 11. Then 11 take away 3 is 8.",
+      "explanation": "6 and 2 more make 8. The extra ducks are added to the starting group.",
       "narration": {
-        "prompt": "Mia has six ducks. Then five more come. Then three go to Ben. How many ducks does Mia have now?"
+        "prompt": "Mia has 6 ducks. She gets 2 more. How many ducks does she have now?"
       },
       "randomise": {
         "shuffleOptions": true
+      },
+      "visual": {
+        "item": "duck",
+        "count": 6,
+        "added": 2
       }
     },
     {
@@ -153,7 +158,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "9 and 6 make 15. Taking 6 from 9 is what is left, not the start.",
+      "explanation": "15 take away 6 is 9. The starting group has 15 apples.",
       "narration": {
         "prompt": "Sam had some apples. He gave six away. Now he has nine. How many did he start with?"
       },

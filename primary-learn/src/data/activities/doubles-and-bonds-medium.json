@@ -94,15 +94,15 @@
     {
       "id": "db-2-3",
       "kind": "build-set",
-      "prompt": "Share 10 {items} onto two plates. Make one plate.",
+      "prompt": "Share 10 {items} equally between two groups.",
       "visual": {
         "item": "frog",
         "count": 5
       },
       "bank": 10,
-      "explanation": "10 shared equally is 5 on each plate. Not all 10 on one.",
+      "explanation": "10 shared equally between two groups is 5 in each group.",
       "narration": {
-        "prompt": "Share 10 {items} onto two plates. Make one plate."
+        "prompt": "Share 10 {items} equally between two groups."
       }
     },
     {
@@ -148,7 +148,7 @@
     {
       "id": "db-2-6",
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the number.",
+      "prompt": "Select the card that matches the sum.",
       "pairs": [
         {
           "id": "p1",
@@ -164,7 +164,7 @@
       ],
       "explanation": "5 and 5 make 10. The two parts match.",
       "narration": {
-        "prompt": "Select the card that matches the number."
+        "prompt": "Select the card that matches the sum."
       }
     },
     {

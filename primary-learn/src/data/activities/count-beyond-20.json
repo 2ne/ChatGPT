@@ -81,32 +81,32 @@
     {
       "id": "c20-1-3",
       "kind": "multiple-choice",
-      "prompt": "Which number is left of 21?",
+      "prompt": "Which number is left of 22?",
       "hundredSquare": {
         "start": 11,
         "rows": 3,
-        "missing": 20,
-        "highlight": 21
+        "missing": 21,
+        "highlight": 22
       },
       "options": [
         {
           "id": "a",
-          "label": "21"
+          "label": "22"
         },
         {
           "id": "b",
-          "label": "20"
+          "label": "21"
         },
         {
           "id": "c",
-          "label": "22"
+          "label": "23"
         }
       ],
       "correctId": "b",
       "hint": "Left is one less.",
-      "explanation": "Left of 21 is 20. The ones go back to 0.",
+      "explanation": "21 is one less than 22, so it sits just to the left.",
       "narration": {
-        "prompt": "Which number is left of 21?"
+        "prompt": "Which number is left of 22?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -151,7 +151,7 @@
         },
         {
           "id": "b",
-          "label": "20"
+          "label": "23"
         },
         {
           "id": "c",
@@ -161,7 +161,7 @@
       "correctId": "b",
       "explanation": "The run jumps. After 21 comes 22.",
       "narration": {
-        "prompt": "Which number is wrong? 18, 19, 20, 21, 20."
+        "prompt": "Which number is wrong? 18, 19, 20, 21, 23."
       },
       "randomise": {
         "shuffleOptions": true
@@ -171,7 +171,7 @@
         19,
         20,
         21,
-        20
+        23
       ]
     },
     {

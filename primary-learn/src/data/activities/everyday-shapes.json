@@ -100,7 +100,7 @@
       "kind": "multiple-choice",
       "id": "shapes-1-3",
       "prompt": "Which shape is a square?",
-      "explanation": "A square has 4 equal sides. A kite is pointy at one end.",
+      "explanation": "A square has 4 equal sides and 4 square corners.",
       "narration": {
         "prompt": "Which shape is a square?"
       },
@@ -261,7 +261,7 @@
       "choices": [
         "Square",
         "Kite",
-        "Rectangle"
+        "Circle"
       ],
       "mode": "one-at-a-time"
     },

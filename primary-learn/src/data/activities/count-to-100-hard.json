@@ -140,7 +140,8 @@
       },
       "acceptedAnswers": [
         "99",
-        "ninety-nine"
+        "ninety-nine",
+        "ninety nine"
       ],
       "inputMode": "numeric"
     },
@@ -151,7 +152,7 @@
       "options": [
         {
           "id": "a",
-          "label": "100"
+          "label": "103"
         },
         {
           "id": "b",
@@ -169,7 +170,7 @@
       "correctId": "a",
       "explanation": "The run jumps. After 101 comes 102.",
       "narration": {
-        "prompt": "Which number is wrong? 98, 99, 100, 101, 100."
+        "prompt": "Which number is wrong? 98, 99, 100, 101, 103."
       },
       "randomise": {
         "shuffleOptions": true
@@ -179,7 +180,7 @@
         99,
         100,
         101,
-        100
+        103
       ]
     },
     {

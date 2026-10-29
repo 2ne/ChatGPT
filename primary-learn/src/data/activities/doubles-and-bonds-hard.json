@@ -43,99 +43,184 @@
       "id": "db-3-1",
       "kind": "multiple-choice",
       "prompt": "Two bags each have 4 apples. How many apples are there in all?",
-      "visual": { "item": "apple", "count": 4, "added": 4 },
+      "visual": {
+        "item": "apple",
+        "count": 4,
+        "added": 4
+      },
       "options": [
-        { "id": "a", "label": "8" },
-        { "id": "b", "label": "4" },
-        { "id": "c", "label": "10" }
+        {
+          "id": "a",
+          "label": "8"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "10"
+        }
       ],
       "correctId": "a",
       "explanation": "4 and 4 make 8. Each bag is one part, not the whole.",
-      "narration": { "prompt": "Two bags each have 4 apples. How many apples are there in all?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Two bags each have 4 apples. How many apples are there in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-3-2",
       "kind": "fill-blank",
       "prompt": "10 is double what number?",
-      "acceptedAnswers": ["5", "five"],
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
       "inputMode": "numeric",
       "explanation": "Double 5 is 10. Half of 10 is 5, not 10.",
-      "narration": { "prompt": "10 is double what number?" }
+      "narration": {
+        "prompt": "10 is double what number?"
+      }
     },
     {
       "id": "db-3-3",
       "kind": "part-whole",
       "prompt": "What do 3 and 3 make?",
       "whole": 6,
-      "parts": [3, 3],
+      "parts": [
+        3,
+        3
+      ],
       "missing": "whole",
-      "choices": [5, 6, 8],
+      "choices": [
+        5,
+        6,
+        8
+      ],
       "explanation": "3 and 3 make 6. Both parts are the same.",
-      "narration": { "prompt": "What do 3 and 3 make?" }
+      "narration": {
+        "prompt": "What do 3 and 3 make?"
+      }
     },
     {
       "id": "db-3-4",
       "kind": "part-whole",
       "prompt": "What do you need to add to 9 to make 10?",
       "whole": 10,
-      "parts": [9, 1],
+      "parts": [
+        9,
+        1
+      ],
       "missing": "right",
-      "choices": [1, 2, 9],
+      "choices": [
+        1,
+        2,
+        9
+      ],
       "explanation": "9 and 1 make 10. Not another 9.",
-      "narration": { "prompt": "What do you need to add to 9 to make 10?" }
+      "narration": {
+        "prompt": "What do you need to add to 9 to make 10?"
+      }
     },
     {
       "id": "db-3-5",
       "kind": "pick-pair",
       "prompt": "What two numbers make 10?",
       "total": 10,
-      "tiles": [1, 9, 4, 7],
+      "tiles": [
+        1,
+        9,
+        4,
+        7
+      ],
       "showDots": true,
       "explanation": "1 and 9 make 10. 4 and 7 do not.",
-      "narration": { "prompt": "What two numbers make 10?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "What two numbers make 10?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-3-6",
       "kind": "fill-blank",
       "prompt": "What is half of 8?",
-      "acceptedAnswers": ["4", "four"],
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
       "inputMode": "numeric",
       "explanation": "Half of 8 is 4. Each equal part is 4.",
-      "narration": { "prompt": "What is half of 8?" }
+      "narration": {
+        "prompt": "What is half of 8?"
+      }
     },
     {
       "id": "db-3-7",
       "kind": "ordered",
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
-        { "id": "n10", "label": "10" },
-        { "id": "n2", "label": "2" },
-        { "id": "n6", "label": "6" }
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n2",
+          "label": "2"
+        },
+        {
+          "id": "n6",
+          "label": "6"
+        }
       ],
-      "correctOrder": ["n2", "n6", "n10"],
+      "correctOrder": [
+        "n2",
+        "n6",
+        "n10"
+      ],
       "explanation": "The numbers go 2, 6, 10. Each one is a double.",
-      "narration": { "prompt": "Put the numbers in order, from smallest to biggest." }
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
     },
     {
       "id": "db-3-8",
       "kind": "multi-select",
       "prompt": "Tap every pair that is a double.",
       "options": [
-        { "id": "a", "label": "2 and 2" },
-        { "id": "b", "label": "3 and 4" },
-        { "id": "c", "label": "4 and 4" }
+        {
+          "id": "a",
+          "label": "2 and 2"
+        },
+        {
+          "id": "b",
+          "label": "3 and 4"
+        },
+        {
+          "id": "c",
+          "label": "4 and 4"
+        }
       ],
-      "correctIds": ["a", "c"],
+      "correctIds": [
+        "a",
+        "c"
+      ],
       "explanation": "2 and 2, and 4 and 4, are doubles. Both parts match.",
-      "narration": { "prompt": "Tap every pair that is a double." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Tap every pair that is a double."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "db-3-9",
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the number.",
+      "prompt": "Select the card that matches the sum.",
       "pairs": [
         {
           "id": "p1",
@@ -144,18 +229,30 @@
         }
       ],
       "mode": "one-at-a-time",
-      "choices": ["6", "8", "10", "7"],
+      "choices": [
+        "6",
+        "8",
+        "10",
+        "7"
+      ],
       "explanation": "4 and 4 make 8. Not 6 and not 10.",
-      "narration": { "prompt": "Select the card that matches the number." }
+      "narration": {
+        "prompt": "Select the card that matches the sum."
+      }
     },
     {
       "id": "db-3-10",
       "kind": "fill-blank",
       "prompt": "What is half of 4?",
-      "acceptedAnswers": ["2", "two"],
+      "acceptedAnswers": [
+        "2",
+        "two"
+      ],
       "inputMode": "numeric",
       "explanation": "Half of 4 is 2. Each equal part is 2.",
-      "narration": { "prompt": "What is half of 4?" }
+      "narration": {
+        "prompt": "What is half of 4?"
+      }
     }
   ]
 }

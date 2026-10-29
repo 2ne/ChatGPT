@@ -42,7 +42,7 @@
     {
       "id": "pat-3-1",
       "kind": "multi-select",
-      "prompt": "Tap every group that can be put into pairs with none left over.",
+      "prompt": "Select the two groups that have a pair for every block.",
       "options": [
         {
           "id": "a",
@@ -71,7 +71,7 @@
       ],
       "explanation": "4 and 6 make pairs with none left over. 7 is odd.",
       "narration": {
-        "prompt": "Tap every group that can be put into pairs with none left over."
+        "prompt": "Select the two groups that have a pair for every block."
       },
       "randomise": {
         "shuffleOptions": true
@@ -117,7 +117,7 @@
     {
       "id": "pat-3-4",
       "kind": "multiple-choice",
-      "prompt": "Which group has one left over after pairing?",
+      "prompt": "Which group has a block without a pair?",
       "options": [
         {
           "id": "a",
@@ -130,7 +130,7 @@
         {
           "id": "b",
           "tenFrame": {
-            "count": 1,
+            "count": 3,
             "item": "duck",
             "pairs": true
           }
@@ -145,9 +145,9 @@
         }
       ],
       "correctId": "b",
-      "explanation": "1 has no pair left over. That is odd.",
+      "explanation": "3 makes one pair with one block left over. That makes 3 an odd number.",
       "narration": {
-        "prompt": "Which group has one left over after pairing?"
+        "prompt": "Which group has a block without a pair?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -156,7 +156,7 @@
     {
       "id": "pat-3-5",
       "kind": "multiple-choice",
-      "prompt": "Can 9 be shared equally onto two plates?",
+      "prompt": "Can 9 blocks be shared equally between two groups?",
       "options": [
         {
           "id": "a",
@@ -170,7 +170,7 @@
       "correctId": "b",
       "explanation": "One group would have 5 and the other 4, so they would not be equal.",
       "narration": {
-        "prompt": "Can 9 be shared equally onto two plates?"
+        "prompt": "Can 9 blocks be shared equally between two groups?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -225,21 +225,21 @@
     {
       "id": "pat-3-8",
       "kind": "fill-blank",
-      "prompt": "8 is shared onto two plates. Type how many on each plate.",
+      "prompt": "8 is shared equally between two groups. How many are in each group?",
       "acceptedAnswers": [
         "4",
         "four"
       ],
       "inputMode": "numeric",
-      "explanation": "8 shared equally is 4 on each plate.",
+      "explanation": "8 shared equally is 4 in each group.",
       "narration": {
-        "prompt": "8 is shared onto two plates. Type how many on each plate."
+        "prompt": "8 is shared equally between two groups. How many are in each group?"
       }
     },
     {
       "id": "pat-3-9",
       "kind": "multiple-choice",
-      "prompt": "Which group has one left over after pairing?",
+      "prompt": "Which group has a block without a pair?",
       "options": [
         {
           "id": "a",
@@ -269,7 +269,7 @@
       "correctId": "c",
       "explanation": "7 makes 3 pairs and one left over. That is odd.",
       "narration": {
-        "prompt": "Which group has one left over after pairing?"
+        "prompt": "Which group has a block without a pair?"
       },
       "randomise": {
         "shuffleOptions": true

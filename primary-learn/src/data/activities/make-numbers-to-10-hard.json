@@ -66,7 +66,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "7 and 3 make 10. Add both parts.",
+      "explanation": "7 and 3 make 10. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },
@@ -193,7 +193,7 @@
     {
       "id": "m10-3-7",
       "kind": "multiple-choice",
-      "prompt": "Sam has 6 {items}. Now he has 9. How many did he get?",
+      "prompt": "Sam has 6 apples. Now he has 9. How many did he get?",
       "options": [
         {
           "id": "a",
@@ -211,7 +211,7 @@
       "correctId": "b",
       "explanation": "6 and 3 make 9. The new total is not how many he got.",
       "narration": {
-        "prompt": "Sam has 6 {items}. Now he has 9. How many did he get?"
+        "prompt": "Sam has 6 apples. Now he has 9. How many did he get?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -226,7 +226,7 @@
         "ten"
       ],
       "inputMode": "numeric",
-      "explanation": "2 and 8 make 10. Add both parts.",
+      "explanation": "2 and 8 make 10. Both parts count towards the total.",
       "narration": {
         "prompt": "What do 2 and 8 make?"
       }

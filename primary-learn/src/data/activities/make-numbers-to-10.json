@@ -103,7 +103,7 @@
       ],
       "correctId": "b",
       "hint": "Add both colours.",
-      "explanation": "4 and 3 make 7. Add both parts.",
+      "explanation": "4 and 3 make 7. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },

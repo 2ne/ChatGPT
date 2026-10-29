@@ -39,7 +39,8 @@
       },
       "acceptedAnswers": [
         "23",
-        "twenty-three"
+        "twenty-three",
+        "twenty three"
       ],
       "inputMode": "numeric"
     },
@@ -147,7 +148,7 @@
         },
         {
           "id": "b",
-          "label": "22"
+          "label": "19"
         },
         {
           "id": "c",
@@ -157,7 +158,7 @@
       "correctId": "b",
       "explanation": "The run jumps. After 21 comes 20.",
       "narration": {
-        "prompt": "Which number is wrong? 24, 23, 22, 21, 22."
+        "prompt": "Which number is wrong? 24, 23, 22, 21, 19."
       },
       "randomise": {
         "shuffleOptions": true
@@ -167,7 +168,7 @@
         23,
         22,
         21,
-        22
+        19
       ]
     },
     {

@@ -272,7 +272,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "10 and 9 make 19. Add both frames.",
+      "explanation": "10 and 9 make 19. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },

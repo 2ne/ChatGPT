@@ -96,7 +96,7 @@
     {
       "id": "db-1-3",
       "kind": "match-pairs",
-      "prompt": "Select the card that matches the number.",
+      "prompt": "Select the card that matches the sum.",
       "pairs": [
         {
           "id": "p1",
@@ -112,22 +112,22 @@
       ],
       "explanation": "2 and 2 make 4. The two parts match.",
       "narration": {
-        "prompt": "Select the card that matches the number."
+        "prompt": "Select the card that matches the sum."
       }
     },
     {
       "id": "db-1-4",
       "kind": "build-set",
-      "prompt": "Share 8 {items} onto two plates. Make one plate.",
+      "prompt": "Share 8 {items} equally between two groups.",
       "visual": {
         "item": "apple",
         "count": 4
       },
       "bank": 8,
       "hint": "Both plates get the same number.",
-      "explanation": "8 shared equally is 4 on each plate. Not all 8 on one.",
+      "explanation": "8 shared equally between two groups is 4 in each group.",
       "narration": {
-        "prompt": "Share 8 {items} onto two plates. Make one plate."
+        "prompt": "Share 8 {items} equally between two groups."
       }
     },
     {

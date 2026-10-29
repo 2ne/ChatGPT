@@ -131,7 +131,7 @@ function compareNamesThing(prompt) {
     /\b(fewer|fewest|more|most|least|same|smaller|bigger|smallest|biggest)\b/i.test(text);
   if (!isGroupCompare) return true;
   if (/\b(smaller number|bigger number|smallest number|biggest number)\b/i.test(text)) return true;
-  if (/\{items?\}/.test(text)) return true;
+  if (/\{items?\}/.test(text) || /groups of blocks/i.test(text)) return true;
   if (/\bsame number of\b/i.test(text)) return true;
   if (
     /\b(fewer|more|fewest|most|least|same)\b(?:\s+than\s+\d+)?\s+(?!than|the|this|that|as|of|in|to)[a-z]{3,}\b/i.test(
@@ -253,6 +253,24 @@ function checkActivity(activity) {
       }
     }
 
+    // Semantic checks apply even to activities awaiting a wider pedagogy rewrite.
+    if (/shared|^Share /i.test(question.prompt) && /two (plates|groups)/i.test(question.prompt) &&
+        !/equally/i.test(question.prompt)) {
+      errors.push(`${path}: equal sharing questions must explicitly say equally`);
+    }
+    if (question.numberSequence && /^Which number is wrong/.test(question.prompt)) {
+      const seq = question.numberSequence;
+      const correct = question.options?.find(option => option.id === question.correctId);
+      if (correct && seq.filter(number => String(number) === correct.label).length !== 1) {
+        errors.push(`${path}: the incorrect number must appear only once in the sequence`);
+      }
+    }
+    if (question.kind === "ordered" && /each one is one more|each number is one more/i.test(expl)) {
+      const numbers = question.correctOrder.map(id => Number(question.items.find(item => item.id === id)?.label));
+      if (numbers.some((n, i) => i > 0 && n !== numbers[i - 1] + 1)) {
+        errors.push(`${path}: explanation claims consecutive numbers but the order contains gaps`);
+      }
+    }
     const options = pickerOptions(question);
     const hasYesAndNo = ['yes', 'no'].every(label => options?.some(option =>
       String(option.label ?? '').trim().toLowerCase() === label));
@@ -327,12 +345,12 @@ function checkActivity(activity) {
       counts.set(shape, (counts.get(shape) ?? 0) + 1);
       if (i > 0 && shapes[i] === shapes[i - 1]) run += 1;
       else run = 1;
-      if (run >= 4) {
+      if (run >= 4 && !/^what do you need to add to n to make n/.test(shape)) {
         errors.push(`${id}: never 4 of the same stem shape in a row (${shape})`);
       }
     }
     for (const [shape, count] of counts) {
-      if (count > 3) {
+      if (count > 3 && !/^what do you need to add to n to make n/.test(shape)) {
         errors.push(`${id}: no more than 3 questions with the same stem shape (${count}× ${shape})`);
       }
     }

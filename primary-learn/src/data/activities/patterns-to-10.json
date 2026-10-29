@@ -42,7 +42,7 @@
     {
       "id": "pat-1-1",
       "kind": "multiple-choice",
-      "prompt": "Which group can be put into pairs with none left over?",
+      "prompt": "Which group has a pair for every block?",
       "options": [
         {
           "id": "a",
@@ -73,7 +73,7 @@
       "hint": "A pair is two, one above the other.",
       "explanation": "2 makes 1 pair with none left over.",
       "narration": {
-        "prompt": "Which group can be put into pairs with none left over?"
+        "prompt": "Which group has a pair for every block?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -115,11 +115,11 @@
     {
       "id": "pat-1-3",
       "kind": "build-set",
-      "prompt": "Share 4 {items} onto two plates. Make one plate.",
+      "prompt": "Share 4 {items} equally between two groups.",
       "hint": "Share them equally.",
-      "explanation": "4 shared equally is 2 on each plate. Not all 4 on one.",
+      "explanation": "6 shared equally between two groups is 2 in each group.",
       "narration": {
-        "prompt": "Share 4 {items} onto two plates. Make one plate."
+        "prompt": "Share 4 {items} equally between two groups."
       },
       "visual": {
         "item": "frog",
@@ -162,7 +162,7 @@
     {
       "id": "pat-1-5",
       "kind": "multiple-choice",
-      "prompt": "Which group has one left over after pairing?",
+      "prompt": "Which group has a block without a pair?",
       "options": [
         {
           "id": "a",
@@ -192,7 +192,7 @@
       "correctId": "b",
       "explanation": "3 makes 1 pair and one left over. That is odd.",
       "narration": {
-        "prompt": "Which group has one left over after pairing?"
+        "prompt": "Which group has a block without a pair?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -201,10 +201,10 @@
     {
       "id": "pat-1-6",
       "kind": "build-set",
-      "prompt": "Share 6 {items} onto two plates. Make one plate.",
-      "explanation": "6 shared equally is 3 on each plate. Not all 6 on one.",
+      "prompt": "Share 6 {items} equally between two groups.",
+      "explanation": "8 shared equally between two groups is 3 in each group.",
       "narration": {
-        "prompt": "Share 6 {items} onto two plates. Make one plate."
+        "prompt": "Share 6 {items} equally between two groups."
       },
       "visual": {
         "item": "car",
@@ -215,7 +215,7 @@
     {
       "id": "pat-1-7",
       "kind": "multiple-choice",
-      "prompt": "Which group has one left over after pairing?",
+      "prompt": "Which group has a block without a pair?",
       "options": [
         {
           "id": "a",
@@ -245,7 +245,7 @@
       "correctId": "c",
       "explanation": "5 makes 2 pairs and one left over. That is odd.",
       "narration": {
-        "prompt": "Which group has one left over after pairing?"
+        "prompt": "Which group has a block without a pair?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -273,7 +273,7 @@
     {
       "id": "pat-1-9",
       "kind": "fill-blank",
-      "prompt": "8 is shared onto two plates. How many on each plate?",
+      "prompt": "8 is shared equally between two groups. How many are in each group?",
       "tenFrame": {
         "count": 8,
         "item": "frog",
@@ -282,9 +282,9 @@
           4
         ]
       },
-      "explanation": "8 shared equally is 4 on each plate. Not all 8 on one.",
+      "explanation": "8 shared equally is 4 in each group. Not all 8 in one group.",
       "narration": {
-        "prompt": "8 is shared onto two plates. How many on each plate?"
+        "prompt": "8 is shared equally between two groups. How many are in each group?"
       },
       "acceptedAnswers": [
         "4",

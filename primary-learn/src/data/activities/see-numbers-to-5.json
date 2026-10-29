@@ -45,7 +45,7 @@
     {
       "id": "s5-1-1",
       "kind": "fill-blank",
-      "prompt": "Type how many {items} you can see.",
+      "prompt": "Type how many dots you can see.",
       "visual": {
         "item": "star",
         "count": 2
@@ -55,7 +55,7 @@
       "hint": "Just look. Do not count one by one.",
       "explanation": "The dice shows 2. The pips make a pattern. No need to go one by one.",
       "narration": {
-        "prompt": "Type how many {items} you can see."
+        "prompt": "Type how many dots you can see."
       },
       "acceptedAnswers": [
         "2",
@@ -66,7 +66,7 @@
     {
       "id": "s5-1-2",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
+      "prompt": "How many dots can you see?",
       "visual": {
         "item": "apple",
         "count": 4
@@ -91,7 +91,7 @@
       "hint": "Just look.",
       "explanation": "The dice shows 4. The corners make 4, not 3.",
       "narration": {
-        "prompt": "How many {items} can you see?"
+        "prompt": "How many dots can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -144,7 +144,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "2 and 3 make 5. Add both parts, not one part.",
+      "explanation": "2 and 3 make 5. Both parts count towards the total.",
       "narration": {
         "prompt": "How many blocks can you see in all?"
       },
@@ -282,7 +282,7 @@
         }
       ],
       "correctId": "b",
-      "explanation": "3 were shown. Keep the picture in your head. The cup hides it.",
+      "explanation": "3 were shown. The cup hides the same group. None were added or taken away.",
       "narration": {
         "prompt": "How many {items} are under the cup?"
       },

@@ -61,7 +61,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which group has fewer than 12 apples?",
+      "prompt": "Which group has the fewest blocks?",
       "options": [
         {
           "id": "0",
@@ -93,13 +93,13 @@
         }
       ],
       "correctId": "0",
-      "explanation": "10 is less than 12.",
+      "explanation": "10 is fewer than 11, 12 and 13.",
       "randomise": {
         "shuffleOptions": true
       },
       "id": "represent100-2-2",
       "narration": {
-        "prompt": "Which group has fewer than 12 apples?"
+        "prompt": "Which group has the fewest blocks?"
       }
     },
     {
@@ -356,7 +356,7 @@
         "2",
         "3"
       ],
-      "explanation": "The numbers go 53, 55, 56, 59. Each one is one more than the last.",
+      "explanation": "The numbers go 53, 55, 56, 59. Each number is bigger than the one before.",
       "id": "represent100-2-10",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."

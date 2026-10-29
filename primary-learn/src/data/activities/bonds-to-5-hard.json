@@ -180,7 +180,7 @@
     {
       "kind": "multiple-choice",
       "id": "b5h-first-addend",
-      "prompt": "2 + 3 and 3 + 2 make the same total. What is 5 take away 2?",
+      "prompt": "Which sum makes 5?",
       "part": 4,
       "total": 5,
       "gap": "left",
@@ -191,20 +191,20 @@
       "options": [
         {
           "id": "a",
-          "label": "3"
+          "label": "4 + 1"
         },
         {
           "id": "b",
-          "label": "2"
+          "label": "2 + 2"
         },
         {
           "id": "c",
-          "label": "4"
+          "label": "3 + 3"
         }
       ],
-      "explanation": "2 + 3, 3 + 2 and 5 take away 2 are one family.",
+      "explanation": "4 and 1 make 5. Both parts count towards the total.",
       "narration": {
-        "prompt": "Two plus three and three plus two make the same total. What is five take away two?"
+        "prompt": "Which sum makes 5?"
       },
       "correctId": "a"
     },
