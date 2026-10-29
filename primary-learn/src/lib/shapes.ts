@@ -20,7 +20,7 @@ export const SHAPE_VARIANTS: Record<ShapeName, readonly string[]> = {
   dice: ["standard"],
 };
 
-export const THREE_SOLID_NAMES = ["cube", "cuboid", "pyramid", "sphere", "dice"] as const;
+export const THREE_SOLID_NAMES = ["cube", "cuboid", "pyramid", "sphere", "dice", "ball"] as const;
 
 /** Everyday object pictures and the solid they really are. */
 export const REAL_OBJECT_SOLID: Record<string, string> = {

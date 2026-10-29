@@ -35,12 +35,28 @@ function model(shape: ShapeAsset) {
     roughness: 0.28,
     clearcoat: 0.65,
     clearcoatRoughness: 0.2,
-    flatShading: shape.name !== "sphere",
+    flatShading: shape.name !== "sphere" && shape.name !== "ball",
   });
   const group = new THREE.Group();
   group.add(new THREE.Mesh(geometry, material));
-  if (shape.name !== "sphere") {
+  if (shape.name !== "sphere" && shape.name !== "ball") {
     group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: "#343568" })));
+  }
+  if (shape.name === "ball") {
+    // Surface seams identify a real ball while lighting shows its curved surface.
+    for (const axis of ["x", "y", "z"] as const) {
+      const points = Array.from({ length: 128 }, (_, index) => {
+        const angle = index / 128 * Math.PI * 2;
+        return new THREE.Vector3(Math.cos(angle) * 0.864, Math.sin(angle) * 0.864, 0);
+      });
+      const seam = new THREE.LineLoop(
+        new THREE.BufferGeometry().setFromPoints(points),
+        new THREE.LineBasicMaterial({ color: "#343568" }),
+      );
+      if (axis === "x") seam.rotation.x = Math.PI / 2;
+      if (axis === "y") seam.rotation.y = Math.PI / 2;
+      group.add(seam);
+    }
   }
   if (shape.name === "dice") {
     // Opposite faces total seven. Each pip sits just above its square face.

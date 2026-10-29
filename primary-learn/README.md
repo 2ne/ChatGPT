@@ -25,6 +25,7 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 ## What it does
 
 - Everyday shape questions render dice as Three.js cubes with pips on all six faces, using the same lighting and outlined edges as the other 3D shapes.
+- Balls use a shaded Three.js sphere with surface seams, making them visibly different from flat circles.
 - Asks for a child’s name and woodland avatar on first visit
 - Opens question one immediately after difficulty selection. The header shows the activity title, difficulty and question count. Pip and stars appear on completion.
 - Shows the maths path as a winding road of numbered levels (not a free-choice list)
