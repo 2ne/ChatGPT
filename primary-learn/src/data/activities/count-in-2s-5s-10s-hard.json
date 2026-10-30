@@ -1,7 +1,7 @@
 {
   "id": "count-in-2s-5s-10s-hard",
   "title": "Count in 2s, 5s and 10s",
-  "summary": "Mix twos, fives and tens, count back, and spot a number you would not say.",
+  "summary": "Name the step, count back, spot a number you would not say, and order backwards.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 spots 16 in a fives count. Q3 counts 5 children holding up one hand each. Q4 reads 12 on a number line with no objects. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to a tens count. Q8 continues 25, 20, 15 counting back in fives. Q9 fills 70 on a hundred square. Q10 orders 20, 30, 40, 50.",
-    "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
+    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 spots 16 in a fives count. Q3 counts 5 children holding up one hand each. Q4 names the step in 15, 20, 25, 30. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to the word forty. Q8 continues 25, 20, 15 counting back in fives. Q9 fills 70 on a hundred square. Q10 orders 50, 45, 40, 35 from biggest to smallest.",
+    "versus": "Easy uses pairs and tens pictures up to 50, with hops on the number line. Medium adds fives, a twos gap, a tens pick and higher 5s counts. Hard names the step size, counts back, spots a number you would not say, and orders from biggest to smallest. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "count-in-2s",
@@ -48,7 +48,7 @@
     {
       "id": "c2510-3-2",
       "kind": "multiple-choice",
-      "prompt": "Which number would not be said if you count in fives?",
+      "prompt": "Which number would you not say when you count in fives?",
       "numberSequence": [
         5,
         10,
@@ -77,7 +77,7 @@
       "correctId": "d",
       "explanation": "16 is not a five. You say 5, 10, 15, 20.",
       "narration": {
-        "prompt": "Which number would not be said if you count in fives? Five, ten, fifteen, sixteen, twenty."
+        "prompt": "Which number would you not say when you count in fives?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -107,35 +107,35 @@
     {
       "id": "c2510-3-4",
       "kind": "multiple-choice",
-      "prompt": "Count in twos from 0. Which number sits on the mark?",
-      "numberLine": {
-        "start": 0,
-        "end": 20,
-        "scale": "ones",
-        "marked": 12
-      },
+      "prompt": "What is this count going up in?",
+      "numberSequence": [
+        15,
+        20,
+        25,
+        30
+      ],
       "options": [
         {
           "id": "a",
-          "label": "12"
+          "label": "1"
         },
         {
           "id": "b",
-          "label": "13"
+          "label": "2"
         },
         {
           "id": "c",
-          "label": "14"
+          "label": "5"
         },
         {
           "id": "d",
-          "label": "16"
+          "label": "10"
         }
       ],
-      "correctId": "a",
-      "explanation": "The mark is 12. Count 2, 4, 6, 8, 10, 12.",
+      "correctId": "c",
+      "explanation": "The count goes up in 5s. 15, 20, 25, 30. Not 1s or 10s.",
       "narration": {
-        "prompt": "Count in twos from 0. Which number sits on the mark?"
+        "prompt": "What is this count going up in? Fifteen, twenty, twenty-five, thirty."
       },
       "randomise": {
         "shuffleOptions": true
@@ -221,16 +221,16 @@
         {
           "id": "p1",
           "left": "40",
-          "right": "10, 20, 30, 40"
+          "right": "forty"
         }
       ],
       "choices": [
-        "10, 20, 30, 40",
-        "10, 20, 30",
-        "20, 30, 40, 50",
-        "2, 4, 6, 8"
+        "forty",
+        "fourteen",
+        "four",
+        "fifty"
       ],
-      "explanation": "40 is 10, 20, 30, 40. Not twos or an extra ten.",
+      "explanation": "40 is forty. Not fourteen, four or fifty.",
       "narration": {
         "prompt": "Select the card that matches the number."
       }
@@ -268,22 +268,22 @@
       "options": [
         {
           "id": "a",
-          "label": "60"
+          "label": "70"
         },
         {
           "id": "b",
-          "label": "69"
+          "label": "71"
         },
         {
           "id": "c",
-          "label": "70"
+          "label": "75"
         },
         {
           "id": "d",
           "label": "80"
         }
       ],
-      "correctId": "c",
+      "correctId": "a",
       "explanation": "The empty cell is 70. Count 50, 60, 70 down the tens.",
       "narration": {
         "prompt": "Count in tens. Which number goes in the empty cell?"
@@ -295,34 +295,34 @@
     {
       "id": "c2510-3-10",
       "kind": "ordered",
-      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "prompt": "Put the numbers in order, from biggest to smallest.",
       "items": [
-        {
-          "id": "n50",
-          "label": "50"
-        },
-        {
-          "id": "n20",
-          "label": "20"
-        },
         {
           "id": "n40",
           "label": "40"
         },
         {
-          "id": "n30",
-          "label": "30"
+          "id": "n50",
+          "label": "50"
+        },
+        {
+          "id": "n35",
+          "label": "35"
+        },
+        {
+          "id": "n45",
+          "label": "45"
         }
       ],
       "correctOrder": [
-        "n20",
-        "n30",
+        "n50",
+        "n45",
         "n40",
-        "n50"
+        "n35"
       ],
-      "explanation": "The numbers go 20, 30, 40, 50. Each jump is 10.",
+      "explanation": "The numbers go 50, 45, 40, 35. Each jump is 5.",
       "narration": {
-        "prompt": "Put the numbers in order, from smallest to biggest."
+        "prompt": "Put the numbers in order, from biggest to smallest."
       }
     }
   ]

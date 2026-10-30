@@ -706,11 +706,32 @@ function parseQuestion(value: unknown, path: string): Question {
       if (letters.size !== 4) fail(path, "number line flags need A, B, C and D");
     }
     if (marked == null && !flags) fail(path, "number line needs a marked tick or flags");
+    let jumps: import("../types/activity").NumberLineJumps | undefined;
+    if (n.jumps != null) {
+      if (flags) fail(path, "jumps cannot mix with flags");
+      if (marked == null) fail(path, "jumps need a marked tick");
+      if (!isRecord(n.jumps)) fail(path, "jumps must be { step, from? }");
+      const step = n.jumps.step;
+      if (step !== 2 && step !== 5 && step !== 10) fail(path, "jumps.step must be 2, 5 or 10");
+      let from = 0;
+      if (n.jumps.from != null) {
+        from = expectNumber(n.jumps, "from", `${path}.numberLine.jumps`);
+        if (!Number.isInteger(from) || from < start || from > end) {
+          fail(path, "jumps.from must sit on the line");
+        }
+      }
+      if (marked <= from) fail(path, "marked must be after jumps.from");
+      if ((marked - from) % step !== 0) fail(path, "marked must be a multiple of jumps.step from jumps.from");
+      if (marked === start || marked === end) {
+        fail(path, "jumps must not mark 0 or the end. Those are the only labels");
+      }
+      jumps = n.jumps.from == null ? { step } : { step, from };
+    }
     if (kind !== "multiple-choice" && kind !== "fill-blank") fail(path, "number lines use choice or fill-blank questions");
     if (visual || extras || layout || flashMs != null || tenFrame || baseTen || shape || turn || position) {
       fail(path, "number lines cannot mix with other stem pictures");
     }
-    numberLine = { start, end, scale, marked, flags };
+    numberLine = { start, end, scale, marked, flags, jumps };
   }
   let hundredSquare: import("../types/activity").HundredSquareAsset | undefined;
   if (value.hundredSquare != null) {

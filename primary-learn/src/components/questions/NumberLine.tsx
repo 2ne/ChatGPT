@@ -18,6 +18,19 @@ function tickKind(value: number, hundred: boolean, labelEvery: number): "major" 
   return value % labelEvery === 0 ? "major" : "minor";
 }
 
+function hopStarts(from: number, step: number, marked: number): number[] {
+  const starts: number[] = [];
+  for (let value = from; value < marked; value += step) starts.push(value);
+  return starts;
+}
+
+function lineAria(line: NumberLineAsset): string {
+  const base = describeNumberLine(line);
+  if (!line.jumps || line.marked == null) return base;
+  const from = line.jumps.from ?? 0;
+  return `${base} Hops of ${line.jumps.step} from ${from} to the mark.`;
+}
+
 export function NumberLine({ line }: { line: NumberLineAsset }) {
   const view = visibleNumberLine(line);
   const hundred = line.start === 0 && line.end === 100;
@@ -26,15 +39,20 @@ export function NumberLine({ line }: { line: NumberLineAsset }) {
   for (let n = view.start; n <= view.end; n += 1) ticks.push(n);
   const flags = line.flags ?? [];
   const marked = line.marked;
+  const jumps = line.jumps;
+  const hopFrom = jumps?.from ?? 0;
+  const hops =
+    jumps && marked != null ? hopStarts(hopFrom, jumps.step, marked) : [];
   const tall = flags.length > 0;
-  const height = tall ? 132 : 112;
-  const axisY = tall ? 68 : 52;
+  const withHops = hops.length > 0;
+  const height = tall ? 132 : withHops ? 128 : 112;
+  const axisY = tall ? 68 : withHops ? 64 : 52;
   return (
     <svg
       className="number-line"
       viewBox={`0 0 ${WIDTH} ${height}`}
       role="img"
-      aria-label={describeNumberLine(line)}
+      aria-label={lineAria(line)}
     >
       <line
         x1={PAD}
@@ -45,12 +63,26 @@ export function NumberLine({ line }: { line: NumberLineAsset }) {
         strokeWidth="3"
         strokeLinecap="round"
       />
+      {hops.map((start) => {
+        const x1 = xAt(start, view.start, view.end);
+        const x2 = xAt(start + (jumps?.step ?? 0), view.start, view.end);
+        const mid = (x1 + x2) / 2;
+        return (
+          <path
+            key={`hop-${start}`}
+            className="number-line-hop"
+            d={`M ${x1} ${axisY} Q ${mid} ${axisY - 18} ${x2} ${axisY}`}
+          />
+        );
+      })}
       {ticks.map((value) => {
         const x = xAt(value, view.start, view.end);
         const isMark = marked === value;
         const kind = tickKind(value, hundred, labelEvery);
         const up = isMark ? 10 : kind === "major" ? 8 : kind === "mid" ? 6 : 4;
-        const showLabel = kind === "major" && marked !== value;
+        const showLabel = withHops
+          ? (value === view.start || value === view.end) && value !== marked
+          : kind === "major" && marked !== value;
         return (
           <g key={`t-${value}`}>
             <line
@@ -92,14 +124,14 @@ export function NumberLine({ line }: { line: NumberLineAsset }) {
           <text
             className="number-line-mark"
             x={xAt(marked, view.start, view.end)}
-            y={axisY - 28}
+            y={withHops ? axisY - 36 : axisY - 28}
             textAnchor="middle"
             fill="var(--primary-deep)"
           >
             ?
           </text>
           <path
-            d={`M ${xAt(marked, view.start, view.end) - 6} ${axisY - 20} L ${xAt(marked, view.start, view.end) + 6} ${axisY - 20} L ${xAt(marked, view.start, view.end)} ${axisY - 12} Z`}
+            d={`M ${xAt(marked, view.start, view.end) - 6} ${withHops ? axisY - 28 : axisY - 20} L ${xAt(marked, view.start, view.end) + 6} ${withHops ? axisY - 28 : axisY - 20} L ${xAt(marked, view.start, view.end)} ${withHops ? axisY - 20 : axisY - 12} Z`}
             fill="var(--primary)"
           />
         </g>

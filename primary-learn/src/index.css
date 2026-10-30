@@ -1937,6 +1937,14 @@ button.object-token {
   font-weight: 800;
 }
 
+.number-line-hop {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-opacity: 0.45;
+  stroke-linecap: round;
+}
+
 .hundred-square {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));

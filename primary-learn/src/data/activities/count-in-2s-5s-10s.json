@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts 6 ducks in twos. Child thinks in pairs, not one by one. Q2 counts 10 frame blocks in twos. Q3 continues 2, 4, 6 by adding 2. Q4 finds 6 in a twos gap. Q5 matches 10 to a ten frame. Q6 lands on 8 after jumps of 2 on a number line. Q7 reads 5 tens as 50. Q8 fills 40 in a tens column. Q9 picks two numbers from a tens count. Q10 orders 10, 20, 30, 40.",
-    "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
+    "within": "Q1 counts 6 ducks in twos. Child thinks in pairs, not one by one. Q2 counts 10 frame blocks in twos. Q3 continues 2, 4, 6 by adding 2. Q4 finds 6 in a twos gap. Q5 matches 8 to a pairs frame. Q6 counts hops of 2 to the mark at 8. Q7 reads 5 tens as 50. Q8 fills 40 in a tens column. Q9 picks two numbers from a tens count. Q10 orders 10, 20, 30, 40.",
+    "versus": "Easy uses pairs and tens pictures up to 50, with hops on the number line. Medium adds fives, a twos gap, a tens pick and higher 5s counts. Hard names the step size, counts back, spots a number you would not say, and orders from biggest to smallest. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "count-in-2s",
@@ -177,10 +177,10 @@
       "pairs": [
         {
           "id": "p1",
-          "left": "10",
+          "left": "8",
           "right": {
             "tenFrame": {
-              "count": 10,
+              "count": 8,
               "item": "star",
               "pairs": true
             }
@@ -188,13 +188,6 @@
         }
       ],
       "choices": [
-        {
-          "tenFrame": {
-            "count": 10,
-            "item": "star",
-            "pairs": true
-          }
-        },
         {
           "tenFrame": {
             "count": 8,
@@ -208,9 +201,16 @@
             "item": "star",
             "pairs": true
           }
+        },
+        {
+          "tenFrame": {
+            "count": 10,
+            "item": "star",
+            "pairs": true
+          }
         }
       ],
-      "explanation": "10 matches the full ten frame. Not 8 or 6.",
+      "explanation": "8 is 4 pairs. Not 6 or a full ten.",
       "narration": {
         "prompt": "Select the card that matches the number."
       }
@@ -223,7 +223,11 @@
         "start": 0,
         "end": 20,
         "scale": "ones",
-        "marked": 8
+        "marked": 8,
+        "jumps": {
+          "step": 2,
+          "from": 0
+        }
       },
       "explanation": "The mark is 8. Count 2, 4, 6, 8 from 0.",
       "narration": {

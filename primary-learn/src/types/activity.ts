@@ -133,12 +133,20 @@ export type NumberLineFlag = {
   at: number;
 };
 
+/** Skip-count hops on a marked line. Omit to keep the ordinary labelled line. */
+export type NumberLineJumps = {
+  step: 2 | 5 | 10;
+  /** Where the hops start. Default 0. */
+  from?: number;
+};
+
 export type NumberLineAsset = {
   start: number;
   end: number;
   scale?: NumberLineScale;
   marked?: number;
   flags?: NumberLineFlag[];
+  jumps?: NumberLineJumps;
 };
 
 /**

@@ -1,7 +1,7 @@
 {
   "id": "count-in-2s-5s-10s-medium",
   "title": "Count in 2s, 5s and 10s",
-  "summary": "Count in fives, continue a count, find a missing number and count groups.",
+  "summary": "Count in fives, twos and tens. Continue a count, find a missing number and count groups.",
   "subject": "maths",
   "type": "counting",
   "yearGroups": [
@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts 15 blocks in fives on a ten frame. Child thinks 5, 10, 15. Q2 continues 5, 10, 15. Q3 finds 15 in a fives gap. Q4 counts groups of 5 in 20 blocks. Q5 fills 45 on a hundred square counting in fives. Q6 lands on 15 after jumps of 5. Q7 matches 20 to a fives count. Q8 picks two fives-count numbers. Q9 counts 3 children holding up one hand each. Q10 orders 5, 10, 15, 20.",
-    "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
+    "within": "Q1 counts 15 blocks in fives. Child thinks 5, 10, 15. Q2 continues 20, 25, 30. Q3 finds 16 in a twos gap. Q4 counts groups of 5 in 20 blocks. Q5 fills 45 on a hundred square counting in fives. Q6 counts hops of 5 to the mark at 15. Q7 matches 10 to two groups of 5 on a ten frame. Q8 picks two tens-count numbers. Q9 counts 3 children holding up one hand each. Q10 orders 35, 40, 45, 50.",
+    "versus": "Easy uses pairs and tens pictures up to 50, with hops on the number line. Medium adds fives, a twos gap, a tens pick and higher 5s counts. Hard names the step size, counts back, spots a number you would not say, and orders from biggest to smallest. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
     "count-in-2s",
@@ -62,21 +62,22 @@
     {
       "id": "c2510-2-2",
       "kind": "fill-blank",
-      "prompt": "What number comes next? 5, 10, 15, ?",
-      "explanation": "After 15 comes 20. Add 5 each time. Not 16.",
+      "prompt": "What number comes next? 20, 25, 30, ?",
+      "explanation": "After 30 comes 35. Add 5 each time. Not 31.",
       "narration": {
-        "prompt": "What number comes next? Five, ten, fifteen, blank."
+        "prompt": "What number comes next? Twenty, twenty-five, thirty, blank."
       },
       "acceptedAnswers": [
-        "20",
-        "twenty"
+        "35",
+        "thirty-five",
+        "thirty five"
       ],
       "inputMode": "numeric",
       "numericChoices": [
-        16,
-        18,
-        20,
-        25
+        31,
+        32,
+        35,
+        40
       ]
     },
     {
@@ -84,33 +85,33 @@
       "kind": "multiple-choice",
       "prompt": "Which number is missing?",
       "numberSequence": [
-        5,
-        10,
+        12,
+        14,
         null,
-        20
+        18
       ],
       "options": [
         {
           "id": "a",
-          "label": "15"
-        },
-        {
-          "id": "b",
           "label": "16"
         },
         {
+          "id": "b",
+          "label": "17"
+        },
+        {
           "id": "c",
-          "label": "20"
+          "label": "18"
         },
         {
           "id": "d",
-          "label": "25"
+          "label": "20"
         }
       ],
       "correctId": "a",
-      "explanation": "15 sits between 10 and 20. The jump is 5, not 1.",
+      "explanation": "16 sits between 14 and 18. The jump is 2, not 1.",
       "narration": {
-        "prompt": "Which number is missing? Five, ten, blank, twenty."
+        "prompt": "Which number is missing? Twelve, fourteen, blank, eighteen."
       },
       "randomise": {
         "shuffleOptions": true
@@ -185,7 +186,11 @@
         "start": 0,
         "end": 20,
         "scale": "ones",
-        "marked": 15
+        "marked": 15,
+        "jumps": {
+          "step": 5,
+          "from": 0
+        }
       },
       "options": [
         {
@@ -222,16 +227,36 @@
       "pairs": [
         {
           "id": "p1",
-          "left": "20",
-          "right": "5, 10, 15, 20"
+          "left": "10",
+          "right": {
+            "tenFrame": {
+              "count": 10,
+              "item": "star"
+            }
+          }
         }
       ],
       "choices": [
-        "5, 10, 15, 20",
-        "5, 10, 15",
-        "10, 20, 30, 40"
+        {
+          "tenFrame": {
+            "count": 10,
+            "item": "star"
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 5,
+            "item": "star"
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 8,
+            "item": "star"
+          }
+        }
       ],
-      "explanation": "20 is 5, 10, 15, 20. Not a tens count.",
+      "explanation": "10 is two groups of 5. Not 5 or 8.",
       "narration": {
         "prompt": "Select the card that matches the number."
       }
@@ -239,32 +264,32 @@
     {
       "id": "c2510-2-8",
       "kind": "multi-select",
-      "prompt": "Tap the two numbers you say when you count in fives.",
+      "prompt": "Tap the two numbers you say when you count in tens.",
       "options": [
         {
           "id": "a",
-          "label": "10"
+          "label": "40"
         },
         {
           "id": "b",
-          "label": "12"
+          "label": "41"
         },
         {
           "id": "c",
-          "label": "15"
+          "label": "45"
         },
         {
           "id": "d",
-          "label": "16"
+          "label": "50"
         }
       ],
       "correctIds": [
         "a",
-        "c"
+        "d"
       ],
-      "explanation": "You say 10 and 15. 12 and 16 skip the fives.",
+      "explanation": "You say 40 and 50. 41 and 45 are not tens.",
       "narration": {
-        "prompt": "Tap the two numbers you say when you count in fives."
+        "prompt": "Tap the two numbers you say when you count in tens."
       },
       "randomise": {
         "shuffleOptions": true
@@ -296,29 +321,29 @@
       "prompt": "Put the numbers in order, from smallest to biggest.",
       "items": [
         {
-          "id": "n15",
-          "label": "15"
+          "id": "n45",
+          "label": "45"
         },
         {
-          "id": "n5",
-          "label": "5"
+          "id": "n35",
+          "label": "35"
         },
         {
-          "id": "n20",
-          "label": "20"
+          "id": "n50",
+          "label": "50"
         },
         {
-          "id": "n10",
-          "label": "10"
+          "id": "n40",
+          "label": "40"
         }
       ],
       "correctOrder": [
-        "n5",
-        "n10",
-        "n15",
-        "n20"
+        "n35",
+        "n40",
+        "n45",
+        "n50"
       ],
-      "explanation": "The numbers go 5, 10, 15, 20. Each jump is 5.",
+      "explanation": "The numbers go 35, 40, 45, 50. Each jump is 5.",
       "narration": {
         "prompt": "Put the numbers in order, from smallest to biggest."
       }
