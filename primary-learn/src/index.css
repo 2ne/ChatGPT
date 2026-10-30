@@ -5039,7 +5039,9 @@ button.object-token {
   padding: 0;
   border: 0;
   background: transparent;
-  overflow: hidden;
+  overflow: visible;
+  perspective: 1100px;
+  -webkit-perspective: 1100px;
   cursor: pointer;
 }
 
@@ -5050,21 +5052,24 @@ button.object-token {
 }
 
 .match-card-inner {
-  box-sizing: border-box;
-  display: grid;
+  position: relative;
+  display: block;
   width: 100%;
   height: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  transform: scaleX(1);
-  transition: transform 150ms ease;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 0.55s cubic-bezier(0.4, 0.15, 0.2, 1);
 }
-
-.match-card.is-squeeze .match-card-inner {
-  transform: scaleX(0);
+.match-card.is-up .match-card-inner {
+  transform: rotateY(180deg);
 }
 
 .match-card-face {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   box-sizing: border-box;
   display: grid;
   place-items: center;
@@ -5097,11 +5102,11 @@ button.object-token {
 
 .match-card-front {
   background: var(--card);
+  transform: rotateY(180deg);
 }
 
 .match-turn-target.option,
 .match-card-front.option {
-  position: relative;
   box-sizing: border-box;
   display: grid;
   place-items: center;

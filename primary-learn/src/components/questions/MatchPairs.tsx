@@ -4,7 +4,6 @@ import { matchSideBaseTen, matchSideDice, matchSideKey, matchSideLabel, matchSid
 import { seededOrder } from "../../lib/matchPairs";
 import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
-import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { ObjectGroup } from "./ObjectGroup";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 import { ShapePicture } from "./ShapePicture";
@@ -79,8 +78,6 @@ function ChoiceMark({ marked }: { marked?: "correct" | "wrong" | null }) {
   return null;
 }
 
-const FLIP_FALLBACK_MS = 200;
-
 function FlipCardButton({
   card,
   index,
@@ -96,105 +93,30 @@ function FlipCardButton({
   disabled?: boolean;
   onTap: () => void;
 }) {
-  const reducedMotion = usePrefersReducedMotion();
-  const [shownUp, setShownUp] = useState(faceUp);
-  const [squeezing, setSqueezing] = useState(false);
-  const wantRef = useRef(faceUp);
-  const shownRef = useRef(faceUp);
-  const phaseRef = useRef<"idle" | "out" | "in">("idle");
-  const timersRef = useRef<number[]>([]);
-  wantRef.current = faceUp;
-  shownRef.current = shownUp;
-
-  function clearTimers() {
-    for (const id of timersRef.current) window.clearTimeout(id);
-    timersRef.current = [];
-  }
-
-  function showFace(nextUp: boolean) {
-    shownRef.current = nextUp;
-    setShownUp(nextUp);
-    setSqueezing(false);
-    phaseRef.current = "in";
-    const wait = reducedMotion ? 0 : FLIP_FALLBACK_MS;
-    const timer = window.setTimeout(finishIn, wait);
-    timersRef.current.push(timer);
-  }
-
-  function finishIn() {
-    phaseRef.current = "idle";
-    setSqueezing(false);
-    if (wantRef.current !== shownRef.current) startFlip(wantRef.current);
-  }
-
-  function startFlip(nextUp: boolean) {
-    clearTimers();
-    if (reducedMotion || shownRef.current === nextUp) {
-      shownRef.current = nextUp;
-      setShownUp(nextUp);
-      setSqueezing(false);
-      phaseRef.current = "idle";
-      return;
-    }
-    phaseRef.current = "out";
-    setSqueezing(true);
-    const timer = window.setTimeout(() => {
-      if (phaseRef.current === "out") showFace(wantRef.current);
-    }, FLIP_FALLBACK_MS);
-    timersRef.current.push(timer);
-  }
-
-  function onFlipEnd(event: { propertyName: string }) {
-    if (event.propertyName !== "transform") return;
-    if (phaseRef.current === "out") {
-      clearTimers();
-      showFace(wantRef.current);
-      return;
-    }
-    if (phaseRef.current === "in") {
-      clearTimers();
-      finishIn();
-    }
-  }
-
-  useEffect(() => {
-    if (faceUp !== shownRef.current && phaseRef.current === "idle") {
-      startFlip(faceUp);
-    }
-  }, [faceUp, reducedMotion]);
-
-  useEffect(() => {
-    return () => clearTimers();
-  }, []);
-
-  const label = matchSideLabel(card.content);
   const number = index + 1;
-  const aria = shownUp ? copy.cardShows(number, label) : copy.cardFaceDown(number);
+  const aria = faceUp
+    ? copy.cardShows(number, matchSideLabel(card.content))
+    : copy.cardFaceDown(number);
   return (
     <button
       type="button"
-      className={`match-card${shownUp ? " is-up" : ""}${squeezing ? " is-squeeze" : ""}`}
+      className={`match-card${faceUp ? " is-up" : ""}`}
       disabled={disabled}
       aria-label={aria}
+      aria-pressed={faceUp}
       onClick={onTap}
     >
-      <span className="match-card-inner" onTransitionEnd={onFlipEnd}>
-        {shownUp ? (
-          <span
-            className={`match-card-face match-card-front${
-              marked ? ` ${choiceClass(false, marked)}` : ""
-            }`}
-          >
-            <SideView side={card.content} />
-            <ChoiceMark marked={marked} />
-          </span>
-        ) : (
-          <span className="match-card-face match-card-back">
-            <span className="match-card-back-mark" aria-hidden>
-              ?
-            </span>
-          </span>
-        )}
+      <span className="match-card-inner">
+        <span className="match-card-face match-card-back" aria-hidden>
+          <span className="match-card-back-mark">?</span>
+        </span>
+        <span
+          className={`match-card-face match-card-front${marked ? ` ${choiceClass(false, marked)}` : ""}`}
+          aria-hidden={!faceUp}
+        >
+          <SideView side={card.content} />
+          <ChoiceMark marked={marked} />
+        </span>
       </span>
     </button>
   );
