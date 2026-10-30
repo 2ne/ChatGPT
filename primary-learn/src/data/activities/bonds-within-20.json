@@ -327,7 +327,13 @@
       "explanation": "10 and 10 make 20. Both parts are the same.",
       "narration": {
         "prompt": "What is ten plus ten?"
-      }
+      },
+      "numericChoices": [
+        20,
+        0,
+        10,
+        19
+      ]
     }
   ]
 }

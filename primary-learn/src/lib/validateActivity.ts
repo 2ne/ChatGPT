@@ -872,6 +872,13 @@ function parseQuestion(value: unknown, path: string): Question {
       if (!acceptedAnswers.every(isString) || acceptedAnswers.length === 0) {
         fail(path, "acceptedAnswers must be a non-empty string array");
       }
+      const numericChoices = value.numericChoices == null ? undefined : expectArray(value, "numericChoices", path);
+      if (numericChoices && (numericChoices.length !== 4 ||
+          !numericChoices.every(n => typeof n === "number" && Number.isInteger(n) && n >= 0) ||
+          new Set(numericChoices).size !== 4 ||
+          numericChoices.filter(n => (acceptedAnswers as string[]).includes(String(n))).length !== 1)) {
+        fail(path, "numericChoices needs four distinct whole numbers and exactly one accepted answer");
+      }
       const prefix = value.prefix == null ? undefined : expectString(value, "prefix", path);
       const suffix = value.suffix == null ? undefined : expectString(value, "suffix", path);
       const inputMode = value.inputMode;
@@ -900,6 +907,7 @@ function parseQuestion(value: unknown, path: string): Question {
         ...core,
         kind,
         acceptedAnswers: acceptedAnswers as string[],
+        numericChoices: numericChoices as number[] | undefined,
         prefix,
         suffix,
         inputMode: inputMode === "text" || inputMode === "numeric" ? inputMode : undefined,

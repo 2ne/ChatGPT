@@ -323,7 +323,13 @@
       "explanation": "7 and 3 make 10, then 2 more is 12.",
       "narration": {
         "prompt": "What is seven plus five?"
-      }
+      },
+      "numericChoices": [
+        11,
+        12,
+        13,
+        2
+      ]
     }
   ]
 }

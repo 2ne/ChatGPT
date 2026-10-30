@@ -133,7 +133,13 @@
       "explanation": "4 and 3 make 7. The whole can sit on the left.",
       "narration": {
         "prompt": "What do you need to add to four to make seven?"
-      }
+      },
+      "numericChoices": [
+        2,
+        3,
+        4,
+        7
+      ]
     },
     {
       "kind": "multiple-choice",
@@ -183,7 +189,13 @@
         "3",
         "three"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        5,
+        8,
+        13,
+        3
+      ]
     },
     {
       "kind": "pick-pair",
@@ -250,7 +262,13 @@
         "3",
         "three"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        7,
+        11,
+        3,
+        4
+      ]
     },
     {
       "kind": "multiple-choice",

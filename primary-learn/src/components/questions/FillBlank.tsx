@@ -5,7 +5,7 @@ import { BaseTen } from "./BaseTen";
 import { HundredSquare } from "./HundredSquare";
 import { NumberLine } from "./NumberLine";
 import { TenFrame } from "./TenFrame";
-import type { Reveal } from "./choice";
+import { choiceClass, markChoice, type Reveal } from "./choice";
 
 type FillBlankProps = {
   question: FillBlankQuestion;
@@ -31,9 +31,9 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
           flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
-      <div className={`equation ${tone}`.trim()}>
+      {(!question.numericChoices || question.prefix || question.suffix) ? <div className={`equation ${tone}`.trim()}>
         {question.prefix ? <span className="t-title-sm">{question.prefix}</span> : null}
-        <input
+        {question.numericChoices ? <span className="t-title-sm" aria-label={copy.yourAnswer}>{typeof answer === "string" && answer ? answer : "?"}</span> : <input
           value={typeof answer === "string" ? answer : ""}
           disabled={disabled}
           inputMode={question.inputMode === "text" ? "text" : "numeric"}
@@ -42,9 +42,25 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
           spellCheck={false}
           aria-label={copy.yourAnswer}
           onChange={(event) => onChange(event.target.value)}
-        />
+        />}
         {question.suffix ? <span className="t-title-sm">{question.suffix}</span> : null}
-      </div>
+      </div> : null}
+      {question.numericChoices ? (
+        <div className="number-answer-grid" role="radiogroup" aria-label={copy.pickOne}>
+          {question.numericChoices.map((value, index) => {
+            const selected = answer === String(value);
+            const correct = question.acceptedAnswers.includes(String(value));
+            const marked = markChoice(reveal, selected, correct);
+            return <button type="button" key={value} role="radio" aria-checked={selected}
+              disabled={disabled} className={choiceClass(selected, marked)}
+              onClick={() => onChange(String(value))}>
+              <span className="option-letter" aria-hidden>{"ABCD"[index]}</span>
+              <span>{value}</span>
+              {marked ? <span aria-hidden>{marked === "correct" ? "✓" : "✕"}</span> : null}
+            </button>;
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

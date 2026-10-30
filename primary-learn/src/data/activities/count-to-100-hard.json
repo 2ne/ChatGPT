@@ -40,7 +40,13 @@
       "acceptedAnswers": [
         "34"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        43,
+        7,
+        30,
+        34
+      ]
     },
     {
       "id": "c100-3-2",
@@ -128,7 +134,13 @@
         "100",
         "one hundred"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        90,
+        99,
+        100,
+        101
+      ]
     },
     {
       "id": "c100-3-5",
@@ -143,7 +155,13 @@
         "ninety-nine",
         "ninety nine"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        98,
+        99,
+        101,
+        90
+      ]
     },
     {
       "id": "c100-3-6",
@@ -223,17 +241,23 @@
     {
       "id": "c100-3-8",
       "kind": "fill-blank",
-      "prompt": "Type the number after 99.",
+      "prompt": "Which number comes between 99 and 101?",
       "acceptedAnswers": [
         "100",
         "one hundred",
         "a hundred"
       ],
       "inputMode": "numeric",
-      "explanation": "After 99 comes 100. The ones and tens both roll over.",
+      "explanation": "100 comes after 99 and before 101.",
       "narration": {
-        "prompt": "Type the number after 99."
-      }
+        "prompt": "Which number comes between 99 and 101?"
+      },
+      "numericChoices": [
+        101,
+        110,
+        99,
+        100
+      ]
     },
     {
       "id": "c100-3-9",

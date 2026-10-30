@@ -294,7 +294,13 @@
       "explanation": "8 and 2 make 10, then 5 more is 15.",
       "narration": {
         "prompt": "What is eight plus seven?"
-      }
+      },
+      "numericChoices": [
+        1,
+        14,
+        15,
+        16
+      ]
     },
     {
       "id": "b20-3-10",

@@ -43,7 +43,13 @@
         "twenty-five",
         "twenty five"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        24,
+        25,
+        26,
+        15
+      ]
     },
     {
       "id": "c100-1-2",
@@ -131,7 +137,13 @@
         "30",
         "thirty"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        30,
+        39,
+        20,
+        28
+      ]
     },
     {
       "id": "c100-1-5",
@@ -146,7 +158,13 @@
         "thirty-nine",
         "thirty nine"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        41,
+        30,
+        39,
+        40
+      ]
     },
     {
       "id": "c100-1-6",
@@ -226,7 +244,7 @@
     {
       "id": "c100-1-8",
       "kind": "fill-blank",
-      "prompt": "Type the number after 49.",
+      "prompt": "What number comes after 49?",
       "acceptedAnswers": [
         "50",
         "fifty"
@@ -234,8 +252,14 @@
       "inputMode": "numeric",
       "explanation": "After 49 comes 50. The ones go back to 0.",
       "narration": {
-        "prompt": "Type the number after 49."
-      }
+        "prompt": "What number comes after 49?"
+      },
+      "numericChoices": [
+        40,
+        48,
+        50,
+        59
+      ]
     },
     {
       "id": "c100-1-9",

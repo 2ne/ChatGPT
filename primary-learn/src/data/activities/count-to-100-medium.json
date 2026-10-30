@@ -77,7 +77,13 @@
       "acceptedAnswers": [
         "73"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        73,
+        74,
+        63,
+        72
+      ]
     },
     {
       "id": "c100-2-3",
@@ -128,7 +134,13 @@
         "70",
         "seventy"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        79,
+        60,
+        68,
+        70
+      ]
     },
     {
       "id": "c100-2-5",
@@ -143,7 +155,13 @@
         "sixty-nine",
         "sixty nine"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        60,
+        69,
+        70,
+        71
+      ]
     },
     {
       "id": "c100-2-6",
@@ -223,7 +241,7 @@
     {
       "id": "c100-2-8",
       "kind": "fill-blank",
-      "prompt": "Type the number before 80.",
+      "prompt": "What number comes before 80?",
       "acceptedAnswers": [
         "79",
         "seventy-nine",
@@ -232,8 +250,14 @@
       "inputMode": "numeric",
       "explanation": "Before 80 is 79. The ones become 9.",
       "narration": {
-        "prompt": "Type the number before 80."
-      }
+        "prompt": "What number comes before 80?"
+      },
+      "numericChoices": [
+        78,
+        79,
+        81,
+        70
+      ]
     },
     {
       "id": "c100-2-9",

@@ -144,7 +144,13 @@
         "12",
         "twelve"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        13,
+        0,
+        11,
+        12
+      ]
     },
     {
       "kind": "fill-blank",
@@ -159,7 +165,13 @@
       "explanation": "3 and 2 make 5. 4 and 1 make 5 too.",
       "narration": {
         "prompt": "Three plus two is the same as four plus what?"
-      }
+      },
+      "numericChoices": [
+        0,
+        1,
+        2,
+        5
+      ]
     },
     {
       "kind": "make-total",
@@ -238,7 +250,13 @@
         "7",
         "seven"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        8,
+        15,
+        23,
+        7
+      ]
     },
     {
       "kind": "multiple-choice",

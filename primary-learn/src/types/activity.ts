@@ -271,6 +271,7 @@ export type FillBlankQuestion = QuestionCore & {
   prefix?: string;
   suffix?: string;
   acceptedAnswers: string[];
+  numericChoices?: number[];
   inputMode?: "numeric" | "text";
 };
 

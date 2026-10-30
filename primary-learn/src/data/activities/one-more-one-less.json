@@ -77,7 +77,13 @@
         "5",
         "five"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        6,
+        7,
+        4,
+        5
+      ]
     },
     {
       "id": "oml-1-3",
@@ -188,7 +194,13 @@
         "4",
         "four"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        6,
+        3,
+        4,
+        5
+      ]
     },
     {
       "id": "oml-1-7",
@@ -228,7 +240,7 @@
     {
       "id": "oml-1-8",
       "kind": "fill-blank",
-      "prompt": "Type one more than 9.",
+      "prompt": "What is one more than 9?",
       "acceptedAnswers": [
         "10",
         "ten"
@@ -236,8 +248,14 @@
       "inputMode": "numeric",
       "explanation": "One more than 9 is 10. The ones go back to 0.",
       "narration": {
-        "prompt": "Type one more than 9."
-      }
+        "prompt": "What is one more than 9?"
+      },
+      "numericChoices": [
+        8,
+        9,
+        10,
+        19
+      ]
     },
     {
       "id": "oml-1-9",
@@ -277,7 +295,7 @@
     {
       "id": "oml-1-10",
       "kind": "fill-blank",
-      "prompt": "Type one less than the marked number.",
+      "prompt": "What is one less than the marked number?",
       "numberLine": {
         "start": 0,
         "end": 10,
@@ -286,13 +304,19 @@
       },
       "explanation": "The mark is 7. One less is the tick before, 6.",
       "narration": {
-        "prompt": "Type one less than the marked number."
+        "prompt": "What is one less than the marked number?"
       },
       "acceptedAnswers": [
         "6",
         "six"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        6,
+        7,
+        8,
+        5
+      ]
     }
   ]
 }

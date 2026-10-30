@@ -249,7 +249,7 @@
     {
       "id": "nb10-1-8",
       "kind": "fill-blank",
-      "prompt": "Type the number that goes with 9 to make 10.",
+      "prompt": "What do you need to add to 9 to make 10?",
       "acceptedAnswers": [
         "1",
         "one"
@@ -257,8 +257,14 @@
       "inputMode": "numeric",
       "explanation": "9 and 1 make 10. One empty cell is left.",
       "narration": {
-        "prompt": "Type the number that goes with 9 to make 10."
-      }
+        "prompt": "What do you need to add to 9 to make 10?"
+      },
+      "numericChoices": [
+        10,
+        0,
+        1,
+        9
+      ]
     },
     {
       "id": "nb10-1-9",

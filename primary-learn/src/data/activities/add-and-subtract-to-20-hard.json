@@ -37,7 +37,13 @@
         "7",
         "seven"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        4,
+        7,
+        11,
+        15
+      ]
     },
     {
       "kind": "multiple-choice",
@@ -118,7 +124,13 @@
         "16",
         "sixteen"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        7,
+        9,
+        16,
+        2
+      ]
     },
     {
       "kind": "fill-blank",
@@ -133,7 +145,13 @@
       "explanation": "8 and 5 make 13. 10 and 3 make 13 too.",
       "narration": {
         "prompt": "Eight plus five is the same as ten plus what?"
-      }
+      },
+      "numericChoices": [
+        8,
+        13,
+        3,
+        5
+      ]
     },
     {
       "kind": "multiple-choice",
@@ -249,7 +267,13 @@
         "12",
         "twelve"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        20,
+        8,
+        11,
+        12
+      ]
     },
     {
       "kind": "multiple-choice",

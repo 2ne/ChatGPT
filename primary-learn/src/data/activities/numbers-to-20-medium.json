@@ -162,7 +162,7 @@
     {
       "id": "n20-2-5",
       "kind": "fill-blank",
-      "prompt": "Type the number sixteen.",
+      "prompt": "Which number is sixteen?",
       "acceptedAnswers": [
         "16",
         "sixteen"
@@ -170,8 +170,14 @@
       "inputMode": "numeric",
       "explanation": "Sixteen is 16. That is 10 and 6, not 60.",
       "narration": {
-        "prompt": "Type the number sixteen."
-      }
+        "prompt": "Which number is sixteen?"
+      },
+      "numericChoices": [
+        16,
+        60,
+        6,
+        15
+      ]
     },
     {
       "id": "n20-2-6",

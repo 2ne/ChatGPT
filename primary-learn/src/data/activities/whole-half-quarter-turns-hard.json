@@ -72,7 +72,13 @@
       "explanation": "Three quarter turns make a three-quarter turn. Four make a whole turn.",
       "narration": {
         "prompt": "How many quarter turns make a three-quarter turn?"
-      }
+      },
+      "numericChoices": [
+        3,
+        4,
+        1,
+        2
+      ]
     },
     {
       "id": "turns-3-3",
@@ -262,7 +268,13 @@
       "explanation": "Three quarters plus one more quarter make a whole turn.",
       "narration": {
         "prompt": "How many quarter turns are left after a three-quarter turn to make a whole turn?"
-      }
+      },
+      "numericChoices": [
+        4,
+        1,
+        2,
+        3
+      ]
     },
     {
       "id": "turns-3-9",
@@ -276,7 +288,13 @@
       "explanation": "Each whole turn is two half turns. Two wholes need four.",
       "narration": {
         "prompt": "How many half turns make two whole turns?"
-      }
+      },
+      "numericChoices": [
+        1,
+        2,
+        3,
+        4
+      ]
     },
     {
       "id": "turns-3-10",

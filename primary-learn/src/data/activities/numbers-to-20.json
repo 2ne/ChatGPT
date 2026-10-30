@@ -167,7 +167,7 @@
     {
       "id": "n20-1-5",
       "kind": "fill-blank",
-      "prompt": "Type the number fourteen.",
+      "prompt": "Which number is fourteen?",
       "acceptedAnswers": [
         "14",
         "fourteen"
@@ -175,8 +175,14 @@
       "inputMode": "numeric",
       "explanation": "Fourteen is 14. That is 10 and 4, not 40.",
       "narration": {
-        "prompt": "Type the number fourteen."
-      }
+        "prompt": "Which number is fourteen?"
+      },
+      "numericChoices": [
+        40,
+        4,
+        13,
+        14
+      ]
     },
     {
       "id": "n20-1-6",

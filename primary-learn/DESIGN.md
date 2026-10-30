@@ -541,3 +541,5 @@ Number-sequence choice questions show their sequence in shared number tiles belo
 Finger displays use the five supplied transparent WebP hand images in src/assets/hands via FingerHand. All crops share one canvas and wrist baseline. Use these assets for stems and compact answer/matching cards. Keep object-fit contain to preserve fingers and proportions. Zero has no supplied hand artwork and uses a numeral fallback.
 
 Bond add tiles use a pale grey background, a dashed grey border and one white plus inside a grey circle. No visible Add label. Accessible names identify the item being added. Both known and add rows wrap at five tiles and centre incomplete rows. Tile dimensions stay fixed when filled.
+
+Year 1 number answers use four large tap choices in a two-column grid, with fixed button dimensions and the existing A to D feedback states. Numeric fill-blank data retains its scoring contract but supplies numericChoices instead of displaying a keyboard input. Prefix and suffix equations remain visible with a non-editable answer slot.

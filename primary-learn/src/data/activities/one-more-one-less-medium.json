@@ -40,7 +40,13 @@
         "11",
         "eleven"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        10,
+        11,
+        20,
+        9
+      ]
     },
     {
       "id": "oml-2-2",
@@ -126,7 +132,13 @@
         "11",
         "eleven"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        12,
+        13,
+        10,
+        11
+      ]
     },
     {
       "id": "oml-2-5",
@@ -144,7 +156,13 @@
         "20",
         "twenty"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        29,
+        10,
+        18,
+        20
+      ]
     },
     {
       "id": "oml-2-6",
@@ -184,7 +202,7 @@
     {
       "id": "oml-2-7",
       "kind": "fill-blank",
-      "prompt": "Type one less than 15.",
+      "prompt": "What is one less than 15?",
       "acceptedAnswers": [
         "14",
         "fourteen"
@@ -192,8 +210,14 @@
       "inputMode": "numeric",
       "explanation": "One less than 15 is 14. Move one, not a whole ten.",
       "narration": {
-        "prompt": "Type one less than 15."
-      }
+        "prompt": "What is one less than 15?"
+      },
+      "numericChoices": [
+        5,
+        14,
+        15,
+        16
+      ]
     },
     {
       "id": "oml-2-8",
@@ -281,7 +305,13 @@
         "15",
         "fifteen"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        14,
+        15,
+        24,
+        13
+      ]
     }
   ]
 }

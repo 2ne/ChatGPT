@@ -159,7 +159,7 @@
     {
       "id": "n20-3-5",
       "kind": "fill-blank",
-      "prompt": "Type the number eighteen.",
+      "prompt": "Which number is eighteen?",
       "acceptedAnswers": [
         "18",
         "eighteen"
@@ -167,8 +167,14 @@
       "inputMode": "numeric",
       "explanation": "Eighteen is 18. That is 10 and 8, not 80.",
       "narration": {
-        "prompt": "Type the number eighteen."
-      }
+        "prompt": "Which number is eighteen?"
+      },
+      "numericChoices": [
+        17,
+        18,
+        80,
+        8
+      ]
     },
     {
       "id": "n20-3-6",
@@ -295,7 +301,7 @@
     {
       "id": "n20-3-10",
       "kind": "fill-blank",
-      "prompt": "Type the number thirteen.",
+      "prompt": "Which number is thirteen?",
       "acceptedAnswers": [
         "13",
         "thirteen"
@@ -303,8 +309,14 @@
       "inputMode": "numeric",
       "explanation": "Thirteen is 13, not 30.",
       "narration": {
-        "prompt": "Type the number thirteen."
-      }
+        "prompt": "Which number is thirteen?"
+      },
+      "numericChoices": [
+        13,
+        30,
+        3,
+        12
+      ]
     }
   ]
 }

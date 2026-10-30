@@ -235,7 +235,7 @@
     {
       "id": "nb10-2-8",
       "kind": "fill-blank",
-      "prompt": "Type the number that goes with 3 to make 10.",
+      "prompt": "What do you need to add to 3 to make 10?",
       "acceptedAnswers": [
         "7",
         "seven"
@@ -243,8 +243,14 @@
       "inputMode": "numeric",
       "explanation": "3 and 7 make 10. The missing part completes the total.",
       "narration": {
-        "prompt": "Type the number that goes with 3 to make 10."
-      }
+        "prompt": "What do you need to add to 3 to make 10?"
+      },
+      "numericChoices": [
+        3,
+        6,
+        7,
+        8
+      ]
     },
     {
       "id": "nb10-2-9",

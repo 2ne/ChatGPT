@@ -271,6 +271,9 @@ function checkActivity(activity) {
         errors.push(`${path}: explanation claims consecutive numbers but the order contains gaps`);
       }
     }
+    if (year1 && question.kind === "fill-blank" && !question.numericChoices) {
+      errors.push(`${path}: Year 1 answers need tap choices, not keyboard entry`);
+    }
     const options = pickerOptions(question);
     const hasYesAndNo = ['yes', 'no'].every(label => options?.some(option =>
       String(option.label ?? '').trim().toLowerCase() === label));

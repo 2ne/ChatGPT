@@ -104,7 +104,13 @@
         "19",
         "nineteen"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        21,
+        18,
+        19,
+        20
+      ]
     },
     {
       "id": "oml-3-4",
@@ -140,7 +146,7 @@
     {
       "id": "oml-3-5",
       "kind": "fill-blank",
-      "prompt": "Type one less than 30.",
+      "prompt": "What is one less than 30?",
       "acceptedAnswers": [
         "29",
         "twenty-nine",
@@ -149,8 +155,14 @@
       "inputMode": "numeric",
       "explanation": "One less than 30 is 29. The ones become 9.",
       "narration": {
-        "prompt": "Type one less than 30."
-      }
+        "prompt": "What is one less than 30?"
+      },
+      "numericChoices": [
+        20,
+        28,
+        29,
+        31
+      ]
     },
     {
       "id": "oml-3-6",
@@ -200,7 +212,13 @@
         "19",
         "nineteen"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        18,
+        19,
+        20,
+        17
+      ]
     },
     {
       "id": "oml-3-8",
@@ -284,7 +302,13 @@
         "19",
         "nineteen"
       ],
-      "inputMode": "numeric"
+      "inputMode": "numeric",
+      "numericChoices": [
+        19,
+        21,
+        10,
+        18
+      ]
     }
   ]
 }

@@ -244,7 +244,13 @@
       "explanation": "8 and 2 make 10. The missing part completes the total.",
       "narration": {
         "prompt": "What do you need to add to 8 to make 10?"
-      }
+      },
+      "numericChoices": [
+        8,
+        10,
+        1,
+        2
+      ]
     },
     {
       "id": "nb10-3-9",

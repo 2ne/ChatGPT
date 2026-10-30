@@ -72,7 +72,13 @@
       "explanation": "Two quarter turns make a half turn. Four make a whole turn.",
       "narration": {
         "prompt": "How many quarter turns make a half turn?"
-      }
+      },
+      "numericChoices": [
+        4,
+        1,
+        2,
+        3
+      ]
     },
     {
       "id": "turns-2-3",
@@ -222,7 +228,13 @@
       "explanation": "Four quarter turns make a whole turn. Two make a half turn.",
       "narration": {
         "prompt": "How many quarter turns make a whole turn?"
-      }
+      },
+      "numericChoices": [
+        1,
+        2,
+        3,
+        4
+      ]
     },
     {
       "id": "turns-2-8",
@@ -236,7 +248,13 @@
       "explanation": "Two half turns make a whole turn. One half turn faces the opposite way.",
       "narration": {
         "prompt": "A whole turn is how many half turns?"
-      }
+      },
+      "numericChoices": [
+        2,
+        3,
+        4,
+        1
+      ]
     },
     {
       "id": "turns-2-9",

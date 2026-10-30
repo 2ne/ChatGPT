@@ -72,7 +72,13 @@
       "explanation": "Four quarter turns make a full turn. A half turn is only two.",
       "narration": {
         "prompt": "How many quarter turns make a full turn?"
-      }
+      },
+      "numericChoices": [
+        1,
+        2,
+        3,
+        4
+      ]
     },
     {
       "id": "turns-1-3",
@@ -260,7 +266,13 @@
       "explanation": "Two half turns make a full turn. One half turn is not enough.",
       "narration": {
         "prompt": "How many half turns make a full turn?"
-      }
+      },
+      "numericChoices": [
+        2,
+        3,
+        4,
+        1
+      ]
     },
     {
       "id": "turns-1-9",
@@ -274,7 +286,13 @@
       "explanation": "A half turn is two quarter turns, not one and not four.",
       "narration": {
         "prompt": "A half turn is how many quarter turns?"
-      }
+      },
+      "numericChoices": [
+        3,
+        4,
+        1,
+        2
+      ]
     },
     {
       "id": "turns-1-10",
