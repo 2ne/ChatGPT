@@ -84,6 +84,7 @@
       "id": "ga-2-5",
       "kind": "fill-blank",
       "prompt": "20 {items} are shared equally between 4 children. How many does each child get?",
+      "visual": { "item": "star", "count": 20 },
       "explanation": "Each child gets 5. Four equal groups. Not 4 {items} each.",
       "narration": { "prompt": "20 {items} are shared equally between 4 children. How many does each child get?" },
       "acceptedAnswers": ["5", "five"],
@@ -112,7 +113,7 @@
       "kind": "multiple-choice",
       "prompt": "Which picture has equal groups?",
       "options": [
-            { "id": "a", "groups": { "sizes": [5, 5, 5], "item": "star" } },
+        { "id": "a", "groups": { "sizes": [5, 5, 5], "item": "star" } },
         { "id": "b", "groups": { "sizes": [5, 5, 5, 4], "item": "star" } },
         { "id": "c", "groups": { "sizes": [10, 8], "item": "star" } },
         { "id": "d", "groups": { "sizes": [2, 2, 2, 3], "item": "star" } }
@@ -126,6 +127,7 @@
       "id": "ga-2-8",
       "kind": "fill-blank",
       "prompt": "3 equal groups make 15 {items}. How many {items} are in each group?",
+      "visual": { "item": "star", "count": 15 },
       "explanation": "Each group has 5. Three fives make 15. Not 3.",
       "narration": { "prompt": "3 equal groups make 15 {items}. How many {items} are in each group?" },
       "acceptedAnswers": ["5", "five"],
