@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 reads tens and ones. Q2 and Q3 use the square for ten more and one less near 100. Q4 and Q5 cross 100 both ways. Q6 spots a repeat around 100. Q7 reads 100 on the line. Q8 types the number after 99. Q9 finds 92 with flags. Q10 orders numbers that cross 100.",
+    "within": "Q1 reads 34 as tens and ones. Q2 finds ten more on the square. Q3 moves one left. Q4 counts across 100. Q5 counts back across 90. Q6 fills a gap after 100. Q7 reads 70 on the line. Q8 finds a number between two others. Q9 identifies 92 with flags. Q10 orders numbers across 100. Answers vary across the number range.",
     "versus": "Easy uses a 3-row square and a 0 to 100 line in the twenties to sixties. Medium moves the window higher and counts both ways. Hard adds tens and ones, reverse thinking and counts around 100. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -51,35 +51,35 @@
     {
       "id": "c100-3-2",
       "kind": "multiple-choice",
-      "prompt": "Which number is under 89?",
+      "prompt": "Which number is under 57?",
       "hundredSquare": {
-        "start": 71,
+        "start": 41,
         "rows": 3,
-        "missing": 99,
-        "highlight": 89
+        "missing": 67,
+        "highlight": 57
       },
       "options": [
         {
           "id": "a",
-          "label": "79"
+          "label": "47"
         },
         {
           "id": "b",
-          "label": "88"
+          "label": "56"
         },
         {
           "id": "c",
-          "label": "90"
+          "label": "58"
         },
         {
           "id": "d",
-          "label": "99"
+          "label": "67"
         }
       ],
       "correctId": "d",
-      "explanation": "Under 89 is 99. That is ten more, not one more.",
+      "explanation": "67 is ten more than 57, so it sits directly below 57.",
       "narration": {
-        "prompt": "Which number is under 89?"
+        "prompt": "Which number is under 57?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -88,35 +88,35 @@
     {
       "id": "c100-3-3",
       "kind": "multiple-choice",
-      "prompt": "Which number is left of 100?",
+      "prompt": "Which number is left of 84?",
       "hundredSquare": {
         "start": 71,
         "rows": 3,
-        "missing": 99,
-        "highlight": 100
+        "missing": 83,
+        "highlight": 84
       },
       "options": [
         {
           "id": "a",
-          "label": "100"
+          "label": "74"
         },
         {
           "id": "b",
-          "label": "101"
+          "label": "85"
         },
         {
           "id": "c",
-          "label": "99"
+          "label": "83"
         },
         {
           "id": "d",
-          "label": "110"
+          "label": "94"
         }
       ],
       "correctId": "c",
-      "explanation": "Left of 100 is 99. Do not step the other way.",
+      "explanation": "83 is one less than 84, so it sits just to the left.",
       "narration": {
-        "prompt": "Which number is left of 100?"
+        "prompt": "Which number is left of 84?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -145,50 +145,50 @@
     {
       "id": "c100-3-5",
       "kind": "fill-blank",
-      "prompt": "What number comes before 100?",
-      "explanation": "Before 100 is 99. Not 90 and not 101.",
+      "prompt": "What number comes before 90?",
+      "explanation": "89 comes just before 90. Counting back one crosses into the previous ten.",
       "narration": {
-        "prompt": "What number comes before 100?"
+        "prompt": "What number comes before 90?"
       },
       "acceptedAnswers": [
-        "99",
-        "ninety-nine",
-        "ninety nine"
+        "89",
+        "eighty-nine",
+        "eighty nine"
       ],
       "inputMode": "numeric",
       "numericChoices": [
-        98,
-        99,
-        101,
-        90
+        88,
+        89,
+        91,
+        80
       ]
     },
     {
       "id": "c100-3-6",
       "kind": "multiple-choice",
-      "prompt": "Which number is wrong?",
+      "prompt": "Which number is missing?",
       "options": [
         {
           "id": "a",
-          "label": "103"
-        },
-        {
-          "id": "b",
-          "label": "97"
-        },
-        {
-          "id": "c",
           "label": "102"
         },
         {
+          "id": "b",
+          "label": "100"
+        },
+        {
+          "id": "c",
+          "label": "101"
+        },
+        {
           "id": "d",
-          "label": "110"
+          "label": "104"
         }
       ],
       "correctId": "a",
-      "explanation": "The run jumps. After 101 comes 102.",
+      "explanation": "102 comes after 101 and before 103. Each step adds one.",
       "narration": {
-        "prompt": "Which number is wrong? 98, 99, 100, 101, 103."
+        "prompt": "Which number is missing? 98, 99, 100, 101, blank, 103."
       },
       "randomise": {
         "shuffleOptions": true
@@ -198,6 +198,7 @@
         99,
         100,
         101,
+        null,
         103
       ]
     },
@@ -209,28 +210,28 @@
         "start": 0,
         "end": 100,
         "scale": "tens",
-        "marked": 100
+        "marked": 70
       },
       "options": [
         {
           "id": "a",
-          "label": "10"
+          "label": "71"
         },
         {
           "id": "b",
-          "label": "90"
+          "label": "80"
         },
         {
           "id": "c",
-          "label": "99"
+          "label": "90"
         },
         {
           "id": "d",
-          "label": "100"
+          "label": "70"
         }
       ],
       "correctId": "d",
-      "explanation": "The last tick is 100. That is 10 tens, not 10.",
+      "explanation": "The marked tick is 70. Seven tens make 70.",
       "narration": {
         "prompt": "Which number sits on the mark?"
       },
@@ -241,22 +242,22 @@
     {
       "id": "c100-3-8",
       "kind": "fill-blank",
-      "prompt": "Which number comes between 99 and 101?",
+      "prompt": "Which number comes between 94 and 96?",
       "acceptedAnswers": [
-        "100",
-        "one hundred",
-        "a hundred"
+        "95",
+        "ninety-five",
+        "ninety five"
       ],
       "inputMode": "numeric",
-      "explanation": "100 comes after 99 and before 101.",
+      "explanation": "95 comes after 94 and before 96.",
       "narration": {
-        "prompt": "Which number comes between 99 and 101?"
+        "prompt": "Which number comes between 94 and 96?"
       },
       "numericChoices": [
-        101,
-        110,
-        99,
-        100
+        94,
+        96,
+        95,
+        90
       ]
     },
     {
