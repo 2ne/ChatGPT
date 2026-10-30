@@ -143,3 +143,7 @@ Node 17 uses illustrated position scenes with Pip and SVG toy cars with a clear 
 Level selection, topic navigation, settings and quest exit share a Vaul drawer (`Sheet.tsx`). Includes swipe dismissal, a drag handle, modal focus handling and reduced-motion support. Vaul 1.1.2 is MIT licensed; its upstream currently describes the project as unmaintained. Keep its use behind the shared wrapper.
 
 Everyone sees the full pathway from Reception onwards. Onboarding asks for a name and buddy only. Previous year preferences are ignored, with all learner progress preserved. The floating topic menu remains available and scrolls independently of its drag handle.
+
+### Groups and arrays
+
+Node 21 keeps ten questions per difficulty. Look-only group diagrams use compact two-column layouts with up to five objects per row. Arrays retain their row structure. Group building has a grey plus button on each group, tap-to-remove objects and an icon reset. The source shows the remaining objects without an extra selection step. Building tasks provide exactly the required total. Numeric questions use four answer choices, and single matching trials use direct choices. Hard sharing stories omit unrelated counting pictures.

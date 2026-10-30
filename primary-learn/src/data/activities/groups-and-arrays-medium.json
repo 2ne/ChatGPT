@@ -4,7 +4,9 @@
   "summary": "Find totals to 30, share equally, and tell grouping from sharing.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "expected",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -13,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts 4 groups of 5 (20). Child skip-counts in fives. Q2 counts 3 groups of 10 (30). Q3 makes 2 groups of 5. Q4 finds how many groups of 5 from 20. Q5 shares 20 equally between 4. Q6 matches 30 to 3 groups of 10. Q7 spots equal groups. Q8 finds the size of 3 equal groups that make 15. Q9 taps two equal-group pictures. Q10 orders group totals from fewest to most.",
+    "within": "Q1 totals four fives. Q2 totals three tens. Q3 builds two fives with exactly ten objects. Q4 groups twenty into fives. Q5 shares twenty between four. Q6 chooses the groups that total thirty. Q7 recognises equal groups. Q8 shares fifteen into three groups. Q9 selects two equal-group pictures. Q10 orders four group totals.",
     "versus": "Easy uses small equal groups of 2 and 5, totals to 10, sharing into 2, and grouping 10 into twos. Medium uses totals to 30, groups of 10, and grouping versus sharing stories. Hard reads an array both ways, finds a missing number of groups, and spots unequal groups. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -25,114 +27,257 @@
   ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "id": "ga-2-1",
       "kind": "fill-blank",
-      "prompt": "How many {items} can you see?",
-      "groups": { "sizes": [5, 5, 5, 5], "item": "star" },
+      "prompt": "How many {items} can you see in all?",
+      "groups": {
+        "sizes": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "item": "star"
+      },
       "explanation": "There are 20 {items}. Four groups of 5. They go 5, 10, 15, 20.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "acceptedAnswers": ["20", "twenty"],
+      "narration": {
+        "prompt": "How many {items} can you see in all?"
+      },
+      "acceptedAnswers": [
+        "20",
+        "twenty"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [4, 5, 15, 20],
+      "numericChoices": [
+        4,
+        5,
+        15,
+        20
+      ],
       "randomise": {}
     },
     {
       "id": "ga-2-2",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
-      "groups": { "sizes": [10, 10, 10], "item": "star" },
+      "prompt": "How many {items} can you see in all?",
+      "groups": {
+        "sizes": [
+          10,
+          10,
+          10
+        ],
+        "item": "star"
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "10" },
-        { "id": "c", "label": "13" },
-        { "id": "d", "label": "30" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "13"
+        },
+        {
+          "id": "d",
+          "label": "30"
+        }
       ],
       "correctId": "d",
       "explanation": "There are 30 {items}. Three groups of 10. They go 10, 20, 30.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many {items} can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-2-3",
       "kind": "build-set",
       "prompt": "Make 2 groups of 5 {items}.",
-      "visual": { "item": "star", "count": 10 },
+      "visual": {
+        "item": "star",
+        "count": 10
+      },
       "groupCount": 2,
       "groupSize": 5,
-      "bank": 12,
+      "bank": 10,
       "explanation": "2 groups of 5 make 10. Each group has the same number.",
-      "narration": { "prompt": "Make 2 groups of 5 {items}." },
+      "narration": {
+        "prompt": "Make 2 groups of 5 {items}."
+      },
       "randomise": {}
     },
     {
       "id": "ga-2-4",
       "kind": "fill-blank",
       "prompt": "How many groups of 5 can you make from 20 {items}?",
-      "groups": { "sizes": [10, 10], "item": "star" },
-      "explanation": "20 makes 4 groups of 5. Not 2 tens.",
-      "narration": { "prompt": "How many groups of 5 can you make from 20 {items}?" },
-      "acceptedAnswers": ["4", "four"],
+      "explanation": "4 groups of 5 make 20. The answer is the number of groups.",
+      "narration": {
+        "prompt": "How many groups of 5 can you make from 20 {items}?"
+      },
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [2, 4, 5, 10],
+      "numericChoices": [
+        2,
+        4,
+        5,
+        10
+      ],
       "randomise": {}
     },
     {
       "id": "ga-2-5",
       "kind": "fill-blank",
-      "prompt": "20 {items} are shared equally between 4 children. How many does each child get?",
-      "visual": { "item": "star", "count": 20 },
-      "explanation": "Each child gets 5. Four equal groups. Not 4 {items} each.",
-      "narration": { "prompt": "20 {items} are shared equally between 4 children. How many does each child get?" },
-      "acceptedAnswers": ["5", "five"],
+      "prompt": "Share 20 {items} equally between 4 children. How many does each child get?",
+      "explanation": "Each child gets 5 {items}. Four equal shares make 20.",
+      "narration": {
+        "prompt": "Share 20 {items} equally between 4 children. How many does each child get?"
+      },
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [4, 5, 8, 16],
+      "numericChoices": [
+        4,
+        5,
+        8,
+        16
+      ],
       "randomise": {}
     },
     {
       "id": "ga-2-6",
-      "kind": "match-pairs",
-      "prompt": "Select the card that matches the number.",
-      "mode": "one-at-a-time",
-      "pairs": [
+      "kind": "multiple-choice",
+      "prompt": "Which groups make 30 {items} in all?",
+      "options": [
         {
-          "id": "p1",
-          "left": "30",
-          "right": "3 groups of 10"
+          "id": "a",
+          "label": "3 groups of 10"
+        },
+        {
+          "id": "b",
+          "label": "3 groups of 5"
+        },
+        {
+          "id": "c",
+          "label": "2 groups of 10"
+        },
+        {
+          "id": "d",
+          "label": "4 groups of 10"
         }
       ],
-      "choices": ["3 groups of 10", "3 groups of 5", "2 groups of 10"],
-      "explanation": "30 is 3 groups of 10. Not 3 fives or 2 tens.",
-      "narration": { "prompt": "Select the card that matches the number." }
+      "correctId": "a",
+      "explanation": "3 groups of 10 make 30. Count 10, 20, 30.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "narration": {
+        "prompt": "Which groups make 30 {items} in all?"
+      }
     },
     {
       "id": "ga-2-7",
       "kind": "multiple-choice",
       "prompt": "Which picture has equal groups?",
       "options": [
-        { "id": "a", "groups": { "sizes": [5, 5, 5], "item": "star" } },
-        { "id": "b", "groups": { "sizes": [5, 5, 5, 4], "item": "star" } },
-        { "id": "c", "groups": { "sizes": [10, 8], "item": "star" } },
-        { "id": "d", "groups": { "sizes": [2, 2, 2, 3], "item": "star" } }
+        {
+          "id": "a",
+          "groups": {
+            "sizes": [
+              5,
+              5,
+              5
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "groups": {
+            "sizes": [
+              5,
+              5,
+              4
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "groups": {
+            "sizes": [
+              10,
+              8
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "groups": {
+            "sizes": [
+              2,
+              2,
+              2,
+              3
+            ],
+            "item": "star"
+          }
+        }
       ],
       "correctId": "a",
       "explanation": "Equal groups are the same size. Three groups of 5 match.",
-      "narration": { "prompt": "Which picture has equal groups?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which picture has equal groups?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-2-8",
       "kind": "fill-blank",
-      "prompt": "3 equal groups make 15 {items}. How many {items} are in each group?",
-      "visual": { "item": "star", "count": 15 },
-      "explanation": "Each group has 5. Three fives make 15. Not 3.",
-      "narration": { "prompt": "3 equal groups make 15 {items}. How many {items} are in each group?" },
-      "acceptedAnswers": ["5", "five"],
+      "prompt": "Share 15 {items} equally between 3 groups. How many go in each group?",
+      "explanation": "5 {items} go in each group. Three groups of 5 make 15.",
+      "narration": {
+        "prompt": "Share 15 {items} equally between 3 groups. How many go in each group?"
+      },
+      "acceptedAnswers": [
+        "5",
+        "five"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [3, 5, 12, 18],
+      "numericChoices": [
+        3,
+        5,
+        12,
+        18
+      ],
       "randomise": {}
     },
     {
@@ -140,29 +285,94 @@
       "kind": "multi-select",
       "prompt": "Tap the two pictures that have equal groups.",
       "options": [
-        { "id": "a", "groups": { "sizes": [10, 10], "item": "star" } },
-        { "id": "b", "groups": { "sizes": [5, 5, 4], "item": "star" } },
-        { "id": "c", "groups": { "sizes": [2, 2, 2, 2], "item": "star" } },
-        { "id": "d", "groups": { "sizes": [10, 9], "item": "star" } }
+        {
+          "id": "a",
+          "groups": {
+            "sizes": [
+              10,
+              10
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "groups": {
+            "sizes": [
+              5,
+              5,
+              4
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "groups": {
+            "sizes": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "groups": {
+            "sizes": [
+              10,
+              9
+            ],
+            "item": "star"
+          }
+        }
       ],
-      "correctIds": ["a", "c"],
-      "explanation": "Equal groups match. Two tens, and four twos.",
-      "narration": { "prompt": "Tap the two pictures that have equal groups." },
-      "randomise": { "shuffleOptions": true }
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "Two groups of 10 are equal. Four groups of 2 are also equal.",
+      "narration": {
+        "prompt": "Tap the two pictures that have equal groups."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-2-10",
       "kind": "ordered",
-      "prompt": "Put the groups of {items} in order, from fewest to most.",
+      "prompt": "Put the group totals in order, from smallest to biggest.",
       "items": [
-        { "id": "n20", "label": "2 groups of 10" },
-        { "id": "n10", "label": "2 groups of 5" },
-        { "id": "n25", "label": "5 groups of 5" },
-        { "id": "n15", "label": "3 groups of 5" }
+        {
+          "id": "n20",
+          "label": "2 groups of 10"
+        },
+        {
+          "id": "n10",
+          "label": "2 groups of 5"
+        },
+        {
+          "id": "n25",
+          "label": "5 groups of 5"
+        },
+        {
+          "id": "n15",
+          "label": "3 groups of 5"
+        }
       ],
-      "correctOrder": ["n10", "n15", "n20", "n25"],
-      "explanation": "2 groups of 5 is 10. Then 15, 20 and 25.",
-      "narration": { "prompt": "Put the groups of {items} in order, from fewest to most." },
+      "correctOrder": [
+        "n10",
+        "n15",
+        "n20",
+        "n25"
+      ],
+      "explanation": "The totals are 10, 15, 20 and 25. Compare the totals, not the number of groups.",
+      "narration": {
+        "prompt": "Put the group totals in order, from smallest to biggest."
+      },
       "randomise": {}
     }
   ]

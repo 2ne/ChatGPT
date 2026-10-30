@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { OBJECT_GLYPH, describeArray, describeGroups } from "../../data/objects";
 import type { ArrayAsset, GroupsAsset, ObjectItem } from "../../types/activity";
 
@@ -43,7 +44,7 @@ export function GroupsPicture({ groups, array, compact, fit }: GroupsPictureProp
   return (
     <span className={`groups-board${card ? " is-card" : ""}${compact ? " is-option" : ""}`} role="img" aria-label={describeGroups(groups)}>
       {groups.sizes.map((size, index) => (
-        <span key={`g-${index}`} className="groups-cluster">
+        <span key={`g-${index}`} className="groups-cluster" style={{ "--group-columns": Math.min(size, 5) } as CSSProperties}>
           <Tokens item={item} count={size} compact={small} />
         </span>
       ))}

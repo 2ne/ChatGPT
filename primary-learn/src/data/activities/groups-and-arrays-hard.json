@@ -4,7 +4,9 @@
   "summary": "Read arrays both ways, find missing groups, and spot unequal groups.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "greater-depth",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -13,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts 3 rows of 5 on an array (15). Q2 finds how many rows of 5 make 15. Q3 sees 3 rows of 5 and knows 5 rows of 3 is the same total. Q4 matches a 2 by 5 array to 2 rows of 5. Q5 groups a pile of 20 into fives. Q6 spots the unequal groups. Q7 shares 30 equally between 3 from a pictured array. Q8 taps two arrays with the same total. Q9 groups a pictured 30 into tens. Q10 sees 4 rows of 5 stickers and 5 rows of 4 stickers as the same.",
+    "within": "Q1 totals a three-by-five array. Q2 counts its rows. Q3 finds the total with rows reversed. Q4 describes a smaller array. Q5 finds how many fives make twenty without a counting pile. Q6 spots unequal groups. Q7 shares thirty between three without an unrelated array. Q8 compares array totals. Q9 finds how many tens make thirty. Q10 recognises a reversed array as the same total.",
     "versus": "Easy uses small equal groups of 2 and 5, totals to 10, sharing into 2, and grouping 10 into twos. Medium uses totals to 30, groups of 10, and grouping versus sharing stories. Hard reads an array both ways, finds a missing number of rows, and spots unequal groups. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -25,75 +27,158 @@
   ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "id": "ga-3-1",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
-      "array": { "rows": 3, "columns": 5, "item": "star" },
+      "prompt": "How many {items} can you see in all?",
+      "array": {
+        "rows": 3,
+        "columns": 5,
+        "item": "star"
+      },
       "options": [
-        { "id": "a", "label": "3" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "8" },
-        { "id": "d", "label": "15" }
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "15"
+        }
       ],
       "correctId": "d",
       "explanation": "3 rows of 5 make 15. They go 5, 10, 15. Not 8.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many {items} can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-3-2",
       "kind": "fill-blank",
-      "prompt": "This array has 15 {items} in rows of 5. How many rows?",
-      "array": { "rows": 3, "columns": 5, "item": "star" },
-      "explanation": "3 rows of 5 make 15. Not 5 rows.",
-      "narration": { "prompt": "This array has 15 {items} in rows of 5. How many rows?" },
-      "acceptedAnswers": ["3", "three"],
+      "prompt": "How many rows of 5 {items} can you see?",
+      "array": {
+        "rows": 3,
+        "columns": 5,
+        "item": "star"
+      },
+      "explanation": "There are 3 rows. Each row has 5 {items}.",
+      "narration": {
+        "prompt": "How many rows of 5 {items} can you see?"
+      },
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [2, 3, 4, 5],
+      "numericChoices": [
+        2,
+        3,
+        4,
+        5
+      ],
       "randomise": {}
     },
     {
       "id": "ga-3-3",
       "kind": "fill-blank",
-      "prompt": "This is 3 rows of 5 {items}. How many {items} do 5 rows of 3 make?",
-      "array": { "rows": 3, "columns": 5, "item": "star" },
-      "explanation": "5 rows of 3 is the same 15. Not 8 from adding 3 and 5.",
-      "narration": { "prompt": "This is 3 rows of 5 {items}. How many {items} do 5 rows of 3 make?" },
-      "acceptedAnswers": ["15", "fifteen"],
+      "prompt": "How many {items} are in 5 rows of 3?",
+      "explanation": "5 rows of 3 make 15. This is the same total as 3 rows of 5.",
+      "narration": {
+        "prompt": "How many {items} are in 5 rows of 3?"
+      },
+      "acceptedAnswers": [
+        "15",
+        "fifteen"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [8, 12, 15, 18],
+      "numericChoices": [
+        8,
+        12,
+        15,
+        18
+      ],
       "randomise": {}
     },
     {
       "id": "ga-3-4",
-      "kind": "match-pairs",
-      "prompt": "Select the card that matches the picture.",
-      "mode": "one-at-a-time",
-      "pairs": [
+      "kind": "multiple-choice",
+      "prompt": "Which words describe the rows of {items}?",
+      "array": {
+        "rows": 2,
+        "columns": 5,
+        "item": "star"
+      },
+      "options": [
         {
-          "id": "p1",
-          "left": { "array": { "rows": 2, "columns": 5, "item": "star" } },
-          "right": "2 rows of 5"
+          "id": "a",
+          "label": "2 rows of 5"
+        },
+        {
+          "id": "b",
+          "label": "5 rows of 2"
+        },
+        {
+          "id": "c",
+          "label": "2 rows of 2"
+        },
+        {
+          "id": "d",
+          "label": "3 rows of 5"
         }
       ],
-      "choices": ["2 rows of 5", "5 rows of 5", "2 rows of 2", "3 rows of 5"],
-      "explanation": "2 rows with 5 in each row. That makes 10.",
-      "narration": { "prompt": "Select the card that matches the picture." }
+      "correctId": "a",
+      "explanation": "There are 2 rows with 5 {items} in each row. That makes 10.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "narration": {
+        "prompt": "Which words describe the rows of {items}?"
+      }
     },
     {
       "id": "ga-3-5",
       "kind": "fill-blank",
-      "prompt": "How many groups of 5 {items} make 20?",
-      "visual": { "item": "star", "count": 20 },
-      "explanation": "4 groups of 5 make 20. Not 5 groups.",
-      "narration": { "prompt": "How many groups of 5 {items} make 20?" },
-      "acceptedAnswers": ["4", "four"],
+      "prompt": "How many groups of 5 can you make from 20 {items}?",
+      "explanation": "4 groups of 5 make 20. Count in fives to reach 20.",
+      "narration": {
+        "prompt": "How many groups of 5 can you make from 20 {items}?"
+      },
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [2, 4, 5, 15],
+      "numericChoices": [
+        2,
+        4,
+        5,
+        15
+      ],
       "randomise": {}
     },
     {
@@ -101,26 +186,79 @@
       "kind": "multiple-choice",
       "prompt": "Which picture does not show equal groups?",
       "options": [
-        { "id": "a", "groups": { "sizes": [5, 5, 5], "item": "star" } },
-        { "id": "b", "groups": { "sizes": [2, 2, 2, 2], "item": "star" } },
-        { "id": "c", "groups": { "sizes": [10, 10], "item": "star" } },
-        { "id": "d", "groups": { "sizes": [5, 5, 4], "item": "star" } }
+        {
+          "id": "a",
+          "groups": {
+            "sizes": [
+              5,
+              5,
+              5
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "groups": {
+            "sizes": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "groups": {
+            "sizes": [
+              10,
+              10
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "groups": {
+            "sizes": [
+              5,
+              5,
+              4
+            ],
+            "item": "star"
+          }
+        }
       ],
       "correctId": "d",
       "explanation": "5, 5 and 4 are not the same. Equal groups match.",
-      "narration": { "prompt": "Which picture does not show equal groups?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which picture does not show equal groups?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-3-7",
       "kind": "fill-blank",
-      "prompt": "30 {items} are shared equally between 3 children. How many does each child get?",
-      "array": { "rows": 5, "columns": 6, "item": "star" },
-      "explanation": "Each child gets 10. Three equal groups. Not 3 each.",
-      "narration": { "prompt": "30 {items} are shared equally between 3 children. How many does each child get?" },
-      "acceptedAnswers": ["10", "ten"],
+      "prompt": "Share 30 {items} equally between 3 children. How many does each child get?",
+      "explanation": "Each child gets 10 {items}. Three equal shares make 30.",
+      "narration": {
+        "prompt": "Share 30 {items} equally between 3 children. How many does each child get?"
+      },
+      "acceptedAnswers": [
+        "10",
+        "ten"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [3, 9, 10, 27],
+      "numericChoices": [
+        3,
+        9,
+        10,
+        27
+      ],
       "randomise": {}
     },
     {
@@ -128,46 +266,112 @@
       "kind": "multi-select",
       "prompt": "Tap the two arrays that have the same number of {items}.",
       "options": [
-        { "id": "a", "array": { "rows": 2, "columns": 6, "item": "star" } },
-        { "id": "b", "array": { "rows": 3, "columns": 4, "item": "star" } },
-        { "id": "c", "array": { "rows": 3, "columns": 5, "item": "star" } },
-        { "id": "d", "array": { "rows": 2, "columns": 5, "item": "star" } }
+        {
+          "id": "a",
+          "array": {
+            "rows": 2,
+            "columns": 6,
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "array": {
+            "rows": 3,
+            "columns": 4,
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "array": {
+            "rows": 3,
+            "columns": 5,
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "array": {
+            "rows": 2,
+            "columns": 5,
+            "item": "star"
+          }
+        }
       ],
-      "correctIds": ["a", "b"],
+      "correctIds": [
+        "a",
+        "b"
+      ],
       "explanation": "2 rows of 6 and 3 rows of 4 both make 12.",
-      "narration": { "prompt": "Tap the two arrays that have the same number of {items}." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Tap the two arrays that have the same number of {items}."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-3-9",
       "kind": "multiple-choice",
       "prompt": "How many groups of 10 can you make from 30 {items}?",
-      "groups": { "sizes": [5, 5, 5, 5, 5, 5], "item": "star" },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "3" },
-        { "id": "c", "label": "6" },
-        { "id": "d", "label": "10" }
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "3"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
       ],
       "correctId": "b",
-      "explanation": "30 makes 3 groups of 10. Not 6 fives.",
-      "narration": { "prompt": "How many groups of 10 can you make from 30 {items}?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "3 groups of 10 make 30. Six groups of 5 have the same total.",
+      "narration": {
+        "prompt": "How many groups of 10 can you make from 30 {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-3-10",
       "kind": "multiple-choice",
-      "prompt": "Mia has 4 rows of 5 stickers. Kim has 5 rows of 4 stickers. Who has more stickers?",
+      "prompt": "Which rows have the same total as 4 rows of 5 stickers?",
       "options": [
-        { "id": "a", "label": "Mia" },
-        { "id": "b", "label": "Kim" },
-        { "id": "c", "label": "They have the same" },
-        { "id": "d", "label": "Mia has 1 more" }
+        {
+          "id": "a",
+          "label": "4 rows of 4"
+        },
+        {
+          "id": "b",
+          "label": "5 rows of 5"
+        },
+        {
+          "id": "c",
+          "label": "5 rows of 4"
+        },
+        {
+          "id": "d",
+          "label": "3 rows of 5"
+        }
       ],
       "correctId": "c",
-      "explanation": "4 rows of 5 and 5 rows of 4 are both 20 stickers.",
-      "narration": { "prompt": "Mia has 4 rows of 5 stickers. Kim has 5 rows of 4 stickers. Who has more stickers?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "4 rows of 5 and 5 rows of 4 both make 20 stickers.",
+      "narration": {
+        "prompt": "Which rows have the same total as 4 rows of 5 stickers?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }

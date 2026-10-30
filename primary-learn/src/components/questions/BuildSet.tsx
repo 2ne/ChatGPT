@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
-import { RotateCw } from "lucide-react";
+import { useLayoutEffect, useRef, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
+import { Plus, RotateCw } from "lucide-react";
 import { copy } from "../../data/copy";
 import { OBJECT_WORDS, objectGlyph } from "../../data/objects";
 import type { BuildSetQuestion } from "../../types/activity";
@@ -33,8 +33,6 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
     ? answer.groups.map((group) => group.filter((id) => ids.includes(id)))
     : emptyGroups(groupCount);
   const used = new Set(groups.flat());
-  const [picked, setPicked] = useState(0);
-  const root = useRef<HTMLDivElement>(null);
   const words = OBJECT_WORDS[question.visual.item];
   const glyph = objectGlyph(question.visual.item);
   const allRight = groups.length === groupCount && groups.every((group) => group.length === groupSize);
@@ -44,12 +42,13 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
     onChange({ groups: next } satisfies BuildGroupsAnswer);
   }
 
-  function add(id: string) {
-    if (disabled || used.has(id)) return;
+  function add(index: number) {
+    const id = ids.find((candidate) => !used.has(candidate));
+    if (disabled || id == null) return;
     const next = groups.map((group) => [...group]);
-    const bucket = next[picked] ?? [];
+    const bucket = next[index] ?? [];
     bucket.push(id);
-    next[picked] = bucket;
+    next[index] = bucket;
     setGroups(next);
   }
 
@@ -59,66 +58,43 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
   }
 
   return (
-    <div className="build-set is-groups" ref={root} style={{ "--build-rows": Math.ceil(bank / 5) } as CSSProperties}>
+    <div className="build-set is-groups" style={{ "--share-height": `${Math.ceil(groupSize / 3) * 48 + 8}px` } as CSSProperties}>
       <div className="share-groups">
         {groups.map((group, index) => (
-          <div key={`g-${index}`} className={`share-group${picked === index ? " is-on" : ""}${marked}`}>
-            <p className="share-group-name">{copy.groupLabel(index + 1)}</p>
-            <button
-              type="button"
-              className="share-group-pick"
-              disabled={disabled}
-              aria-label={copy.groupLabel(index + 1)}
-              aria-pressed={picked === index}
-              onClick={() => setPicked(index)}
-            />
-            {group.length === 0 ? <p className="share-group-empty">{copy.tapOntoGroup}</p> : null}
-            {group.map((id) => (
-              <button
-                key={`${question.id}-${id}`}
-                type="button"
-                className="object-token"
-                disabled={disabled}
-                aria-label={`${words.singular}. Tap to take it out.`}
-                onClick={() => remove(id)}
-              >
-                <span className="object-glyph" aria-hidden>
-                  {glyph}
-                </span>
+          <div key={`g-${index}`} className={`share-group${marked}`}>
+            <div className="share-group-heading">
+              <p className="share-group-name">{copy.groupLabel(index + 1)}</p>
+              <button type="button" className="share-group-add"
+                disabled={disabled || used.size === bank}
+                aria-label={copy.addToGroup(words.singular, index + 1)}
+                onClick={() => add(index)}>
+                <Plus size={22} aria-hidden />
               </button>
-            ))}
+            </div>
+            <div className="share-group-objects">
+              {group.map((id) => (
+                <button key={`${question.id}-${id}`} type="button" className="object-token"
+                  disabled={disabled} aria-label={copy.removeFromGroup(words.singular, index + 1)}
+                  onClick={() => remove(id)}>
+                  <span className="object-glyph" aria-hidden>{glyph}</span>
+                </button>
+              ))}
+            </div>
           </div>
         ))}
       </div>
-      <div className="build-source">
-        <div className="build-tray" role="group" aria-label={copy.tapToAdd}>
-          {ids.map((id) => (
-            <button
-              key={`${question.id}-${id}`}
-              type="button"
-              style={{ visibility: used.has(id) ? "hidden" : "visible" }}
-              className="object-token"
-              disabled={disabled || used.has(id)}
-              aria-hidden={used.has(id) || undefined}
-              aria-label={`Add a ${words.singular}`}
-              onClick={() => add(id)}
-            >
-              <span className="object-glyph" aria-hidden>
-                {glyph}
-              </span>
-            </button>
-          ))}
-        </div>
+      <div className="share-bank" role="img" aria-label={copy.objectsToShare}>
+        {ids.map((id) => (
+          <span key={id} className={`share-bank-object${used.has(id) ? " is-used" : ""}`} aria-hidden>
+            {glyph}
+          </span>
+        ))}
       </div>
       <div className="build-reset">
-        <button
-          type="button"
-          className="btn-text"
+        <button type="button" className="btn-text" aria-label={copy.startGroupAgain}
           disabled={disabled || used.size === 0}
-          style={{ visibility: used.size && !disabled ? "visible" : "hidden" }}
-          onClick={() => setGroups(emptyGroups(groupCount))}
-        >
-          <RotateCw size={18} aria-hidden /> Start again
+          onClick={() => setGroups(emptyGroups(groupCount))}>
+          <RotateCw size={20} aria-hidden />
         </button>
       </div>
     </div>

@@ -4,7 +4,9 @@
   "summary": "Find totals of equal groups of 2 and 5, share equally, and make groups of 2.",
   "subject": "maths",
   "type": "counting",
-  "yearGroups": ["Year1"],
+  "yearGroups": [
+    "Year1"
+  ],
   "ability": "emerging",
   "estimatedMinutes": 6,
   "masteryThreshold": 0.8,
@@ -13,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts 2 groups of 2 in twos (4). Child sees equal groups, not one pile. Q2 counts 3 groups of 2 (6). Q3 makes 3 groups of 2. Q4 spots equal groups against unequal. Q5 counts 4 groups of 2, not 8 objects. Q6 shares 6 equally between 2, one at a time. Q7 matches the words 2 groups of 5 to a picture. Q8 counts 2 groups of 5 in fives (10). Q9 taps two pictures with equal groups. Q10 groups 10 objects into twos.",
+    "within": "Q1 totals two pairs. Q2 totals three pairs. Q3 builds three pairs with direct add controls. Q4 recognises equal groups. Q5 counts groups rather than objects. Q6 shares six between two. Q7 recognises two groups of five. Q8 totals two fives. Q9 selects two equal-group pictures. Q10 groups ten into pairs.",
     "versus": "Easy uses small equal groups of 2 and 5, totals to 10, sharing into 2, and grouping 10 into twos. Medium uses totals to 30, groups of 10, and grouping versus sharing stories. Hard reads an array both ways, finds a missing number of groups, and spots unequal groups. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -25,50 +27,105 @@
   ],
   "randomise": {
     "mode": "attempt",
-    "items": ["apple", "banana", "star", "balloon", "car", "duck", "ladybird", "frog", "fish", "strawberry"]
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
   },
   "questions": [
     {
       "id": "ga-1-1",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
-      "groups": { "sizes": [2, 2], "item": "star" },
+      "prompt": "How many {items} can you see in all?",
+      "groups": {
+        "sizes": [
+          2,
+          2
+        ],
+        "item": "star"
+      },
       "hint": "The groups are equal. Jump 2, then 2 more.",
       "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "6" },
-        { "id": "d", "label": "8" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
       ],
       "correctId": "a",
       "explanation": "There are 4 {items}. Two groups of 2. They go 2, 4.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many {items} can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-1-2",
       "kind": "fill-blank",
-      "prompt": "How many {items} can you see?",
-      "groups": { "sizes": [2, 2, 2], "item": "star" },
+      "prompt": "How many {items} can you see in all?",
+      "groups": {
+        "sizes": [
+          2,
+          2,
+          2
+        ],
+        "item": "star"
+      },
       "hint": "Jump 2 for each group.",
       "explanation": "There are 6 {items}. Three groups of 2. They go 2, 4, 6.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "acceptedAnswers": ["6", "six"],
+      "narration": {
+        "prompt": "How many {items} can you see in all?"
+      },
+      "acceptedAnswers": [
+        "6",
+        "six"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [3, 5, 6, 8],
+      "numericChoices": [
+        3,
+        5,
+        6,
+        8
+      ],
       "randomise": {}
     },
     {
       "id": "ga-1-3",
       "kind": "build-set",
       "prompt": "Make 3 groups of 2 {items}.",
-      "visual": { "item": "star", "count": 6 },
+      "visual": {
+        "item": "star",
+        "count": 6
+      },
       "groupCount": 3,
       "groupSize": 2,
-      "bank": 8,
+      "bank": 6,
       "hint": "Put 2 in each group.",
       "explanation": "3 groups of 2 make 6. Each group has the same number.",
-      "narration": { "prompt": "Make 3 groups of 2 {items}." },
+      "narration": {
+        "prompt": "Make 3 groups of 2 {items}."
+      },
       "randomise": {}
     },
     {
@@ -76,106 +133,301 @@
       "kind": "multiple-choice",
       "prompt": "Which picture has equal groups?",
       "options": [
-        { "id": "a", "groups": { "sizes": [2, 2, 2], "item": "star" } },
-        { "id": "b", "groups": { "sizes": [2, 2, 3], "item": "star" } },
-        { "id": "c", "groups": { "sizes": [2, 3], "item": "star" } },
-        { "id": "d", "groups": { "sizes": [1, 2, 2], "item": "star" } }
+        {
+          "id": "a",
+          "groups": {
+            "sizes": [
+              2,
+              2,
+              2
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "groups": {
+            "sizes": [
+              2,
+              2,
+              3
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "groups": {
+            "sizes": [
+              2,
+              3
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "groups": {
+            "sizes": [
+              1,
+              2,
+              2
+            ],
+            "item": "star"
+          }
+        }
       ],
       "correctId": "a",
       "explanation": "Equal groups are the same size. 2, 2 and 2 match.",
-      "narration": { "prompt": "Which picture has equal groups?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Which picture has equal groups?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-1-5",
       "kind": "fill-blank",
       "prompt": "How many groups of 2 {items} can you see?",
-      "groups": { "sizes": [2, 2, 2, 2], "item": "star" },
-      "explanation": "There are 4 groups. Each group has 2. Not 8 {items}.",
-      "narration": { "prompt": "How many groups of 2 {items} can you see?" },
-      "acceptedAnswers": ["4", "four"],
+      "groups": {
+        "sizes": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "item": "star"
+      },
+      "explanation": "There are 4 groups of 2. There are 8 {items} in all.",
+      "narration": {
+        "prompt": "How many groups of 2 {items} can you see?"
+      },
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [2, 3, 4, 8],
+      "numericChoices": [
+        2,
+        3,
+        4,
+        8
+      ],
       "randomise": {}
     },
     {
       "id": "ga-1-6",
       "kind": "fill-blank",
-      "prompt": "6 {items} are shared equally between 2 children. How many does each child get?",
-      "visual": { "item": "star", "count": 6 },
-      "explanation": "Each child gets 3. Two equal shares. Not 6 in one pile.",
-      "narration": { "prompt": "6 {items} are shared equally between 2 children. How many does each child get?" },
-      "acceptedAnswers": ["3", "three"],
+      "prompt": "Share 6 {items} equally between 2 children. How many does each child get?",
+      "visual": {
+        "item": "star",
+        "count": 6
+      },
+      "explanation": "Each child gets 3 {items}. Both children have the same number.",
+      "narration": {
+        "prompt": "Share 6 {items} equally between 2 children. How many does each child get?"
+      },
+      "acceptedAnswers": [
+        "3",
+        "three"
+      ],
       "inputMode": "numeric",
-      "numericChoices": [3, 4, 5, 8],
+      "numericChoices": [
+        3,
+        4,
+        5,
+        8
+      ],
       "randomise": {}
     },
     {
       "id": "ga-1-7",
-      "kind": "match-pairs",
-      "prompt": "Select the card that matches the word.",
-      "mode": "one-at-a-time",
-      "pairs": [
+      "kind": "multiple-choice",
+      "prompt": "Which picture shows 2 groups of 5 {items}?",
+      "options": [
         {
-          "id": "p1",
-          "left": "2 groups of 5",
-          "right": { "groups": { "sizes": [5, 5], "item": "star" } }
+          "id": "a",
+          "groups": {
+            "sizes": [
+              5,
+              5
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "groups": {
+            "sizes": [
+              2,
+              2
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "groups": {
+            "sizes": [
+              5
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "groups": {
+            "sizes": [
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "item": "star"
+          }
         }
       ],
-      "choices": [
-        { "groups": { "sizes": [5, 5], "item": "star" } },
-        { "groups": { "sizes": [2, 2], "item": "star" } },
-        { "groups": { "sizes": [5], "item": "star" } }
-      ],
-      "explanation": "2 groups of 5 is two fives. Not one five or two twos.",
-      "narration": { "prompt": "Select the card that matches the word." }
+      "correctId": "a",
+      "explanation": "There are two groups. Each group has 5 {items}.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "narration": {
+        "prompt": "Which picture shows 2 groups of 5 {items}?"
+      }
     },
     {
       "id": "ga-1-8",
       "kind": "multiple-choice",
-      "prompt": "How many {items} can you see?",
-      "groups": { "sizes": [5, 5], "item": "star" },
+      "prompt": "How many {items} can you see in all?",
+      "groups": {
+        "sizes": [
+          5,
+          5
+        ],
+        "item": "star"
+      },
       "options": [
-        { "id": "a", "label": "2" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "7" },
-        { "id": "d", "label": "10" }
+        {
+          "id": "a",
+          "label": "2"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "7"
+        },
+        {
+          "id": "d",
+          "label": "10"
+        }
       ],
       "correctId": "d",
       "explanation": "There are 10 {items}. Two groups of 5. They go 5, 10.",
-      "narration": { "prompt": "How many {items} can you see?" },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "How many {items} can you see in all?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-1-9",
       "kind": "multi-select",
       "prompt": "Tap the two pictures that have equal groups.",
       "options": [
-        { "id": "a", "groups": { "sizes": [2, 2], "item": "star" } },
-        { "id": "b", "groups": { "sizes": [2, 3], "item": "star" } },
-        { "id": "c", "groups": { "sizes": [5, 5], "item": "star" } },
-        { "id": "d", "groups": { "sizes": [5, 4], "item": "star" } }
+        {
+          "id": "a",
+          "groups": {
+            "sizes": [
+              2,
+              2
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "b",
+          "groups": {
+            "sizes": [
+              2,
+              3
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "c",
+          "groups": {
+            "sizes": [
+              5,
+              5
+            ],
+            "item": "star"
+          }
+        },
+        {
+          "id": "d",
+          "groups": {
+            "sizes": [
+              5,
+              4
+            ],
+            "item": "star"
+          }
+        }
       ],
-      "correctIds": ["a", "c"],
+      "correctIds": [
+        "a",
+        "c"
+      ],
       "explanation": "Equal groups match. 2 and 2, and 5 and 5.",
-      "narration": { "prompt": "Tap the two pictures that have equal groups." },
-      "randomise": { "shuffleOptions": true }
+      "narration": {
+        "prompt": "Tap the two pictures that have equal groups."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "id": "ga-1-10",
       "kind": "multiple-choice",
       "prompt": "How many groups of 2 can you make from 10 {items}?",
-      "visual": { "item": "star", "count": 10 },
+      "visual": {
+        "item": "star",
+        "count": 10
+      },
       "options": [
-        { "id": "a", "label": "4" },
-        { "id": "b", "label": "5" },
-        { "id": "c", "label": "8" },
-        { "id": "d", "label": "12" }
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "8"
+        },
+        {
+          "id": "d",
+          "label": "12"
+        }
       ],
       "correctId": "b",
-      "explanation": "10 makes 5 groups of 2. Not 10 ones.",
-      "narration": { "prompt": "How many groups of 2 can you make from 10 {items}?" },
-      "randomise": { "shuffleOptions": true }
+      "explanation": "5 groups of 2 make 10. Count in twos to reach 10.",
+      "narration": {
+        "prompt": "How many groups of 2 can you make from 10 {items}?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     }
   ]
 }
