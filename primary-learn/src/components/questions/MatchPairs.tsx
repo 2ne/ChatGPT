@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { copy } from "../../data/copy";
-import { matchSideBaseTen, matchSideDice, matchSideKey, matchSideLabel, matchSideTenFrame, matchSideVisual } from "../../lib/matchSide";
+import { matchSideArray, matchSideBaseTen, matchSideDice, matchSideGroups, matchSideKey, matchSideLabel, matchSideTenFrame, matchSideVisual } from "../../lib/matchSide";
 import { seededOrder } from "../../lib/matchPairs";
 import { playSound } from "../../lib/sound";
 import type { MatchPairsQuestion, MatchSide } from "../../types/activity";
@@ -10,6 +10,7 @@ import { ShapePicture } from "./ShapePicture";
 import { BaseTen } from "./BaseTen";
 import { DiceFace } from "./DiceFace";
 import { TenFrame } from "./TenFrame";
+import { GroupsPicture } from "./GroupsPicture";
 
 export type QuestionPlayControl = {
   canConfirm: boolean;
@@ -36,6 +37,8 @@ function SideView({ side }: { side: MatchSide }) {
   const tenFrame = matchSideTenFrame(side);
   const baseTen = matchSideBaseTen(side);
   const dice = matchSideDice(side);
+  const groups = matchSideGroups(side);
+  const array = matchSideArray(side);
   const label = typeof side === "string" ? side : side.label;
   const layout = typeof side === "string" ? undefined : side.layout;
   const shape = typeof side === "string" ? undefined : side.shape;
@@ -45,9 +48,11 @@ function SideView({ side }: { side: MatchSide }) {
       {tenFrame ? <TenFrame frame={tenFrame} fit="card" /> : null}
       {baseTen ? <BaseTen model={baseTen} compact /> : null}
       {dice ? <DiceFace face={dice} compact /> : null}
+      {groups ? <GroupsPicture groups={groups} compact fit="card" /> : null}
+      {array ? <GroupsPicture array={array} compact fit="card" /> : null}
       {visual ? <ObjectGroup visual={visual} compact pack layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
-      {!visual && !tenFrame && !baseTen && !dice && !shape && !label ? matchSideLabel(side) : null}
+      {!visual && !tenFrame && !baseTen && !dice && !groups && !array && !shape && !label ? matchSideLabel(side) : null}
     </span>
   );
 }

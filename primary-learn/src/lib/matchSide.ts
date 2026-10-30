@@ -1,12 +1,16 @@
 import {
+  arrayKey,
   baseTenKey,
+  describeArray,
   describeBaseTen,
+  describeGroups,
   describeTenFrame,
   describeVisual,
+  groupsKey,
   tenFrameKey,
   visualKey,
 } from "../data/objects";
-import type { BaseTenAsset, DiceAsset, MatchSide, ObjectAsset, TenFrameAsset } from "../types/activity";
+import type { ArrayAsset, BaseTenAsset, DiceAsset, GroupsAsset, MatchSide, ObjectAsset, TenFrameAsset } from "../types/activity";
 import { isRealObject, shapeName } from "./shapes";
 
 export function matchSideVisual(side: MatchSide): ObjectAsset | undefined {
@@ -27,6 +31,16 @@ export function matchSideBaseTen(side: MatchSide): BaseTenAsset | undefined {
 export function matchSideDice(side: MatchSide): DiceAsset | undefined {
   if (typeof side === "string") return undefined;
   return side.dice;
+}
+
+export function matchSideGroups(side: MatchSide): GroupsAsset | undefined {
+  if (typeof side === "string") return undefined;
+  return side.groups;
+}
+
+export function matchSideArray(side: MatchSide): ArrayAsset | undefined {
+  if (typeof side === "string") return undefined;
+  return side.array;
 }
 
 function isNumeralLabel(label: string): boolean {
@@ -55,6 +69,8 @@ export function matchSideRepresentation(side: MatchSide): string {
   if (side.tenFrame) return "ten-frame";
   if (side.baseTen) return "base-ten";
   if (side.dice) return "dice";
+  if (side.groups) return "groups";
+  if (side.array) return "array";
   if (side.shape) return isRealObject(side.shape) ? "real-object" : "shape";
   if (side.visual) return `objects-${side.layout ?? "row"}`;
   if (label) return labelRepresentation(label);
@@ -76,6 +92,18 @@ export function matchSideFitsCard(side: MatchSide): string | null {
   if (side.visual && side.visual.count > 20) {
     return "more than 20 objects cannot stay 16px on a match card";
   }
+  if (side.array) {
+    const cell = Math.min(104 / side.array.columns, 104 / side.array.rows);
+    if (cell < 16) {
+      return "array cells would be smaller than 16px on a match card. Use a numeral or a word";
+    }
+  }
+  if (side.groups) {
+    const total = side.groups.sizes.reduce((sum, size) => sum + size, 0);
+    if (total > 10 || side.groups.sizes.length > 3) {
+      return "too many groups for a match card. Use a numeral or a word";
+    }
+  }
   return null;
 }
 
@@ -86,6 +114,8 @@ export function matchSideLabel(side: MatchSide): string {
   if (side.tenFrame) return describeTenFrame(side.tenFrame);
   if (side.baseTen) return describeBaseTen(side.baseTen);
   if (side.dice) return `dice showing ${side.dice.count}`;
+  if (side.groups) return describeGroups(side.groups);
+  if (side.array) return describeArray(side.array);
   if (side.visual) return describeVisual(side.visual);
   return "";
 }
@@ -96,6 +126,8 @@ export function matchSideKey(side: MatchSide): string {
   if (side.tenFrame) return tenFrameKey(side.tenFrame);
   if (side.baseTen) return baseTenKey(side.baseTen);
   if (side.dice) return `dice:${side.dice.count}`;
+  if (side.groups) return groupsKey(side.groups);
+  if (side.array) return arrayKey(side.array);
   if (side.visual) return visualKey(side.visual);
   return side.label ?? "";
 }

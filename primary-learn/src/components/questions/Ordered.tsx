@@ -123,7 +123,7 @@ export function Ordered({ question, answer, disabled, reveal, onChange }: Ordere
                   <span />
                   <span />
                 </span>
-                <OptionContent label={item?.label} visual={item?.visual} tenFrame={item?.tenFrame} baseTen={item?.baseTen} dice={item?.dice} />
+                <OptionContent label={item?.label} visual={item?.visual} tenFrame={item?.tenFrame} baseTen={item?.baseTen} dice={item?.dice} groups={item?.groups} array={item?.array} />
               </button>
               <span className="step-pair">
                 <button

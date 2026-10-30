@@ -2,6 +2,8 @@ import { OBJECT_WORDS, numberWord } from "../data/objects";
 import type {
   Activity,
   ActivityRandomise,
+  ArrayAsset,
+  GroupsAsset,
   MatchSide,
   NarrationLine,
   ObjectAsset,
@@ -67,7 +69,7 @@ function capitalize(value: string): string {
 
 function sideItem(side: MatchSide): ObjectItem | undefined {
   if (typeof side === "string") return undefined;
-  return side.visual?.item ?? side.tenFrame?.item;
+  return side.visual?.item ?? side.tenFrame?.item ?? side.groups?.item ?? side.array?.item;
 }
 
 /** Distinct object items that appear on a question, in first-seen order. */
@@ -78,6 +80,8 @@ export function collectItems(question: Question): ObjectItem[] {
   };
   if (question.visual) add(question.visual.item);
   if (question.tenFrame?.item) add(question.tenFrame.item);
+  if (question.groups?.item) add(question.groups.item);
+  if (question.array?.item) add(question.array.item);
   if (question.extras) {
     for (const extra of question.extras) add(extra.item);
   }
@@ -85,12 +89,16 @@ export function collectItems(question: Question): ObjectItem[] {
     for (const option of question.options) {
       add(option.visual?.item);
       add(option.tenFrame?.item);
+      add(option.groups?.item);
+      add(option.array?.item);
     }
   }
   if (question.kind === "ordered") {
     for (const item of question.items) {
       add(item.visual?.item);
       add(item.tenFrame?.item);
+      add(item.groups?.item);
+      add(item.array?.item);
     }
   }
   if (question.kind === "match-pairs") {
@@ -144,12 +152,32 @@ function remapTenFrame(
   return { ...frame, item: itemMap.get(item) ?? item };
 }
 
+function remapGroups(
+  groups: GroupsAsset | undefined,
+  itemMap: Map<ObjectItem, ObjectItem>,
+): GroupsAsset | undefined {
+  if (!groups) return undefined;
+  const item = groups.item ?? "star";
+  return { ...groups, item: itemMap.get(item) ?? item };
+}
+
+function remapArray(
+  grid: ArrayAsset | undefined,
+  itemMap: Map<ObjectItem, ObjectItem>,
+): ArrayAsset | undefined {
+  if (!grid) return undefined;
+  const item = grid.item ?? "star";
+  return { ...grid, item: itemMap.get(item) ?? item };
+}
+
 function remapSide(side: MatchSide, itemMap: Map<ObjectItem, ObjectItem>): MatchSide {
   if (typeof side === "string") return side;
   return {
     ...side,
     visual: remapVisual(side.visual, itemMap),
     tenFrame: remapTenFrame(side.tenFrame, itemMap),
+    groups: remapGroups(side.groups, itemMap),
+    array: remapArray(side.array, itemMap),
   };
 }
 
@@ -341,6 +369,8 @@ function realizeQuestion(
     question.kind === "make-total" ? undefined : count,
   );
   next.tenFrame = remapTenFrame(next.tenFrame, itemMap);
+  next.groups = remapGroups(next.groups, itemMap);
+  next.array = remapArray(next.array, itemMap);
   if (next.extras) {
     next.extras = next.extras.map((asset) => remapVisual(asset, itemMap) ?? asset);
   }
@@ -350,6 +380,8 @@ function realizeQuestion(
       ...option,
       visual: remapVisual(option.visual, itemMap),
       tenFrame: remapTenFrame(option.tenFrame, itemMap),
+      groups: remapGroups(option.groups, itemMap),
+      array: remapArray(option.array, itemMap),
     }));
   }
   if (next.kind === "ordered") {
@@ -357,6 +389,8 @@ function realizeQuestion(
       ...item,
       visual: remapVisual(item.visual, itemMap),
       tenFrame: remapTenFrame(item.tenFrame, itemMap),
+      groups: remapGroups(item.groups, itemMap),
+      array: remapArray(item.array, itemMap),
     }));
   }
   if (next.kind === "match-pairs") {
@@ -418,6 +452,51 @@ export function playSeed(activity: Activity): string {
  * Apply optional `randomise` draws. The source activity is not mutated.
  * Retries should reuse this result so the child sees the same apples/count.
  */
+const PLACEHOLDER = /\{[A-Za-z][A-Za-z0-9]*\}/g;
+
+export function leftoverPlaceholders(text: string): string[] {
+  return [...text.matchAll(PLACEHOLDER)].map((match) => match[0]);
+}
+
+function spokenPrompt(question: Question): string {
+  const line = question.narration?.prompt;
+  if (typeof line === "string") return line;
+  if (line && typeof line === "object") return line.text;
+  return "";
+}
+
+/** Child-facing strings after realize. Leftover `{item}` here is a leak. */
+export function questionChildText(question: Question): string {
+  const parts = [question.prompt, question.explanation, question.hint ?? "", spokenPrompt(question)];
+  if ("options" in question && question.options) {
+    for (const option of question.options) {
+      if (option.label) parts.push(option.label);
+    }
+  }
+  if (question.kind === "ordered") {
+    for (const item of question.items) {
+      if (item.label) parts.push(item.label);
+    }
+  }
+  if (question.kind === "fill-blank") {
+    if (question.prefix) parts.push(question.prefix);
+    if (question.suffix) parts.push(question.suffix);
+  }
+  if (question.kind === "match-pairs") {
+    for (const pair of question.pairs) {
+      if (typeof pair.left === "string") parts.push(pair.left);
+      else if (pair.left.label) parts.push(pair.left.label);
+      if (typeof pair.right === "string") parts.push(pair.right);
+      else if (pair.right.label) parts.push(pair.right.label);
+    }
+    for (const side of question.choices) {
+      if (typeof side === "string") parts.push(side);
+      else if (side.label) parts.push(side.label);
+    }
+  }
+  return parts.filter(Boolean).join("\n");
+}
+
 export function realizeActivity(activity: Activity, seed?: string): Activity {
   const resolved = seed ?? playSeed(activity);
   const rng = mulberry32(hashString(resolved));

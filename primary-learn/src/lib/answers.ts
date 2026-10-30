@@ -1,5 +1,5 @@
-import { describeBaseTen, describeTenFrame, describeVisual } from "../data/objects";
-import type { BaseTenAsset, Question, TenFrameAsset } from "../types/activity";
+import { describeArray, describeBaseTen, describeGroups, describeTenFrame, describeVisual } from "../data/objects";
+import type { ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, Question, TenFrameAsset } from "../types/activity";
 import { shapeName } from "./shapes";
 
 function optionLabel(
@@ -11,6 +11,8 @@ function optionLabel(
         tenFrame?: TenFrameAsset;
         baseTen?: BaseTenAsset;
         dice?: { count: number };
+        groups?: GroupsAsset;
+        array?: ArrayAsset;
       }
     | undefined,
   slot: number,
@@ -21,8 +23,35 @@ function optionLabel(
   if (option.tenFrame) return describeTenFrame(option.tenFrame);
   if (option.baseTen) return describeBaseTen(option.baseTen);
   if (option.dice) return `dice showing ${option.dice.count}`;
+  if (option.groups) return describeGroups(option.groups);
+  if (option.array) return describeArray(option.array);
   if (option.visual) return describeVisual(option.visual);
   return null;
+}
+
+export type BuildGroupsAnswer = { groups: string[][] };
+
+export function isBuildGroupsAnswer(value: unknown): value is BuildGroupsAnswer {
+  return Boolean(value && typeof value === "object" && Array.isArray((value as BuildGroupsAnswer).groups));
+}
+
+function emptyBuildSetAnswer(question: BuildSetQuestion): unknown {
+  if (question.groupCount) {
+    return { groups: Array.from({ length: question.groupCount }, () => [] as string[]) };
+  }
+  return [] as string[];
+}
+
+function correctBuildSetAnswer(question: BuildSetQuestion): unknown {
+  if (question.groupCount && question.groupSize) {
+    const ids = Array.from({ length: question.visual.count }, (_, index) => String(index));
+    const groups: string[][] = [];
+    for (let g = 0; g < question.groupCount; g += 1) {
+      groups.push(ids.slice(g * question.groupSize, (g + 1) * question.groupSize));
+    }
+    return { groups };
+  }
+  return Array.from({ length: question.visual.count }, (_, index) => String(index));
 }
 import { makeTotalMissing } from "./makeTotal";
 import { matchSideKey, matchSideLabel } from "./matchSide";
@@ -89,6 +118,11 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
       return question.pairs.every((pair) => map[pair.id] === matchSideKey(pair.right));
     }
     case "build-set": {
+      if (question.groupCount && question.groupSize) {
+        if (!isBuildGroupsAnswer(answer)) return false;
+        if (answer.groups.length !== question.groupCount) return false;
+        return answer.groups.every((group) => group.length === question.groupSize);
+      }
       if (!Array.isArray(answer)) return false;
       return answer.length === question.visual.count;
     }
@@ -120,7 +154,7 @@ export function emptyAnswerFor(question: Question): unknown {
         string
       >;
     case "build-set":
-      return [] as string[];
+      return emptyBuildSetAnswer(question);
     case "make-total":
       return makeTotalMissing(question) === 0 && question.mode === "fill-slots" ? 0 : null;
     case "pick-pair":
@@ -149,7 +183,7 @@ export function correctAnswerFor(question: Question): unknown {
         question.pairs.map((pair) => [pair.id, matchSideKey(pair.right)]),
       );
     case "build-set":
-      return Array.from({ length: question.visual.count }, (_, index) => String(index));
+      return correctBuildSetAnswer(question);
     case "make-total":
       return makeTotalMissing(question);
     case "pick-pair": {
@@ -179,7 +213,9 @@ export function correctAnswerLabel(question: Question): string | null {
       return labels.length ? labels.join(", ") : null;
     }
     case "build-set":
-      return String(question.visual.count);
+      return question.groupCount && question.groupSize
+        ? `${question.groupCount} groups of ${question.groupSize}`
+        : String(question.visual.count);
     case "make-total":
       return String(makeTotalMissing(question));
     case "part-whole":
@@ -223,6 +259,9 @@ export function hasProvidedAnswer(question: Question, answer: unknown): boolean 
       return question.pairs.every((pair) => Boolean(map[pair.id]));
     }
     case "build-set":
+      if (isBuildGroupsAnswer(answer)) {
+        return answer.groups.some((group) => group.length > 0);
+      }
       return Array.isArray(answer) && answer.length > 0;
     case "make-total":
       return typeof answer === "number";

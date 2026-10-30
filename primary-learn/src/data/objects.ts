@@ -1,6 +1,8 @@
 import {
   OBJECT_ITEMS,
+  type ArrayAsset,
   type BaseTenAsset,
+  type GroupsAsset,
   type HundredSquareAsset,
   type NumberLineAsset,
   type ObjectAsset,
@@ -86,6 +88,36 @@ export function describeVisual(visual: ObjectAsset): string {
     return `${visual.count} ${noun}, ${visual.removed} ${takenNoun} taken away`;
   }
   return `${visual.count} ${noun}`;
+}
+
+export function describeGroups(groups: GroupsAsset): string {
+  const item = groups.item ?? "star";
+  const words = OBJECT_WORDS[item];
+  const equal = groups.sizes.length > 0 && groups.sizes.every((size) => size === groups.sizes[0]);
+  if (equal) {
+    const size = groups.sizes[0] ?? 0;
+    const n = groups.sizes.length;
+    const noun = size === 1 ? words.singular : words.plural;
+    return `${n} groups of ${size} ${noun}`;
+  }
+  const last = groups.sizes[groups.sizes.length - 1];
+  const head = groups.sizes.slice(0, -1).join(", ");
+  return `groups of ${head} and ${last} ${words.plural}`;
+}
+
+export function groupsKey(groups: GroupsAsset): string {
+  return `groups:${groups.item ?? "star"}:${groups.sizes.join("-")}`;
+}
+
+export function describeArray(grid: ArrayAsset): string {
+  const item = grid.item ?? "star";
+  const words = OBJECT_WORDS[item];
+  const noun = grid.columns === 1 ? words.singular : words.plural;
+  return `${grid.rows} rows of ${grid.columns} ${noun}`;
+}
+
+export function arrayKey(grid: ArrayAsset): string {
+  return `array:${grid.item ?? "star"}:${grid.rows}x${grid.columns}`;
 }
 
 export function describeTenFrame(frame: TenFrameAsset): string {

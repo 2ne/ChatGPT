@@ -4,7 +4,8 @@ import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
-import type { BaseTenAsset, DiceAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import type { ArrayAsset, BaseTenAsset, DiceAsset, GroupsAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import { GroupsPicture } from "./GroupsPicture";
 import { BaseTen } from "./BaseTen";
 import { DiceFace } from "./DiceFace";
 import { FingerHand } from "./FingerHand";
@@ -399,6 +400,8 @@ export function OptionContent({
   tenFrame,
   baseTen,
   dice,
+  groups,
+  array,
   layout,
   pack,
 }: {
@@ -407,6 +410,8 @@ export function OptionContent({
   tenFrame?: TenFrameAsset;
   baseTen?: BaseTenAsset;
   dice?: DiceAsset;
+  groups?: GroupsAsset;
+  array?: ArrayAsset;
   layout?: ObjectLayout;
   pack?: boolean;
 }) {
@@ -415,6 +420,8 @@ export function OptionContent({
       {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}
       {baseTen ? <BaseTen model={baseTen} compact /> : null}
       {dice ? <DiceFace face={dice} compact /> : null}
+      {groups ? <GroupsPicture groups={groups} compact /> : null}
+      {array ? <GroupsPicture array={array} compact /> : null}
       {visual ? <ObjectGroup visual={visual} compact pack={pack} layout={layout} /> : null}
       {label ? <span>{label}</span> : null}
     </span>

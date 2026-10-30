@@ -47,6 +47,8 @@ export const copy = {
   yourGroup: "Your group",
   tapToAdd: "Tap to add",
   emptyGroup: "Your group is empty.",
+  tapOntoGroup: "Tap to put some here.",
+  groupLabel: (n: number) => `Group ${n}`,
   startGroupAgain: "Start the group again",
   matchChoose: "Choose",
   matchPartners: "Partners",

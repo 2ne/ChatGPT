@@ -34,6 +34,7 @@ const server = await createServer({
 
 try {
   const mod = await server.ssrLoadModule("/src/data/activities/index.ts");
+  const realizeMod = await server.ssrLoadModule("/src/lib/realize.ts");
   const list = mod.activities;
   if (!Array.isArray(list) || list.length === 0) {
     throw new Error("No activities loaded");
@@ -48,6 +49,17 @@ try {
     slots.add(slot);
   }
   const pedagogy = lintActivities(list);
+  const leftover = [];
+  for (const activity of list) {
+    const realized = realizeMod.realizeActivity(activity, activity.id);
+    for (const question of realized.questions) {
+      const found = realizeMod.leftoverPlaceholders(realizeMod.questionChildText(question));
+      if (found.length) {
+        leftover.push(`${activity.id}/${question.id}: leftover placeholder ${found.join(" ")}`);
+      }
+    }
+  }
+  pedagogy.push(...leftover);
   if (pedagogy.length) {
     for (const line of pedagogy) console.error(line);
     console.error(`\n${pedagogy.length} pedagogy checks failed. ${pedagogyAllowlistNote}`);

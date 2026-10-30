@@ -24,7 +24,7 @@ function skipContent(id) {
 
 /** Picture is the job, so Hard may keep it. */
 const PICTURE_IS_QUESTION =
-  /\b(how many|can you see|which group|tap the|tap every|select the card|under the cup|make a group|puppet|which sum|marked|sits on the mark|which letter|what number is this|what is this shape|empty cell|belongs at)\b/i;
+  /\b(how many|can you see|which group|tap the|tap every|select the card|under the cup|make a group|puppet|which sum|marked|sits on the mark|which letter|what number is this|what is this shape|empty cell|belongs at|equal groups|groups of|rows of|share equally)\b/i;
 
 /** Numerals already state the job. A stem picture would only repeat or leak. */
 const NUMERAL_ONLY_JOB =
@@ -38,7 +38,7 @@ function hardPictureRepeatsNumerals(question) {
   const prompt = String(question.prompt ?? "").trim();
   if (PICTURE_IS_QUESTION.test(prompt) || isStoryPrompt(prompt)) return false;
   if (question.kind === "build-set" || question.kind === "count-objects") return false;
-  if (question.numberLine || question.hundredSquare || question.shape || question.turn || question.position) {
+  if (question.numberLine || question.hundredSquare || question.shape || question.turn || question.position || question.groups || question.array) {
     return false;
   }
   const hasPicture = Boolean(question.tenFrame || question.baseTen || question.visual);
@@ -71,7 +71,7 @@ function stemNumbers(text) {
 }
 
 function numericLabel(option) {
-  if (!option || option.visual || option.tenFrame || option.baseTen || option.dice || option.shape) {
+  if (!option || option.visual || option.tenFrame || option.baseTen || option.dice || option.shape || option.groups || option.array) {
     return null;
   }
   if (option.label == null) return null;
@@ -171,6 +171,8 @@ function optionFingerprint(question) {
     turn: question.turn ?? null,
     numberLine: question.numberLine ?? null,
     hundredSquare: question.hundredSquare ?? null,
+    groups: question.groups ?? null,
+    array: question.array ?? null,
     pairs: question.pairs ?? null,
   });
 }

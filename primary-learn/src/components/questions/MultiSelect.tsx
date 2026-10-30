@@ -3,6 +3,7 @@ import type { MultiSelectQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
 import { BaseTen } from "./BaseTen";
 import { TenFrame } from "./TenFrame";
+import { GroupsPicture } from "./GroupsPicture";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
 
@@ -34,6 +35,8 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
     <div className="option-stack" role="group" aria-label={question.prompt}>
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
+      {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.array ? <GroupsPicture array={question.array} /> : null}
       {question.visual ? (
         <ObjectGroup
           visual={question.visual}
@@ -63,6 +66,8 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
               tenFrame={option.tenFrame}
               baseTen={option.baseTen}
               dice={option.dice}
+              groups={option.groups}
+              array={option.array}
               layout={option.layout}
             />
             {marked === "correct" ? (

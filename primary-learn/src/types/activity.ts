@@ -101,6 +101,25 @@ export type TenFrameAsset = {
 };
 
 /**
+ * Separate clusters of the same object. Equal groups are [2, 2, 2].
+ * Unequal groups are [2, 2, 3]. Look-only. Not tappable.
+ */
+export type GroupsAsset = {
+  sizes: number[];
+  item?: ObjectItem;
+};
+
+/**
+ * Equal rows of the same object. 3 rows of 5 is the same total as 5 rows of 3.
+ * Look-only. Not tappable.
+ */
+export type ArrayAsset = {
+  rows: number;
+  columns: number;
+  item?: ObjectItem;
+};
+
+/**
  * Structured tens and ones for 21 to 99.
  * Rods are neutral, not the question objects. Segmented on Easy, plain on Medium.
  */
@@ -168,6 +187,8 @@ export type QuestionOption = {
   tenFrame?: TenFrameAsset;
   baseTen?: BaseTenAsset;
   dice?: DiceAsset;
+  groups?: GroupsAsset;
+  array?: ArrayAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -228,6 +249,10 @@ type QuestionCore = {
   tenFrame?: TenFrameAsset;
   /** Optional tens-and-ones picture. Do not mix with visual or tenFrame. */
   baseTen?: BaseTenAsset;
+  /** Optional equal or unequal clusters. Do not mix with visual, tenFrame or array. */
+  groups?: GroupsAsset;
+  /** Optional equal-row grid. Do not mix with visual, tenFrame or groups. */
+  array?: ArrayAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */
@@ -253,6 +278,13 @@ export type BuildSetQuestion = QuestionCore & {
   visual: ObjectAsset;
   /** How many objects sit in the tray. Must be >= visual.count. Default is count + 2. */
   bank?: number;
+  /**
+   * Make this many equal groups. `visual.count` must be groupCount × groupSize.
+   * Omit for a single group.
+   */
+  groupCount?: number;
+  /** How many objects belong in each group when `groupCount` is set. */
+  groupSize?: number;
 };
 
 export type MultipleChoiceQuestion = QuestionCore & {
@@ -298,6 +330,8 @@ export type MatchSide =
       tenFrame?: TenFrameAsset;
       baseTen?: BaseTenAsset;
       dice?: DiceAsset;
+      groups?: GroupsAsset;
+      array?: ArrayAsset;
       shape?: ShapeAsset;
       layout?: ObjectLayout;
     };

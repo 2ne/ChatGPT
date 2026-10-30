@@ -8,6 +8,7 @@ import { BaseTen } from "./BaseTen";
 import { HundredSquare } from "./HundredSquare";
 import { NumberLine } from "./NumberLine";
 import { TenFrame } from "./TenFrame";
+import { GroupsPicture } from "./GroupsPicture";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
 
@@ -52,7 +53,7 @@ export function MultipleChoice({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked, ["amount-card"])}
               >
-                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} layout={option.layout} pack />
+                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} groups={option.groups} array={option.array} layout={option.layout} pack />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
@@ -72,7 +73,7 @@ export function MultipleChoice({
 
   const countCheck = question.prompt.match(/^Pip counts ((?:\d+\s*,\s*)+\d+)\. Is that right\?$/);
   const numberSequence = question.numberSequence ?? (countCheck ? countCheck[1].split(",").map(value => Number(value.trim())) : undefined);
-  const showStem = !numberSequence && question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame || question.baseTen);
+  const showStem = !numberSequence && question.kind !== "count-objects" && Boolean(question.visual || question.tenFrame || question.baseTen || question.groups || question.array);
   const sum = !question.visual && optionsAreNumerals(question.options)
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
@@ -96,6 +97,8 @@ export function MultipleChoice({
       ) : null}
       {showStem && question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {showStem && question.baseTen ? <BaseTen model={question.baseTen} /> : null}
+      {showStem && question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {showStem && question.array ? <GroupsPicture array={question.array} /> : null}
       {showStem && question.visual ? (
         <ObjectGroup
           visual={question.visual}
@@ -127,6 +130,8 @@ export function MultipleChoice({
                 tenFrame={option.tenFrame}
                 baseTen={option.baseTen}
                 dice={option.dice}
+                groups={option.groups}
+                array={option.array}
                 layout={option.layout}
               />
               {marked === "correct" ? (

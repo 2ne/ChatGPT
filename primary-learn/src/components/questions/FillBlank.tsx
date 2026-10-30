@@ -5,6 +5,7 @@ import { BaseTen } from "./BaseTen";
 import { HundredSquare } from "./HundredSquare";
 import { NumberLine } from "./NumberLine";
 import { TenFrame } from "./TenFrame";
+import { GroupsPicture } from "./GroupsPicture";
 import { choiceClass, markChoice, type Reveal } from "./choice";
 
 type FillBlankProps = {
@@ -23,6 +24,8 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
       {question.hundredSquare ? <HundredSquare square={question.hundredSquare} /> : null}
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
+      {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.array ? <GroupsPicture array={question.array} /> : null}
       {question.visual ? (
         <ObjectGroup
           visual={question.visual}

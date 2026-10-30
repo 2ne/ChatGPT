@@ -1,8 +1,9 @@
-import { useLayoutEffect, useRef, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent } from "react";
 import { RotateCw } from "lucide-react";
 import { copy } from "../../data/copy";
 import { OBJECT_WORDS, objectGlyph } from "../../data/objects";
 import type { BuildSetQuestion } from "../../types/activity";
+import { isBuildGroupsAnswer, type BuildGroupsAnswer } from "../../lib/answers";
 import type { Reveal } from "./choice";
 
 type BuildSetProps = {
@@ -19,7 +20,115 @@ function bankSize(question: BuildSetQuestion): number {
   return Math.min(12, Math.max(target, written));
 }
 
+function emptyGroups(count: number): string[][] {
+  return Array.from({ length: count }, () => [] as string[]);
+}
+
+function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
+  const groupCount = question.groupCount ?? 2;
+  const groupSize = question.groupSize ?? 2;
+  const bank = bankSize(question);
+  const ids = Array.from({ length: bank }, (_, index) => String(index));
+  const groups = isBuildGroupsAnswer(answer)
+    ? answer.groups.map((group) => group.filter((id) => ids.includes(id)))
+    : emptyGroups(groupCount);
+  const used = new Set(groups.flat());
+  const [picked, setPicked] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
+  const words = OBJECT_WORDS[question.visual.item];
+  const glyph = objectGlyph(question.visual.item);
+  const allRight = groups.length === groupCount && groups.every((group) => group.length === groupSize);
+  const marked = reveal == null ? "" : allRight ? " is-correct" : " is-wrong";
+
+  function setGroups(next: string[][]) {
+    onChange({ groups: next } satisfies BuildGroupsAnswer);
+  }
+
+  function add(id: string) {
+    if (disabled || used.has(id)) return;
+    const next = groups.map((group) => [...group]);
+    const bucket = next[picked] ?? [];
+    bucket.push(id);
+    next[picked] = bucket;
+    setGroups(next);
+  }
+
+  function remove(id: string) {
+    if (disabled) return;
+    setGroups(groups.map((group) => group.filter((item) => item !== id)));
+  }
+
+  return (
+    <div className="build-set is-groups" ref={root} style={{ "--build-rows": Math.ceil(bank / 5) } as CSSProperties}>
+      <div className="share-groups">
+        {groups.map((group, index) => (
+          <div key={`g-${index}`} className={`share-group${picked === index ? " is-on" : ""}${marked}`}>
+            <p className="share-group-name">{copy.groupLabel(index + 1)}</p>
+            <button
+              type="button"
+              className="share-group-pick"
+              disabled={disabled}
+              aria-label={copy.groupLabel(index + 1)}
+              aria-pressed={picked === index}
+              onClick={() => setPicked(index)}
+            />
+            {group.length === 0 ? <p className="share-group-empty">{copy.tapOntoGroup}</p> : null}
+            {group.map((id) => (
+              <button
+                key={`${question.id}-${id}`}
+                type="button"
+                className="object-token"
+                disabled={disabled}
+                aria-label={`${words.singular}. Tap to take it out.`}
+                onClick={() => remove(id)}
+              >
+                <span className="object-glyph" aria-hidden>
+                  {glyph}
+                </span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="build-source">
+        <div className="build-tray" role="group" aria-label={copy.tapToAdd}>
+          {ids.map((id) => (
+            <button
+              key={`${question.id}-${id}`}
+              type="button"
+              style={{ visibility: used.has(id) ? "hidden" : "visible" }}
+              className="object-token"
+              disabled={disabled || used.has(id)}
+              aria-hidden={used.has(id) || undefined}
+              aria-label={`Add a ${words.singular}`}
+              onClick={() => add(id)}
+            >
+              <span className="object-glyph" aria-hidden>
+                {glyph}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="build-reset">
+        <button
+          type="button"
+          className="btn-text"
+          disabled={disabled || used.size === 0}
+          style={{ visibility: used.size && !disabled ? "visible" : "hidden" }}
+          onClick={() => setGroups(emptyGroups(groupCount))}
+        >
+          <RotateCw size={18} aria-hidden /> Start again
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function BuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
+  if (question.groupCount && question.groupSize) {
+    return <GroupsBuildSet question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
+  }
   const target = question.visual.count;
   const bank = bankSize(question);
   const ids = Array.from({ length: bank }, (_, index) => String(index));

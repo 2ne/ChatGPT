@@ -248,7 +248,7 @@ Year 1.
 
 ### 21. `y1-groups-arrays` — Groups and arrays
 
-Requires: `y1-count-2-5-10`. Quest: none. Status: missing.
+Requires: `y1-count-2-5-10`. Quest: `groups-and-arrays`, `groups-and-arrays-medium`, `groups-and-arrays-hard`. Status: done.
 
 - Solve one-step multiplication and division problems using concrete objects, pictorial representations and arrays, with the support of the teacher
 
