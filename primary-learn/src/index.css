@@ -2107,7 +2107,6 @@ button.object-token {
   --bt-one: 14px;
   --bt-gap: 4px;
   --bt-rod: var(--sky);
-  --bt-rod-band: #0284c7;
   --bt-one-fill: var(--violet);
   box-sizing: border-box;
   display: flex;
@@ -2142,7 +2141,7 @@ button.object-token {
 }
 
 .base-ten-rod.is-plain {
-  background: linear-gradient(to top, var(--bt-rod) 0 50%, var(--bt-rod-band) 50% 100%);
+  background: var(--bt-rod);
   border: 1px solid var(--ink-soft);
 }
 
@@ -2161,7 +2160,7 @@ button.object-token {
 }
 
 .base-ten-seg.is-upper {
-  background: var(--bt-rod-band);
+  background: var(--bt-rod);
 }
 
 .base-ten-ones {
