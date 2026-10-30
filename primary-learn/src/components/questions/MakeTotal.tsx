@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useState, type MouseEvent, type PointerEvent } from "react";
 import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS } from "../../data/objects";
@@ -84,12 +85,9 @@ function Slot({
     filled ? (
       <span className="object-glyph is-drop">{glyph}</span>
     ) : kind === "add" ? (
-      <>
-        <span className="make-total-add-icon" aria-hidden>
-          +
-        </span>
-        <span className="make-total-add-label">{copy.addSlot}</span>
-      </>
+      <span className="make-total-add-icon" aria-hidden>
+        <Plus size={22} strokeWidth={3} />
+      </span>
     ) : null;
 
   if (!tappable || !onToggle) {
@@ -109,7 +107,7 @@ function Slot({
         kind === "added"
           ? `${words.singular} ${index + 1}. Tap to take it out.`
           : kind === "add"
-            ? copy.addSlot
+            ? `Add one ${words.singular}`
             : `Make ${index + 1}`
       }
       onPointerDown={(event) => activate(onToggle, event)}
@@ -312,6 +310,7 @@ export function MakeTotal({ question, answer, disabled, reveal, onChange }: Make
           className="btn-text make-total-reset"
           disabled={!canFill || selected == null || selected <= 0}
           onClick={(event) => {
+            setFilledSlots([]);
             onChange(null);
             event.currentTarget.blur();
           }}
