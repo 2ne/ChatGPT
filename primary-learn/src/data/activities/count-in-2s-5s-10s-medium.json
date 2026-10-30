@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts 15 blocks in fives on a ten frame. Child thinks 5, 10, 15. Q2 continues 5, 10, 15. Q3 finds 15 in a fives gap. Q4 counts groups of 5 in 20 blocks. Q5 fills 45 on a hundred square counting in fives. Q6 lands on 15 after jumps of 5. Q7 matches 20 to a fives count. Q8 picks two fives-count numbers. Q9 uses 3 hands to make 15 fingers. Q10 orders 5, 10, 15, 20.",
+    "within": "Q1 counts 15 blocks in fives on a ten frame. Child thinks 5, 10, 15. Q2 continues 5, 10, 15. Q3 finds 15 in a fives gap. Q4 counts groups of 5 in 20 blocks. Q5 fills 45 on a hundred square counting in fives. Q6 lands on 15 after jumps of 5. Q7 matches 20 to a fives count. Q8 picks two fives-count numbers. Q9 counts 3 children holding up one hand each. Q10 orders 5, 10, 15, 20.",
     "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -273,10 +273,10 @@
     {
       "id": "c2510-2-9",
       "kind": "fill-blank",
-      "prompt": "Kim has 3 hands. How many fingers does she have now?",
+      "prompt": "Three children each hold up one hand. How many fingers is that?",
       "explanation": "3 hands make 15 fingers. Count 5, 10, 15. Not 3.",
       "narration": {
-        "prompt": "Kim has 3 hands. How many fingers does she have now?"
+        "prompt": "Three children each hold up one hand. How many fingers is that?"
       },
       "acceptedAnswers": [
         "15",

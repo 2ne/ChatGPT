@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 spots 16 in a fives count. Q3 uses 5 hands to make 25 fingers. Q4 reads 12 on a number line with no objects. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to a tens count. Q8 counts back in fives from 15. Q9 fills 70 on a hundred square. Q10 orders 20, 30, 40, 50.",
+    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 spots 16 in a fives count. Q3 counts 5 children holding up one hand each. Q4 reads 12 on a number line with no objects. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to a tens count. Q8 continues 25, 20, 15 counting back in fives. Q9 fills 70 on a hundred square. Q10 orders 20, 30, 40, 50.",
     "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -86,10 +86,10 @@
     {
       "id": "c2510-3-3",
       "kind": "fill-blank",
-      "prompt": "Mia has 5 hands. How many fingers does she have now?",
+      "prompt": "Five children each hold up one hand. How many fingers is that?",
       "explanation": "5 hands make 25 fingers. Count 5, 10, 15, 20, 25.",
       "narration": {
-        "prompt": "Mia has 5 hands. How many fingers does she have now?"
+        "prompt": "Five children each hold up one hand. How many fingers is that?"
       },
       "acceptedAnswers": [
         "25",
@@ -238,10 +238,10 @@
     {
       "id": "c2510-3-8",
       "kind": "fill-blank",
-      "prompt": "What number comes after 15 if you count back in fives?",
+      "prompt": "Count back in fives: 25, 20, 15, ?",
       "explanation": "After 15 comes 10. Count back 5. Not 14.",
       "narration": {
-        "prompt": "What number comes after 15 if you count back in fives?"
+        "prompt": "Count back in fives: twenty-five, twenty, fifteen, blank."
       },
       "acceptedAnswers": [
         "10",
