@@ -1,0 +1,374 @@
+{
+  "id": "count-in-2s-5s-10s",
+  "title": "Count in 2s, 5s and 10s",
+  "summary": "Count in twos and tens with pairs, ten frames, tens rods, a number line and a hundred square.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-count-2-5-10",
+  "pathNode": "y1-count-2-5-10",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 counts 6 ducks in twos. Child thinks in pairs, not one by one. Q2 counts 10 frame blocks in twos. Q3 continues 2, 4, 6 by adding 2. Q4 finds 6 in a twos gap. Q5 matches 10 to a ten frame. Q6 lands on 8 after jumps of 2 on a number line. Q7 reads 5 tens as 50. Q8 fills 40 in a tens column. Q9 picks two numbers from a tens count. Q10 orders 10, 20, 30, 40.",
+    "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "count-in-2s",
+    "count-in-10s"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "banana",
+      "star",
+      "balloon",
+      "car",
+      "duck",
+      "ladybird",
+      "frog",
+      "fish",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "id": "c2510-1-1",
+      "kind": "count-objects",
+      "prompt": "How many {items} can you see?",
+      "visual": {
+        "item": "duck",
+        "count": 6
+      },
+      "hint": "Count in twos: 2, 4, 6.",
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "6"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "There are 6 {items}. Count 2, 4, 6. Do not count in ones.",
+      "narration": {
+        "prompt": "How many {items} can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-1-2",
+      "kind": "multiple-choice",
+      "prompt": "How many blocks can you see?",
+      "tenFrame": {
+        "count": 10,
+        "item": "star",
+        "pairs": true
+      },
+      "hint": "Count in twos along the pairs.",
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "11"
+        },
+        {
+          "id": "c",
+          "label": "12"
+        },
+        {
+          "id": "d",
+          "label": "20"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The frame has 10 blocks. Count 2, 4, 6, 8, 10.",
+      "narration": {
+        "prompt": "How many blocks can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-1-3",
+      "kind": "fill-blank",
+      "prompt": "What number comes next? 2, 4, 6, ?",
+      "hint": "Each jump is 2.",
+      "explanation": "After 6 comes 8. Add 2 each time. Not 7.",
+      "narration": {
+        "prompt": "What number comes next? Two, four, six, blank."
+      },
+      "acceptedAnswers": [
+        "8",
+        "eight"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "id": "c2510-1-4",
+      "kind": "multiple-choice",
+      "prompt": "Which number is missing?",
+      "numberSequence": [
+        2,
+        4,
+        null,
+        8
+      ],
+      "options": [
+        {
+          "id": "a",
+          "label": "4"
+        },
+        {
+          "id": "b",
+          "label": "5"
+        },
+        {
+          "id": "c",
+          "label": "6"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "6 sits between 4 and 8. The jump is 2, not 1.",
+      "narration": {
+        "prompt": "Which number is missing? Two, four, blank, eight."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-1-5",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "mode": "one-at-a-time",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "10",
+          "right": {
+            "tenFrame": {
+              "count": 10,
+              "item": "star",
+              "pairs": true
+            }
+          }
+        }
+      ],
+      "choices": [
+        {
+          "tenFrame": {
+            "count": 10,
+            "item": "star",
+            "pairs": true
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 8,
+            "item": "star",
+            "pairs": true
+          }
+        },
+        {
+          "tenFrame": {
+            "count": 6,
+            "item": "star",
+            "pairs": true
+          }
+        }
+      ],
+      "explanation": "10 matches the full ten frame. Not 8 or 6.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      }
+    },
+    {
+      "id": "c2510-1-6",
+      "kind": "fill-blank",
+      "prompt": "Count in twos from 0. Which number sits on the mark?",
+      "numberLine": {
+        "start": 0,
+        "end": 20,
+        "scale": "ones",
+        "marked": 8
+      },
+      "explanation": "The mark is 8. Count 2, 4, 6, 8 from 0.",
+      "narration": {
+        "prompt": "Count in twos from 0. Which number sits on the mark?"
+      },
+      "acceptedAnswers": [
+        "8",
+        "eight"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        4,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "c2510-1-7",
+      "kind": "fill-blank",
+      "prompt": "What number is this?",
+      "baseTen": {
+        "tens": 5,
+        "ones": 0,
+        "style": "segmented"
+      },
+      "explanation": "5 tens make 50. Count 10, 20, 30, 40, 50. Not 5.",
+      "narration": {
+        "prompt": "What number is this?"
+      },
+      "acceptedAnswers": [
+        "50",
+        "fifty"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        5,
+        15,
+        40,
+        50
+      ]
+    },
+    {
+      "id": "c2510-1-8",
+      "kind": "multiple-choice",
+      "prompt": "Count in tens. Which number goes in the empty cell?",
+      "hundredSquare": {
+        "start": 1,
+        "rows": 4,
+        "missing": 40,
+        "highlight": 30
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "31"
+        },
+        {
+          "id": "b",
+          "label": "39"
+        },
+        {
+          "id": "c",
+          "label": "40"
+        },
+        {
+          "id": "d",
+          "label": "50"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The empty cell is 40. Count 10, 20, 30, 40 down the tens.",
+      "narration": {
+        "prompt": "Count in tens. Which number goes in the empty cell?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-1-9",
+      "kind": "multi-select",
+      "prompt": "Tap the two numbers you say when you count in tens.",
+      "options": [
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "21"
+        },
+        {
+          "id": "c",
+          "label": "25"
+        },
+        {
+          "id": "d",
+          "label": "30"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "d"
+      ],
+      "explanation": "You say 20 and 30. 21 and 25 are not tens.",
+      "narration": {
+        "prompt": "Tap the two numbers you say when you count in tens."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-1-10",
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n40",
+          "label": "40"
+        },
+        {
+          "id": "n10",
+          "label": "10"
+        },
+        {
+          "id": "n30",
+          "label": "30"
+        },
+        {
+          "id": "n20",
+          "label": "20"
+        }
+      ],
+      "correctOrder": [
+        "n10",
+        "n20",
+        "n30",
+        "n40"
+      ],
+      "explanation": "The numbers go 10, 20, 30, 40. Each jump is 10.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    }
+  ]
+}

@@ -238,7 +238,7 @@ Requires: `y1-count-100`. Quest: `show-and-compare-numbers`, `show-and-compare-n
 
 ### 20. `y1-count-2-5-10` — Count in 2s, 5s and 10s
 
-Requires: `y1-represent-100`. Quest: none. Status: missing.
+Requires: `y1-represent-100`. Quest: `count-in-2s-5s-10s`, `count-in-2s-5s-10s-medium`, `count-in-2s-5s-10s-hard`. Status: done.
 
 - Count in multiples of twos, fives and tens
 

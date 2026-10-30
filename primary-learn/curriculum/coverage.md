@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 19 — nodes 1 to 19 (`eyfs-count-5` through `y1-represent-100`) |
+| Done | 20 — nodes 1 to 20 (`eyfs-count-5` through `y1-count-2-5-10`) |
 | Partial | 0 |
-| Missing | 105 |
+| Missing | 104 |
 
 ## Quests in the app
 
@@ -80,11 +80,15 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `show-and-compare-numbers-medium` | `y1-represent-100` (node 19) | done — Medium pictures, number lines and comparisons |
 | `show-and-compare-numbers-hard` | `y1-represent-100` (node 19) | done — Hard pictures, number lines and comparisons |
 
+| `count-in-2s-5s-10s` | `y1-count-2-5-10` (node 20) | done — Easy: twos and tens with pairs, frames, rods, line and square |
+| `count-in-2s-5s-10s-medium` | `y1-count-2-5-10` (node 20) | done — Medium: fives, continue a count, missing number and groups |
+| `count-in-2s-5s-10s-hard` | `y1-count-2-5-10` (node 20) | done — Hard: mixed steps, count back, would-not-say, line and hands story |
+
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-count-2-5-10` — Count in 2s, 5s and 10s (node 20). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-groups-arrays` — Groups and arrays (node 21). Start that node with Easy.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 

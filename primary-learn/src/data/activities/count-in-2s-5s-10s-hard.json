@@ -1,0 +1,329 @@
+{
+  "id": "count-in-2s-5s-10s-hard",
+  "title": "Count in 2s, 5s and 10s",
+  "summary": "Mix twos, fives and tens, count back, and spot a number you would not say.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-count-2-5-10",
+  "pathNode": "y1-count-2-5-10",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 spots 16 in a fives count. Q3 uses 5 hands to make 25 fingers. Q4 reads 12 on a number line with no objects. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to a tens count. Q8 counts back in fives from 15. Q9 fills 70 on a hundred square. Q10 orders 20, 30, 40, 50.",
+    "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "count-in-2s",
+    "count-in-5s",
+    "count-in-10s",
+    "count-backwards"
+  ],
+  "questions": [
+    {
+      "id": "c2510-3-1",
+      "kind": "fill-blank",
+      "prompt": "What number comes next? 20, 18, 16, ?",
+      "explanation": "After 16 comes 14. Count back 2. Not 15.",
+      "narration": {
+        "prompt": "What number comes next? Twenty, eighteen, sixteen, blank."
+      },
+      "acceptedAnswers": [
+        "14",
+        "fourteen"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        12,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "id": "c2510-3-2",
+      "kind": "multiple-choice",
+      "prompt": "Which number would not be said if you count in fives?",
+      "numberSequence": [
+        5,
+        10,
+        15,
+        16,
+        20
+      ],
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "16"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "16 is not a five. You say 5, 10, 15, 20.",
+      "narration": {
+        "prompt": "Which number would not be said if you count in fives? Five, ten, fifteen, sixteen, twenty."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-3-3",
+      "kind": "fill-blank",
+      "prompt": "Mia has 5 hands. How many fingers does she have now?",
+      "explanation": "5 hands make 25 fingers. Count 5, 10, 15, 20, 25.",
+      "narration": {
+        "prompt": "Mia has 5 hands. How many fingers does she have now?"
+      },
+      "acceptedAnswers": [
+        "25",
+        "twenty-five",
+        "twenty five"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        5,
+        10,
+        25,
+        30
+      ]
+    },
+    {
+      "id": "c2510-3-4",
+      "kind": "multiple-choice",
+      "prompt": "Count in twos from 0. Which number sits on the mark?",
+      "numberLine": {
+        "start": 0,
+        "end": 20,
+        "scale": "ones",
+        "marked": 12
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "12"
+        },
+        {
+          "id": "b",
+          "label": "13"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "16"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The mark is 12. Count 2, 4, 6, 8, 10, 12.",
+      "narration": {
+        "prompt": "Count in twos from 0. Which number sits on the mark?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-3-5",
+      "kind": "multiple-choice",
+      "prompt": "Which number is missing?",
+      "numberSequence": [
+        50,
+        40,
+        null,
+        20
+      ],
+      "options": [
+        {
+          "id": "a",
+          "label": "20"
+        },
+        {
+          "id": "b",
+          "label": "25"
+        },
+        {
+          "id": "c",
+          "label": "29"
+        },
+        {
+          "id": "d",
+          "label": "30"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "30 sits between 40 and 20. Count back 10 each time.",
+      "narration": {
+        "prompt": "Which number is missing? Fifty, forty, blank, twenty."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-3-6",
+      "kind": "multi-select",
+      "prompt": "Tap the two numbers you would not say when you count in tens.",
+      "options": [
+        {
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "20"
+        },
+        {
+          "id": "c",
+          "label": "25"
+        },
+        {
+          "id": "d",
+          "label": "30"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "15 and 25 are not tens. You say 20 and 30.",
+      "narration": {
+        "prompt": "Tap the two numbers you would not say when you count in tens."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-3-7",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "mode": "one-at-a-time",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "40",
+          "right": "10, 20, 30, 40"
+        }
+      ],
+      "choices": [
+        "10, 20, 30, 40",
+        "10, 20, 30",
+        "20, 30, 40, 50",
+        "2, 4, 6, 8"
+      ],
+      "explanation": "40 is 10, 20, 30, 40. Not twos or an extra ten.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      }
+    },
+    {
+      "id": "c2510-3-8",
+      "kind": "fill-blank",
+      "prompt": "What number comes after 15 if you count back in fives?",
+      "explanation": "After 15 comes 10. Count back 5. Not 14.",
+      "narration": {
+        "prompt": "What number comes after 15 if you count back in fives?"
+      },
+      "acceptedAnswers": [
+        "10",
+        "ten"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        5,
+        10,
+        14,
+        16
+      ]
+    },
+    {
+      "id": "c2510-3-9",
+      "kind": "multiple-choice",
+      "prompt": "Count in tens. Which number goes in the empty cell?",
+      "hundredSquare": {
+        "start": 51,
+        "rows": 3,
+        "missing": 70,
+        "highlight": 60
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "60"
+        },
+        {
+          "id": "b",
+          "label": "69"
+        },
+        {
+          "id": "c",
+          "label": "70"
+        },
+        {
+          "id": "d",
+          "label": "80"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The empty cell is 70. Count 50, 60, 70 down the tens.",
+      "narration": {
+        "prompt": "Count in tens. Which number goes in the empty cell?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-3-10",
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n50",
+          "label": "50"
+        },
+        {
+          "id": "n20",
+          "label": "20"
+        },
+        {
+          "id": "n40",
+          "label": "40"
+        },
+        {
+          "id": "n30",
+          "label": "30"
+        }
+      ],
+      "correctOrder": [
+        "n20",
+        "n30",
+        "n40",
+        "n50"
+      ],
+      "explanation": "The numbers go 20, 30, 40, 50. Each jump is 10.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "id": "count-in-2s-5s-10s-medium",
+  "title": "Count in 2s, 5s and 10s",
+  "summary": "Count in fives, continue a count, find a missing number and count groups.",
+  "subject": "maths",
+  "type": "counting",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-count-2-5-10",
+  "pathNode": "y1-count-2-5-10",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 counts 15 blocks in fives on a ten frame. Child thinks 5, 10, 15. Q2 continues 5, 10, 15. Q3 finds 15 in a fives gap. Q4 counts groups of 5 in 20 blocks. Q5 fills 45 on a hundred square counting in fives. Q6 lands on 15 after jumps of 5. Q7 matches 20 to a fives count. Q8 picks two fives-count numbers. Q9 uses 3 hands to make 15 fingers. Q10 orders 5, 10, 15, 20.",
+    "versus": "Easy uses pairs and tens pictures up to 50. Medium introduces fives, continuing a count, a missing 5s number and counting groups. Hard mixes steps, counts back, spots a number you would not say, uses a number line with no objects, and a short hands story. Hard is a new kind of thinking, not just bigger numbers."
+  },
+  "skills": [
+    "count-in-2s",
+    "count-in-5s",
+    "count-in-10s"
+  ],
+  "questions": [
+    {
+      "id": "c2510-2-1",
+      "kind": "multiple-choice",
+      "prompt": "How many blocks can you see?",
+      "tenFrame": {
+        "count": 15,
+        "item": "star"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "5"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "14"
+        },
+        {
+          "id": "d",
+          "label": "15"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "There are 15 blocks. Count 5, 10, 15. Not 14 or 10.",
+      "narration": {
+        "prompt": "How many blocks can you see?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-2-2",
+      "kind": "fill-blank",
+      "prompt": "What number comes next? 5, 10, 15, ?",
+      "explanation": "After 15 comes 20. Add 5 each time. Not 16.",
+      "narration": {
+        "prompt": "What number comes next? Five, ten, fifteen, blank."
+      },
+      "acceptedAnswers": [
+        "20",
+        "twenty"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        16,
+        18,
+        20,
+        25
+      ]
+    },
+    {
+      "id": "c2510-2-3",
+      "kind": "multiple-choice",
+      "prompt": "Which number is missing?",
+      "numberSequence": [
+        5,
+        10,
+        null,
+        20
+      ],
+      "options": [
+        {
+          "id": "a",
+          "label": "15"
+        },
+        {
+          "id": "b",
+          "label": "16"
+        },
+        {
+          "id": "c",
+          "label": "20"
+        },
+        {
+          "id": "d",
+          "label": "25"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "15 sits between 10 and 20. The jump is 5, not 1.",
+      "narration": {
+        "prompt": "Which number is missing? Five, ten, blank, twenty."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-2-4",
+      "kind": "fill-blank",
+      "prompt": "How many groups of 5 blocks can you see?",
+      "tenFrame": {
+        "count": 20,
+        "item": "star"
+      },
+      "explanation": "20 blocks make 4 groups of 5. Not 20 ones.",
+      "narration": {
+        "prompt": "How many groups of 5 blocks can you see?"
+      },
+      "acceptedAnswers": [
+        "4",
+        "four"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        2,
+        4,
+        5,
+        20
+      ]
+    },
+    {
+      "id": "c2510-2-5",
+      "kind": "multiple-choice",
+      "prompt": "Count in fives. Which number goes in the empty cell?",
+      "hundredSquare": {
+        "start": 31,
+        "rows": 3,
+        "missing": 45,
+        "highlight": 40
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "35"
+        },
+        {
+          "id": "b",
+          "label": "40"
+        },
+        {
+          "id": "c",
+          "label": "44"
+        },
+        {
+          "id": "d",
+          "label": "45"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "The empty cell is 45. Count 35, 40, 45, 50.",
+      "narration": {
+        "prompt": "Count in fives. Which number goes in the empty cell?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-2-6",
+      "kind": "multiple-choice",
+      "prompt": "Count in fives from 0. Which number sits on the mark?",
+      "numberLine": {
+        "start": 0,
+        "end": 20,
+        "scale": "ones",
+        "marked": 15
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "20"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The mark is 15. Count 5, 10, 15 from 0.",
+      "narration": {
+        "prompt": "Count in fives from 0. Which number sits on the mark?"
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-2-7",
+      "kind": "match-pairs",
+      "prompt": "Select the card that matches the number.",
+      "mode": "one-at-a-time",
+      "pairs": [
+        {
+          "id": "p1",
+          "left": "20",
+          "right": "5, 10, 15, 20"
+        }
+      ],
+      "choices": [
+        "5, 10, 15, 20",
+        "5, 10, 15",
+        "10, 20, 30, 40"
+      ],
+      "explanation": "20 is 5, 10, 15, 20. Not a tens count.",
+      "narration": {
+        "prompt": "Select the card that matches the number."
+      }
+    },
+    {
+      "id": "c2510-2-8",
+      "kind": "multi-select",
+      "prompt": "Tap the two numbers you say when you count in fives.",
+      "options": [
+        {
+          "id": "a",
+          "label": "10"
+        },
+        {
+          "id": "b",
+          "label": "12"
+        },
+        {
+          "id": "c",
+          "label": "15"
+        },
+        {
+          "id": "d",
+          "label": "16"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "You say 10 and 15. 12 and 16 skip the fives.",
+      "narration": {
+        "prompt": "Tap the two numbers you say when you count in fives."
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
+    },
+    {
+      "id": "c2510-2-9",
+      "kind": "fill-blank",
+      "prompt": "Kim has 3 hands. How many fingers does she have now?",
+      "explanation": "3 hands make 15 fingers. Count 5, 10, 15. Not 3.",
+      "narration": {
+        "prompt": "Kim has 3 hands. How many fingers does she have now?"
+      },
+      "acceptedAnswers": [
+        "15",
+        "fifteen"
+      ],
+      "inputMode": "numeric",
+      "numericChoices": [
+        3,
+        8,
+        15,
+        30
+      ]
+    },
+    {
+      "id": "c2510-2-10",
+      "kind": "ordered",
+      "prompt": "Put the numbers in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "n15",
+          "label": "15"
+        },
+        {
+          "id": "n5",
+          "label": "5"
+        },
+        {
+          "id": "n20",
+          "label": "20"
+        },
+        {
+          "id": "n10",
+          "label": "10"
+        }
+      ],
+      "correctOrder": [
+        "n5",
+        "n10",
+        "n15",
+        "n20"
+      ],
+      "explanation": "The numbers go 5, 10, 15, 20. Each jump is 5.",
+      "narration": {
+        "prompt": "Put the numbers in order, from smallest to biggest."
+      }
+    }
+  ]
+}
