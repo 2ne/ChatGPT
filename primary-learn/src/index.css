@@ -2071,7 +2071,7 @@ button.object-token {
   width: 8px;
   height: 28px;
   border-radius: 2px;
-  background: var(--violet);
+  background: var(--sky);
   border: 1px solid var(--ink-soft);
 }
 
@@ -2106,8 +2106,8 @@ button.object-token {
   --bt-rod-h: 110px;
   --bt-one: 14px;
   --bt-gap: 4px;
-  --bt-rod: var(--violet);
-  --bt-rod-band: var(--primary);
+  --bt-rod: var(--sky);
+  --bt-rod-band: #0284c7;
   --bt-one-fill: var(--violet);
   box-sizing: border-box;
   display: flex;
