@@ -42,7 +42,7 @@
     {
       "id": "m10-1-1",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see in all?",
+      "prompt": "How many coloured blocks can you see in all?",
       "tenFrame": {
         "count": 6,
         "item": "apple",
@@ -69,7 +69,7 @@
       "hint": "Add both colours.",
       "explanation": "5 and 1 make 6. The first 5 is only one part.",
       "narration": {
-        "prompt": "How many blocks can you see in all?"
+        "prompt": "How many coloured blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -78,7 +78,7 @@
     {
       "id": "m10-1-2",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see in all?",
+      "prompt": "How many coloured blocks can you see in all?",
       "tenFrame": {
         "count": 7,
         "item": "frog",
@@ -105,7 +105,7 @@
       "hint": "Add both colours.",
       "explanation": "4 and 3 make 7. Both parts count towards the total.",
       "narration": {
-        "prompt": "How many blocks can you see in all?"
+        "prompt": "How many coloured blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true

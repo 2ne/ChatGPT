@@ -42,7 +42,7 @@
     {
       "id": "db-2-1",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see in all?",
+      "prompt": "How many coloured blocks can you see in all?",
       "tenFrame": {
         "count": 6,
         "item": "apple",
@@ -68,7 +68,7 @@
       "correctId": "a",
       "explanation": "3 and 3 make 6. That is a double, not 3.",
       "narration": {
-        "prompt": "How many blocks can you see in all?"
+        "prompt": "How many coloured blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true

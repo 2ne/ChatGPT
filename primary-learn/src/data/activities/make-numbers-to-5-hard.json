@@ -42,7 +42,7 @@
     {
       "id": "m5-3-1",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see in all?",
+      "prompt": "How many coloured blocks can you see in all?",
       "tenFrame": {
         "count": 5,
         "item": "apple",
@@ -68,7 +68,7 @@
       "correctId": "c",
       "explanation": "1 and 4 make 5. Both parts count towards the total.",
       "narration": {
-        "prompt": "How many blocks can you see in all?"
+        "prompt": "How many coloured blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true

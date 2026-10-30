@@ -109,7 +109,7 @@
     {
       "id": "c10-1-3",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see?",
+      "prompt": "How many coloured blocks can you see?",
       "tenFrame": {
         "count": 8,
         "item": "apple",
@@ -136,7 +136,7 @@
       "hint": "See 5 on the top, then the extra bit.",
       "explanation": "5 and 3 more make 8. The first 5 is only one part.",
       "narration": {
-        "prompt": "How many blocks can you see?"
+        "prompt": "How many coloured blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true

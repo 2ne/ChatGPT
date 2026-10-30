@@ -26,7 +26,7 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see?",
+      "prompt": "How many coloured blocks can you see?",
       "options": [
         {
           "id": "0",
@@ -56,7 +56,7 @@
       },
       "id": "represent100-2-1",
       "narration": {
-        "prompt": "How many blocks can you see?"
+        "prompt": "How many coloured blocks can you see?"
       }
     },
     {

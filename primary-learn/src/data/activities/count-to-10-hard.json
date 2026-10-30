@@ -81,7 +81,7 @@
     {
       "id": "c10-3-2",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see?",
+      "prompt": "How many coloured blocks can you see?",
       "tenFrame": {
         "count": 7,
         "item": "apple",
@@ -107,7 +107,7 @@
       "correctId": "a",
       "explanation": "5 and 2 more make 7. The first 5 is only one part.",
       "narration": {
-        "prompt": "How many blocks can you see?"
+        "prompt": "How many coloured blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -116,7 +116,7 @@
     {
       "id": "c10-3-3",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see?",
+      "prompt": "How many coloured blocks can you see?",
       "tenFrame": {
         "count": 9,
         "item": "frog",
@@ -142,7 +142,7 @@
       "correctId": "c",
       "explanation": "5 and 4 more make 9. Empty cells are not counted.",
       "narration": {
-        "prompt": "How many blocks can you see?"
+        "prompt": "How many coloured blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true

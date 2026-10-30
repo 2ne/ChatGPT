@@ -107,7 +107,7 @@
     {
       "id": "c10-2-3",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see?",
+      "prompt": "How many coloured blocks can you see?",
       "tenFrame": {
         "count": 10,
         "item": "apple",
@@ -133,7 +133,7 @@
       "correctId": "b",
       "explanation": "5 and 5 make 10. The first 5 is only one part.",
       "narration": {
-        "prompt": "How many blocks can you see?"
+        "prompt": "How many coloured blocks can you see?"
       },
       "randomise": {
         "shuffleOptions": true

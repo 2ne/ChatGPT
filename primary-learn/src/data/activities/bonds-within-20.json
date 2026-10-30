@@ -43,7 +43,7 @@
     {
       "id": "b20-1-1",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see in all?",
+      "prompt": "How many coloured blocks can you see in all?",
       "tenFrame": {
         "count": 11,
         "item": "apple",
@@ -74,7 +74,7 @@
       "hint": "A full frame is 10. Then add the extra bit.",
       "explanation": "10 and 1 make 11. The first 10 is only one part.",
       "narration": {
-        "prompt": "How many blocks can you see in all?"
+        "prompt": "How many coloured blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true
@@ -248,7 +248,7 @@
     {
       "id": "b20-1-8",
       "kind": "multiple-choice",
-      "prompt": "How many blocks can you see in all?",
+      "prompt": "How many coloured blocks can you see in all?",
       "tenFrame": {
         "count": 18,
         "item": "fish",
@@ -278,7 +278,7 @@
       "correctId": "d",
       "explanation": "10 and 8 make 18. Both parts count towards the total.",
       "narration": {
-        "prompt": "How many blocks can you see in all?"
+        "prompt": "How many coloured blocks can you see in all?"
       },
       "randomise": {
         "shuffleOptions": true
