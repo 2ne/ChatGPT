@@ -723,7 +723,7 @@ function parseQuestion(value: unknown, path: string): Question {
       if (marked <= from) fail(path, "marked must be after jumps.from");
       if ((marked - from) % step !== 0) fail(path, "marked must be a multiple of jumps.step from jumps.from");
       if (marked === start || marked === end) {
-        fail(path, "jumps must not mark 0 or the end. Those are the only labels");
+        fail(path, "number line labels include the marked answer");
       }
       jumps = n.jumps.from == null ? { step } : { step, from };
     }

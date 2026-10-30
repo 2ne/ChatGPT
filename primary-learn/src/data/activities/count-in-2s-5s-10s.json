@@ -66,7 +66,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "There are 6 {items}. Count 2, 4, 6. Do not count in ones.",
+      "explanation": "There are 6 {items}. They go 2, 4, 6. Not one by one.",
       "narration": {
         "prompt": "How many {items} can you see?"
       },
@@ -103,7 +103,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "The frame has 10 blocks. Count 2, 4, 6, 8, 10.",
+      "explanation": "The frame has 10 blocks. They go 2, 4, 6, 8, 10.",
       "narration": {
         "prompt": "How many blocks can you see?"
       },
@@ -229,7 +229,7 @@
           "from": 0
         }
       },
-      "explanation": "The mark is 8. Count 2, 4, 6, 8 from 0.",
+      "explanation": "The mark is 8. The hops go 2, 4, 6, 8 from 0.",
       "narration": {
         "prompt": "Count in twos from 0. Which number sits on the mark?"
       },
@@ -254,7 +254,7 @@
         "ones": 0,
         "style": "segmented"
       },
-      "explanation": "5 tens make 50. Count 10, 20, 30, 40, 50. Not 5.",
+      "explanation": "5 tens make 50. They go 10, 20, 30, 40, 50. Not 5.",
       "narration": {
         "prompt": "What number is this?"
       },
@@ -299,7 +299,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "The empty cell is 40. Count 10, 20, 30, 40 down the tens.",
+      "explanation": "The empty cell is 40. Tens go 10, 20, 30, 40.",
       "narration": {
         "prompt": "Count in tens. Which number goes in the empty cell?"
       },

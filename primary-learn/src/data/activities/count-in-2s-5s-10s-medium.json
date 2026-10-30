@@ -51,7 +51,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "There are 15 blocks. Count 5, 10, 15. Not 14 or 10.",
+      "explanation": "There are 15 blocks. They go 5, 10, 15. Not 14 or 10.",
       "narration": {
         "prompt": "How many blocks can you see?"
       },
@@ -170,7 +170,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "The empty cell is 45. Count 35, 40, 45, 50.",
+      "explanation": "The empty cell is 45. Fives go 35, 40, 45, 50.",
       "narration": {
         "prompt": "Count in fives. Which number goes in the empty cell?"
       },
@@ -211,7 +211,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "The mark is 15. Count 5, 10, 15 from 0.",
+      "explanation": "The mark is 15. The hops go 5, 10, 15 from 0.",
       "narration": {
         "prompt": "Count in fives from 0. Which number sits on the mark?"
       },
@@ -231,7 +231,8 @@
           "right": {
             "tenFrame": {
               "count": 10,
-              "item": "star"
+              "item": "star",
+              "parts": [5, 5]
             }
           }
         }
@@ -240,7 +241,8 @@
         {
           "tenFrame": {
             "count": 10,
-            "item": "star"
+            "item": "star",
+            "parts": [5, 5]
           }
         },
         {
@@ -299,7 +301,7 @@
       "id": "c2510-2-9",
       "kind": "fill-blank",
       "prompt": "Three children each hold up one hand. How many fingers is that?",
-      "explanation": "3 hands make 15 fingers. Count 5, 10, 15. Not 3.",
+      "explanation": "3 hands make 15 fingers. They go 5, 10, 15. Not 3.",
       "narration": {
         "prompt": "Three children each hold up one hand. How many fingers is that?"
       },

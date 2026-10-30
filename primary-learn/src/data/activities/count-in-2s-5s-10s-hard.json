@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 spots 16 in a fives count. Q3 counts 5 children holding up one hand each. Q4 names the step in 15, 20, 25, 30. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to the word forty. Q8 continues 25, 20, 15 counting back in fives. Q9 fills 70 on a hundred square. Q10 orders 50, 45, 40, 35 from biggest to smallest.",
+    "within": "Q1 counts back in twos from 20. Child subtracts 2, not 1. Q2 picks 16, a number you would not say in fives. Q3 counts 4 children holding up two hands each in tens. Q4 names the step in 15, 20, 25, 30. Q5 finds 30 counting back in tens. Q6 picks two numbers you would not say in tens. Q7 matches 40 to the word forty. Q8 continues 25, 20, 15 counting back in fives. Q9 fills 70 on a hundred square. Q10 orders 50, 45, 40, 35 from biggest to smallest.",
     "versus": "Easy uses pairs and tens pictures up to 50, with hops on the number line. Medium adds fives, a twos gap, a tens pick and higher 5s counts. Hard names the step size, counts back, spots a number you would not say, and orders from biggest to smallest. Hard is a new kind of thinking, not just bigger numbers."
   },
   "skills": [
@@ -29,7 +29,7 @@
       "id": "c2510-3-1",
       "kind": "fill-blank",
       "prompt": "What number comes next? 20, 18, 16, ?",
-      "explanation": "After 16 comes 14. Count back 2. Not 15.",
+      "explanation": "After 16 comes 14. Each jump back is 2. Not 15.",
       "narration": {
         "prompt": "What number comes next? Twenty, eighteen, sixteen, blank."
       },
@@ -49,13 +49,6 @@
       "id": "c2510-3-2",
       "kind": "multiple-choice",
       "prompt": "Which number would you not say when you count in fives?",
-      "numberSequence": [
-        5,
-        10,
-        15,
-        16,
-        20
-      ],
       "options": [
         {
           "id": "a",
@@ -86,22 +79,21 @@
     {
       "id": "c2510-3-3",
       "kind": "fill-blank",
-      "prompt": "Five children each hold up one hand. How many fingers is that?",
-      "explanation": "5 hands make 25 fingers. Count 5, 10, 15, 20, 25.",
+      "prompt": "Four children each hold up two hands. How many fingers is that?",
+      "explanation": "Two hands are 10 fingers. 4 tens make 40. Not 8 or 20.",
       "narration": {
-        "prompt": "Five children each hold up one hand. How many fingers is that?"
+        "prompt": "Four children each hold up two hands. How many fingers is that?"
       },
       "acceptedAnswers": [
-        "25",
-        "twenty-five",
-        "twenty five"
+        "40",
+        "forty"
       ],
       "inputMode": "numeric",
       "numericChoices": [
-        5,
-        10,
-        25,
-        30
+        4,
+        8,
+        20,
+        40
       ]
     },
     {
@@ -170,7 +162,7 @@
         }
       ],
       "correctId": "d",
-      "explanation": "30 sits between 40 and 20. Count back 10 each time.",
+      "explanation": "30 sits between 40 and 20. Each jump back is 10.",
       "narration": {
         "prompt": "Which number is missing? Fifty, forty, blank, twenty."
       },
@@ -239,7 +231,7 @@
       "id": "c2510-3-8",
       "kind": "fill-blank",
       "prompt": "Count back in fives: 25, 20, 15, ?",
-      "explanation": "After 15 comes 10. Count back 5. Not 14.",
+      "explanation": "After 15 comes 10. Each jump back is 5. Not 14.",
       "narration": {
         "prompt": "Count back in fives: twenty-five, twenty, fifteen, blank."
       },
@@ -284,7 +276,7 @@
         }
       ],
       "correctId": "a",
-      "explanation": "The empty cell is 70. Count 50, 60, 70 down the tens.",
+      "explanation": "The empty cell is 70. Tens go 50, 60, 70.",
       "narration": {
         "prompt": "Count in tens. Which number goes in the empty cell?"
       },

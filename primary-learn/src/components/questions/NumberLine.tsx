@@ -24,6 +24,25 @@ function hopStarts(from: number, step: number, marked: number): number[] {
   return starts;
 }
 
+/** Labels the child can read. Skip-count hops only name 0 and the end, never the mark. */
+function shownLabels(
+  view: { start: number; end: number },
+  hundred: boolean,
+  labelEvery: number,
+  marked: number | undefined,
+  withHops: boolean,
+): Set<number> {
+  if (withHops) {
+    return new Set([view.start, view.end].filter((value) => value !== marked));
+  }
+  const labels = new Set<number>();
+  for (let value = view.start; value <= view.end; value += 1) {
+    const major = hundred ? value % 10 === 0 : value % labelEvery === 0;
+    if (major && value !== marked) labels.add(value);
+  }
+  return labels;
+}
+
 function lineAria(line: NumberLineAsset): string {
   const base = describeNumberLine(line);
   if (!line.jumps || line.marked == null) return base;
@@ -44,7 +63,8 @@ export function NumberLine({ line }: { line: NumberLineAsset }) {
   const hops =
     jumps && marked != null ? hopStarts(hopFrom, jumps.step, marked) : [];
   const tall = flags.length > 0;
-  const withHops = hops.length > 0;
+  const withHops = Boolean(jumps);
+  const labels = shownLabels(view, hundred, labelEvery, marked, withHops);
   const height = tall ? 132 : withHops ? 128 : 112;
   const axisY = tall ? 68 : withHops ? 64 : 52;
   return (
@@ -80,9 +100,7 @@ export function NumberLine({ line }: { line: NumberLineAsset }) {
         const isMark = marked === value;
         const kind = tickKind(value, hundred, labelEvery);
         const up = isMark ? 10 : kind === "major" ? 8 : kind === "mid" ? 6 : 4;
-        const showLabel = withHops
-          ? (value === view.start || value === view.end) && value !== marked
-          : kind === "major" && marked !== value;
+        const showLabel = labels.has(value);
         return (
           <g key={`t-${value}`}>
             <line

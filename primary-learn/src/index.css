@@ -1939,9 +1939,9 @@ button.object-token {
 
 .number-line-hop {
   fill: none;
-  stroke: var(--primary);
+  stroke: var(--violet);
   stroke-width: 2.5;
-  stroke-opacity: 0.45;
+  stroke-opacity: 0.4;
   stroke-linecap: round;
 }
 
