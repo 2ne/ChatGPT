@@ -1,3 +1,4 @@
+import { FractionPicture } from "./FractionPicture";
 import { useRef } from "react";
 import type { MultiSelectQuestion } from "../../types/activity";
 import { ObjectGroup, OptionContent } from "./ObjectGroup";
@@ -36,6 +37,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
       {question.array ? <GroupsPicture array={question.array} /> : null}
       {question.visual ? (
         <ObjectGroup
@@ -67,7 +69,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
               baseTen={option.baseTen}
               dice={option.dice}
               groups={option.groups}
-              array={option.array}
+              array={option.array} fraction={option.fraction}
               layout={option.layout}
             />
             {marked === "correct" ? (

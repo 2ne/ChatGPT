@@ -15,6 +15,7 @@ import {
   type ArrayAsset,
   type BaseTenAsset,
   type GroupsAsset,
+  type FractionAsset,
   type DiceAsset,
   type MakeTotalGap,
   type MakeTotalMode,
@@ -410,6 +411,25 @@ function optionalBaseTen(record: Record<string, unknown>, path: string): BaseTen
   return parseBaseTen(record.baseTen, `${path}.baseTen`);
 }
 
+function optionalFraction(record: Record<string, unknown>, path: string): FractionAsset | undefined {
+  const value = record.fraction;
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "fraction must be an object");
+  const shape = expectString(value, "shape", path) as FractionAsset["shape"];
+  if (!["rectangle", "square", "circle"].includes(shape)) fail(path, "unsupported fraction shape");
+  const parts = expectNumber(value, "parts", path);
+  if (parts !== 2 && parts !== 4) fail(path, "fraction parts must be 2 or 4");
+  if (!Array.isArray(value.shaded) || value.shaded.some(n => !Number.isInteger(n) || n < 0 || n >= parts) || new Set(value.shaded).size !== value.shaded.length) fail(path, "fraction shaded must contain unique valid part indices");
+  if (value.equal != null && typeof value.equal !== "boolean") fail(path, "fraction equal must be a boolean");
+  const equal = value.equal !== false;
+  const layout = value.layout == null ? (parts === 4 ? "grid" : "vertical") : expectString(value, "layout", path) as FractionAsset["layout"];
+  if (!["vertical", "horizontal", "grid", "diagonal"].includes(layout!)) fail(path, "unsupported fraction layout");
+  if (layout === "diagonal" && (!equal || shape === "circle")) fail(path, "diagonal fractions need equal parts of a rectangle or square");
+  if (layout === "grid" && parts !== 4) fail(path, "fraction grid needs four parts");
+  if (!equal && layout !== "vertical" && shape !== "circle") fail(path, "unequal rectangular parts use vertical strips");
+  return { shape, parts, shaded: value.shaded as number[], equal, layout };
+}
+
 function parseDice(value: unknown, path: string): DiceAsset {
   if (!isRecord(value)) fail(path, "dice must be { count }");
   const count = expectNumber(value, "count", path);
@@ -459,6 +479,9 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   const dice = optionalDice(value, path);
   const groups = optionalGroups(value, path);
   const array = optionalArray(value, path);
+  const fraction = optionalFraction(value, path);
+  if (fraction && !allowShape) fail(path, "fraction options use multiple-choice or multi-select");
+  if (fraction && (visual || tenFrame || baseTen || dice || groups || array || value.shape || layout)) fail(path, "fraction options cannot mix picture fields");
   const shape = parseShape(value.shape, `${path}.shape`);
   if (shape && !allowShape) fail(path, "shape options use multiple-choice or multi-select");
   if (shape && visual) fail(path, "option cannot mix object and shape pictures");
@@ -471,8 +494,8 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   if (baseTen && layout) fail(path, "tens and ones do not use layout");
   if (dice && layout) fail(path, "dice faces do not use layout");
   if ((groups || array) && layout) fail(path, "groups and arrays do not use layout");
-  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array) fail(path, "option needs a label or a picture");
-  return { id, label, visual, tenFrame, baseTen, dice, groups, array, shape, layout };
+  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction) fail(path, "option needs a label or a picture");
+  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -834,7 +857,9 @@ function parseQuestion(value: unknown, path: string): Question {
     if (kind !== "multiple-choice" || visual || groups || array) fail(path, "numberSequence uses choice questions without object pictures");
     numberSequence = value.numberSequence as (number | null)[];
   }
-  const core = { numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
+  const fraction = optionalFraction(value, path);
+  if (fraction && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "fraction stems use choice questions without other pictures");
+  const core = { fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,

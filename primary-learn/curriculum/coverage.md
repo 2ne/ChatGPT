@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 21 — nodes 1 to 21 (`eyfs-count-5` through `y1-groups-arrays`) |
+| Done | 22 — nodes 1 to 22 (`eyfs-count-5` through `y1-halves-quarters`) |
 | Partial | 0 |
-| Missing | 103 |
+| Missing | 102 |
 
 ## Quests in the app
 
@@ -87,6 +87,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `groups-and-arrays` | `y1-groups-arrays` (node 21) | done — Easy: equal groups of 2 and 5, share 6, group 10 into twos |
 | `groups-and-arrays-medium` | `y1-groups-arrays` (node 21) | done — Medium: totals to 30, grouping versus sharing, order group totals |
 | `groups-and-arrays-hard` | `y1-groups-arrays` (node 21) | done — Hard: arrays both ways, missing groups, unequal groups |
+| `halves-and-quarters` | `y1-halves-quarters` (node 22) | done — Easy: equal halves and quarters of shapes, quantities to 8, build a share |
+| `halves-and-quarters-medium` | `y1-halves-quarters` (node 22) | done — Medium: varied cuts, quantities to 12, share equally between four |
+| `halves-and-quarters-hard` | `y1-halves-quarters` (node 22) | done — Hard: unequal-part errors, quantities to 18, compare half and quarter amounts |
 
 ## Next quest to build
 

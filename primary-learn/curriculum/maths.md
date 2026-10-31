@@ -254,7 +254,7 @@ Requires: `y1-count-2-5-10`. Quest: `groups-and-arrays`, `groups-and-arrays-medi
 
 ### 22. `y1-halves-quarters` — Halves and quarters
 
-Requires: `y1-groups-arrays`. Quest: none. Status: missing.
+Requires: `y1-groups-arrays`. Quest: `halves-and-quarters`, `halves-and-quarters-medium`, `halves-and-quarters-hard`. Status: done.
 
 - Recognise, find and name a half as one of two equal parts of an object, shape or quantity
 - Recognise, find and name a quarter as one of four equal parts of an object, shape or quantity

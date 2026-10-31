@@ -119,6 +119,15 @@ export type ArrayAsset = {
   item?: ObjectItem;
 };
 
+/** A whole shape partitioned into halves or quarters. Look-only. */
+export type FractionAsset = {
+  shape: "rectangle" | "square" | "circle";
+  parts: 2 | 4;
+  shaded: number[];
+  equal?: boolean;
+  layout?: "vertical" | "horizontal" | "grid" | "diagonal";
+};
+
 /**
  * Structured tens and ones for 21 to 99.
  * Rods are neutral, not the question objects. Segmented on Easy, plain on Medium.
@@ -189,6 +198,7 @@ export type QuestionOption = {
   dice?: DiceAsset;
   groups?: GroupsAsset;
   array?: ArrayAsset;
+  fraction?: FractionAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -253,6 +263,7 @@ type QuestionCore = {
   groups?: GroupsAsset;
   /** Optional equal-row grid. Do not mix with visual, tenFrame or groups. */
   array?: ArrayAsset;
+  fraction?: FractionAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */

@@ -5405,3 +5405,20 @@ button.object-token {
   min-height: 64px;
   min-width: 0;
 }
+
+/* Fraction diagrams remain look-only inside the shared answer controls. */
+.fraction-picture {
+  --fraction-fill: #b9b2f2;
+  --fraction-hatch: #e0dcfa;
+  display: block;
+  flex: none;
+  width: min(100%, 260px);
+  height: auto;
+  margin: 0 auto 12px;
+}
+.fraction-picture.is-option {
+  width: 120px;
+  max-width: 100%;
+  height: 80px;
+  margin: 0 auto;
+}

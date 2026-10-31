@@ -1,0 +1,376 @@
+{
+  "id": "halves-and-quarters-hard",
+  "title": "Halves and quarters",
+  "summary": "Spot unequal parts and compare half and quarter amounts.",
+  "subject": "maths",
+  "type": "fractions",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-halves-quarters",
+  "pathNode": "y1-halves-quarters",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 recognises a diagonal half. Q2 finds half of fourteen. Q3 builds a quarter of twelve. Q4 spots four equal triangular parts against unequal near misses. Q5 finds a quarter of sixteen. Q6 connects halves to a sharing story. Q7 selects two quarter pictures and rejects unequal parts. Q8 finds half of eighteen. Q9 orders four half and quarter quantities. Q10 judges a pictured claim and rejects four unequal parts.",
+    "versus": "Easy introduces two equal parts and four equal parts with shapes and quantities to 8. Medium varies the cuts and uses quantities to 12 with less picture support. Hard adds new thinking by spotting unequal-part errors in unfamiliar layouts, comparing half and quarter quantities, and explaining a pictured claim. No fraction notation or formal equivalence is required."
+  },
+  "skills": [
+    "equal-parts",
+    "halves",
+    "quarters",
+    "fractions-of-quantities"
+  ],
+  "randomise": {
+    "mode": "attempt",
+    "items": [
+      "apple",
+      "star",
+      "frog",
+      "strawberry"
+    ]
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which picture has one half coloured?",
+      "options": [
+        {
+          "id": "a",
+          "fraction": {
+            "shape": "square",
+            "parts": 2,
+            "shaded": [
+              1
+            ],
+            "layout": "diagonal"
+          }
+        },
+        {
+          "id": "b",
+          "fraction": {
+            "shape": "circle",
+            "parts": 4,
+            "shaded": [
+              0
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "fraction": {
+            "shape": "rectangle",
+            "parts": 2,
+            "shaded": [
+              0
+            ],
+            "equal": false
+          }
+        },
+        {
+          "id": "d",
+          "fraction": {
+            "shape": "circle",
+            "parts": 2,
+            "shaded": [
+              0,
+              1
+            ]
+          }
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The diagonal makes two equal triangles. One triangle is half of the square.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "hq-3-1",
+      "narration": {
+        "prompt": "Which picture has one half coloured?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "What is half of 14?",
+      "acceptedAnswers": [
+        "7"
+      ],
+      "numericChoices": [
+        5,
+        6,
+        7,
+        14
+      ],
+      "inputMode": "numeric",
+      "explanation": "Two equal groups of 7 make 14. Each group is half of 14.",
+      "id": "hq-3-2",
+      "narration": {
+        "prompt": "What is half of 14?"
+      }
+    },
+    {
+      "kind": "build-set",
+      "prompt": "Make a group with one quarter of 12 {items}.",
+      "visual": {
+        "item": "star",
+        "count": 3
+      },
+      "bank": 12,
+      "explanation": "Four equal groups of 3 make 12. Each group is one quarter of 12.",
+      "randomise": {},
+      "id": "hq-3-3",
+      "narration": {
+        "prompt": "Make a group with one quarter of 12 {items}."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which picture is split into four equal parts?",
+      "options": [
+        {
+          "id": "a",
+          "fraction": {
+            "shape": "rectangle",
+            "parts": 4,
+            "shaded": [],
+            "layout": "vertical",
+            "equal": false
+          }
+        },
+        {
+          "id": "b",
+          "fraction": {
+            "shape": "rectangle",
+            "parts": 2,
+            "shaded": []
+          }
+        },
+        {
+          "id": "c",
+          "fraction": {
+            "shape": "square",
+            "parts": 4,
+            "shaded": [],
+            "layout": "diagonal"
+          }
+        },
+        {
+          "id": "d",
+          "fraction": {
+            "shape": "circle",
+            "parts": 4,
+            "shaded": [],
+            "equal": false
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The four triangles are equal in size. Four unequal parts are not quarters.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "hq-3-4",
+      "narration": {
+        "prompt": "Which picture is split into four equal parts?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "What is one quarter of 16?",
+      "acceptedAnswers": [
+        "4"
+      ],
+      "numericChoices": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "inputMode": "numeric",
+      "explanation": "Four equal groups of 4 make 16. Each group is one quarter of 16.",
+      "id": "hq-3-5",
+      "narration": {
+        "prompt": "What is one quarter of 16?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Share 8 apples equally between 2 children. How many apples does each child get?",
+      "options": [
+        {
+          "id": "a",
+          "label": "3"
+        },
+        {
+          "id": "b",
+          "label": "4"
+        },
+        {
+          "id": "c",
+          "label": "5"
+        },
+        {
+          "id": "d",
+          "label": "8"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "Each child gets 4 apples. Each child has half of the 8 apples.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "hq-3-6",
+      "narration": {
+        "prompt": "Share 8 apples equally between 2 children. How many apples does each child get?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two pictures that have one quarter coloured.",
+      "options": [
+        {
+          "id": "a",
+          "fraction": {
+            "shape": "circle",
+            "parts": 4,
+            "shaded": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "fraction": {
+            "shape": "rectangle",
+            "parts": 4,
+            "shaded": [
+              3
+            ],
+            "layout": "vertical"
+          }
+        },
+        {
+          "id": "c",
+          "fraction": {
+            "shape": "rectangle",
+            "parts": 4,
+            "shaded": [
+              0
+            ],
+            "layout": "vertical",
+            "equal": false
+          }
+        },
+        {
+          "id": "d",
+          "fraction": {
+            "shape": "square",
+            "parts": 2,
+            "shaded": [
+              0
+            ]
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "b"
+      ],
+      "explanation": "A quarter is one of four equal parts. Four unequal parts do not make quarters.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "hq-3-7",
+      "narration": {
+        "prompt": "Tap the two pictures that have one quarter coloured."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "What is half of 18?",
+      "acceptedAnswers": [
+        "9"
+      ],
+      "numericChoices": [
+        6,
+        8,
+        9,
+        18
+      ],
+      "inputMode": "numeric",
+      "explanation": "Two equal groups of 9 make 18. Each group is half of 18.",
+      "id": "hq-3-8",
+      "narration": {
+        "prompt": "What is half of 18?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the amounts in order, from smallest to biggest.",
+      "items": [
+        {
+          "id": "a",
+          "label": "Half of 8"
+        },
+        {
+          "id": "b",
+          "label": "A quarter of 8"
+        },
+        {
+          "id": "c",
+          "label": "Half of 12"
+        },
+        {
+          "id": "d",
+          "label": "A quarter of 12"
+        }
+      ],
+      "correctOrder": [
+        "b",
+        "d",
+        "a",
+        "c"
+      ],
+      "explanation": "The amounts are 2, 3, 4 and 6. Find each amount before comparing them.",
+      "id": "hq-3-9",
+      "narration": {
+        "prompt": "Put the amounts in order, from smallest to biggest."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Pip says the coloured part is one quarter. Is Pip right?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The four parts are not equal in size. A quarter must be one of four equal parts.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "fraction": {
+        "shape": "rectangle",
+        "parts": 4,
+        "shaded": [
+          3
+        ],
+        "layout": "vertical",
+        "equal": false
+      },
+      "id": "hq-3-10",
+      "narration": {
+        "prompt": "Pip says the coloured part is one quarter. Is Pip right?"
+      }
+    }
+  ]
+}

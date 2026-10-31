@@ -4,7 +4,8 @@ import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
-import type { ArrayAsset, BaseTenAsset, DiceAsset, GroupsAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import type { FractionAsset, ArrayAsset, BaseTenAsset, DiceAsset, GroupsAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import { FractionPicture } from "./FractionPicture";
 import { GroupsPicture } from "./GroupsPicture";
 import { BaseTen } from "./BaseTen";
 import { DiceFace } from "./DiceFace";
@@ -402,6 +403,7 @@ export function OptionContent({
   dice,
   groups,
   array,
+  fraction,
   layout,
   pack,
 }: {
@@ -412,11 +414,13 @@ export function OptionContent({
   dice?: DiceAsset;
   groups?: GroupsAsset;
   array?: ArrayAsset;
+  fraction?: FractionAsset;
   layout?: ObjectLayout;
   pack?: boolean;
 }) {
   return (
     <span className="option-content">
+      {fraction ? <FractionPicture fraction={fraction} compact /> : null}
       {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}
       {baseTen ? <BaseTen model={baseTen} compact /> : null}
       {dice ? <DiceFace face={dice} compact /> : null}
