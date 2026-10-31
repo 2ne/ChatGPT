@@ -197,8 +197,9 @@ they are.
    star or cup marks progress; the learner's buddy sits on their
    section. Tap a topic to scroll there and close the menu. No
    `Go to my level` button.
-   Major screen changes (onboarding, pathway, activity) scroll to the top so
-   the name and avatar stay in view. Do not auto-jump down the path on entry.
+   Onboarding and activity pages start at the top. Returning to the pathway
+   restores its previous scroll position during the current app session.
+   The first pathway visit starts at the top. Starting again clears the position.
 
 ### Starting an activity
 
