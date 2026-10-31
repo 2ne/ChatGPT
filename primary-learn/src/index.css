@@ -2014,7 +2014,7 @@ button.object-token {
 .share-group-objects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; align-content: start; min-height: var(--share-height); padding-top: 8px; }
 .share-group-objects .object-token { width: 100%; max-width: 44px; height: 44px; min-height: 44px; font-size: 25px; border: 1px solid var(--line-strong); border-radius: 12px; background: #fff; }
 .share-bank { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; padding: 12px; border: 2px dashed var(--line-strong); border-radius: 18px; background: var(--paper-deep); }
-.share-bank-object { display: grid; place-items: center; min-height: 32px; font-size: 26px; }
+.share-bank-object { position: relative; display: grid; place-items: center; min-height: 32px; font-size: 26px; }
 .share-bank-object.is-used { visibility: hidden; }
 .share-group-add:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
 @media (hover: hover) and (pointer: fine) { .share-group-add:not(:disabled):hover { background: #e4e5eb; } }

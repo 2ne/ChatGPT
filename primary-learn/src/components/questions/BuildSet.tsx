@@ -24,91 +24,7 @@ function emptyGroups(count: number): string[][] {
   return Array.from({ length: count }, () => [] as string[]);
 }
 
-function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
-  const groupCount = question.groupCount ?? 2;
-  const groupSize = question.groupSize ?? 2;
-  const bank = bankSize(question);
-  const ids = Array.from({ length: bank }, (_, index) => String(index));
-  const groups = isBuildGroupsAnswer(answer)
-    ? answer.groups.map((group) => group.filter((id) => ids.includes(id)))
-    : emptyGroups(groupCount);
-  const used = new Set(groups.flat());
-  const words = OBJECT_WORDS[question.visual.item];
-  const glyph = objectGlyph(question.visual.item);
-  const allRight = groups.length === groupCount && groups.every((group) => group.length === groupSize);
-  const marked = reveal == null ? "" : allRight ? " is-correct" : " is-wrong";
-
-  function setGroups(next: string[][]) {
-    onChange({ groups: next } satisfies BuildGroupsAnswer);
-  }
-
-  function add(index: number) {
-    const id = ids.find((candidate) => !used.has(candidate));
-    if (disabled || id == null) return;
-    const next = groups.map((group) => [...group]);
-    const bucket = next[index] ?? [];
-    bucket.push(id);
-    next[index] = bucket;
-    setGroups(next);
-  }
-
-  function remove(id: string) {
-    if (disabled) return;
-    setGroups(groups.map((group) => group.filter((item) => item !== id)));
-  }
-
-  return (
-    <div className="build-set is-groups" style={{ "--share-height": `${Math.ceil(groupSize / 3) * 48 + 8}px` } as CSSProperties}>
-      <div className="share-groups">
-        {groups.map((group, index) => (
-          <div key={`g-${index}`} className={`share-group${marked}`}>
-            <div className="share-group-heading">
-              <p className="share-group-name">{copy.groupLabel(index + 1)}</p>
-              <button type="button" className="share-group-add"
-                disabled={disabled || used.size === bank}
-                aria-label={copy.addToGroup(words.singular, index + 1)}
-                onClick={() => add(index)}>
-                <Plus size={22} aria-hidden />
-              </button>
-            </div>
-            <div className="share-group-objects">
-              {group.map((id) => (
-                <button key={`${question.id}-${id}`} type="button" className="object-token"
-                  disabled={disabled} aria-label={copy.removeFromGroup(words.singular, index + 1)}
-                  onClick={() => remove(id)}>
-                  <span className="object-glyph" aria-hidden>{glyph}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="share-bank" role="img" aria-label={copy.objectsToShare}>
-        {ids.map((id) => (
-          <span key={id} className={`share-bank-object${used.has(id) ? " is-used" : ""}`} aria-hidden>
-            {glyph}
-          </span>
-        ))}
-      </div>
-      <div className="build-reset">
-        <button type="button" className="btn-text" aria-label={copy.startGroupAgain}
-          disabled={disabled || used.size === 0}
-          onClick={() => setGroups(emptyGroups(groupCount))}>
-          <RotateCw size={20} aria-hidden />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export function BuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
-  if (question.groupCount && question.groupSize) {
-    return <GroupsBuildSet question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
-  }
-  const target = question.visual.count;
-  const bank = bankSize(question);
-  const ids = Array.from({ length: bank }, (_, index) => String(index));
-  const selected = Array.isArray(answer) ? (answer as string[]).filter((id) => ids.includes(id)) : [];
+function useBuildMovement(answer: unknown) {
   const root = useRef<HTMLDivElement>(null);
   const origins = useRef(new Map<string, DOMRect>());
   const keyboardMove = useRef(false);
@@ -137,6 +53,98 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
     origins.current.clear();
     keyboardMove.current = false;
   }, [answer]);
+  return { root, remember, keyboardMove };
+}
+
+function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
+  const groupCount = question.groupCount ?? 2;
+  const groupSize = question.groupSize ?? 2;
+  const bank = bankSize(question);
+  const ids = Array.from({ length: bank }, (_, index) => String(index));
+  const groups = isBuildGroupsAnswer(answer)
+    ? answer.groups.map((group) => group.filter((id) => ids.includes(id)))
+    : emptyGroups(groupCount);
+  const used = new Set(groups.flat());
+  const { root, remember } = useBuildMovement(answer);
+  const words = OBJECT_WORDS[question.visual.item];
+  const glyph = objectGlyph(question.visual.item);
+  const allRight = groups.length === groupCount && groups.every((group) => group.length === groupSize);
+  const marked = reveal == null ? "" : allRight ? " is-correct" : " is-wrong";
+
+  function setGroups(next: string[][]) {
+    onChange({ groups: next } satisfies BuildGroupsAnswer);
+  }
+
+  function add(index: number) {
+    const id = ids.find((candidate) => !used.has(candidate));
+    if (disabled || id == null) return;
+    remember(id);
+    const next = groups.map((group) => [...group]);
+    const bucket = next[index] ?? [];
+    bucket.push(id);
+    next[index] = bucket;
+    setGroups(next);
+  }
+
+  function remove(id: string) {
+    if (disabled) return;
+    remember(id);
+    setGroups(groups.map((group) => group.filter((item) => item !== id)));
+  }
+
+  return (
+    <div className="build-set is-groups" ref={root} style={{ "--share-height": `${Math.ceil(groupSize / 3) * 48 + 8}px` } as CSSProperties}>
+      <div className="share-groups">
+        {groups.map((group, index) => (
+          <div key={`g-${index}`} className={`share-group${marked}`}>
+            <div className="share-group-heading">
+              <p className="share-group-name">{copy.groupLabel(index + 1)}</p>
+              <button type="button" className="share-group-add"
+                disabled={disabled || used.size === bank}
+                aria-label={copy.addToGroup(words.singular, index + 1)}
+                onClick={() => add(index)}>
+                <Plus size={22} aria-hidden />
+              </button>
+            </div>
+            <div className="share-group-objects">
+              {group.map((id) => (
+                <button key={`${question.id}-${id}`} type="button" data-build-id={id} className="object-token"
+                  disabled={disabled} aria-label={copy.removeFromGroup(words.singular, index + 1)}
+                  onClick={() => remove(id)}>
+                  <span className="object-glyph" aria-hidden>{glyph}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="share-bank" role="img" aria-label={copy.objectsToShare}>
+        {ids.map((id) => (
+          <span key={id} data-build-id={id} data-in-tray={used.has(id) ? "hidden" : "visible"} className={`share-bank-object${used.has(id) ? " is-used" : ""}`} aria-hidden>
+            {glyph}
+          </span>
+        ))}
+      </div>
+      <div className="build-reset">
+        <button type="button" className="btn-text" aria-label={copy.startGroupAgain}
+          disabled={disabled || used.size === 0}
+          onClick={() => { used.forEach(remember); setGroups(emptyGroups(groupCount)); }}>
+          <RotateCw size={20} aria-hidden />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function BuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
+  if (question.groupCount && question.groupSize) {
+    return <GroupsBuildSet question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
+  }
+  const target = question.visual.count;
+  const bank = bankSize(question);
+  const ids = Array.from({ length: bank }, (_, index) => String(index));
+  const selected = Array.isArray(answer) ? (answer as string[]).filter((id) => ids.includes(id)) : [];
+  const { root, remember, keyboardMove } = useBuildMovement(answer);
   const words = OBJECT_WORDS[question.visual.item];
   const glyph = objectGlyph(question.visual.item);
   const marked =
