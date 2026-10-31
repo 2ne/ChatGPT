@@ -2303,12 +2303,13 @@ button.object-token {
 }
 
 .option {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
   min-height: 64px;
   width: 100%;
-  padding: 10px 14px;
+  padding: 10px 56px 10px 14px;
   border: 2.5px solid var(--line);
   border-radius: 18px;
   background: #fff;
@@ -2413,6 +2414,13 @@ button.object-token {
   60% {
     transform: translateX(5px);
   }
+}
+
+.option > .option-check,
+.option > .option-cross {
+  position: absolute;
+  top: calc(50% - 15px);
+  right: 14px;
 }
 
 .option-check {

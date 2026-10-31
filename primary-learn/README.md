@@ -43,6 +43,8 @@ Agents work directly on `main`. No pull requests. No test suites. No linting req
 
 ## Adding activities
 
+Answer rows reserve space for absolutely positioned correct and incorrect icons so pictures and text stay in place when feedback appears.
+
 Count to 5 uses tap choices and hands-on activities at every difficulty, with no typed number answers.
 Yes/No questions use exactly those two choices rather than adding a third unrelated answer.
 The counting-check questions across Count to 5 Easy, Medium and Hard feature Pip, with matching narration and feedback naming the skipped number.
