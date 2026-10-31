@@ -119,6 +119,16 @@ export type ArrayAsset = {
   item?: ObjectItem;
 };
 
+/** Pictorial comparison or recording in equal non-standard units. */
+export type MeasureAsset = {
+  kind: "length" | "height" | "mass" | "capacity" | "time";
+  values: number[];
+  labels?: string[];
+  units?: boolean;
+  gaps?: boolean;
+  offsets?: number[];
+};
+
 /** A whole shape partitioned into halves or quarters. Look-only. */
 export type FractionAsset = {
   shape: "rectangle" | "square" | "circle";
@@ -199,6 +209,7 @@ export type QuestionOption = {
   groups?: GroupsAsset;
   array?: ArrayAsset;
   fraction?: FractionAsset;
+  measure?: MeasureAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -264,6 +275,7 @@ type QuestionCore = {
   /** Optional equal-row grid. Do not mix with visual, tenFrame or groups. */
   array?: ArrayAsset;
   fraction?: FractionAsset;
+  measure?: MeasureAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */

@@ -1,0 +1,439 @@
+{
+  "id": "longer-heavier-fuller-medium",
+  "title": "Longer, heavier, fuller",
+  "summary": "Compare closer measurements, half-full cups and time taken for the same job.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-compare-measures",
+  "pathNode": "y1-compare-measures",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 finds the shortest of four closer ribbon lengths. Q2 records a five-block height. Q3 recognises two half-full cups. Q4 reads the lighter bag on a balance. Q5 records five blocks of mass. Q6 compares partially filled identical cups. Q7 records five cups filling a jug. Q8 compares seconds taken for the same job. Q9 orders four ribbon lengths. Q10 finds two six-block strips.",
+    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths with shifted starts, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
+  },
+  "skills": [
+    "compare-lengths-heights",
+    "compare-mass",
+    "compare-capacity",
+    "measure-equal-units",
+    "compare-time"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which ribbon is shortest?",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "length",
+            "values": [
+              6
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "length",
+            "values": [
+              5
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "length",
+            "values": [
+              4
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "length",
+            "values": [
+              7
+            ]
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The shortest ribbon reaches the least far from the same starting point.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-2-1",
+      "narration": {
+        "prompt": "Which ribbon is shortest?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many blocks tall is the tower?",
+      "acceptedAnswers": [
+        "5"
+      ],
+      "numericChoices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "inputMode": "numeric",
+      "explanation": "The tower matches 5 equal blocks stacked from the bottom to the top.",
+      "measure": {
+        "kind": "height",
+        "values": [
+          5
+        ],
+        "units": true
+      },
+      "id": "measure-2-2",
+      "narration": {
+        "prompt": "How many blocks tall is the tower?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two half-full cups.",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              4
+            ]
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "The water reaches halfway up both cups. The cups are the same size.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-2-3",
+      "narration": {
+        "prompt": "Tap the two half-full cups."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which bag is lighter?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Bag A"
+        },
+        {
+          "id": "b",
+          "label": "Bag B"
+        },
+        {
+          "id": "c",
+          "label": "They weigh the same"
+        },
+        {
+          "id": "d",
+          "label": "You cannot tell"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Bag A is on the higher pan. The lighter bag goes up.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "mass",
+        "values": [
+          3,
+          6
+        ]
+      },
+      "id": "measure-2-4",
+      "narration": {
+        "prompt": "Which bag is lighter?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many blocks balance the bag?",
+      "acceptedAnswers": [
+        "5"
+      ],
+      "numericChoices": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "inputMode": "numeric",
+      "explanation": "The pans are level. The bag weighs the same as 5 blocks.",
+      "measure": {
+        "kind": "mass",
+        "values": [
+          5,
+          5
+        ],
+        "units": true
+      },
+      "id": "measure-2-5",
+      "narration": {
+        "prompt": "How many blocks balance the bag?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which cup has the most water?",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              3
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              0
+            ]
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The cups are the same size. The highest water level shows the most water.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-2-6",
+      "narration": {
+        "prompt": "Which cup has the most water?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many full cups fill the jug?",
+      "acceptedAnswers": [
+        "5"
+      ],
+      "numericChoices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "inputMode": "numeric",
+      "explanation": "The jug holds 5 of these full cups. Equal cups give a fair measurement.",
+      "measure": {
+        "kind": "capacity",
+        "values": [
+          5
+        ],
+        "units": true
+      },
+      "id": "measure-2-7",
+      "narration": {
+        "prompt": "How many full cups fill the jug?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Both children put on a coat. Who takes less time?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Mia"
+        },
+        {
+          "id": "b",
+          "label": "Sam"
+        },
+        {
+          "id": "c",
+          "label": "They take the same time"
+        },
+        {
+          "id": "d",
+          "label": "You cannot tell"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Mia takes 4 seconds. Sam takes 7 seconds. Fewer seconds means less time.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "time",
+        "values": [
+          4,
+          7
+        ],
+        "labels": [
+          "Mia",
+          "Sam"
+        ]
+      },
+      "id": "measure-2-8",
+      "narration": {
+        "prompt": "Both children put on a coat. Who takes less time?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the ribbon lengths in order, from shortest to longest.",
+      "items": [
+        {
+          "id": "a",
+          "label": "5 blocks"
+        },
+        {
+          "id": "b",
+          "label": "2 blocks"
+        },
+        {
+          "id": "c",
+          "label": "4 blocks"
+        },
+        {
+          "id": "d",
+          "label": "3 blocks"
+        }
+      ],
+      "correctOrder": [
+        "b",
+        "d",
+        "c",
+        "a"
+      ],
+      "explanation": "The lengths go 2, 3, 4 and 5 blocks. Compare lengths measured with the same blocks.",
+      "id": "measure-2-9",
+      "narration": {
+        "prompt": "Put the ribbon lengths in order, from shortest to longest."
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two strips that are 6 blocks long.",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "length",
+            "values": [
+              6
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "length",
+            "values": [
+              5
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "length",
+            "values": [
+              7
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "length",
+            "values": [
+              6
+            ],
+            "units": true
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "d"
+      ],
+      "explanation": "Each chosen strip matches 6 equal blocks. The other strips match 5 or 7 blocks.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-2-10",
+      "narration": {
+        "prompt": "Tap the two strips that are 6 blocks long."
+      }
+    }
+  ]
+}

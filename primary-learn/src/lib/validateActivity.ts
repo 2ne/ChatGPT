@@ -16,6 +16,7 @@ import {
   type BaseTenAsset,
   type GroupsAsset,
   type FractionAsset,
+  type MeasureAsset,
   type DiceAsset,
   type MakeTotalGap,
   type MakeTotalMode,
@@ -411,6 +412,33 @@ function optionalBaseTen(record: Record<string, unknown>, path: string): BaseTen
   return parseBaseTen(record.baseTen, `${path}.baseTen`);
 }
 
+function optionalMeasure(record: Record<string, unknown>, path: string): MeasureAsset | undefined {
+  const value = record.measure;
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "measure must be an object");
+  const kind = expectString(value, "kind", path) as MeasureAsset["kind"];
+  if (!["length", "height", "mass", "capacity", "time"].includes(kind)) fail(path, "unsupported measure kind");
+  if (!Array.isArray(value.values) || value.values.length < 1 || value.values.length > 4 || !value.values.every(n => Number.isInteger(n) && n >= 0 && n <= 12)) fail(path, "measure values need one to four whole numbers from 0 to 12");
+  const values = value.values as number[];
+  if (kind !== "capacity" && values.some(n => n === 0)) fail(path, "non-capacity measurements must be positive");
+  if (value.labels != null && (!Array.isArray(value.labels) || value.labels.length !== values.length || !value.labels.every(label => typeof label === "string" && label.trim()))) fail(path, "measure labels must match values");
+  for (const field of ["units", "gaps"]) if (value[field] != null && typeof value[field] !== "boolean") fail(path, `measure ${field} must be a boolean`);
+  const units = value.units === true, gaps = value.gaps === true;
+  if (units && kind === "time") fail(path, "time diagrams already show seconds");
+  if (units && kind !== "mass" && values.length !== 1) fail(path, "unit measurement needs one object");
+  if (gaps && (!units || kind !== "length")) fail(path, "gap examples need length units");
+  if (kind === "mass" && (values.length !== 2 || (units && values[0] !== values[1]))) fail(path, "mass needs two sides; counting units must balance");
+  if (kind === "capacity" && !units && values.some(n => n > 4)) fail(path, "cup fill levels range from 0 to 4");
+  if (kind === "capacity" && units && values[0]! > 8) fail(path, "cup records support up to eight cups");
+  if ((kind === "length" || kind === "height") && values.some(n => n > 10)) fail(path, "length diagrams support up to ten units");
+  let offsets: number[] | undefined;
+  if (value.offsets != null) {
+    if (kind !== "length" || units || !Array.isArray(value.offsets) || value.offsets.length !== values.length || !value.offsets.every((n, i) => Number.isInteger(n) && n >= 0 && n + values[i]! <= 10)) fail(path, "length offsets must keep strips within ten units");
+    offsets = value.offsets as number[];
+  }
+  return { kind, values, labels: value.labels as string[] | undefined, units, gaps, offsets };
+}
+
 function optionalFraction(record: Record<string, unknown>, path: string): FractionAsset | undefined {
   const value = record.fraction;
   if (value == null) return undefined;
@@ -480,6 +508,8 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   const groups = optionalGroups(value, path);
   const array = optionalArray(value, path);
   const fraction = optionalFraction(value, path);
+  const measure = optionalMeasure(value, path);
+  if (measure && (!allowShape || visual || tenFrame || baseTen || dice || groups || array || fraction || value.shape || layout)) fail(path, "measure options use choice questions without other pictures");
   if (fraction && !allowShape) fail(path, "fraction options use multiple-choice or multi-select");
   if (fraction && (visual || tenFrame || baseTen || dice || groups || array || value.shape || layout)) fail(path, "fraction options cannot mix picture fields");
   const shape = parseShape(value.shape, `${path}.shape`);
@@ -494,8 +524,8 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   if (baseTen && layout) fail(path, "tens and ones do not use layout");
   if (dice && layout) fail(path, "dice faces do not use layout");
   if ((groups || array) && layout) fail(path, "groups and arrays do not use layout");
-  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction) fail(path, "option needs a label or a picture");
-  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, shape, layout };
+  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction && !measure) fail(path, "option needs a label or a picture");
+  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -859,7 +889,9 @@ function parseQuestion(value: unknown, path: string): Question {
   }
   const fraction = optionalFraction(value, path);
   if (fraction && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "fraction stems use choice questions without other pictures");
-  const core = { fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
+  const measure = optionalMeasure(value, path);
+  if (measure && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "measure stems use choice questions without other pictures");
+  const core = { measure, fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,

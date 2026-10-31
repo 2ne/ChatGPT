@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 22 — nodes 1 to 22 (`eyfs-count-5` through `y1-halves-quarters`) |
+| Done | 23 — nodes 1 to 23 (`eyfs-count-5` through `y1-compare-measures`) |
 | Partial | 0 |
-| Missing | 102 |
+| Missing | 101 |
 
 ## Quests in the app
 
@@ -90,12 +90,15 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `halves-and-quarters` | `y1-halves-quarters` (node 22) | done — Easy: equal halves and quarters of shapes, quantities to 8, build a share |
 | `halves-and-quarters-medium` | `y1-halves-quarters` (node 22) | done — Medium: varied cuts, quantities to 12, share equally between four |
 | `halves-and-quarters-hard` | `y1-halves-quarters` (node 22) | done — Hard: unequal-part errors, quantities to 18, compare half and quarter amounts |
+| `longer-heavier-fuller` | `y1-compare-measures` (node 23) | done — Easy: direct comparisons, three-block and three-cup measurements, parts of a day |
+| `longer-heavier-fuller-medium` | `y1-compare-measures` (node 23) | done — Medium: closer comparisons, five-unit measurements, half-full cups, compare time taken |
+| `longer-heavier-fuller-hard` | `y1-compare-measures` (node 23) | done — Hard: shifted starts, gapped units, level balances, seven-unit records and four times |
 
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-halves-quarters` — Halves and quarters (node 22). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-coins` — Coins and notes (node 24). Start that node with Easy.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 

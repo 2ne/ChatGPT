@@ -1,0 +1,412 @@
+{
+  "id": "longer-heavier-fuller-hard",
+  "title": "Longer, heavier, fuller",
+  "summary": "Spot measuring mistakes and compare lengths, weights, water amounts and times.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-compare-measures",
+  "pathNode": "y1-compare-measures",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 recognises equal-length ribbons with different starting positions. Q2 records seven blocks of length. Q3 finds matching amounts in identical cups. Q4 records seven blocks of mass. Q5 rejects a measurement with gaps. Q6 records six full cups filling a jug. Q7 rejects a claim that a bag is heavier on a level balance. Q8 compares four times for the same job. Q9 orders four water amounts in equal cups. Q10 selects two valid unit measurements and rejects gapped units.",
+    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths with shifted starts, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
+  },
+  "skills": [
+    "compare-lengths-heights",
+    "compare-mass",
+    "compare-capacity",
+    "measure-equal-units",
+    "compare-time"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which ribbon is longer?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Mia's ribbon"
+        },
+        {
+          "id": "b",
+          "label": "Sam's ribbon"
+        },
+        {
+          "id": "c",
+          "label": "They are the same length"
+        },
+        {
+          "id": "d",
+          "label": "You cannot tell"
+        }
+      ],
+      "correctId": "c",
+      "explanation": "Both ribbons have the same length. Their ends are in different places.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "length",
+        "values": [
+          5,
+          5
+        ],
+        "labels": [
+          "Mia",
+          "Sam"
+        ],
+        "offsets": [
+          0,
+          2
+        ]
+      },
+      "id": "measure-3-1",
+      "narration": {
+        "prompt": "Which ribbon is longer?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many blocks long is the strip?",
+      "acceptedAnswers": [
+        "7"
+      ],
+      "numericChoices": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "inputMode": "numeric",
+      "explanation": "The strip matches 7 equal blocks. Count the blocks, not the lines between them.",
+      "measure": {
+        "kind": "length",
+        "values": [
+          7
+        ],
+        "units": true
+      },
+      "id": "measure-3-2",
+      "narration": {
+        "prompt": "How many blocks long is the strip?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two cups with the same amount of water.",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              3
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              3
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              2
+            ]
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "The matching cups have the same water level. All four cups are the same size.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-3-3",
+      "narration": {
+        "prompt": "Tap the two cups with the same amount of water."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many blocks balance the bag?",
+      "acceptedAnswers": [
+        "7"
+      ],
+      "numericChoices": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "inputMode": "numeric",
+      "explanation": "The pans are level. The bag weighs the same as 7 equal blocks.",
+      "measure": {
+        "kind": "mass",
+        "values": [
+          7,
+          7
+        ],
+        "units": true
+      },
+      "id": "measure-3-4",
+      "narration": {
+        "prompt": "How many blocks balance the bag?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Can these blocks measure the strip correctly?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The blocks have gaps. Measuring blocks must touch end to end.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "length",
+        "values": [
+          5
+        ],
+        "units": true,
+        "gaps": true
+      },
+      "id": "measure-3-5",
+      "narration": {
+        "prompt": "Can these blocks measure the strip correctly?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many full cups fill the jug?",
+      "acceptedAnswers": [
+        "6"
+      ],
+      "numericChoices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "inputMode": "numeric",
+      "explanation": "The jug holds 6 of these full cups. Count both rows of equal cups.",
+      "measure": {
+        "kind": "capacity",
+        "values": [
+          6
+        ],
+        "units": true
+      },
+      "id": "measure-3-6",
+      "narration": {
+        "prompt": "How many full cups fill the jug?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Pip says bag A is heavier. Is Pip right?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The pans are level. The bags weigh the same, so neither bag is heavier.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "mass",
+        "values": [
+          4,
+          4
+        ]
+      },
+      "id": "measure-3-7",
+      "narration": {
+        "prompt": "Pip says bag A is heavier. Is Pip right?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Each child builds the same tower. Who takes the least time?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Mia"
+        },
+        {
+          "id": "b",
+          "label": "Sam"
+        },
+        {
+          "id": "c",
+          "label": "Pip"
+        },
+        {
+          "id": "d",
+          "label": "Alex"
+        }
+      ],
+      "correctId": "d",
+      "explanation": "Alex takes 6 seconds. That is the fewest seconds for the same job.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "time",
+        "values": [
+          9,
+          7,
+          8,
+          6
+        ],
+        "labels": [
+          "Mia",
+          "Sam",
+          "Pip",
+          "Alex"
+        ]
+      },
+      "id": "measure-3-8",
+      "narration": {
+        "prompt": "Each child builds the same tower. Who takes the least time?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the amounts of water in order, from least to most.",
+      "items": [
+        {
+          "id": "a",
+          "label": "2 cups"
+        },
+        {
+          "id": "b",
+          "label": "4 cups"
+        },
+        {
+          "id": "c",
+          "label": "1 cup"
+        },
+        {
+          "id": "d",
+          "label": "3 cups"
+        }
+      ],
+      "correctOrder": [
+        "c",
+        "a",
+        "d",
+        "b"
+      ],
+      "explanation": "The amounts go 1, 2, 3 and 4 equal cups. More full cups means more water.",
+      "id": "measure-3-9",
+      "narration": {
+        "prompt": "Put the amounts of water in order, from least to most."
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two strips measured correctly with blocks.",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "length",
+            "values": [
+              4
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "length",
+            "values": [
+              6
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "length",
+            "values": [
+              5
+            ],
+            "units": true,
+            "gaps": true
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "length",
+            "values": [
+              3
+            ],
+            "units": true,
+            "gaps": true
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "b"
+      ],
+      "explanation": "The blocks must touch end to end and cover the strip. Gaps do not give a correct measurement.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-3-10",
+      "narration": {
+        "prompt": "Tap the two strips measured correctly with blocks."
+      }
+    }
+  ]
+}

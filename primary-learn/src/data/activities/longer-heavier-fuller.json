@@ -1,0 +1,451 @@
+{
+  "id": "longer-heavier-fuller",
+  "title": "Longer, heavier, fuller",
+  "summary": "Compare lengths, heights, weights and full cups. Measure with blocks and cups.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-compare-measures",
+  "pathNode": "y1-compare-measures",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 compares four ribbon lengths. Q2 compares tower heights. Q3 records three blocks of length. Q4 finds two full cups. Q5 identifies an empty cup. Q6 records a bag balanced by three blocks. Q7 reads which bag is heavier from a balance. Q8 records three full cups filling a jug. Q9 orders parts of a day from morning. Q10 selects two strips measuring four blocks.",
+    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths with shifted starts, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
+  },
+  "skills": [
+    "compare-lengths-heights",
+    "compare-mass",
+    "compare-capacity",
+    "measure-equal-units",
+    "compare-time"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which ribbon is longest?",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "length",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "length",
+            "values": [
+              6
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "length",
+            "values": [
+              3
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "length",
+            "values": [
+              4
+            ]
+          }
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The longest ribbon reaches furthest from the same starting point.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "hint": "Compare the ribbons from the same starting point.",
+      "id": "measure-1-1",
+      "narration": {
+        "prompt": "Which ribbon is longest?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which tower is tallest?",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "height",
+            "values": [
+              3
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "height",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "height",
+            "values": [
+              5
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "height",
+            "values": [
+              1
+            ]
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The tallest tower reaches highest from the same bottom line.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "hint": "Look at the tops of the towers.",
+      "id": "measure-1-2",
+      "narration": {
+        "prompt": "Which tower is tallest?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many blocks long is the strip?",
+      "acceptedAnswers": [
+        "3"
+      ],
+      "numericChoices": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "inputMode": "numeric",
+      "explanation": "The strip matches 3 equal blocks. They touch end to end.",
+      "measure": {
+        "kind": "length",
+        "values": [
+          3
+        ],
+        "units": true
+      },
+      "hint": "Count each equal block once.",
+      "id": "measure-1-3",
+      "narration": {
+        "prompt": "How many blocks long is the strip?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two full cups.",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              4
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              4
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              0
+            ]
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "The water reaches the top in both full cups. The other cups have room for more water.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-1-4",
+      "narration": {
+        "prompt": "Tap the two full cups."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which cup is empty?",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              2
+            ]
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              0
+            ]
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "capacity",
+            "values": [
+              4
+            ]
+          }
+        }
+      ],
+      "correctId": "c",
+      "explanation": "An empty cup has no water in it.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-1-5",
+      "narration": {
+        "prompt": "Which cup is empty?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many blocks balance the bag?",
+      "acceptedAnswers": [
+        "3"
+      ],
+      "numericChoices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "inputMode": "numeric",
+      "explanation": "The pans are level. The bag weighs the same as 3 blocks.",
+      "measure": {
+        "kind": "mass",
+        "values": [
+          3,
+          3
+        ],
+        "units": true
+      },
+      "id": "measure-1-6",
+      "narration": {
+        "prompt": "How many blocks balance the bag?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which bag is heavier?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Bag A"
+        },
+        {
+          "id": "b",
+          "label": "Bag B"
+        },
+        {
+          "id": "c",
+          "label": "They weigh the same"
+        },
+        {
+          "id": "d",
+          "label": "You cannot tell"
+        }
+      ],
+      "correctId": "a",
+      "explanation": "Bag A is on the lower pan. The heavier bag goes down.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "measure": {
+        "kind": "mass",
+        "values": [
+          5,
+          2
+        ]
+      },
+      "id": "measure-1-7",
+      "narration": {
+        "prompt": "Which bag is heavier?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many full cups fill the jug?",
+      "acceptedAnswers": [
+        "3"
+      ],
+      "numericChoices": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "inputMode": "numeric",
+      "explanation": "The jug holds 3 of these full cups. The cups are all the same size.",
+      "measure": {
+        "kind": "capacity",
+        "values": [
+          3
+        ],
+        "units": true
+      },
+      "id": "measure-1-8",
+      "narration": {
+        "prompt": "How many full cups fill the jug?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the parts of the day in order, starting with morning.",
+      "items": [
+        {
+          "id": "a",
+          "label": "Evening"
+        },
+        {
+          "id": "b",
+          "label": "Morning"
+        },
+        {
+          "id": "c",
+          "label": "Night"
+        },
+        {
+          "id": "d",
+          "label": "Afternoon"
+        }
+      ],
+      "correctOrder": [
+        "b",
+        "d",
+        "a",
+        "c"
+      ],
+      "explanation": "A day goes from morning to afternoon, then evening and night.",
+      "id": "measure-1-9",
+      "narration": {
+        "prompt": "Put the parts of the day in order, starting with morning."
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two strips that are 4 blocks long.",
+      "options": [
+        {
+          "id": "a",
+          "measure": {
+            "kind": "length",
+            "values": [
+              4
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "b",
+          "measure": {
+            "kind": "length",
+            "values": [
+              3
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "c",
+          "measure": {
+            "kind": "length",
+            "values": [
+              4
+            ],
+            "units": true
+          }
+        },
+        {
+          "id": "d",
+          "measure": {
+            "kind": "length",
+            "values": [
+              5
+            ],
+            "units": true
+          }
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "Each chosen strip matches 4 equal blocks. The blocks touch end to end.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "measure-1-10",
+      "narration": {
+        "prompt": "Tap the two strips that are 4 blocks long."
+      }
+    }
+  ]
+}

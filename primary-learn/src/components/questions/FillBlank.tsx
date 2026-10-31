@@ -1,3 +1,4 @@
+import { MeasurePicture } from "./MeasurePicture";
 import { FractionPicture } from "./FractionPicture";
 import { copy } from "../../data/copy";
 import type { FillBlankQuestion } from "../../types/activity";
@@ -26,6 +27,7 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.measure ? <MeasurePicture measure={question.measure} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
       {question.array ? <GroupsPicture array={question.array} /> : null}
       {question.visual ? (

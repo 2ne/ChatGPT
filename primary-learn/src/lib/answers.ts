@@ -1,6 +1,7 @@
+import { describeMeasure } from "./measures";
 import { describeFraction } from "./fractions";
 import { describeArray, describeBaseTen, describeGroups, describeTenFrame, describeVisual } from "../data/objects";
-import type { FractionAsset, ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, Question, TenFrameAsset } from "../types/activity";
+import type { MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, Question, TenFrameAsset } from "../types/activity";
 import { shapeName } from "./shapes";
 
 function optionLabel(
@@ -15,6 +16,7 @@ function optionLabel(
         groups?: GroupsAsset;
         array?: ArrayAsset;
         fraction?: FractionAsset;
+        measure?: MeasureAsset;
       }
     | undefined,
   slot: number,
@@ -27,6 +29,7 @@ function optionLabel(
   if (option.dice) return `dice showing ${option.dice.count}`;
   if (option.groups) return describeGroups(option.groups);
   if (option.array) return describeArray(option.array);
+  if (option.measure) return `${"ABCD"[slot]}. ${describeMeasure(option.measure)}`;
   if (option.fraction) return `${"ABCD"[slot]}. ${describeFraction(option.fraction)}`;
   if (option.visual) return describeVisual(option.visual);
   return null;

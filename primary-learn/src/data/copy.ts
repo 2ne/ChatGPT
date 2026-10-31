@@ -48,6 +48,8 @@ export const copy = {
   tapToAdd: "Tap to add",
   emptyGroup: "Your group is empty.",
   tapOntoGroup: "Tap to put some here.",
+  measureLowerPan: "The lower pan is heavier.",
+  measureCupsFillJug: "These full cups fill the jug.",
   objectsToShare: "Objects left to share.",
   addToGroup: (item: string, n: number) => `Add one ${item} to group ${n}.`,
   removeFromGroup: (item: string, n: number) => `Take this ${item} out of group ${n}.`,

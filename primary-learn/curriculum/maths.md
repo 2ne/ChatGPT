@@ -265,7 +265,7 @@ Year 1.
 
 ### 23. `y1-compare-measures` — Longer, heavier, fuller
 
-Requires: `y1-halves-quarters`. Quest: none. Status: missing.
+Requires: `y1-halves-quarters`. Quest: `longer-heavier-fuller`, `longer-heavier-fuller-medium`, `longer-heavier-fuller-hard`. Status: done.
 
 - Compare, describe and solve practical problems for lengths and heights, mass/weight, capacity/volume, and time (quicker, slower, earlier, later)
 - Measure and begin to record lengths and heights, mass/weight, and capacity/volume
