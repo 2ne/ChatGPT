@@ -1979,7 +1979,7 @@ button.object-token {
   font-size: clamp(16px, 5vw, 23px);
   border: 0;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--violet) 12%, var(--paper));
+  background: transparent;
   box-shadow: none;
 }
 .groups-board.is-option,
