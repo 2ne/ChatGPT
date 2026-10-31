@@ -159,7 +159,7 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
         <button type="button" className="btn-text" aria-label={copy.startGroupAgain}
           disabled={disabled || used.size === 0}
           onClick={() => { groups.forEach((group, index) => group.forEach((id) => animateOut(id, addButton(index)))); setGroups(emptyGroups(groupCount)); }}>
-          <RotateCw size={20} aria-hidden />
+          <RotateCw size={18} aria-hidden /> Start again
         </button>
       </div>
     </div>
