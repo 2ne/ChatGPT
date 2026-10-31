@@ -3039,12 +3039,12 @@ button.object-token {
 
 /* Written group labels need body-sized type, rather than the large numeral style. */
 .ordered-tile.has-text .ordered-drag {
-  gap: 8px;
+  gap: 14px;
   padding-inline: 2px;
 }
 
 .ordered-tile.has-text .option-content {
-  font-size: clamp(14px, 4vw, 20px);
+  font-size: clamp(16px, 4.7vw, 22px);
   line-height: 1.25;
   white-space: nowrap;
   justify-content: flex-start;
