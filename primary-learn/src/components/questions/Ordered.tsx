@@ -99,7 +99,7 @@ export function Ordered({ question, answer, disabled, reveal, onChange }: Ordere
         return (
           <li key={`${question.id}-${id}`} data-ordered-id={id}>
             <div
-              className={[choiceClass(dragging, marked), "ordered-tile", dragging ? "is-dragging" : ""]
+              className={[choiceClass(dragging, marked), "ordered-tile", item?.label && !Number.isFinite(Number(item.label)) ? "has-text" : "", dragging ? "is-dragging" : ""]
                 .filter(Boolean)
                 .join(" ")}
             >

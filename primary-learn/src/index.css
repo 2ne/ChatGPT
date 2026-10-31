@@ -3037,6 +3037,19 @@ button.object-token {
   line-height: 1;
 }
 
+/* Written group labels need body-sized type, rather than the large numeral style. */
+.ordered-tile.has-text .ordered-drag {
+  gap: 8px;
+  padding-inline: 2px;
+}
+
+.ordered-tile.has-text .option-content {
+  font-size: clamp(14px, 4vw, 20px);
+  line-height: 1.25;
+  white-space: nowrap;
+  justify-content: flex-start;
+}
+
 .ordered-tile .step-pair {
   margin-left: 0;
 }
