@@ -28,11 +28,44 @@ function useBuildMovement(answer: unknown) {
   const root = useRef<HTMLDivElement>(null);
   const origins = useRef(new Map<string, DOMRect>());
   const keyboardMove = useRef(false);
+  const exits = useRef(new Set<HTMLElement>());
 
-  function remember(id: string) {
+  function remember(id: string, from?: DOMRect) {
     const node = root.current?.querySelector<HTMLElement>(`[data-build-id="${id}"]:not([data-in-tray="hidden"])`);
-    if (node) origins.current.set(id, node.getBoundingClientRect());
+    if (from || node) origins.current.set(id, from ?? node!.getBoundingClientRect());
   }
+
+  function animateOut(id: string, destination: DOMRect | undefined) {
+    const node = root.current?.querySelector<HTMLElement>(`[data-build-id="${id}"]`);
+    if (!node || !destination || window.matchMedia("(prefers-reduced-motion: reduce)").matches || typeof node.animate !== "function") return;
+    const from = node.getBoundingClientRect();
+    const ghost = document.createElement("span");
+    ghost.textContent = node.textContent;
+    ghost.setAttribute("aria-hidden", "true");
+    Object.assign(ghost.style, {
+      position: "fixed", left: `${from.left}px`, top: `${from.top}px`,
+      width: `${from.width}px`, height: `${from.height}px`, display: "grid",
+      placeItems: "center", fontSize: getComputedStyle(node).fontSize,
+      lineHeight: "1", pointerEvents: "none", zIndex: "9999",
+    });
+    document.body.append(ghost);
+    exits.current.add(ghost);
+    const dx = destination.left + destination.width / 2 - from.left - from.width / 2;
+    const dy = destination.top + destination.height / 2 - from.top - from.height / 2;
+    const animation = ghost.animate([
+      { transform: "translate(0, 0) scale(1)", opacity: 1 },
+      { transform: `translate(${dx * .55}px, ${dy * .55 - 20}px) scale(.8)`, opacity: 1, offset: .55 },
+      { transform: `translate(${dx}px, ${dy}px) scale(.25)`, opacity: 0 },
+    ], { duration: 420, easing: "cubic-bezier(.22,.61,.36,1)" });
+    const clear = () => { ghost.remove(); exits.current.delete(ghost); };
+    animation.onfinish = clear;
+    animation.oncancel = clear;
+  }
+
+  useLayoutEffect(() => {
+    const active = exits.current;
+    return () => { active.forEach((node) => node.remove()); active.clear(); };
+  }, []);
 
   useLayoutEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -53,7 +86,7 @@ function useBuildMovement(answer: unknown) {
     origins.current.clear();
     keyboardMove.current = false;
   }, [answer]);
-  return { root, remember, keyboardMove };
+  return { root, remember, keyboardMove, animateOut };
 }
 
 function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildSetProps) {
@@ -65,7 +98,11 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
     ? answer.groups.map((group) => group.filter((id) => ids.includes(id)))
     : emptyGroups(groupCount);
   const used = new Set(groups.flat());
-  const { root, remember } = useBuildMovement(answer);
+  const { root, remember, animateOut } = useBuildMovement(answer);
+
+  function addButton(index: number) {
+    return root.current?.querySelector<HTMLElement>(`[data-group-add="${index}"]`)?.getBoundingClientRect();
+  }
   const words = OBJECT_WORDS[question.visual.item];
   const glyph = objectGlyph(question.visual.item);
   const allRight = groups.length === groupCount && groups.every((group) => group.length === groupSize);
@@ -78,7 +115,7 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
   function add(index: number) {
     const id = ids.find((candidate) => !used.has(candidate));
     if (disabled || id == null) return;
-    remember(id);
+    remember(id, addButton(index));
     const next = groups.map((group) => [...group]);
     const bucket = next[index] ?? [];
     bucket.push(id);
@@ -88,7 +125,7 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
 
   function remove(id: string) {
     if (disabled) return;
-    remember(id);
+    animateOut(id, addButton(groups.findIndex((group) => group.includes(id))));
     setGroups(groups.map((group) => group.filter((item) => item !== id)));
   }
 
@@ -99,7 +136,7 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
           <div key={`g-${index}`} className={`share-group${marked}`}>
             <div className="share-group-heading">
               <p className="share-group-name">{copy.groupLabel(index + 1)}</p>
-              <button type="button" className="share-group-add"
+              <button type="button" className="share-group-add" data-group-add={index}
                 disabled={disabled || used.size === bank}
                 aria-label={copy.addToGroup(words.singular, index + 1)}
                 onClick={() => add(index)}>
@@ -118,17 +155,10 @@ function GroupsBuildSet({ question, answer, disabled, reveal, onChange }: BuildS
           </div>
         ))}
       </div>
-      <div className="share-bank" role="img" aria-label={copy.objectsToShare}>
-        {ids.map((id) => (
-          <span key={id} data-build-id={id} data-in-tray={used.has(id) ? "hidden" : "visible"} className={`share-bank-object${used.has(id) ? " is-used" : ""}`} aria-hidden>
-            {glyph}
-          </span>
-        ))}
-      </div>
       <div className="build-reset">
         <button type="button" className="btn-text" aria-label={copy.startGroupAgain}
           disabled={disabled || used.size === 0}
-          onClick={() => { used.forEach(remember); setGroups(emptyGroups(groupCount)); }}>
+          onClick={() => { groups.forEach((group, index) => group.forEach((id) => animateOut(id, addButton(index)))); setGroups(emptyGroups(groupCount)); }}>
           <RotateCw size={20} aria-hidden />
         </button>
       </div>
@@ -236,7 +266,7 @@ export function BuildSet({ question, answer, disabled, reveal, onChange }: Build
       <div className="build-reset">
         <button type="button" className="btn-text" disabled={disabled || !selected.length}
           style={{ visibility: selected.length && !disabled ? "visible" : "hidden" }}
-          onClick={() => { selected.forEach(remember); onChange([]); }}>
+          onClick={() => { selected.forEach((id) => remember(id)); onChange([]); }}>
           <RotateCw size={18} aria-hidden /> Start again
         </button>
       </div>
