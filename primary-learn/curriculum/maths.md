@@ -272,7 +272,7 @@ Requires: `y1-halves-quarters`. Quest: `longer-heavier-fuller`, `longer-heavier-
 
 ### 24. `y1-coins` — Coins and notes
 
-Requires: `y1-compare-measures`. Quest: none. Status: missing.
+Requires: `y1-compare-measures`. Quest: `coins-and-notes`, `coins-and-notes-medium`, `coins-and-notes-hard`. Status: done.
 
 - Recognise and know the value of different denominations of coins and notes
 

@@ -119,6 +119,13 @@ export type ArrayAsset = {
   item?: ObjectItem;
 };
 
+/** Recognisable denomination, without implying a total or calculating change. */
+export type MoneyAsset = {
+  kind: "coin" | "note";
+  /** Coins use pence (100 = £1). Notes use pounds. */
+  value: number;
+};
+
 /** Pictorial comparison or recording in equal non-standard units. */
 export type MeasureAsset = {
   kind: "length" | "height" | "mass" | "capacity" | "time";
@@ -209,6 +216,7 @@ export type QuestionOption = {
   array?: ArrayAsset;
   fraction?: FractionAsset;
   measure?: MeasureAsset;
+  money?: MoneyAsset[];
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -275,6 +283,7 @@ type QuestionCore = {
   array?: ArrayAsset;
   fraction?: FractionAsset;
   measure?: MeasureAsset;
+  money?: MoneyAsset[];
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */

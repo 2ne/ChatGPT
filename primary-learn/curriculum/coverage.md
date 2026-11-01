@@ -10,9 +10,9 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
 | Nodes (future quests) | 124 |
-| Done | 23 — nodes 1 to 23 (`eyfs-count-5` through `y1-compare-measures`) |
+| Done | 24 — nodes 1 to 24 (`eyfs-count-5` through `y1-coins`) |
 | Partial | 0 |
-| Missing | 101 |
+| Missing | 100 |
 
 ## Quests in the app
 
@@ -93,12 +93,15 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `longer-heavier-fuller` | `y1-compare-measures` (node 23) | done — Easy: direct comparisons, three-block and three-cup measurements, parts of a day |
 | `longer-heavier-fuller-medium` | `y1-compare-measures` (node 23) | done — Medium: closer comparisons, five-unit measurements, half-full cups, compare time taken |
 | `longer-heavier-fuller-hard` | `y1-compare-measures` (node 23) | done — Hard: aligned equal lengths, gapped units, level balances, seven-unit records and four times |
+| `coins-and-notes` | `y1-coins` (node 24) | done — Easy: pence coin recognition, pound coin, copper and seven-sided families, order values |
+| `coins-and-notes-medium` | `y1-coins` (node 24) | done — Medium: two-pound coin, four note values, compare and order denominations |
+| `coins-and-notes-hard` | `y1-coins` (node 24) | done — Hard: size traps, mixed pound/pence comparisons, notes versus coins |
 
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-coins` — Coins and notes (node 24). Start that node with Easy.
+When expanding the path, the first `missing` node is `y1-time-hour` — O’clock and half past (node 25). Split calendar language from clock reading when that node is built.
 
 Do not build a later *new* node while an earlier node is still `missing`.
 

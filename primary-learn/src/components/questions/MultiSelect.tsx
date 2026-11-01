@@ -1,3 +1,4 @@
+import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { FractionPicture } from "./FractionPicture";
 import { useRef } from "react";
@@ -38,6 +39,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.money ? <MoneyPicture money={question.money} /> : null}
       {question.measure ? <MeasurePicture measure={question.measure} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
       {question.array ? <GroupsPicture array={question.array} /> : null}
@@ -71,7 +73,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
               baseTen={option.baseTen}
               dice={option.dice}
               groups={option.groups}
-              array={option.array} fraction={option.fraction} measure={option.measure}
+              array={option.array} fraction={option.fraction} measure={option.measure} money={option.money}
               layout={option.layout}
             />
             {marked === "correct" ? (

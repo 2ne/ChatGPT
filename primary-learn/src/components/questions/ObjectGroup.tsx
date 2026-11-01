@@ -1,3 +1,4 @@
+import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { useEffect, useMemo, useState, type MouseEvent, type PointerEvent } from "react";
 import { RotateCw } from "lucide-react";
@@ -5,7 +6,7 @@ import { copy } from "../../data/copy";
 import { OBJECT_GLYPH, OBJECT_WORDS, describeVisual } from "../../data/objects";
 import { hashString, mulberry32 } from "../../lib/realize";
 import { speakCount } from "../../lib/speech";
-import type { MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, DiceAsset, GroupsAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
+import type { MoneyAsset, MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, DiceAsset, GroupsAsset, ObjectAsset, ObjectItem, ObjectLayout, TenFrameAsset } from "../../types/activity";
 import { FractionPicture } from "./FractionPicture";
 import { GroupsPicture } from "./GroupsPicture";
 import { BaseTen } from "./BaseTen";
@@ -405,7 +406,7 @@ export function OptionContent({
   groups,
   array,
   fraction,
-  measure,
+  measure, money,
   layout,
   pack,
 }: {
@@ -417,12 +418,13 @@ export function OptionContent({
   groups?: GroupsAsset;
   array?: ArrayAsset;
   fraction?: FractionAsset;
-  measure?: MeasureAsset;
+  measure?: MeasureAsset; money?: MoneyAsset[];
   layout?: ObjectLayout;
   pack?: boolean;
 }) {
   return (
     <span className="option-content">
+      {money ? <MoneyPicture money={money} compact /> : null}
       {measure ? <MeasurePicture measure={measure} compact /> : null}
       {fraction ? <FractionPicture fraction={fraction} compact /> : null}
       {tenFrame ? <TenFrame frame={tenFrame} compact /> : null}

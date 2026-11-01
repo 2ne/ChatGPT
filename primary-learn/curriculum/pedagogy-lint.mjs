@@ -159,6 +159,7 @@ function optionFingerprint(question) {
     items: question.items ?? null,
     choices: question.choices ?? null,
     visual: question.visual ?? null,
+    money: question.money ?? null,
     tenFrame: question.tenFrame ?? null,
     baseTen: question.baseTen ?? null,
     part: question.part ?? null,

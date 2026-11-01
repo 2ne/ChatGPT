@@ -1,0 +1,458 @@
+{
+  "id": "coins-and-notes-medium",
+  "title": "Coins and notes",
+  "summary": "Recognise pound coins and notes, and compare their values.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-coins",
+  "pathNode": "y1-coins",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 identifies the two-pound coin. Q2 reads a five-pound note. Q3 selects coins worth more than ten pence. Q4 identifies a ten-pound note. Q5 reads a twenty-pound note. Q6 identifies a fifty-pound note. Q7 selects the two notes worth less than twenty pounds. Q8 reads the pound coin in pounds. Q9 orders the four note values. Q10 rejects the claim that the physically bigger coin always has greater value.",
+    "versus": "Easy recognises common coin values and the copper and seven-sided coin families. Medium introduces all four Bank of England note values, the two-pound coin and ordering notes. Hard adds new thinking by rejecting physical-size errors, distinguishing pounds from pence when numerals match, and comparing mixed denominations. No coin totals, equivalent combinations or change calculations are introduced."
+  },
+  "skills": [
+    "recognise-coins",
+    "recognise-notes",
+    "money-values",
+    "pence-and-pounds",
+    "compare-denominations"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which coin is worth two pounds?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 100
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 200
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 50
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 20
+            }
+          ]
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The round coin marked £2 is worth two pounds. It has a gold-coloured outer ring.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-2-1",
+      "narration": {
+        "prompt": "Which coin is worth two pounds?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many pounds is this note worth?",
+      "money": [
+        {
+          "kind": "note",
+          "value": 5
+        }
+      ],
+      "acceptedAnswers": [
+        "5"
+      ],
+      "numericChoices": [
+        2,
+        5,
+        10,
+        20
+      ],
+      "inputMode": "numeric",
+      "explanation": "The £ symbol means pounds. This note is worth five pounds.",
+      "prefix": "£",
+      "id": "money-2-2",
+      "narration": {
+        "prompt": "How many pounds is this note worth?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two coins worth more than 10p.",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "correctIds": [
+        "b",
+        "d"
+      ],
+      "explanation": "20p and 50p are both worth more than 10p. The 10p coin is equal to 10p.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-2-3",
+      "narration": {
+        "prompt": "Tap the two coins worth more than ten pence."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which note is worth ten pounds?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "note",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "note",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "note",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "note",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The note marked £10 is worth ten pounds. The £ symbol means pounds.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-2-4",
+      "narration": {
+        "prompt": "Which note is worth ten pounds?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many pounds is this note worth?",
+      "money": [
+        {
+          "kind": "note",
+          "value": 20
+        }
+      ],
+      "acceptedAnswers": [
+        "20"
+      ],
+      "numericChoices": [
+        5,
+        10,
+        20,
+        50
+      ],
+      "inputMode": "numeric",
+      "explanation": "The note marked £20 is worth twenty pounds, not twenty pence.",
+      "prefix": "£",
+      "id": "money-2-5",
+      "narration": {
+        "prompt": "How many pounds is this note worth?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which note is worth fifty pounds?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "note",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "note",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "note",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "note",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "correctId": "d",
+      "explanation": "The note marked £50 is worth fifty pounds. Read the value as well as the colour.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-2-6",
+      "narration": {
+        "prompt": "Which note is worth fifty pounds?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two notes worth less than twenty pounds.",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "note",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "note",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "note",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "note",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "Five pounds and ten pounds are both less than twenty pounds.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-2-7",
+      "narration": {
+        "prompt": "Tap the two notes worth less than twenty pounds."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many pounds is this coin worth?",
+      "money": [
+        {
+          "kind": "coin",
+          "value": 100
+        }
+      ],
+      "acceptedAnswers": [
+        "1"
+      ],
+      "numericChoices": [
+        1,
+        2,
+        5,
+        10
+      ],
+      "inputMode": "numeric",
+      "explanation": "The £1 coin is worth one pound. The symbol £ means pounds.",
+      "prefix": "£",
+      "id": "money-2-8",
+      "narration": {
+        "prompt": "How many pounds is this coin worth?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the notes in order, from lowest value to highest value.",
+      "items": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "note",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "note",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "note",
+              "value": 50
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "note",
+              "value": 10
+            }
+          ]
+        }
+      ],
+      "correctOrder": [
+        "b",
+        "d",
+        "a",
+        "c"
+      ],
+      "explanation": "The note values go five pounds, ten pounds, twenty pounds and fifty pounds.",
+      "id": "money-2-9",
+      "narration": {
+        "prompt": "Put the notes in order, from lowest value to highest value."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Pip says a bigger coin is always worth more. Is Pip right?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The 2p coin is bigger, but the 5p coin is worth more. Size does not show value.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "money": [
+        {
+          "kind": "coin",
+          "value": 2
+        },
+        {
+          "kind": "coin",
+          "value": 5
+        }
+      ],
+      "id": "money-2-10",
+      "narration": {
+        "prompt": "Pip says a bigger coin is always worth more. Is Pip right?"
+      }
+    }
+  ]
+}

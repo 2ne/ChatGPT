@@ -5448,3 +5448,12 @@ button.object-token {
 .measure-water { fill: #b4dff0; }
 .measure-water-line { stroke: #4e93ae; stroke-width: 2; }
 .measure-key { display: block; margin-top: 4px; color: var(--ink-soft); font-family: var(--font-body); font-size: 14px; text-align: center; }
+
+/* Recognisable money values without answer-style backgrounds on individual items. */
+.money-picture { display: block; width: min(100%, 320px); height: 112px; margin: 0 auto 12px; }
+.money-picture.is-option { width: min(100%, 192px); height: 80px; margin: 0 auto; }
+.money-coin-value { fill: #34343d; font-family: var(--font-display); font-weight: 800; }
+.money-coin-word { fill: #34343d; font-family: var(--font-body); font-size: 7px; font-weight: 900; letter-spacing: .7px; }
+.money-note-value { font-family: var(--font-display); font-size: 30px; font-weight: 800; }
+.money-note-word { font-family: var(--font-body); font-size: 7px; font-weight: 900; letter-spacing: 1px; }
+.ordered-tile .money-picture.is-option { height: 64px; }

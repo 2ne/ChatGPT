@@ -1,0 +1,478 @@
+{
+  "id": "coins-and-notes",
+  "title": "Coins and notes",
+  "summary": "Recognise coin values and put pence coins in order.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-coins",
+  "pathNode": "y1-coins",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 identifies 1p. Q2 reads 2p. Q3 recognises 1p and 2p as the copper coins. Q4 identifies 5p. Q5 reads 10p. Q6 identifies 20p. Q7 recognises 20p and 50p as seven-sided coins. Q8 reads 50p. Q9 identifies the current pound coin. Q10 orders four pence coins by value, not physical size.",
+    "versus": "Easy recognises common coin values and the copper and seven-sided coin families. Medium introduces all four Bank of England note values, the two-pound coin and ordering notes. Hard adds new thinking by rejecting physical-size errors, distinguishing pounds from pence when numerals match, and comparing mixed denominations. No coin totals, equivalent combinations or change calculations are introduced."
+  },
+  "skills": [
+    "recognise-coins",
+    "recognise-notes",
+    "money-values",
+    "pence-and-pounds",
+    "compare-denominations"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which coin is worth 1p?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 10
+            }
+          ]
+        }
+      ],
+      "correctId": "a",
+      "explanation": "The coin marked 1 penny is worth 1p.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "hint": "Look at the value marked on each coin.",
+      "id": "money-1-1",
+      "narration": {
+        "prompt": "Which coin is worth one penny?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many pence is this coin worth?",
+      "money": [
+        {
+          "kind": "coin",
+          "value": 2
+        }
+      ],
+      "acceptedAnswers": [
+        "2"
+      ],
+      "numericChoices": [
+        2,
+        5,
+        10,
+        20
+      ],
+      "inputMode": "numeric",
+      "explanation": "The coin marked 2 pence is worth 2p.",
+      "suffix": "p",
+      "hint": "The number on the coin tells you its value.",
+      "id": "money-1-2",
+      "narration": {
+        "prompt": "How many pence is this coin worth?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two copper-coloured coins.",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 10
+            }
+          ]
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "explanation": "The 1p and 2p coins are copper-coloured. Their values are different.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-1-3",
+      "narration": {
+        "prompt": "Tap the two copper-coloured coins."
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which coin is worth 5p?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 20
+            }
+          ]
+        }
+      ],
+      "correctId": "b",
+      "explanation": "The coin marked 5 pence is worth 5p. Its small size does not mean a smaller value.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-1-4",
+      "narration": {
+        "prompt": "Which coin is worth five pence?"
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many pence is this coin worth?",
+      "money": [
+        {
+          "kind": "coin",
+          "value": 10
+        }
+      ],
+      "acceptedAnswers": [
+        "10"
+      ],
+      "numericChoices": [
+        2,
+        5,
+        10,
+        20
+      ],
+      "inputMode": "numeric",
+      "explanation": "The coin marked 10 pence is worth 10p.",
+      "suffix": "p",
+      "id": "money-1-5",
+      "narration": {
+        "prompt": "How many pence is this coin worth?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which coin is worth 20p?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The smaller seven-sided coin is marked 20 pence. It is worth 20p.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-1-6",
+      "narration": {
+        "prompt": "Which coin is worth twenty pence?"
+      }
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two coins with seven sides.",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 100
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 50
+            }
+          ]
+        }
+      ],
+      "correctIds": [
+        "a",
+        "d"
+      ],
+      "explanation": "The 20p and 50p coins have seven curved sides. The pound coin has twelve sides.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-1-7",
+      "narration": {
+        "prompt": "Tap the two coins with seven sides."
+      }
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many pence is this coin worth?",
+      "money": [
+        {
+          "kind": "coin",
+          "value": 50
+        }
+      ],
+      "acceptedAnswers": [
+        "50"
+      ],
+      "numericChoices": [
+        5,
+        10,
+        20,
+        50
+      ],
+      "inputMode": "numeric",
+      "explanation": "The larger seven-sided coin is marked 50 pence. It is worth 50p.",
+      "suffix": "p",
+      "id": "money-1-8",
+      "narration": {
+        "prompt": "How many pence is this coin worth?"
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which coin is worth one pound?",
+      "options": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 20
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 50
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 100
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 200
+            }
+          ]
+        }
+      ],
+      "correctId": "c",
+      "explanation": "The twelve-sided coin marked £1 is worth one pound.",
+      "randomise": {
+        "shuffleOptions": true
+      },
+      "id": "money-1-9",
+      "narration": {
+        "prompt": "Which coin is worth one pound?"
+      }
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put the coins in order, from lowest value to highest value.",
+      "items": [
+        {
+          "id": "a",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "money": [
+            {
+              "kind": "coin",
+              "value": 1
+            }
+          ]
+        }
+      ],
+      "correctOrder": [
+        "d",
+        "b",
+        "c",
+        "a"
+      ],
+      "explanation": "The values go 1p, 2p, 5p and 10p. Order their values, not their sizes.",
+      "id": "money-1-10",
+      "narration": {
+        "prompt": "Put the coins in order, from lowest value to highest value."
+      }
+    }
+  ]
+}

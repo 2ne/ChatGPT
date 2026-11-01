@@ -17,6 +17,7 @@ import {
   type GroupsAsset,
   type FractionAsset,
   type MeasureAsset,
+  type MoneyAsset,
   type DiceAsset,
   type MakeTotalGap,
   type MakeTotalMode,
@@ -412,6 +413,20 @@ function optionalBaseTen(record: Record<string, unknown>, path: string): BaseTen
   return parseBaseTen(record.baseTen, `${path}.baseTen`);
 }
 
+function optionalMoney(record: Record<string, unknown>, path: string): MoneyAsset[] | undefined {
+  if (record.money == null) return undefined;
+  if (!Array.isArray(record.money) || record.money.length < 1 || record.money.length > 4) fail(path, "money needs one to four denominations");
+  return record.money.map((item, index) => {
+    const at = `${path}.money[${index}]`;
+    if (!isRecord(item)) fail(at, "money item must be an object");
+    const kind = expectString(item, "kind", at);
+    const value = expectNumber(item, "value", at);
+    if (kind !== "coin" && kind !== "note") fail(at, "money kind must be coin or note");
+    if (!(kind === "coin" ? [1, 2, 5, 10, 20, 50, 100, 200] : [5, 10, 20, 50]).includes(value)) fail(at, "unsupported circulating denomination");
+    return { kind, value };
+  });
+}
+
 function optionalMeasure(record: Record<string, unknown>, path: string): MeasureAsset | undefined {
   const value = record.measure;
   if (value == null) return undefined;
@@ -488,7 +503,7 @@ function parseFlashMs(record: Record<string, unknown>, path: string): number | u
   return flashMs;
 }
 
-function parseOption(value: unknown, path: string, allowShape = false): QuestionOption {
+function parseOption(value: unknown, path: string, allowShape = false, allowMoney = false): QuestionOption {
   if (!isRecord(value)) fail(path, "option must be an object");
   const id = expectString(value, "id", path);
   const label = value.label == null ? undefined : expectString(value, "label", path);
@@ -504,6 +519,8 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   const groups = optionalGroups(value, path);
   const array = optionalArray(value, path);
   const fraction = optionalFraction(value, path);
+  const money = optionalMoney(value, path);
+  if (money && (!allowMoney || visual || tenFrame || baseTen || dice || groups || array || fraction || value.measure || value.shape || layout)) fail(path, "money options use choice or ordering without other pictures");
   const measure = optionalMeasure(value, path);
   if (measure && (!allowShape || visual || tenFrame || baseTen || dice || groups || array || fraction || value.shape || layout)) fail(path, "measure options use choice questions without other pictures");
   if (fraction && !allowShape) fail(path, "fraction options use multiple-choice or multi-select");
@@ -520,8 +537,8 @@ function parseOption(value: unknown, path: string, allowShape = false): Question
   if (baseTen && layout) fail(path, "tens and ones do not use layout");
   if (dice && layout) fail(path, "dice faces do not use layout");
   if ((groups || array) && layout) fail(path, "groups and arrays do not use layout");
-  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction && !measure) fail(path, "option needs a label or a picture");
-  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, shape, layout };
+  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction && !measure && !money) fail(path, "option needs a label or a picture");
+  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, money, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -887,7 +904,9 @@ function parseQuestion(value: unknown, path: string): Question {
   if (fraction && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "fraction stems use choice questions without other pictures");
   const measure = optionalMeasure(value, path);
   if (measure && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "measure stems use choice questions without other pictures");
-  const core = { measure, fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
+  const money = optionalMoney(value, path);
+  if (money && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || measure || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "money stems use choice questions without other pictures");
+  const core = { money, measure, fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,
@@ -935,7 +954,7 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "multiple-choice": {
       const options = expectArray(value, "options", path).map((option, i) =>
-        parseOption(option, `${path}.options[${i}]`, true),
+        parseOption(option, `${path}.options[${i}]`, true, true),
       );
       if (options.some((option) => option.shape) && options.some((option) => option.visual)) fail(path, "shape choices cannot mix in object pictures");
       const correctId = expectString(value, "correctId", path);
@@ -1009,7 +1028,7 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "multi-select": {
       const options = expectArray(value, "options", path).map((option, i) =>
-        parseOption(option, `${path}.options[${i}]`, true),
+        parseOption(option, `${path}.options[${i}]`, true, true),
       );
       if (options.some((option) => option.shape) && options.some((option) => option.visual)) fail(path, "shape choices cannot mix in object pictures");
       const correctIds = expectArray(value, "correctIds", path);
@@ -1073,7 +1092,7 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "ordered": {
       const items = expectArray(value, "items", path).map((item, i) =>
-        parseOption(item, `${path}.items[${i}]`),
+        parseOption(item, `${path}.items[${i}]`, false, true),
       );
       const correctOrder = expectArray(value, "correctOrder", path);
       if (!correctOrder.every(isString) || correctOrder.length !== items.length) {

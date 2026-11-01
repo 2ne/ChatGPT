@@ -1,7 +1,8 @@
+import { describeMoney } from "./money";
 import { describeMeasure } from "./measures";
 import { describeFraction } from "./fractions";
 import { describeArray, describeBaseTen, describeGroups, describeTenFrame, describeVisual } from "../data/objects";
-import type { MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, Question, TenFrameAsset } from "../types/activity";
+import type { MoneyAsset, MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, Question, TenFrameAsset } from "../types/activity";
 import { shapeName } from "./shapes";
 
 function optionLabel(
@@ -17,6 +18,7 @@ function optionLabel(
         array?: ArrayAsset;
         fraction?: FractionAsset;
         measure?: MeasureAsset;
+        money?: MoneyAsset[];
       }
     | undefined,
   slot: number,
@@ -29,6 +31,7 @@ function optionLabel(
   if (option.dice) return `dice showing ${option.dice.count}`;
   if (option.groups) return describeGroups(option.groups);
   if (option.array) return describeArray(option.array);
+  if (option.money) return describeMoney(option.money);
   if (option.measure) return `${"ABCD"[slot]}. ${describeMeasure(option.measure)}`;
   if (option.fraction) return `${"ABCD"[slot]}. ${describeFraction(option.fraction)}`;
   if (option.visual) return describeVisual(option.visual);
@@ -233,7 +236,7 @@ export function correctAnswerLabel(question: Question): string | null {
     }
     case "ordered": {
       const labels = question.correctOrder.map(
-        (id) => question.items.find((item) => item.id === id)?.label ?? id,
+        (id, slot) => optionLabel(question.items.find((item) => item.id === id), slot) ?? id,
       );
       return labels.length ? labels.join(", ") : null;
     }

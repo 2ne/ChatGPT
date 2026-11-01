@@ -1,3 +1,4 @@
+import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { FractionPicture } from "./FractionPicture";
 import { TurnChoices } from "./TurnChoices";
@@ -55,7 +56,7 @@ export function MultipleChoice({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked, ["amount-card"])}
               >
-                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} groups={option.groups} array={option.array} fraction={option.fraction} measure={option.measure} layout={option.layout} pack />
+                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} groups={option.groups} array={option.array} fraction={option.fraction} measure={option.measure} money={option.money} layout={option.layout} pack />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
@@ -100,6 +101,7 @@ export function MultipleChoice({
       {showStem && question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {showStem && question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {showStem && question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.money ? <MoneyPicture money={question.money} /> : null}
       {question.measure ? <MeasurePicture measure={question.measure} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
       {showStem && question.array ? <GroupsPicture array={question.array} /> : null}
@@ -135,7 +137,7 @@ export function MultipleChoice({
                 baseTen={option.baseTen}
                 dice={option.dice}
                 groups={option.groups}
-                array={option.array} fraction={option.fraction} measure={option.measure}
+                array={option.array} fraction={option.fraction} measure={option.measure} money={option.money}
                 layout={option.layout}
               />
               {marked === "correct" ? (
