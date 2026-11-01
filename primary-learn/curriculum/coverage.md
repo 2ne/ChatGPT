@@ -9,10 +9,10 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | | Count |
 | --- | --- |
 | Categories | 45 (`cat-r-to-5` → `cat-y6-graphs`) |
-| Nodes (future quests) | 124 |
-| Done | 24 — nodes 1 to 24 (`eyfs-count-5` through `y1-coins`) |
+| Nodes (future quests) | 125 |
+| Done | 26 — nodes 1 to 26 (`eyfs-count-5` through `y1-time-hour`) |
 | Partial | 0 |
-| Missing | 100 |
+| Missing | 99 |
 
 ## Quests in the app
 
@@ -96,15 +96,21 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `coins-and-notes` | `y1-coins` (node 24) | done — Easy: pence coin recognition, pound coin, copper and seven-sided families, order values |
 | `coins-and-notes-medium` | `y1-coins` (node 24) | done — Medium: two-pound coin, four note values, compare and order denominations |
 | `coins-and-notes-hard` | `y1-coins` (node 24) | done — Hard: size traps, mixed pound/pence comparisons, notes versus coins |
+| `days-and-dates` | `y1-calendar` (node 25, category `cat-y1-measures`) | done — Easy: day and month sequences, units and time records |
+| `days-and-dates-medium` | `y1-calendar` (node 25, category `cat-y1-measures`) | done — Medium: day and month sequences, units and time records |
+| `days-and-dates-hard` | `y1-calendar` (node 25, category `cat-y1-measures`) | done — Hard: day and month sequences, units and time records |
+| `oclock-and-half-past` | `y1-time-hour` (node 26, category `cat-y1-measures`) | done — Easy: read, choose and set clock hands to the hour and half past |
+| `oclock-and-half-past-medium` | `y1-time-hour` (node 26, category `cat-y1-measures`) | done — Medium: read, choose and set clock hands to the hour and half past |
+| `oclock-and-half-past-hard` | `y1-time-hour` (node 26, category `cat-y1-measures`) | done — Hard: read, choose and set clock hands to the hour and half past |
 
 ## Next quest to build
 
 Agent shortcut: **[NEXT.md](./NEXT.md)** (keep that file in sync when this scoreboard changes).
 
-When expanding the path, the first `missing` node is `y1-time-hour` — O’clock and half past (node 25). Split calendar language from clock reading when that node is built.
+When expanding the path, the first `missing` node is `y2-count-steps` — Count in steps (node 27). Year 1 time is split into Days and dates (25) and O'clock and half past (26).
 
 Do not build a later *new* node while an earlier node is still `missing`.
 
 The October 2026 path audit did not add or remove nodes. Reception now compares quantities before composing numbers to 10. Years 1 to 6 interleave a practical topic after the first number block. `y1-bonds-10` is still node 13.
 
-Later, not now: 2 or 3 extra Reception nodes for shape, repeating patterns and measures. Split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` when those nodes are built.
+Later, not now: 2 or 3 extra Reception nodes for shape, repeating patterns and measures. Split `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` when those nodes are built.

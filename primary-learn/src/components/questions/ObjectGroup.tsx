@@ -1,3 +1,4 @@
+import { ClockPicture } from "./ClockPicture";
 import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { useEffect, useMemo, useState, type MouseEvent, type PointerEvent } from "react";
@@ -406,7 +407,7 @@ export function OptionContent({
   groups,
   array,
   fraction,
-  measure, money,
+  measure, money, clock,
   layout,
   pack,
 }: {
@@ -418,12 +419,13 @@ export function OptionContent({
   groups?: GroupsAsset;
   array?: ArrayAsset;
   fraction?: FractionAsset;
-  measure?: MeasureAsset; money?: MoneyAsset[];
+  measure?: MeasureAsset; money?: MoneyAsset[]; clock?: import("../../types/activity").ClockAsset;
   layout?: ObjectLayout;
   pack?: boolean;
 }) {
   return (
     <span className="option-content">
+      {clock ? <ClockPicture clock={clock} compact /> : null}
       {money ? <MoneyPicture money={money} compact /> : null}
       {measure ? <MeasurePicture measure={measure} compact /> : null}
       {fraction ? <FractionPicture fraction={fraction} compact /> : null}

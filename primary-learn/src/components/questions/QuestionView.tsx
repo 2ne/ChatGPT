@@ -3,6 +3,7 @@ import type { Question, QuestionKind } from "../../types/activity";
 import { copy } from "../../data/copy";
 import { questionUsesBaseTen } from "../../lib/baseTen";
 import { BaseTenKey } from "./BaseTenKey";
+import { SetClock } from "./SetClock";
 import { BuildSet } from "./BuildSet";
 import { CountObjects } from "./CountObjects";
 import { FillBlank } from "./FillBlank";
@@ -42,6 +43,7 @@ type KindView = ComponentType<{
 export const QUESTION_VIEWS: Record<QuestionKind, KindView> = {
   "count-objects": CountObjects as KindView,
   "build-set": BuildSet as KindView,
+  "set-clock": SetClock as KindView,
   "multiple-choice": MultipleChoice as KindView,
   "multi-select": MultiSelect as KindView,
   "fill-blank": FillBlank as KindView,

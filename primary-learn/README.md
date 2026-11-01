@@ -77,7 +77,7 @@ UK (England) maths pathways and gap tracking live in **`curriculum/`**:
 
 - `curriculum/NEXT.md` — what agents should build next (keep in sync with coverage)
 - `curriculum/overview.md` — stages and ages
-- `curriculum/maths.md` — the path: 45 categories and 124 nodes, in order
+- `curriculum/maths.md` — the path: 45 categories and 125 nodes, in order
 - `curriculum/audit.md` — how to check that path before adding a quest
 - `curriculum/coverage.md` — how many nodes are still missing
 
@@ -107,13 +107,13 @@ npm run preview
 
 - **Rapid prototype** — push to `main`, no PRs, no tests, no lint required; build is the check
 - **No auth** — profile and progress keys are `primary-path:profile:v1` and `primary-path:progress:v1`. localStorage only, on purpose
-- **Primary maths** — the map is `curriculum/maths.md`: 45 categories and 124 nodes in one suggested order. Everything is open. English or other subjects would be separate work, not this app
+- **Primary maths** — the map is `curriculum/maths.md`: 45 categories and 125 nodes in one suggested order. Everything is open. English or other subjects would be separate work, not this app
 - **Three levels** — every node has Easy / Medium / Hard. The map uses `pathNode` + `difficulty`. Mastering all three means the child can do it
 - **Right first time** — `QUALITY.md` is required. Activities are not rewritten after they ship
 - **Speaker** — Web Speech API only (no generated audio); UK female teacher voice; `narration.prompt` is the question only and must never reveal the answer
 - **Improve before expanding** — finish and tighten shipped quests before adding new nodes
 - **UK framing** — year groups Reception–Year 6 stay on each activity for sequencing, British English, National Curriculum / EYFS maths references
-- **Content ≠ UI** — quests are JSON; one `ActivityRunner`; one component per question kind; shared wording in `copy.ts`. Change a phrase or an apple picture once, not 124 times
+- **Content ≠ UI** — quests are JSON; one `ActivityRunner`; one component per question kind; shared wording in `copy.ts`. Change a phrase or an apple picture once, not 125 times
 - **Optional randomise** — playthroughs can swap objects or shuffle choices (`realize.ts`). Counts stay inside the written band. The draw stays for that play
 - **Shared runner** — new content is data; after a miss the runner shows a short correction and moves on. Stars come from the 10-question score
 - **Pip** — pure-SVG mascot (indigo blob, sprout, star badge) with CSS moods. No WebGL / Three.js
@@ -175,3 +175,15 @@ The educational SVG illustrations preserve relative sizes within coins and withi
 Optional money teaching follows scoring. “Show me” compares one 2p, 5p or 10p coin with that many pennies. The end page uses the same shared score, stars and actions as every other quest.
 
 Money attempts retain stars and also store `moneyPractice` denominations locally. A missed comparison conservatively flags every assessed denomination, rather than diagnosing which one caused the error. Subsequent attempts bring relevant questions forward within their existing question-kind slots, retaining ten questions and the interaction rhythm. Money progress is marked secure only after an attempt without flagged denominations; stars and path access are unchanged. Older attempts remain readable. Other activities retain their existing progress rules.
+
+### Days, dates and clock time
+
+The final Year 1 time stop is split as planned into node 25 `y1-calendar` (Days and dates) and node 26 `y1-time-hour` (O'clock and half past). Both have Easy, Medium and Hard quests with ten questions each. Later display numbers increase by one; existing node IDs and saved activity progress stay stable. Year 2 starts at node 27.
+
+Days and dates develops before/after, day parts, yesterday/today/tomorrow, week and month sequences, year boundaries, time units and named measured records. Calendar statements are hypothetical, so answers never depend on the device date. There are no month-length facts or time-unit conversions.
+
+Clock time begins with the short hour hand alone, then both hands at the hour and half past. `ClockPicture` supports stems, answer choices and ordering cards. The long blue hand is longer and thinner than the short purple hour hand. Half-past hour hands always sit exactly halfway between hour numbers, including between twelve and one. Accessible descriptions name the time.
+
+The reusable `set-clock` question asks children to set a time using two labelled 44px-plus hand controls and Start again. Moving the long hand half a turn moves the short hand too; moving it past the hour advances the hour. There is no typed input or precision dragging. Answers remain editable until checked, reset clears the answer, and correct feedback shows the target clock after a miss. Clock choices use a two-column layout. The shared end page is unchanged. No digital time, quarter hours, five-minute intervals or elapsed-time arithmetic.
+
+Scope follows the [Year 1 programme of study](https://www.gov.uk/government/publications/national-curriculum-in-england-mathematics-programmes-of-study/national-curriculum-in-england-mathematics-programmes-of-study). Hand positioning follows [NCETM Year 1 time](https://www.ncetm.org.uk/classroom-resources/cp-year-1-unit-11-time/) and [Oak's half-hour lesson](https://www.thenational.academy/teachers/lessons/tell-the-time-to-the-half-hour-using-the-hour-hand).

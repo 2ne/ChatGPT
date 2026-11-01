@@ -1,3 +1,4 @@
+import { ClockPicture } from "./ClockPicture";
 import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { FractionPicture } from "./FractionPicture";
@@ -39,6 +40,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.clock ? <ClockPicture clock={question.clock} /> : null}
       {question.money ? <MoneyPicture money={question.money} /> : null}
       {question.measure ? <MeasurePicture measure={question.measure} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
@@ -51,6 +53,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
           flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
+      <div className={question.options.some(option => option.clock) ? "clock-choice-grid" : "option-stack"}>
       {question.options.map((option, slot) => {
         const isOn = selected.includes(option.id);
         const marked = markChoice(reveal, isOn, question.correctIds.includes(option.id));
@@ -73,7 +76,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
               baseTen={option.baseTen}
               dice={option.dice}
               groups={option.groups}
-              array={option.array} fraction={option.fraction} measure={option.measure} money={option.money}
+              array={option.array} fraction={option.fraction} measure={option.measure} clock={option.clock} money={option.money}
               layout={option.layout}
             />
             {marked === "correct" ? (
@@ -88,6 +91,7 @@ export function MultiSelect({ question, answer, disabled, reveal, onChange }: Mu
           </button>
         );
       })}
+      </div>
     </div>
   );
 }

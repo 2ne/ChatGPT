@@ -19,7 +19,7 @@ When asked to add or change a learning activity, follow [QUALITY.md](../../QUALI
 
 **Writing:** Follow **Writing for children** below for every child-facing string.
 
-**Curriculum:** This product is a **primary maths pathway**. The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one path: 45 categories, 124 nodes. Node 1 (`eyfs-count-5`) is the suggested start. Everything is open. The path suggests an order but never blocks. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
+**Curriculum:** This product is a **primary maths pathway**. The only map is `curriculum/maths.md` (England EYFS mathematics + National Curriculum mathematics, Reception → Year 6). It is one path: 45 categories, 125 nodes. Node 1 (`eyfs-count-5`) is the suggested start. Everything is open. The path suggests an order but never blocks. Before adding a quest, follow `curriculum/audit.md`. Do not rename ids or invent a second set of categories.
 
 ## Rapid prototype
 
@@ -123,7 +123,7 @@ primary-learn/
 
 ## Content and UI stay separate
 
-Educational content is **pure data**. Presentation is **one generic runner** plus **one component per question kind**. If 124 quests exist and a phrase or a picture style needs changing, we change it once in the UI/copy layer — not in every JSON file.
+Educational content is **pure data**. Presentation is **one generic runner** plus **one component per question kind**. If 125 quests exist and a phrase or a picture style needs changing, we change it once in the UI/copy layer — not in every JSON file.
 
 | Layer | Lives in | May contain | Must not contain |
 | --- | --- | --- | --- |

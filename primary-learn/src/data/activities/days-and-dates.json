@@ -1,0 +1,316 @@
+{
+  "id": "days-and-dates",
+  "title": "Days and dates",
+  "summary": "Sequence days and months and begin recording time.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "emerging",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-calendar",
+  "pathNode": "y1-calendar",
+  "difficulty": 1,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 uses before and first. Q2 sequences morning, afternoon and evening. Q3 finds tomorrow. Q4 counts the days in a week. Q5 sequences four weekdays. Q6 identifies a month. Q7 distinguishes months from days. Q8 sequences yesterday, today and tomorrow. Q9 compares everyday time units. Q10 identifies hours and minutes as units of time.",
+    "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
+  },
+  "skills": [
+    "time-language",
+    "days-and-months",
+    "record-time"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam puts on socks before shoes. What goes on first?",
+      "explanation": "Before means earlier. Sam puts on socks first.",
+      "narration": {
+        "prompt": "Sam puts on socks before shoes. What goes on first?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Shoes"
+        },
+        {
+          "id": "b",
+          "label": "Socks"
+        },
+        {
+          "id": "c",
+          "label": "Both together"
+        },
+        {
+          "id": "d",
+          "label": "Neither"
+        }
+      ],
+      "correctId": "b",
+      "hint": "Think about the word before.",
+      "id": "days-and-dates-1-1"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these parts of the day in order.",
+      "explanation": "Morning comes first, then afternoon, then evening.",
+      "narration": {
+        "prompt": "Put these parts of the day in order."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "Evening"
+        },
+        {
+          "id": "a",
+          "label": "Morning"
+        },
+        {
+          "id": "b",
+          "label": "Afternoon"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c"
+      ],
+      "id": "days-and-dates-1-2"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Today is Monday. What day is tomorrow?",
+      "explanation": "Tomorrow is the next day. Tuesday comes after Monday.",
+      "narration": {
+        "prompt": "Today is Monday. What day is tomorrow?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Sunday"
+        },
+        {
+          "id": "b",
+          "label": "Wednesday"
+        },
+        {
+          "id": "c",
+          "label": "Monday"
+        },
+        {
+          "id": "d",
+          "label": "Tuesday"
+        }
+      ],
+      "correctId": "d",
+      "hint": "Think about the next day in the week.",
+      "id": "days-and-dates-1-3"
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many days are in one week?",
+      "explanation": "A full week has seven days, including Saturday and Sunday.",
+      "narration": {
+        "prompt": "How many days are in one week?"
+      },
+      "acceptedAnswers": [
+        "7",
+        "seven"
+      ],
+      "numericChoices": [
+        5,
+        6,
+        7,
+        12
+      ],
+      "inputMode": "numeric",
+      "id": "days-and-dates-1-4"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these days in order, starting with Monday.",
+      "explanation": "The week starts with Monday, Tuesday, Wednesday and Thursday.",
+      "narration": {
+        "prompt": "Put these days in order, starting with Monday."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "Wednesday"
+        },
+        {
+          "id": "a",
+          "label": "Monday"
+        },
+        {
+          "id": "d",
+          "label": "Thursday"
+        },
+        {
+          "id": "b",
+          "label": "Tuesday"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-1-5"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which word names a month?",
+      "explanation": "January is a month. Tuesday is a day of the week.",
+      "narration": {
+        "prompt": "Which word names a month?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Tuesday"
+        },
+        {
+          "id": "b",
+          "label": "Morning"
+        },
+        {
+          "id": "c",
+          "label": "January"
+        },
+        {
+          "id": "d",
+          "label": "Week"
+        }
+      ],
+      "correctId": "c",
+      "id": "days-and-dates-1-6"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two months.",
+      "explanation": "March and June are months. Thursday and Saturday are days.",
+      "narration": {
+        "prompt": "Tap the two months."
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "March"
+        },
+        {
+          "id": "b",
+          "label": "Thursday"
+        },
+        {
+          "id": "c",
+          "label": "June"
+        },
+        {
+          "id": "d",
+          "label": "Saturday"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "id": "days-and-dates-1-7"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these days in order.",
+      "explanation": "Yesterday is before today. Tomorrow is after today.",
+      "narration": {
+        "prompt": "Put these days in order."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "Tomorrow"
+        },
+        {
+          "id": "a",
+          "label": "Yesterday"
+        },
+        {
+          "id": "b",
+          "label": "Today"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c"
+      ],
+      "id": "days-and-dates-1-8"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which unit measures the longest time?",
+      "explanation": "A day is longer than an hour, a minute or a second.",
+      "narration": {
+        "prompt": "Which unit measures the longest time?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "One minute"
+        },
+        {
+          "id": "b",
+          "label": "One day"
+        },
+        {
+          "id": "c",
+          "label": "One second"
+        },
+        {
+          "id": "d",
+          "label": "One hour"
+        }
+      ],
+      "correctId": "b",
+      "id": "days-and-dates-1-9"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two units used to measure time.",
+      "explanation": "Hours and minutes measure time. Litres measure capacity and kilograms measure mass.",
+      "narration": {
+        "prompt": "Tap the two units used to measure time."
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Hours"
+        },
+        {
+          "id": "b",
+          "label": "Litres"
+        },
+        {
+          "id": "c",
+          "label": "Minutes"
+        },
+        {
+          "id": "d",
+          "label": "Kilograms"
+        }
+      ],
+      "correctIds": [
+        "a",
+        "c"
+      ],
+      "id": "days-and-dates-1-10"
+    }
+  ]
+}

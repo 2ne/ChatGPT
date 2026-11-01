@@ -26,8 +26,8 @@ for (const line of text.split(/\r?\n/)) {
 }
 
 const nodeCount = categories.reduce((sum, c) => sum + c.nodes.length, 0);
-if (categories.length !== 45 || nodeCount !== 124) {
-  throw new Error(`Expected 45 categories and 124 nodes, found ${categories.length} and ${nodeCount}`);
+if (categories.length !== 45 || nodeCount !== 125) {
+  throw new Error(`Expected 45 categories and 125 nodes, found ${categories.length} and ${nodeCount}`);
 }
 
 const out = `// Generated from curriculum/maths.md by curriculum/build-path-data.mjs. Do not edit by hand.

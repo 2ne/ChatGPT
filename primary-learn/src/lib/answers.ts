@@ -1,3 +1,4 @@
+import { clockLabel, isClockAnswer } from "./clock";
 import { describeMoney } from "./money";
 import { describeMeasure } from "./measures";
 import { describeFraction } from "./fractions";
@@ -19,6 +20,7 @@ function optionLabel(
         fraction?: FractionAsset;
         measure?: MeasureAsset;
         money?: MoneyAsset[];
+        clock?: import("../types/activity").ClockAsset;
       }
     | undefined,
   slot: number,
@@ -31,6 +33,7 @@ function optionLabel(
   if (option.dice) return `dice showing ${option.dice.count}`;
   if (option.groups) return describeGroups(option.groups);
   if (option.array) return describeArray(option.array);
+  if (option.clock) return clockLabel(option.clock);
   if (option.money) return describeMoney(option.money);
   if (option.measure) return `${"ABCD"[slot]}. ${describeMeasure(option.measure)}`;
   if (option.fraction) return `${"ABCD"[slot]}. ${describeFraction(option.fraction)}`;
@@ -88,6 +91,8 @@ function normaliseNumeric(value: string): string {
 
 export function isAnswerCorrect(question: Question, answer: unknown): boolean {
   switch (question.kind) {
+    case "set-clock":
+      return isClockAnswer(answer) && answer.hour === question.targetTime.hour && answer.minute === question.targetTime.minute;
     case "count-objects":
     case "multiple-choice":
       return answer === question.correctId;
@@ -178,6 +183,7 @@ export function emptyAnswerFor(question: Question): unknown {
 /** Correct answer value for pre-filling QuestionView (teacher review, reveal). */
 export function correctAnswerFor(question: Question): unknown {
   switch (question.kind) {
+    case "set-clock": return { ...question.targetTime };
     case "count-objects":
     case "multiple-choice":
       return question.correctId;
@@ -210,6 +216,7 @@ export function correctAnswerFor(question: Question): unknown {
 /** Correct answer text for the labelled feedback reveal and question bank. */
 export function correctAnswerLabel(question: Question): string | null {
   switch (question.kind) {
+    case "set-clock": return clockLabel(question.targetTime);
     case "count-objects":
     case "multiple-choice":
       return optionLabel(question.options.find((option) => option.id === question.correctId), question.options.findIndex((option) => option.id === question.correctId));
@@ -253,6 +260,7 @@ export function correctAnswerLabel(question: Question): string | null {
 
 export function hasProvidedAnswer(question: Question, answer: unknown): boolean {
   switch (question.kind) {
+    case "set-clock": return isClockAnswer(answer);
     case "count-objects":
     case "multiple-choice":
       return typeof answer === "string" && answer.length > 0;

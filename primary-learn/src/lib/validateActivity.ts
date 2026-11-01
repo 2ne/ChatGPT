@@ -18,6 +18,7 @@ import {
   type FractionAsset,
   type MeasureAsset,
   type MoneyAsset,
+  type ClockAsset,
   type DiceAsset,
   type MakeTotalGap,
   type MakeTotalMode,
@@ -413,6 +414,17 @@ function optionalBaseTen(record: Record<string, unknown>, path: string): BaseTen
   return parseBaseTen(record.baseTen, `${path}.baseTen`);
 }
 
+function optionalClock(record: Record<string, unknown>, path: string, key = "clock"): ClockAsset | undefined {
+  const clock = record[key];
+  if (clock == null) return undefined;
+  if (!isRecord(clock)) fail(path, `${key} must be an object`);
+  const hour = expectNumber(clock, "hour", path);
+  const minute = expectNumber(clock, "minute", path);
+  if (!Number.isInteger(hour) || hour < 1 || hour > 12 || (minute !== 0 && minute !== 30)) fail(path, "clock needs hour 1 to 12 and minute 0 or 30");
+  if (clock.showMinute != null && typeof clock.showMinute !== "boolean") fail(path, "showMinute must be boolean");
+  return { hour, minute: minute as 0 | 30, showMinute: clock.showMinute as boolean | undefined };
+}
+
 function optionalMoney(record: Record<string, unknown>, path: string): MoneyAsset[] | undefined {
   if (record.money == null) return undefined;
   if (!Array.isArray(record.money) || record.money.length < 1 || record.money.length > 4) fail(path, "money needs one to four denominations");
@@ -519,6 +531,8 @@ function parseOption(value: unknown, path: string, allowShape = false, allowMone
   const groups = optionalGroups(value, path);
   const array = optionalArray(value, path);
   const fraction = optionalFraction(value, path);
+  const clock = optionalClock(value, path);
+  if (clock && (!allowMoney || visual || tenFrame || baseTen || dice || groups || array || fraction || value.money || value.measure || value.shape || layout)) fail(path, "clock options use choice or ordering without other pictures");
   const money = optionalMoney(value, path);
   if (money && (!allowMoney || visual || tenFrame || baseTen || dice || groups || array || fraction || value.measure || value.shape || layout)) fail(path, "money options use choice or ordering without other pictures");
   const measure = optionalMeasure(value, path);
@@ -537,8 +551,8 @@ function parseOption(value: unknown, path: string, allowShape = false, allowMone
   if (baseTen && layout) fail(path, "tens and ones do not use layout");
   if (dice && layout) fail(path, "dice faces do not use layout");
   if ((groups || array) && layout) fail(path, "groups and arrays do not use layout");
-  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction && !measure && !money) fail(path, "option needs a label or a picture");
-  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, money, shape, layout };
+  if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction && !measure && !money && !clock) fail(path, "option needs a label or a picture");
+  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, money, clock, shape, layout };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -906,7 +920,9 @@ function parseQuestion(value: unknown, path: string): Question {
   if (measure && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "measure stems use choice questions without other pictures");
   const money = optionalMoney(value, path);
   if (money && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || measure || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "money stems use choice questions without other pictures");
-  const core = { money, measure, fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
+  const clock = optionalClock(value, path);
+  if (clock && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || money || measure || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "clock stems use choice questions without other pictures");
+  const core = { clock, money, measure, fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,
@@ -915,6 +931,13 @@ function parseQuestion(value: unknown, path: string): Question {
   }
 
   switch (kind) {
+    case "set-clock": {
+      const targetTime = optionalClock(value, path, "targetTime");
+      const initialTime = optionalClock(value, path, "initialTime");
+      if (!targetTime || !initialTime || targetTime.showMinute === false || initialTime.showMinute === false) fail(path, "set-clock needs targetTime and initialTime with both hands");
+      if (targetTime.hour === initialTime.hour && targetTime.minute === initialTime.minute) fail(path, "set-clock must start away from its target");
+      return { ...core, kind, targetTime, initialTime };
+    }
     case "count-objects": {
       if (!visual) fail(path, "count-objects needs visual { item, count }");
       const options = expectArray(value, "options", path).map((option, i) =>

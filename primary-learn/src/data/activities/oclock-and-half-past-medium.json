@@ -1,0 +1,323 @@
+{
+  "id": "oclock-and-half-past-medium",
+  "title": "O'clock and half past",
+  "summary": "Read clocks and set the hands to the hour and half past.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-time-hour",
+  "pathNode": "y1-time-hour",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 reads half past. Q2 selects a matching clock. Q3 sets half past. Q4 names the hour already passed. Q5 distinguishes o'clock from half past. Q6 sets half past twelve across the top of the dial. Q7 rejects the next-hour confusion. Q8 selects o'clock times. Q9 sets another half-past time. Q10 orders times across eleven and twelve.",
+    "versus": "Easy moves from hour-hand-only pictures to both hands and introduces half past. Medium mixes reading and setting both time types, including twelve. Hard adds error spotting and independent interpretation of each hand, rejects the next-hour trap and orders times across twelve. No quarter hours, digital time, five-minute intervals or duration arithmetic are required."
+  },
+  "skills": [
+    "read-clock",
+    "set-clock",
+    "oclock",
+    "half-past"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "What time does this clock show?",
+      "explanation": "The short hand has passed four but has not reached five. It is half past four.",
+      "narration": {
+        "prompt": "What time does this clock show?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "4 o'clock"
+        },
+        {
+          "id": "b",
+          "label": "Half past 5"
+        },
+        {
+          "id": "c",
+          "label": "Half past 4"
+        },
+        {
+          "id": "d",
+          "label": "6 o'clock"
+        }
+      ],
+      "correctId": "c",
+      "clock": {
+        "hour": 4,
+        "minute": 30
+      },
+      "id": "oclock-and-half-past-2-1"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which clock shows half past 8?",
+      "explanation": "At half past eight, the short hand is between eight and nine. The long hand points to six.",
+      "narration": {
+        "prompt": "Which clock shows half past eight?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "clock": {
+            "hour": 8,
+            "minute": 0
+          }
+        },
+        {
+          "id": "b",
+          "clock": {
+            "hour": 8,
+            "minute": 30
+          }
+        },
+        {
+          "id": "c",
+          "clock": {
+            "hour": 9,
+            "minute": 30
+          }
+        },
+        {
+          "id": "d",
+          "clock": {
+            "hour": 6,
+            "minute": 30
+          }
+        }
+      ],
+      "correctId": "b",
+      "id": "oclock-and-half-past-2-2"
+    },
+    {
+      "kind": "set-clock",
+      "prompt": "Set the clock to half past 10.",
+      "explanation": "The short hand is between ten and eleven. The long hand points to six.",
+      "narration": {
+        "prompt": "Set the clock to half past ten."
+      },
+      "targetTime": {
+        "hour": 10,
+        "minute": 30
+      },
+      "initialTime": {
+        "hour": 8,
+        "minute": 0
+      },
+      "id": "oclock-and-half-past-2-3"
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "Half past which hour is shown?",
+      "explanation": "The short hand has passed six but has not reached seven. It is half past six.",
+      "narration": {
+        "prompt": "Half past which hour is shown?"
+      },
+      "acceptedAnswers": [
+        "6",
+        "six"
+      ],
+      "numericChoices": [
+        5,
+        6,
+        7,
+        12
+      ],
+      "inputMode": "numeric",
+      "clock": {
+        "hour": 6,
+        "minute": 30
+      },
+      "id": "oclock-and-half-past-2-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What time is shown on this clock?",
+      "explanation": "The short hand points to eleven. The long hand at twelve means eleven o'clock.",
+      "narration": {
+        "prompt": "What time is shown on this clock?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Half past 11"
+        },
+        {
+          "id": "b",
+          "label": "12 o'clock"
+        },
+        {
+          "id": "c",
+          "label": "11 o'clock"
+        },
+        {
+          "id": "d",
+          "label": "Half past 12"
+        }
+      ],
+      "correctId": "c",
+      "clock": {
+        "hour": 11,
+        "minute": 0
+      },
+      "id": "oclock-and-half-past-2-5"
+    },
+    {
+      "kind": "set-clock",
+      "prompt": "Set the clock to half past 12.",
+      "explanation": "The short hand is halfway between twelve and one. The long hand points to six.",
+      "narration": {
+        "prompt": "Set the clock to half past twelve."
+      },
+      "targetTime": {
+        "hour": 12,
+        "minute": 30
+      },
+      "initialTime": {
+        "hour": 10,
+        "minute": 0
+      },
+      "id": "oclock-and-half-past-2-6"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Which time matches this clock?",
+      "explanation": "The short hand is before twelve but has passed eleven. It is half past eleven.",
+      "narration": {
+        "prompt": "Which time matches this clock?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Half past 12"
+        },
+        {
+          "id": "b",
+          "label": "Half past 11"
+        },
+        {
+          "id": "c",
+          "label": "11 o'clock"
+        },
+        {
+          "id": "d",
+          "label": "6 o'clock"
+        }
+      ],
+      "correctId": "b",
+      "clock": {
+        "hour": 11,
+        "minute": 30
+      },
+      "id": "oclock-and-half-past-2-7"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two clocks that show o'clock times.",
+      "explanation": "At o'clock, the long hand points to twelve and the short hand points to an hour.",
+      "narration": {
+        "prompt": "Tap the two clocks that show o'clock times."
+      },
+      "options": [
+        {
+          "id": "a",
+          "clock": {
+            "hour": 7,
+            "minute": 30
+          }
+        },
+        {
+          "id": "b",
+          "clock": {
+            "hour": 2,
+            "minute": 0
+          }
+        },
+        {
+          "id": "c",
+          "clock": {
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "id": "d",
+          "clock": {
+            "hour": 10,
+            "minute": 0
+          }
+        }
+      ],
+      "correctIds": [
+        "b",
+        "d"
+      ],
+      "id": "oclock-and-half-past-2-8"
+    },
+    {
+      "kind": "set-clock",
+      "prompt": "Set the clock to half past 7.",
+      "explanation": "The short hand is between seven and eight. The long hand points to six.",
+      "narration": {
+        "prompt": "Set the clock to half past seven."
+      },
+      "targetTime": {
+        "hour": 7,
+        "minute": 30
+      },
+      "initialTime": {
+        "hour": 5,
+        "minute": 0
+      },
+      "id": "oclock-and-half-past-2-9"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these times in order, starting at 11 o'clock.",
+      "explanation": "Half past eleven comes after eleven o'clock and before twelve o'clock.",
+      "narration": {
+        "prompt": "Put these times in order, starting at eleven o'clock."
+      },
+      "items": [
+        {
+          "id": "c",
+          "clock": {
+            "hour": 12,
+            "minute": 0
+          }
+        },
+        {
+          "id": "a",
+          "clock": {
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "id": "b",
+          "clock": {
+            "hour": 11,
+            "minute": 30
+          }
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c"
+      ],
+      "id": "oclock-and-half-past-2-10"
+    }
+  ]
+}

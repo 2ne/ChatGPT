@@ -178,8 +178,13 @@ export const PATH_CATEGORIES: PathCategory[] = [
       },
       {
         "number": 25,
+        "id": "y1-calendar",
+        "title": "Days and dates"
+      },
+      {
+        "number": 26,
         "id": "y1-time-hour",
-        "title": "O’clock and half past"
+        "title": "O'clock and half past"
       }
     ]
   },
@@ -189,17 +194,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 26,
+        "number": 27,
         "id": "y2-count-steps",
         "title": "Count in steps"
       },
       {
-        "number": 27,
+        "number": 28,
         "id": "y2-place-value-100",
         "title": "Tens and ones"
       },
       {
-        "number": 28,
+        "number": 29,
         "id": "y2-order-100",
         "title": "Order numbers to 100"
       }
@@ -211,12 +216,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 29,
+        "number": 30,
         "id": "y2-bonds-20-fluent",
         "title": "Bonds to 20"
       },
       {
-        "number": 30,
+        "number": 31,
         "id": "y2-add-sub-mental",
         "title": "Add and subtract two-digit numbers"
       }
@@ -228,17 +233,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 31,
+        "number": 32,
         "id": "y2-money",
         "title": "Pounds and pence"
       },
       {
-        "number": 32,
+        "number": 33,
         "id": "y2-standard-units",
         "title": "Metres, grams and litres"
       },
       {
-        "number": 33,
+        "number": 34,
         "id": "y2-time-5-min",
         "title": "Time to five minutes"
       }
@@ -250,12 +255,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 34,
+        "number": 35,
         "id": "y2-odd-even",
         "title": "Odd and even"
       },
       {
-        "number": 35,
+        "number": 36,
         "id": "y2-tables-2-5-10",
         "title": "2, 5 and 10 times tables"
       }
@@ -267,7 +272,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 36,
+        "number": 37,
         "id": "y2-fractions-unit",
         "title": "Fractions of amounts"
       }
@@ -279,17 +284,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 2",
     "nodes": [
       {
-        "number": 37,
+        "number": 38,
         "id": "y2-shape-properties",
         "title": "Sides, faces and symmetry"
       },
       {
-        "number": 38,
+        "number": 39,
         "id": "y2-position",
         "title": "Position and turns"
       },
       {
-        "number": 39,
+        "number": 40,
         "id": "y2-statistics",
         "title": "Charts and tables"
       }
@@ -301,12 +306,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 40,
+        "number": 41,
         "id": "y3-count-4-8-50-100",
         "title": "Count in 4s, 8s, 50s and 100s"
       },
       {
-        "number": 41,
+        "number": 42,
         "id": "y3-place-value-1000",
         "title": "Hundreds, tens and ones"
       }
@@ -318,12 +323,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 42,
+        "number": 43,
         "id": "y3-add-sub-mental",
         "title": "Add hundreds, tens and ones"
       },
       {
-        "number": 43,
+        "number": 44,
         "id": "y3-column-add-sub",
         "title": "Column addition and subtraction"
       }
@@ -335,22 +340,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 44,
+        "number": 45,
         "id": "y3-measures",
         "title": "Length, mass and capacity"
       },
       {
-        "number": 45,
+        "number": 46,
         "id": "y3-perimeter",
         "title": "Perimeter"
       },
       {
-        "number": 46,
+        "number": 47,
         "id": "y3-money",
         "title": "Giving change"
       },
       {
-        "number": 47,
+        "number": 48,
         "id": "y3-time",
         "title": "Time to the minute"
       }
@@ -362,12 +367,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 48,
+        "number": 49,
         "id": "y3-tables-3-4-8",
         "title": "3, 4 and 8 times tables"
       },
       {
-        "number": 49,
+        "number": 50,
         "id": "y3-multiply-2-digit",
         "title": "Multiply a two-digit number"
       }
@@ -379,22 +384,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 50,
+        "number": 51,
         "id": "y3-tenths",
         "title": "Tenths"
       },
       {
-        "number": 51,
+        "number": 52,
         "id": "y3-fractions-of-sets",
         "title": "Fractions of a set"
       },
       {
-        "number": 52,
+        "number": 53,
         "id": "y3-equivalent-fractions",
         "title": "Equivalent fractions"
       },
       {
-        "number": 53,
+        "number": 54,
         "id": "y3-add-fractions",
         "title": "Add and subtract fractions"
       }
@@ -406,17 +411,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 3",
     "nodes": [
       {
-        "number": 54,
+        "number": 55,
         "id": "y3-draw-shapes",
         "title": "Draw and make shapes"
       },
       {
-        "number": 55,
+        "number": 56,
         "id": "y3-angles",
         "title": "Right angles"
       },
       {
-        "number": 56,
+        "number": 57,
         "id": "y3-statistics",
         "title": "Bar charts and pictograms"
       }
@@ -428,22 +433,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 57,
+        "number": 58,
         "id": "y4-count-6-7-9-25-1000",
         "title": "Count in 6s, 7s, 9s, 25s and 1,000s"
       },
       {
-        "number": 58,
+        "number": 59,
         "id": "y4-place-value-10000",
         "title": "Thousands"
       },
       {
-        "number": 59,
+        "number": 60,
         "id": "y4-negative-numbers",
         "title": "Below zero"
       },
       {
-        "number": 60,
+        "number": 61,
         "id": "y4-roman-100",
         "title": "Roman numerals to 100"
       }
@@ -455,7 +460,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 61,
+        "number": 62,
         "id": "y4-column-add-sub",
         "title": "Four-digit addition and subtraction"
       }
@@ -467,22 +472,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 62,
+        "number": 63,
         "id": "y4-convert-units",
         "title": "Convert units"
       },
       {
-        "number": 63,
+        "number": 64,
         "id": "y4-perimeter-area",
         "title": "Perimeter and area"
       },
       {
-        "number": 64,
+        "number": 65,
         "id": "y4-money-measures",
         "title": "Money and other measures"
       },
       {
-        "number": 65,
+        "number": 66,
         "id": "y4-time-convert",
         "title": "Analogue and digital time"
       }
@@ -494,12 +499,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 66,
+        "number": 67,
         "id": "y4-tables-to-12",
         "title": "Times tables to 12 × 12"
       },
       {
-        "number": 67,
+        "number": 68,
         "id": "y4-mental-multiply",
         "title": "Multiply in your head"
       }
@@ -511,7 +516,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 68,
+        "number": 69,
         "id": "y4-written-multiply",
         "title": "Short multiplication"
       }
@@ -523,22 +528,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 69,
+        "number": 70,
         "id": "y4-equivalent-fractions",
         "title": "Families of equivalent fractions"
       },
       {
-        "number": 70,
+        "number": 71,
         "id": "y4-hundredths",
         "title": "Hundredths"
       },
       {
-        "number": 71,
+        "number": 72,
         "id": "y4-fraction-quantities",
         "title": "Fractions of quantities"
       },
       {
-        "number": 72,
+        "number": 73,
         "id": "y4-decimals",
         "title": "Tenths and hundredths as decimals"
       }
@@ -550,17 +555,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 73,
+        "number": 74,
         "id": "y4-classify-shapes",
         "title": "Triangles, quadrilaterals and angles"
       },
       {
-        "number": 74,
+        "number": 75,
         "id": "y4-symmetry",
         "title": "Lines of symmetry"
       },
       {
-        "number": 75,
+        "number": 76,
         "id": "y4-coordinates",
         "title": "First-quadrant coordinates"
       }
@@ -572,7 +577,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 4",
     "nodes": [
       {
-        "number": 76,
+        "number": 77,
         "id": "y4-statistics",
         "title": "Bar charts and time graphs"
       }
@@ -584,17 +589,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 77,
+        "number": 78,
         "id": "y5-place-value-1000000",
         "title": "Place value to 1,000,000"
       },
       {
-        "number": 78,
+        "number": 79,
         "id": "y5-negative-numbers",
         "title": "Negative numbers in context"
       },
       {
-        "number": 79,
+        "number": 80,
         "id": "y5-roman-1000",
         "title": "Roman numerals to 1,000"
       }
@@ -606,7 +611,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 80,
+        "number": 81,
         "id": "y5-add-sub",
         "title": "Add and subtract large numbers"
       }
@@ -618,17 +623,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 81,
+        "number": 82,
         "id": "y5-factors-multiples",
         "title": "Factors and multiples"
       },
       {
-        "number": 82,
+        "number": 83,
         "id": "y5-primes",
         "title": "Prime numbers"
       },
       {
-        "number": 83,
+        "number": 84,
         "id": "y5-squares-cubes",
         "title": "Square and cube numbers"
       }
@@ -640,22 +645,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 84,
+        "number": 85,
         "id": "y5-multiply",
         "title": "Long multiplication"
       },
       {
-        "number": 85,
+        "number": 86,
         "id": "y5-divide",
         "title": "Short division"
       },
       {
-        "number": 86,
+        "number": 87,
         "id": "y5-multiply-powers-10",
         "title": "Multiply and divide by 10, 100 and 1,000"
       },
       {
-        "number": 87,
+        "number": 88,
         "id": "y5-mixed-problems",
         "title": "Mixed problems"
       }
@@ -667,22 +672,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 88,
+        "number": 89,
         "id": "y5-convert-units",
         "title": "Metric and imperial units"
       },
       {
-        "number": 89,
+        "number": 90,
         "id": "y5-perimeter-area",
         "title": "Perimeter and area of rectangles"
       },
       {
-        "number": 90,
+        "number": 91,
         "id": "y5-volume",
         "title": "Volume and capacity"
       },
       {
-        "number": 91,
+        "number": 92,
         "id": "y5-time-measure-problems",
         "title": "Time and measure problems"
       }
@@ -694,22 +699,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 92,
+        "number": 93,
         "id": "y5-compare-fractions",
         "title": "Compare and match fractions"
       },
       {
-        "number": 93,
+        "number": 94,
         "id": "y5-mixed-numbers",
         "title": "Mixed numbers"
       },
       {
-        "number": 94,
+        "number": 95,
         "id": "y5-add-fractions",
         "title": "Add and subtract fractions"
       },
       {
-        "number": 95,
+        "number": 96,
         "id": "y5-multiply-fractions",
         "title": "Multiply fractions by whole numbers"
       }
@@ -721,12 +726,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 96,
+        "number": 97,
         "id": "y5-decimals",
         "title": "Decimals to three places"
       },
       {
-        "number": 97,
+        "number": 98,
         "id": "y5-percentages",
         "title": "Percentages"
       }
@@ -738,17 +743,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 98,
+        "number": 99,
         "id": "y5-3d-from-2d",
         "title": "3-D shapes from drawings"
       },
       {
-        "number": 99,
+        "number": 100,
         "id": "y5-angles",
         "title": "Degrees"
       },
       {
-        "number": 100,
+        "number": 101,
         "id": "y5-polygons",
         "title": "Rectangles and polygons"
       }
@@ -760,12 +765,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 5",
     "nodes": [
       {
-        "number": 101,
+        "number": 102,
         "id": "y5-reflection-translation",
         "title": "Reflection and translation"
       },
       {
-        "number": 102,
+        "number": 103,
         "id": "y5-statistics",
         "title": "Line graphs and timetables"
       }
@@ -777,12 +782,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 103,
+        "number": 104,
         "id": "y6-place-value-10000000",
         "title": "Place value to 10,000,000"
       },
       {
-        "number": 104,
+        "number": 105,
         "id": "y6-negative-intervals",
         "title": "Intervals across zero"
       }
@@ -794,22 +799,22 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 105,
+        "number": 106,
         "id": "y6-long-multiply",
         "title": "Long multiplication"
       },
       {
-        "number": 106,
+        "number": 107,
         "id": "y6-long-divide",
         "title": "Long and short division"
       },
       {
-        "number": 107,
+        "number": 108,
         "id": "y6-mental-order",
         "title": "Order of operations"
       },
       {
-        "number": 108,
+        "number": 109,
         "id": "y6-multi-step",
         "title": "Multi-step problems"
       }
@@ -821,17 +826,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 109,
+        "number": 110,
         "id": "y6-convert-units",
         "title": "Miles, kilometres and units"
       },
       {
-        "number": 110,
+        "number": 111,
         "id": "y6-area",
         "title": "Area of parallelograms and triangles"
       },
       {
-        "number": 111,
+        "number": 112,
         "id": "y6-volume",
         "title": "Volume of cubes and cuboids"
       }
@@ -843,27 +848,27 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 112,
+        "number": 113,
         "id": "y6-simplify-fractions",
         "title": "Simplify and order fractions"
       },
       {
-        "number": 113,
+        "number": 114,
         "id": "y6-add-fractions",
         "title": "Add and subtract fractions"
       },
       {
-        "number": 114,
+        "number": 115,
         "id": "y6-multiply-divide-fractions",
         "title": "Multiply and divide fractions"
       },
       {
-        "number": 115,
+        "number": 116,
         "id": "y6-decimals",
         "title": "Decimals to three places"
       },
       {
-        "number": 116,
+        "number": 117,
         "id": "y6-fdp-equivalence",
         "title": "Fraction, decimal and percentage equivalents"
       }
@@ -875,12 +880,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 117,
+        "number": 118,
         "id": "y6-ratio",
         "title": "Ratio and scale"
       },
       {
-        "number": 118,
+        "number": 119,
         "id": "y6-percentage-problems",
         "title": "Percentage problems"
       }
@@ -892,7 +897,7 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 119,
+        "number": 120,
         "id": "y6-algebra",
         "title": "Formulae and sequences"
       }
@@ -904,17 +909,17 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 120,
+        "number": 121,
         "id": "y6-draw-shapes",
         "title": "Draw shapes and nets"
       },
       {
-        "number": 121,
+        "number": 122,
         "id": "y6-missing-angles",
         "title": "Missing angles"
       },
       {
-        "number": 122,
+        "number": 123,
         "id": "y6-circles",
         "title": "Radius and diameter"
       }
@@ -926,12 +931,12 @@ export const PATH_CATEGORIES: PathCategory[] = [
     "year": "Year 6",
     "nodes": [
       {
-        "number": 123,
+        "number": 124,
         "id": "y6-coordinates",
         "title": "Four quadrants"
       },
       {
-        "number": 124,
+        "number": 125,
         "id": "y6-statistics",
         "title": "Pie charts, line graphs and the mean"
       }

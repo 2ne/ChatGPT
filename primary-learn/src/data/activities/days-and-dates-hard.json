@@ -1,0 +1,338 @@
+{
+  "id": "days-and-dates-hard",
+  "title": "Days and dates",
+  "summary": "Sequence days and months and begin recording time.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "greater-depth",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-calendar",
+  "pathNode": "y1-calendar",
+  "difficulty": 3,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 crosses a week boundary. Q2 orders days from a given start. Q3 finds preceding months. Q4 reads a named seconds record. Q5 reverses yesterday to find today. Q6 orders months across a year boundary. Q7 spots a five-day-week error. Q8 matches names and measured records. Q9 compares minute, hour, day and week. Q10 moves two months across a year boundary.",
+    "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
+  },
+  "skills": [
+    "time-language",
+    "days-and-months",
+    "record-time"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "Today is Sunday. What day is tomorrow?",
+      "explanation": "Monday follows Sunday, even though it starts a new week.",
+      "narration": {
+        "prompt": "Today is Sunday. What day is tomorrow?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Saturday"
+        },
+        {
+          "id": "b",
+          "label": "Monday"
+        },
+        {
+          "id": "c",
+          "label": "Tuesday"
+        },
+        {
+          "id": "d",
+          "label": "Sunday"
+        }
+      ],
+      "correctId": "b",
+      "id": "days-and-dates-3-1"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these days in order, starting with Thursday.",
+      "explanation": "Thursday and Friday come before the weekend days of Saturday and Sunday.",
+      "narration": {
+        "prompt": "Put these days in order, starting with Thursday."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "Saturday"
+        },
+        {
+          "id": "a",
+          "label": "Thursday"
+        },
+        {
+          "id": "d",
+          "label": "Sunday"
+        },
+        {
+          "id": "b",
+          "label": "Friday"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-3-2"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two months just before March and June.",
+      "explanation": "February comes just before March. May comes just before June.",
+      "narration": {
+        "prompt": "Tap the two months just before March and June."
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "April"
+        },
+        {
+          "id": "b",
+          "label": "February"
+        },
+        {
+          "id": "c",
+          "label": "July"
+        },
+        {
+          "id": "d",
+          "label": "May"
+        }
+      ],
+      "correctIds": [
+        "b",
+        "d"
+      ],
+      "id": "days-and-dates-3-3"
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many seconds does Mia's turn take?",
+      "explanation": "Mia records eight seconds. The other record belongs to Sam.",
+      "narration": {
+        "prompt": "How many seconds does Mia's turn take?"
+      },
+      "acceptedAnswers": [
+        "8",
+        "eight"
+      ],
+      "numericChoices": [
+        3,
+        5,
+        8,
+        10
+      ],
+      "inputMode": "numeric",
+      "measure": {
+        "kind": "time",
+        "values": [
+          8,
+          5
+        ],
+        "labels": [
+          "Mia",
+          "Sam"
+        ]
+      },
+      "id": "days-and-dates-3-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Yesterday was Friday. What day is today?",
+      "explanation": "Today follows yesterday. Saturday comes after Friday.",
+      "narration": {
+        "prompt": "Yesterday was Friday. What day is today?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Thursday"
+        },
+        {
+          "id": "b",
+          "label": "Friday"
+        },
+        {
+          "id": "c",
+          "label": "Saturday"
+        },
+        {
+          "id": "d",
+          "label": "Sunday"
+        }
+      ],
+      "correctId": "c",
+      "id": "days-and-dates-3-5"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these months in order, starting with November.",
+      "explanation": "January follows December. The months continue into a new year.",
+      "narration": {
+        "prompt": "Put these months in order, starting with November."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "January"
+        },
+        {
+          "id": "a",
+          "label": "November"
+        },
+        {
+          "id": "d",
+          "label": "February"
+        },
+        {
+          "id": "b",
+          "label": "December"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-3-6"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Pip says a full week has only five days. Is Pip right?",
+      "explanation": "A full week has seven days. Five school days leave out the weekend.",
+      "narration": {
+        "prompt": "Pip says a full week has only five days. Is Pip right?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes"
+        },
+        {
+          "id": "b",
+          "label": "No"
+        }
+      ],
+      "correctId": "b",
+      "id": "days-and-dates-3-7"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two matching time records.",
+      "explanation": "Mia records four seconds and Sam records seven seconds. Each name belongs to its own record.",
+      "narration": {
+        "prompt": "Tap the two matching time records."
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Mia takes 7 seconds."
+        },
+        {
+          "id": "b",
+          "label": "Sam takes 7 seconds."
+        },
+        {
+          "id": "c",
+          "label": "Mia takes 4 seconds."
+        },
+        {
+          "id": "d",
+          "label": "Sam takes 4 seconds."
+        }
+      ],
+      "correctIds": [
+        "b",
+        "c"
+      ],
+      "measure": {
+        "kind": "time",
+        "values": [
+          4,
+          7
+        ],
+        "labels": [
+          "Mia",
+          "Sam"
+        ]
+      },
+      "id": "days-and-dates-3-8"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these lengths of time in order, from shortest to longest.",
+      "explanation": "Minutes are shorter than hours. Hours are shorter than days, and seven days make one week.",
+      "narration": {
+        "prompt": "Put these lengths of time in order, from shortest to longest."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "One day"
+        },
+        {
+          "id": "a",
+          "label": "One minute"
+        },
+        {
+          "id": "d",
+          "label": "One week"
+        },
+        {
+          "id": "b",
+          "label": "One hour"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-3-9"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What month comes two months after November?",
+      "explanation": "December is one month after November. January is two months after November.",
+      "narration": {
+        "prompt": "What month comes two months after November?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "December"
+        },
+        {
+          "id": "b",
+          "label": "January"
+        },
+        {
+          "id": "c",
+          "label": "February"
+        },
+        {
+          "id": "d",
+          "label": "October"
+        }
+      ],
+      "correctId": "b",
+      "id": "days-and-dates-3-10"
+    }
+  ]
+}

@@ -19,7 +19,7 @@ nodes.forEach((node, i) => {
   ids.add(node.id);
 });
 
-if (nodes.length !== 124) problems.push(`node count ${nodes.length}`);
+if (nodes.length !== 125) problems.push(`node count ${nodes.length}`);
 if (cats.length !== 45) problems.push(`category count ${cats.length}`);
 if (reqs.length !== nodes.length) problems.push(`requires ${reqs.length}`);
 

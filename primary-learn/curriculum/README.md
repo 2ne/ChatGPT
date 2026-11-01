@@ -22,7 +22,7 @@ Agents: when creating quests, set `pathNode`, `difficulty`, `curriculumRef` and 
 | [NEXT.md](./NEXT.md) | What agents should build next |
 | [overview.md](./overview.md) | Stages and ages |
 | [eyfs.md](./eyfs.md) | Reception maths (before Year 1) |
-| [maths.md](./maths.md) | The path: 45 categories, 124 quest nodes, Reception → Year 6 |
+| [maths.md](./maths.md) | The path: 45 categories, 125 quest nodes, Reception → Year 6 |
 | [audit.md](./audit.md) | How to check the path before creating quests |
 | [coverage.md](./coverage.md) | How many nodes are missing, partial or done |
 

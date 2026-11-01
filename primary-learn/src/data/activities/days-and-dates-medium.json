@@ -1,0 +1,324 @@
+{
+  "id": "days-and-dates-medium",
+  "title": "Days and dates",
+  "summary": "Sequence days and months and begin recording time.",
+  "subject": "maths",
+  "type": "reasoning",
+  "yearGroups": [
+    "Year1"
+  ],
+  "ability": "expected",
+  "estimatedMinutes": 6,
+  "masteryThreshold": 0.8,
+  "curriculumRef": "y1-calendar",
+  "pathNode": "y1-calendar",
+  "difficulty": 2,
+  "questionCount": 10,
+  "difficultyRamp": {
+    "within": "Q1 finds the preceding weekday. Q2 sequences days across a week boundary. Q3 identifies weekend days. Q4 identifies twelve months in a year. Q5 finds the next month. Q6 sequences four months. Q7 moves from December to January. Q8 compares units to a minute. Q9 orders units. Q10 chooses minutes for recording an everyday duration.",
+    "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
+  },
+  "skills": [
+    "time-language",
+    "days-and-months",
+    "record-time"
+  ],
+  "randomise": {
+    "mode": "attempt"
+  },
+  "questions": [
+    {
+      "kind": "multiple-choice",
+      "prompt": "What day comes just before Wednesday?",
+      "explanation": "Tuesday comes before Wednesday. Thursday comes after it.",
+      "narration": {
+        "prompt": "What day comes just before Wednesday?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Thursday"
+        },
+        {
+          "id": "b",
+          "label": "Monday"
+        },
+        {
+          "id": "c",
+          "label": "Tuesday"
+        },
+        {
+          "id": "d",
+          "label": "Friday"
+        }
+      ],
+      "correctId": "c",
+      "id": "days-and-dates-2-1"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these days in order, starting with Friday.",
+      "explanation": "After Sunday, a new week starts with Monday.",
+      "narration": {
+        "prompt": "Put these days in order, starting with Friday."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "Sunday"
+        },
+        {
+          "id": "a",
+          "label": "Friday"
+        },
+        {
+          "id": "d",
+          "label": "Monday"
+        },
+        {
+          "id": "b",
+          "label": "Saturday"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-2-2"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two days at the weekend.",
+      "explanation": "Saturday and Sunday make the weekend.",
+      "narration": {
+        "prompt": "Tap the two days at the weekend."
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Friday"
+        },
+        {
+          "id": "b",
+          "label": "Sunday"
+        },
+        {
+          "id": "c",
+          "label": "Monday"
+        },
+        {
+          "id": "d",
+          "label": "Saturday"
+        }
+      ],
+      "correctIds": [
+        "b",
+        "d"
+      ],
+      "id": "days-and-dates-2-3"
+    },
+    {
+      "kind": "fill-blank",
+      "prompt": "How many months are in one year?",
+      "explanation": "A year has twelve months, from January to December.",
+      "narration": {
+        "prompt": "How many months are in one year?"
+      },
+      "acceptedAnswers": [
+        "12",
+        "twelve"
+      ],
+      "numericChoices": [
+        4,
+        7,
+        10,
+        12
+      ],
+      "inputMode": "numeric",
+      "id": "days-and-dates-2-4"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What month comes just after April?",
+      "explanation": "May follows April. March comes before April.",
+      "narration": {
+        "prompt": "What month comes just after April?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "March"
+        },
+        {
+          "id": "b",
+          "label": "June"
+        },
+        {
+          "id": "c",
+          "label": "May"
+        },
+        {
+          "id": "d",
+          "label": "August"
+        }
+      ],
+      "correctId": "c",
+      "id": "days-and-dates-2-5"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these months in order, starting with April.",
+      "explanation": "April is followed by May, June and July.",
+      "narration": {
+        "prompt": "Put these months in order, starting with April."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "June"
+        },
+        {
+          "id": "a",
+          "label": "April"
+        },
+        {
+          "id": "d",
+          "label": "July"
+        },
+        {
+          "id": "b",
+          "label": "May"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-2-6"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What month comes just after December?",
+      "explanation": "January follows December at the start of a new year.",
+      "narration": {
+        "prompt": "What month comes just after December?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "November"
+        },
+        {
+          "id": "b",
+          "label": "January"
+        },
+        {
+          "id": "c",
+          "label": "February"
+        },
+        {
+          "id": "d",
+          "label": "October"
+        }
+      ],
+      "correctId": "b",
+      "id": "days-and-dates-2-7"
+    },
+    {
+      "kind": "multi-select",
+      "prompt": "Tap the two units longer than one minute.",
+      "explanation": "An hour and a day each last longer than one minute.",
+      "narration": {
+        "prompt": "Tap the two units longer than one minute."
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "One second"
+        },
+        {
+          "id": "b",
+          "label": "One hour"
+        },
+        {
+          "id": "c",
+          "label": "One minute"
+        },
+        {
+          "id": "d",
+          "label": "One day"
+        }
+      ],
+      "correctIds": [
+        "b",
+        "d"
+      ],
+      "id": "days-and-dates-2-8"
+    },
+    {
+      "kind": "ordered",
+      "prompt": "Put these lengths of time in order, from shortest to longest.",
+      "explanation": "Seconds are shorter than minutes. Minutes are shorter than hours. Hours are shorter than days.",
+      "narration": {
+        "prompt": "Put these lengths of time in order, from shortest to longest."
+      },
+      "items": [
+        {
+          "id": "c",
+          "label": "One hour"
+        },
+        {
+          "id": "a",
+          "label": "One second"
+        },
+        {
+          "id": "d",
+          "label": "One day"
+        },
+        {
+          "id": "b",
+          "label": "One minute"
+        }
+      ],
+      "correctOrder": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "id": "days-and-dates-2-9"
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "Sam records a reading session. Which unit fits best?",
+      "explanation": "Minutes suit a reading session. Seconds are very short, while months and years are much longer.",
+      "narration": {
+        "prompt": "Sam records a reading session. Which unit fits best?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "Seconds"
+        },
+        {
+          "id": "b",
+          "label": "Months"
+        },
+        {
+          "id": "c",
+          "label": "Years"
+        },
+        {
+          "id": "d",
+          "label": "Minutes"
+        }
+      ],
+      "correctId": "d",
+      "id": "days-and-dates-2-10"
+    }
+  ]
+}

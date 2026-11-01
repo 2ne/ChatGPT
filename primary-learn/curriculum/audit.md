@@ -29,7 +29,7 @@ A node is:
 
 Node status in this file is about **curriculum coverage**, not map stars. The map marks a node `done` once Easy has at least one star. Medium and Hard still earn the rest of the stars. Nothing is gated.
 
-Run `node curriculum/check-path.mjs` from the `primary-learn` folder. It checks that there are 124 nodes and 45 categories, that the numbers run 1 to 124, and that each node requires the one before it.
+Run `node curriculum/check-path.mjs` from the `primary-learn` folder. It checks that there are 125 nodes and 45 categories, that the numbers run 1 to 125, and that each node requires the one before it.
 
 ## How the map finds a quest
 
@@ -131,7 +131,7 @@ Checked against the EYFS mathematics ELGs (Number and Numerical patterns) and th
 James agreed (not now):
 
 - Add 2 or 3 extra Reception nodes later for shape, repeating patterns and measures (Development Matters, not ELGs).
-- Split `y1-time-hour`, `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` when those nodes are built. Leave them whole until then.
+- Split `y3-time`, `y5-decimals`, `y6-decimals` and `y6-algebra` when those nodes are built. Leave them whole until then.
 
 ## What the path screen already does
 

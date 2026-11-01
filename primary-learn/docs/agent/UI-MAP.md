@@ -32,6 +32,7 @@ Do not read all of `src/index.css`. Jump to the region you need. Design rules: [
 | Bond demonstration | `src/components/questions/BondDemonstration.tsx` | `.bond-demo` |
 | Shape questions | `ShapeChoices.tsx`, `ShapePicture.tsx`, `ShapeSvg.tsx`, `src/lib/solidShapes.ts` | `.shape-picture`, `.shape-choice-grid`; SVG flat shapes, lazy Three.js solids |
 | Money teaching and practice | `questions/MoneyLearning.tsx`, `lib/money.ts` | Optional post-answer value demonstration. End page matches other quests. Later attempts prioritise missed values. |
+| Clock reading and setting | `questions/ClockPicture.tsx`, `questions/SetClock.tsx`, `lib/clock.ts` | `.clock-picture`, `.clock-choice-grid`, `.clock-controls`; structured clock pictures and scored hand setting. End page stays shared. |
 | Money illustrations | `questions/MoneyPicture.tsx`, `lib/money.ts` | `.money-picture`; coin/note values on choice, numeric and ordering questions |
 | Measurement diagrams | `questions/MeasurePicture.tsx`, `lib/measures.ts` | `.measure-picture`; lengths, heights, balances, cups and time taken |
 | Fraction diagrams | `questions/FractionPicture.tsx`, `lib/fractions.ts` | `.fraction-picture`; exact halves/quarters on stems and choice options |

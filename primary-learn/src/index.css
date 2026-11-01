@@ -5463,3 +5463,20 @@ button.object-token {
 .money-demo-content { padding: 16px; border: 2px solid var(--line, #e8e0cc); border-radius: 20px; margin-top: 12px; }
 .money-pennies { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; max-width: 400px; margin-inline: auto; }
 .money-pennies .money-picture { width: 100%; height: auto; margin: 0; }
+
+.clock-picture { display: block; width: min(100%, 280px); height: auto; margin: 0 auto 16px; }
+.clock-picture.is-option { width: min(100%, 170px); margin: 0 auto; }
+.clock-number { fill: var(--ink); font: 800 28px var(--font-body); }
+.clock-hour { stroke: #5745bf; stroke-width: 13; stroke-linecap: round; }
+.clock-minute { stroke: #3985ae; stroke-width: 7; stroke-linecap: round; }
+.clock-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.clock-choice-grid .option { position: relative; padding: 34px 10px 10px; justify-content: center; min-width: 0; }
+.clock-choice-grid .option-letter { position: absolute; left: 10px; top: 8px; width: 28px; height: 28px; min-width: 28px; font-size: 16px; border-radius: 9px; }
+.clock-choice-grid .option-content { display: grid; justify-items: center; width: 100%; }
+.ordered-list .clock-picture { width: 110px; }
+.set-clock { display: grid; justify-items: center; gap: 16px; }
+.set-clock > .clock-picture { margin-bottom: 0; }
+.clock-controls { display: grid; gap: 12px; width: min(100%, 340px); }
+.clock-controls .btn { justify-content: center; min-height: 52px; white-space: normal; }
+.clock-hand-key { display: inline-block; flex: 0 0 auto; width: 22px; height: 8px; border-radius: 8px; background: #5745bf; }
+.clock-hand-key.is-minute { width: 32px; height: 5px; background: #3985ae; }

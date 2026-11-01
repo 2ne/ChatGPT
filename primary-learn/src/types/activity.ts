@@ -26,6 +26,7 @@ export const QUESTION_KINDS = [
   "make-total",
   "pick-pair",
   "part-whole",
+  "set-clock",
 ] as const;
 
 export type QuestionKind = (typeof QUESTION_KINDS)[number];
@@ -120,6 +121,8 @@ export type ArrayAsset = {
 };
 
 /** Recognisable denomination, without implying a total or calculating change. */
+export type ClockAsset = { hour: number; minute: 0 | 30; showMinute?: boolean };
+
 export type MoneyAsset = {
   kind: "coin" | "note";
   /** Coins use pence (100 = £1). Notes use pounds. */
@@ -217,6 +220,7 @@ export type QuestionOption = {
   fraction?: FractionAsset;
   measure?: MeasureAsset;
   money?: MoneyAsset[];
+  clock?: ClockAsset;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -284,6 +288,7 @@ type QuestionCore = {
   fraction?: FractionAsset;
   measure?: MeasureAsset;
   money?: MoneyAsset[];
+  clock?: ClockAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */
@@ -452,7 +457,14 @@ export type PartWholeQuestion = QuestionCore & {
   choices?: number[];
 };
 
+export type SetClockQuestion = QuestionCore & {
+  kind: "set-clock";
+  targetTime: ClockAsset;
+  initialTime: ClockAsset;
+};
+
 export type Question =
+  | SetClockQuestion
   | CountObjectsQuestion
   | BuildSetQuestion
   | MultipleChoiceQuestion

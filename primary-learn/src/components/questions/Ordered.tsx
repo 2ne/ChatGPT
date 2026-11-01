@@ -1,3 +1,4 @@
+import { clockLabel } from "../../lib/clock";
 import { describeMoney } from "../../lib/money";
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { copy } from "../../data/copy";
@@ -93,7 +94,7 @@ export function Ordered({ question, answer, disabled, reveal, onChange }: Ordere
     <ol ref={listRef} className="ordered-list" aria-label={question.prompt}>
       {order.map((id, index) => {
         const item = itemFor(id);
-        const label = item?.label ?? (item?.money ? describeMoney(item.money) : id);
+        const label = item?.label ?? (item?.clock ? clockLabel(item.clock) : item?.money ? describeMoney(item.money) : id);
         const inPlace = reveal != null && question.correctOrder[index] === id;
         const marked = reveal == null ? null : inPlace ? "correct" : "wrong";
         const dragging = draggingId === id;
@@ -124,7 +125,7 @@ export function Ordered({ question, answer, disabled, reveal, onChange }: Ordere
                   <span />
                   <span />
                 </span>
-                <OptionContent label={item?.label} visual={item?.visual} tenFrame={item?.tenFrame} baseTen={item?.baseTen} dice={item?.dice} groups={item?.groups} array={item?.array} money={item?.money} />
+                <OptionContent label={item?.label} visual={item?.visual} tenFrame={item?.tenFrame} baseTen={item?.baseTen} dice={item?.dice} groups={item?.groups} array={item?.array} clock={item?.clock} money={item?.money} />
               </button>
               <span className="step-pair">
                 <button

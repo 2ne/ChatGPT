@@ -9,7 +9,7 @@ import {
   Star,
   X,
 } from "lucide-react";
-import type { Activity, Question } from "../types/activity";
+import type { Activity, Question, QuestionOption } from "../types/activity";
 import type { ActivityAttempt } from "../types/progress";
 import { correctAnswerLabel, emptyAnswerFor, hasProvidedAnswer, isAnswerCorrect } from "../lib/answers";
 import { optionNumber } from "../lib/makeTotal";
@@ -352,11 +352,11 @@ export function ActivityRunner({
 
   /* ——— Question / feedback ——— */
   const rightLabel = lastCorrect === false ? correctAnswerLabel(question) : null;
-  const rightOption = question.kind === "multiple-choice" || question.kind === "count-objects"
+  const rightOption: QuestionOption | undefined = question.kind === "multiple-choice" || question.kind === "count-objects"
     ? question.options.find(option => option.id === question.correctId)
-    : undefined;
+    : question.kind === "set-clock" ? { id: "correct-clock", clock: question.targetTime } : undefined;
   const pictureAnswer = rightOption && !rightOption.label &&
-    (rightOption.tenFrame || rightOption.baseTen || rightOption.visual || rightOption.dice);
+    (rightOption.tenFrame || rightOption.baseTen || rightOption.visual || rightOption.dice || rightOption.clock);
   const reveal = phase === "feedback" ? (lastCorrect ? "correct" : "incorrect") : null;
   const pipMood = phase === "feedback" ? (lastCorrect ? "cheer" : "think") : "happy";
   const position = Math.min(index + 1, activeQueue.length);

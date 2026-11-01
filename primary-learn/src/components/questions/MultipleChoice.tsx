@@ -1,3 +1,4 @@
+import { ClockPicture } from "./ClockPicture";
 import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { FractionPicture } from "./FractionPicture";
@@ -56,7 +57,7 @@ export function MultipleChoice({
                 onClick={() => onChange(option.id)}
                 className={choiceClass(selected, marked, ["amount-card"])}
               >
-                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} groups={option.groups} array={option.array} fraction={option.fraction} measure={option.measure} money={option.money} layout={option.layout} pack />
+                <OptionContent visual={option.visual} tenFrame={option.tenFrame} baseTen={option.baseTen} dice={option.dice} groups={option.groups} array={option.array} fraction={option.fraction} measure={option.measure} clock={option.clock} money={option.money} layout={option.layout} pack />
                 {marked === "correct" ? (
                   <span className="option-check" aria-hidden>
                     ✓
@@ -101,6 +102,7 @@ export function MultipleChoice({
       {showStem && question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {showStem && question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {showStem && question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.clock ? <ClockPicture clock={question.clock} /> : null}
       {question.money ? <MoneyPicture money={question.money} /> : null}
       {question.measure ? <MeasurePicture measure={question.measure} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
@@ -113,7 +115,7 @@ export function MultipleChoice({
           flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
-      <div role="radiogroup" aria-label={copy.pickOne} className="option-stack">
+      <div role="radiogroup" aria-label={copy.pickOne} className={question.options.some(option => option.clock) ? "clock-choice-grid" : "option-stack"}>
         {question.options.map((option, slot) => {
           const selected = answer === option.id;
           const marked = markChoice(reveal, selected, option.id === question.correctId);
@@ -137,7 +139,7 @@ export function MultipleChoice({
                 baseTen={option.baseTen}
                 dice={option.dice}
                 groups={option.groups}
-                array={option.array} fraction={option.fraction} measure={option.measure} money={option.money}
+                array={option.array} fraction={option.fraction} measure={option.measure} clock={option.clock} money={option.money}
                 layout={option.layout}
               />
               {marked === "correct" ? (

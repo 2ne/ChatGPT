@@ -1,3 +1,4 @@
+import { ClockPicture } from "./ClockPicture";
 import { MoneyPicture } from "./MoneyPicture";
 import { MeasurePicture } from "./MeasurePicture";
 import { FractionPicture } from "./FractionPicture";
@@ -28,6 +29,7 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
       {question.tenFrame ? <TenFrame frame={question.tenFrame} /> : null}
       {question.baseTen ? <BaseTen model={question.baseTen} /> : null}
       {question.groups ? <GroupsPicture groups={question.groups} /> : null}
+      {question.clock ? <ClockPicture clock={question.clock} /> : null}
       {question.money ? <MoneyPicture money={question.money} /> : null}
       {question.measure ? <MeasurePicture measure={question.measure} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
