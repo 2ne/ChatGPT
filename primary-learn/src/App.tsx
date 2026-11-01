@@ -60,6 +60,7 @@ export default function App() {
             <RequireProfile profile={learner.profile}>
               <ActivityRoute
                 profile={learner.profile!}
+                progress={learner.progress}
                 onComplete={learner.recordAttempt}
               />
             </RequireProfile>
@@ -168,9 +169,11 @@ function QuestionBankRoute({ hasProfile }: { hasProfile: boolean }) {
 
 function ActivityRoute({
   profile,
+  progress,
   onComplete,
 }: {
   profile: LearnerProfile;
+  progress: ProgressState;
   onComplete: (attempt: ActivityAttempt) => void;
 }) {
   const { id } = useParams<{ id: string }>();
@@ -187,6 +190,7 @@ function ActivityRoute({
     <ActivityRunner
       key={activity.id}
       activity={activity}
+      previousAttempt={progress.byActivity[activity.id]?.attempts.at(-1)}
       learnerName={profile.name}
       onExit={() => navigate("/pathway")}
       onNext={() => navigate(next ? `/activity/${next.id}` : "/pathway")}

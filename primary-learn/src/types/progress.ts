@@ -31,6 +31,8 @@ export type ActivityAttempt = {
   stars: number;
   mastered: boolean;
   missedQuestionIds: string[];
+  /** Denominations to revisit. Stars still describe the whole attempt. */
+  moneyPractice?: import("./activity").MoneyAsset[];
 };
 
 export type ActivityProgress = {
@@ -40,7 +42,7 @@ export type ActivityProgress = {
   bestCorrectCount: number;
   bestTotalCount: number;
   bestStars: number;
-  /** True once the best score has earned at least one star. */
+  /** Usually one star. Money attempts additionally require no flagged denominations. */
   mastered: boolean;
   lastAttemptAt: string | null;
 };

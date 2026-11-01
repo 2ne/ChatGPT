@@ -15,7 +15,7 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 compares a physically larger 2p coin with a smaller 5p coin. Q2 reads the two-pound coin. Q3 selects coins worth less than fifty pence. Q4 selects the note worth more than twenty pounds. Q5 reads 20p without confusing pence with pounds. Q6 distinguishes a 5p coin from a five-pound note. Q7 selects two items each worth at least two pounds. Q8 reads a fifty-pound note. Q9 orders mixed pence and pound coins. Q10 rejects the same-numeral trap between 50p and fifty pounds.",
+    "within": "Q1 compares a physically larger 2p coin with a smaller 5p coin. Q2 reads the two-pound coin. Q3 selects coins worth less than fifty pence. Q4 selects the note worth more than twenty pounds. Q5 reads 20p without confusing pence with pounds. Q6 distinguishes a 5p coin from a five-pound note. Q7 selects two items each worth at least two pounds. Q8 reads a fifty-pound note. Q9 orders mixed pence and pound coins. Q10 rejects the same-numeral trap between 50p and fifty pounds. One question uses a single coin or note to pay an exact price.",
     "versus": "Easy recognises common coin values and the copper and seven-sided coin families. Medium introduces all four Bank of England note values, the two-pound coin and ordering notes. Hard adds new thinking by rejecting physical-size errors, distinguishing pounds from pence when numerals match, and comparing mixed denominations. No coin totals, equivalent combinations or change calculations are introduced."
   },
   "skills": [
@@ -152,7 +152,7 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which note is worth more than twenty pounds?",
+      "prompt": "A bag costs £50. Which note pays the exact price?",
       "options": [
         {
           "id": "a",
@@ -192,14 +192,16 @@
         }
       ],
       "correctId": "d",
-      "explanation": "Fifty pounds is more than twenty pounds. The twenty-pound note has the same value, not more.",
+      "explanation": "The £50 note pays exactly £50. No change is needed.",
       "randomise": {
         "shuffleOptions": true
       },
       "id": "money-3-4",
       "narration": {
-        "prompt": "Which note is worth more than twenty pounds?"
-      }
+        "prompt": "A bag costs fifty pounds. Which note pays the exact price?",
+        "explanation": "The fifty pounds note pays exactly fifty pounds. No change is needed."
+      },
+      "hint": "Find the same value as the price."
     },
     {
       "kind": "fill-blank",

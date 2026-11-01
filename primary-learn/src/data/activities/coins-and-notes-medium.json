@@ -15,7 +15,7 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 identifies the two-pound coin. Q2 reads a five-pound note. Q3 selects coins worth more than ten pence. Q4 identifies a ten-pound note. Q5 reads a twenty-pound note. Q6 identifies a fifty-pound note. Q7 selects the two notes worth less than twenty pounds. Q8 reads the pound coin in pounds. Q9 orders the four note values. Q10 rejects the claim that the physically bigger coin always has greater value.",
+    "within": "Q1 identifies the two-pound coin. Q2 reads a five-pound note. Q3 selects coins worth more than ten pence. Q4 identifies a ten-pound note. Q5 reads a twenty-pound note. Q6 identifies a fifty-pound note. Q7 selects the two notes worth less than twenty pounds. Q8 reads the pound coin in pounds. Q9 orders the four note values. Q10 rejects the claim that the physically bigger coin always has greater value. One question uses a single coin or note to pay an exact price.",
     "versus": "Easy recognises common coin values and the copper and seven-sided coin families. Medium introduces all four Bank of England note values, the two-pound coin and ordering notes. Hard adds new thinking by rejecting physical-size errors, distinguishing pounds from pence when numerals match, and comparing mixed denominations. No coin totals, equivalent combinations or change calculations are introduced."
   },
   "skills": [
@@ -31,7 +31,7 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "prompt": "Which coin is worth two pounds?",
+      "prompt": "A pencil costs £2. Which coin pays the exact price?",
       "options": [
         {
           "id": "a",
@@ -71,14 +71,16 @@
         }
       ],
       "correctId": "b",
-      "explanation": "The round coin marked £2 is worth two pounds. It has a gold-coloured outer ring.",
+      "explanation": "The £2 coin pays exactly £2. No change is needed.",
       "randomise": {
         "shuffleOptions": true
       },
       "id": "money-2-1",
       "narration": {
-        "prompt": "Which coin is worth two pounds?"
-      }
+        "prompt": "A pencil costs two pounds. Which coin pays the exact price?",
+        "explanation": "The two pounds coin pays exactly two pounds. No change is needed."
+      },
+      "hint": "Find the same value as the price."
     },
     {
       "kind": "fill-blank",

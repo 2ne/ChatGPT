@@ -35,6 +35,9 @@ import { FlashPeekProvider } from "./questions/flashPeek";
 import { QuestionView } from "./questions/QuestionView";
 import type { QuestionPlayControl } from "./questions/MatchPairs";
 import { QuestExitSheet } from "./QuestExitSheet";
+import { moneyToPractise, prioritiseMoney } from "../lib/money";
+import { MoneyDemonstration, MoneyPractice } from "./questions/MoneyLearning";
+import type { MoneyAsset } from "../types/activity";
 import { BondDemonstration } from "./questions/BondDemonstration";
 
 function hearPrompt(question: Question, difficulty: number): string {
@@ -70,6 +73,7 @@ function QuestBackdrop({ backdrop }: { backdrop?: CSSProperties }) {
 
 type ActivityRunnerProps = {
   activity: Activity;
+  previousAttempt?: ActivityAttempt;
   learnerName: string;
   onExit: () => void;
   onNext: () => void;
@@ -81,12 +85,13 @@ type Phase = "question" | "feedback" | "summary";
 
 export function ActivityRunner({
   activity,
+  previousAttempt,
   onExit,
   onNext,
   nextLabel,
   onComplete,
 }: ActivityRunnerProps) {
-  const [playQuestions, setPlayQuestions] = useState<Question[]>(() => realizeActivity(activity).questions);
+  const [playQuestions, setPlayQuestions] = useState<Question[]>(() => prioritiseMoney(realizeActivity(activity).questions, previousAttempt?.moneyPractice));
   const [phase, setPhase] = useState<Phase>("question");
   const [index, setIndex] = useState(0);
   const [exitOpen, setExitOpen] = useState(false);
@@ -127,6 +132,7 @@ export function ActivityRunner({
     setPlaySession(value => value + 1);
     setExitOpen(false);
     const realized = realizeActivity(activity);
+    realized.questions = prioritiseMoney(realized.questions, phase === "summary" ? moneyToPractise(playQuestions, results) : previousAttempt?.moneyPractice);
     const first = realized.questions[0];
     setPlayQuestions(realized.questions);
     setActiveQueue(realized.questions.map((item) => item.id));
@@ -186,6 +192,10 @@ export function ActivityRunner({
       startedAt,
       finishedAt,
     );
+    if (playQuestions.some(item => item.money || ("options" in item && item.options?.some(option => option.money)))) {
+      attempt.moneyPractice = moneyToPractise(playQuestions, results);
+      attempt.mastered = attempt.moneyPractice.length === 0;
+    }
     onComplete(attempt);
     setPhase("summary");
   }
@@ -318,6 +328,7 @@ export function ActivityRunner({
     const stars = attemptStars(correctCount, total);
     return (
       <ResultScreen
+        moneyPractice={playQuestions.some(item => item.money || ("options" in item && item.options?.some(option => option.money))) ? moneyToPractise(playQuestions, results) : undefined}
         correctCount={correctCount}
         total={total}
         stars={stars}
@@ -553,6 +564,8 @@ export function ActivityRunner({
 
           {phase === "feedback" && lastCorrect === false ? <BondDemonstration key={question.id} question={question} /> : null}
 
+          {phase === "feedback" ? <MoneyDemonstration key={question.id} question={question} /> : null}
+
           {primaryAction ? <div className="quest-actions-inline">{primaryAction}</div> : null}
           </div>
         </section>
@@ -571,6 +584,7 @@ export function ActivityRunner({
 }
 
 function ResultScreen({
+  moneyPractice,
   correctCount,
   total,
   stars,
@@ -581,6 +595,7 @@ function ResultScreen({
   onTryAgain,
   onNext,
 }: {
+  moneyPractice?: MoneyAsset[];
   correctCount: number;
   total: number;
   stars: number;
@@ -642,6 +657,7 @@ function ResultScreen({
             </div>
             <h1 className="result-score">{copy.youGot(correctCount, total)}</h1>
             <p className="result-line">{copy.starLine(stars)}</p>
+            {moneyPractice ? <MoneyPractice practice={moneyPractice} /> : null}
             <div className="result-actions">
               <button type="button" className="btn btn-secondary btn-block" onClick={onTryAgain}>
                 <RotateCcw size={17} aria-hidden /> {copy.tryAgain}

@@ -128,7 +128,9 @@ function hydrateProgress(entry: ProgressRecord): ActivityProgress {
     bestCorrectCount: bestCorrect,
     bestTotalCount: bestTotal,
     bestStars,
-    mastered: bestStars >= 1,
+    mastered: attempts.some(attempt => attempt.moneyPractice !== undefined)
+      ? attempts.some(attempt => attempt.moneyPractice?.length === 0)
+      : bestStars >= 1,
     lastAttemptAt: entry.lastAttemptAt ?? null,
   };
 }

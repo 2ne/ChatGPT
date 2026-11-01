@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 identifies 1p. Q2 reads 2p. Q3 recognises 1p and 2p as the copper coins. Q4 identifies 5p. Q5 reads 10p. Q6 identifies 20p. Q7 recognises 20p and 50p as seven-sided coins. Q8 reads 50p. Q9 identifies the current pound coin. Q10 orders four pence coins by value, not physical size.",
-    "versus": "Easy recognises common coin values and the copper and seven-sided coin families. Medium introduces all four Bank of England note values, the two-pound coin and ordering notes. Hard adds new thinking by rejecting physical-size errors, distinguishing pounds from pence when numerals match, and comparing mixed denominations. No coin totals, equivalent combinations or change calculations are introduced."
+    "within": "Q1 identifies 1p. Q2 reads 2p. Q3 identifies the 1p and 2p values. Q4 identifies 5p. Q5 reads 10p. Q6 identifies 20p. Q7 identifies the 20p and 50p values. Q8 reads 50p. Q9 identifies the current pound coin. Q10 orders four pence coins by value, not physical size. One question uses a single coin or note to pay an exact price.",
+    "versus": "Easy recognises common coin values with colour and shape as supporting hints. Medium introduces all four Bank of England note values, the two-pound coin and ordering notes. Hard adds new thinking by rejecting physical-size errors, distinguishing pounds from pence when numerals match, and comparing mixed denominations. No coin totals, equivalent combinations or change calculations are introduced."
   },
   "skills": [
     "recognise-coins",
@@ -110,7 +110,7 @@
     },
     {
       "kind": "multi-select",
-      "prompt": "Tap the two copper-coloured coins.",
+      "prompt": "Tap the 1p coin and the 2p coin.",
       "options": [
         {
           "id": "a",
@@ -153,18 +153,20 @@
         "a",
         "c"
       ],
-      "explanation": "The 1p and 2p coins are copper-coloured. Their values are different.",
+      "explanation": "The 1p coin is worth one penny. The 2p coin is worth two pence.",
       "randomise": {
         "shuffleOptions": true
       },
       "id": "money-1-3",
       "narration": {
-        "prompt": "Tap the two copper-coloured coins."
-      }
+        "prompt": "Tap the one penny coin and the two pence coin.",
+        "explanation": "The 1p coin is worth one penny. The 2p coin is worth two pence."
+      },
+      "hint": "Both coins are copper coloured. Look at their values."
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which coin is worth 5p?",
+      "prompt": "A sticker costs 5p. Which coin pays the exact price?",
       "options": [
         {
           "id": "a",
@@ -204,14 +206,16 @@
         }
       ],
       "correctId": "b",
-      "explanation": "The coin marked 5 pence is worth 5p. Its small size does not mean a smaller value.",
+      "explanation": "The 5p coin pays exactly 5p. No change is needed.",
       "randomise": {
         "shuffleOptions": true
       },
       "id": "money-1-4",
       "narration": {
-        "prompt": "Which coin is worth five pence?"
-      }
+        "prompt": "A sticker costs five pence. Which coin pays the exact price?",
+        "explanation": "The five pence coin pays exactly five pence. No change is needed."
+      },
+      "hint": "Find the same value as the price."
     },
     {
       "kind": "fill-blank",
@@ -292,7 +296,7 @@
     },
     {
       "kind": "multi-select",
-      "prompt": "Tap the two coins with seven sides.",
+      "prompt": "Tap the 20p coin and the 50p coin.",
       "options": [
         {
           "id": "a",
@@ -335,14 +339,16 @@
         "a",
         "d"
       ],
-      "explanation": "The 20p and 50p coins have seven curved sides. The pound coin has twelve sides.",
+      "explanation": "These coins are worth twenty pence and fifty pence. Both have seven curved sides.",
       "randomise": {
         "shuffleOptions": true
       },
       "id": "money-1-7",
       "narration": {
-        "prompt": "Tap the two coins with seven sides."
-      }
+        "prompt": "Tap the twenty pence coin and the fifty pence coin.",
+        "explanation": "These coins are worth twenty pence and fifty pence. Both have seven curved sides."
+      },
+      "hint": "Both coins have seven curved sides. Look at their values."
     },
     {
       "kind": "fill-blank",
