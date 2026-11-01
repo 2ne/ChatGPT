@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 uses before and first. Q2 sequences morning, afternoon and evening. Q3 finds tomorrow. Q4 counts the days in a week. Q5 sequences four weekdays. Q6 identifies a month. Q7 distinguishes months from days. Q8 sequences yesterday, today and tomorrow. Q9 compares everyday time units. Q10 identifies hours and minutes as units of time.",
+    "within": "Q1 identifies morning as the part of the day before afternoon. Q2 sequences morning, afternoon and evening. Q3 finds tomorrow. Q4 counts the days in a week. Q5 sequences four weekdays. Q6 identifies a month. Q7 distinguishes months from days. Q8 sequences yesterday, today and tomorrow. Q9 compares everyday time units. Q10 identifies hours and minutes as units of time.",
     "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
   },
   "skills": [
@@ -29,31 +29,31 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "prompt": "Sam puts on socks before shoes. What goes on first?",
-      "explanation": "Before means earlier. Sam puts on socks first.",
+      "prompt": "Which part of the day comes just before afternoon?",
+      "explanation": "Morning comes before afternoon. Evening comes after afternoon.",
       "narration": {
-        "prompt": "Sam puts on socks before shoes. What goes on first?"
+        "prompt": "Which part of the day comes just before afternoon?"
       },
       "options": [
         {
           "id": "a",
-          "label": "Shoes"
+          "label": "Evening"
         },
         {
           "id": "b",
-          "label": "Socks"
+          "label": "Morning"
         },
         {
           "id": "c",
-          "label": "Both together"
+          "label": "Night"
         },
         {
           "id": "d",
-          "label": "Neither"
+          "label": "Afternoon"
         }
       ],
       "correctId": "b",
-      "hint": "Think about the word before.",
+      "hint": "Think about the order of the parts of a day.",
       "id": "days-and-dates-1-1"
     },
     {
