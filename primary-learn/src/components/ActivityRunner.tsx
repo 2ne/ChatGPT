@@ -36,8 +36,7 @@ import { QuestionView } from "./questions/QuestionView";
 import type { QuestionPlayControl } from "./questions/MatchPairs";
 import { QuestExitSheet } from "./QuestExitSheet";
 import { moneyToPractise, prioritiseMoney } from "../lib/money";
-import { MoneyDemonstration, MoneyPractice } from "./questions/MoneyLearning";
-import type { MoneyAsset } from "../types/activity";
+import { MoneyDemonstration } from "./questions/MoneyLearning";
 import { BondDemonstration } from "./questions/BondDemonstration";
 
 function hearPrompt(question: Question, difficulty: number): string {
@@ -328,7 +327,6 @@ export function ActivityRunner({
     const stars = attemptStars(correctCount, total);
     return (
       <ResultScreen
-        moneyPractice={playQuestions.some(item => item.money || ("options" in item && item.options?.some(option => option.money))) ? moneyToPractise(playQuestions, results) : undefined}
         correctCount={correctCount}
         total={total}
         stars={stars}
@@ -584,7 +582,6 @@ export function ActivityRunner({
 }
 
 function ResultScreen({
-  moneyPractice,
   correctCount,
   total,
   stars,
@@ -595,7 +592,6 @@ function ResultScreen({
   onTryAgain,
   onNext,
 }: {
-  moneyPractice?: MoneyAsset[];
   correctCount: number;
   total: number;
   stars: number;
@@ -657,7 +653,6 @@ function ResultScreen({
             </div>
             <h1 className="result-score">{copy.youGot(correctCount, total)}</h1>
             <p className="result-line">{copy.starLine(stars)}</p>
-            {moneyPractice ? <MoneyPractice practice={moneyPractice} /> : null}
             <div className="result-actions">
               <button type="button" className="btn btn-secondary btn-block" onClick={onTryAgain}>
                 <RotateCcw size={17} aria-hidden /> {copy.tryAgain}

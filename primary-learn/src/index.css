@@ -5463,7 +5463,3 @@ button.object-token {
 .money-demo-content { padding: 16px; border: 2px solid var(--line, #e8e0cc); border-radius: 20px; margin-top: 12px; }
 .money-pennies { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; max-width: 400px; margin-inline: auto; }
 .money-pennies .money-picture { width: 100%; height: auto; margin: 0; }
-.money-practice ul { display: flex; flex-wrap: wrap; gap: 8px 24px; padding-left: 24px; }
-.money-practice details { margin-top: 18px; }
-.money-practice summary { cursor: pointer; min-height: 44px; padding-block: 12px; font-weight: 800; }
-.money-practice summary:focus-visible { outline: 3px solid #5745df; outline-offset: 4px; border-radius: 4px; }
