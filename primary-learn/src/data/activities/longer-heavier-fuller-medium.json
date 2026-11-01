@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Q1 finds the shortest of four closer ribbon lengths. Q2 records a five-block height. Q3 recognises two half-full cups. Q4 reads the lighter bag on a balance. Q5 records five blocks of mass. Q6 compares partially filled identical cups. Q7 records five cups filling a jug. Q8 compares seconds taken for the same job. Q9 orders four ribbon lengths. Q10 finds two six-block strips.",
-    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths with shifted starts, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
+    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths from a common start, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
   },
   "skills": [
     "compare-lengths-heights",

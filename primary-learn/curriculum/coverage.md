@@ -92,7 +92,7 @@ Each node can hold Easy / Medium / Hard. Coverage below is about curriculum bull
 | `halves-and-quarters-hard` | `y1-halves-quarters` (node 22) | done — Hard: unequal-part errors, quantities to 18, compare half and quarter amounts |
 | `longer-heavier-fuller` | `y1-compare-measures` (node 23) | done — Easy: direct comparisons, three-block and three-cup measurements, parts of a day |
 | `longer-heavier-fuller-medium` | `y1-compare-measures` (node 23) | done — Medium: closer comparisons, five-unit measurements, half-full cups, compare time taken |
-| `longer-heavier-fuller-hard` | `y1-compare-measures` (node 23) | done — Hard: shifted starts, gapped units, level balances, seven-unit records and four times |
+| `longer-heavier-fuller-hard` | `y1-compare-measures` (node 23) | done — Hard: aligned equal lengths, gapped units, level balances, seven-unit records and four times |
 
 ## Next quest to build
 

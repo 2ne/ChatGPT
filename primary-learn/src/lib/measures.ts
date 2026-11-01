@@ -11,5 +11,5 @@ export function describeMeasure(measure: MeasureAsset): string {
   if (kind === "capacity") return values.map((value, i) => `${labels?.[i] ?? "The cup"} is ${["empty", "a quarter full", "half full", "three quarters full", "full"][value]}.`).join(" ");
   if (kind === "time") return values.map((value, i) => `${labels?.[i] ?? `Child ${i + 1}`} takes ${value} seconds.`).join(" ");
   if (units) return `A strip with ${values[0]} identical blocks ${gaps ? "separated by gaps" : "touching end to end"} alongside it.`;
-  return values.map((value, i) => `${labels?.[i] ?? "The strip"} is ${value} equal steps ${kind === "height" ? "tall" : "long"}${measure.offsets?.[i] ? ", with its start shifted to the right" : ""}.`).join(" ");
+  return values.map((value, i) => `${labels?.[i] ?? "The strip"} is ${value} equal steps ${kind === "height" ? "tall" : "long"}.`).join(" ");
 }

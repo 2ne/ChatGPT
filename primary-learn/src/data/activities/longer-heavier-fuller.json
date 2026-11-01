@@ -16,7 +16,7 @@
   "questionCount": 10,
   "difficultyRamp": {
     "within": "Q1 compares four ribbon lengths. Q2 compares tower heights. Q3 records three blocks of length. Q4 finds two full cups. Q5 identifies an empty cup. Q6 records a bag balanced by three blocks. Q7 reads which bag is heavier from a balance. Q8 records three full cups filling a jug. Q9 orders parts of a day from morning. Q10 selects two strips measuring four blocks.",
-    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths with shifted starts, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
+    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths from a common start, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
   },
   "skills": [
     "compare-lengths-heights",

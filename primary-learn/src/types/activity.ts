@@ -126,7 +126,6 @@ export type MeasureAsset = {
   labels?: string[];
   units?: boolean;
   gaps?: boolean;
-  offsets?: number[];
 };
 
 /** A whole shape partitioned into halves or quarters. Look-only. */

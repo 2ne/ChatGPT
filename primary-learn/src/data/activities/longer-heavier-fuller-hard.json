@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 recognises equal-length ribbons with different starting positions. Q2 records seven blocks of length. Q3 finds matching amounts in identical cups. Q4 records seven blocks of mass. Q5 rejects a measurement with gaps. Q6 records six full cups filling a jug. Q7 rejects a claim that a bag is heavier on a level balance. Q8 compares four times for the same job. Q9 orders four water amounts in equal cups. Q10 selects two valid unit measurements and rejects gapped units.",
-    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths with shifted starts, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
+    "within": "Q1 recognises equal-length ribbons from a common starting point. Q2 records seven blocks of length. Q3 finds matching amounts in identical cups. Q4 records seven blocks of mass. Q5 rejects a measurement with gaps. Q6 records six full cups filling a jug. Q7 rejects a claim that a bag is heavier on a level balance. Q8 compares four times for the same job. Q9 orders four water amounts in equal cups. Q10 selects two valid unit measurements and rejects gapped units.",
+    "versus": "Easy compares obvious differences and records up to three equal blocks or cups, with hints at the start. Medium uses closer comparisons, heights, half-full cups and records to five units. Hard adds new thinking by spotting gaps between units, recognising equal lengths from a common start, reading level balances and comparing time taken by four children. All measurements stay in non-standard blocks and cups; time comparisons use seconds without reading clocks."
   },
   "skills": [
     "compare-lengths-heights",
@@ -51,7 +51,7 @@
         }
       ],
       "correctId": "c",
-      "explanation": "Both ribbons have the same length. Their ends are in different places.",
+      "explanation": "Both ribbons start together and finish together. Their lengths are the same.",
       "randomise": {
         "shuffleOptions": true
       },
@@ -64,10 +64,6 @@
         "labels": [
           "Mia",
           "Sam"
-        ],
-        "offsets": [
-          0,
-          2
         ]
       },
       "id": "measure-3-1",

@@ -4,7 +4,7 @@ import type { MeasureAsset } from "../../types/activity";
 import { describeMeasure } from "../../lib/measures";
 
 export function MeasurePicture({ measure, compact }: { measure: MeasureAsset; compact?: boolean }) {
-  const { kind, values, labels, units, gaps, offsets } = measure;
+  const { kind, values, labels, units, gaps } = measure;
   let height = 160;
   let drawing: ReactNode;
   const label = (text: string, x: number, y: number) => <text x={x} y={y} textAnchor="middle" className="measure-label">{text}</text>;
@@ -18,12 +18,12 @@ export function MeasurePicture({ measure, compact }: { measure: MeasureAsset; co
     height = values.length * (units ? 85 : 62) + 15;
     drawing = values.map((value, i) => {
       const top = i * (units ? 85 : 62) + 22;
-      const start = 22 + (offsets?.[i] ?? 0) * 24;
+      const start = 22;
       const width = value * 24;
       const unitWidth = gaps ? (width - (value - 1) * 6) / value : 24;
       return <g key={i}>
-        {labels?.[i] ? label(labels[i]!, 150, top - 7) : null}
-        <rect x={start} y={top} width={width} height="18" rx="3" className="measure-strip" />
+        {labels?.[i] ? label(labels[i]!, start + width / 2, top - 7) : null}
+        <rect x={start} y={top} width={width} height="18" rx="3" className="measure-strip" data-series={i % 2} />
         {units ? Array.from({ length: value }, (_, j) => block(start + j * (unitWidth + (gaps ? 6 : 0)), top + 26, unitWidth, 20, j)) : null}
       </g>;
     });

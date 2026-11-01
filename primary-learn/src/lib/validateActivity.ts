@@ -431,12 +431,8 @@ function optionalMeasure(record: Record<string, unknown>, path: string): Measure
   if (kind === "capacity" && !units && values.some(n => n > 4)) fail(path, "cup fill levels range from 0 to 4");
   if (kind === "capacity" && units && values[0]! > 8) fail(path, "cup records support up to eight cups");
   if ((kind === "length" || kind === "height") && values.some(n => n > 10)) fail(path, "length diagrams support up to ten units");
-  let offsets: number[] | undefined;
-  if (value.offsets != null) {
-    if (kind !== "length" || units || !Array.isArray(value.offsets) || value.offsets.length !== values.length || !value.offsets.every((n, i) => Number.isInteger(n) && n >= 0 && n + values[i]! <= 10)) fail(path, "length offsets must keep strips within ten units");
-    offsets = value.offsets as number[];
-  }
-  return { kind, values, labels: value.labels as string[] | undefined, units, gaps, offsets };
+  if (value.offsets != null) fail(path, "ribbons must use a common left starting point");
+  return { kind, values, labels: value.labels as string[] | undefined, units, gaps };
 }
 
 function optionalFraction(record: Record<string, unknown>, path: string): FractionAsset | undefined {
