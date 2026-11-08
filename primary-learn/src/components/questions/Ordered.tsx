@@ -6,6 +6,7 @@ import type { OrderedQuestion } from "../../types/activity";
 import { pinOrderedAnchor } from "../../lib/answers";
 import { OptionContent } from "./ObjectGroup";
 import { choiceClass, type Reveal } from "./choice";
+import { DayScene } from "./TimeStrip";
 
 type OrderedProps = {
   question: OrderedQuestion;
@@ -20,7 +21,43 @@ type DragState = {
   pointerId: number;
 };
 
-export function Ordered({ question, answer, disabled, reveal, onChange }: OrderedProps) {
+export function Ordered(props: OrderedProps) {
+  return props.question.interaction === "tap" ? <TapOrder {...props} /> : <DragOrder {...props} />;
+}
+
+function TapOrder({ question, answer, disabled, reveal, onChange }: OrderedProps) {
+  const anchor = question.items.find((item) => item.id === question.anchorId);
+  const items = anchor ? [anchor, ...question.items.filter((item) => item !== anchor)] : question.items;
+  const order = Array.isArray(answer) ? answer : anchor ? [anchor.id] : [];
+  return (
+    <div className="tap-order-grid" role="group" aria-label={question.prompt}>
+      {items.map((item) => {
+        const position = order.indexOf(item.id);
+        const selected = position >= 0;
+        const label = item.label ?? item.id;
+        const marked = reveal ? (question.correctOrder[position] === item.id ? "correct" : "wrong") : null;
+        return (
+          <button
+            key={item.id}
+            type="button"
+            className={choiceClass(selected, marked, ["scene-choice"])}
+            aria-pressed={selected}
+            aria-label={item === anchor ? copy.staysFirst(label) : selected ? copy.orderChoice(label, position + 1) : label}
+            disabled={disabled || reveal != null || item === anchor}
+            onClick={() => onChange(selected ? order.filter((id) => id !== item.id) : [...order, item.id])}
+          >
+            {item.dayPart ? <><DayScene part={item.dayPart} /><span>{label}</span></> : <OptionContent {...item} />}
+            {selected ? <span className="scene-order-number option-letter" aria-hidden>{position + 1}</span> : null}
+            {marked === "correct" ? <span className="option-check" aria-hidden>✓</span> : null}
+            {marked === "wrong" ? <span className="option-cross" aria-hidden>✕</span> : null}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function DragOrder({ question, answer, disabled, reveal, onChange }: OrderedProps) {
   const raw = Array.isArray(answer) ? (answer as string[]) : question.items.map((item) => item.id);
   const order = pinOrderedAnchor(question, raw);
   const anchorId = question.anchorId;

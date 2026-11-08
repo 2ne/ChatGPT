@@ -2423,6 +2423,140 @@ button.object-token {
   right: 14px;
 }
 
+.time-strip {
+  margin: 0 0 18px;
+}
+
+.time-strip-title {
+  margin: 0 0 6px;
+  text-align: center;
+  color: var(--ink);
+  font: 800 18px/1.2 var(--font-display);
+}
+
+.time-strip-cells,
+.scene-choice-grid,
+.tap-order-grid {
+  display: grid;
+  gap: clamp(5px, 2vw, 12px);
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+.time-strip-cells {
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  padding: 0;
+  list-style: none;
+}
+
+.time-cell {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  padding: 4px 1px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: center;
+  font: 800 clamp(12px, 3.4vw, 18px)/1.15 var(--font-display);
+}
+
+.time-cell.is-start {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.time-cell.is-gap {
+  border-style: dashed;
+  color: var(--ink-soft);
+  font-size: 23px;
+}
+
+.time-cell.day-cell {
+  min-height: 88px;
+  padding: 6px;
+  gap: 4px;
+  text-transform: capitalize;
+}
+
+.time-strip-cells:has(.day-cell) {
+  max-width: 340px;
+}
+
+.day-scene {
+  display: block;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  border-radius: 9px;
+}
+
+.day-cell .day-scene {
+  max-width: 100px;
+}
+
+.scene-choice-grid,
+.tap-order-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tap-order-grid:has(> :nth-child(3):last-child) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.option.scene-choice {
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 5px;
+  text-align: center;
+  font-size: clamp(14px, 4vw, 19px);
+}
+
+.scene-choice > .scene-order-number {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  font-size: 15px;
+}
+
+.scene-choice > .option-check,
+.scene-choice > .option-cross {
+  top: 8px;
+  right: 8px;
+}
+
+.duration-timer {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 12px;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+}
+
+.duration-timer-value {
+  min-height: 28px;
+  font: 800 22px/1.25 var(--font-display);
+}
+
+.duration-timer progress {
+  width: min(100%, 180px);
+  accent-color: var(--primary);
+}
+
+.duration-timer > .btn {
+  min-height: 44px;
+}
+
 .option-check {
   margin-left: auto;
   flex: none;

@@ -14,6 +14,7 @@ import { PickPair } from "./PickPair";
 import { MultiSelect } from "./MultiSelect";
 import { MultipleChoice } from "./MultipleChoice";
 import { Ordered } from "./Ordered";
+import { TimeStrip } from "./TimeStrip";
 import type { Reveal } from "./choice";
 
 type QuestionViewProps = {
@@ -67,9 +68,13 @@ export function QuestionView({
   if (!View) {
     return <p className="t-body">{copy.emptyActivity}</p>;
   }
+  const stripFill = question.timeStrip && question.kind === "multiple-choice"
+    ? question.options.find((option) => option.id === (reveal ? question.correctId : answer))
+    : undefined;
   return (
     <>
       {questionUsesBaseTen(question) ? <BaseTenKey explain={showBaseTenHint} /> : null}
+      {question.timeStrip ? <TimeStrip strip={question.timeStrip} fill={stripFill} /> : null}
       <View
         key={question.id}
         question={question as never}

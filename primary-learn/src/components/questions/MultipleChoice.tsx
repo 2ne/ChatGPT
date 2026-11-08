@@ -15,6 +15,7 @@ import { TenFrame } from "./TenFrame";
 import { GroupsPicture } from "./GroupsPicture";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
+import { DayScene } from "./TimeStrip";
 
 type MultipleChoiceProps = {
   question: MultipleChoiceQuestion | CountObjectsQuestion;
@@ -82,6 +83,7 @@ export function MultipleChoice({
     ? question.prompt.match(/^What is (\d+) ([+−-]|take away) (\d+)\?$/)
     : null;
   const selectedLabel = question.options.find((option) => option.id === answer)?.label;
+  const sceneChoices = question.options.some((option) => option.dayPart);
   return (
     <div className="option-stack">
       {numberSequence ? <div className="number-sequence" role="group" aria-label="Number sequence">
@@ -115,7 +117,7 @@ export function MultipleChoice({
           flashMs={reveal ? undefined : question.flashMs}
         />
       ) : null}
-      <div role="radiogroup" aria-label={copy.pickOne} className={question.options.some(option => option.clock) ? "clock-choice-grid" : "option-stack"}>
+      <div role="radiogroup" aria-label={copy.pickOne} className={sceneChoices ? "scene-choice-grid" : question.options.some(option => option.clock) ? "clock-choice-grid" : "option-stack"}>
         {question.options.map((option, slot) => {
           const selected = answer === option.id;
           const marked = markChoice(reveal, selected, option.id === question.correctId);
@@ -127,11 +129,13 @@ export function MultipleChoice({
               aria-checked={selected}
               disabled={disabled}
               onClick={() => onChange(option.id)}
-              className={choiceClass(selected, marked)}
+              className={choiceClass(selected, marked, sceneChoices ? ["scene-choice"] : [])}
             >
-              <span className="option-letter" aria-hidden>
-                {"ABCD"[slot] ?? "•"}
-              </span>
+              {option.dayPart ? <DayScene part={option.dayPart} /> : (
+                <span className="option-letter" aria-hidden>
+                  {"ABCD"[slot] ?? "•"}
+                </span>
+              )}
               <OptionContent
                 label={option.label}
                 visual={option.visual}

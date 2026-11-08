@@ -214,7 +214,7 @@ Work through this on the finished file. If any box fails, fix it. Do not push a 
 
 1. Every wrong option is one named error. At most one distractor may copy a stem number.
 2. Across a quest, numeric answers mix smallest, middle and largest. Do not park the answer in the middle by habit.
-3. 3 options for Reception pickers, 4 for Year 1, never more than 4.
+3. 3 options for Reception pickers, 4 for standard Year 1 pickers, never more than 4. Day-part picture picks use 2 distinct scenes.
 4. No more than 3 questions with the same stem shape in a quest. Never 4 in a row.
 5. No two identical stems plus options in one quest.
 6. Hard adds a new kind of thinking, stated in `difficultyRamp`.

@@ -15,8 +15,8 @@
   "difficulty": 2,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 finds the preceding weekday. Q2 sequences days across a week boundary. Q3 identifies weekend days. Q4 identifies twelve months in a year. Q5 finds the next month. Q6 sequences four months. Q7 moves from December to January. Q8 compares units to a minute. Q9 orders units. Q10 chooses minutes for recording an everyday duration.",
-    "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
+    "within": "Q1 fills a gap before Wednesday. Q2 orders days across a week boundary. Q3 finds the weekend. Q4 counts months in a year. Q5 fills a gap after April. Q6 orders four months. Q7 crosses into a new year. Q8 compares units to a minute. Q9 orders units. Q10 chooses a unit for reading time.",
+    "versus": "Easy uses pictures for parts of the day, a week strip and a calendar date. Medium uses before and after across week and month boundaries. Hard works backwards from yesterday, moves two months across a year boundary and reads named time records."
   },
   "skills": [
     "time-language",
@@ -53,14 +53,23 @@
         }
       ],
       "correctId": "c",
-      "id": "days-and-dates-2-1"
+      "id": "days-and-dates-2-1",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "Monday",
+          null,
+          "Wednesday"
+        ],
+        "marked": 2
+      }
     },
     {
       "kind": "ordered",
-      "prompt": "Put these days in order, starting with Friday.",
+      "prompt": "Tap the days in order, starting with Friday.",
       "explanation": "After Sunday, a new week starts with Monday.",
       "narration": {
-        "prompt": "Put these days in order, starting with Friday."
+        "prompt": "Tap the days in order, starting with Friday."
       },
       "items": [
         {
@@ -86,8 +95,9 @@
         "c",
         "d"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-2-2"
+      "id": "days-and-dates-2-2",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multi-select",
@@ -118,7 +128,19 @@
         "b",
         "d"
       ],
-      "id": "days-and-dates-2-3"
+      "id": "days-and-dates-2-3",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      }
     },
     {
       "kind": "fill-blank",
@@ -166,14 +188,24 @@
         }
       ],
       "correctId": "c",
-      "id": "days-and-dates-2-5"
+      "id": "days-and-dates-2-5",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "March",
+          "April",
+          null,
+          "June"
+        ],
+        "marked": 1
+      }
     },
     {
       "kind": "ordered",
-      "prompt": "Put these months in order, starting with April.",
+      "prompt": "Tap the months in order, starting with April.",
       "explanation": "April is followed by May, June and July.",
       "narration": {
-        "prompt": "Put these months in order, starting with April."
+        "prompt": "Tap the months in order, starting with April."
       },
       "items": [
         {
@@ -199,8 +231,9 @@
         "c",
         "d"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-2-6"
+      "id": "days-and-dates-2-6",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multiple-choice",
@@ -228,7 +261,16 @@
         }
       ],
       "correctId": "b",
-      "id": "days-and-dates-2-7"
+      "id": "days-and-dates-2-7",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "November",
+          "December",
+          null
+        ],
+        "marked": 1
+      }
     },
     {
       "kind": "multi-select",
@@ -296,10 +338,10 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Sam records a reading session. Which unit fits best?",
+      "prompt": "Sam reads a book. What could we use to time it?",
       "explanation": "Minutes suit a reading session. Seconds are very short, while months and years are much longer.",
       "narration": {
-        "prompt": "Sam records a reading session. Which unit fits best?"
+        "prompt": "Sam reads a book. What could we use to time it?"
       },
       "options": [
         {

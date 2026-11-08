@@ -136,6 +136,7 @@ export type MeasureAsset = {
   labels?: string[];
   units?: boolean;
   gaps?: boolean;
+  timer?: true;
 };
 
 /** A whole shape partitioned into halves or quarters. Look-only. */
@@ -207,6 +208,13 @@ export type HundredSquareAsset = {
   highlight?: number;
 };
 
+export const DAY_PARTS = ["morning", "afternoon", "evening", "night"] as const;
+export type DayPart = (typeof DAY_PARTS)[number];
+
+export type TimeStripAsset =
+  | { kind: "day-parts"; cells: (DayPart | null)[] }
+  | { kind: "calendar"; cells: (string | null)[]; marked?: number; title?: string };
+
 export type QuestionOption = {
   id: string;
   shape?: ShapeAsset;
@@ -221,6 +229,7 @@ export type QuestionOption = {
   measure?: MeasureAsset;
   money?: MoneyAsset[];
   clock?: ClockAsset;
+  dayPart?: DayPart;
   /** Layout for option pictures (e.g. dice on “which group” so kids glance, not count). */
   layout?: ObjectLayout;
 };
@@ -289,6 +298,7 @@ type QuestionCore = {
   measure?: MeasureAsset;
   money?: MoneyAsset[];
   clock?: ClockAsset;
+  timeStrip?: TimeStripAsset;
   /** Extra pictures mixed in. The child counts `visual`, not these. */
   extras?: ObjectAsset[];
   /** Object layout. Omit for a tidy row. */
@@ -355,6 +365,7 @@ export type OrderedQuestion = QuestionCore & {
   kind: "ordered";
   items: QuestionOption[];
   correctOrder: string[];
+  interaction?: "tap";
   /**
    * Named start that stays at the top. Must be `correctOrder[0]`.
    * Use for cyclic days, months and times. Omit on smallest-to-biggest items.

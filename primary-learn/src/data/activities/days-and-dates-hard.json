@@ -15,8 +15,8 @@
   "difficulty": 3,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 crosses a week boundary. Q2 orders days from a given start. Q3 finds preceding months. Q4 reads a named seconds record. Q5 reverses yesterday to find today. Q6 orders months across a year boundary. Q7 spots a five-day-week error. Q8 matches names and measured records. Q9 compares minute, hour, day and week. Q10 moves two months across a year boundary.",
-    "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
+    "within": "Q1 crosses a week boundary. Q2 orders days from a given start. Q3 finds preceding months. Q4 runs a timer and records seconds. Q5 reverses yesterday to find today. Q6 orders months across a year boundary. Q7 spots a five-day-week error. Q8 matches names and measured records. Q9 compares minute, hour, day and week. Q10 moves two months across a year boundary.",
+    "versus": "Easy uses pictures for parts of the day, a week strip and a calendar date. Medium uses before and after across week and month boundaries. Hard works backwards from yesterday, moves two months across a year boundary and reads named time records."
   },
   "skills": [
     "time-language",
@@ -53,14 +53,23 @@
         }
       ],
       "correctId": "b",
-      "id": "days-and-dates-3-1"
+      "id": "days-and-dates-3-1",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "Saturday",
+          "Sunday",
+          null
+        ],
+        "marked": 1
+      }
     },
     {
       "kind": "ordered",
-      "prompt": "Put these days in order, starting with Thursday.",
+      "prompt": "Tap the days in order, starting with Thursday.",
       "explanation": "Thursday and Friday come before the weekend days of Saturday and Sunday.",
       "narration": {
-        "prompt": "Put these days in order, starting with Thursday."
+        "prompt": "Tap the days in order, starting with Thursday."
       },
       "items": [
         {
@@ -86,8 +95,9 @@
         "c",
         "d"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-3-2"
+      "id": "days-and-dates-3-2",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multi-select",
@@ -122,10 +132,10 @@
     },
     {
       "kind": "fill-blank",
-      "prompt": "How many seconds does Mia's turn take?",
-      "explanation": "Mia records eight seconds. The other record belongs to Sam.",
+      "prompt": "Start the timer. How many seconds does Pip take?",
+      "explanation": "Pip takes eight seconds. The timer shows how long the turn lasts.",
       "narration": {
-        "prompt": "How many seconds does Mia's turn take?"
+        "prompt": "Start the timer. How many seconds does Pip take?"
       },
       "acceptedAnswers": [
         "8",
@@ -141,15 +151,12 @@
       "measure": {
         "kind": "time",
         "values": [
-          8,
-          5
+          8
         ],
-        "labels": [
-          "Mia",
-          "Sam"
-        ]
+        "timer": true
       },
-      "id": "days-and-dates-3-4"
+      "id": "days-and-dates-3-4",
+      "hint": "Look at the number when the timer stops."
     },
     {
       "kind": "multiple-choice",
@@ -177,14 +184,23 @@
         }
       ],
       "correctId": "c",
-      "id": "days-and-dates-3-5"
+      "id": "days-and-dates-3-5",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "Friday",
+          null,
+          "Sunday"
+        ],
+        "marked": 0
+      }
     },
     {
       "kind": "ordered",
-      "prompt": "Put these months in order, starting with November.",
+      "prompt": "Tap the months in order, starting with November.",
       "explanation": "January follows December. The months continue into a new year.",
       "narration": {
-        "prompt": "Put these months in order, starting with November."
+        "prompt": "Tap the months in order, starting with November."
       },
       "items": [
         {
@@ -210,8 +226,9 @@
         "c",
         "d"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-3-6"
+      "id": "days-and-dates-3-6",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multiple-choice",
@@ -235,10 +252,10 @@
     },
     {
       "kind": "multi-select",
-      "prompt": "Tap the two matching time records.",
+      "prompt": "Tap one time for Mia and one time for Sam.",
       "explanation": "Mia records four seconds and Sam records seven seconds. Each name belongs to its own record.",
       "narration": {
-        "prompt": "Tap the two matching time records."
+        "prompt": "Tap one time for Mia and one time for Sam."
       },
       "options": [
         {
@@ -334,7 +351,16 @@
         }
       ],
       "correctId": "b",
-      "id": "days-and-dates-3-10"
+      "id": "days-and-dates-3-10",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "November",
+          "December",
+          null
+        ],
+        "marked": 0
+      }
     }
   ]
 }

@@ -15,8 +15,8 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 identifies morning as the part of the day before afternoon. Q2 sequences morning, afternoon and evening. Q3 finds tomorrow. Q4 counts the days in a week. Q5 sequences four weekdays. Q6 identifies a month. Q7 distinguishes months from days. Q8 sequences yesterday, today and tomorrow. Q9 compares everyday time units. Q10 identifies hours and minutes as units of time.",
-    "versus": "Easy builds daily language, weekdays and recognition of month names. Medium sequences weekdays and months across boundaries and chooses units for recording time. Hard adds reverse reasoning from yesterday, spots incomplete weeks, matches named measured records and moves two months across a year boundary. No clock reading, month-length facts or conversions are required."
+    "within": "Q1 fills a gap before afternoon. Q2 taps scenes in order. Q3 finds tomorrow. Q4 counts days in a week. Q5 orders three days. Q6 names a month from a calendar. Q7 finds a date in October. Q8 orders yesterday, today and tomorrow. Q9 chooses a unit for a short event. Q10 recognises time units.",
+    "versus": "Easy uses pictures for parts of the day, a week strip and a calendar date. Medium uses before and after across week and month boundaries. Hard works backwards from yesterday, moves two months across a year boundary and reads named time records."
   },
   "skills": [
     "time-language",
@@ -29,61 +29,76 @@
   "questions": [
     {
       "kind": "multiple-choice",
-      "prompt": "Which part of the day comes just before afternoon?",
+      "prompt": "What comes before afternoon?",
       "explanation": "Morning comes before afternoon. Evening comes after afternoon.",
       "narration": {
-        "prompt": "Which part of the day comes just before afternoon?"
+        "prompt": "What comes before afternoon?"
       },
       "options": [
         {
           "id": "a",
-          "label": "Evening"
+          "label": "Evening",
+          "dayPart": "evening"
         },
         {
           "id": "b",
-          "label": "Morning"
-        },
-        {
-          "id": "c",
-          "label": "Night"
-        },
-        {
-          "id": "d",
-          "label": "Afternoon"
+          "label": "Morning",
+          "dayPart": "morning"
         }
       ],
       "correctId": "b",
-      "hint": "Think about the order of the parts of a day.",
-      "id": "days-and-dates-1-1"
+      "hint": "Think about when you have breakfast.",
+      "id": "days-and-dates-1-1",
+      "timeStrip": {
+        "kind": "day-parts",
+        "cells": [
+          null,
+          "afternoon"
+        ]
+      },
+      "randomise": {
+        "shuffleOptions": true
+      }
     },
     {
       "kind": "ordered",
-      "prompt": "Put these parts of the day in order, starting with morning.",
-      "explanation": "Morning comes first, then afternoon, then evening.",
+      "prompt": "Tap the pictures in order, starting with morning.",
+      "explanation": "Morning comes first. Afternoon, evening and night come after it.",
       "narration": {
-        "prompt": "Put these parts of the day in order, starting with morning."
+        "prompt": "Tap the pictures in order, starting with morning."
       },
       "items": [
         {
           "id": "c",
-          "label": "Evening"
+          "label": "Evening",
+          "dayPart": "evening"
+        },
+        {
+          "id": "d",
+          "label": "Night",
+          "dayPart": "night"
         },
         {
           "id": "a",
-          "label": "Morning"
+          "label": "Morning",
+          "dayPart": "morning"
         },
         {
           "id": "b",
-          "label": "Afternoon"
+          "label": "Afternoon",
+          "dayPart": "afternoon"
         }
       ],
       "correctOrder": [
         "a",
         "b",
-        "c"
+        "c",
+        "d"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-1-2"
+      "id": "days-and-dates-1-2",
+      "hint": "Look at where the sun is in each picture.",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multiple-choice",
@@ -112,7 +127,16 @@
       ],
       "correctId": "d",
       "hint": "Think about the next day in the week.",
-      "id": "days-and-dates-1-3"
+      "id": "days-and-dates-1-3",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "Sunday",
+          "Monday",
+          null
+        ],
+        "marked": 1
+      }
     },
     {
       "kind": "fill-blank",
@@ -132,14 +156,27 @@
         12
       ],
       "inputMode": "numeric",
-      "id": "days-and-dates-1-4"
+      "id": "days-and-dates-1-4",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "hint": "Count one box for each day."
     },
     {
       "kind": "ordered",
-      "prompt": "Put these days in order, starting with Monday.",
-      "explanation": "The week starts with Monday, Tuesday, Wednesday and Thursday.",
+      "prompt": "Tap the days in order, starting with Monday.",
+      "explanation": "Tuesday comes after Monday. Wednesday comes next.",
       "narration": {
-        "prompt": "Put these days in order, starting with Monday."
+        "prompt": "Tap the days in order, starting with Monday."
       },
       "items": [
         {
@@ -151,10 +188,6 @@
           "label": "Monday"
         },
         {
-          "id": "d",
-          "label": "Thursday"
-        },
-        {
           "id": "b",
           "label": "Tuesday"
         }
@@ -162,51 +195,24 @@
       "correctOrder": [
         "a",
         "b",
-        "c",
-        "d"
+        "c"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-1-5"
+      "id": "days-and-dates-1-5",
+      "hint": "Say the days from Monday as you tap.",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which word names a month?",
-      "explanation": "January is a month. Tuesday is a day of the week.",
+      "prompt": "Which month is this calendar for?",
+      "explanation": "March is the month on the calendar. The numbers show dates in March.",
       "narration": {
-        "prompt": "Which word names a month?"
+        "prompt": "Which month is this calendar for?"
       },
       "options": [
         {
           "id": "a",
-          "label": "Tuesday"
-        },
-        {
-          "id": "b",
-          "label": "Morning"
-        },
-        {
-          "id": "c",
-          "label": "January"
-        },
-        {
-          "id": "d",
-          "label": "Week"
-        }
-      ],
-      "correctId": "c",
-      "id": "days-and-dates-1-6"
-    },
-    {
-      "kind": "multi-select",
-      "prompt": "Tap the two months.",
-      "explanation": "March and June are months. Thursday and Saturday are days.",
-      "narration": {
-        "prompt": "Tap the two months."
-      },
-      "options": [
-        {
-          "id": "a",
-          "label": "March"
+          "label": "April"
         },
         {
           "id": "b",
@@ -214,25 +220,76 @@
         },
         {
           "id": "c",
-          "label": "June"
+          "label": "March"
         },
         {
           "id": "d",
-          "label": "Saturday"
+          "label": "May"
         }
       ],
-      "correctIds": [
-        "a",
-        "c"
+      "correctId": "c",
+      "id": "days-and-dates-1-6",
+      "hint": "Look at the name above the dates.",
+      "timeStrip": {
+        "kind": "calendar",
+        "title": "March",
+        "cells": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7"
+        ]
+      }
+    },
+    {
+      "kind": "multiple-choice",
+      "prompt": "What date comes after 8 October?",
+      "explanation": "9 October comes after 8 October. The date goes up by one each day.",
+      "narration": {
+        "prompt": "What date comes after the eighth of October?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "label": "7"
+        },
+        {
+          "id": "b",
+          "label": "10"
+        },
+        {
+          "id": "c",
+          "label": "9"
+        },
+        {
+          "id": "d",
+          "label": "11"
+        }
       ],
-      "id": "days-and-dates-1-7"
+      "correctId": "c",
+      "id": "days-and-dates-1-7",
+      "hint": "Count one more than eight.",
+      "timeStrip": {
+        "kind": "calendar",
+        "cells": [
+          "7",
+          "8",
+          null,
+          "10"
+        ],
+        "marked": 1,
+        "title": "October"
+      }
     },
     {
       "kind": "ordered",
-      "prompt": "Put these days in order, starting with yesterday.",
+      "prompt": "Tap yesterday, today and tomorrow in order.",
       "explanation": "Yesterday is before today. Tomorrow is after today.",
       "narration": {
-        "prompt": "Put these days in order, starting with yesterday."
+        "prompt": "Tap yesterday, today and tomorrow in order."
       },
       "items": [
         {
@@ -253,36 +310,39 @@
         "b",
         "c"
       ],
-      "anchorId": "a",
-      "id": "days-and-dates-1-8"
+      "id": "days-and-dates-1-8",
+      "hint": "Start with the day that has already happened.",
+      "interaction": "tap",
+      "anchorId": "a"
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which unit measures the longest time?",
-      "explanation": "A day is longer than an hour, a minute or a second.",
+      "prompt": "Pip blinks. What could we use to time it?",
+      "explanation": "A blink is very quick. We use seconds for short times.",
       "narration": {
-        "prompt": "Which unit measures the longest time?"
+        "prompt": "Pip blinks. What could we use to time it?"
       },
       "options": [
         {
           "id": "a",
-          "label": "One minute"
+          "label": "Minutes"
         },
         {
           "id": "b",
-          "label": "One day"
+          "label": "Days"
         },
         {
           "id": "c",
-          "label": "One second"
+          "label": "Seconds"
         },
         {
           "id": "d",
-          "label": "One hour"
+          "label": "Hours"
         }
       ],
-      "correctId": "b",
-      "id": "days-and-dates-1-9"
+      "correctId": "c",
+      "id": "days-and-dates-1-9",
+      "hint": "Think about which unit measures a very short time."
     },
     {
       "kind": "multi-select",

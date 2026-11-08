@@ -1,10 +1,47 @@
 import { copy } from "../../data/copy";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { MeasureAsset } from "../../types/activity";
 import { describeMeasure } from "../../lib/measures";
+import { Pip } from "../mascot/Pip";
 
-export function MeasurePicture({ measure, compact }: { measure: MeasureAsset; compact?: boolean }) {
+function DurationTimer({ seconds, showResult }: { seconds: number; showResult: boolean }) {
+  const [start, setStart] = useState<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const running = start !== null && !showResult;
+  const done = showResult || elapsed === seconds;
+  useEffect(() => {
+    if (start === null || showResult) return;
+    const timer = window.setInterval(() => {
+      const wholeSeconds = Math.min(seconds, Math.floor((performance.now() - start) / 1000));
+      setElapsed(wholeSeconds);
+      if (wholeSeconds === seconds) setStart(null);
+    }, 50);
+    return () => window.clearInterval(timer);
+  }, [seconds, showResult, start]);
+
+  return (
+    <div className="duration-timer">
+      <Pip size={52} mood={done ? "cheer" : "happy"} />
+      <span className="duration-timer-value" role="status">
+        {done ? copy.timerDone(seconds) : running ? copy.timing : null}
+      </span>
+      {running ? <progress value={elapsed} max={seconds} aria-label={copy.timing} /> : null}
+      {showResult ? null : (
+        <button type="button" className="btn btn-secondary" aria-disabled={running} onClick={() => {
+          if (running) return;
+          setElapsed(0);
+          setStart(performance.now());
+        }}>
+          {copy.startTimer}
+        </button>
+      )}
+    </div>
+  );
+}
+
+export function MeasurePicture({ measure, compact, showResult = false }: { measure: MeasureAsset; compact?: boolean; showResult?: boolean }) {
   const { kind, values, labels, units, gaps } = measure;
+  if (measure.timer) return <DurationTimer seconds={values[0]!} showResult={showResult} />;
   let height = 160;
   let drawing: ReactNode;
   const label = (text: string, x: number, y: number) => <text x={x} y={y} textAnchor="middle" className="measure-label">{text}</text>;

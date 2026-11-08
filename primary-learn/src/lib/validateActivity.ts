@@ -2,6 +2,7 @@ import { ABILITY_BANDS, SUBJECTS, YEAR_GROUPS } from "../types/curriculum";
 import {
   ACTIVITY_TYPES,
   BASE_TEN_STYLES,
+  DAY_PARTS,
   MAKE_TOTAL_GAPS,
   MAKE_TOTAL_MODES,
   MAKE_TOTAL_OPS,
@@ -19,6 +20,7 @@ import {
   type MeasureAsset,
   type MoneyAsset,
   type ClockAsset,
+  type DayPart,
   type DiceAsset,
   type MakeTotalGap,
   type MakeTotalMode,
@@ -32,6 +34,7 @@ import {
   type QuestionOption,
   type RandomiseSpec,
   type TenFrameAsset,
+  type TimeStripAsset,
 } from "../types/activity";
 import { isResultBlank, parseBareEquation } from "./fillBlank";
 import { makeTotalMissing, makeTotalOther, makeTotalPart, optionNumber } from "./makeTotal";
@@ -448,6 +451,9 @@ function optionalMeasure(record: Record<string, unknown>, path: string): Measure
   if (!Array.isArray(value.values) || value.values.length < 1 || value.values.length > 4 || !value.values.every(n => Number.isInteger(n) && n >= 0 && n <= 12)) fail(path, "measure values need one to four whole numbers from 0 to 12");
   const values = value.values as number[];
   if (kind !== "capacity" && values.some(n => n === 0)) fail(path, "non-capacity measurements must be positive");
+  if (value.timer != null && (value.timer !== true || kind !== "time" || values.length !== 1 || record.kind !== "fill-blank")) {
+    fail(path, "a timer needs one duration on a fill-blank stem");
+  }
   if (value.labels != null && (!Array.isArray(value.labels) || value.labels.length !== values.length || !value.labels.every(label => typeof label === "string" && label.trim()))) fail(path, "measure labels must match values");
   for (const field of ["units", "gaps"]) if (value[field] != null && typeof value[field] !== "boolean") fail(path, `measure ${field} must be a boolean`);
   const units = value.units === true, gaps = value.gaps === true;
@@ -459,7 +465,7 @@ function optionalMeasure(record: Record<string, unknown>, path: string): Measure
   if (kind === "capacity" && units && values[0]! > 8) fail(path, "cup records support up to eight cups");
   if ((kind === "length" || kind === "height") && values.some(n => n > 10)) fail(path, "length diagrams support up to ten units");
   if (value.offsets != null) fail(path, "ribbons must use a common left starting point");
-  return { kind, values, labels: value.labels as string[] | undefined, units, gaps };
+  return { kind, values, labels: value.labels as string[] | undefined, units, gaps, timer: value.timer === true ? true : undefined };
 }
 
 function optionalFraction(record: Record<string, unknown>, path: string): FractionAsset | undefined {
@@ -515,7 +521,35 @@ function parseFlashMs(record: Record<string, unknown>, path: string): number | u
   return flashMs;
 }
 
-function parseOption(value: unknown, path: string, allowShape = false, allowMoney = false): QuestionOption {
+function isDayPart(value: unknown): value is DayPart {
+  return DAY_PARTS.some((part) => part === value);
+}
+
+function parseTimeStrip(value: unknown, path: string): TimeStripAsset | undefined {
+  if (value == null) return undefined;
+  if (!isRecord(value)) fail(path, "time strip must be an object");
+  const cells = expectArray(value, "cells", path);
+  if (cells.length < 2 || cells.length > 7 || cells.filter((cell) => cell === null).length > 1) {
+    fail(path, "time strip needs 2 to 7 cells and at most one gap");
+  }
+  if (value.kind === "day-parts") {
+    if (cells.length > 4 || !cells.every((cell) => cell === null || isDayPart(cell))) {
+      fail(path, "day strip needs up to four parts of the day");
+    }
+    return { kind: "day-parts", cells };
+  }
+  if (value.kind !== "calendar" || !cells.every((cell) => cell === null || (isString(cell) && cell.trim()))) {
+    fail(path, "calendar strip needs non-empty labels or a gap");
+  }
+  const marked = value.marked == null ? undefined : expectNumber(value, "marked", path);
+  if (marked != null && (!Number.isInteger(marked) || marked < 0 || marked >= cells.length || cells[marked] === null)) {
+    fail(path, "marked must point to a labelled calendar cell");
+  }
+  const title = value.title == null ? undefined : expectString(value, "title", path);
+  return { kind: "calendar", cells: cells as (string | null)[], marked, title };
+}
+
+function parseOption(value: unknown, path: string, allowShape = false, allowMoney = false, allowDayPart = false): QuestionOption {
   if (!isRecord(value)) fail(path, "option must be an object");
   const id = expectString(value, "id", path);
   const label = value.label == null ? undefined : expectString(value, "label", path);
@@ -540,6 +574,10 @@ function parseOption(value: unknown, path: string, allowShape = false, allowMone
   if (fraction && !allowShape) fail(path, "fraction options use multiple-choice or multi-select");
   if (fraction && (visual || tenFrame || baseTen || dice || groups || array || value.shape || layout)) fail(path, "fraction options cannot mix picture fields");
   const shape = parseShape(value.shape, `${path}.shape`);
+  const dayPart = value.dayPart;
+  if (dayPart != null && (!allowDayPart || !isDayPart(dayPart) || label?.toLowerCase() !== dayPart || visual || shape || tenFrame || baseTen || dice || groups || array || fraction || measure || money || clock || layout)) {
+    fail(path, "day part needs a choice or ordering item with its matching label and no other picture");
+  }
   if (shape && !allowShape) fail(path, "shape options use multiple-choice or multi-select");
   if (shape && visual) fail(path, "option cannot mix object and shape pictures");
   if (tenFrame && (visual || shape || baseTen || dice || groups || array)) fail(path, "option cannot mix a ten frame with another picture");
@@ -552,7 +590,7 @@ function parseOption(value: unknown, path: string, allowShape = false, allowMone
   if (dice && layout) fail(path, "dice faces do not use layout");
   if ((groups || array) && layout) fail(path, "groups and arrays do not use layout");
   if (!label && !visual && !shape && !tenFrame && !baseTen && !dice && !groups && !array && !fraction && !measure && !money && !clock) fail(path, "option needs a label or a picture");
-  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, money, clock, shape, layout };
+  return { id, label, visual, tenFrame, baseTen, dice, groups, array, fraction, measure, money, clock, shape, layout, dayPart: isDayPart(dayPart) ? dayPart : undefined };
 }
 
 function parseMatchSide(value: unknown, path: string): MatchSide {
@@ -922,7 +960,13 @@ function parseQuestion(value: unknown, path: string): Question {
   if (money && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || measure || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "money stems use choice questions without other pictures");
   const clock = optionalClock(value, path);
   if (clock && (!["multiple-choice", "multi-select", "fill-blank"].includes(kind) || money || measure || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence || extras || layout || flashMs)) fail(path, "clock stems use choice questions without other pictures");
-  const core = { clock, money, measure, fraction, numberSequence, numberLine, hundredSquare, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
+  const timeStrip = parseTimeStrip(value.timeStrip, `${path}.timeStrip`);
+  if (timeStrip && (!["multiple-choice", "fill-blank", "ordered", "multi-select"].includes(kind) ||
+    (timeStrip.cells.includes(null) && kind !== "multiple-choice") ||
+    clock || money || measure || fraction || visual || tenFrame || baseTen || groups || array || shape || turn || position || numberLine || hundredSquare || numberSequence)) {
+    fail(path, "time strips need a choice or order question without other stem pictures; gaps need a single choice");
+  }
+  const core = { clock, money, measure, fraction, numberSequence, numberLine, hundredSquare, timeStrip, id, prompt, explanation, hint, narration, visual, tenFrame, baseTen, groups, array, shape, turn, position, extras, layout, flashMs, randomise };
   if (parseBareEquation(prompt)) {
     fail(
       path,
@@ -977,12 +1021,19 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "multiple-choice": {
       const options = expectArray(value, "options", path).map((option, i) =>
-        parseOption(option, `${path}.options[${i}]`, true, true),
+        parseOption(option, `${path}.options[${i}]`, true, true, true),
       );
       if (options.some((option) => option.shape) && options.some((option) => option.visual)) fail(path, "shape choices cannot mix in object pictures");
       const correctId = expectString(value, "correctId", path);
       if (!options.some((option) => option.id === correctId)) {
         fail(path, "correctId must match an option id");
+      }
+      const hasScenes = options.some((option) => option.dayPart);
+      if (hasScenes && (!options.every((option) => option.dayPart) || options.length !== 2 || new Set(options.map((option) => option.dayPart)).size !== 2)) {
+        fail(path, "day part choices need two different scenes");
+      }
+      if (timeStrip?.cells.includes(null) && (timeStrip.kind === "day-parts" ? !hasScenes : !options.every((option) => option.label))) {
+        fail(path, "time strip gap needs choices matching the type of strip");
       }
       if (turn?.interactive) {
         const expected = String((turn.clockwise ? 1 : -1) * turn.quarters);
@@ -1079,6 +1130,9 @@ function parseQuestion(value: unknown, path: string): Question {
           numericChoices.filter(n => (acceptedAnswers as string[]).includes(String(n))).length !== 1)) {
         fail(path, "numericChoices needs four distinct whole numbers and exactly one accepted answer");
       }
+      if (measure?.timer && (!numericChoices?.includes(measure.values[0]) || !acceptedAnswers.includes(String(measure.values[0])))) {
+        fail(path, "the timed duration must be the accepted number choice");
+      }
       const prefix = value.prefix == null ? undefined : expectString(value, "prefix", path);
       const suffix = value.suffix == null ? undefined : expectString(value, "suffix", path);
       const inputMode = value.inputMode;
@@ -1115,7 +1169,7 @@ function parseQuestion(value: unknown, path: string): Question {
     }
     case "ordered": {
       const items = expectArray(value, "items", path).map((item, i) =>
-        parseOption(item, `${path}.items[${i}]`, false, true),
+        parseOption(item, `${path}.items[${i}]`, false, true, true),
       );
       const itemIds = items.map((item) => item.id);
       if (new Set(itemIds).size !== itemIds.length) fail(path, "ordered items need unique ids");
@@ -1134,7 +1188,14 @@ function parseQuestion(value: unknown, path: string): Question {
         if (!itemIds.includes(anchorId)) fail(path, "anchorId must match an item");
         if (correctOrder[0] !== anchorId) fail(path, "anchorId must be the first correct item");
       }
-      return { ...core, kind, items, correctOrder: correctOrder as string[], anchorId };
+      const interaction = value.interaction;
+      if (interaction != null && (interaction !== "tap" || items.length < 2 || items.length > 4 || items.some((item) => !item.label))) {
+        fail(path, "tap ordering needs 2 to 4 labelled items");
+      }
+      if (items.some((item) => item.dayPart) && (interaction !== "tap" || !items.every((item) => item.dayPart))) {
+        fail(path, "day part ordering needs tap interaction and a scene for every item");
+      }
+      return { ...core, kind, items, correctOrder: correctOrder as string[], anchorId, interaction: interaction === "tap" ? interaction : undefined };
     }
     case "match-pairs": {
       const pairs = expectArray(value, "pairs", path).map((pair, i) => {

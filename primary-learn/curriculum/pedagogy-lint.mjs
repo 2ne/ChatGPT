@@ -287,7 +287,9 @@ function checkActivity(activity) {
     const yesNo = options?.length === 2 &&
       ['yes', 'no'].every(label => options.some(option =>
         option.label?.trim().toLowerCase() === label && !option.visual && !option.tenFrame && !option.shape));
-    if (content && options && !yesNo && !question.turn?.interactive && question.numeral == null) {
+    const dayPartPick = year1 && question.kind === "multiple-choice" &&
+      options?.length === 2 && options.every(option => option.dayPart);
+    if (content && options && !yesNo && !dayPartPick && !question.turn?.interactive && question.numeral == null) {
       if (options.length > 4) {
         errors.push(`${path}: never more than 4 options`);
       } else if (reception && options.length !== 3) {

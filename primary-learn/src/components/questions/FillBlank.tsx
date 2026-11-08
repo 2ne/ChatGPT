@@ -31,7 +31,7 @@ export function FillBlank({ question, answer, disabled, reveal, onChange }: Fill
       {question.groups ? <GroupsPicture groups={question.groups} /> : null}
       {question.clock ? <ClockPicture clock={question.clock} /> : null}
       {question.money ? <MoneyPicture money={question.money} /> : null}
-      {question.measure ? <MeasurePicture measure={question.measure} /> : null}
+      {question.measure ? <MeasurePicture measure={question.measure} showResult={reveal != null} /> : null}
       {question.fraction ? <FractionPicture fraction={question.fraction} /> : null}
       {question.array ? <GroupsPicture array={question.array} /> : null}
       {question.visual ? (
