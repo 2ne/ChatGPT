@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 fills a gap before afternoon. Q2 taps scenes in order. Q3 finds tomorrow. Q4 counts days in a week. Q5 orders three days. Q6 names a month from a calendar. Q7 finds a date in October. Q8 orders yesterday, today and tomorrow. Q9 chooses a unit for a short event. Q10 recognises time units.",
+    "within": "Q1 fills a gap before afternoon. Q2 orders parts of the day using icons. Q3 finds tomorrow. Q4 counts days in a week. Q5 orders three days. Q6 names a month from a calendar. Q7 finds a date in October. Q8 orders yesterday, today and tomorrow. Q9 chooses a unit for a short event. Q10 recognises time units.",
     "versus": "Easy uses pictures for parts of the day, a week strip and a calendar date. Medium uses before and after across week and month boundaries. Hard works backwards from yesterday, moves two months across a year boundary and reads named time records."
   },
   "skills": [
@@ -62,10 +62,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap the pictures in order, starting with morning.",
+      "prompt": "Put the pictures in order, starting with morning.",
       "explanation": "Morning comes first. Afternoon, evening and night come after it.",
       "narration": {
-        "prompt": "Tap the pictures in order, starting with morning."
+        "prompt": "Put the pictures in order, starting with morning."
       },
       "items": [
         {
@@ -96,8 +96,7 @@
         "d"
       ],
       "id": "days-and-dates-1-2",
-      "hint": "Look at where the sun is in each picture.",
-      "interaction": "tap",
+      "hint": "Think about when the sun goes down.",
       "anchorId": "a"
     },
     {
@@ -173,10 +172,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap the days in order, starting with Monday.",
+      "prompt": "Put the days in order, starting with Monday.",
       "explanation": "Tuesday comes after Monday. Wednesday comes next.",
       "narration": {
-        "prompt": "Tap the days in order, starting with Monday."
+        "prompt": "Put the days in order, starting with Monday."
       },
       "items": [
         {
@@ -198,8 +197,7 @@
         "c"
       ],
       "id": "days-and-dates-1-5",
-      "hint": "Say the days from Monday as you tap.",
-      "interaction": "tap",
+      "hint": "Say the days from Monday as you move the cards.",
       "anchorId": "a"
     },
     {
@@ -286,10 +284,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap yesterday, today and tomorrow in order.",
+      "prompt": "Put yesterday, today and tomorrow in order.",
       "explanation": "Yesterday is before today. Tomorrow is after today.",
       "narration": {
-        "prompt": "Tap yesterday, today and tomorrow in order."
+        "prompt": "Put yesterday, today and tomorrow in order."
       },
       "items": [
         {
@@ -312,7 +310,6 @@
       ],
       "id": "days-and-dates-1-8",
       "hint": "Start with the day that has already happened.",
-      "interaction": "tap",
       "anchorId": "a"
     },
     {

@@ -101,7 +101,6 @@ export const copy = {
   timeSequence: "Time in order",
   missingTime: "Missing place",
   timeSequenceStart: (label: string) => `Start at ${label}.`,
-  orderChoice: (label: string, position: number) => `${label}. Place ${position}.`,
   pickOne: "Choose one answer",
   baseTenKeyHint: "Each tall bar is 10. Each small square is 1.",
   baseTenKeyAria: "A tall bar is 10. A small square is 1.",

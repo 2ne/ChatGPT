@@ -292,7 +292,6 @@
               "title": { "type": "string" }
             }
           },
-          "interaction": { "enum": ["tap"] },
           "measure": {
             "type": "object",
             "properties": {

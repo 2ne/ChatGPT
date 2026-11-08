@@ -2435,8 +2435,7 @@ button.object-token {
 }
 
 .time-strip-cells,
-.scene-choice-grid,
-.tap-order-grid {
+.scene-choice-grid {
   display: grid;
   gap: clamp(5px, 2vw, 12px);
   margin: 0 auto;
@@ -2499,13 +2498,8 @@ button.object-token {
   max-width: 100px;
 }
 
-.scene-choice-grid,
-.tap-order-grid {
+.scene-choice-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.tap-order-grid:has(> :nth-child(3):last-child) {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .option.scene-choice {
@@ -2515,16 +2509,6 @@ button.object-token {
   padding: 6px 5px;
   text-align: center;
   font-size: clamp(14px, 4vw, 19px);
-}
-
-.scene-choice > .scene-order-number {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
-  font-size: 15px;
 }
 
 .scene-choice > .option-check,
@@ -3202,6 +3186,11 @@ button.object-token {
   line-height: 1.25;
   white-space: nowrap;
   justify-content: flex-start;
+}
+
+.ordered-day-part > svg {
+  flex: none;
+  color: var(--primary);
 }
 
 .ordered-tile .step-pair {

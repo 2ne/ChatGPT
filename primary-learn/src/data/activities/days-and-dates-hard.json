@@ -66,10 +66,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap the days in order, starting with Thursday.",
+      "prompt": "Put the days in order, starting with Thursday.",
       "explanation": "Thursday and Friday come before the weekend days of Saturday and Sunday.",
       "narration": {
-        "prompt": "Tap the days in order, starting with Thursday."
+        "prompt": "Put the days in order, starting with Thursday."
       },
       "items": [
         {
@@ -96,7 +96,6 @@
         "d"
       ],
       "id": "days-and-dates-3-2",
-      "interaction": "tap",
       "anchorId": "a"
     },
     {
@@ -197,10 +196,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap the months in order, starting with November.",
+      "prompt": "Put the months in order, starting with November.",
       "explanation": "January follows December. The months continue into a new year.",
       "narration": {
-        "prompt": "Tap the months in order, starting with November."
+        "prompt": "Put the months in order, starting with November."
       },
       "items": [
         {
@@ -227,7 +226,6 @@
         "d"
       ],
       "id": "days-and-dates-3-6",
-      "interaction": "tap",
       "anchorId": "a"
     },
     {

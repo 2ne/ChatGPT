@@ -182,7 +182,7 @@ The final Year 1 time stop is split as planned into node 25 `y1-calendar` (Days 
 
 Days and dates develops before/after, day parts, yesterday/today/tomorrow, week and month sequences, year boundaries, time units and named measured records. Calendar statements are hypothetical, so answers never depend on the device date. There are no month-length facts or time-unit conversions.
 
-Easy starts with two illustrated day-part choices and a tap-to-order round. The `timeStrip` asset shows a row of day-part scenes or calendar cells, with an optional starting cell for calendar sequences. A gap fills with the chosen answer and shows the correct answer after checking. Tap ordering keeps any named start pinned and lets children tap a selected card again to remove it. Hard uses a short timer for recording seconds alongside a static named time record.
+Easy starts with two illustrated day-part choices and a drag-to-order round with simple sky icons. The `timeStrip` asset shows a row of day-part scenes or calendar cells, with an optional starting cell for calendar sequences. A gap fills with the chosen answer and shows the correct answer after checking. Ordering keeps any named start pinned. Hard uses a short timer for recording seconds alongside a static named time record.
 
 Clock time begins with the short hour hand alone, then both hands at the hour and half past. `ClockPicture` supports stems, answer choices and ordering cards. The long blue hand is longer and thinner than the short purple hour hand. Half-past hour hands always sit exactly halfway between hour numbers, including between twelve and one. Accessible descriptions name the time.
 

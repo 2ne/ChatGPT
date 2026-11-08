@@ -66,10 +66,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap the days in order, starting with Friday.",
+      "prompt": "Put the days in order, starting with Friday.",
       "explanation": "After Sunday, a new week starts with Monday.",
       "narration": {
-        "prompt": "Tap the days in order, starting with Friday."
+        "prompt": "Put the days in order, starting with Friday."
       },
       "items": [
         {
@@ -96,7 +96,6 @@
         "d"
       ],
       "id": "days-and-dates-2-2",
-      "interaction": "tap",
       "anchorId": "a"
     },
     {
@@ -202,10 +201,10 @@
     },
     {
       "kind": "ordered",
-      "prompt": "Tap the months in order, starting with April.",
+      "prompt": "Put the months in order, starting with April.",
       "explanation": "April is followed by May, June and July.",
       "narration": {
-        "prompt": "Tap the months in order, starting with April."
+        "prompt": "Put the months in order, starting with April."
       },
       "items": [
         {
@@ -232,7 +231,6 @@
         "d"
       ],
       "id": "days-and-dates-2-6",
-      "interaction": "tap",
       "anchorId": "a"
     },
     {

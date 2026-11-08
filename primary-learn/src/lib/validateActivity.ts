@@ -1188,14 +1188,7 @@ function parseQuestion(value: unknown, path: string): Question {
         if (!itemIds.includes(anchorId)) fail(path, "anchorId must match an item");
         if (correctOrder[0] !== anchorId) fail(path, "anchorId must be the first correct item");
       }
-      const interaction = value.interaction;
-      if (interaction != null && (interaction !== "tap" || items.length < 2 || items.length > 4 || items.some((item) => !item.label))) {
-        fail(path, "tap ordering needs 2 to 4 labelled items");
-      }
-      if (items.some((item) => item.dayPart) && (interaction !== "tap" || !items.every((item) => item.dayPart))) {
-        fail(path, "day part ordering needs tap interaction and a scene for every item");
-      }
-      return { ...core, kind, items, correctOrder: correctOrder as string[], anchorId, interaction: interaction === "tap" ? interaction : undefined };
+      return { ...core, kind, items, correctOrder: correctOrder as string[], anchorId };
     }
     case "match-pairs": {
       const pairs = expectArray(value, "pairs", path).map((pair, i) => {

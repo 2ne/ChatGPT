@@ -365,7 +365,6 @@ export type OrderedQuestion = QuestionCore & {
   kind: "ordered";
   items: QuestionOption[];
   correctOrder: string[];
-  interaction?: "tap";
   /**
    * Named start that stays at the top. Must be `correctOrder[0]`.
    * Use for cyclic days, months and times. Omit on smallest-to-biggest items.

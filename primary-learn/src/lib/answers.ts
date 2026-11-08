@@ -132,8 +132,7 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
     }
     case "ordered": {
       if (!Array.isArray(answer)) return false;
-      const ids = answer.map(String);
-      const order = question.interaction === "tap" ? ids : pinOrderedAnchor(question, ids);
+      const order = pinOrderedAnchor(question, answer.map(String));
       return (
         order.length === question.correctOrder.length &&
         order.every((id, index) => id === question.correctOrder[index])
@@ -174,7 +173,6 @@ export function emptyAnswerFor(question: Question): unknown {
     case "fill-blank":
       return "";
     case "ordered":
-      if (question.interaction === "tap") return question.anchorId ? [question.anchorId] : [];
       return pinOrderedAnchor(question, question.items.map((item) => item.id));
     case "match-pairs":
       return Object.fromEntries(question.pairs.map((pair) => [pair.id, ""])) as Record<

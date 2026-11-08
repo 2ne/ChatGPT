@@ -1,12 +1,19 @@
+import { Moon, Sun, Sunrise, Sunset } from "lucide-react";
 import { clockLabel } from "../../lib/clock";
 import { describeMoney } from "../../lib/money";
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { copy } from "../../data/copy";
-import type { OrderedQuestion } from "../../types/activity";
+import type { DayPart, OrderedQuestion } from "../../types/activity";
 import { pinOrderedAnchor } from "../../lib/answers";
 import { OptionContent } from "./ObjectGroup";
 import { choiceClass, type Reveal } from "./choice";
-import { DayScene } from "./TimeStrip";
+
+const dayPartIcons = {
+  morning: Sunrise,
+  afternoon: Sun,
+  evening: Sunset,
+  night: Moon,
+} satisfies Record<DayPart, typeof Sun>;
 
 type OrderedProps = {
   question: OrderedQuestion;
@@ -21,43 +28,7 @@ type DragState = {
   pointerId: number;
 };
 
-export function Ordered(props: OrderedProps) {
-  return props.question.interaction === "tap" ? <TapOrder {...props} /> : <DragOrder {...props} />;
-}
-
-function TapOrder({ question, answer, disabled, reveal, onChange }: OrderedProps) {
-  const anchor = question.items.find((item) => item.id === question.anchorId);
-  const items = anchor ? [anchor, ...question.items.filter((item) => item !== anchor)] : question.items;
-  const order = Array.isArray(answer) ? answer : anchor ? [anchor.id] : [];
-  return (
-    <div className="tap-order-grid" role="group" aria-label={question.prompt}>
-      {items.map((item) => {
-        const position = order.indexOf(item.id);
-        const selected = position >= 0;
-        const label = item.label ?? item.id;
-        const marked = reveal ? (question.correctOrder[position] === item.id ? "correct" : "wrong") : null;
-        return (
-          <button
-            key={item.id}
-            type="button"
-            className={choiceClass(selected, marked, ["scene-choice"])}
-            aria-pressed={selected}
-            aria-label={item === anchor ? copy.staysFirst(label) : selected ? copy.orderChoice(label, position + 1) : label}
-            disabled={disabled || reveal != null || item === anchor}
-            onClick={() => onChange(selected ? order.filter((id) => id !== item.id) : [...order, item.id])}
-          >
-            {item.dayPart ? <><DayScene part={item.dayPart} /><span>{label}</span></> : <OptionContent {...item} />}
-            {selected ? <span className="scene-order-number option-letter" aria-hidden>{position + 1}</span> : null}
-            {marked === "correct" ? <span className="option-check" aria-hidden>✓</span> : null}
-            {marked === "wrong" ? <span className="option-cross" aria-hidden>✕</span> : null}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function DragOrder({ question, answer, disabled, reveal, onChange }: OrderedProps) {
+export function Ordered({ question, answer, disabled, reveal, onChange }: OrderedProps) {
   const raw = Array.isArray(answer) ? (answer as string[]) : question.items.map((item) => item.id);
   const order = pinOrderedAnchor(question, raw);
   const anchorId = question.anchorId;
@@ -149,6 +120,7 @@ function DragOrder({ question, answer, disabled, reveal, onChange }: OrderedProp
       {order.map((id, index) => {
         const item = itemFor(id);
         const label = item?.label ?? (item?.clock ? clockLabel(item.clock) : item?.money ? describeMoney(item.money) : id);
+        const DayIcon = item?.dayPart ? dayPartIcons[item.dayPart] : undefined;
         const inPlace = reveal != null && question.correctOrder[index] === id;
         const marked = reveal == null ? null : inPlace ? "correct" : "wrong";
         const dragging = draggingId === id;
@@ -174,7 +146,14 @@ function DragOrder({ question, answer, disabled, reveal, onChange }: OrderedProp
                 <span />
               </span>
             )}
-            <OptionContent label={item?.label} visual={item?.visual} tenFrame={item?.tenFrame} baseTen={item?.baseTen} dice={item?.dice} groups={item?.groups} array={item?.array} clock={item?.clock} money={item?.money} />
+            {DayIcon ? (
+              <span className="option-content ordered-day-part">
+                <DayIcon size={24} aria-hidden="true" />
+                {label}
+              </span>
+            ) : (
+              <OptionContent label={item?.label} visual={item?.visual} tenFrame={item?.tenFrame} baseTen={item?.baseTen} dice={item?.dice} groups={item?.groups} array={item?.array} clock={item?.clock} money={item?.money} />
+            )}
           </>
         );
         return (
