@@ -337,6 +337,8 @@ export type MultipleChoiceQuestion = QuestionCore & {
   kind: "multiple-choice";
   options: QuestionOption[];
   correctId: string;
+  /** Five weekdays, with four date choices and one fixed reference date. */
+  calendarPick?: { month: string; referenceDay: number };
   /**
    * Number-to-amount pick. Shows this count in a lavender card and a 2x2
    * grid of picture groups. The correct option’s visual.count must match.

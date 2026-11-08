@@ -2427,6 +2427,70 @@ button.object-token {
   margin: 0 0 18px;
 }
 
+.calendar-pick {
+  max-width: 400px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+}
+
+.calendar-pick-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: var(--primary-soft);
+  color: var(--ink);
+  font: 800 22px/1.2 var(--font-display);
+}
+
+.calendar-pick-week {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(44px, 1fr));
+  gap: clamp(4px, 1.5vw, 8px);
+  padding: clamp(6px, 2vw, 12px);
+}
+
+.calendar-pick-cell {
+  display: grid;
+  gap: 5px;
+  text-align: center;
+}
+
+.calendar-pick-weekday {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.calendar-pick-date {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  font: 800 23px/1 var(--font-display);
+}
+
+.calendar-pick-reference {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.calendar-pick-mark {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
 .time-strip-title {
   margin: 0 0 6px;
   text-align: center;

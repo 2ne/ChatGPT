@@ -16,6 +16,7 @@ import { GroupsPicture } from "./GroupsPicture";
 import { choiceClass, markChoice, optionsAreNumerals, type Reveal } from "./choice";
 import { ShapeChoices } from "./ShapeChoices";
 import { DayScene } from "./TimeStrip";
+import { CalendarChoices } from "./CalendarChoices";
 
 type MultipleChoiceProps = {
   question: MultipleChoiceQuestion | CountObjectsQuestion;
@@ -32,6 +33,9 @@ export function MultipleChoice({
   reveal,
   onChange,
 }: MultipleChoiceProps) {
+  if (question.kind === "multiple-choice" && question.calendarPick) {
+    return <CalendarChoices calendar={question.calendarPick} options={question.options} correctId={question.correctId} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
+  }
   if (question.kind === "multiple-choice" && question.turn) return <TurnChoices key={question.id} question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;
   if (question.kind === "multiple-choice" && (question.shape || question.options.some((option) => option.shape))) {
     return <ShapeChoices question={question} answer={answer} disabled={disabled} reveal={reveal} onChange={onChange} />;

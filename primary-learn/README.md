@@ -184,6 +184,8 @@ Days and dates develops before/after, day parts, yesterday/today/tomorrow, week 
 
 Easy starts with two illustrated day-part choices and a drag-to-order round with simple sky icons. The `timeStrip` asset shows a row of day-part scenes or calendar cells, with an optional starting cell for calendar sequences. A gap fills with the chosen answer and shows the correct answer after checking. Ordering keeps any named start pinned. Hard uses a short timer for recording seconds alongside a static named time record.
 
+Easy date questions use `calendarPick` to show a five-day calendar row. The reference date stays marked, and children select an answer directly on one of the other four dates.
+
 Clock time begins with the short hour hand alone, then both hands at the hour and half past. `ClockPicture` supports stems, answer choices and ordering cards. The long blue hand is longer and thinner than the short purple hour hand. Half-past hour hands always sit exactly halfway between hour numbers, including between twelve and one. Accessible descriptions name the time.
 
 The reusable `set-clock` question asks children to set a time using two labelled 44px-plus hand controls and Start again. Moving the long hand half a turn moves the short hand too; moving it past the hour advances the hour. There is no typed input or precision dragging. Answers remain editable until checked, reset clears the answer, and correct feedback shows the target clock after a miss. Clock choices use a two-column layout. The shared end page is unchanged. No digital time, quarter hours, five-minute intervals or elapsed-time arithmetic.

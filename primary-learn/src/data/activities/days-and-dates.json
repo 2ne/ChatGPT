@@ -15,7 +15,7 @@
   "difficulty": 1,
   "questionCount": 10,
   "difficultyRamp": {
-    "within": "Q1 fills a gap before afternoon. Q2 orders parts of the day using icons. Q3 finds tomorrow. Q4 counts days in a week. Q5 orders three days. Q6 names a month from a calendar. Q7 finds a date in October. Q8 orders yesterday, today and tomorrow. Q9 chooses a unit for a short event. Q10 recognises time units.",
+    "within": "Q1 fills a gap before afternoon. Q2 orders parts of the day using icons. Q3 finds tomorrow. Q4 counts days in a week. Q5 orders three days. Q6 finds the previous date on a calendar. Q7 finds tomorrow's date. Q8 orders yesterday, today and tomorrow. Q9 chooses a unit for a short event. Q10 recognises time units.",
     "versus": "Easy uses pictures for parts of the day, a week strip and a calendar date. Medium uses before and after across week and month boundaries. Hard works backwards from yesterday, moves two months across a year boundary and reads named time records."
   },
   "skills": [
@@ -202,84 +202,68 @@
     },
     {
       "kind": "multiple-choice",
-      "prompt": "Which month is this calendar for?",
-      "explanation": "March is the month on the calendar. The numbers show dates in March.",
+      "prompt": "Pip's party is on 4 March. Tap the date just before.",
+      "explanation": "3 March comes just before 4 March. The date goes down by one when you go back a day.",
       "narration": {
-        "prompt": "Which month is this calendar for?"
+        "prompt": "Pip's party is on the fourth of March. Tap the date just before."
       },
       "options": [
         {
           "id": "a",
-          "label": "April"
+          "label": "2"
         },
         {
           "id": "b",
-          "label": "Thursday"
+          "label": "3"
         },
         {
           "id": "c",
-          "label": "March"
+          "label": "5"
         },
         {
           "id": "d",
-          "label": "May"
+          "label": "6"
         }
       ],
-      "correctId": "c",
+      "correctId": "b",
       "id": "days-and-dates-1-6",
-      "hint": "Look at the name above the dates.",
-      "timeStrip": {
-        "kind": "calendar",
-        "title": "March",
-        "cells": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7"
-        ]
+      "hint": "Find the date next to 4 on the left.",
+      "calendarPick": {
+        "month": "March",
+        "referenceDay": 4
       }
     },
     {
       "kind": "multiple-choice",
-      "prompt": "What date comes after 8 October?",
-      "explanation": "9 October comes after 8 October. The date goes up by one each day.",
+      "prompt": "Today is 8 October. Tap tomorrow's date.",
+      "explanation": "Tomorrow is the next day. 9 October comes just after 8 October.",
       "narration": {
-        "prompt": "What date comes after the eighth of October?"
+        "prompt": "Today is the eighth of October. Tap tomorrow's date."
       },
       "options": [
         {
           "id": "a",
-          "label": "7"
+          "label": "5"
         },
         {
           "id": "b",
-          "label": "10"
+          "label": "6"
         },
         {
           "id": "c",
-          "label": "9"
+          "label": "7"
         },
         {
           "id": "d",
-          "label": "11"
+          "label": "9"
         }
       ],
-      "correctId": "c",
+      "correctId": "d",
       "id": "days-and-dates-1-7",
-      "hint": "Count one more than eight.",
-      "timeStrip": {
-        "kind": "calendar",
-        "cells": [
-          "7",
-          "8",
-          null,
-          "10"
-        ],
-        "marked": 1,
-        "title": "October"
+      "hint": "Find the date next to 8 on the right.",
+      "calendarPick": {
+        "month": "October",
+        "referenceDay": 8
       }
     },
     {

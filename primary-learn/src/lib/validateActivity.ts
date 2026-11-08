@@ -1029,6 +1029,26 @@ function parseQuestion(value: unknown, path: string): Question {
         fail(path, "correctId must match an option id");
       }
       const hasScenes = options.some((option) => option.dayPart);
+      let calendarPick: Extract<Question, { kind: "multiple-choice" }>["calendarPick"];
+      if (value.calendarPick != null) {
+        const at = `${path}.calendarPick`;
+        if (!isRecord(value.calendarPick)) fail(at, "calendar pick must be an object");
+        const month = expectString(value.calendarPick, "month", at);
+        const referenceDay = expectNumber(value.calendarPick, "referenceDay", at);
+        const days = [...options.map((option) => Number(option.label)), referenceDay].sort((a, b) => a - b);
+        if (options.length !== 4 || new Set(options.map((option) => option.id)).size !== 4 ||
+          options.some((option) => !/^\d+$/.test(option.label ?? "") || option.visual || option.shape ||
+            option.tenFrame || option.baseTen || option.dice || option.groups || option.array ||
+            option.fraction || option.measure || option.money || option.clock || option.dayPart) ||
+          !days.every((day, i) => Number.isInteger(day) && day >= 1 && day <= 31 && day === days[0]! + i)) {
+          fail(at, "a calendar pick needs four date choices and a reference date across five consecutive days");
+        }
+        if (timeStrip || value.numeral != null || visual || shape || turn || position || clock || money ||
+          measure || fraction || tenFrame || baseTen || groups || array || numberLine || hundredSquare || numberSequence) {
+          fail(at, "calendar picks supply their own visual");
+        }
+        calendarPick = { month, referenceDay };
+      }
       if (hasScenes && (!options.every((option) => option.dayPart) || options.length !== 2 || new Set(options.map((option) => option.dayPart)).size !== 2)) {
         fail(path, "day part choices need two different scenes");
       }
@@ -1098,7 +1118,7 @@ function parseQuestion(value: unknown, path: string): Question {
       const named = promptShapeLabel(prompt);
       assertShapeLabel(path, shape, correct?.label ?? named);
       assertShapeLabel(path, correct?.shape, named);
-      return { ...core, kind, options, correctId, numeral, numeralLabel };
+      return { ...core, kind, options, correctId, numeral, numeralLabel, calendarPick };
     }
     case "multi-select": {
       const options = expectArray(value, "options", path).map((option, i) =>

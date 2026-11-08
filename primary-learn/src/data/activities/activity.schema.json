@@ -292,6 +292,14 @@
               "title": { "type": "string" }
             }
           },
+          "calendarPick": {
+            "type": "object",
+            "required": ["month", "referenceDay"],
+            "properties": {
+              "month": { "type": "string", "minLength": 1 },
+              "referenceDay": { "type": "integer", "minimum": 1, "maximum": 31 }
+            }
+          },
           "measure": {
             "type": "object",
             "properties": {
