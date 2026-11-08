@@ -3022,6 +3022,18 @@ button.object-token {
   cursor: default;
 }
 
+.ordered-tile.is-anchor {
+  background: var(--paper-deep);
+}
+
+.ordered-tile.is-anchor .step-pair {
+  visibility: hidden;
+}
+
+.ordered-drag.is-anchor {
+  cursor: default;
+}
+
 .ordered-grip {
   display: grid;
   grid-template-columns: repeat(2, 6px);

@@ -366,6 +366,8 @@ the thin rainbow. Inner words stay padded.
   digits). Left: a grip handle so drag is obvious. Middle: the number. Right:
   up/down arrow buttons. Kids can drag or tap arrows. No position numbers like
   `1.` beside the answer. Arrow keys also move the focused tile.
+  A named cyclic start (`anchorId`) sits at the top and cannot be dragged or
+  moved with arrows. Magnitude order does not pin a start.
   Stem: `Put the numbers in order, from smallest to biggest.` Feedback:
   `The numbers go 1, 2, 3.`
 - **Cherry bonds (`part-whole`)** stay on the same white activity screen. A

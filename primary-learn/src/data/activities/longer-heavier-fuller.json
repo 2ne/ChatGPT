@@ -383,6 +383,7 @@
         "a",
         "c"
       ],
+      "anchorId": "b",
       "explanation": "A day goes from morning to afternoon, then evening and night.",
       "id": "measure-1-9",
       "narration": {

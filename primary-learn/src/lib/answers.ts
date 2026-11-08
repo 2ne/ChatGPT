@@ -3,7 +3,7 @@ import { describeMoney } from "./money";
 import { describeMeasure } from "./measures";
 import { describeFraction } from "./fractions";
 import { describeArray, describeBaseTen, describeGroups, describeTenFrame, describeVisual } from "../data/objects";
-import type { MoneyAsset, MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, Question, TenFrameAsset } from "../types/activity";
+import type { MoneyAsset, MeasureAsset, FractionAsset, ArrayAsset, BaseTenAsset, BuildSetQuestion, GroupsAsset, OrderedQuestion, Question, TenFrameAsset } from "../types/activity";
 import { shapeName } from "./shapes";
 
 function optionLabel(
@@ -89,6 +89,17 @@ function normaliseNumeric(value: string): string {
   return String(asNumber);
 }
 
+/** Keep a named start first. Remaining tiles stay in the given order. */
+export function pinOrderedAnchor(question: OrderedQuestion, ids: string[]): string[] {
+  const known = question.items.map((item) => item.id);
+  const present = ids.filter((id) => known.includes(id));
+  const missing = known.filter((id) => !present.includes(id));
+  const full = [...present, ...missing];
+  const anchor = question.anchorId;
+  if (!anchor || !known.includes(anchor)) return full;
+  return [anchor, ...full.filter((id) => id !== anchor)];
+}
+
 export function isAnswerCorrect(question: Question, answer: unknown): boolean {
   switch (question.kind) {
     case "set-clock":
@@ -121,9 +132,10 @@ export function isAnswerCorrect(question: Question, answer: unknown): boolean {
     }
     case "ordered": {
       if (!Array.isArray(answer)) return false;
+      const order = pinOrderedAnchor(question, answer.map(String));
       return (
-        answer.length === question.correctOrder.length &&
-        answer.every((id, index) => id === question.correctOrder[index])
+        order.length === question.correctOrder.length &&
+        order.every((id, index) => id === question.correctOrder[index])
       );
     }
     case "match-pairs": {
@@ -161,7 +173,7 @@ export function emptyAnswerFor(question: Question): unknown {
     case "fill-blank":
       return "";
     case "ordered":
-      return question.items.map((item) => item.id);
+      return pinOrderedAnchor(question, question.items.map((item) => item.id));
     case "match-pairs":
       return Object.fromEntries(question.pairs.map((pair) => [pair.id, ""])) as Record<
         string,

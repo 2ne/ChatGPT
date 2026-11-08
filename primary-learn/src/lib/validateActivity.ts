@@ -1117,11 +1117,24 @@ function parseQuestion(value: unknown, path: string): Question {
       const items = expectArray(value, "items", path).map((item, i) =>
         parseOption(item, `${path}.items[${i}]`, false, true),
       );
+      const itemIds = items.map((item) => item.id);
+      if (new Set(itemIds).size !== itemIds.length) fail(path, "ordered items need unique ids");
       const correctOrder = expectArray(value, "correctOrder", path);
-      if (!correctOrder.every(isString) || correctOrder.length !== items.length) {
+      if (
+        !correctOrder.every(isString) ||
+        correctOrder.length !== items.length ||
+        new Set(correctOrder).size !== correctOrder.length ||
+        !itemIds.every((id) => correctOrder.includes(id))
+      ) {
         fail(path, "correctOrder must list every item id once");
       }
-      return { ...core, kind, items, correctOrder: correctOrder as string[] };
+      let anchorId: string | undefined;
+      if (value.anchorId != null) {
+        anchorId = expectString(value, "anchorId", path);
+        if (!itemIds.includes(anchorId)) fail(path, "anchorId must match an item");
+        if (correctOrder[0] !== anchorId) fail(path, "anchorId must be the first correct item");
+      }
+      return { ...core, kind, items, correctOrder: correctOrder as string[], anchorId };
     }
     case "match-pairs": {
       const pairs = expectArray(value, "pairs", path).map((pair, i) => {

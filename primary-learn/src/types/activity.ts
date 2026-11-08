@@ -355,6 +355,11 @@ export type OrderedQuestion = QuestionCore & {
   kind: "ordered";
   items: QuestionOption[];
   correctOrder: string[];
+  /**
+   * Named start that stays at the top. Must be `correctOrder[0]`.
+   * Use for cyclic days, months and times. Omit on smallest-to-biggest items.
+   */
+  anchorId?: string;
 };
 
 /** A match side is a label, or a picture, or both. Optional layout for glanceable amounts. */

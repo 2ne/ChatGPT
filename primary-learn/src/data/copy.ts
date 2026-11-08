@@ -94,6 +94,7 @@ export const copy = {
   dragNumber: (label: string) => `Drag ${label}`,
   moveUp: (label: string) => `Move ${label} up`,
   moveDown: (label: string) => `Move ${label} down`,
+  staysFirst: (label: string) => `${label} stays first.`,
   pickOne: "Choose one answer",
   baseTenKeyHint: "Each tall bar is 10. Each small square is 1.",
   baseTenKeyAria: "A tall bar is 10. A small square is 1.",
