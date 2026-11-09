@@ -106,23 +106,6 @@ body.titling #game { cursor: default; }
   margin-inline: auto;
   font-size: clamp(75px, min(13.9cqw, 25cqh), 264px);
 }
-#title::before {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  inset: -.1em -.08em -.105em -.19em;
-  opacity: .87;
-  --corner: linear-gradient(var(--cyan), var(--cyan));
-  background:
-    var(--corner) top left / .22em 2px no-repeat,
-    var(--corner) top left / 2px .21em no-repeat,
-    var(--corner) top 25% right / .19em 1px no-repeat,
-    var(--corner) top 27% right / 1px .18em no-repeat,
-    var(--corner) bottom left / .2em 2px no-repeat,
-    var(--corner) bottom left / 2px .19em no-repeat;
-  filter: drop-shadow(0 0 5px #40e9fa91);
-}
-#menu.splash #title::before { inset: -.08em -.12em -.11em -.18em; }
 #title::after {
   content: "";
   position: absolute;
@@ -148,6 +131,7 @@ body.titling #game { cursor: default; }
 }
 #titleMain { display: flex; align-items: end; gap: .066em; letter-spacing: -.026em; }
 .title-word {
+  position: relative;
   display: block;
   color: #8ef5ff;
   background: linear-gradient(180deg, #eaffff 6%, #b6faff 31%, #66e8ff 63%, #53ddf3 94%);
@@ -156,7 +140,7 @@ body.titling #game { cursor: default; }
   filter: drop-shadow(0 0 .065em #2cdefa54);
 }
 .title-word::after {
-  content: "Null";
+  content: attr(data-text);
   position: absolute;
   inset: 0;
   background:
@@ -166,6 +150,30 @@ body.titling #game { cursor: default; }
   mask: repeating-linear-gradient(2deg, #000 0 2px, transparent 3px 9px, #000 10px 12px, transparent 13px 29px);
   opacity: .46;
   pointer-events: none;
+}
+.title-word::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  text-shadow: -.045em 0 var(--pink), .045em 0 var(--cyan);
+}
+@media (prefers-reduced-motion: no-preference) {
+  #title { animation: title-jitter 4.8s steps(1, end) -3s infinite; }
+  .title-word::before { animation: title-slices 4.8s steps(1, end) -3s infinite; }
+}
+@keyframes title-jitter {
+  0%, 95%, 100% { translate: 0; }
+  90% { translate: -.012em 0; }
+  92% { translate: .018em 0; }
+  94% { translate: -.008em 0; }
+}
+@keyframes title-slices {
+  0%, 95%, 100% { opacity: 0; }
+  90% { opacity: .95; clip-path: inset(24% -.12em 63%); translate: .05em 0; }
+  92% { opacity: .85; clip-path: inset(54% -.12em 34%); translate: -.045em 0; }
+  94% { opacity: .7; clip-path: inset(72% -.12em 19%); translate: .025em 0; }
 }
 .title-dot {
   flex: none;
