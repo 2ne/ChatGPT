@@ -82,35 +82,6 @@ body.titling #game { cursor: default; }
 .station-frame i:nth-child(3) { bottom: 0; left: 0; color: var(--pink); border-right: 0; border-top: 0; }
 .station-frame i:nth-child(4) { bottom: 0; right: 0; color: var(--cyan); border-left: 0; border-top: 0; }
 
-.station-label, .station-tag {
-  position: absolute;
-  top: max(23px, 4.75cqh, env(safe-area-inset-top));
-  display: flex;
-  align-items: center;
-  gap: clamp(9px, 1.2cqw, 21px);
-  font-size: clamp(11px, 1.12cqw, 20px);
-  line-height: 1.14;
-  letter-spacing: .23em;
-  text-transform: uppercase;
-  color: var(--ice);
-  text-shadow: 0 2px 10px #000;
-}
-.station-label { left: max(21px, 4.5cqw, env(safe-area-inset-left)); align-items: start; }
-.station-label b { display: block; margin-top: .29em; color: var(--cyan); letter-spacing: .17em; }
-.station-label i {
-  width: 1.95em;
-  aspect-ratio: 1;
-  border: 2px solid var(--cyan);
-  mask: conic-gradient(from 45deg, transparent 0 11deg, #000 11deg 79deg, transparent 79deg 101deg, #000 101deg 169deg, transparent 169deg 191deg, #000 191deg 259deg, transparent 259deg 281deg, #000 281deg 349deg, transparent 349deg);
-}
-.station-tag { right: max(21px, 3cqw, env(safe-area-inset-right)); white-space: nowrap; }
-.station-tag i {
-  width: 2.8em;
-  height: .83em;
-  transform: skewX(-40deg);
-  background: repeating-linear-gradient(90deg, var(--pink) 0 21%, transparent 21% 32%);
-}
-
 #menuCol {
   position: absolute;
   top: 12.2cqh;
@@ -345,8 +316,4 @@ body.titling #game { cursor: default; }
   #menuList button { min-height: 41px; }
   #pressAny { margin-top: 6cqh; }
   #menu .mpanel { max-height: 88cqh; overflow: auto; }
-}
-@container (max-width: 350px) {
-  .station-label, .station-tag { letter-spacing: .12em; }
-  .station-tag i { width: 1.8em; }
 }
