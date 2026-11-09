@@ -247,7 +247,7 @@ body.titling #game { cursor: default; }
   border: 0;
   background: none;
   color: #f2eff9;
-  font: 700 clamp(15px, 1.76cqw, 30px)/1 "Rajdhani", sans-serif;
+  font: 700 clamp(15px, 1.76cqw, 26px)/1 "Rajdhani", sans-serif;
   letter-spacing: .2em;
   text-transform: uppercase;
   text-align: start;
@@ -261,11 +261,11 @@ body.titling #game { cursor: default; }
 }
 #menuList button svg {
   flex: none;
-  width: clamp(20px, 2.4cqw, 39px);
+  width: 1.15em;
   aspect-ratio: 1;
   fill: none;
   stroke: var(--edge);
-  stroke-width: 1.6;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
