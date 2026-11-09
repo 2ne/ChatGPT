@@ -450,6 +450,94 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .cname { font-size: 17px; letter-spacing: 0; }
   .cdesc, .cstat { font-size: 13px; }
 }
+
+/* iPhone-class landscape is wide enough to skip the portrait card shrink
+   above, but only ~375–430px tall — so the default title/cards clip. Scale
+   the picker with dvh so the whole overlay stays on screen. */
+@media (orientation: landscape) and (max-height: 540px) {
+  #picker {
+    justify-content: center;
+    overflow: hidden;
+    padding:
+      max(6px, env(safe-area-inset-top, 0px))
+      max(10px, env(safe-area-inset-right, 0px))
+      max(6px, env(safe-area-inset-bottom, 0px))
+      max(10px, env(safe-area-inset-left, 0px));
+  }
+  #pickerTitle {
+    font-size: clamp(20px, 7.2dvh, 32px);
+    letter-spacing: 0.16em;
+    line-height: 1.05;
+  }
+  #pickerSub {
+    font-size: clamp(10px, 3.1dvh, 13px);
+    letter-spacing: 0.34em;
+    margin-top: 0;
+    line-height: 1.2;
+  }
+  #pickerSub::before,
+  #pickerSub::after {
+    width: clamp(16px, 4vw, 28px);
+    margin: 0 0.55em;
+  }
+  #cards {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(6px, 1.3vw, 12px);
+    margin-top: clamp(4px, 2dvh, 12px);
+    padding: 0;
+    max-width: 100%;
+  }
+  .card {
+    flex: 0 1 auto;
+    width: clamp(132px, 21vw, 184px);
+    min-width: 120px;
+    min-height: 44px;
+    padding:
+      clamp(6px, 1.8dvh, 11px)
+      clamp(8px, 1.3vw, 14px)
+      clamp(7px, 2dvh, 12px);
+  }
+  .ctop {
+    font-size: clamp(8px, 2.4dvh, 11px);
+    letter-spacing: 0.18em;
+  }
+  .ckey {
+    min-width: 16px;
+    padding: 0 3px;
+    font-size: clamp(10px, 2.6dvh, 12px);
+  }
+  .cicon {
+    width: clamp(32px, 10.5dvh, 48px);
+    height: clamp(32px, 10.5dvh, 48px);
+    margin: clamp(6px, 2dvh, 12px) 0 clamp(5px, 1.6dvh, 10px);
+  }
+  .cname {
+    font-size: clamp(14px, 4.8dvh, 20px);
+    letter-spacing: 0.06em;
+  }
+  .cdesc {
+    font-size: clamp(11px, 3.4dvh, 14px);
+    margin-top: clamp(2px, 0.8dvh, 6px);
+    min-height: 0;
+    line-height: 1.15;
+  }
+  .cstat {
+    font-size: clamp(12px, 3.8dvh, 16px);
+    margin-top: clamp(4px, 1.4dvh, 8px);
+    padding-top: clamp(4px, 1.4dvh, 8px);
+  }
+  .clvl {
+    gap: 3px;
+    margin-top: clamp(4px, 1.3dvh, 8px);
+    height: 6px;
+  }
+  .clvl i { width: 10px; height: 4px; }
+  .card:hover { transform: translateY(-3px); }
+  .card.picked { transform: translateY(-5px) scale(1.03); }
+}
 @media (max-width: 540px) {
   #ammoWrap { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 52px); }
 }
