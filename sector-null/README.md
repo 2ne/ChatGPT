@@ -17,7 +17,7 @@ npm run dev
 
 `npm run build` writes a static site to `dist/`. Use `npm run preview` to serve that build locally. The browser needs WebGL. The menu track loops across the intro and main menu. If the browser blocks autoplay, use the title screen's Start prompt to enable sound. Selecting Play switches to the gameplay score.
 
-The gameplay score uses the full-length clips in `assets/score/` with one shared gain adjustment. Wave starts land on the cue hit and wave clears lead into the ability loop. Waves 1–4 start with the early loop and wave 5 onward starts with the late loop. Wave 4 switches on the next bar if eight drones are alive at once. Pausing freezes the music and wave timing together.
+The gameplay score uses the full-length clips in `assets/score/` with a shared gain adjustment and a quieter start cue for wave 1. Wave starts land on the cue hit and wave clears lead into the ability loop. Waves 1–4 start with the early loop and wave 5 onward starts with the late loop. Wave 4 switches on the next bar if eight drones are alive at once. Pausing freezes the music and wave timing together.
 
 Supply pickup notices appear one at a time. Each drop type shows a short effect description the first time its notice appears, and the game remembers discovered types in the browser.
 

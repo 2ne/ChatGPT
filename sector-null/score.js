@@ -7,6 +7,7 @@ const CLIPS = {
 };
 
 export const WAVE_LEAD_IN = 0.83;
+const OPENING_CUE_VOLUME = 0.45;
 const CLEAR_FADE = 0.4;
 const ABILITY_ENTRY = 2.2;
 const BAR = 1.65704;
@@ -42,12 +43,12 @@ export function createScore(ctx, musicBus) {
     track.gain.disconnect();
   }
 
-  function play(name, start, { loop = false, phase = start, fadeIn = 0 } = {}) {
+  function play(name, start, { loop = false, phase = start, fadeIn = 0, volume = 1 } = {}) {
     const gain = ctx.createGain();
     gain.connect(level);
-    gain.gain.setValueAtTime(fadeIn ? 0 : 1, start);
-    if (fadeIn) gain.gain.linearRampToValueAtTime(1, start + fadeIn);
-    const track = { name, start, phase, fadeIn, gain, source: null, end: Infinity, fadeAt: Infinity };
+    gain.gain.setValueAtTime(fadeIn ? 0 : volume, start);
+    if (fadeIn) gain.gain.linearRampToValueAtTime(volume, start + fadeIn);
+    const track = { name, start, phase, fadeIn, volume, gain, source: null, end: Infinity, fadeAt: Infinity };
     tracks.add(track);
     buffers[name].then(buffer => {
       if (!tracks.has(track)) return;
@@ -78,9 +79,9 @@ export function createScore(ctx, musicBus) {
     }
     // A combat track already fading out during a bar switch can finish that fade.
     if (track.fadeAt <= at) return;
-    const volume = track.fadeIn ? Math.min(1, (at - track.start) / track.fadeIn) : 1;
+    const fadeProgress = track.fadeIn ? Math.min(1, (at - track.start) / track.fadeIn) : 1;
     track.gain.gain.cancelScheduledValues(at);
-    track.gain.gain.setValueAtTime(volume, at);
+    track.gain.gain.setValueAtTime(track.volume * fadeProgress, at);
     track.end = at + duration;
     track.fadeAt = at;
     track.gain.gain.linearRampToValueAtTime(0, track.end);
@@ -92,7 +93,7 @@ export function createScore(ctx, musicBus) {
       const start = Math.max(ctx.currentTime + delay, clearedAt + ABILITY_ENTRY + WAVE_LEAD_IN);
       const cue = start - WAVE_LEAD_IN;
       fadeOut(ability, cue, WAVE_LEAD_IN);
-      play('start', cue);
+      play('start', cue, { volume: wave === 1 ? OPENING_CUE_VOLUME : 1 });
       combat = play(wave >= LATE_WAVE ? 'late' : 'early', start, { loop: true });
       return start;
     },
