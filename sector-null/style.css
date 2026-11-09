@@ -115,7 +115,11 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     opacity: 0;
     text-shadow: 0 0 18px #64dfee66, 0 0 4px #000; transition: opacity .35s;
   }
-  #bannerSub { display:block; font-size: 16px; letter-spacing: 4px; color:#8a9098; margin-top: 10px; }
+  #bannerSub {
+    display: block; font-size: 16px; font-weight: 700; letter-spacing: 3px;
+    color: #d4e8f0; margin-top: 10px;
+    text-shadow: 0 0 10px #000c, 0 1px 2px #000;
+  }
 
   /* pickup toast */
   #toast {
@@ -157,6 +161,10 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     letter-spacing: 6px;
     color: #64dfee;
     text-shadow: 0 0 18px #64dfee66, 0 0 4px #000;
+  }
+  #banner.boss #bannerText {
+    color: #ff708c;
+    text-shadow: 0 0 18px #ff368c66, 0 0 4px #000;
   }
   #pickerSub {
     font-size: 16px; font-weight: 700; letter-spacing: 6px; margin-top: 2px;
@@ -544,6 +552,29 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
   .clvl i { width: 10px; height: 4px; }
   .card:hover { transform: translateY(-3px); }
   .card.picked { transform: translateY(-5px) scale(1.03); }
+
+  #banner {
+    top: 36%;
+    padding-left: max(72px, calc(env(safe-area-inset-left, 0px) + 24px));
+    padding-right: max(168px, 21vw, calc(env(safe-area-inset-right, 0px) + 24px));
+  }
+  #bannerText {
+    display: inline-block;
+    max-width: 100%;
+    font-size: clamp(20px, 8dvh, 32px);
+    letter-spacing: 0.14em;
+    line-height: 1.05;
+  }
+  #bannerSub {
+    font-size: clamp(11px, 3.6dvh, 14px);
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    margin-top: 6px;
+    max-width: min(36rem, 100%);
+    margin-left: auto;
+    margin-right: auto;
+    white-space: normal;
+  }
 }
 @media (max-width: 540px) {
   #ammoWrap { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 52px); }

@@ -1495,7 +1495,8 @@ function updateToast(dt) {
   activePickupHint = firstPickup ? pickup.id : null;
 }
 
-function showBanner(text, sub, dur = 1.6) {
+function showBanner(text, sub, dur = 1.6, kind = 'wave') {
+  hud.banner.classList.toggle('boss', kind === 'boss');
   hud.bannerText.textContent = text;
   hud.bannerSub.textContent = sub || '';
   hud.banner.style.opacity = 1;
@@ -1675,7 +1676,7 @@ function spawnWaveBoss() {
     sub = 'MILESTONE · Leave marked zones · Strike during recovery';
   }
   spawnDrone(undefined, type);
-  showBanner(type.name, sub, 2.5);
+  showBanner(type.name, sub, 2.5, 'boss');
 }
 
 function maybeSplitBoss(z) {
@@ -1700,7 +1701,7 @@ function maybeSplitBoss(z) {
     pushOutOfSolids(pos, 0.35);
     spawnDrone(pos, fragment);
   }
-  showBanner('SPAWNER', 'Spawns loose — clear them or they reform', 1.6);
+  showBanner('SPAWNER', 'Spawns loose — clear them or they reform', 1.6, 'boss');
   audio.explode(z.position);
 }
 function bakeDrone({ plate, joint, trim, optic }, seed) {
@@ -3475,7 +3476,7 @@ function chaseDrone(z, dt) {
       }
       ud.patternTimer = 3.6;
       ud.recovery = 3.2;
-      showBanner('REACTOR SURGE', 'Leave the rings · Boss exposed: +75% damage', 1.6);
+      showBanner('REACTOR SURGE', 'Leave the rings · Boss exposed: +75% damage', 1.6, 'boss');
       audio.enemyCharge(z.position);
       return;
     }
