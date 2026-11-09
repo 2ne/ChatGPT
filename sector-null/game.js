@@ -1143,6 +1143,12 @@ const sparkMat = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false }
 // ===================================================================
 const keys = {};
 const movementKeys = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight']);
+let movementPressOrder = 0;
+function keyboardAxis(negativeKeys, positiveKeys) {
+  const negative = Math.max(...negativeKeys.map(code => keys[code] || 0));
+  const positive = Math.max(...positiveKeys.map(code => keys[code] || 0));
+  return negative === positive ? 0 : positive > negative ? 1 : -1;
+}
 const mouse = new THREE.Vector2();
 let firing = false;
 const aimPoint = new THREE.Vector3();
@@ -1271,7 +1277,10 @@ window.addEventListener('keydown', e => {
     if (state.paused || state.choosing) return;
     resetStick(moveStick); // Keyboard movement must not cancel against a stale touch vector.
   }
-  keys[e.code] = true;
+  // OS key-repeat must not let an older held direction steal priority back.
+  if (movementKeys.has(e.code)) {
+    if (!keys[e.code]) keys[e.code] = ++movementPressOrder;
+  } else keys[e.code] = true;
   if (e.code === 'Escape' || e.code === 'KeyP') { if (!e.repeat) setPaused(!state.paused); return; }
   if (state.paused) return;
   if (e.code === 'KeyR') startReload();
@@ -3602,11 +3611,8 @@ function update(dt) {
   const px = player.position.x, pz = player.position.z;
   if (state.running && !state.choosing) {
     // --- movement ---
-    let mx = 0, mz = 0;
-    if (keys['KeyW'] || keys['ArrowUp']) mz -= 1;
-    if (keys['KeyS'] || keys['ArrowDown']) mz += 1;
-    if (keys['KeyA'] || keys['ArrowLeft']) mx -= 1;
-    if (keys['KeyD'] || keys['ArrowRight']) mx += 1;
+    let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);
+    let mz = keyboardAxis(['KeyW', 'ArrowUp'], ['KeyS', 'ArrowDown']);
     mx += moveStick.delta.x;
     mz += moveStick.delta.y;
     const moving = !!(mx || mz);

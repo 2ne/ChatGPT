@@ -86,3 +86,5 @@ Boss base health scaling is now `6 + 1.3×wave + 0.1×wave²` times regular wave
 Helper Bot repeat offers explicitly say UPGRADE HELPER BOT and 1 BOT, show the rank transition and actual damage/fire interval changes, and confirm the upgrade after selection. Bomb builds show damage improvements only because their firing interval stays fixed. Build summaries label ranks explicitly instead of implying equipment counts.
 
 Movement input is cleared when entering/leaving upgrades, starting a run, pausing or losing window/tab focus. Gameplay focus returns to the canvas after UI choices. Arrow keys suppress browser scrolling during a run; key releases are captured at window level, and switching between keyboard movement and touch clears the previous movement source. These safeguards prevent stale inputs from carrying across UI transitions.
+
+For opposite keyboard directions, the newest press wins on each axis (including mixed WASD/arrow bindings); releasing it restores any still-held opposite direction. OS key-repeat does not change priority. This allows immediate reversals without opposite inputs cancelling movement.
