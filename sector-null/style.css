@@ -35,7 +35,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   }
   .stat {
     display: flex; align-items: baseline; gap: .42em;
-    font-size: clamp(15px, 2.15vw, 20px); line-height: 1.15;
+    font-size: clamp(13px, 1.6vw, 16px); line-height: 1.15;
     letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
   }
   .stat[hidden] { display: none; }
@@ -48,10 +48,10 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .stat + .stat { margin-top: 3px; }
   .enemy-stats .stat { justify-content: space-between; }
   .label { color: #bdd1dc; }
-  .stat-value { color: #e2f8ff; font-size: 1.27em; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat-value { color: #e2f8ff; font-size: 1.12em; font-weight: 700; font-variant-numeric: tabular-nums; }
   .enemy-stats .stat-value { min-width: 2ch; text-align: right; }
   #score { color: #9dff7a; }
-  .score-high .stat-value { color: #a8c4b0; font-size: 1.05em; }
+  .score-high .stat-value { color: #a8c4b0; font-size: 1em; }
   #waveNum, #zleft { color: #82eaf5; }
   #kills { color: #71dabb; }
 
@@ -75,7 +75,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     clip-path: inherit;
   }
   #shieldCount {
-    color: var(--shield-pink); font-size: clamp(13px, 1.55vw, 17px); line-height: 1;
+    color: var(--shield-pink); font-size: clamp(12px, 1.35vw, 15px); line-height: 1;
     font-variant-numeric: tabular-nums; white-space: nowrap;
   }
 
