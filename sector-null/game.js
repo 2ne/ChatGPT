@@ -1225,6 +1225,8 @@ const hud = {
   shieldCount: document.getElementById('shieldCount'),
   powerups: document.getElementById('powerups'),
   toast: document.getElementById('toast'),
+  toastTitle: document.getElementById('toastTitle'),
+  toastDetail: document.getElementById('toastDetail'),
   picker: document.getElementById('picker'),
   pickerTitle: document.getElementById('pickerTitle'),
   pickerSub: document.getElementById('pickerSub'),
@@ -1272,12 +1274,13 @@ function updateHUD() {
 let flashT = 0;
 function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; state.shake = 0.5; }
 
-function showToast(text, color) {
-  hud.toast.textContent = text;
+function showToast(text, color, detail = '') {
+  hud.toastTitle.textContent = text;
+  hud.toastDetail.textContent = detail;
   hud.toast.style.color = color;
   hud.toast.style.opacity = 1;
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => { hud.toast.style.opacity = 0; }, 1400);
+  showToast._t = setTimeout(() => { hud.toast.style.opacity = 0; }, detail ? 2200 : 1400);
 }
 
 function showBanner(text, sub, dur = 1.6) {
@@ -1946,10 +1949,11 @@ function killDrone(z, idx, dir) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  { id: 'med',  name: '+1 SHIELD',     icon: '+', color: 0xff78b5, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',    icon: '↑', color: 0xffa64c, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', icon: '∞', color: 0x76bcf0, weight: 25 },
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores 1 shield', icon: '+', color: 0xff78b5, weight: 40 },
+  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage',    icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo',   icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
+const seenDrops = new Set(store.get('seen-drops', []));
 const DROP_MODELS = {
   med: [  // first-aid case, crosses on top and front
     [0.52, 0.34, 0.36, 0, 0, 0, 0xe6e2da, 0, 0, 0, 0.05],
@@ -2044,7 +2048,12 @@ function spawnDrop(type, pos) {
 
 function collect(type) {
   audio.pickup(type.id);
-  showToast(type.name, type.tint);
+  const firstPickup = !seenDrops.has(type.id);
+  showToast(type.name, type.tint, firstPickup ? type.detail : '');
+  if (firstPickup) {
+    seenDrops.add(type.id);
+    store.set('seen-drops', [...seenDrops]);
+  }
   if (type.id === 'med') state.hp = Math.min(state.maxHp, state.hp + 1);
   else if (type.id === 'dmg') state.pDamage = 10;
   else if (type.id === 'ammo') { state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }

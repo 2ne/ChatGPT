@@ -90,6 +90,10 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     font-size: 28px; letter-spacing: 6px; opacity: 0; transition: opacity .25s;
     text-shadow: 0 0 12px currentColor, 0 0 3px #000;
   }
+  #toastDetail {
+    display: block; color: #e2f8ff; font-size: 18px; letter-spacing: .04em;
+    text-shadow: 0 0 6px #000, 0 0 3px #000;
+  }
 
   /* active power-up timers */
   #powerups { margin-top: 10px; font-size: 14px; letter-spacing: 2px; line-height: 1.6; }
