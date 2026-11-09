@@ -580,6 +580,22 @@ const M = {
   rubber: mat(0x151f27),
   lens: mat(0x2c8399, { emissive: 0x36dcff, emissiveIntensity: 0.9 }),
 };
+const powerGlowMaterials = [M.suit, M.vest, M.vestDk, M.plating, M.helmet, M.pants, M.glove, M.module];
+const powerOrange = new THREE.Color(0xffa64c), powerBlue = new THREE.Color(0x76bcf0), powerPink = new THREE.Color(0xff78b5);
+let healGlow = 0, powerGlowTime = 0;
+function updatePowerGlow(dt) {
+  if (state.running) { healGlow = Math.max(0, healGlow - dt); powerGlowTime += dt; }
+  const orange = state.running && state.pDamage > 0, blue = state.running && state.pAmmo > 0;
+  const healing = state.running && healGlow > 0;
+  const strength = reducedMotion.matches ? 0.35 : 0.3 + 0.16 * (0.5 + 0.5 * Math.sin(powerGlowTime * Math.PI * 2 / 1.8));
+  powerGlowMaterials.forEach((material, i) => {
+    const color = healing ? powerPink : orange && blue ? (i < 4 ? powerOrange : powerBlue) : orange ? powerOrange : powerBlue;
+    const time = orange && (!blue || i < 4) ? state.pDamage / 10 : state.pAmmo / 8;
+    const stacked = Math.min(1, Math.max(0, time - 1));
+    material.emissive.copy(color);
+    material.emissiveIntensity = healing ? 0.55 * Math.min(1, healGlow * 3) : orange || blue ? strength + stacked * 0.25 : 0;
+  });
+}
 
 // rig proportions (world units; the operator stands ~2.6 tall)
 const THIGH = 0.44, SHIN = 0.42, ANKLE_H = 0.15, HIP_H = 0.97;
@@ -1290,8 +1306,9 @@ function updateHUD() {
   // power-up time left as a clock: 0:10 … 0:01
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
-  if (state.pDamage > 0) pu += `<div style="color:#ff7a2e">OVERCHARGE ${clock(state.pDamage)}</div>`;
-  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}</div>`;
+  if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}<small>DOUBLE DAMAGE${state.pDamage > 10 ? ' · EXTENDED' : ''}</small></div>`;
+  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}<small>NO RECHARGING${state.pAmmo > 8 ? ' · EXTENDED' : ''}</small></div>`;
+  if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
   hud.powerups.innerHTML = pu;
   const infinite = state.pAmmo > 0;
   const lastCharge = !infinite && !state.reloading && state.mag === 1;
@@ -1632,6 +1649,7 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     turn: 3.0 + Math.random() * 2.0,                   // max turn rate (rad/s), varied per drone
   };
   z.rotation.y = z.userData.heading;
+  resolveBotPosition(z);
   scene.add(z);
   drones.push(z);
   return z;
@@ -1868,16 +1886,30 @@ function toLocal(b, x, z) {
   _local.x = dx * b.c - dz * b.s; _local.z = dx * b.s + dz * b.c;
   return _local;
 }
-function pushOutOfSolids(pos) {
+function pushOutOfSolids(pos, radius = Z_RADIUS) {
   for (const b of SOLIDS) {
     const { x: lx, z: lz } = toLocal(b, pos.x, pos.z);
-    const ex = b.hx + Z_RADIUS, ez = b.hz + Z_RADIUS;
+    const ex = b.hx + radius, ez = b.hz + radius;
     const px = ex - Math.abs(lx), pz = ez - Math.abs(lz);
     if (px <= 0 || pz <= 0) continue;
     // out through the nearest face, a hair clear of it so it doesn't read as still touching
-    const nx = px < pz ? Math.sign(lx) * (ex + 0.01) : lx, nz = px < pz ? lz : Math.sign(lz) * (ez + 0.01);
+    const nx = px < pz ? (Math.sign(lx) || 1) * (ex + 0.01) : lx, nz = px < pz ? lz : (Math.sign(lz) || 1) * (ez + 0.01);
     pos.x = b.x + nx * b.c + nz * b.s;
     pos.z = b.z - nx * b.s + nz * b.c;
+  }
+}
+function resolveBotPosition(z) {
+  const radius = botRadius(z) + 0.02, pos = z.position;
+  for (let pass = 0; pass < 2; pass++) {
+    pushOutOfSolids(pos, radius);
+    for (const w of wallBoxes) {
+      const cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
+      const dx = pos.x - cx, dz = pos.z - cz;
+      const hx = (w.maxX - w.minX) / 2 + radius, hz = (w.maxZ - w.minZ) / 2 + radius;
+      if (Math.abs(dx) >= hx || Math.abs(dz) >= hz) continue;
+      if (hx - Math.abs(dx) < hz - Math.abs(dz)) pos.x = cx + (Math.sign(dx) || 1) * (hx + 0.01);
+      else pos.z = cz + (Math.sign(dz) || 1) * (hz + 0.01);
+    }
   }
 }
 // does the segment a→b (prop-local) cross the box ±hx, ±hz? (slab test)
@@ -1899,59 +1931,96 @@ function segHitsBox(ax, az, bx, bz, hx, hz) {
 // --- finding a way round the props: a shortest path over their corners (padded out so a
 // drone clears them), searched whenever a prop blocks the straight line to the target ---
 const SEE_SLOP = 0.05; // a drone pressed against a prop can still see along its side
-const ROUND_NODES = SOLIDS.flatMap(b => [[1, 1], [1, -1], [-1, -1], [-1, 1]].map(([sx, sz]) => {
-  const kx = sx * (b.hx + Z_RADIUS + ROUND_PAD), kz = sz * (b.hz + Z_RADIUS + ROUND_PAD);
-  return { x: b.x + kx * b.c + kz * b.s, z: b.z - kx * b.s + kz * b.c };
-}));
 // can a drone walk straight from a to b without going through a prop?
-function clearPath(ax, az, bx, bz) {
+function clearPath(ax, az, bx, bz, radius = Z_RADIUS - SEE_SLOP) {
   for (const b of SOLIDS) {
     const p = toLocal(b, ax, az), px = p.x, pz = p.z, q = toLocal(b, bx, bz);
-    if (segHitsBox(px, pz, q.x, q.z, b.hx + Z_RADIUS - SEE_SLOP, b.hz + Z_RADIUS - SEE_SLOP)) return false;
+    if (segHitsBox(px, pz, q.x, q.z, b.hx + radius, b.hz + radius)) return false;
   }
   return true;
 }
-// which corners can see each other, and how far apart they are (props don't move)
-const NODE_LINKS = ROUND_NODES.map(a => ROUND_NODES.map(b =>
-  a !== b && clearPath(a.x, a.z, b.x, b.z) ? Math.hypot(a.x - b.x, a.z - b.z) : Infinity));
-const _goal = { x: 0, z: 0 }, _from = { x: 0, z: 0 }, _toGoal = [], _done = [];
+const navGraphs = new Map();
+const navObstacles = [...SOLIDS, ...wallBoxes.map(w => ({
+  x: (w.minX + w.maxX) / 2, z: (w.minZ + w.maxZ) / 2,
+  hx: (w.maxX - w.minX) / 2, hz: (w.maxZ - w.minZ) / 2, c: 1, s: 0,
+}))];
+const botRadius = z => Z_RADIUS * z.userData.type.size;
+function navClear(ax, az, bx, bz, radius, entrances = false) {
+  if (!clearPath(ax, az, bx, bz, radius)) return false;
+  for (const w of wallBoxes) {
+    const cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
+    if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
+      (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
+  }
+  if (entrances) for (const o of openings) {
+    if (o.kind === 'door' && o.hp <= 0) continue;
+    const w = o.box, cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
+    if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
+      (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
+  }
+  return true;
+}
+function navigationGraph(radius) {
+  if (navGraphs.has(radius)) return navGraphs.get(radius);
+  const nodes = navObstacles.flatMap(b => [[1, 1], [1, -1], [-1, -1], [-1, 1]].map(([sx, sz]) => {
+    const x = sx * (b.hx + radius + ROUND_PAD), z = sz * (b.hz + radius + ROUND_PAD);
+    return { x: b.x + x * b.c + z * b.s, z: b.z - x * b.s + z * b.c };
+  })).filter(p => navClear(p.x, p.z, p.x, p.z, radius));
+  const links = nodes.map(a => nodes.map(b => a !== b && navClear(a.x, a.z, b.x, b.z, radius)
+    ? Math.hypot(a.x - b.x, a.z - b.z) : Infinity));
+  const graph = { nodes, links };
+  navGraphs.set(radius, graph);
+  return graph;
+}
+const _goal = { x: 0, z: 0 };
 // Where a drone should head to get to (tx, tz): straight there if nothing's in the way,
 // otherwise the corner in sight that starts the shortest way round. It doesn't count a
 // corner it's already standing at, and stays loyal to its last pick (ud.via) unless another
 // way is clearly shorter, so it doesn't dither between two even routes.
 function routeAround(z, tx, tz) {
-  const ud = z.userData;
+  const ud = z.userData, radius = botRadius(z);
+  if (inside(z.position)) {
+    tx = THREE.MathUtils.clamp(tx, -HALF + radius + 0.2, HALF - radius - 0.2);
+    tz = THREE.MathUtils.clamp(tz, -HALF + radius + 0.2, HALF - radius - 0.2);
+  }
   _goal.x = tx; _goal.z = tz;
-  _from.x = z.position.x; _from.z = z.position.z;
-  pushOutOfSolids(_from); // plan from where it'll be once it's been shoved clear
-  const { x, z: fz } = _from;
-  if (clearPath(x, fz, tx, tz)) { ud.via = -1; return _goal; }
+  pushOutOfSolids(_goal, radius + 0.02); // player/flanking target may hug cover too closely
+  tx = _goal.x; tz = _goal.z;
+  resolveBotPosition(z);
+  const { x, z: fz } = z.position;
+  if (navClear(x, fz, tx, tz, radius)) { ud.via = -1; return _goal; }
+  const { nodes, links } = navigationGraph(radius);
   // how far each corner is from the goal, going round (Dijkstra out from the goal)
-  const n = ROUND_NODES.length, dist = _toGoal;
-  for (let i = 0; i < n; i++) {
-    const k = ROUND_NODES[i];
-    dist[i] = clearPath(k.x, k.z, tx, tz) ? Math.hypot(tx - k.x, tz - k.z) : Infinity;
-    _done[i] = false;
+  const n = nodes.length;
+  const now = performance.now();
+  let plan = ud.navPlan;
+  if (!plan || now > plan.until || Math.hypot(tx - plan.x, tz - plan.z) > 0.8) {
+    const dist = [], done = [];
+    for (let i = 0; i < n; i++) {
+      const k = nodes[i];
+      dist[i] = navClear(k.x, k.z, tx, tz, radius) ? Math.hypot(tx - k.x, tz - k.z) : Infinity;
+      done[i] = false;
+    }
+    for (let r = 0; r < n; r++) {
+      let u = -1;
+      for (let i = 0; i < n; i++) if (!done[i] && (u < 0 || dist[i] < dist[u])) u = i;
+      if (u < 0 || dist[u] === Infinity) break;
+      done[u] = true;
+      for (let i = 0; i < n; i++) dist[i] = Math.min(dist[i], dist[u] + links[u][i]);
+    }
+    plan = ud.navPlan = { x: tx, z: tz, until: now + 300 + ud.seed, dist };
   }
-  for (let r = 0; r < n; r++) {
-    let u = -1;
-    for (let i = 0; i < n; i++) if (!_done[i] && (u < 0 || dist[i] < dist[u])) u = i;
-    if (dist[u] === Infinity) break;
-    _done[u] = true;
-    for (let i = 0; i < n; i++) dist[i] = Math.min(dist[i], dist[u] + NODE_LINKS[u][i]);
-  }
-  let best = -1, bestCost = Infinity, near = -1, nearD = Infinity;
+  let best = -1, bestCost = Infinity;
   for (let i = 0; i < n; i++) {
-    const k = ROUND_NODES[i], d = Math.hypot(k.x - x, k.z - fz);
-    if (d < 0.45 || !clearPath(x, fz, k.x, k.z)) continue;
-    if (d < nearD) { nearD = d; near = i; }
-    const cost = d + dist[i] - (ud.via === i ? 1 : 0);
+    const k = nodes[i], d = Math.hypot(k.x - x, k.z - fz);
+    if (d < 0.12 || !navClear(x, fz, k.x, k.z, radius)) continue;
+    const cost = d + plan.dist[i] - (ud.via === i ? 0.5 : 0);
     if (cost < bestCost) { bestCost = cost; best = i; }
   }
-  if (best < 0) best = near; // no way through from here: at least get round the nearest corner
-  if (best < 0) return _goal;
+  // Don't fall back to walking straight through the obstacle when no route exists.
+  if (best < 0) { _goal.x = x; _goal.z = fz; return _goal; }
   ud.via = best;
-  _goal.x = ROUND_NODES[best].x; _goal.z = ROUND_NODES[best].z;
+  _goal.x = nodes[best].x; _goal.z = nodes[best].z;
   return _goal;
 }
 
@@ -1977,8 +2046,8 @@ function killDrone(z, idx) {
 // ===================================================================
 const DROP_TYPES = [
   { id: 'med',  name: '+1 SHIELD',     detail: 'Restores 1 shield, up to your maximum.', icon: '+', color: 0xff78b5, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Deal double damage for 10 seconds.', icon: '↑', color: 0xffa64c, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', detail: 'Refills your magazine. Fire without reloading for 8 seconds.', icon: '∞', color: 0x76bcf0, weight: 25 },
+  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Adds 10 seconds of double damage. Repeat pickups add time.', icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'INFINITE CELL', detail: 'Refills your cell and adds 8 seconds without recharging.', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
 // Teach each item once per run; saved browser history must not suppress a lesson.
 const seenDrops = new Set();
@@ -2081,9 +2150,9 @@ function collect(type) {
     // Let a routine notice yield promptly, but never cut another lesson short.
     toastTime = Math.min(toastTime, 0.15);
   }
-  if (type.id === 'med') state.hp = Math.min(state.maxHp, state.hp + 1);
-  else if (type.id === 'dmg') state.pDamage = 10;
-  else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }
+  if (type.id === 'med') { state.hp = Math.min(state.maxHp, state.hp + 1); healGlow = 1; }
+  else if (type.id === 'dmg') state.pDamage += 10;
+  else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo += 8; state.reloading = false; state.mag = state.magSize; }
 }
 
 function updateDrops(dt) {
@@ -2329,6 +2398,7 @@ const BASE_STATS = { maxHp: 3, magSize: 8, reloadTime: 1.2, fireRate: 0.13, dama
 function resetGame(keep = false) {
   if (!keep) { clearRun(); resetOpenings(); }
   seenDrops.clear();
+  healGlow = 0; powerGlowTime = 0;
   pressure.set(0);
   Object.assign(state, {
     ...BASE_STATS, running: true, hp: BASE_STATS.maxHp, kills: 0, wave: 0,
@@ -2460,8 +2530,7 @@ function wanderDrone(z, dt) {
     ud.idle = rnd(0, 1);
   } else {
     const g = routeAround(z, c.x, c.z);
-    walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed, 1.5, dt);
-    walking = true;
+    walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed, 1.5, dt);
   }
   ud.gait = damp(ud.gait, walking ? 1 : 0, 4, dt);
   animateDrone(z, dt, 99);
@@ -2648,7 +2717,6 @@ let groanT = 1;
 const Z_REACH = 1.2;      // stops and swings when this close (center to center)
 const Z_LET_GO = 1.5;     // ...and only gives chase again once you're this far off
 const Z_CLOSE = 0.95;     // never gets nearer than this (no standing inside the operator)
-const Z_SPACE = 0.8;      // drones keep this far apart, so a crowd fans out around you
 const Z_SWING = 0.85;     // seconds from wind-up to recovered
 const Z_HIT_RANGE = 1.65; // the blow connects if you're still this close
 const Z_TRACK = 7;        // rad/s a drone turns to keep facing you while it stands and swings
@@ -2676,10 +2744,29 @@ function faceToward(z, dx, dz, rate, dt) {
 // turns, and slow down while facing well off it: a drone that overshoots turns round
 // and comes back instead of orbiting.
 function walkToward(z, dx, dz, speed, turn, dt) {
+  const distance = Math.hypot(dx, dz);
+  if (distance < 0.03) return false;
   const ud = z.userData, off = faceToward(z, dx, dz, turn, dt);
-  const v = speed * Math.max(0.15, Math.cos(Math.min(off, Math.PI / 2)));
-  z.position.x += Math.sin(ud.heading) * v * dt;
-  z.position.z += Math.cos(ud.heading) * v * dt;
+  // Turn on the spot for sharp corners instead of grinding forward into cover.
+  if (off > 0.9) return false;
+  const step = Math.min(distance, speed * Math.cos(off) ** 2 * dt);
+  const sx = Math.sin(ud.heading), sz = Math.cos(ud.heading);
+  const look = Math.min(distance, Math.max(step, 0.25));
+  if (!navClear(z.position.x, z.position.z, z.position.x + sx * look, z.position.z + sz * look, botRadius(z), true)) {
+    ud.navPlan = null;
+    ud.blockedFor = (ud.blockedFor || 0) + dt;
+    if (ud.blockedFor > 1.2) {
+      ud.via = -1; ud.blockedFor = 0;
+      if (ud.opening && !inside(z.position) && ud.stage === 0) {
+        ud.opening = nearestOpening(z.position, ud.opening);
+      }
+    }
+    return false;
+  }
+  ud.blockedFor = 0;
+  z.position.x += sx * step;
+  z.position.z += sz * step;
+  return step > 0.001;
 }
 
 function hurtPlayer(damage = 1) {
@@ -2718,8 +2805,8 @@ function chaseDrone(z, dt) {
     } else {
       const side = Math.sin(ud.seed) > 0 ? 1 : -1;
       const retreat = pd < 5 ? -0.7 : pd > 8 ? 0.7 : 0;
-      walkToward(z, pdx * retreat + pdz * side * 0.45, pdz * retreat - pdx * side * 0.45, ud.speed * 0.7, ud.turn * 2, dt);
-      moving = true;
+      const g = routeAround(z, z.position.x + pdx * retreat + pdz * side * 0.45, z.position.z + pdz * retreat - pdx * side * 0.45);
+      moving = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * 0.7, ud.turn * 2, dt);
     }
     ud.gait = damp(ud.gait, moving ? 1 : 0, 8, dt);
     animateDrone(z, dt, pd);
@@ -2737,10 +2824,10 @@ function chaseDrone(z, dt) {
     if (!ud.struck && ud.swing >= Z_STRIKE) {
       ud.struck = true;
       if (o) hitOpening(o);
-      else if (!(pd < Z_HIT_RANGE && !wallBetween(z.position, p) && hurtPlayer(ud.type.style === 'heavy' && !ud.boss ? 2 : 1))) audio.swipe(z.position);
+      else if (!(pd < Z_HIT_RANGE && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer(ud.type.style === 'heavy' && !ud.boss ? 2 : 1))) audio.swipe(z.position);
     }
     if (ud.swing >= Z_SWING) { ud.swing = -1; ud.swingCd = rnd(0.25, 0.6); }
-  } else if (pd < (ud.standing ? Z_LET_GO : Z_REACH) && !wallBetween(z.position, p)) {
+  } else if (pd < (ud.standing ? Z_LET_GO : Z_REACH) && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05)) {
     // at arm's length: stand, square up, and swing as soon as it's facing you (no
     // cooldown left over from battering its way in)
     if (!ud.standing) ud.swingCd = 0;
@@ -2783,8 +2870,7 @@ function chaseDrone(z, dt) {
     if (tx !== null) {
       const g = routeAround(z, tx, tz);
       // turn harder up close so the last few steps home in on you
-      walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed, ud.turn * (pd < 4 ? 2.5 : 1), dt);
-      walking = true;
+      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed, ud.turn * (pd < 4 ? 2.5 : 1), dt);
     }
   }
   // progress check: a drone that's been trying to walk for 2s but has barely moved (jammed
@@ -2807,10 +2893,15 @@ function separateDrones() {
     const a = drones[i].position;
     for (let k = i + 1; k < drones.length; k++) {
       const b = drones[k].position, dx = b.x - a.x, dz = b.z - a.z, d2 = dx * dx + dz * dz;
-      if (d2 >= Z_SPACE * Z_SPACE || d2 < 1e-6) continue;
-      const d = Math.sqrt(d2), push = (Z_SPACE - d) / 2 / d;
-      a.x -= dx * push; a.z -= dz * push;
-      b.x += dx * push; b.z += dz * push;
+      const spacing = botRadius(drones[i]) + botRadius(drones[k]) + 0.08;
+      if (d2 >= spacing * spacing || d2 < 1e-6) continue;
+      const d = Math.sqrt(d2), push = Math.min(0.15, (spacing - d) / 2) / d;
+      if (drones[i].userData.climb < 0 && navClear(a.x, a.z, a.x - dx * push, a.z - dz * push, botRadius(drones[i]), true)) {
+        a.x -= dx * push; a.z -= dz * push;
+      }
+      if (drones[k].userData.climb < 0 && navClear(b.x, b.z, b.x + dx * push, b.z + dz * push, botRadius(drones[k]), true)) {
+        b.x += dx * push; b.z += dz * push;
+      }
     }
   }
   for (const z of drones) {
@@ -2819,7 +2910,7 @@ function separateDrones() {
       const dx = z.position.x - player.position.x, dz = z.position.z - player.position.z, d = Math.hypot(dx, dz);
       if (d < Z_CLOSE && d > 1e-6) { z.position.x += dx / d * (Z_CLOSE - d); z.position.z += dz / d * (Z_CLOSE - d); }
     }
-    pushOutOfSolids(z.position);
+    resolveBotPosition(z);
   }
 }
 
@@ -2969,6 +3060,7 @@ function update(dt) {
   // wall doesn't run in place). Runs on the title and death screens too, so the pose settles ---
   const inv = dt > 0 ? 1 / dt : 0;
   animatePlayer(dt, (player.position.x - px) * inv, (player.position.z - pz) * inv);
+  updatePowerGlow(dt);
   // flicker while the post-hit grace period lasts
   player.visible = !state.running || state.dmgCd <= 0 || Math.floor(state.dmgCd * 12) % 2 === 0;
   updateDebris(dt);

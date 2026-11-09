@@ -20,6 +20,12 @@ Each wave ends with one larger red boss after all regular bots are defeated. The
 
 Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes, movement and introduction banners provide additional cues.
 
+## Navigation and power-up feedback
+
+Bots plan around both cover and bulkheads using navigation graphs sized to their bodies. Routes refresh as the target moves, with stable corner choices to limit jitter. Movement checks clearance before stepping, turns in place for sharp corners, and limits steps at waypoints. Ranged strafing uses the same navigation; crowd separation avoids pushing bots into obstacles. Melee attacks cannot pass through solid cover.
+
+Power-ups tint the operator orange for Overcharge and blue for Infinite Cell, with a gentle pulse (steady glow under reduced motion). If both are active, the torso and limbs show separate colours. Shield kits produce a one-second pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the effect description. Glow strength is capped to keep it readable.
+
 ## Run locally
 
 Use Node.js 22 or later.
