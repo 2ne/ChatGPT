@@ -1142,6 +1142,7 @@ const sparkMat = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false }
 // INPUT
 // ===================================================================
 const keys = {};
+const movementKeys = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight']);
 const mouse = new THREE.Vector2();
 let firing = false;
 const aimPoint = new THREE.Vector3();
@@ -1158,9 +1159,22 @@ let touchAiming = false;
 let touchYaw = 0; // smoothed facing while the aim stick is active
 
 function resetStick(stick) {
+  const pointerId = stick.id;
   stick.id = null;
   stick.delta.set(0, 0);
   stick.dot.classList.remove('active', 'firing');
+  if (pointerId !== null && canvas.hasPointerCapture(pointerId)) canvas.releasePointerCapture(pointerId);
+}
+
+function resetGameplayInput() {
+  for (const k in keys) delete keys[k];
+  resetStick(moveStick);
+  resetStick(aimStick);
+  firing = false;
+}
+
+function focusGame() {
+  canvas.focus({ preventScroll: true });
 }
 
 function paintStick(stick) {
@@ -1200,6 +1214,7 @@ function syncTouchControls() {
 
 canvas.addEventListener('pointerdown', e => {
   if (e.pointerType === 'mouse' || !state.running || state.paused || state.choosing) return;
+  for (const k of movementKeys) delete keys[k];
   const stick = e.clientX < window.innerWidth / 2 ? moveStick : aimStick;
   if (stick.id !== null) return;
   stick.id = e.pointerId;
@@ -1242,8 +1257,8 @@ function releaseStick(e) {
     firing = false;
   }
 }
-canvas.addEventListener('pointerup', releaseStick);
-canvas.addEventListener('pointercancel', releaseStick);
+window.addEventListener('pointerup', releaseStick, true);
+window.addEventListener('pointercancel', releaseStick, true);
 canvas.addEventListener('lostpointercapture', releaseStick);
 document.getElementById('touchReload').addEventListener('click', startReload);
 document.getElementById('touchPause').addEventListener('click', () => setPaused(true));
@@ -1251,6 +1266,11 @@ document.getElementById('touchPause').addEventListener('click', () => setPaused(
 window.addEventListener('keydown', e => {
   if (menu.key(e)) { e.preventDefault(); return; }
   if (e.code === 'Enter' && !state.running && !document.getElementById('death').classList.contains('hidden')) return startGame();
+  if (movementKeys.has(e.code) && state.running) {
+    e.preventDefault(); // Arrow keys control movement, never a focused UI panel.
+    if (state.paused || state.choosing) return;
+    resetStick(moveStick); // Keyboard movement must not cancel against a stale touch vector.
+  }
   keys[e.code] = true;
   if (e.code === 'Escape' || e.code === 'KeyP') { if (!e.repeat) setPaused(!state.paused); return; }
   if (state.paused) return;
@@ -1261,7 +1281,7 @@ window.addEventListener('keydown', e => {
     document.getElementById('reloadHint').textContent = m ? '[R] RELOAD   ·   [M] MUTED' : '[R] RELOAD';
   }
 });
-window.addEventListener('keyup', e => { keys[e.code] = false; });
+window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
   touchAiming = false;
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1281,7 +1301,10 @@ document.getElementById('deathQuitBtn').addEventListener('click', quitToTitle);
 document.getElementById('resumeBtn').addEventListener('click', () => setPaused(false));
 document.getElementById('quitBtn').addEventListener('click', quitToTitle);
 // alt-tabbing away mid-run pauses (and would otherwise leave WASD stuck down)
-window.addEventListener('blur', () => setPaused(true));
+window.addEventListener('blur', () => { resetGameplayInput(); setPaused(true); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { resetGameplayInput(); setPaused(true); }
+});
 document.getElementById('cards').addEventListener('click', e => {
   const c = e.target.closest('.card');
   if (c) choose(+c.dataset.i);
@@ -2762,6 +2785,7 @@ function openPicker(healed) {
   offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
   state.choosing = true;
+  resetGameplayInput();
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
   hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
@@ -2801,6 +2825,8 @@ function choose(i) {
   u.apply(state);
   if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
   state.choosing = false;
+  resetGameplayInput();
+  focusGame();
   // brief beat so the pick registers visually before the picker closes
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
@@ -2943,6 +2969,7 @@ const BASE_STATS = { maxHp: 3, magSize: 8, reloadTime: 1.2, fireRate: 0.13, dama
 // `keep` carries over what's on the field (coming from the title: the operator stays where
 // they are and the yard's drones join wave 1, which starts once the camera is down)
 function resetGame(keep = false) {
+  resetGameplayInput();
   if (!keep) { clearRun(); resetOpenings(); }
   seenDrops.clear();
   healGlow = 0; powerGlowTime = 0;
@@ -2977,6 +3004,7 @@ function startGame(fromTitle = false) {
   menuEl.classList.add('gone');
   menuEl.inert = true;
   resetGame(fromTitle);
+  focusGame();
 }
 
 function setPaused(on) {
@@ -2986,12 +3014,13 @@ function setPaused(on) {
   audio.setPaused(on);
   document.body.classList.toggle('paused', on);
   syncTouchControls();
-  firing = false;
-  for (const k in keys) keys[k] = false; // keyups are missed while the menu is up
+  resetGameplayInput();
   document.getElementById('pauseStat').textContent =
     `WAVE ${state.wave} · ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) document.getElementById('resumeBtn').focus({ preventScroll: true });
+  else if (state.choosing) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+  else focusGame();
 }
 
 function quitToTitle() {
