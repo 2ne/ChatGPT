@@ -2509,10 +2509,11 @@ function awardWaveBonuses() {
 // ===================================================================
 // AUTOMATIC EQUIPMENT — active-play timers, no additional touch buttons.
 const helper = new THREE.Group();
-const helperShell = new THREE.MeshStandardMaterial({ color: 0xa7a1ff, metalness: 0.6, roughness: 0.3 });
-box(helper, helperShell, 0, 0, 0, 0.65, 0.3, 0.55);
-box(helper, cyanLight, 0, 0.04, 0.29, 0.32, 0.08, 0.04);
-const helperBarrels = [-0.25, 0.25].map(x => box(helper, alloy, x, -0.02, 0.4, 0.12, 0.12, 0.45));
+const helperShell = new THREE.MeshStandardMaterial({ color: 0xf5f7fa, metalness: 0.12, roughness: 0.32 });
+model(helper, new THREE.SphereGeometry(0.36, 24, 16), helperShell, 0, 0, 0);
+// Small dark socket and centred gun keep the white spherical silhouette clear.
+model(helper, new THREE.SphereGeometry(0.12, 12, 8), carbon, 0, 0, 0.33);
+const helperBarrels = [0, 0.065].map(x => box(helper, alloy, x, 0, 0.45, 0.085, 0.085, 0.28));
 scene.add(helper); helper.visible = false;
 const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
 const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
@@ -2572,17 +2573,17 @@ function updateEquipment(dt) {
     const desired = player.position.clone().add(new THREE.Vector3(-0.85, 1.75, 0.6));
     helper.position.lerp(desired, Math.min(1, dt * 9));
     helperBarrels[1].visible = !!u.botGun;
-    helperShell.color.setHex(u.botBomb ? 0xffb16e : 0xa7a1ff);
+    helperBarrels[0].position.x = u.botGun ? -0.065 : 0;
     equipment.shot -= dt;
     const target = drones.filter(z => inside(z.position) && !wallBetween(helper.position, z.position) && clearPath(helper.position.x, helper.position.z, z.position.x, z.position.z, 0.05)).sort((a, b) => a.position.distanceToSquared(helper.position) - b.position.distanceToSquared(helper.position))[0];
     if (target) {
       helper.lookAt(target.position.x, helper.position.y, target.position.z);
       if (equipment.shot <= 0) {
+        helper.updateWorldMatrix(true, true);
         equipment.shot = u.botBomb ? 1.7 : 0.65 / (1 + 0.25 * (u.bot - 1) + (u.botGun === 2 ? 0.35 : 0));
         for (let k = 0; k < (u.botGun ? 2 : 1); k++) {
           const b = makeTracer(!!u.botBomb);
-          b.position.copy(helper.position); b.position.y = 1.1;
-          b.position.x += k ? 0.15 : -0.15;
+          helperBarrels[k].getWorldPosition(b.position);
           const dir = target.position.clone().sub(b.position); dir.y = 0; dir.normalize();
           b.lookAt(b.position.clone().add(dir));
           b.userData = { dir, life: 0.7, pierce: 0, hits: new Set(), helper: true, damage: 0.8 + u.bot * 0.7, blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0 };
@@ -2739,7 +2740,7 @@ function recommendationScore(u) {
 function upgradePreview(u) {
   const rank = (state.upgrades[u.id] || 0) + 1;
   const paths = {
-    bot: '<rect x="35" y="16" width="30" height="24" rx="6"/><path d="M25 28h10m30 0h10M43 24h2m10 0h2M40 40l-5 8m25-8 5 8"/>',
+    bot: '<circle cx="48" cy="29" r="19" fill="#eef3f7" stroke="#fff"/><circle cx="48" cy="29" r="6" fill="#172733" stroke="#172733"/><path d="M48 29h19" stroke="#506375" stroke-width="6"/>',
     mine: '<path d="M20 42h60M36 38l5-12h18l5 12zM50 18v-8M25 20l8 6m42-6-8 6"/>',
     shield: '<path d="M50 8l23 8v14c0 12-23 23-23 23S27 42 27 30V16zM40 30h20m-10-10v20"/>',
     rifle: '<path d="M10 28h25m-6-7 8 7-8 7"/>',
