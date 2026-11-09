@@ -35,6 +35,7 @@ export function createScore(ctx, musicBus) {
 
   const tracks = new Set();
   let ability, combat;
+  let combatRate = 1;
 
   function release(track) {
     tracks.delete(track);
@@ -54,7 +55,10 @@ export function createScore(ctx, musicBus) {
     gain.connect(level);
     gain.gain.setValueAtTime(fadeIn ? 0 : volume, start);
     if (fadeIn) gain.gain.linearRampToValueAtTime(volume, start + fadeIn);
-    const track = { name, start, phase, fadeIn, volume, gain, filter, source: null, end: Infinity, fadeAt: Infinity };
+    const track = {
+      name, start, phase, fadeIn, volume, gain, filter, source: null, end: Infinity, fadeAt: Infinity,
+      rate: loop && name !== 'ability' ? combatRate : 1,
+    };
     tracks.add(track);
     buffers[name].then(buffer => {
       if (!tracks.has(track)) return;
@@ -67,6 +71,7 @@ export function createScore(ctx, musicBus) {
       const source = ctx.createBufferSource();
       source.buffer = buffer;
       source.loop = loop;
+      source.playbackRate.value = track.rate;
       source.connect(filter);
       source.onended = () => release(track);
       track.source = source;
@@ -109,12 +114,20 @@ export function createScore(ctx, musicBus) {
       fadeOut(combat, nextBar, COMBAT_CROSSFADE);
       combat = play('late', nextBar, { loop: true, phase, fadeIn: COMBAT_CROSSFADE });
     },
+    // Nudge combat tempo as more bots pile into the deck (1.0 → ~1.18).
+    setCombatRate(rate) {
+      combatRate = Math.max(1, Math.min(1.18, rate));
+      if (combat?.source && tracks.has(combat)) {
+        combat.source.playbackRate.setTargetAtTime(combatRate, ctx.currentTime, 0.35);
+      }
+    },
     clearWave() {
       const clearedAt = ctx.currentTime;
       for (const track of tracks) {
         fadeOut(track, clearedAt, CLEAR_FADE);
       }
       combat = null;
+      combatRate = 1;
       ability = play('ability', clearedAt, {
         loop: true, fadeIn: CLEAR_FADE, volume: ABILITY_VOLUME, cutoff: ABILITY_CUTOFF,
       });
@@ -125,6 +138,7 @@ export function createScore(ctx, musicBus) {
         release(track);
       }
       combat = ability = null;
+      combatRate = 1;
     },
   };
 }

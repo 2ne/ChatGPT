@@ -1411,12 +1411,21 @@ function botsLeftLabel(n) {
 
 function checkBotMilestones(remaining) {
   if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
+  // Mark every crossed threshold, but only announce the lowest new one so rapid
+  // multi-kills do not stack 10 / 5 / 3 toasts back-to-back.
+  let hit = null;
   for (const n of BOT_MILESTONES) {
-    if (remaining !== n || botMilestonesDone.has(n)) continue;
-    botMilestonesDone.add(n);
-    toastQueue.push({ text: botsLeftLabel(n), color: '#82eaf5' });
-    if (!activePickupHint) toastTime = Math.min(toastTime, 0.12);
+    if (remaining <= n && !botMilestonesDone.has(n)) {
+      botMilestonesDone.add(n);
+      hit = n;
+    }
   }
+  if (hit === null) return;
+  for (let i = toastQueue.length - 1; i >= 0; i--) {
+    if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
+  }
+  toastQueue.push({ text: botsLeftLabel(hit), color: '#82eaf5', botsLeft: true });
+  if (!activePickupHint) toastTime = Math.min(toastTime, 0.12);
 }
 
 function updateToast(dt) {
@@ -1525,10 +1534,10 @@ const DRONE_PALETTES = [
   { plate: 0xa32e39, joint: 0x321c28, trim: 0xff8c75, optic: 0xffe4d1 },
 ];
 const BOT_TYPES = {
-  patrol: { name: 'PATROL', kit: 0, health: 1, speed: 1, size: 1, style: 'melee' },
-  runner: { name: 'FLANKER', kit: 1, health: 0.7, speed: 1.35, size: 0.88, style: 'flank' },
-  gunner: { name: 'PULSE GUNNER', kit: 2, health: 1.25, speed: 0.8, size: 1, style: 'ranged' },
-  heavy: { name: 'BULWARK', kit: 3, health: 2.5, speed: 0.62, size: 1.18, style: 'heavy' },
+  patrol: { name: 'PATROL', kit: 0, health: 1, speed: 1, size: 1, style: 'melee', loco: 'walk' },
+  runner: { name: 'FLANKER', kit: 1, health: 0.7, speed: 1.35, size: 0.88, style: 'flank', loco: 'roll' },
+  gunner: { name: 'PULSE GUNNER', kit: 2, health: 1.25, speed: 0.8, size: 1, style: 'ranged', loco: 'walk' },
+  heavy: { name: 'BULWARK', kit: 3, health: 2.5, speed: 0.62, size: 1.18, style: 'heavy', loco: 'stomp' },
 };
 function waveBotType() {
   const r = Math.random();
@@ -1547,29 +1556,36 @@ function spawnWaveBoss() {
   clearEnemyBolts();
   const hp = bossHealthMult();
   const volley = state.wave >= 6 ? 5 : 3;
-  // Four archetypes on a loop so late waves keep feeling different.
+  // Names mirror the trick: Slammer, Charger, Cannon/Skirmisher, Spawner.
   const kind = (state.wave - 1) % 4;
   let type, sub;
   if (kind === 0) {
-    type = { name: 'WARDEN', kit: 4, health: hp, speed: 0.72, size: 1.4, style: 'heavy', boss: true, volley: 0 };
-    sub = 'BOSS · Keep moving and keep your distance';
+    type = {
+      name: 'SLAMMER', kit: 4, health: hp, speed: 0.88, size: 1.42,
+      style: 'heavy', boss: true, volley: 0, slam: true, loco: 'stomp',
+    };
+    sub = 'BOSS · Wide slam strikes — do not stand still';
   } else if (kind === 1) {
-    type = { name: 'REAVER', kit: 4, health: hp * 0.92, speed: 1.35, size: 1.28, style: 'rusher', boss: true, volley: 0 };
+    type = {
+      name: 'CHARGER', kit: 4, health: hp * 0.92, speed: 1.35, size: 1.28,
+      style: 'rusher', boss: true, volley: 0, loco: 'skitter',
+    };
     sub = 'BOSS · It charges and swipes — stay mobile';
   } else if (kind === 2) {
     const armed = state.wave >= 3;
     type = {
-      name: armed ? 'SIEGE WARDEN' : 'HUNTER',
-      kit: 4, health: hp, speed: armed ? 0.78 : 1.1, size: 1.4,
+      name: armed ? 'CANNON' : 'SKIRMISHER',
+      kit: 4, health: hp, speed: armed ? 0.78 : 1.1, size: 1.35,
       style: armed ? 'ranged' : 'flank', boss: true, volley: armed ? volley : 0,
+      loco: armed ? 'stomp' : 'roll',
     };
-    sub = armed ? 'BOSS · Dodge the charged volley' : 'BOSS · Fast and aggressive';
+    sub = armed ? 'BOSS · Dodge the charged volley' : 'BOSS · Fast flanking pressure';
   } else {
     type = {
-      name: 'SCHISM', kit: 4, health: hp * 1.08, speed: 0.85, size: 1.45,
-      style: 'heavy', boss: true, volley: 0, split: true,
+      name: 'SPAWNER', kit: 4, health: hp * 1.08, speed: 0.85, size: 1.45,
+      style: 'heavy', boss: true, volley: 0, split: true, loco: 'stomp',
     };
-    sub = 'BOSS · Fragments peel off as it takes damage';
+    sub = 'BOSS · Spawns runners that later return to the core';
   }
   spawnDrone(undefined, type);
   showBanner(type.name, sub, 2.5);
@@ -1584,8 +1600,8 @@ function maybeSplitBoss(z) {
   ud.splitsDone++;
   const count = 3 + ud.splitsDone;
   const fragment = {
-    name: 'SCHISM FRAGMENT', kit: 4, health: 0.85, speed: 1.45, size: 0.72,
-    style: 'flank', fragment: true,
+    name: 'SPAWN', kit: 4, health: 0.85, speed: 1.45, size: 0.72,
+    style: 'flank', fragment: true, loco: 'roll',
   };
   for (let i = 0; i < count; i++) {
     const ang = (i / count) * Math.PI * 2 + ud.seed;
@@ -1597,7 +1613,7 @@ function maybeSplitBoss(z) {
     pushOutOfSolids(pos, 0.35);
     spawnDrone(pos, fragment);
   }
-  showBanner('SCHISM', 'Fragments loose', 1.6);
+  showBanner('SPAWNER', 'Spawns loose — clear them or they reform', 1.6);
   audio.explode(z.position);
 }
 function bakeDrone({ plate, joint, trim, optic }, seed) {
@@ -1806,19 +1822,23 @@ function hitDrone(z) {
 
 const Z_POLE_KNEE = new THREE.Vector3(0, 0, 1);
 const _zPole = new THREE.Vector3(), _zReach = new THREE.Vector3();
-// pose a drone for this frame: a lurching, uneven shamble that turns into a
-// loping run on later waves, arms groping toward the operator or hanging dead.
+// pose a drone for this frame. Chase logic is shared; locomotion (walk / roll /
+// skitter / stomp) changes how the rig reads while it moves.
 function animateDrone(z, dt, near) {
   const u = z.userData;
-  const Z_STRIKE = u.type.style === 'heavy' ? 0.4 : 0.2;
+  const loco = u.type.loco || 'walk';
+  const Z_STRIKE = u.type.style === 'heavy' || u.type.slam ? 0.45 : 0.2;
   const gait = u.gait; // 0 when it's standing its ground
   const sp = u.speed * gait;
-  const run = THREE.MathUtils.clamp((u.speed - 3) / 2, 0, 1); // later waves lope instead of shamble
-  const freq = 1.1 + sp * 0.22;
-  const beta = 0.6 - 0.18 * run;
+  const run = THREE.MathUtils.clamp((u.speed - 3) / 2, 0, 1);
+  const freq = loco === 'skitter' ? 2.2 + sp * 0.35
+    : loco === 'stomp' ? 0.75 + sp * 0.12
+    : loco === 'roll' ? 1.6 + sp * 0.3
+    : 1.1 + sp * 0.22;
+  const beta = loco === 'roll' ? 0.5 : 0.6 - 0.18 * run;
   u.phase = (u.phase + freq * dt) % 1;
   const ph = u.phase * Math.PI * 2;
-  const L = Math.min(0.7, sp * beta / freq);
+  const L = Math.min(loco === 'stomp' ? 0.55 : 0.7, sp * beta / Math.max(0.4, freq));
   const t = performance.now() / 1000 + u.seed;
   u.flinch *= Math.exp(-7 * dt);
   u.groan *= Math.exp(-2.5 * dt);
@@ -1833,18 +1853,25 @@ function animateDrone(z, dt, near) {
   const clamber = u.climb >= 0 ? Math.sin(Math.PI * u.climb) : 0; // over a window sill
 
   // pelvis: dips on every step, and drops hard onto the bad leg
-  const badStance = u.limp ? Math.max(0, Math.sin(ph + (u.limpSide > 0 ? 0 : Math.PI))) : 0;
-  const pelvisY = Z_HIP - 0.05 - 0.06 * run - 0.05 * Math.abs(Math.sin(ph)) * gait - 0.06 * slam - 0.08 * u.limp * badStance;
+  const badStance = u.limp && loco === 'walk' ? Math.max(0, Math.sin(ph + (u.limpSide > 0 ? 0 : Math.PI))) : 0;
+  const pelvisY = Z_HIP - 0.05
+    - (loco === 'roll' ? 0.12 : loco === 'skitter' ? 0.1 : 0.06 * run)
+    - (loco === 'roll' ? 0 : 0.05 * Math.abs(Math.sin(ph)) * gait)
+    - 0.06 * slam - 0.08 * u.limp * badStance;
   u.pelvis.position.set(0, pelvisY, 0);
-  u.pelvis.rotation.set(0, 0.12 * Math.sin(ph), 0.1 * Math.sin(ph) + 0.12 * u.limp * badStance * u.limpSide);
+  u.pelvis.rotation.set(
+    loco === 'roll' ? 0.08 * gait : 0,
+    loco === 'roll' ? u.phase * Math.PI * 2 * gait : 0.12 * Math.sin(ph),
+    loco === 'roll' ? 0 : 0.1 * Math.sin(ph) + 0.12 * u.limp * badStance * u.limpSide,
+  );
   u.pelvis.updateMatrix();
 
   // torso: hunched, lurching side to side against the hips, kicked back by hits
   u.upper.position.set(0, pelvisY + 0.08, 0);
   u.upper.rotation.set(
     u.hunch + 0.12 * run + 0.25 * u.attack - 0.55 * rear + 0.5 * slam - 0.6 * u.flinch,
-    -0.15 * Math.sin(ph),
-    -0.14 * Math.sin(ph) - 0.1 * u.limp * badStance * u.limpSide + 0.04 * Math.sin(t * 0.7));
+    loco === 'roll' ? 0 : -0.15 * Math.sin(ph),
+    loco === 'skitter' ? 0.22 * Math.sin(ph * 2) : -0.14 * Math.sin(ph) - 0.1 * u.limp * badStance * u.limpSide + 0.04 * Math.sin(t * 0.7));
   u.upper.updateMatrix();
   // head lolls, nods with each step, comes up to look at its meal, snaps back when shot
   u.head.rotation.set(
@@ -1854,18 +1881,33 @@ function animateDrone(z, dt, near) {
   u.jaw.rotation.x = 0.12 + 0.12 * Math.abs(Math.sin(t * 2.3)) + 0.45 * u.groan + 0.35 * u.attack * Math.abs(Math.sin(t * 9)) + 0.5 * rear;
 
   for (const l of u.limbs) {
-    // --- legs: the good leg steps through, the bad one drags its toe ---
-    const bad = u.limp && l.side === u.limpSide;
+    // --- legs ---
+    const bad = u.limp && l.side === u.limpSide && loco === 'walk';
     const p = (u.phase + (l.side > 0 ? 0 : 0.5 + 0.06 * u.limp)) % 1;
-    const { s, lift, pitch } = footCycle(p, beta);
-    l.foot3.set(l.side * 0.15, Z_ANKLE + lift * (bad ? 0.03 : 0.12 + 0.1 * run) * gait + 0.3 * clamber, s * L - 0.2 * clamber);
-    l.hipP.copy(l.hip).applyMatrix4(u.pelvis.matrix);
-    ik2(l.hipP, l.foot3, Z_THIGH, Z_SHIN, Z_POLE_KNEE, l.knee);
-    l.ankle.subVectors(l.foot3, l.knee).normalize().multiplyScalar(Z_SHIN).add(l.knee);
-    bone(l.thigh, l.hipP, l.knee, Z_POLE_KNEE);
-    bone(l.shin, l.knee, l.ankle, Z_POLE_KNEE);
-    l.foot.position.copy(l.ankle);
-    l.foot.rotation.set(bad ? 0.35 : pitch, l.side * (bad ? 0.35 : 0.12), 0);
+    if (loco === 'roll') {
+      // Wheels: fixed stance, continuous spin on the shin axis.
+      l.foot3.set(l.side * 0.18, Z_ANKLE * 0.55, 0);
+      l.hipP.copy(l.hip).applyMatrix4(u.pelvis.matrix);
+      ik2(l.hipP, l.foot3, Z_THIGH * 0.7, Z_SHIN * 0.7, Z_POLE_KNEE, l.knee);
+      l.ankle.subVectors(l.foot3, l.knee).normalize().multiplyScalar(Z_SHIN * 0.7).add(l.knee);
+      bone(l.thigh, l.hipP, l.knee, Z_POLE_KNEE);
+      bone(l.shin, l.knee, l.ankle, Z_POLE_KNEE);
+      l.foot.position.copy(l.ankle);
+      l.foot.rotation.set(u.phase * Math.PI * 2 * gait, l.side * 0.2, Math.PI / 2);
+      l.shin.rotation.x += u.phase * Math.PI * 2 * gait;
+    } else {
+      const { s, lift, pitch } = footCycle(p, beta);
+      const liftMul = loco === 'stomp' ? 0.2 : loco === 'skitter' ? 0.08 : (bad ? 0.03 : 0.12 + 0.1 * run);
+      const stride = loco === 'skitter' ? L * 0.65 : L;
+      l.foot3.set(l.side * (loco === 'skitter' ? 0.2 : 0.15), Z_ANKLE + lift * liftMul * gait + 0.3 * clamber, s * stride - 0.2 * clamber);
+      l.hipP.copy(l.hip).applyMatrix4(u.pelvis.matrix);
+      ik2(l.hipP, l.foot3, Z_THIGH, Z_SHIN, Z_POLE_KNEE, l.knee);
+      l.ankle.subVectors(l.foot3, l.knee).normalize().multiplyScalar(Z_SHIN).add(l.knee);
+      bone(l.thigh, l.hipP, l.knee, Z_POLE_KNEE);
+      bone(l.shin, l.knee, l.ankle, Z_POLE_KNEE);
+      l.foot.position.copy(l.ankle);
+      l.foot.rotation.set(bad ? 0.35 : pitch * (loco === 'stomp' ? 1.4 : 1), l.side * (bad ? 0.35 : 0.12), 0);
+    }
 
     // --- arms: reaching ones grope ahead (and claw when close); the rest hang and swing ---
     l.sh.copy(l.shoulder).applyMatrix4(u.upper.matrix);
@@ -1891,11 +1933,15 @@ function animateDrone(z, dt, near) {
   }
 }
 
-function nearestOpening(pos, skip) {
+function nearestOpening(pos, skip, z = null) {
+  // Large / boss bots jam in window frames — prefer doors when available.
+  const preferDoor = z && (z.userData.boss || z.userData.type.size >= 1.25);
   let best = null, bd = Infinity;
   for (const o of openings) {
     if (o === skip) continue;
-    const d = (o.x - pos.x) ** 2 + (o.z - pos.z) ** 2;
+    let d = (o.x - pos.x) ** 2 + (o.z - pos.z) ** 2;
+    if (preferDoor && o.kind === 'window') d *= 3.5;
+    if (preferDoor && o.kind === 'door') d *= 0.55;
     if (d < bd) { bd = d; best = o; }
   }
   return best;
@@ -1992,6 +2038,14 @@ function updateOpenings(dt) {
 // start a drone clambering in through a broken window
 function startClimb(z, o) {
   const ud = z.userData;
+  // Big bots get stuck in window frames — send them to a door instead.
+  if ((ud.boss || ud.type.size >= 1.25) && o.kind === 'window') {
+    const door = nearestOpening(z.position, o, z);
+    if (door && door.kind === 'door') {
+      ud.opening = door; ud.stage = 0; ud.via = -1;
+      return;
+    }
+  }
   o.climber = z;
   ud.climb = 0; ud.climbO = o;
   ud.climbFrom = z.position.clone();
@@ -2000,7 +2054,9 @@ function startClimb(z, o) {
 }
 function climbStep(z, dt) {
   const ud = z.userData, o = ud.climbO;
-  ud.climb = Math.min(1, ud.climb + dt / CLIMB_TIME);
+  // Bosses climb a touch faster so they spend less time wedged in the frame.
+  const climbDur = ud.boss ? CLIMB_TIME * 0.75 : CLIMB_TIME;
+  ud.climb = Math.min(1, ud.climb + dt / climbDur);
   const k = ud.climb, e = ease(k);
   z.position.x = ud.climbFrom.x + (o.lx - ud.climbFrom.x) * e;
   z.position.z = ud.climbFrom.z + (o.lz - ud.climbFrom.z) * e;
@@ -2015,7 +2071,9 @@ function endClimb(z, died) {
   if (died && ud.climb < 0.5) z.position.copy(ud.climbFrom); // falls back out
   else z.position.set(o.lx, 0, o.lz);
   z.position.y = 0; z.rotation.x = 0;
-  ud.climb = -1; ud.climbO = null; ud.opening = null; ud.stage = 0;
+  // Bosses and heavies often finish inside the frame — shove them clear of the sill.
+  if (!died) pushOutOfSolids(z.position, botRadius(z) + 0.08);
+  ud.climb = -1; ud.climbO = null; ud.opening = null; ud.stage = 0; ud.via = -1; ud.navPlan = null;
 }
 
 // --- solid props (see SOLIDS): drones are shoved out of them and plan a way round them ---
@@ -3066,7 +3124,7 @@ function walkToward(z, dx, dz, speed, turn, dt) {
     if (ud.blockedFor > 1.2) {
       ud.via = -1; ud.blockedFor = 0;
       if (ud.opening && !inside(z.position) && ud.stage === 0) {
-        ud.opening = nearestOpening(z.position, ud.opening);
+        ud.opening = nearestOpening(z.position, ud.opening, z);
       }
     }
     return false;
@@ -3087,12 +3145,33 @@ function hurtPlayer(damage = 1) {
   return true;
 }
 
+// Shared hunt point: same pursuit for every bot, with a soft inward pull near
+// corners so packs do not freeze when the operator stands in a pocket.
+function huntPoint(z, px, pz) {
+  const radius = botRadius(z);
+  const margin = radius + 0.55;
+  let tx = THREE.MathUtils.clamp(px, -HALF + margin, HALF - margin);
+  let tz = THREE.MathUtils.clamp(pz, -HALF + margin, HALF - margin);
+  const corner = (HALF - margin) * 0.7;
+  if (Math.abs(tx) > corner && Math.abs(tz) > corner) {
+    tx *= 0.78;
+    tz *= 0.78;
+  }
+  const side = Math.sin(z.userData.seed * 7.13);
+  const dx = px - z.position.x, dz = pz - z.position.z, d = Math.hypot(dx, dz) || 1;
+  tx += (-dz / d) * side * 0.65;
+  tz += (dx / d) * side * 0.65;
+  return { x: tx, z: tz };
+}
+
 function chaseDrone(z, dt) {
   const ud = z.userData, p = player.position;
   const rusher = ud.type.style === 'rusher';
-  const Z_STRIKE = ud.type.style === 'heavy' ? 0.4 : rusher ? 0.28 : 0.2;
-  const reach = rusher ? Z_REACH * 1.2 : Z_REACH;
-  const letGo = rusher ? Z_LET_GO * 1.15 : Z_LET_GO;
+  const slammer = !!ud.type.slam;
+  const Z_STRIKE = ud.type.style === 'heavy' || slammer ? 0.42 : rusher ? 0.28 : 0.2;
+  const reach = rusher ? Z_REACH * 1.2 : slammer ? Z_REACH * 1.25 : Z_REACH;
+  const letGo = rusher ? Z_LET_GO * 1.15 : slammer ? Z_LET_GO * 1.2 : Z_LET_GO;
+  const hitRange = slammer ? Z_HIT_RANGE * 1.45 : Z_HIT_RANGE;
   const pdx = p.x - z.position.x, pdz = p.z - z.position.z, pd = Math.hypot(pdx, pdz);
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
@@ -3138,7 +3217,11 @@ function chaseDrone(z, dt) {
     if (!ud.struck && ud.swing >= Z_STRIKE) {
       ud.struck = true;
       if (o) hitOpening(o);
-      else if (!(pd < Z_HIT_RANGE && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer(ud.type.style === 'heavy' && !ud.boss ? 2 : 1))) audio.swipe(z.position);
+      else if (!(pd < hitRange && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer((ud.type.style === 'heavy' && !ud.boss) || slammer ? 2 : 1))) {
+        audio.swipe(z.position);
+      } else if (slammer) {
+        state.shake = Math.max(state.shake, 0.55);
+      }
     }
     if (ud.swing >= Z_SWING) { ud.swing = -1; ud.swingCd = rnd(0.25, 0.6); }
   } else if (pd < (ud.standing ? letGo : reach) && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05)) {
@@ -3171,19 +3254,15 @@ function chaseDrone(z, dt) {
     }
     if (inside(z.position)) {
       ud.opening = null; ud.stage = 0; // through the wall — re-pick if knocked back out
-      if (ud.type.fragment && ud.reformT <= 0) {
-        // Returning to the core — leave tx/tz as set above.
-      } else if (ud.type.style === 'flank' && pd > 3) {
-        const side = Math.sin(ud.seed) > 0 ? 1 : -1;
-        tx += pdz / pd * 2.5 * side; tz -= pdx / pd * 2.5 * side;
-      } else if (rusher && pd > 2.2) {
-        // Commit straight at the operator — no flanking weave.
-        tx = p.x; tz = p.z;
+      if (!(ud.type.fragment && ud.reformT <= 0)) {
+        // Same pursuit for every role: hunt the operator (with corner-safe offset).
+        const hunt = huntPoint(z, p.x, p.z);
+        tx = hunt.x; tz = hunt.z;
       }
     } else {
       // Commit to one opening (no per-frame re-pick): walk up via its outer waypoint so
       // it comes at the door or window square-on, then break it and go through
-      if (!ud.opening) { ud.opening = nearestOpening(z.position); ud.stage = 0; }
+      if (!ud.opening) { ud.opening = nearestOpening(z.position, null, z); ud.stage = 0; }
       const o = ud.opening;
       if (ud.stage === 0) {
         tx = o.ox; tz = o.oz;
@@ -3209,12 +3288,24 @@ function chaseDrone(z, dt) {
       walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * rush, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1), dt);
     }
   }
-  // progress check: a drone that's been trying to walk for 2s but has barely moved (jammed
-  // in a crowd at a door, say) forgets its plan and makes for the next-nearest way in
-  if (walking && (ud.stuckT += dt) > 2) {
-    if (Math.hypot(z.position.x - ud.stuckX, z.position.z - ud.stuckZ) < 0.6 && ud.opening && !inside(z.position)) {
-      ud.opening = nearestOpening(z.position, ud.opening);
-      ud.stage = 0; ud.via = -1;
+  // progress check: jammed bots (corner packs, window frames, doors) forget their plan
+  if ((walking || ud.climb >= 0) && (ud.stuckT += dt) > 1.4) {
+    const moved = Math.hypot(z.position.x - ud.stuckX, z.position.z - ud.stuckZ);
+    if (moved < 0.55) {
+      ud.via = -1;
+      ud.navPlan = null;
+      ud.blockedFor = 0;
+      if (ud.climb >= 0 && ud.climb > 0.15) endClimb(z); // abort a wedged window climb
+      else if (ud.opening && !inside(z.position)) {
+        ud.opening = nearestOpening(z.position, ud.opening, z);
+        ud.stage = 0;
+      } else if (inside(z.position)) {
+        // Sidestep out of a corner jam, then re-hunt next frame.
+        const side = Math.sin(ud.seed * 3.7) >= 0 ? 1 : -1;
+        z.position.x += side * 0.35;
+        z.position.z += side * 0.2;
+        pushOutOfSolids(z.position, botRadius(z));
+      }
     }
     ud.stuckT = 0;
   }
@@ -3310,6 +3401,12 @@ function update(dt) {
       updateDrops(dt);
       updateEmeralds(dt);
       if (state.intermission <= 0) state.waveTime += dt;
+      // Combat music edges up as more bots make it onto the deck.
+      let insideBots = 0;
+      for (const d of drones) if (inside(d.position)) insideBots++;
+      audio.setCombatRate(1 + Math.min(0.18, insideBots * 0.015));
+    } else {
+      audio.setCombatRate(1);
     }
 
     // --- waves ---
