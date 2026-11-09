@@ -2592,8 +2592,8 @@ function updateEquipment(dt) {
     }
   }
   equipment.mine -= dt;
-  if (u.mine && equipment.mine <= 0 && equipment.mines.length < 6) {
-    equipment.mine = 4.5 - u.mine * 0.5;
+  if (u.mine && equipment.mine <= 0 && equipment.mines.length < 3) {
+    equipment.mine = 8; // Ranks improve each trap, not passive deployment frequency.
     const m = new THREE.Mesh(mineGeo, mineMat);
     m.position.copy(player.position); m.position.y = 0.12;
     m.userData = { life: 18, armed: 0.6 };
@@ -2604,7 +2604,7 @@ function updateEquipment(dt) {
     const triggered = m.userData.armed <= 0 && drones.some(z => Math.hypot(z.position.x - m.position.x, z.position.z - m.position.z) < 1.5 && !wallBetween(m.position, z.position));
     if (triggered || m.userData.life <= 0) {
       scene.remove(m); equipment.mines.splice(i, 1);
-      if (triggered) equipmentBlast(m.position, 2.3 + u.mine * 0.3, 3 + u.mine * 2, !!u.shock);
+      if (triggered) equipmentBlast(m.position, 1.8 + u.mine * 0.2, 3 + u.mine, !!u.shock);
       if (state.choosing) return;
     }
   }
@@ -2632,7 +2632,7 @@ const UPGRADES = [
   { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'An automatic gun at your side', max: 3, stat: s => [s.upgrades.bot || 0, `Rank ${(s.upgrades.bot || 0) + 1}`], apply: () => {} },
   { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botBomb, stat: s => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
   { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botGun, stat: s => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
-  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'Automatically leave explosive traps', max: 3, stat: s => [s.upgrades.mine || 0, `Rank ${(s.upgrades.mine || 0) + 1}`], apply: () => {} },
+  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: s => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
   { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: s => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
   { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: s => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
   { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Getting hit blasts nearby enemies', max: 3, stat: s => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
