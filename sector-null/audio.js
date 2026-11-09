@@ -210,8 +210,11 @@ export function createAudio(settings, listener) {
       signal(base.map(n => n + shift), 0.11, 0.06);
     },
     emerald(chain = 0) {
-      const n = 72 + Math.min(chain, 8) * 2;
-      signal([n, n + 4], 0.08, 0.04);
+      // Short digital tick — no chord, no reverb. Chain only nudges pitch.
+      if (!ctx) return;
+      const hz = 1480 + Math.min(chain, 8) * 90;
+      voice(hz, hz * 1.12, 0.045, 0.035, { type: 'square', attack: 0.002 });
+      grain(hz * 1.6, 0.03, 0.028);
     },
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },
