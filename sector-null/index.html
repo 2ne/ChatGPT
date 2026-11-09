@@ -48,18 +48,24 @@
 </div>
 
 <div id="menu" class="splash">
-  <div id="menuShade"></div>
+  <div id="menuShade" aria-hidden="true"></div>
+  <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="station-label"><i aria-hidden="true"></i><span>Orbital Systems <b>Reactor Deck 07</b></span></div>
+  <div class="station-tag" aria-hidden="true">07 / NUL <i></i></div>
   <div id="menuCol">
-    <div class="station-label"><i></i> ORBITAL SYSTEMS / REACTOR DECK 07</div>
-    <h1 id="title"><span id="titleTop">SECTOR</span><span id="titleMain">NULL<span class="title-dot">.</span></span></h1>
-    <p id="mission">Security has turned on the crew. Hold the reactor deck.</p>
-    <button type="button" id="pressAny">INITIALISE <span>↗</span></button>
-    <nav id="menuList">
-      <div id="menuMarker"></div>
-      <button data-act="play"><i>01</i><span>PLAY</span></button>
-      <button data-act="how"><i>02</i><span>HOW TO PLAY</span></button>
-      <button data-act="settings"><i>03</i><span>SETTINGS</span></button>
-      </nav>
+    <h1 id="title" aria-label="Sector Null"><span id="titleTop">Sector</span><span id="titleMain"><span class="title-word">Null</span><i class="title-dot" aria-hidden="true"></i></span></h1>
+    <button type="button" id="pressAny"><span>Press</span> <b>Start</b> <span>to begin</span></button>
+    <nav id="menuList" aria-label="Main menu">
+      <button data-act="play">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 3 15 9-15 9z"/></svg><span>Play</span>
+      </button>
+      <button data-act="how">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6h10c2 0 3.1 1.3 3.7 3.3l1.2 4.8c.7 2.8-1.5 4.6-3.5 2.8L16 15H8l-2.4 1.9c-2 1.8-4.2 0-3.5-2.8l1.2-4.8C3.9 7.3 5 6 7 6Z"/><path d="M7 9v4M5 11h4m6-1h.01m3 2h.01"/></svg><span>How to play</span>
+      </button>
+      <button data-act="settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 3-.6 2.5-1.8.8-2.2-1.4-2.5 2.5 1.4 2.2-.8 1.8L1 12l.5 3.4 2.5.3 1.1 1.7-1 2.3L7 22l2-1.6 2 .5 1 2.2 3.4-.5.3-2.5 1.7-1.1 2.3 1 2.3-2.9-1.6-2 .5-2 2.2-1-.5-3.4-2.5-.3-1.1-1.7 1-2.3-2.9-2.3-2 1.6-2-.5L12 2z" transform="translate(1 0) scale(.94)"/><circle cx="12" cy="12" r="3.1"/></svg><span>Settings</span>
+      </button>
+    </nav>
   </div>
 
   <section id="howPanel" class="mpanel">
@@ -86,7 +92,6 @@
     </div>
   </section>
 
-  <div class="station-tag" aria-hidden="true"><span>07 / NUL</span><b>REACTOR ONLINE</b></div>
   <div id="menuFoot">
     <div id="bestRun"></div>
     <div id="menuHints"></div>

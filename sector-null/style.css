@@ -132,65 +132,9 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   /* ---------- title screen ---------- */
   #hud { transition: opacity .6s; }
   body.titling #hud { opacity: 0; }
-  #menu { position: fixed; inset: 0; z-index: 10; user-select: none; overflow: hidden; }
-  #menu.gone { pointer-events: none; }
-  /* legibility scrim on the left, a heavy vignette, and film grain over the live scene */
-  #menuShade {
-    position: absolute; inset: 0; pointer-events: none;
-    background:
-      linear-gradient(90deg, rgba(4,4,7,.88) 0%, rgba(4,4,7,.62) 28%, rgba(4,4,7,0) 58%),
-      linear-gradient(0deg, rgba(4,4,7,.75) 0%, rgba(4,4,7,0) 22%),
-      radial-gradient(ellipse 120% 95% at 60% 45%, transparent 55%, rgba(0,0,0,.75) 100%);
-    transition: opacity 1s;
-  }
   #fadeIn { position: fixed; inset: 0; background: #000; z-index: 30; pointer-events: none; animation: fadeIn 1.1s ease-out forwards; }
   @keyframes fadeIn { to { opacity: 0; } }
 
-  #menuCol {
-    position: absolute; left: clamp(32px, 7vw, 130px); top: 50%; transform: translateY(-54%);
-    width: min(560px, 46vw);
-  }
-  #title { font-family: "Rajdhani", sans-serif; line-height: .86; filter: drop-shadow(0 4px 0 #000) drop-shadow(0 0 30px #64dfee40); }
-  #titleTop { font-size: clamp(26px, 3.3vw, 50px); letter-spacing: .5em; color: #e4f1f5; }
-  #titleMain { font-size: clamp(64px, 8.6vw, 128px); letter-spacing: 4px; color: #64dfee; margin-left: -3px; }
-
-  #pressAny {
-    margin-top: 64px; font-size: 22px; letter-spacing: 8px; color: #cdd2d8;
-    animation: breathe 2.2s ease-in-out infinite;
-  }
-  @keyframes breathe { 0%, 100% { opacity: .9; } 50% { opacity: .28; } }
-  #menu:not(.splash) #pressAny { display: none; }
-  #menu.splash #menuList, #menu.splash #menuFoot { display: none; }
-
-  #menuList { position: relative; margin-top: 52px; display: flex; flex-direction: column; }
-  #menuList button {
-    font: inherit; background: none; border: 0; cursor: pointer; text-align: left;
-    display: flex; align-items: baseline; gap: 18px; padding: 7px 0 7px 26px;
-    color: #a1b4c0; transition: color .16s, transform .22s cubic-bezier(.2, .8, .2, 1);
-    animation: itemIn .55s cubic-bezier(.2, .8, .2, 1) backwards;
-  }
-  #menuList button:nth-of-type(2) { animation-delay: .07s; }
-  #menuList button:nth-of-type(3) { animation-delay: .14s; }
-  #menuList button:nth-of-type(4) { animation-delay: .21s; }
-  @keyframes itemIn { from { opacity: 0; transform: translateX(-28px); } }
-  #menuList button i { font-style: normal; font-size: 17px; letter-spacing: 2px; color: #8da6b2; transition: color .16s; }
-  #menuList button span { font-family: "Rajdhani", sans-serif; font-size: clamp(30px, 2.6vw, 40px); letter-spacing: 3px; line-height: 1.1; }
-  #menuList button.sel { color: #e4f1f5; transform: translateX(12px); }
-  #menuList button.sel i { color: #64dfee; }
-  #menuList button.sel span { text-shadow: 0 0 22px #64dfee55, 0 2px 0 #000; }
-  #menuMarker {
-    position: absolute; left: 0; top: 0; width: 6px; background: #64dfee; box-shadow: 0 0 14px #64dfee;
-    transition: transform .22s cubic-bezier(.2, .8, .2, 1), height .22s;
-  }
-
-  #menuFoot {
-    position: absolute; left: clamp(32px, 7vw, 130px); right: clamp(32px, 4vw, 70px); bottom: 34px;
-    display: flex; justify-content: space-between; align-items: flex-end; font-size: 15px; letter-spacing: 3px; color: #a1b4c0;
-    animation: itemIn .6s .2s cubic-bezier(.2, .8, .2, 1) backwards;
-  }
-  #bestRun b { font-weight: normal; color: #cdd2d8; }
-  #bestRun .lbl { color: #64dfee; margin-right: 12px; }
-  #menuHints { display: flex; gap: 22px; align-items: center; }
   kbd {
     display: inline-block; min-width: 26px; height: 26px; padding: 0 6px; margin-right: 6px;
     font: inherit; font-size: 16px; line-height: 24px; text-align: center; letter-spacing: 1px; color: #e4f1f5;
@@ -231,11 +175,6 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .toggle { display: flex; gap: 6px; font-size: 16px; }
   .toggle i { font-style: normal; padding: 1px 10px; border: 1px solid #2c2f37; color: #97b0bd; }
   .toggle i.on { border-color: #64dfee; color: #e4f1f5; background: #64dfee33; }
-
-  /* leaving for a run: the column slides off and the shade lifts while the camera swoops down */
-  #menu.gone #menuCol, #menu.gone #menuFoot, #menu.gone .mpanel { opacity: 0; transform: translate(-40px, -54%); transition: opacity .35s, transform .5s cubic-bezier(.5, 0, .8, .4); }
-  #menu.gone #menuFoot { transform: translateY(20px); }
-  #menu.gone #menuShade { opacity: 0; }
 
   #deathBest { color: #8a9098; font-size: 16px; letter-spacing: 4px; margin-top: 8px; min-height: 1.2em; }
   #deathBest.record { color: #ffbd78; }
@@ -281,59 +220,6 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   #deathTitle { font-family: "Rajdhani", sans-serif; font-size: clamp(72px, 12vw, 170px); letter-spacing: 10px; color: #ffa859; filter: drop-shadow(0 4px 0 #000) drop-shadow(0 0 28px #ffa85955); }
   #deathStat { color: #64dfee; font-size: 22px; letter-spacing: 4px; margin-top: 22px; }
 
-/* Station interface */
-#menuShade {
-  background:
-    linear-gradient(90deg, #070d16 0%, #070d16ed 19%, #070d168c 38%, #070d1600 70%),
-    linear-gradient(0deg, #070d16cc, transparent 24%),
-    radial-gradient(ellipse at 66% 45%, transparent 44%, #050b14ac 100%);
-}
-#menuCol { width: min(510px, 46vw); }
-.station-label, .station-tag {
-  font-size: 13px;
-  letter-spacing: 0.23em;
-  color: #a1bbc9;
-}
-.station-label { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; white-space: nowrap; }
-.station-label i { width: 7px; height: 7px; background: #72edf7; box-shadow: 0 0 13px #72edf7; transform: rotate(45deg); }
-.station-tag {
-  position: absolute;
-  top: max(28px, env(safe-area-inset-top));
-  right: max(32px, env(safe-area-inset-right));
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: right;
-  padding-right: 12px;
-  border-right: 1px solid #64dfee88;
-}
-.station-tag b { color: #76e6ef; font-weight: 600; }
-#menu.gone .station-tag { opacity: 0; transition: opacity .3s; }
-#title { line-height: .72; font-weight: 700; margin-left: -3px; }
-#titleTop, #titleMain { display: block; }
-#titleTop { font-size: clamp(28px, 4vw, 59px); letter-spacing: .23em; padding-bottom: 7px; }
-#titleMain { font-size: clamp(94px, 14vw, 210px); letter-spacing: -.06em; color: #dbf7ff; }
-.title-dot { color: #66deed; font-size: .63em; margin-left: .07em; }
-#mission { color: #b1c4d0; font-size: clamp(16px, 1.5vw, 21px); margin-top: 20px; max-width: 310px; line-height: 1.27; }
-#pressAny {
-  color: #a2f7ff;
-  background: #102631;
-  border: 1px solid #4aa9b8;
-  border-left: 3px solid #79edf9;
-  padding: 10px 20px 9px;
-  margin-top: 25px;
-  font: inherit;
-  font-size: 16px;
-  letter-spacing: .22em;
-  animation: none;
-  cursor: pointer;
-}
-#pressAny:hover { background: #1c3c49; }
-#pressAny span { margin-left: 15px; }
-#menuList { margin-top: 25px; max-width: 330px; }
-#menuList button { min-height: 42px; }
-#menuList button span { font-weight: 700; font-size: clamp(24px, 2.5vw, 36px); }
-#menuMarker { width: 2px; }
 #deathTitle { font-weight: 700; font-size: clamp(50px, 12vw, 130px); }
 #deathStat { text-align: center; }
 #bootError { z-index: 40; color: #e4f1f5; background: #080e16; padding: 24px; text-align: center; font-size: 22px; }
@@ -347,11 +233,6 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
 .stat { color: #e2f8ff; font-size: 16px; letter-spacing: 1.3px; }
 .cname, .mpanel h2 { font-weight: 700; }
 @media (max-width: 760px) {
-  #menuCol { left: 22px; width: calc(100% - 44px); }
-  .station-tag { display: none; }
-  #menuFoot { left: 22px; right: 22px; bottom: 14px; }
-  #menuHints { display: none; }
-  #menuShade { background: linear-gradient(90deg, #070d16ed, #070d1666); }
   .mpanel { z-index: 2; left: 22px; width: calc(100% - 44px); padding: 16px; }
   .crow { gap: 8px; font-size: 16px; letter-spacing: 1px; }
   .crow .caps { width: 134px; }

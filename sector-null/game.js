@@ -2,8 +2,11 @@ import * as THREE from 'three';
 
 import '@fontsource/rajdhani/latin-600.css';
 import '@fontsource/rajdhani/latin-700.css';
+import '@fontsource/oxanium/latin-700.css';
 import './style.css';
+import './title.css';
 import { createAudio } from './audio.js';
+import { createTitleScene } from './title-scene.js';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -17,6 +20,8 @@ function createRenderer() {
   }
 }
 const renderer = createRenderer();
+const titleScene = createTitleScene();
+const titleMotion = matchMedia('(prefers-reduced-motion: reduce)');
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.65));
@@ -2359,9 +2364,6 @@ const menu = {
     if (i !== this.sel && !quiet) audio.ui('move');
     this.sel = i;
     menuButtons.forEach((b, k) => b.classList.toggle('sel', k === i));
-    const b = menuButtons[i], m = document.getElementById('menuMarker');
-    m.style.height = b.offsetHeight + 'px';
-    m.style.transform = `translateY(${b.offsetTop}px)`;
   },
   open(panel) {
     this.panel = panel;
@@ -2415,7 +2417,8 @@ const menu = {
   key(e) {
     if (!title.active || menuEl.classList.contains('gone')) return false;
     if (e.code === 'KeyM') return false; // mute works everywhere
-    if (menuEl.classList.contains('splash')) { if (e.code === 'Tab') return false; this.leaveSplash(); return true; }
+    if (e.code === 'Tab') return false;
+    if (menuEl.classList.contains('splash')) { this.leaveSplash(); return true; }
     const c = e.code, up = c === 'ArrowUp' || c === 'KeyW', down = c === 'ArrowDown' || c === 'KeyS';
     const left = c === 'ArrowLeft' || c === 'KeyA', right = c === 'ArrowRight' || c === 'KeyD';
     const ok = c === 'Enter' || c === 'Space', back = c === 'Escape' || c === 'Backspace';
@@ -2458,6 +2461,7 @@ function showBest() {
 }
 menuButtons.forEach((b, i) => {
   b.addEventListener('mouseenter', () => { if (!menu.panel || menu.panel !== b.dataset.act) menu.select(i); });
+  b.addEventListener('focus', () => menu.select(i, true));
   b.addEventListener('click', () => menu.activate(i));
 });
 settingRows.forEach((r, i) => {
@@ -2807,7 +2811,11 @@ function loop(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
   if (!state.paused) update(dt);
-  renderer.render(scene, camera);
+  if (title.active) {
+    titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, titleMotion.matches);
+  } else {
+    renderer.render(scene, camera);
+  }
   requestAnimationFrame(loop);
 }
 

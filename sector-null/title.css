@@ -1,0 +1,352 @@
+/* The title screen and menu share the same diegetic frame. */
+#menu {
+  --ice: #e2fcff;
+  --cyan: #45ecff;
+  --pink: #ff368c;
+  --menu-x: clamp(34px, 7cqw, 145px);
+  --menu-width: min(32cqw, 570px);
+  --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  container-type: size;
+  isolation: isolate;
+  overflow: hidden;
+  user-select: none;
+  color: var(--ice);
+}
+body.titling #game { cursor: default; }
+#menu.gone { pointer-events: none; }
+#menu.gone > :not(#menuShade) { visibility: hidden; }
+#menuShade {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #050c18f2 0%, #050c18c9 24%, #06142540 44%, transparent 63%),
+    linear-gradient(0deg, #030b15ad, transparent 19%),
+    radial-gradient(ellipse at 5% 89%, #9b0d471f, transparent 44%);
+}
+#menu.splash #menuShade {
+  background:
+    radial-gradient(ellipse at 50% 37%, #030d1bce 0%, #06142388 25%, transparent 61%),
+    linear-gradient(0deg, #02091875, transparent 20%),
+    linear-gradient(90deg, #5e10343a, transparent 24%, transparent 92%, #07142530);
+}
+#menu.gone #menuShade {
+  background: #030811;
+  animation: leave-title .52s ease-out forwards;
+}
+@keyframes leave-title { to { opacity: 0; } }
+
+.station-frame {
+  position: absolute;
+  inset: clamp(8px, .85cqw, 16px);
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #ff3d9760, #ff3d9735 18%, transparent 31%) top left / 100% 1px no-repeat,
+    linear-gradient(90deg, transparent 58%, #24e7f076) bottom left / 100% 1px no-repeat,
+    linear-gradient(#ff3d9790, #ff3d9745 84%, transparent) left / 1px 100% no-repeat,
+    linear-gradient(transparent 17%, #22e8fa1d 76%, #22e8fa7a) right / 1px 100% no-repeat;
+}
+.station-frame::before {
+  content: "";
+  position: absolute;
+  inset: 16px 3px;
+  background:
+    radial-gradient(circle at 1px 1px, #ff419d8f 1px, transparent 1.3px) 0 0 / 15px 16px,
+    repeating-linear-gradient(0deg, #f02e6a3b 0 1px, transparent 1px 6px);
+  mask-image: linear-gradient(90deg, #000 0, #0008 22px, transparent 44px);
+  opacity: .67;
+}
+.station-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--pink), var(--pink)) 22% 0 / 5% 3px no-repeat,
+    linear-gradient(var(--cyan), var(--cyan)) 63% 100% / 12% 2px no-repeat,
+    linear-gradient(90deg, #ff368c 33%, transparent 33% 50%, #ff368c85 50% 82%, transparent 82%) 2% 97% / 34px 5px no-repeat;
+  opacity: .9;
+}
+.station-frame i {
+  position: absolute;
+  width: clamp(18px, 4cqw, 55px);
+  height: clamp(18px, 4cqw, 48px);
+  border: 1px solid;
+  border-radius: 5px;
+}
+.station-frame i:nth-child(1) { top: 0; left: 0; color: var(--pink); border-right: 0; border-bottom: 0; }
+.station-frame i:nth-child(2) { top: 0; right: 0; color: var(--cyan); border-left: 0; border-bottom: 0; }
+.station-frame i:nth-child(3) { bottom: 0; left: 0; color: var(--pink); border-right: 0; border-top: 0; }
+.station-frame i:nth-child(4) { bottom: 0; right: 0; color: var(--cyan); border-left: 0; border-top: 0; }
+
+.station-label, .station-tag {
+  position: absolute;
+  top: max(23px, 4.75cqh, env(safe-area-inset-top));
+  display: flex;
+  align-items: center;
+  gap: clamp(9px, 1.2cqw, 21px);
+  font-size: clamp(11px, 1.12cqw, 20px);
+  line-height: 1.14;
+  letter-spacing: .23em;
+  text-transform: uppercase;
+  color: var(--ice);
+  text-shadow: 0 2px 10px #000;
+}
+.station-label { left: max(21px, 4.5cqw, env(safe-area-inset-left)); align-items: start; }
+.station-label b { display: block; margin-top: .29em; color: var(--cyan); letter-spacing: .17em; }
+.station-label i {
+  width: 1.95em;
+  aspect-ratio: 1;
+  border: 2px solid var(--cyan);
+  mask: conic-gradient(from 45deg, transparent 0 11deg, #000 11deg 79deg, transparent 79deg 101deg, #000 101deg 169deg, transparent 169deg 191deg, #000 191deg 259deg, transparent 259deg 281deg, #000 281deg 349deg, transparent 349deg);
+}
+.station-tag { right: max(21px, 3cqw, env(safe-area-inset-right)); white-space: nowrap; }
+.station-tag i {
+  width: 2.8em;
+  height: .83em;
+  transform: skewX(-40deg);
+  background: repeating-linear-gradient(90deg, var(--pink) 0 21%, transparent 21% 32%);
+}
+
+#menuCol {
+  position: absolute;
+  top: 12.2cqh;
+  left: var(--menu-x);
+  width: var(--menu-width);
+}
+#menu.splash #menuCol {
+  top: 20.5cqh;
+  left: 50%;
+  width: min(48cqw, 850px);
+  transform: translateX(-50%);
+  text-align: center;
+}
+#title {
+  position: relative;
+  isolation: isolate;
+  width: max-content;
+  max-width: 100%;
+  font: 700 clamp(62px, min(10.6cqw, 19cqh), 195px)/.81 "Oxanium", "Rajdhani", sans-serif;
+  text-transform: uppercase;
+}
+#menu.splash #title {
+  margin-inline: auto;
+  font-size: clamp(75px, min(13.9cqw, 25cqh), 264px);
+}
+#title::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: -.1em -.08em -.105em -.19em;
+  opacity: .87;
+  --corner: linear-gradient(var(--cyan), var(--cyan));
+  background:
+    var(--corner) top left / .22em 2px no-repeat,
+    var(--corner) top left / 2px .21em no-repeat,
+    var(--corner) top 25% right / .19em 1px no-repeat,
+    var(--corner) top 27% right / 1px .18em no-repeat,
+    var(--corner) bottom left / .2em 2px no-repeat,
+    var(--corner) bottom left / 2px .19em no-repeat;
+  filter: drop-shadow(0 0 5px #40e9fa91);
+}
+#menu.splash #title::before { inset: -.08em -.12em -.11em -.18em; }
+#title::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  inset: 20% -25% 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 7px, #13d9ff38 7px 8px, transparent 8px 13px),
+    repeating-linear-gradient(90deg, #fa478f70 0 12px, transparent 13px 38px);
+  mask-image: radial-gradient(ellipse, #0008, transparent 67%);
+  opacity: .8;
+}
+#titleTop {
+  display: block;
+  font-size: .27em;
+  line-height: 1;
+  letter-spacing: .54em;
+  margin-inline-end: -.54em;
+  margin-block-end: .12em;
+  padding-left: .08em;
+  color: #e7f9fd;
+  text-shadow: 0 0 .42em #46c5eb4d, 0 .07em .17em #041c2a;
+}
+#titleMain { display: flex; align-items: end; gap: .066em; letter-spacing: -.026em; }
+.title-word {
+  display: block;
+  color: #8ef5ff;
+  background: linear-gradient(180deg, #eaffff 6%, #b6faff 31%, #66e8ff 63%, #53ddf3 94%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 .065em #2cdefa54);
+}
+.title-word::after {
+  content: "Null";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 8px, #d1ffff 9px, transparent 10px 13px),
+    repeating-linear-gradient(90deg, #74f9fc 0 2px, transparent 3px 11px);
+  background-clip: text;
+  mask: repeating-linear-gradient(2deg, #000 0 2px, transparent 3px 9px, #000 10px 12px, transparent 13px 29px);
+  opacity: .46;
+  pointer-events: none;
+}
+.title-dot {
+  flex: none;
+  width: .155em;
+  height: .155em;
+  margin-bottom: .113em;
+  background: var(--pink);
+  box-shadow: 0 0 .1em #f3238266;
+}
+
+#pressAny {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.4cqw, 24px);
+  width: min(39cqw, 650px);
+  min-height: clamp(46px, 7.4cqh, 78px);
+  padding: 8px 12px;
+  margin-top: 7.5cqh;
+  border: 0;
+  background: none;
+  color: var(--ice);
+  font: 700 clamp(12px, 1.56cqw, 27px)/1 "Rajdhani", sans-serif;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  isolation: isolate;
+  filter: drop-shadow(0 0 11px #f8309863);
+}
+#pressAny::before, #pressAny::after, #menuList button::before, #menuList button::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  inset: 0;
+  clip-path: var(--cut);
+}
+#pressAny::before { background: #ff66b2; }
+#pressAny::after {
+  inset: 2px;
+  background: linear-gradient(90deg, #30122b, #111324 56%, #201122);
+  box-shadow: inset 0 0 20px #d5377d54;
+}
+#pressAny b {
+  padding: .16em .65em .12em;
+  border: 1px solid #ffe2f2;
+  box-shadow: 0 0 .6em #ff2e9d95, inset 0 0 .5em #ff2e9d6e;
+  color: #fff;
+  background: #6f164055;
+}
+#pressAny:hover, #pressAny:focus-visible { filter: drop-shadow(0 0 15px #f830989e); }
+#pressAny:hover::after { background: linear-gradient(90deg, #551d43, #20172d 56%, #3f1737); }
+
+#menu:not(.splash) #pressAny, #menu.splash :is(#menuList, #menuFoot) { display: none; }
+#menuList {
+  display: grid;
+  width: min(100%, 455px);
+  gap: clamp(5px, 1.1cqh, 11px);
+  margin-top: 6cqh;
+}
+#menuList button {
+  --edge: var(--pink);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: clamp(13px, 2.1cqw, 35px);
+  min-height: clamp(46px, 7.3cqh, 79px);
+  padding: 0 clamp(15px, 2.3cqw, 39px);
+  border: 0;
+  background: none;
+  color: #f2eff9;
+  font: 700 clamp(15px, 1.76cqw, 30px)/1 "Rajdhani", sans-serif;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-align: start;
+  cursor: pointer;
+  transition: filter .17s, color .17s;
+}
+#menuList button::before { background: linear-gradient(90deg, var(--edge), #da45876b 57%, transparent 99%); }
+#menuList button::after {
+  inset: 1px 0 1px 3px;
+  background: linear-gradient(90deg, #211022f2, #111423bc 62%, #10162309);
+}
+#menuList button svg {
+  flex: none;
+  width: clamp(20px, 2.4cqw, 39px);
+  aspect-ratio: 1;
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#menuList button:is(.sel, :focus-visible) {
+  --edge: var(--cyan);
+  filter: drop-shadow(0 0 10px #19d9f579);
+  color: #fff;
+}
+#menuList button:is(.sel, :focus-visible)::before { background: var(--edge); }
+#menuList button:is(.sel, :focus-visible)::after {
+  inset: 2px 2px 2px 4px;
+  background:
+    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / clamp(18px, 3.5cqw, 56px) 100% no-repeat,
+    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
+}
+@starting-style {
+  #menu:not(.splash) #menuList { opacity: 0; transform: translateX(-14px); }
+}
+#menuList { transition: opacity .3s, transform .3s; }
+
+#menuFoot {
+  position: absolute;
+  inset: auto max(24px, 3.5cqw) max(17px, 2.8cqh) var(--menu-x);
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 12px;
+  letter-spacing: .16em;
+  color: #adccdc;
+  text-shadow: 0 1px 8px #000;
+  pointer-events: none;
+}
+#bestRun .lbl { color: var(--cyan); margin-right: 10px; }
+#menuHints { display: flex; gap: 15px; margin-left: auto; }
+#menuHints kbd { min-width: 20px; height: 20px; padding-inline: 4px; font-size: 12px; line-height: 18px; }
+#menu .mpanel { left: calc(var(--menu-x) + var(--menu-width) + 20px); background: #081827f7; border-color: #33708a; }
+#menu .mpanel.open { z-index: 2; }
+
+@container (max-width: 760px) {
+  #menuCol { top: 17cqh; left: max(23px, 8cqw); width: min(70cqw, 350px); }
+  #menu.splash #menuCol { top: 27cqh; width: 84cqw; }
+  #menu.splash #title { font-size: clamp(60px, 18cqw, 116px); }
+  #title { font-size: clamp(52px, 15cqw, 105px); }
+  #menuList { margin-top: 5cqh; }
+  #pressAny { width: min(72cqw, 395px); margin-top: 6cqh; }
+  #menu .mpanel { left: 22px; width: calc(100% - 44px); }
+  #menuHints { display: none; }
+}
+@container (max-height: 500px) and (min-width: 600px) {
+  #menuCol { top: 17cqh; }
+  #title { font-size: 16cqh; }
+  #menu.splash #menuCol { top: 22cqh; }
+  #menu.splash #title { font-size: 23cqh; }
+  #menuList { margin-top: 3.8cqh; }
+  #menuList button { min-height: 41px; }
+  #pressAny { margin-top: 6cqh; }
+  #menu .mpanel { max-height: 88cqh; overflow: auto; }
+}
+@container (max-width: 350px) {
+  .station-label, .station-tag { letter-spacing: .12em; }
+  .station-tag i { width: 1.8em; }
+}
