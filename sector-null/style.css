@@ -52,8 +52,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .enemy-stats .stat-value { min-width: 2ch; text-align: right; }
   #score { color: #9dff7a; }
   .score-high .stat-value { color: #a8c4b0; font-size: 1em; }
-  #waveNum, #zleft { color: #82eaf5; }
-  #kills { color: #71dabb; }
+  #waveNum { color: #82eaf5; }
 
   /* health pips */
   #health {
@@ -263,8 +262,6 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .toggle i { font-style: normal; padding: 1px 10px; border: 1px solid #2c2f37; color: #97b0bd; }
   .toggle i.on { border-color: #64dfee; color: #e4f1f5; background: #64dfee33; }
 
-  #deathBest { color: #8a9098; font-size: 16px; letter-spacing: 4px; margin-top: 8px; min-height: 1.2em; }
-  #deathBest.record { color: #ffbd78; }
   /* the pause and death menus */
   body.paused #hud, body.paused #picker, body.paused #flash { visibility: hidden; }
   #pause { background: #060e19bd; padding: 16px; }
@@ -295,20 +292,147 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   #pauseMenu button:hover { background: #1e3b4e; }
   #pauseMenu #resumeBtn:hover { background: #cefaff; }
   #pause .sub { color: #b2c8d6; font-size: 14px; letter-spacing: .08em; margin-top: 12px; }
-  .vmenu { display: flex; flex-direction: column; gap: 6px; margin-top: 34px; }
-  .vmenu button {
-    font: inherit; font-size: 30px; letter-spacing: 6px; color: #8a9098;
-    background: none; border: 0; cursor: pointer; transition: color .12s, text-shadow .12s;
+  #death {
+    --ice: #e2fcff;
+    --cyan: #45ecff;
+    --pink: #ff368c;
+    --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+    background:
+      radial-gradient(ellipse at 50% 28%, #0a1a2ecc 0%, #050c18d8 42%, #030811f2 100%),
+      linear-gradient(90deg, #5e103428, transparent 28%, transparent 78%, #07142540);
+    padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
   }
-  .vmenu button::before, .vmenu button::after { content: ""; display: inline-block; width: 1em; color: #64dfee; }
-  .vmenu button:hover { color: #e4f1f5; text-shadow: 0 0 12px #64dfee88; }
-  .vmenu button:hover::before { content: "›"; }
-  .vmenu button:hover::after { content: "‹"; }
-  #deathTitle { font-family: "Rajdhani", sans-serif; font-size: clamp(72px, 12vw, 170px); letter-spacing: 10px; color: #ffa859; filter: drop-shadow(0 4px 0 #000) drop-shadow(0 0 28px #ffa85955); }
-  #deathStat { color: #64dfee; font-size: 22px; letter-spacing: 4px; margin-top: 22px; }
-
-#deathTitle { font-weight: 700; font-size: clamp(50px, 12vw, 130px); }
-#deathStat { text-align: center; }
+  #deathPanel {
+    position: relative;
+    width: min(100%, 560px);
+    padding: clamp(28px, 5vw, 48px) clamp(22px, 4vw, 40px) clamp(24px, 4vw, 36px);
+    text-align: center;
+    color: var(--ice);
+    isolation: isolate;
+  }
+  #deathPanel .station-frame {
+    inset: 0;
+    background:
+      linear-gradient(90deg, #ff3d9760, #ff3d9735 18%, transparent 31%) top left / 100% 1px no-repeat,
+      linear-gradient(90deg, transparent 58%, #24e7f076) bottom left / 100% 1px no-repeat,
+      linear-gradient(#ff3d9790, #ff3d9745 84%, transparent) left / 1px 100% no-repeat,
+      linear-gradient(transparent 17%, #22e8fa1d 76%, #22e8fa7a) right / 1px 100% no-repeat;
+  }
+  #deathEyebrow {
+    font: 700 clamp(12px, 1.8vw, 16px)/1 "Rajdhani", sans-serif;
+    letter-spacing: .54em;
+    margin: 0 0 10px;
+    padding-left: .54em;
+    color: #e7f9fd;
+    text-shadow: 0 0 .42em #46c5eb4d;
+  }
+  #deathTitle {
+    display: inline-flex;
+    align-items: end;
+    gap: .08em;
+    margin: 0;
+    font: 700 clamp(42px, 9vw, 92px)/.85 "Oxanium", "Rajdhani", sans-serif;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+  }
+  .death-word {
+    position: relative;
+    display: block;
+    color: #8ef5ff;
+    background: linear-gradient(180deg, #eaffff 6%, #b6faff 31%, #66e8ff 63%, #53ddf3 94%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 .065em #2cdefa54);
+  }
+  .death-word::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 8px, #d1ffff 9px, transparent 10px 13px),
+      repeating-linear-gradient(90deg, #74f9fc 0 2px, transparent 3px 11px);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    mask: repeating-linear-gradient(2deg, #000 0 2px, transparent 3px 9px, #000 10px 12px, transparent 13px 29px);
+    opacity: .42;
+    pointer-events: none;
+  }
+  #deathTitle .title-dot {
+    flex: none;
+    width: .155em;
+    height: .155em;
+    margin-bottom: .12em;
+    background: var(--pink);
+    box-shadow: 0 0 .1em #f3238266;
+  }
+  #deathStat {
+    margin-top: 18px;
+    color: #9ec8d8;
+    font-size: clamp(14px, 2.2vw, 18px);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  #deathBest {
+    color: #7f96a4;
+    font-size: 14px;
+    letter-spacing: .18em;
+    margin-top: 10px;
+    min-height: 1.2em;
+    text-transform: uppercase;
+  }
+  #deathBest.record {
+    color: var(--pink);
+    text-shadow: 0 0 12px #ff368c66;
+  }
+  #deathMenu {
+    display: grid;
+    gap: 10px;
+    width: min(100%, 320px);
+    margin: 28px auto 0;
+  }
+  #deathMenu button {
+    --edge: var(--pink);
+    --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+    position: relative;
+    isolation: isolate;
+    min-height: 52px;
+    padding: 0 22px;
+    border: 0;
+    background: none;
+    color: #f2eff9;
+    font: 700 18px/1 "Rajdhani", sans-serif;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: filter .17s, color .17s;
+  }
+  #deathMenu button::before, #deathMenu button::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    inset: 0;
+    clip-path: var(--cut);
+  }
+  #deathMenu button::before { background: linear-gradient(90deg, var(--edge), #da45876b 57%, transparent 99%); }
+  #deathMenu button::after {
+    inset: 1px 0 1px 3px;
+    background: linear-gradient(90deg, #211022f2, #111423bc 62%, #10162309);
+  }
+  #deathMenu button:hover, #deathMenu button:focus-visible {
+    --edge: var(--cyan);
+    filter: drop-shadow(0 0 10px #19d9f579);
+    color: #fff;
+  }
+  #deathMenu button:hover::before, #deathMenu button:focus-visible::before { background: var(--edge); }
+  #deathMenu button:hover::after, #deathMenu button:focus-visible::after {
+    inset: 2px 2px 2px 4px;
+    background:
+      repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
+      linear-gradient(90deg, #062538, #081825 70%, #0b3548);
+  }
+  #deathMenu #retryBtn { --edge: var(--cyan); }
 #bootError { z-index: 40; color: #e4f1f5; background: #080e16; padding: 24px; text-align: center; font-size: 22px; }
 .cname, .mpanel h2 { font-weight: 700; }
 @media (max-width: 760px) {

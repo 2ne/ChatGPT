@@ -1294,9 +1294,6 @@ const hud = {
   wave: document.getElementById('waveNum'),
   score: document.getElementById('score'),
   highScore: document.getElementById('highScore'),
-  kills: document.getElementById('kills'),
-  zleft: document.getElementById('zleft'),
-  remainingStat: document.getElementById('remainingStat'),
   health: document.getElementById('health'),
   shieldPips: document.getElementById('shieldPips'),
   shieldCount: document.getElementById('shieldCount'),
@@ -1356,7 +1353,6 @@ function updateHUD() {
   hud.wave.textContent = state.wave;
   hud.score.textContent = formatScore(state.score);
   hud.highScore.textContent = formatScore(readHighScore().score);
-  hud.kills.textContent = state.kills;
   const remaining = drones.length + state.toSpawn + (state.bossPending ? 1 : 0);
   const boss = drones.find(z => z.userData.boss);
   hud.bossPanel.hidden = !boss || !state.running;
@@ -1367,8 +1363,7 @@ function updateHUD() {
     hud.bossHealth.value = Math.max(0, u.hp);
     hud.bossHealth.setAttribute('aria-label', `${u.type.name}: ${Math.ceil(u.hp)} of ${u.maxHp} health`);
   }
-  hud.remainingStat.hidden = state.intermission > 0 || state.choosing;
-  hud.zleft.textContent = remaining;
+  checkBotMilestones(remaining);
   if (hud.shieldPips.children.length !== state.maxHp) {
     hud.shieldPips.innerHTML = '<span class="shield-pip"></span>'.repeat(state.maxHp);
   }
@@ -1407,6 +1402,22 @@ function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; s
 const toastQueue = [];
 let toastTime = 0;
 let activePickupHint = null;
+const BOT_MILESTONES = [10, 5, 3, 1];
+const botMilestonesDone = new Set();
+
+function botsLeftLabel(n) {
+  return n === 1 ? '1 BOT LEFT' : `${n} BOTS LEFT`;
+}
+
+function checkBotMilestones(remaining) {
+  if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
+  for (const n of BOT_MILESTONES) {
+    if (remaining !== n || botMilestonesDone.has(n)) continue;
+    botMilestonesDone.add(n);
+    toastQueue.push({ text: botsLeftLabel(n), color: '#82eaf5' });
+    if (!activePickupHint) toastTime = Math.min(toastTime, 0.12);
+  }
+}
 
 function updateToast(dt) {
   toastTime = Math.max(0, toastTime - dt);
@@ -2538,6 +2549,7 @@ function startWave(n) {
   state.waveTime = 0;
   state.shotsFired = 0;
   state.shotsHit = 0;
+  botMilestonesDone.clear();
   // Drones toughen steadily but slower than upgrades let the player scale, so
   // runs can go long; speed caps below the player's so kiting always works.
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
@@ -2600,6 +2612,7 @@ function resetGame(keep = false) {
     pDamage: 0, pAmmo: 0, sinceDrop: 0,
   });
   emeraldChain = 0;
+  botMilestonesDone.clear();
   updateWeaponIcon();
   if (keep) {
     queueWave(SWOOP_TIME * 0.85);
@@ -2632,7 +2645,7 @@ function setPaused(on) {
   firing = false;
   for (const k in keys) keys[k] = false; // keyups are missed while the menu is up
   document.getElementById('pauseStat').textContent =
-    `WAVE ${state.wave} · ${formatScore(state.score)} PTS · ${state.kills} UNITS DOWN`;
+    `WAVE ${state.wave} · ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) document.getElementById('resumeBtn').focus({ preventScroll: true });
 }
@@ -2650,17 +2663,18 @@ function die() {
   // Bank a partial accuracy bonus for the unfinished wave.
   addScore(accuracyBonus());
   document.getElementById('deathStat').textContent =
-    `SCORE ${formatScore(state.score)} · WAVE ${state.wave} · ${state.kills} UNITS DOWN`;
+    `Score ${formatScore(state.score)} · Wave ${state.wave} · ${state.kills} bots down`;
   const best = readHighScore();
   const record = state.score > 0 && state.score > best.score;
   if (record) store.set('highscore', { score: state.score, wave: state.wave, kills: state.kills });
   const db = document.getElementById('deathBest');
   const shown = record ? readHighScore() : best;
   db.textContent = record
-    ? 'NEW HIGH SCORE'
-    : shown.score > 0 ? `HIGH SCORE ${formatScore(shown.score)} · WAVE ${shown.wave}` : '';
+    ? 'New high score'
+    : shown.score > 0 ? `High score ${formatScore(shown.score)} · Wave ${shown.wave}` : '';
   db.classList.toggle('record', record);
   document.getElementById('death').classList.remove('hidden');
+  document.getElementById('retryBtn').focus({ preventScroll: true });
   audio.death();
   updateHUD();
   showBest();

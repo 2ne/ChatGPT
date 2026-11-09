@@ -32,8 +32,6 @@
     <div class="enemy-stats">
       <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
       <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
-      <div class="stat"><span class="label">Units down</span> <span class="stat-value" id="kills">0</span></div>
-      <div class="stat" id="remainingStat"><span class="label">Hostiles left</span> <span class="stat-value" id="zleft">0</span></div>
     </div>
   </div>
 
@@ -150,12 +148,16 @@
 </div>
 
 <div id="death" class="overlay hidden">
-  <div id="deathTitle" >SIGNAL LOST</div>
-  <div id="deathStat"></div>
-  <div id="deathBest"></div>
-  <div id="deathMenu" class="vmenu">
-    <button id="retryBtn">TRY AGAIN</button>
-    <button id="deathQuitBtn">MAIN MENU</button>
+  <div id="deathPanel">
+    <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <p id="deathEyebrow">SECTOR NULL</p>
+    <h1 id="deathTitle"><span class="death-word" data-text="GAME OVER">GAME OVER</span><i class="title-dot" aria-hidden="true"></i></h1>
+    <div id="deathStat"></div>
+    <div id="deathBest"></div>
+    <div id="deathMenu">
+      <button type="button" id="retryBtn">Try again</button>
+      <button type="button" id="deathQuitBtn">Main menu</button>
+    </div>
   </div>
 </div>
 
