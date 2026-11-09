@@ -124,7 +124,12 @@ export function createAudio(settings, listener) {
     reloadOut() { grain(2400, 0.14, 0.24); voice(190, 95, 0.16, 0.11, { type: 'triangle' }); },
     reloadIn() { grain(1500, 0.1, 0.23); signal([61, 73], 0.06, 0.048); },
     hit(pos) { const out = spatial(pos); grain(2200, 0.08, 0.26, out); voice(290, 87, 0.1, 0.21, { out, type: 'triangle' }); },
-    shutdown(pos) { const out = spatial(pos); grain(1250, 0.38, 0.32, out); voice(820, 45, 0.34, 0.22, { out, type: 'triangle', echo: true }); },
+    explode(pos) {
+      const out = spatial(pos);
+      grain(2400, 0.16, 0.34, out);
+      grain(520, 0.28, 0.2, out);
+      voice(155, 42, 0.24, 0.28, { out, type: 'triangle', echo: true });
+    },
     servo(pos) { const out = spatial(pos); voice(135, 280, 0.24, 0.056, { out, type: 'triangle' }); grain(780, 0.12, 0.05, out); },
     swipe(pos) { grain(740, 0.21, 0.25, spatial(pos)); },
     hurt() { voice(108, 43, 0.38, 0.42, { type: 'triangle' }); signal([56, 50], 0.12); },

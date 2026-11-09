@@ -21,7 +21,7 @@ function createRenderer() {
 }
 const renderer = createRenderer();
 const titleScene = createTitleScene();
-const titleMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.65));
@@ -1087,7 +1087,6 @@ const state = {
 
 const bullets = [];
 const drones = [];
-const particles = [];
 
 // reusable materials for spawned objects
 // tracers: a white-hot core inside a softer colored streak, both additive so they glow
@@ -1430,7 +1429,6 @@ function bakeDrone({ plate, joint, trim, optic }, seed) {
 const DRONE_KITS = DRONE_PALETTES.map((palette, i) => bakeDrone(palette, 7 + i * 31));
 const droneShell = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32 });
 const droneHurt = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32, emissive: 0xffb64b, emissiveIntensity: 0.85 });
-const scorchMat = new THREE.MeshStandardMaterial({ color: 0x111b24, roughness: 0.9 });
 
 // Spawn points sit just past the edge of the gameplay view (worked out from where the
 // follow camera will be, whatever the window's shape), so nothing pops in on screen.
@@ -1480,7 +1478,7 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3())) {
   mesh(kit.torso, upper);
   const head = new THREE.Group(); head.position.set(0, 0.68, 0.06); head.rotation.order = 'YXZ'; upper.add(head);
   mesh(kit.head, head);
-  const eyes = mesh(kit.eyes, head, kit.optic);
+  mesh(kit.eyes, head, kit.optic);
   const jaw = new THREE.Group(); jaw.position.set(0, 0, -0.06); head.add(jaw);
   mesh(kit.jaw, jaw);
   const side = s => ({
@@ -1501,7 +1499,7 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3())) {
     hp: state.droneHp,
     pace,                                               // its speed relative to the wave's
     speed: state.droneSpeed * pace,
-    hurt: 0, body, eyes, pelvis, upper, head, jaw, limbs,
+    hurt: 0, body, pelvis, upper, head, jaw, limbs,
     // gait personality
     phase: Math.random(),
     seed: Math.random() * 100,
@@ -1540,77 +1538,72 @@ const Z_POLE_KNEE = new THREE.Vector3(0, 0, 1);
 const _zPole = new THREE.Vector3(), _zReach = new THREE.Vector3();
 // pose a drone for this frame: a lurching, uneven shamble that turns into a
 // loping run on later waves, arms groping toward the operator or hanging dead.
-// `dead` (0..1) goes limp as it dies; `sag` buckles the knees.
-function animateDrone(z, dt, near, dead = 0, sag = dead) {
+function animateDrone(z, dt, near) {
   const u = z.userData;
-  const fall = dead ? u.fallDir : 0; // +1 toppling forward, -1 backward
-  const live = 1 - dead;
-  const gait = u.gait * live; // 0 when it's standing its ground
+  const gait = u.gait; // 0 when it's standing its ground
   const sp = u.speed * gait;
   const run = THREE.MathUtils.clamp((u.speed - 3) / 2, 0, 1); // later waves lope instead of shamble
   const freq = 1.1 + sp * 0.22;
   const beta = 0.6 - 0.18 * run;
-  u.phase = (u.phase + freq * dt * live) % 1;
+  u.phase = (u.phase + freq * dt) % 1;
   const ph = u.phase * Math.PI * 2;
   const L = Math.min(0.7, sp * beta / freq);
   const t = performance.now() / 1000 + u.seed;
   u.flinch *= Math.exp(-7 * dt);
   u.groan *= Math.exp(-2.5 * dt);
-  u.attack = damp(u.attack, near < 2.4 && u.swing < 0 ? live : 0, 6, dt);
+  u.attack = damp(u.attack, near < 2.4 && u.swing < 0 ? 1 : 0, 6, dt);
   // the swing: rear back with the arms up (-1), slam down and lunge (+1), recover
   const sw = u.swing, rec = Z_SWING - Z_STRIKE - 0.1;
-  const blow = sw < 0 || dead ? 0
+  const blow = sw < 0 ? 0
     : sw < Z_STRIKE ? -ease(sw / Z_STRIKE)
     : sw < Z_STRIKE + 0.1 ? -1 + 2 * ease((sw - Z_STRIKE) / 0.1)
     : 1 - ease(Math.min(1, (sw - Z_STRIKE - 0.1) / rec));
   const rear = Math.max(0, -blow), slam = Math.max(0, blow);
-  const clamber = u.climb >= 0 && !dead ? Math.sin(Math.PI * u.climb) : 0; // over a window sill
+  const clamber = u.climb >= 0 ? Math.sin(Math.PI * u.climb) : 0; // over a window sill
 
   // pelvis: dips on every step, and drops hard onto the bad leg
   const badStance = u.limp ? Math.max(0, Math.sin(ph + (u.limpSide > 0 ? 0 : Math.PI))) : 0;
-  const pelvisY = Z_HIP - 0.05 - 0.06 * run - 0.05 * Math.abs(Math.sin(ph)) * gait - 0.06 * slam - 0.08 * u.limp * badStance - 0.3 * sag;
+  const pelvisY = Z_HIP - 0.05 - 0.06 * run - 0.05 * Math.abs(Math.sin(ph)) * gait - 0.06 * slam - 0.08 * u.limp * badStance;
   u.pelvis.position.set(0, pelvisY, 0);
-  u.pelvis.rotation.set(0, 0.12 * Math.sin(ph) * live, (0.1 * Math.sin(ph) + 0.12 * u.limp * badStance * u.limpSide) * live);
+  u.pelvis.rotation.set(0, 0.12 * Math.sin(ph), 0.1 * Math.sin(ph) + 0.12 * u.limp * badStance * u.limpSide);
   u.pelvis.updateMatrix();
 
   // torso: hunched, lurching side to side against the hips, kicked back by hits
   u.upper.position.set(0, pelvisY + 0.08, 0);
   u.upper.rotation.set(
-    (u.hunch + 0.12 * run + 0.25 * u.attack - 0.55 * rear + 0.5 * slam) * live - 0.6 * u.flinch + 0.35 * fall * dead, // goes over with the fall
-    -0.15 * Math.sin(ph) * live,
-    (-0.14 * Math.sin(ph) - 0.1 * u.limp * badStance * u.limpSide) * live + 0.04 * Math.sin(t * 0.7));
+    u.hunch + 0.12 * run + 0.25 * u.attack - 0.55 * rear + 0.5 * slam - 0.6 * u.flinch,
+    -0.15 * Math.sin(ph),
+    -0.14 * Math.sin(ph) - 0.1 * u.limp * badStance * u.limpSide + 0.04 * Math.sin(t * 0.7));
   u.upper.updateMatrix();
   // head lolls, nods with each step, comes up to look at its meal, snaps back when shot
   u.head.rotation.set(
-    (-u.hunch * 0.7 + 0.12 * Math.abs(Math.sin(ph)) - 0.25 * u.attack - 0.2 * rear) * live - 0.7 * u.flinch + (fall > 0 ? 0.3 : -0.6) * dead,
-    0.25 * Math.sin(t * 0.9) * live,
-    u.tilt + 0.18 * Math.sin(t * 1.3 + 1) * live);
-  u.jaw.rotation.x = (0.12 + 0.12 * Math.abs(Math.sin(t * 2.3)) + 0.45 * u.groan + 0.35 * u.attack * Math.abs(Math.sin(t * 9)) + 0.5 * rear) * live + 0.5 * dead;
+    -u.hunch * 0.7 + 0.12 * Math.abs(Math.sin(ph)) - 0.25 * u.attack - 0.2 * rear - 0.7 * u.flinch,
+    0.25 * Math.sin(t * 0.9),
+    u.tilt + 0.18 * Math.sin(t * 1.3 + 1));
+  u.jaw.rotation.x = 0.12 + 0.12 * Math.abs(Math.sin(t * 2.3)) + 0.45 * u.groan + 0.35 * u.attack * Math.abs(Math.sin(t * 9)) + 0.5 * rear;
 
   for (const l of u.limbs) {
     // --- legs: the good leg steps through, the bad one drags its toe ---
     const bad = u.limp && l.side === u.limpSide;
     const p = (u.phase + (l.side > 0 ? 0 : 0.5 + 0.06 * u.limp)) % 1;
     const { s, lift, pitch } = footCycle(p, beta);
-    l.foot3.set(l.side * (0.15 + 0.06 * dead), Z_ANKLE + lift * (bad ? 0.03 : 0.12 + 0.1 * run) * gait + 0.3 * clamber, s * L - 0.2 * clamber);
+    l.foot3.set(l.side * 0.15, Z_ANKLE + lift * (bad ? 0.03 : 0.12 + 0.1 * run) * gait + 0.3 * clamber, s * L - 0.2 * clamber);
     l.hipP.copy(l.hip).applyMatrix4(u.pelvis.matrix);
     ik2(l.hipP, l.foot3, Z_THIGH, Z_SHIN, Z_POLE_KNEE, l.knee);
     l.ankle.subVectors(l.foot3, l.knee).normalize().multiplyScalar(Z_SHIN).add(l.knee);
     bone(l.thigh, l.hipP, l.knee, Z_POLE_KNEE);
     bone(l.shin, l.knee, l.ankle, Z_POLE_KNEE);
     l.foot.position.copy(l.ankle);
-    l.foot.rotation.set(bad ? 0.35 : pitch * live, l.side * (bad ? 0.35 : 0.12), 0);
+    l.foot.rotation.set(bad ? 0.35 : pitch, l.side * (bad ? 0.35 : 0.12), 0);
 
     // --- arms: reaching ones grope ahead (and claw when close); the rest hang and swing ---
     l.sh.copy(l.shoulder).applyMatrix4(u.upper.matrix);
-    const reaches = (l.side > 0 ? u.arms >= 1 : u.arms >= 2) && !dead;
+    const reaches = l.side > 0 ? u.arms >= 1 : u.arms >= 2;
     const k = l.side * 1.7;
     if (reaches) {
       const claw = u.attack * Math.sin(t * 9 + k);
       l.reach.set(-l.side * 0.08, -0.08 + 0.06 * Math.sin(ph + k) + 0.18 * u.attack + 0.12 * claw - 0.3 * u.flinch,
         0.72 + 0.07 * Math.sin(ph * 2 + k) + 0.2 * claw - 0.35 * u.flinch);
-    } else if (dead) {
-      l.reach.set(l.side * 0.45 * dead, -0.7, -0.15 * fall * dead); // limp, flung out to the sides
     } else {
       // dangling: a loose pendulum against the stride
       l.reach.set(l.side * 0.1, -0.84, 0.1 + 0.16 * Math.sin(ph + (l.side > 0 ? Math.PI : 0)) * gait + 0.25 * u.flinch);
@@ -1625,128 +1618,6 @@ function animateDrone(z, dt, near, dead = 0, sag = dead) {
     bone(l.upperArm, l.sh, l.elbow, _zPole);
     bone(l.forearm, l.elbow, l.wrist, _zPole);
   }
-}
-
-// --- the dead: crumple, topple onto the floor (or the pile), power down, and stay
-// there CORPSE_LIFE seconds before sinking into the boards ---
-const corpses = [];
-const CORPSE_LIFE = 20;   // seconds a body stays down
-const MAX_CORPSES = 120;  // past this the oldest start sinking early
-const BODY_THICK = 0.3;   // how much each body lying underneath raises the next
-function updateCorpses(dt) {
-  let bakes = 0;
-  for (let i = corpses.length - 1; i >= 0; i--) {
-    const z = corpses[i], u = z.userData;
-    u.deadT += dt;
-    if (!u.sinking && (u.deadT > CORPSE_LIFE || corpses.length - i > MAX_CORPSES)) sinkCorpse(z);
-    if (u.baked) {
-      if (u.sinking) {
-        u.sinkT += dt;
-        u.baked.position.y = -u.sinkT * (0.6 + u.restY * 0.5);
-        u.pool.position.y = 0.045 - u.sinkT * 0.04;
-        if (u.baked.position.y < -1.1 - u.restY) {
-          scene.remove(u.baked, u.pool);
-          u.baked.geometry.dispose();
-          corpses.splice(i, 1);
-        }
-      }
-      continue;
-    }
-    const crumple = Math.min(1, u.deadT / 0.25);
-    const fall = Math.min(1, Math.max(0, (u.deadT - 0.1) / 0.45));
-    animateDrone(z, dt, 99, crumple, crumple * (1 - 0.85 * fall)); // knees buckle, then straighten as it goes over
-    // topple: accelerate like a falling body, with a small bounce at the bottom
-    const f = fall * fall;
-    z.rotation.x = u.fallDir * (f * 1.42 - (fall >= 1 ? 0.06 * Math.exp(-(u.deadT - 0.55) * 9) * Math.sin((u.deadT - 0.55) * 30) : 0));
-    z.position.y = (0.12 + u.restY) * f;
-    // the pool spreads out from under the body
-    u.pool.scale.setScalar(Math.min(1, Math.max(0.05, (u.deadT - 0.4) / 1.4)) * u.poolSize);
-    // settled: freeze it into one static mesh (a few per frame, so a crowd dropping at once doesn't hitch)
-    if (u.deadT > 1.0 && bakes < 4) { bakeCorpse(z); bakes++; }
-  }
-}
-// a body and everything piled on top of it go down together
-function sinkCorpse(z) {
-  const u = z.userData;
-  if (u.sinking) return;
-  u.sinking = true; u.sinkT = 0;
-  for (const c of corpses) if (c.userData.under.includes(z)) sinkCorpse(c);
-}
-// merge a settled body's parts, in world space, into one mesh: a pile of a hundred
-// is a hundred draw calls instead of fifteen hundred
-function bakeCorpse(z) {
-  const u = z.userData;
-  z.updateMatrixWorld(true);
-  let n = 0;
-  for (const m of u.body) n += m.geometry.attributes.position.count;
-  const pos = new Float32Array(n * 3), nrm = new Float32Array(n * 3), col = new Float32Array(n * 3);
-  let o = 0;
-  for (const m of u.body) {
-    const g = m.geometry, P = g.attributes.position.array, N = g.attributes.normal.array, C = g.attributes.color.array;
-    _bkN.getNormalMatrix(m.matrixWorld);
-    for (let i = 0; i < P.length; i += 3, o += 3) {
-      _bkV.fromArray(P, i).applyMatrix4(m.matrixWorld).toArray(pos, o);
-      _bkV.fromArray(N, i).applyMatrix3(_bkN).normalize().toArray(nrm, o);
-      col[o] = C[i]; col[o + 1] = C[i + 1]; col[o + 2] = C[i + 2];
-    }
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  g.setAttribute('normal', new THREE.BufferAttribute(nrm, 3));
-  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  u.baked = new THREE.Mesh(g, droneShell);
-  u.baked.castShadow = u.baked.receiveShadow = true;
-  scene.remove(z);
-  scene.add(u.baked);
-}
-function removeCorpses() {
-  for (const c of corpses) {
-    const u = c.userData;
-    scene.remove(c, u.pool);
-    if (u.baked) { scene.remove(u.baked); u.baked.geometry.dispose(); }
-  }
-  corpses.length = 0;
-}
-// three points along a body lying from (x, z) in direction (dx, dz)
-const bodyPoints = (x, z, dx, dz, s) => [0.5, 1.1, 1.7].map(t => [x + dx * t * s, z + dz * t * s]);
-// a scorch mark of overlapping slabs, so it doesn't read as a square rug
-const poolGeo = (() => {
-  const rng = seeded(99), slabs = [[0.8, 0.02, 0.8, 0, 0, 0, 0xffffff, 0, 0.3, 0, 0.008]];
-  for (let i = 0; i < 6; i++) {
-    const a = i * 1.1 + rng(), r = 0.3 + rng() * 0.25, s = 0.25 + rng() * 0.3;
-    slabs.push([s, 0.02, s * (0.6 + rng() * 0.6), Math.cos(a) * r, 0.003 * i, Math.sin(a) * r, 0xffffff, 0, rng() * 3, 0, 0.008]);
-  }
-  return bakeBlocks(slabs, rng);
-})();
-// `dir` (world, optional): the shot that killed it, which it falls along
-function droneDies(z, dir) {
-  const u = z.userData;
-  u.deadT = 0;
-  u.hurt = 0;
-  for (const m of u.body) m.material = droneShell;
-  u.eyes.visible = false; // the light goes out
-  // fall along the shot (or away from the operator) — forward if hit from behind
-  const fx = dir ? dir.x : z.position.x - player.position.x, fz = dir ? dir.z : z.position.z - player.position.z;
-  u.fallDir = fx * Math.sin(u.heading) + fz * Math.cos(u.heading) >= 0 ? 1 : -1;
-  // land on top of any bodies already lying where this one falls
-  const dx = Math.sin(u.heading) * u.fallDir, dz = Math.cos(u.heading) * u.fallDir;
-  u.points = bodyPoints(z.position.x, z.position.z, dx, dz, z.scale.x);
-  u.restY = 0; u.under = []; u.sinking = false; u.baked = null;
-  for (const c of corpses) {
-    const cu = c.userData;
-    if (cu.sinking || !cu.points.some(([ax, az]) => u.points.some(([bx, bz]) => (ax - bx) ** 2 + (az - bz) ** 2 < 0.36))) continue;
-    u.under.push(c);
-    u.restY = Math.max(u.restY, cu.restY + BODY_THICK);
-  }
-  u.restY = Math.min(u.restY, 1.5);
-  const pool = new THREE.Mesh(poolGeo, scorchMat);
-  pool.receiveShadow = true;
-  pool.position.set(z.position.x + Math.sin(u.heading) * u.fallDir * 0.9, 0.045, z.position.z + Math.cos(u.heading) * u.fallDir * 0.9);
-  pool.rotation.y = Math.random() * Math.PI;
-  u.pool = pool; u.poolSize = 1.1 + Math.random() * 0.6;
-  pool.scale.setScalar(0.05);
-  scene.add(pool);
-  corpses.push(z);
 }
 
 function nearestOpening(pos, skip) {
@@ -1972,11 +1843,11 @@ function routeAround(z, tx, tz) {
   return _goal;
 }
 
-function killDrone(z, idx, dir) {
+function killDrone(z, idx) {
+  explodeDrone(z);
   if (z.userData.climb >= 0) endClimb(z, true);
-  spawnSparks(z.position);
   maybeDrop(z.position);
-  droneDies(z, dir);
+  scene.remove(z);
   drones.splice(idx, 1);
   state.kills++;
 }
@@ -2206,21 +2077,70 @@ function choose(i) {
 }
 
 // ===================================================================
-// METAL SPARKS
+// DRONE EXPLOSIONS
 // ===================================================================
-function spawnSparks(pos) {
-  for (let i = 0; i < 12; i++) {
-    const p = new THREE.Mesh(BOX, sparkMat);
-    const s = 0.12 + Math.random() * 0.18;
-    p.scale.set(s * 0.34, s * 0.34, s * 2.2);
-    p.rotation.set(Math.random() * 6, Math.random() * 6, Math.random() * 6);
-    p.position.set(pos.x, 0.8, pos.z);
-    p.userData = {
-      v: new THREE.Vector3((Math.random() - 0.5) * 5, 3 + Math.random() * 4, (Math.random() - 0.5) * 5),
-      life: 0.6 + Math.random() * 0.4,
-    };
-    scene.add(p);
-    particles.push(p);
+const droneBlasts = [];
+const blastGlow = glowTexture();
+const sparkForward = new THREE.Vector3(0, 0, 1);
+const BLAST_TIME = 0.22;
+
+function explodeDrone(drone) {
+  const origin = drone.userData.upper.getWorldPosition(new THREE.Vector3());
+  origin.y += 0.35;
+  audio.explode(origin);
+
+  const reduced = reducedMotion.matches;
+  if (!reduced) {
+    const flare = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: blastGlow, color: 0xff9b42, transparent: true, opacity: 0.9, depthWrite: false,
+      blending: THREE.AdditiveBlending, toneMapped: false,
+    }));
+    flare.position.copy(origin);
+    flare.scale.setScalar(1.8);
+    scene.add(flare);
+    droneBlasts.push({ flare, time: 0 });
+  }
+
+  for (let i = 0; i < (reduced ? 6 : 16); i++) {
+    const spark = new THREE.Mesh(BOX, sparkMat);
+    spark.scale.set(0.035, 0.035, rnd(0.2, 0.45));
+    spark.position.copy(origin);
+    const angle = rnd(0, Math.PI * 2), speed = rnd(4, 9);
+    const velocity = new THREE.Vector3(Math.cos(angle) * speed, rnd(1, 5), Math.sin(angle) * speed);
+    spark.quaternion.setFromUnitVectors(sparkForward, velocity.clone().normalize());
+    spawnDebris(spark, velocity, { life: rnd(0.18, 0.45), bounce: 0.025 });
+  }
+
+  // Throw the actual armour and limbs from their last animated positions.
+  drone.updateMatrixWorld(true);
+  for (const part of drone.userData.body) {
+    part.matrixWorld.decompose(part.position, part.quaternion, part.scale);
+    part.material = droneShell;
+    part.castShadow = false;
+    const velocity = part.position.clone().sub(origin).setY(0).multiplyScalar(5);
+    velocity.add(new THREE.Vector3(rnd(-1.4, 1.4), rnd(2, 4), rnd(-1.4, 1.4)));
+    const spin = new THREE.Vector3(rnd(-10, 10), rnd(-10, 10), rnd(-10, 10));
+    spawnDebris(part, velocity, { life: rnd(0.9, 1.8), bounce: 0.1, spin });
+  }
+}
+
+function removeDroneBlast(flare) {
+  scene.remove(flare);
+  flare.material.dispose();
+}
+
+function updateDroneBlasts(dt) {
+  for (let i = droneBlasts.length - 1; i >= 0; i--) {
+    const blast = droneBlasts[i];
+    blast.time += dt;
+    const progress = blast.time / BLAST_TIME;
+    if (progress >= 1) {
+      removeDroneBlast(blast.flare);
+      droneBlasts.splice(i, 1);
+    } else {
+      blast.flare.scale.setScalar(1.8 + 2.8 * progress);
+      blast.flare.material.opacity = 0.9 * (1 - progress) ** 2;
+    }
   }
 }
 
@@ -2251,11 +2171,10 @@ function startWave(n) {
 function clearRun() {
   for (const b of bullets) scene.remove(b);
   for (const z of drones) scene.remove(z);
-  for (const p of particles) scene.remove(p);
   for (const d of drops) scene.remove(d);
   for (const d of debris) scene.remove(d);
-  removeCorpses();
-  bullets.length = 0; drones.length = 0; particles.length = 0; drops.length = 0; debris.length = 0;
+  for (const { flare } of droneBlasts) removeDroneBlast(flare);
+  bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   toastQueue.length = 0;
   toastTime = 0;
   hud.toast.style.opacity = 0;
@@ -2842,11 +2761,10 @@ function update(dt) {
       const dx = z.position.x - (px + sx * t), dz = z.position.z - (pz + sz * t);
       if (dx * dx + dz * dz < 0.55) {
         z.userData.hp -= state.damage * (state.pDamage > 0 ? 2 : 1);
-        hitDrone(z);
         // small knockback
         z.position.addScaledVector(b.userData.dir, 0.25);
-        if (z.userData.hp <= 0) { audio.shutdown(z.position); killDrone(z, j, b.userData.dir); }
-        else audio.hit(z.position);
+        if (z.userData.hp <= 0) killDrone(z, j);
+        else { hitDrone(z); audio.hit(z.position); }
         b.userData.hits.add(z);
         if (b.userData.pierce > 0) b.userData.pierce--;
         else hit = true; // ends the loop; a piercing bullet keeps checking the rest
@@ -2869,18 +2787,7 @@ function update(dt) {
   }
   if (state.running || title.active) separateDrones();
 
-  // --- particles ---
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
-    p.userData.life -= dt;
-    p.scale.multiplyScalar(Math.exp(-2.5 * dt));
-    p.userData.v.y -= 16 * dt;
-    p.position.addScaledVector(p.userData.v, dt);
-    if (p.position.y < 0.05) { p.position.y = 0.05; p.userData.v.set(0, 0, 0); }
-    if (p.userData.life <= 0) { scene.remove(p); particles.splice(i, 1); }
-  }
-
-  updateCorpses(dt);
+  updateDroneBlasts(dt);
   updateOpenings(dt);
   updateWorld(dt);
 
@@ -2910,7 +2817,7 @@ function loop(now) {
   last = now;
   if (!state.paused) update(dt);
   if (title.active) {
-    titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, titleMotion.matches);
+    titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
   } else {
     renderer.render(scene, camera);
   }

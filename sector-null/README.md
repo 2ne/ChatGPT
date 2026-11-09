@@ -21,6 +21,8 @@ Supply pickup notices appear one at a time. Each drop type shows a short effect 
 
 The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
 
+Destroyed drones burst into sparks and scattered parts. Reduced-motion settings suppress the blast flash and cut the spark count.
+
 | Action | Keyboard and mouse | Touch |
 | --- | --- | --- |
 | Move | WASD or arrow keys | Drag on the left side |
