@@ -582,18 +582,30 @@ const M = {
 };
 const powerGlowMaterials = [M.suit, M.vest, M.vestDk, M.plating, M.helmet, M.pants, M.glove, M.module];
 const powerOrange = new THREE.Color(0xffa64c), powerBlue = new THREE.Color(0x76bcf0), powerPink = new THREE.Color(0xff78b5);
+const powerHot = new THREE.Color(0xffffff);
 let healGlow = 0, powerGlowTime = 0;
 function updatePowerGlow(dt) {
   if (state.running) { healGlow = Math.max(0, healGlow - dt); powerGlowTime += dt; }
   const orange = state.running && state.pDamage > 0, blue = state.running && state.pAmmo > 0;
   const healing = state.running && healGlow > 0;
-  const strength = reducedMotion.matches ? 0.35 : 0.3 + 0.16 * (0.5 + 0.5 * Math.sin(powerGlowTime * Math.PI * 2 / 1.8));
+  const t = powerGlowTime;
+  // Clear beat + faster shimmer so an active buff reads as charged, not a flat recolour.
+  const beat = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 / 0.7);
+  const shimmer = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 / 0.22);
+  const beatBlue = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 / 0.7 + 1.15);
+  const steady = reducedMotion.matches;
   powerGlowMaterials.forEach((material, i) => {
-    const color = healing ? powerPink : orange && blue ? (i < 4 ? powerOrange : powerBlue) : orange ? powerOrange : powerBlue;
-    const time = orange && (!blue || i < 4) ? state.pDamage / 10 : state.pAmmo / 8;
+    const useOrange = !healing && orange && (!blue || i < 4);
+    const useBlue = !healing && blue && (!orange || i >= 4);
+    const color = healing ? powerPink : useOrange ? powerOrange : powerBlue;
+    const wave = useBlue ? beatBlue : beat;
+    const pulse = steady ? 0.55 : 0.28 + 0.52 * wave + 0.22 * shimmer;
+    const time = useOrange ? state.pDamage / 10 : state.pAmmo / 8;
     const stacked = Math.min(1, Math.max(0, time - 1));
-    material.emissive.copy(color);
-    material.emissiveIntensity = healing ? 0.55 * Math.min(1, healGlow * 3) : orange || blue ? strength + stacked * 0.25 : 0;
+    material.emissive.copy(color).lerp(powerHot, steady ? 0.12 : 0.12 + 0.55 * wave);
+    material.emissiveIntensity = healing
+      ? 0.7 * Math.min(1, healGlow * 3) * (steady ? 1 : 0.75 + 0.25 * shimmer)
+      : orange || blue ? pulse + stacked * 0.35 : 0;
   });
 }
 
@@ -1072,6 +1084,10 @@ const state = {
   hp: 3,
   maxHp: 3,
   kills: 0,
+  score: 0,
+  waveTime: 0,
+  shotsFired: 0,
+  shotsHit: 0,
   wave: 0,
   mag: 8,
   magSize: 8,
@@ -1276,6 +1292,8 @@ document.getElementById('cards').addEventListener('mouseover', e => {
 // ===================================================================
 const hud = {
   wave: document.getElementById('waveNum'),
+  score: document.getElementById('score'),
+  highScore: document.getElementById('highScore'),
   kills: document.getElementById('kills'),
   zleft: document.getElementById('zleft'),
   remainingStat: document.getElementById('remainingStat'),
@@ -1284,6 +1302,7 @@ const hud = {
   shieldCount: document.getElementById('shieldCount'),
   powerups: document.getElementById('powerups'),
   toast: document.getElementById('toast'),
+  toastIcon: document.getElementById('toastIcon'),
   toastTitle: document.getElementById('toastTitle'),
   toastDetail: document.getElementById('toastDetail'),
   picker: document.getElementById('picker'),
@@ -1306,6 +1325,16 @@ const hud = {
   bannerSub: document.getElementById('bannerSub'),
 };
 
+const formatScore = n => Math.max(0, Math.round(n)).toLocaleString('en-US');
+function readHighScore() {
+  return store.get('highscore', null) || { score: 0, wave: 0, kills: 0 };
+}
+function addScore(points) {
+  if (!points) return;
+  state.score += points;
+  if (hud.score) hud.score.textContent = formatScore(state.score);
+}
+
 function updateWeaponIcon() {
   const { mag = 0, reload = 0, damage = 0, rate = 0, pierce = 0, spread = 0 } = state.upgrades;
   hud.weaponMods.innerHTML = [
@@ -1325,6 +1354,8 @@ function updateWeaponIcon() {
 function updateHUD() {
   syncTouchControls();
   hud.wave.textContent = state.wave;
+  hud.score.textContent = formatScore(state.score);
+  hud.highScore.textContent = formatScore(readHighScore().score);
   hud.kills.textContent = state.kills;
   const remaining = drones.length + state.toSpawn + (state.bossPending ? 1 : 0);
   const boss = drones.find(z => z.userData.boss);
@@ -1397,6 +1428,8 @@ function updateToast(dt) {
   if (!next) return;
   const { text, color, pickup } = next;
   const firstPickup = pickup && !seenDrops.has(pickup.id);
+  // Same glyph as the floor label so the notice matches what they just collected.
+  hud.toastIcon.textContent = pickup ? pickup.icon : '';
   hud.toastTitle.textContent = text;
   hud.toastDetail.textContent = firstPickup ? pickup.detail : '';
   hud.toast.style.color = color;
@@ -1451,6 +1484,7 @@ function fire() {
     b.userData = { dir, life: 0.9, pierce: state.pierce, hits: new Set() };
     scene.add(b);
     bullets.push(b);
+    state.shotsFired++;
   }
 
   muzzleFlash(state.pDamage > 0);
@@ -1499,7 +1533,8 @@ function spawnWaveBoss() {
   const fast = state.wave % 3 === 2;
   const type = {
     name: armed ? (fast ? 'HUNTER PRIME' : 'SIEGE WARDEN') : (fast ? 'HUNTER' : 'WARDEN'),
-    kit: 4, health: 6 + state.wave * 0.75, speed: fast ? 1.1 : 0.72,
+    // Quadratic growth so stacked Pulse Amplifier / Overcharge runs still feel a boss fight.
+    kit: 4, health: 7 + state.wave * 1.6 + state.wave * state.wave * 0.22, speed: fast ? 1.1 : 0.72,
     size: 1.4, style: armed ? 'ranged' : fast ? 'flank' : 'heavy',
     boss: true, volley: armed ? (state.wave >= 6 ? 5 : 3) : 0,
   };
@@ -2068,16 +2103,28 @@ function routeAround(z, tx, tz) {
   return _goal;
 }
 
+function killPoints(type) {
+  if (type.boss) return 800 + 150 * state.wave;
+  if (type.style === 'flank') return 125;
+  if (type.style === 'ranged') return 150;
+  if (type.style === 'heavy') return 200;
+  return 100;
+}
+
 function killDrone(z, idx) {
+  const type = z.userData.type;
   explodeDrone(z);
   if (z.userData.climb >= 0) endClimb(z, true);
   maybeDrop(z.position);
   scene.remove(z);
   drones.splice(idx, 1);
   state.kills++;
+  if (state.running) addScore(killPoints(type));
   if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
     if (state.bossPending) { spawnWaveBoss(); return; }
     clearEnemyBolts();
+    awardWaveBonuses();
+    clearEmeralds();
     const healed = state.hp < state.maxHp;
     state.hp = Math.min(state.maxHp, state.hp + 1);
     audio.waveClear();
@@ -2230,6 +2277,99 @@ function updateDrops(dt) {
 }
 
 // ===================================================================
+// EMERALDS — Geometry Wars–style score gems (see SCORING.md)
+// ===================================================================
+const EMERALD_LIFE = 2.2;
+const EMERALD_WARN = 0.6;
+const EMERALD_MAGNET = 5.5;
+const EMERALD_PICK = 0.75;
+const EMERALD_VALUE = 40;
+const EMERALD_CHAIN_MS = 750;
+const emeraldGeo = new THREE.OctahedronGeometry(0.11, 0).scale(0.72, 1.2, 0.72);
+const emeraldMat = new THREE.MeshBasicMaterial({ color: 0x7cff4a, toneMapped: false });
+const emeraldGlowMap = glowTexture();
+const emeralds = [];
+let emeraldChain = 0;
+let lastEmeraldAt = -Infinity;
+
+function spawnEmeralds(origin, count) {
+  for (let i = 0; i < count; i++) {
+    const gem = new THREE.Mesh(emeraldGeo, emeraldMat);
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: emeraldGlowMap, color: 0x6dff55, transparent: true, opacity: 0.85,
+      blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+    }));
+    glow.scale.setScalar(0.55);
+    gem.add(glow);
+    const ang = rnd(0, Math.PI * 2), dist = rnd(0.15, 0.7);
+    gem.position.set(origin.x + Math.cos(ang) * dist, 0.35, origin.z + Math.sin(ang) * dist);
+    gem.rotation.set(rnd(0, 1), rnd(0, Math.PI * 2), rnd(0, 1));
+    gem.userData = { life: EMERALD_LIFE, t: rnd(0, Math.PI * 2), glow };
+    scene.add(gem);
+    emeralds.push(gem);
+  }
+}
+
+function disposeEmerald(e) {
+  scene.remove(e);
+  e.userData.glow?.material.dispose();
+}
+
+function clearEmeralds() {
+  for (const e of emeralds) disposeEmerald(e);
+  emeralds.length = 0;
+  emeraldChain = 0;
+}
+
+function collectEmerald() {
+  const now = performance.now();
+  emeraldChain = now - lastEmeraldAt <= EMERALD_CHAIN_MS ? Math.min(emeraldChain + 1, 8) : 0;
+  lastEmeraldAt = now;
+  addScore(EMERALD_VALUE * (emeraldChain + 1));
+  audio.emerald(emeraldChain);
+}
+
+function updateEmeralds(dt) {
+  for (let i = emeralds.length - 1; i >= 0; i--) {
+    const e = emeralds[i], ud = e.userData;
+    ud.life -= dt; ud.t += dt;
+    if (ud.life <= 0) { disposeEmerald(e); emeralds.splice(i, 1); continue; }
+    const dx = player.position.x - e.position.x, dz = player.position.z - e.position.z;
+    const dist = Math.hypot(dx, dz);
+    if (dist < EMERALD_PICK) { collectEmerald(); disposeEmerald(e); emeralds.splice(i, 1); continue; }
+    if (dist < EMERALD_MAGNET && dist > 1e-4) {
+      const pull = 9 + (1 - dist / EMERALD_MAGNET) * 10;
+      e.position.x += (dx / dist) * pull * dt;
+      e.position.z += (dz / dist) * pull * dt;
+    }
+    e.position.y = 0.32 + Math.sin(ud.t * 5) * 0.08;
+    e.rotation.y += dt * 4.5;
+    e.rotation.x = 0.35 + Math.sin(ud.t * 3) * 0.15;
+    const warning = ud.life <= EMERALD_WARN;
+    e.visible = !warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0;
+    ud.glow.material.opacity = 0.55 + 0.35 * Math.sin(ud.t * 8);
+  }
+}
+
+function accuracyBonus() {
+  const rate = state.shotsHit / Math.max(1, state.shotsFired);
+  return Math.round(rate * 400 * Math.max(1, state.wave));
+}
+
+function waveSpeedBonus() {
+  const par = 12 + state.wave * 4;
+  return Math.round(Math.max(0, par - state.waveTime) * 35);
+}
+
+function awardWaveBonuses() {
+  addScore(accuracyBonus());
+  addScore(waveSpeedBonus());
+  state.shotsFired = 0;
+  state.shotsHit = 0;
+  state.waveTime = 0;
+}
+
+// ===================================================================
 // UPGRADES — pick one of three after every cleared wave
 // ===================================================================
 // Each card can be taken up to `max` times per run. `ok` (optional) hides a
@@ -2354,16 +2494,11 @@ function explodeDrone(drone) {
     spawnDebris(spark, velocity, { life: rnd(0.18, 0.45), bounce: 0.025 });
   }
 
-  // Throw the actual armour and limbs from their last animated positions.
-  drone.updateMatrixWorld(true);
-  for (const part of drone.userData.body) {
-    part.matrixWorld.decompose(part.position, part.quaternion, part.scale);
-    part.material = droneShell;
-    part.castShadow = false;
-    const velocity = part.position.clone().sub(origin).setY(0).multiplyScalar(5);
-    velocity.add(new THREE.Vector3(rnd(-1.4, 1.4), rnd(2, 4), rnd(-1.4, 1.4)));
-    const spin = new THREE.Vector3(rnd(-10, 10), rnd(-10, 10), rnd(-10, 10));
-    spawnDebris(part, velocity, { life: rnd(0.9, 1.8), bounce: 0.1, spin });
+  // Score gems replace lasting body-part debris (see SCORING.md).
+  if (state.running) {
+    const type = drone.userData.type;
+    const count = type.boss ? (8 + ((Math.random() * 5) | 0)) : Math.round(3 + type.size * 2);
+    spawnEmeralds(origin, count);
   }
 }
 
@@ -2400,6 +2535,9 @@ function queueWave(delay) {
 function startWave(n) {
   state.wave = n;
   state.bossPending = true;
+  state.waveTime = 0;
+  state.shotsFired = 0;
+  state.shotsHit = 0;
   // Drones toughen steadily but slower than upgrades let the player scale, so
   // runs can go long; speed caps below the player's so kiting always works.
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
@@ -2431,10 +2569,14 @@ function clearRun() {
   for (const d of drops) scene.remove(d);
   for (const d of debris) scene.remove(d);
   for (const { flare } of droneBlasts) removeDroneBlast(flare);
+  clearEmeralds();
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   toastQueue.length = 0;
   toastTime = 0;
   activePickupHint = null;
+  hud.toastIcon.textContent = '';
+  hud.toastTitle.textContent = '';
+  hud.toastDetail.textContent = '';
   hud.toast.style.opacity = 0;
   hud.picker.classList.add('hidden');
 }
@@ -2450,12 +2592,14 @@ function resetGame(keep = false) {
   healGlow = 0; powerGlowTime = 0;
   pressure.set(0);
   Object.assign(state, {
-    ...BASE_STATS, running: true, hp: BASE_STATS.maxHp, kills: 0, wave: 0,
+    ...BASE_STATS, running: true, hp: BASE_STATS.maxHp, kills: 0, score: 0, wave: 0,
+    waveTime: 0, shotsFired: 0, shotsHit: 0,
     mag: BASE_STATS.magSize, reloading: false, reloadT: 0,
     fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0,
   });
+  emeraldChain = 0;
   updateWeaponIcon();
   if (keep) {
     queueWave(SWOOP_TIME * 0.85);
@@ -2487,7 +2631,8 @@ function setPaused(on) {
   syncTouchControls();
   firing = false;
   for (const k in keys) keys[k] = false; // keyups are missed while the menu is up
-  document.getElementById('pauseStat').textContent = `WAVE ${state.wave} · ${state.kills} UNITS DOWN`;
+  document.getElementById('pauseStat').textContent =
+    `WAVE ${state.wave} · ${formatScore(state.score)} PTS · ${state.kills} UNITS DOWN`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) document.getElementById('resumeBtn').focus({ preventScroll: true });
 }
@@ -2502,16 +2647,23 @@ function quitToTitle() {
 function die() {
   state.running = false;
   firing = false;
+  // Bank a partial accuracy bonus for the unfinished wave.
+  addScore(accuracyBonus());
   document.getElementById('deathStat').textContent =
-    `YOU REACHED WAVE ${state.wave} · ${state.kills} UNITS DOWN`;
-  // the local best run is ranked by units disabled
-  const best = store.get('best', null), record = state.kills > 0 && (!best || state.kills > best.kills);
-  if (record) store.set('best', { wave: state.wave, kills: state.kills });
+    `SCORE ${formatScore(state.score)} · WAVE ${state.wave} · ${state.kills} UNITS DOWN`;
+  const best = readHighScore();
+  const record = state.score > 0 && state.score > best.score;
+  if (record) store.set('highscore', { score: state.score, wave: state.wave, kills: state.kills });
   const db = document.getElementById('deathBest');
-  db.textContent = record ? 'NEW BEST RUN' : best ? `BEST: WAVE ${best.wave} · ${best.kills} UNITS DOWN` : '';
+  const shown = record ? readHighScore() : best;
+  db.textContent = record
+    ? 'NEW HIGH SCORE'
+    : shown.score > 0 ? `HIGH SCORE ${formatScore(shown.score)} · WAVE ${shown.wave}` : '';
   db.classList.toggle('record', record);
   document.getElementById('death').classList.remove('hidden');
   audio.death();
+  updateHUD();
+  showBest();
 }
 
 // ===================================================================
@@ -2728,9 +2880,9 @@ for (const button of document.querySelectorAll('.close-panel')) {
   });
 }
 function showBest() {
-  const b = store.get('best', null);
-  document.getElementById('bestRun').innerHTML = b
-    ? `<span class="lbl">BEST RUN</span>WAVE <b>${b.wave}</b> · <b>${b.kills}</b> UNITS DOWN`
+  const b = readHighScore();
+  document.getElementById('bestRun').innerHTML = b.score > 0
+    ? `<span class="lbl">HIGH SCORE</span><b>${formatScore(b.score)}</b> · WAVE <b>${b.wave}</b>`
     : '';
 }
 menuButtons.forEach((b, i) => {
@@ -2769,6 +2921,8 @@ const Z_CLOSE = 0.95;     // never gets nearer than this (no standing inside the
 const Z_SWING = 0.85;     // seconds from wind-up to recovered
 const Z_HIT_RANGE = 1.65; // the blow connects if you're still this close
 const Z_TRACK = 7;        // rad/s a drone turns to keep facing you while it stands and swings
+const Z_SHOT_MAX = 11;    // gunner engagement distance
+const Z_BOSS_SHOT_MAX = 18; // bosses reach across most of the deck
 const HURT_IFRAMES = 1.5; // after a hit, the operator can't be hit again for this long (and flickers)
 
 // is there a wall (or a shut door or window) between two points? (samples the line)
@@ -2833,8 +2987,9 @@ function chaseDrone(z, dt) {
   const Z_STRIKE = ud.type.style === 'heavy' ? 0.4 : 0.2;
   const pdx = p.x - z.position.x, pdz = p.z - z.position.z, pd = Math.hypot(pdx, pdz);
   ud.shotCd = Math.max(0, ud.shotCd - dt);
+  const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
   const canShoot = ud.type.style === 'ranged' && ud.climb < 0 && ud.swing < 0
-    && inside(z.position) && pd > 2.5 && pd < 11 && !wallBetween(z.position, p)
+    && inside(z.position) && pd > 2.5 && pd < shotMax && !wallBetween(z.position, p)
     && clearPath(z.position.x, z.position.z, p.x, p.z);
   if (canShoot) {
     let moving = false;
@@ -2853,7 +3008,9 @@ function chaseDrone(z, dt) {
       audio.enemyCharge(z.position);
     } else {
       const side = Math.sin(ud.seed) > 0 ? 1 : -1;
-      const retreat = pd < 5 ? -0.7 : pd > 8 ? 0.7 : 0;
+      // Bosses hold a longer standoff so their extended range actually gets used.
+      const near = ud.boss ? 7 : 5, far = ud.boss ? 14 : 8;
+      const retreat = pd < near ? -0.7 : pd > far ? 0.7 : 0;
       const g = routeAround(z, z.position.x + pdx * retreat + pdz * side * 0.45, z.position.z + pdz * retreat - pdx * side * 0.45);
       moving = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * 0.7, ud.turn * 2, dt);
     }
@@ -3019,7 +3176,11 @@ function update(dt) {
     }
     state.pDamage = Math.max(0, state.pDamage - dt);
     state.pAmmo = Math.max(0, state.pAmmo - dt);
-    if (!state.choosing) updateDrops(dt);
+    if (!state.choosing) {
+      updateDrops(dt);
+      updateEmeralds(dt);
+      if (state.intermission <= 0) state.waveTime += dt;
+    }
 
     // --- waves ---
     if (state.choosing) {
@@ -3087,6 +3248,7 @@ function update(dt) {
       const dx = z.position.x - (px + sx * t), dz = z.position.z - (pz + sz * t);
       if (dx * dx + dz * dz < 0.55 * z.userData.type.size ** 2) {
         z.userData.hp -= state.damage * (state.pDamage > 0 ? 2 : 1);
+        state.shotsHit++;
         // small knockback
         z.position.addScaledVector(b.userData.dir, z.userData.boss ? 0.04 : z.userData.type.style === 'heavy' ? 0.08 : 0.25);
         if (z.userData.hp <= 0) killDrone(z, j);

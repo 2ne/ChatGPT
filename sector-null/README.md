@@ -4,11 +4,13 @@ A top-down sci-fi survival shooter and competition remix of [Abandon All Hope by
 
 ## Status
 
-Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Best runs and settings are saved in the browser.
+Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Score, high score and settings are saved in the browser.
+
+Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORING.md](./SCORING.md).
 
 ## Enemy roles and wave bosses
 
-Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Wave 1 contains grey patrols and a melee Warden. Wave 2 introduces cyan flankers and a faster Hunter boss. From wave 3, bosses carry visible shoulder cannons and fire three-shot spreads (five from wave 6), preceded by a one-second charge ring and sound. They lock their aim before firing, allowing the player to dodge. Enemy shots stop at cover and are cleared between combat phases.
+Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Boss health uses a steeper per-wave curve (`7 + 1.6×wave + 0.22×wave²` times the wave's base health) so late runs with stacked weapon upgrades stay demanding. Wave 1 contains grey patrols and a melee Warden. Wave 2 introduces cyan flankers and a faster Hunter boss. From wave 3, bosses carry visible shoulder cannons and fire three-shot spreads (five from wave 6), preceded by a one-second charge ring and sound. They engage from up to 18 units (regular gunners stay at 11), hold a longer standoff, lock aim before firing, and can be dodged. Enemy shots stop at cover and are cleared between combat phases.
 
 | Bot | First wave | Health multiplier | Movement and attack |
 | --- | --- | --- | --- |
@@ -16,7 +18,7 @@ Each wave ends with one larger red boss after all regular bots are defeated. The
 | Cyan Flanker | 2 | 0.7× | Faster, smaller, approaches from the side |
 | Purple Pulse Gunner | 3 | 1.25× | Strafes at range, visible cannon, charged single bolts |
 | Gold Bulwark | 4 | 2.5× | Slow, larger, resists knockback; slower wind-up strikes deal 2 shield damage |
-| Red Boss | Every wave | 6 + 0.75 × wave | Larger, durable; alternates faster Hunter and slower Warden variants, armed from wave 3 |
+| Red Boss | Every wave | 7 + 1.6 × wave + 0.22 × wave² | Larger, durable; longer shot range; alternates faster Hunter and slower Warden variants, armed from wave 3 |
 
 Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes, movement and introduction banners provide additional cues.
 
@@ -26,7 +28,7 @@ Uncollected supplies expire after 6 seconds of active play. During the final 2 s
 
 Bots plan around both cover and bulkheads using navigation graphs sized to their bodies. Routes refresh as the target moves, with stable corner choices to limit jitter. Movement checks clearance before stepping, turns in place for sharp corners, and limits steps at waypoints. Ranged strafing uses the same navigation; crowd separation avoids pushing bots into obstacles. Melee attacks cannot pass through solid cover.
 
-Power-ups tint the operator orange for Overcharge and blue for Infinite Cell, with a gentle pulse (steady glow under reduced motion). If both are active, the torso and limbs show separate colours. Shield kits produce a one-second pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the effect description. Glow strength is capped to keep it readable.
+Power-ups light the operator orange for Overcharge and blue for Infinite Cell with a strong pulsing glow (steady under reduced motion). Peaks flash toward white so the buff feels active. If both are active, the torso and limbs pulse on separate phases. Shield kits produce a short pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the effect description.
 
 ## Run locally
 

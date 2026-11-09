@@ -10,6 +10,8 @@ export function createAudio(settings, listener) {
   let paused = false;
   let titleMusic = false;
   let recharge;
+  let pickupStreak = 0;
+  let lastPickupAt = -Infinity;
 
   function cancelReload() {
     if (!recharge) return;
@@ -198,7 +200,19 @@ export function createAudio(settings, listener) {
     waveClear() { score?.clearWave(); },
     alarm(level) { signal(level > 0.8 ? [45, 52, 45] : [45, 52], 0.075, 0.16); },
     death() { cancelReload(); score?.stop(); signal([57, 54, 49, 35], 0.19, 0.17); },
-    pickup(id) { signal(id === 'med' ? [66, 73, 78] : [61, 69, 73], 0.11, 0.06); },
+    pickup(id) {
+      // Rapid grabs within 1s climb the phrase so a chain of pickups keeps rising.
+      const now = performance.now();
+      pickupStreak = now - lastPickupAt <= 1000 ? Math.min(pickupStreak + 1, 8) : 0;
+      lastPickupAt = now;
+      const shift = pickupStreak * 2; // +2 semitones per step
+      const base = id === 'med' ? [66, 73, 78] : [61, 69, 73];
+      signal(base.map(n => n + shift), 0.11, 0.06);
+    },
+    emerald(chain = 0) {
+      const n = 72 + Math.min(chain, 8) * 2;
+      signal([n, n + 4], 0.08, 0.04);
+    },
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },
     hover(i) { signal([59 + i * 2], 0.05); },

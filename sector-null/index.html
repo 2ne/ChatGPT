@@ -30,6 +30,8 @@
       <div id="powerups"></div>
     </div>
     <div class="enemy-stats">
+      <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
+      <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
       <div class="stat"><span class="label">Units down</span> <span class="stat-value" id="kills">0</span></div>
       <div class="stat" id="remainingStat"><span class="label">Hostiles left</span> <span class="stat-value" id="zleft">0</span></div>
     </div>
@@ -56,7 +58,10 @@
 
   <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
   <div id="toast" role="status">
-    <span id="toastTitle"></span>
+    <span id="toastLine">
+      <span id="toastIcon" aria-hidden="true"></span>
+      <span id="toastTitle"></span>
+    </span>
     <span id="toastDetail"></span>
   </div>
 </div>
@@ -104,7 +109,7 @@
   <section id="howPanel" class="mpanel">
     <h2>HOW TO PLAY</h2>
     <button type="button" class="close-panel" aria-label="Close how to play">×</button>
-    <p class="touch-help">Left thumb moves you and turns the gun that way. Right thumb fires — drag it to aim independently. Use Recharge to swap your power cell.</p>
+    <p class="touch-help">Left thumb moves you and turns the gun that way. Right thumb fires — drag it to aim independently. Collect green emeralds for score before they fade. Use Recharge to swap your power cell.</p>
     <div class="mrows">
       <div class="crow"><span class="caps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><b>MOVE</b></div>
       <div class="crow"><span class="caps"><kbd class="wide">MOUSE</kbd></span><b>AIM</b></div>

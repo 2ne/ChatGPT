@@ -50,6 +50,8 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .label { color: #bdd1dc; }
   .stat-value { color: #e2f8ff; font-size: 1.27em; font-weight: 700; font-variant-numeric: tabular-nums; }
   .enemy-stats .stat-value { min-width: 2ch; text-align: right; }
+  #score { color: #9dff7a; }
+  .score-high .stat-value { color: #a8c4b0; font-size: 1.05em; }
   #waveNum, #zleft { color: #82eaf5; }
   #kills { color: #71dabb; }
 
@@ -122,6 +124,17 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     font-size: 28px; letter-spacing: 6px; opacity: 0; transition: opacity .25s;
     text-shadow: 0 0 12px currentColor, 0 0 3px #000;
   }
+  #toastLine {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.35em;
+  }
+  #toastIcon {
+    display: none;
+    font-size: 1.15em;
+    letter-spacing: 0;
+    line-height: 1;
+    text-shadow: 0 0 12px currentColor, 0 0 3px #000;
+  }
+  #toastIcon:not(:empty) { display: inline-block; }
   #toastDetail {
     display: block; color: #e2f8ff; font-size: 18px; letter-spacing: .04em;
     text-shadow: 0 0 6px #000, 0 0 3px #000;
