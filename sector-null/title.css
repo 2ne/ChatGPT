@@ -225,7 +225,7 @@ body.titling #game { cursor: default; }
   color: #fff;
   background: #6f164055;
 }
-#pressAny:hover, #pressAny:focus-visible { filter: drop-shadow(0 0 15px #f830989e); }
+#pressAny:hover { filter: drop-shadow(0 0 15px #f830989e); }
 #pressAny:hover::after { background: linear-gradient(90deg, #551d43, #20172d 56%, #3f1737); }
 
 #menu:not(.splash) #pressAny, #menu.splash :is(#menuList, #menuFoot) { display: none; }
@@ -269,13 +269,13 @@ body.titling #game { cursor: default; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-#menuList button:is(.sel, :focus-visible) {
+#menuList button.sel {
   --edge: var(--cyan);
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
-#menuList button:is(.sel, :focus-visible)::before { background: var(--edge); }
-#menuList button:is(.sel, :focus-visible)::after {
+#menuList button.sel::before { background: var(--edge); }
+#menuList button.sel::after {
   inset: 2px 2px 2px 4px;
   background:
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / clamp(18px, 3.5cqw, 56px) 100% no-repeat,

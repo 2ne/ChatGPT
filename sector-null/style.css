@@ -427,13 +427,13 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     inset: 1px 0 1px 3px;
     background: linear-gradient(90deg, #211022f2, #111423bc 62%, #10162309);
   }
-  #deathMenu button:hover, #deathMenu button:focus-visible {
+  #deathMenu button:hover {
     --edge: var(--cyan);
     filter: drop-shadow(0 0 10px #19d9f579);
     color: #fff;
   }
-  #deathMenu button:hover::before, #deathMenu button:focus-visible::before { background: var(--edge); }
-  #deathMenu button:hover::after, #deathMenu button:focus-visible::after {
+  #deathMenu button:hover::before { background: var(--edge); }
+  #deathMenu button:hover::after {
     inset: 2px 2px 2px 4px;
     background:
       repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
