@@ -212,9 +212,9 @@ export function createAudio(settings, listener) {
     emerald(chain = 0) {
       // Short digital tick — no chord, no reverb. Chain only nudges pitch.
       if (!ctx) return;
-      const hz = 1480 + Math.min(chain, 8) * 90;
+      const hz = 720 + Math.min(chain, 8) * 70;
       voice(hz, hz * 1.12, 0.045, 0.035, { type: 'square', attack: 0.002 });
-      grain(hz * 1.6, 0.03, 0.028);
+      grain(hz * 1.45, 0.03, 0.028);
     },
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },
