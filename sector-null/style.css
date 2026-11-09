@@ -556,6 +556,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
 #reloadHint { color: #a0bac8; }
 #touchControls, .touch-help { display: none; }
 @media (any-pointer: coarse) {
+  #pause .sub { display: none; }
   #touchControls:not(.hidden) { display: block; position: fixed; inset: 0; pointer-events: none; z-index: 3; }
   #touchControls button {
     position: absolute;

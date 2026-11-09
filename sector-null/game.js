@@ -1537,20 +1537,68 @@ function waveBotType() {
   if (state.wave >= 4 && r >= 0.45 && r < 0.6) return BOT_TYPES.heavy;
   return BOT_TYPES.patrol;
 }
+function bossHealthMult() {
+  // Quadratic growth so stacked Pulse Amplifier / Overcharge runs still feel a boss fight.
+  return 7 + state.wave * 1.6 + state.wave * state.wave * 0.22;
+}
+
 function spawnWaveBoss() {
   state.bossPending = false;
   clearEnemyBolts();
-  const armed = state.wave >= 3;
-  const fast = state.wave % 3 === 2;
-  const type = {
-    name: armed ? (fast ? 'HUNTER PRIME' : 'SIEGE WARDEN') : (fast ? 'HUNTER' : 'WARDEN'),
-    // Quadratic growth so stacked Pulse Amplifier / Overcharge runs still feel a boss fight.
-    kit: 4, health: 7 + state.wave * 1.6 + state.wave * state.wave * 0.22, speed: fast ? 1.1 : 0.72,
-    size: 1.4, style: armed ? 'ranged' : fast ? 'flank' : 'heavy',
-    boss: true, volley: armed ? (state.wave >= 6 ? 5 : 3) : 0,
-  };
+  const hp = bossHealthMult();
+  const volley = state.wave >= 6 ? 5 : 3;
+  // Four archetypes on a loop so late waves keep feeling different.
+  const kind = (state.wave - 1) % 4;
+  let type, sub;
+  if (kind === 0) {
+    type = { name: 'WARDEN', kit: 4, health: hp, speed: 0.72, size: 1.4, style: 'heavy', boss: true, volley: 0 };
+    sub = 'BOSS · Keep moving and keep your distance';
+  } else if (kind === 1) {
+    type = { name: 'REAVER', kit: 4, health: hp * 0.92, speed: 1.35, size: 1.28, style: 'rusher', boss: true, volley: 0 };
+    sub = 'BOSS · It charges and swipes — stay mobile';
+  } else if (kind === 2) {
+    const armed = state.wave >= 3;
+    type = {
+      name: armed ? 'SIEGE WARDEN' : 'HUNTER',
+      kit: 4, health: hp, speed: armed ? 0.78 : 1.1, size: 1.4,
+      style: armed ? 'ranged' : 'flank', boss: true, volley: armed ? volley : 0,
+    };
+    sub = armed ? 'BOSS · Dodge the charged volley' : 'BOSS · Fast and aggressive';
+  } else {
+    type = {
+      name: 'SCHISM', kit: 4, health: hp * 1.08, speed: 0.85, size: 1.45,
+      style: 'heavy', boss: true, volley: 0, split: true,
+    };
+    sub = 'BOSS · Fragments peel off as it takes damage';
+  }
   spawnDrone(undefined, type);
-  showBanner(type.name, armed ? 'BOSS · Dodge the charged volley' : 'BOSS · Keep moving and keep your distance', 2.5);
+  showBanner(type.name, sub, 2.5);
+}
+
+function maybeSplitBoss(z) {
+  const ud = z.userData;
+  if (!ud.type.split || !ud.boss || ud.splitsDone >= 2) return;
+  const thresholds = [0.55, 0.28];
+  const next = thresholds[ud.splitsDone];
+  if (ud.hp / ud.maxHp > next) return;
+  ud.splitsDone++;
+  const count = 3 + ud.splitsDone;
+  const fragment = {
+    name: 'SCHISM FRAGMENT', kit: 4, health: 0.85, speed: 1.45, size: 0.72,
+    style: 'flank', fragment: true,
+  };
+  for (let i = 0; i < count; i++) {
+    const ang = (i / count) * Math.PI * 2 + ud.seed;
+    const pos = new THREE.Vector3(
+      z.position.x + Math.cos(ang) * 1.35,
+      0,
+      z.position.z + Math.sin(ang) * 1.35,
+    );
+    pushOutOfSolids(pos, 0.35);
+    spawnDrone(pos, fragment);
+  }
+  showBanner('SCHISM', 'Fragments loose', 1.6);
+  audio.explode(z.position);
 }
 function bakeDrone({ plate, joint, trim, optic }, seed) {
   const rng = seeded(seed);
@@ -1715,6 +1763,9 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     hp: Math.ceil(state.droneHp * type.health),
     maxHp: Math.ceil(state.droneHp * type.health),
     type, boss: !!type.boss, chargeRing, shotCd: 1.5, chargeT: 0, shotTarget: null,
+    splitsDone: 0,
+    reformT: type.fragment ? 5.5 : 0,
+    seekBoss: false,
     pace,                                               // its speed relative to the wave's
     speed: Math.min(5.5, state.droneSpeed * pace),
     hurt: 0, body, pelvis, upper, head, jaw, limbs,
@@ -2426,10 +2477,50 @@ function pixelIcon(rows, cls = 'cicon') {
 let offered = [];
 const PICK_LOCKOUT_MS = 650; // ~ when the last card finishes dealing in
 
-function openPicker(healed) {
+function upgradeWeight(u) {
+  let w = 1;
+  // Early waves lean hard into firepower so weapon progress comes online faster.
+  if (u.cat === 'firepower') w += state.wave <= 3 ? 2.8 : 1.2;
+  if (u.cat === 'handling') w += state.wave <= 3 ? 1.2 : 0.6;
+  if (u.id === 'spread') w += (state.upgrades.spread || 0) === 0 ? (state.wave <= 3 ? 5 : 2) : 0.8;
+  if (u.id === 'damage' && !(state.upgrades.damage)) w += 1.4;
+  if (u.id === 'rate' && !(state.upgrades.rate)) w += 1.2;
+  if (u.id === 'luck' && state.wave <= 2) w *= 0.35;
+  if (u.id === 'heal') w *= state.hp < state.maxHp ? 1 : 0;
+  return Math.max(0.05, w);
+}
+
+function pickUpgradeOffers(count = 3) {
   const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
-  for (let i = pool.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [pool[i], pool[j]] = [pool[j], pool[i]]; }
-  offered = pool.slice(0, 3);
+  const picks = [];
+  // Guarantee Split Beam on the first couple of clears if it still hasn't shown up.
+  if ((state.upgrades.spread || 0) === 0 && state.wave <= 2) {
+    const spread = pool.find(u => u.id === 'spread');
+    if (spread) {
+      picks.push(spread);
+      pool.splice(pool.indexOf(spread), 1);
+    }
+  }
+  while (picks.length < count && pool.length) {
+    const total = pool.reduce((sum, u) => sum + upgradeWeight(u), 0);
+    let roll = Math.random() * total;
+    let idx = 0;
+    for (let i = 0; i < pool.length; i++) {
+      roll -= upgradeWeight(pool[i]);
+      if (roll <= 0) { idx = i; break; }
+    }
+    picks.push(pool.splice(idx, 1)[0]);
+  }
+  // Shuffle display order so the guaranteed card isn't always slot 1.
+  for (let i = picks.length - 1; i > 0; i--) {
+    const j = (Math.random() * (i + 1)) | 0;
+    [picks[i], picks[j]] = [picks[j], picks[i]];
+  }
+  return picks;
+}
+
+function openPicker(healed) {
+  offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
   state.choosing = true;
   clearTimeout(choose._t);
@@ -2998,7 +3089,10 @@ function hurtPlayer(damage = 1) {
 
 function chaseDrone(z, dt) {
   const ud = z.userData, p = player.position;
-  const Z_STRIKE = ud.type.style === 'heavy' ? 0.4 : 0.2;
+  const rusher = ud.type.style === 'rusher';
+  const Z_STRIKE = ud.type.style === 'heavy' ? 0.4 : rusher ? 0.28 : 0.2;
+  const reach = rusher ? Z_REACH * 1.2 : Z_REACH;
+  const letGo = rusher ? Z_LET_GO * 1.15 : Z_LET_GO;
   const pdx = p.x - z.position.x, pdz = p.z - z.position.z, pd = Math.hypot(pdx, pdz);
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
@@ -3047,23 +3141,44 @@ function chaseDrone(z, dt) {
       else if (!(pd < Z_HIT_RANGE && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer(ud.type.style === 'heavy' && !ud.boss ? 2 : 1))) audio.swipe(z.position);
     }
     if (ud.swing >= Z_SWING) { ud.swing = -1; ud.swingCd = rnd(0.25, 0.6); }
-  } else if (pd < (ud.standing ? Z_LET_GO : Z_REACH) && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05)) {
+  } else if (pd < (ud.standing ? letGo : reach) && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05)) {
     // at arm's length: stand, square up, and swing as soon as it's facing you (no
     // cooldown left over from battering its way in)
     if (!ud.standing) ud.swingCd = 0;
     ud.standing = true;
-    const off = faceToward(z, pdx, pdz, Z_TRACK, dt);
-    ud.swingCd -= dt;
-    if (ud.swingCd <= 0 && off < 0.5) { ud.swing = 0; ud.struck = false; ud.swingAt = null; }
+    const off = faceToward(z, pdx, pdz, Z_TRACK * (rusher ? 1.35 : 1), dt);
+    ud.swingCd -= dt * (rusher ? 1.45 : 1);
+    if (ud.swingCd <= 0 && off < (rusher ? 0.7 : 0.5)) { ud.swing = 0; ud.struck = false; ud.swingAt = null; }
   } else {
     ud.standing = false;
     // steer toward nearest opening if outside, else toward player
     let tx = p.x, tz = p.z;
+    if (ud.type.fragment) {
+      ud.reformT = Math.max(0, ud.reformT - dt);
+      if (ud.reformT <= 0) {
+        const core = drones.find(d => d !== z && d.userData.boss && d.userData.type.split);
+        if (core) {
+          const bx = core.position.x - z.position.x, bz = core.position.z - z.position.z;
+          const bd = Math.hypot(bx, bz);
+          if (bd < 1) {
+            core.userData.hp = Math.min(core.userData.maxHp, core.userData.hp + Math.max(1, Math.ceil(ud.hp * 0.5)));
+            ud.mergeAway = true;
+            return;
+          }
+          tx = core.position.x; tz = core.position.z;
+        }
+      }
+    }
     if (inside(z.position)) {
       ud.opening = null; ud.stage = 0; // through the wall — re-pick if knocked back out
-      if (ud.type.style === 'flank' && pd > 3) {
+      if (ud.type.fragment && ud.reformT <= 0) {
+        // Returning to the core — leave tx/tz as set above.
+      } else if (ud.type.style === 'flank' && pd > 3) {
         const side = Math.sin(ud.seed) > 0 ? 1 : -1;
         tx += pdz / pd * 2.5 * side; tz -= pdx / pd * 2.5 * side;
+      } else if (rusher && pd > 2.2) {
+        // Commit straight at the operator — no flanking weave.
+        tx = p.x; tz = p.z;
       }
     } else {
       // Commit to one opening (no per-frame re-pick): walk up via its outer waypoint so
@@ -3090,7 +3205,8 @@ function chaseDrone(z, dt) {
     if (tx !== null) {
       const g = routeAround(z, tx, tz);
       // turn harder up close so the last few steps home in on you
-      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed, ud.turn * (pd < 4 ? 2.5 : 1), dt);
+      const rush = rusher && inside(z.position) ? 1.2 : 1;
+      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * rush, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1), dt);
     }
   }
   // progress check: a drone that's been trying to walk for 2s but has barely moved (jammed
@@ -3266,7 +3382,11 @@ function update(dt) {
         // small knockback
         z.position.addScaledVector(b.userData.dir, z.userData.boss ? 0.04 : z.userData.type.style === 'heavy' ? 0.08 : 0.25);
         if (z.userData.hp <= 0) killDrone(z, j);
-        else { hitDrone(z); audio.hit(z.position); }
+        else {
+          hitDrone(z);
+          audio.hit(z.position);
+          maybeSplitBoss(z);
+        }
         b.userData.hits.add(z);
         if (b.userData.pierce > 0) b.userData.pierce--;
         else hit = true; // ends the loop; a piercing bullet keeps checking the rest
@@ -3281,6 +3401,11 @@ function update(dt) {
   for (let j = drones.length - 1; j >= 0; j--) {
     const z = drones[j];
     const ud = z.userData;
+    if (ud.mergeAway) {
+      scene.remove(z);
+      drones.splice(j, 1);
+      continue;
+    }
     // hurt flash recover
     if (ud.hurt > 0) {
       ud.hurt -= dt;

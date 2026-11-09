@@ -10,7 +10,9 @@ Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORI
 
 ## Enemy roles and wave bosses
 
-Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Boss health uses a steeper per-wave curve (`7 + 1.6×wave + 0.22×wave²` times the wave's base health) so late runs with stacked weapon upgrades stay demanding. Wave 1 contains grey patrols and a melee Warden. Wave 2 introduces cyan flankers and a faster Hunter boss. From wave 3, bosses carry visible shoulder cannons and fire three-shot spreads (five from wave 6), preceded by a one-second charge ring and sound. They engage from up to 18 units (regular gunners stay at 11), hold a longer standoff, lock aim before firing, and can be dodged. Enemy shots stop at cover and are cleared between combat phases.
+Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Boss health uses a steeper per-wave curve (`7 + 1.6×wave + 0.22×wave²` times the wave's base health) so late runs with stacked weapon upgrades stay demanding. Wave 1 contains grey patrols. Bosses rotate through four archetypes: Warden (heavy melee), Reaver (fast charger that swipes), Siege Warden / Hunter (ranged or flank), and Schism (peels off fragments that later try to reform into the core). Armed Siege Wardens appear from wave 3 with charged volleys. Enemy shots stop at cover and are cleared between combat phases.
+
+Early upgrade picks bias toward firepower, and Split Beam is guaranteed among the first two wave-clear offers if you have not taken it yet.
 
 | Bot | First wave | Health multiplier | Movement and attack |
 | --- | --- | --- | --- |
@@ -18,7 +20,10 @@ Each wave ends with one larger red boss after all regular bots are defeated. The
 | Cyan Flanker | 2 | 0.7× | Faster, smaller, approaches from the side |
 | Purple Pulse Gunner | 3 | 1.25× | Strafes at range, visible cannon, charged single bolts |
 | Gold Bulwark | 4 | 2.5× | Slow, larger, resists knockback; slower wind-up strikes deal 2 shield damage |
-| Red Boss | Every wave | 7 + 1.6 × wave + 0.22 × wave² | Larger, durable; longer shot range; alternates faster Hunter and slower Warden variants, armed from wave 3 |
+| Warden | Wave 1, 5, 9… | Boss curve | Heavy melee standoff |
+| Reaver | Wave 2, 6, 10… | Boss curve | Charges the operator and swipes hard |
+| Siege Warden / Hunter | Wave 3, 7, 11… | Boss curve | Ranged volleys from wave 3, or fast flank earlier |
+| Schism | Wave 4, 8, 12… | Boss curve | Splits off fragments that later return to the core |
 
 Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes, movement and introduction banners provide additional cues.
 
