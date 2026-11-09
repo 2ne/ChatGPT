@@ -555,19 +555,29 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
 
   #banner {
     top: 36%;
-    padding-left: max(72px, calc(env(safe-area-inset-left, 0px) + 24px));
-    padding-right: max(168px, 21vw, calc(env(safe-area-inset-right, 0px) + 24px));
+    /* Same gutter on both sides so the title stays on the viewport centre
+       while the subtitle still wraps clear of the side HUD / safe areas. */
+    --banner-gutter: max(
+      168px,
+      21vw,
+      calc(env(safe-area-inset-left, 0px) + 24px),
+      calc(env(safe-area-inset-right, 0px) + 24px)
+    );
+    padding-left: var(--banner-gutter);
+    padding-right: var(--banner-gutter);
   }
   #bannerText {
     display: inline-block;
     max-width: 100%;
     font-size: clamp(20px, 8dvh, 32px);
     letter-spacing: 0.14em;
+    padding-left: 0.14em;
     line-height: 1.05;
   }
   #bannerSub {
     font-size: clamp(11px, 3.6dvh, 14px);
     letter-spacing: 0.12em;
+    padding-left: 0.12em;
     line-height: 1.35;
     margin-top: 6px;
     max-width: min(36rem, 100%);

@@ -1439,6 +1439,7 @@ function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; s
 const toastQueue = [];
 let toastTime = 0;
 let activePickupHint = null;
+let toastIsBotsLeft = false;
 const BOT_MILESTONES = [10, 5, 3, 1];
 const botMilestonesDone = new Set();
 
@@ -1446,8 +1447,13 @@ function botsLeftLabel(n) {
   return n === 1 ? '1 BOT LEFT' : `${n} BOTS LEFT`;
 }
 
+function bannerShowing() {
+  return hud.banner.style.opacity === '1';
+}
+
 function checkBotMilestones(remaining) {
   if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
+  if (bannerShowing()) return;
   // Mark every crossed threshold, but only announce the lowest new one so rapid
   // multi-kills do not stack 10 / 5 / 3 toasts back-to-back.
   let hit = null;
@@ -1475,6 +1481,7 @@ function updateToast(dt) {
       activePickupHint = null;
     }
     hud.toast.style.opacity = 0;
+    toastIsBotsLeft = false;
     toastTime = 0.25; // let the current notice fade before replacing it
     return;
   }
@@ -1483,6 +1490,10 @@ function updateToast(dt) {
   const lessonIndex = toastQueue.findIndex(notice => notice.pickup && !seenDrops.has(notice.pickup.id));
   const next = toastQueue.splice(lessonIndex < 0 ? 0 : lessonIndex, 1)[0];
   if (!next) return;
+  if (next.botsLeft && bannerShowing()) {
+    toastQueue.unshift(next);
+    return;
+  }
   const { text, color, pickup } = next;
   const firstPickup = pickup && !seenDrops.has(pickup.id);
   // Same glyph as the floor label so the notice matches what they just collected.
@@ -1493,6 +1504,7 @@ function updateToast(dt) {
   hud.toast.style.opacity = 1;
   toastTime = firstPickup ? 4.5 : 1.4;
   activePickupHint = firstPickup ? pickup.id : null;
+  toastIsBotsLeft = !!next.botsLeft;
 }
 
 function showBanner(text, sub, dur = 1.6, kind = 'wave') {
@@ -1500,6 +1512,11 @@ function showBanner(text, sub, dur = 1.6, kind = 'wave') {
   hud.bannerText.textContent = text;
   hud.bannerSub.textContent = sub || '';
   hud.banner.style.opacity = 1;
+  if (toastIsBotsLeft) {
+    hud.toast.style.opacity = 0;
+    toastTime = 0.2;
+    toastIsBotsLeft = false;
+  }
   clearTimeout(showBanner._t);
   showBanner._t = setTimeout(() => { hud.banner.style.opacity = 0; }, dur * 1000);
 }
@@ -3018,6 +3035,7 @@ function clearRun() {
   hud.toastTitle.textContent = '';
   hud.toastDetail.textContent = '';
   hud.toast.style.opacity = 0;
+  toastIsBotsLeft = false;
   hud.picker.classList.add('hidden');
 }
 
