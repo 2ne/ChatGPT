@@ -2519,6 +2519,8 @@ const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
 const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
 const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
 const equipment = { shot: 0, mine: 0, safe: 0, pulse: false, mines: [], blasts: [], zones: [], effects: [] };
+const helperDamage = rank => 0.8 + rank * 0.7;
+const helperShotInterval = (rank, upgrades) => upgrades.botBomb ? 1.7 : 0.65 / (1 + 0.25 * (rank - 1) + (upgrades.botGun === 2 ? 0.35 : 0));
 
 function removeFieldObject(o) {
   scene.remove(o);
@@ -2580,13 +2582,13 @@ function updateEquipment(dt) {
       helper.lookAt(target.position.x, helper.position.y, target.position.z);
       if (equipment.shot <= 0) {
         helper.updateWorldMatrix(true, true);
-        equipment.shot = u.botBomb ? 1.7 : 0.65 / (1 + 0.25 * (u.bot - 1) + (u.botGun === 2 ? 0.35 : 0));
+        equipment.shot = helperShotInterval(u.bot, u);
         for (let k = 0; k < (u.botGun ? 2 : 1); k++) {
           const b = makeTracer(!!u.botBomb);
           helperBarrels[k].getWorldPosition(b.position);
           const dir = target.position.clone().sub(b.position); dir.y = 0; dir.normalize();
           b.lookAt(b.position.clone().add(dir));
-          b.userData = { dir, life: 0.7, pierce: 0, hits: new Set(), helper: true, damage: 0.8 + u.bot * 0.7, blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0 };
+          b.userData = { dir, life: 0.7, pierce: 0, hits: new Set(), helper: true, damage: helperDamage(u.bot), blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0 };
           bullets.push(b); scene.add(b);
         }
       }
@@ -2630,7 +2632,7 @@ function updateEquipment(dt) {
 // Each card can be taken up to `max` times per run. `ok` (optional) hides a
 // card while it would do nothing. `stat` returns [now, after] for the card.
 const UPGRADES = [
-  { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'An automatic gun at your side', max: 3, stat: s => [s.upgrades.bot || 0, `Rank ${(s.upgrades.bot || 0) + 1}`], apply: () => {} },
+  { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'Deploy one automatic companion', max: 3, stat: s => [s.upgrades.bot ? helperDamage(s.upgrades.bot).toFixed(1) : 'Shot damage', `${helperDamage((s.upgrades.bot || 0) + 1).toFixed(1)} damage`], apply: () => {} },
   { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botBomb, stat: s => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
   { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botGun, stat: s => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
   { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: s => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
@@ -2750,7 +2752,10 @@ function upgradePreview(u) {
   else if (u.cat === 'firepower' || u.cat === 'handling') art += '<path class="preview-shot" d="M48 28h14m9 0h14"/><path d="M92 14v28"/>';
   if (u.id === 'botBomb') art += '<circle class="preview-shot" cx="83" cy="28" r="7"/>';
   if (u.id === 'botGun') art += '<path class="preview-shot" d="M74 22h20m-20 12h20"/>';
-  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg><span class="rank-label">${state.upgrades[u.id] ? 'UPGRADE' : 'NEW'} · RANK ${rank}${u.max !== Infinity ? ' / ' + u.max : ''}</span>`;
+  const label = u.id === 'bot'
+    ? (rank === 1 ? 'NEW · 1 BOT' : `1 BOT · RANK ${rank - 1} → ${rank}`)
+    : `${state.upgrades[u.id] ? 'UPGRADE' : 'NEW'} · RANK ${rank}${u.max !== Infinity ? ' / ' + u.max : ''}`;
+  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg><span class="rank-label">${label}</span>`;
 }
 
 function openPicker(healed) {
@@ -2763,17 +2768,23 @@ function openPicker(healed) {
   hud.pickerSub.textContent = (healed ? '+1 SHIELD  ·  ' : '') + 'CHOOSE YOUR NEXT UPGRADE';
   hud.cards.innerHTML = offered.map((u, i) => {
     const owned = state.upgrades[u.id] || 0;
+    const botUpgrade = u.id === 'bot' && owned > 0;
+    const name = botUpgrade ? 'UPGRADE HELPER BOT' : u.name;
+    const desc = botUpgrade ? 'Improve your existing companion' : u.desc;
+    const fireRate = botUpgrade && !state.upgrades.botBomb
+      ? `<div class="cstat">Shot interval ${helperShotInterval(owned, state.upgrades).toFixed(2)}s → <b>${helperShotInterval(owned + 1, state.upgrades).toFixed(2)}s</b></div>` : '';
     const [now, after] = u.stat(state);
-    const pips = u.max === Infinity ? '' :
+    const pips = u.max === Infinity || u.id === 'bot' ? '' :
       Array.from({ length: u.max }, (_, k) => `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`).join('');
     return `<button type="button" class="card ${i === 0 ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
       `<div class="ctop"><span>${i === 0 ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
       upgradePreview(u) +
-      `<div class="cname">${u.name}</div><div class="cdesc">${u.desc}</div>` +
+      `<div class="cname">${name}</div><div class="cdesc">${desc}</div>` +
       `<div class="cstat">${now} → <b>${after}</b></div>` +
+      fireRate +
       `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
-  document.getElementById('buildSummary').textContent = UPGRADES.filter(u => state.upgrades[u.id]).map(u => `${u.name} ${state.upgrades[u.id]}`).join(' · ') || 'Choose a weapon, engineer or defence path';
+  document.getElementById('buildSummary').textContent = UPGRADES.filter(u => state.upgrades[u.id]).map(u => `${u.id === 'bot' ? '1 HELPER BOT' : u.name} · Rank ${state.upgrades[u.id]}`).join(' · ') || 'Choose a weapon, engineer or defence path';
   hud.picker.classList.remove('hidden');
   hud.cards.classList.remove('ready');
   audio.deal(offered.length);
@@ -2795,7 +2806,7 @@ function choose(i) {
   clearTimeout(choose._t);
   choose._t = setTimeout(() => hud.picker.classList.add('hidden'), 320);
   queueWave(2.0);
-  toastQueue.push({ text: u.name, color: UPGRADE_CATS[u.cat] });
+  toastQueue.push({ text: u.id === 'bot' ? (state.upgrades.bot === 1 ? 'HELPER BOT DEPLOYED' : `HELPER BOT UPGRADED · RANK ${state.upgrades.bot}`) : u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
 
