@@ -540,7 +540,6 @@ function updateWorld(dt) {
     glow.material.opacity = 0.2 * intensity;
     o.indicator.color.setHex(colour);
   }
-  audio.reactor(warning);
 }
 
 // ===================================================================
@@ -2274,7 +2273,6 @@ function setPaused(on) {
   document.getElementById('pauseStat').textContent = `WAVE ${state.wave} · ${state.kills} UNITS DOWN`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) document.getElementById('resumeBtn').focus({ preventScroll: true });
-  audio.pause(on);
 }
 
 function quitToTitle() {

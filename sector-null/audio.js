@@ -3,9 +3,8 @@ const midiHz = note => 440 * 2 ** ((note - 69) / 12);
 export function createAudio(settings, listener) {
   const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
   soundtrack.loop = true;
-  let ctx, master, musicBus, reverb, noise, hum, humGain;
+  let ctx, master, musicBus, reverb, noise;
   let muted = false;
-  let paused = false;
   let titleMusic = false;
 
   function ensure() {
@@ -33,13 +32,6 @@ export function createAudio(settings, listener) {
       const samples = noise.getChannelData(0);
       for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
 
-      hum = ctx.createOscillator();
-      hum.type = 'triangle';
-      hum.frequency.value = 47;
-      humGain = ctx.createGain();
-      humGain.gain.value = 0.045;
-      hum.connect(humGain).connect(master);
-      hum.start();
       applyVolume();
     }
     if (ctx.state === 'suspended') ctx.resume().catch(() => {});
@@ -118,20 +110,11 @@ export function createAudio(settings, listener) {
         soundtrack.currentTime = 0;
       }
     },
-    pause(on) {
-      paused = on;
-      if (ctx && on) humGain.gain.setTargetAtTime(0, ctx.currentTime, 0.08);
-    },
     toggleMute() {
       ensure();
       muted = !muted;
       applyVolume();
       return muted;
-    },
-    reactor(pressure) {
-      if (!ctx || ctx.state !== 'running') return;
-      hum.frequency.setTargetAtTime(47 + pressure * 17, ctx.currentTime, 0.18);
-      humGain.gain.setTargetAtTime(paused ? 0 : 0.043 + pressure * 0.04, ctx.currentTime, 0.18);
     },
     shot(hot, spread) {
       voice(hot ? 510 : 390, 47, 0.16, 0.31 + spread * 0.03, { type: 'triangle' });
