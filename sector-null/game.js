@@ -1128,15 +1128,43 @@ const aimPoint = new THREE.Vector3();
 const aimPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.9);
 const raycaster = new THREE.Raycaster();
 const touchControls = document.getElementById('touchControls');
-const moveStick = { dot: document.getElementById('moveStick'), delta: new THREE.Vector2(), id: null };
-const aimStick = { dot: document.getElementById('aimStick'), delta: new THREE.Vector2(), id: null };
+const STICK_RADIUS = 64;   // px to full deflection — large enough for thumbs
+const STICK_KNOB = 36;     // visual knob travel
+const AIM_DEAD = 0.18;     // aim stick deadzone (normalized); fire still holds
+const moveStick = { dot: document.getElementById('moveStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
+const aimStick = { dot: document.getElementById('aimStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
 const touchDirection = new THREE.Vector2(0, -1);
 let touchAiming = false;
+let touchYaw = 0; // smoothed facing while the aim stick is active
 
 function resetStick(stick) {
   stick.id = null;
   stick.delta.set(0, 0);
-  stick.dot.classList.remove('active');
+  stick.dot.classList.remove('active', 'firing');
+}
+
+function paintStick(stick) {
+  stick.dot.style.left = stick.x + 'px';
+  stick.dot.style.top = stick.y + 'px';
+  stick.dot.style.setProperty('--dx', stick.delta.x * STICK_KNOB + 'px');
+  stick.dot.style.setProperty('--dy', stick.delta.y * STICK_KNOB + 'px');
+}
+
+// Twin-stick standard: thumb plants the base; if the thumb drifts past the rim,
+// the base follows so full input never drops and quick 180° flicks stay possible.
+function updateStick(stick, clientX, clientY) {
+  let dx = clientX - stick.x;
+  let dy = clientY - stick.y;
+  const len = Math.hypot(dx, dy);
+  if (len > STICK_RADIUS) {
+    const follow = len - STICK_RADIUS;
+    stick.x += (dx / len) * follow;
+    stick.y += (dy / len) * follow;
+    dx = clientX - stick.x;
+    dy = clientY - stick.y;
+  }
+  stick.delta.set(dx / STICK_RADIUS, dy / STICK_RADIUS);
+  paintStick(stick);
 }
 
 function syncTouchControls() {
@@ -1157,24 +1185,34 @@ canvas.addEventListener('pointerdown', e => {
   stick.id = e.pointerId;
   stick.x = e.clientX;
   stick.y = e.clientY;
-  stick.dot.style.left = e.clientX + 'px';
-  stick.dot.style.top = e.clientY + 'px';
-  stick.dot.style.setProperty('--dx', '0px');
-  stick.dot.style.setProperty('--dy', '0px');
+  stick.delta.set(0, 0);
   stick.dot.classList.add('active');
+  paintStick(stick);
+  // Right thumb down = shoot immediately in the current facing. Drag only steers aim.
+  // This matches Geometry Wars / Minigore-style twin-stick expectations.
+  if (stick === aimStick) {
+    if (!touchAiming) {
+      touchDirection.set(Math.sin(player.rotation.y), Math.cos(player.rotation.y));
+      touchYaw = player.rotation.y;
+    }
+    touchAiming = true;
+    firing = true;
+    stick.dot.classList.add('firing');
+  }
   canvas.setPointerCapture(e.pointerId);
   e.preventDefault();
 });
 canvas.addEventListener('pointermove', e => {
   const stick = [moveStick, aimStick].find(item => item.id === e.pointerId);
   if (!stick) return;
-  stick.delta.set((e.clientX - stick.x) / 46, (e.clientY - stick.y) / 46).clampLength(0, 1);
-  stick.dot.style.setProperty('--dx', stick.delta.x * 34 + 'px');
-  stick.dot.style.setProperty('--dy', stick.delta.y * 34 + 'px');
-  if (stick === aimStick && stick.delta.lengthSq() > 0.025) {
-    touchDirection.copy(stick.delta).normalize();
+  updateStick(stick, e.clientX, e.clientY);
+  if (stick === aimStick) {
+    if (stick.delta.lengthSq() > AIM_DEAD * AIM_DEAD) {
+      touchDirection.copy(stick.delta).normalize();
+    }
     touchAiming = true;
     firing = true;
+    stick.dot.classList.add('firing');
   }
 });
 function releaseStick(e) {
@@ -1184,6 +1222,8 @@ function releaseStick(e) {
     firing = false;
   }
 }
+canvas.addEventListener('pointerup', releaseStick);
+canvas.addEventListener('pointercancel', releaseStick);
 canvas.addEventListener('lostpointercapture', releaseStick);
 document.getElementById('touchReload').addEventListener('click', startReload);
 document.getElementById('touchPause').addEventListener('click', () => setPaused(true));
@@ -2943,11 +2983,15 @@ function update(dt) {
     // --- aim ---
     raycaster.setFromCamera(mouse, camera);
     if (touchAiming) {
-      aimPoint.set(player.position.x + touchDirection.x * 8, 0.9, player.position.z + touchDirection.y * 8);
-      player.rotation.y = Math.atan2(touchDirection.x, touchDirection.y);
+      // Smooth the turn toward the stick — snapping feels jittery on thumbs.
+      const targetYaw = Math.atan2(touchDirection.x, touchDirection.y);
+      touchYaw += wrapA(targetYaw - touchYaw) * (1 - Math.exp(-18 * dt));
+      player.rotation.y = touchYaw;
+      aimPoint.set(player.position.x + Math.sin(touchYaw) * 8, 0.9, player.position.z + Math.cos(touchYaw) * 8);
     } else if (raycaster.ray.intersectPlane(aimPlane, aimPoint)) {
       const a = Math.atan2(aimPoint.x - player.position.x, aimPoint.z - player.position.z);
       player.rotation.y = a;
+      touchYaw = a;
     }
   }
 

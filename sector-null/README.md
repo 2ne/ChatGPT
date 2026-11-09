@@ -51,9 +51,11 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 
 | Action | Keyboard and mouse | Touch |
 | --- | --- | --- |
-| Move | WASD or arrow keys | Drag on the left side |
-| Aim and fire | Mouse and left click | Drag and hold on the right side |
+| Move | WASD or arrow keys | Plant and drag on the left side |
+| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim |
 | Recharge | R | Recharge button |
 | Pause | Esc or P | Pause button |
 | Choose an upgrade | 1–3 or click | Tap a card |
 | Mute | M or volume settings | Volume settings |
+
+Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer.
