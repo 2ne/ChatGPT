@@ -515,6 +515,10 @@ const pressure = {
   set(level) { this.level = this.target = level; this.nextAlarm = 0; },
 };
 function updateWorld(dt) {
+  const milestone = state.running && drones.some(z => z.userData.type.milestone);
+  const tint = new THREE.Color(milestone ? (Math.floor(state.wave / 5) % 2 ? 0xffb183 : 0xc4a0ff) : CYAN);
+  coreLight.color.lerp(tint, Math.min(1, dt * 1.5));
+  cyanLight.color.lerp(tint, Math.min(1, dt * 1.5));
   pressure.time += dt;
   pressure.level = THREE.MathUtils.damp(pressure.level, pressure.target, 0.42, dt);
   const t = pressure.time;
@@ -1547,8 +1551,8 @@ function waveBotType() {
   return BOT_TYPES.patrol;
 }
 function bossHealthMult() {
-  // Quadratic growth so stacked Pulse Amplifier / Overcharge runs still feel a boss fight.
-  return 7 + state.wave * 1.6 + state.wave * state.wave * 0.22;
+  // Patterns carry the challenge; avoid increasingly long health-only encounters.
+  return 6 + state.wave * 1.3 + state.wave * state.wave * 0.1;
 }
 
 function spawnWaveBoss() {
@@ -1586,6 +1590,10 @@ function spawnWaveBoss() {
       style: 'heavy', boss: true, volley: 0, split: true, loco: 'stomp',
     };
     sub = 'BOSS · Spawns runners that later return to the core';
+  }
+  if (state.wave % 5 === 0) {
+    type = { name: Math.floor(state.wave / 5) % 2 ? 'REACTOR WARDEN' : 'NULL OVERSEER', kit: 4, health: hp * 1.2, speed: 0.72, size: 1.55, style: 'heavy', boss: true, milestone: true, loco: 'stomp' };
+    sub = 'MILESTONE · Leave marked zones · Strike during recovery';
   }
   spawnDrone(undefined, type);
   showBanner(type.name, sub, 2.5);
@@ -2250,7 +2258,10 @@ function killDrone(z, idx) {
     if (state.bossPending) { spawnWaveBoss(); return; }
     clearEnemyBolts();
     awardWaveBonuses();
+    // Victory banks the reward, including gems from the final boss.
+    for (const gem of emeralds) collectEmerald();
     clearEmeralds();
+    clearEquipmentField();
     const healed = state.hp < state.maxHp;
     state.hp = Math.min(state.maxHp, state.hp + 1);
     audio.waveClear();
@@ -2496,11 +2507,135 @@ function awardWaveBonuses() {
 }
 
 // ===================================================================
+// AUTOMATIC EQUIPMENT — active-play timers, no additional touch buttons.
+const helper = new THREE.Group();
+const helperShell = new THREE.MeshStandardMaterial({ color: 0xa7a1ff, metalness: 0.6, roughness: 0.3 });
+box(helper, helperShell, 0, 0, 0, 0.65, 0.3, 0.55);
+box(helper, cyanLight, 0, 0.04, 0.29, 0.32, 0.08, 0.04);
+const helperBarrels = [-0.25, 0.25].map(x => box(helper, alloy, x, -0.02, 0.4, 0.12, 0.12, 0.45));
+scene.add(helper); helper.visible = false;
+const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
+const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
+const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
+const equipment = { shot: 0, mine: 0, safe: 0, pulse: false, mines: [], blasts: [], zones: [], effects: [] };
+
+function removeFieldObject(o) {
+  scene.remove(o);
+  if (o.geometry === fieldRing) o.material.dispose();
+}
+function clearEquipmentField() {
+  for (const list of [equipment.mines, equipment.zones, equipment.effects]) {
+    list.forEach(removeFieldObject); list.length = 0;
+  }
+  equipment.blasts.length = 0; equipment.pulse = false;
+}
+function groundRing(position, radius, color, life, list) {
+  const ring = new THREE.Mesh(fieldRing, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, depthWrite: false, side: THREE.DoubleSide }));
+  ring.position.copy(position); ring.position.y = 0.06;
+  ring.scale.setScalar(radius);
+  ring.userData = { life, radius };
+  scene.add(ring); list.push(ring);
+  return ring;
+}
+function equipmentBlast(position, radius, damage, slow = false) {
+  groundRing(position, radius, slow ? 0x7cefff : 0xffc17b, 0.35, equipment.effects);
+  audio.hit(position);
+  for (let i = drones.length - 1; i >= 0; i--) {
+    const z = drones[i];
+    if (Math.hypot(z.position.x - position.x, z.position.z - position.z) > radius || wallBetween(position, z.position) || !clearPath(position.x, position.z, z.position.x, z.position.z, 0.05)) continue;
+    z.userData.hp -= damage * (z.userData.recovery > 0 ? 1.75 : 1);
+    if (slow) z.userData.slow = 3;
+    if (z.userData.hp <= 0) killDrone(z, i);
+    else { hitDrone(z); maybeSplitBoss(z); }
+    if (state.choosing) break;
+  }
+}
+function updateEquipment(dt) {
+  helper.visible = !!state.upgrades.bot && state.running;
+  if (!state.running || state.choosing || state.intermission > 0) return;
+  const u = state.upgrades;
+  equipment.safe += dt;
+  if (u.regen && equipment.safe >= (u.regen === 2 ? 8 : 12) && state.hp < state.maxHp) {
+    state.hp++; equipment.safe = 0;
+    groundRing(player.position, 1.5, 0x70dfb8, 0.5, equipment.effects);
+  }
+  if (equipment.pulse) {
+    equipment.pulse = false;
+    equipmentBlast(player.position.clone(), 2.8 + u.pulse * 0.4, 2 + u.pulse * 2, true);
+  }
+  while (equipment.blasts.length && !state.choosing) {
+    const blast = equipment.blasts.shift();
+    equipmentBlast(blast.position, blast.radius, blast.damage);
+  }
+  if (state.choosing) return;
+  if (u.bot) {
+    const desired = player.position.clone().add(new THREE.Vector3(-0.85, 1.75, 0.6));
+    helper.position.lerp(desired, Math.min(1, dt * 9));
+    helperBarrels[1].visible = !!u.botGun;
+    helperShell.color.setHex(u.botBomb ? 0xffb16e : 0xa7a1ff);
+    equipment.shot -= dt;
+    const target = drones.filter(z => inside(z.position) && !wallBetween(helper.position, z.position) && clearPath(helper.position.x, helper.position.z, z.position.x, z.position.z, 0.05)).sort((a, b) => a.position.distanceToSquared(helper.position) - b.position.distanceToSquared(helper.position))[0];
+    if (target) {
+      helper.lookAt(target.position.x, helper.position.y, target.position.z);
+      if (equipment.shot <= 0) {
+        equipment.shot = u.botBomb ? 1.7 : 0.65 / (1 + 0.25 * (u.bot - 1) + (u.botGun === 2 ? 0.35 : 0));
+        for (let k = 0; k < (u.botGun ? 2 : 1); k++) {
+          const b = makeTracer(!!u.botBomb);
+          b.position.copy(helper.position); b.position.y = 1.1;
+          b.position.x += k ? 0.15 : -0.15;
+          const dir = target.position.clone().sub(b.position); dir.y = 0; dir.normalize();
+          b.lookAt(b.position.clone().add(dir));
+          b.userData = { dir, life: 0.7, pierce: 0, hits: new Set(), helper: true, damage: 0.8 + u.bot * 0.7, blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0 };
+          bullets.push(b); scene.add(b);
+        }
+      }
+    }
+  }
+  equipment.mine -= dt;
+  if (u.mine && equipment.mine <= 0 && equipment.mines.length < 6) {
+    equipment.mine = 4.5 - u.mine * 0.5;
+    const m = new THREE.Mesh(mineGeo, mineMat);
+    m.position.copy(player.position); m.position.y = 0.12;
+    m.userData = { life: 18, armed: 0.6 };
+    scene.add(m); equipment.mines.push(m);
+  }
+  for (let i = equipment.mines.length - 1; i >= 0; i--) {
+    const m = equipment.mines[i]; m.userData.life -= dt; m.userData.armed -= dt;
+    const triggered = m.userData.armed <= 0 && drones.some(z => Math.hypot(z.position.x - m.position.x, z.position.z - m.position.z) < 1.5 && !wallBetween(m.position, z.position));
+    if (triggered || m.userData.life <= 0) {
+      scene.remove(m); equipment.mines.splice(i, 1);
+      if (triggered) equipmentBlast(m.position, 2.3 + u.mine * 0.3, 3 + u.mine * 2, !!u.shock);
+      if (state.choosing) return;
+    }
+  }
+  for (let i = equipment.zones.length - 1; i >= 0; i--) {
+    const ring = equipment.zones[i]; ring.userData.life -= dt;
+    ring.material.opacity = 0.4 + 0.5 * Math.min(1, 1 - ring.userData.life / 1.4);
+    if (ring.userData.life <= 0) {
+      if (Math.hypot(player.position.x - ring.position.x, player.position.z - ring.position.z) < ring.userData.radius) hurtPlayer();
+      groundRing(ring.position, ring.userData.radius, 0xff708c, 0.4, equipment.effects);
+      removeFieldObject(ring); equipment.zones.splice(i, 1);
+    }
+  }
+  for (let i = equipment.effects.length - 1; i >= 0; i--) {
+    const ring = equipment.effects[i]; ring.userData.life -= dt;
+    ring.material.opacity = Math.max(0, ring.userData.life * 2);
+    if (ring.userData.life <= 0) { removeFieldObject(ring); equipment.effects.splice(i, 1); }
+  }
+}
+
 // UPGRADES — pick one of three after every cleared wave
 // ===================================================================
 // Each card can be taken up to `max` times per run. `ok` (optional) hides a
 // card while it would do nothing. `stat` returns [now, after] for the card.
 const UPGRADES = [
+  { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'An automatic gun at your side', max: 3, stat: s => [s.upgrades.bot || 0, `Rank ${(s.upgrades.bot || 0) + 1}`], apply: () => {} },
+  { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botBomb, stat: s => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
+  { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botGun, stat: s => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
+  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'Automatically leave explosive traps', max: 3, stat: s => [s.upgrades.mine || 0, `Rank ${(s.upgrades.mine || 0) + 1}`], apply: () => {} },
+  { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: s => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
+  { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: s => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
+  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Getting hit blasts nearby enemies', max: 3, stat: s => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
   { id: 'mag',    cat: 'handling',  name: 'HIGH-CAP CELL',  desc: '+4 pulses per cell',     max: 5, stat: s => [s.magSize, s.magSize + 4 + ' pulses'],                            apply: s => { s.magSize += 4; s.mag = s.magSize; } },
   { id: 'reload', cat: 'handling',  name: 'HOT SWAP',   desc: 'reload 25% faster',          max: 4, stat: s => [s.reloadTime.toFixed(2), (s.reloadTime * 0.75).toFixed(2) + 's'], apply: s => { s.reloadTime *= 0.75; } },
   { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+50% pulse damage',         max: 6, stat: s => [s.damage + '×', s.damage + 0.5 + '×'],                       apply: s => { s.damage += 0.5; } },
@@ -2513,6 +2648,7 @@ const UPGRADES = [
   { id: 'heal',   cat: 'survival',  name: 'SHIELD RESET',      desc: 'restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
 ];
 const UPGRADE_CATS = {
+  engineer: '#a7a1ff',
   firepower: '#ffad61',
   handling:  '#76bcf0',
   survival:  '#70dfb8',
@@ -2532,6 +2668,7 @@ const UPGRADE_ICONS = {
   heal:   ['.XX..XX.', 'XXXXXXXX', 'XXXXXXXX', 'XXXXXXXX', '.XXXXXX.', '..XXXX..', '...XX...', '........'],
 };
 function pixelIcon(rows, cls = 'cicon') {
+  rows ||= ['..XXXX..', '.XXXXXX.', 'XX.XX.XX', 'XXXXXXXX', '..XXXX..', '.X.XX.X.', 'XX....XX', '........'];
   let r = '';
   rows.forEach((row, y) => [...row].forEach((c, x) => {
     if (c !== '.') r += `<rect x="${x}" y="${y}" width="1" height="1"${c === 'o' ? ' opacity=".35"' : ''}/>`;
@@ -2543,6 +2680,9 @@ const PICK_LOCKOUT_MS = 650; // ~ when the last card finishes dealing in
 
 function upgradeWeight(u) {
   let w = 1;
+  if (u.cat === 'engineer') w += 2;
+  if (state.upgrades[u.id]) w += 2;
+  if (u.ok && u.cat === 'engineer') w += 3;
   // Early waves lean hard into firepower so weapon progress comes online faster.
   if (u.cat === 'firepower') w += state.wave <= 3 ? 2.8 : 1.2;
   if (u.cat === 'handling') w += state.wave <= 3 ? 1.2 : 0.6;
@@ -2557,6 +2697,13 @@ function upgradeWeight(u) {
 function pickUpgradeOffers(count = 3) {
   const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
   const picks = [];
+  // Keep an equipment path available, including follow-up modules once owned.
+  const equipment = pool.filter(u => u.cat === 'engineer');
+  if (equipment.length) {
+    const weighted = equipment.flatMap(u => Array(Math.ceil(upgradeWeight(u))).fill(u));
+    const u = weighted[Math.floor(Math.random() * weighted.length)];
+    picks.push(u); pool.splice(pool.indexOf(u), 1);
+  }
   // Guarantee Split Beam on the first couple of clears if it still hasn't shown up.
   if ((state.upgrades.spread || 0) === 0 && state.wave <= 2) {
     const spread = pool.find(u => u.id === 'spread');
@@ -2580,7 +2727,29 @@ function pickUpgradeOffers(count = 3) {
     const j = (Math.random() * (i + 1)) | 0;
     [picks[i], picks[j]] = [picks[j], picks[i]];
   }
-  return picks;
+  return picks.sort((a, b) => recommendationScore(b) - recommendationScore(a));
+}
+
+function recommendationScore(u) {
+  if (state.hp <= 1 && (u.id === 'heal' || u.id === 'hp')) return 100;
+  if (u.id === 'spread' && !state.spread) return 20;
+  return (state.upgrades[u.id] ? 10 : 0) + upgradeWeight(u);
+}
+
+function upgradePreview(u) {
+  const rank = (state.upgrades[u.id] || 0) + 1;
+  const paths = {
+    bot: '<rect x="35" y="16" width="30" height="24" rx="6"/><path d="M25 28h10m30 0h10M43 24h2m10 0h2M40 40l-5 8m25-8 5 8"/>',
+    mine: '<path d="M20 42h60M36 38l5-12h18l5 12zM50 18v-8M25 20l8 6m42-6-8 6"/>',
+    shield: '<path d="M50 8l23 8v14c0 12-23 23-23 23S27 42 27 30V16zM40 30h20m-10-10v20"/>',
+    rifle: '<path d="M10 28h25m-6-7 8 7-8 7"/>',
+  };
+  let art = u.cat === 'engineer' ? paths[u.id === 'mine' || u.id === 'shock' ? 'mine' : 'bot'] : u.cat === 'survival' ? paths.shield : paths.rifle;
+  if (u.id === 'spread') art += Array.from({ length: 2 + state.spread }, (_, i) => `<path class="preview-shot" d="M45 28L90 ${10 + i * 36 / (1 + state.spread)}"/>`).join('');
+  else if (u.cat === 'firepower' || u.cat === 'handling') art += '<path class="preview-shot" d="M48 28h14m9 0h14"/><path d="M92 14v28"/>';
+  if (u.id === 'botBomb') art += '<circle class="preview-shot" cx="83" cy="28" r="7"/>';
+  if (u.id === 'botGun') art += '<path class="preview-shot" d="M74 22h20m-20 12h20"/>';
+  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg><span class="rank-label">${state.upgrades[u.id] ? 'UPGRADE' : 'NEW'} · RANK ${rank}${u.max !== Infinity ? ' / ' + u.max : ''}</span>`;
 }
 
 function openPicker(healed) {
@@ -2590,28 +2759,32 @@ function openPicker(healed) {
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
   hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
-  hud.pickerSub.textContent = (healed ? '+1 SHIELD  ·  ' : '') + 'CHOOSE ONE';
+  hud.pickerSub.textContent = (healed ? '+1 SHIELD  ·  ' : '') + 'CHOOSE YOUR NEXT UPGRADE';
   hud.cards.innerHTML = offered.map((u, i) => {
     const owned = state.upgrades[u.id] || 0;
     const [now, after] = u.stat(state);
     const pips = u.max === Infinity ? '' :
       Array.from({ length: u.max }, (_, k) => `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`).join('');
-    return `<div class="card" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
-      `<div class="ctop"><span>${u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
-      pixelIcon(UPGRADE_ICONS[u.id]) +
+    return `<button type="button" class="card ${i === 0 ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
+      `<div class="ctop"><span>${i === 0 ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
+      upgradePreview(u) +
       `<div class="cname">${u.name}</div><div class="cdesc">${u.desc}</div>` +
       `<div class="cstat">${now} → <b>${after}</b></div>` +
-      `<div class="clvl">${pips}</div></div>`;
+      `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
+  document.getElementById('buildSummary').textContent = UPGRADES.filter(u => state.upgrades[u.id]).map(u => `${u.name} ${state.upgrades[u.id]}`).join(' · ') || 'Choose a weapon, engineer or defence path';
   hud.picker.classList.remove('hidden');
   hud.cards.classList.remove('ready');
   audio.deal(offered.length);
-  openPicker._t = setTimeout(() => hud.cards.classList.add('ready'), PICK_LOCKOUT_MS);
+  openPicker._t = setTimeout(() => {
+    hud.cards.classList.add('ready');
+    if (state.choosing && !state.paused) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+  }, PICK_LOCKOUT_MS);
 }
 
 function choose(i) {
   const u = offered[i];
-  if (!state.choosing || !u) return;
+  if (!state.choosing || !u || state.paused || !hud.cards.classList.contains('ready')) return;
   state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
   u.apply(state);
   if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
@@ -2728,6 +2901,10 @@ function startWave(n) {
 // ===================================================================
 // clear everything a run leaves lying around
 function clearRun() {
+  clearEquipmentField();
+  equipment.shot = equipment.mine = equipment.safe = 0;
+  helper.visible = false;
+  helper.position.copy(player.position);
   audio.cancelReload();
   clearEnemyBolts();
   state.bossPending = false;
@@ -3116,6 +3293,7 @@ function faceToward(z, dx, dz, rate, dt) {
 // turns, and slow down while facing well off it: a drone that overshoots turns round
 // and comes back instead of orbiting.
 function walkToward(z, dx, dz, speed, turn, dt) {
+  if (z.userData.slow > 0) speed *= 0.4;
   const distance = Math.hypot(dx, dz);
   if (distance < 0.03) return false;
   const ud = z.userData, off = faceToward(z, dx, dz, turn, dt);
@@ -3143,6 +3321,8 @@ function walkToward(z, dx, dz, speed, turn, dt) {
 
 function hurtPlayer(damage = 1) {
   if (state.dmgCd > 0) return false;
+  equipment.safe = 0;
+  if (state.upgrades.pulse) equipment.pulse = true;
   state.hp = Math.max(0, state.hp - damage);
   state.dmgCd = HURT_IFRAMES;
   damageFlash();
@@ -3175,6 +3355,33 @@ function huntPoint(z, px, pz) {
 
 function chaseDrone(z, dt) {
   const ud = z.userData, p = player.position;
+  ud.slow = Math.max(0, (ud.slow || 0) - dt);
+  if (ud.type.milestone && inside(z.position) && ud.climb < 0) {
+    if (ud.recovery > 0) {
+      ud.recovery -= dt;
+      ud.chargeRing.visible = true;
+      ud.chargeRing.material = mineMat;
+      return;
+    }
+    ud.chargeRing.visible = false;
+    ud.patternTimer = (ud.patternTimer ?? 2) - dt;
+    if (ud.patternTimer <= 0) {
+      const count = state.wave >= 10 ? 4 : 3;
+      for (let i = 0; i < count; i++) {
+        const angle = i * Math.PI * 2 / count;
+        const position = p.clone();
+        if (i) { position.x += Math.cos(angle) * 3.8; position.z += Math.sin(angle) * 3.8; }
+        position.x = THREE.MathUtils.clamp(position.x, -HALF + 2, HALF - 2);
+        position.z = THREE.MathUtils.clamp(position.z, -HALF + 2, HALF - 2);
+        groundRing(position, 2.1, 0xff708c, 1.4, equipment.zones);
+      }
+      ud.patternTimer = 3.6;
+      ud.recovery = 3.2;
+      showBanner('REACTOR SURGE', 'Leave the rings · Boss exposed: +75% damage', 1.6);
+      audio.enemyCharge(z.position);
+      return;
+    }
+  }
   const rusher = ud.type.style === 'rusher';
   const slammer = !!ud.type.slam;
   const Z_STRIKE = ud.type.style === 'heavy' || slammer ? 0.42 : rusher ? 0.28 : 0.2;
@@ -3477,8 +3684,9 @@ function update(dt) {
       const t = Math.max(0, Math.min(1, ((z.position.x - px) * sx + (z.position.z - pz) * sz) / (sx * sx + sz * sz || 1)));
       const dx = z.position.x - (px + sx * t), dz = z.position.z - (pz + sz * t);
       if (dx * dx + dz * dz < 0.55 * z.userData.type.size ** 2) {
-        z.userData.hp -= state.damage * (state.pDamage > 0 ? 2 : 1);
-        state.shotsHit++;
+        z.userData.hp -= (b.userData.damage ?? state.damage * (state.pDamage > 0 ? 2 : 1)) * (z.userData.recovery > 0 ? 1.75 : 1);
+        if (!b.userData.helper) state.shotsHit++;
+        if (b.userData.blast) equipment.blasts.push({ position: z.position.clone(), radius: b.userData.blast, damage: b.userData.damage * 2 });
         // small knockback
         z.position.addScaledVector(b.userData.dir, z.userData.boss ? 0.04 : z.userData.type.style === 'heavy' ? 0.08 : 0.25);
         if (z.userData.hp <= 0) killDrone(z, j);
@@ -3515,6 +3723,7 @@ function update(dt) {
     else if (title.active) wanderDrone(z, dt);
   }
   if (state.running || title.active) separateDrones();
+  updateEquipment(dt);
 
   updateDroneBlasts(dt);
   updateOpenings(dt);

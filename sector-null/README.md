@@ -10,7 +10,7 @@ Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORI
 
 ## Enemy roles and wave bosses
 
-Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Boss health uses a steeper per-wave curve (`7 + 1.6×wave + 0.22×wave²` times the wave's base health) so late runs with stacked weapon upgrades stay demanding. Wave 1 contains grey patrols. Bosses rotate through four named tricks: Slammer (wide slam melee), Charger (rush and swipe), Cannon / Skirmisher (volley or flank), and Spawner (peels off spawns that later reform into the core). Cannon appears from wave 3 with charged volleys. All bots share the same hunt pathing; locomotion differs by role (walk, wheels, skitter, stomp). Enemy shots stop at cover and are cleared between combat phases.
+Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Boss health uses a moderated per-wave curve (`6 + 1.3×wave + 0.1×wave²` times the wave's base health), with milestone attack patterns every fifth wave. Wave 1 contains grey patrols. Bosses rotate through four named tricks: Slammer (wide slam melee), Charger (rush and swipe), Cannon / Skirmisher (volley or flank), and Spawner (peels off spawns that later reform into the core). Cannon appears from wave 3 with charged volleys. All bots share the same hunt pathing; locomotion differs by role (walk, wheels, skitter, stomp). Enemy shots stop at cover and are cleared between combat phases.
 
 Early upgrade picks bias toward firepower, and Split Beam is guaranteed among the first two wave-clear offers if you have not taken it yet.
 
@@ -66,3 +66,19 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 | Mute | M or volume settings | Volume settings |
 
 Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer.
+
+## Engineer and defence paths
+
+Upgrade cards show a visual preview, explicit rank, current build and a larger recommended option. Recommendations favour an urgently needed shield, a first Split Beam, or continuing owned equipment. All three cards remain deliberate choices; nothing is automatically selected. Use 1–3, tap, or Tab and Enter. Offers include an engineer option whenever an eligible one remains, and owned modules receive higher offer weight.
+
+- **Helper Bot (3 ranks):** follows and fires automatically; ranks increase shot damage and firing speed. Specialise in **Twin Guns (2 ranks)** for doubled shots then faster firing, or **Bomb Launcher (2 ranks)** for slower area blasts then a wider blast. These specialisations are mutually exclusive for that run. Bot fire does not affect rifle accuracy bonuses.
+- **Trail Mines (3 ranks):** automatically deploy every 4–3 seconds; ranks improve damage and blast radius. Up to six mines last 18 seconds and arm after 0.6 seconds. **Shock Mines** adds a 60% movement slow for three seconds to blast survivors.
+- **Shield Regen (2 ranks):** restores one shield after 12/8 seconds without damage, repeating while injured. **Emergency Pulse (3 ranks):** taking damage triggers an area blast and brief slow; ranks increase range and damage.
+
+Equipment uses active combat time and pauses with the game or upgrade selection. Mines, warning zones and effects clear between waves; all equipment resets for a new run. Automated equipment deliberately adds no touch buttons.
+
+## Milestone encounters
+
+Waves 5, 10, 15 and onward in multiples of five replace the regular boss with the Reactor Warden / Null Overseer. Reactor lighting gradually shifts to amber or violet during the encounter. The boss marks three ground zones (four from wave 10) with a 1.4-second warning before striking. Its exposed phase grants 75% bonus incoming damage for 3.2 seconds, followed by pursuit before the next cycle. Move out of the marked rings and use that opening to attack.
+
+Boss base health scaling is now `6 + 1.3×wave + 0.1×wave²` times regular wave health; milestone bosses use 1.2× this value. This reduces health-only attrition while new attack patterns provide pressure. Remaining emeralds are banked automatically at victory, including the final boss drop, before the upgrade screen opens.

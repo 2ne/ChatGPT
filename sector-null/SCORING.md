@@ -51,7 +51,7 @@ Per wave (reset when a wave starts):
 - `shotsFired` — each pulse leaving the rifle (split beams count as multiple).
 - `shotsHit` — each time a pulse damages a drone.
 
-On wave clear, apply the accuracy bonus, then reset counters for the next wave. On death, award a partial accuracy bonus for the unfinished wave using the same formula.
+On wave clear, apply the accuracy bonus, then reset counters for the next wave. Helper bot shots and equipment explosions do not affect rifle accuracy. Collect all remaining emeralds automatically before opening the upgrade picker. On death, award a partial accuracy bonus for the unfinished wave using the same formula.
 
 ## High score
 
@@ -77,7 +77,7 @@ No floating “+100” spam required for v1; live Score ticking is enough. Emera
 
 - Online leaderboards
 - Separate accuracy meter widget
-- Emeralds surviving across the upgrade picker (they clear with other combat leftovers when the wave ends)
+- Emeralds surviving across the upgrade picker (remaining gems are automatically collected at victory)
 
 ## Tuning knobs
 
