@@ -1273,13 +1273,31 @@ function updateHUD() {
 let flashT = 0;
 function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; state.shake = 0.5; }
 
-function showToast(text, color, detail = '') {
+const toastQueue = [];
+let toastTime = 0;
+
+function updateToast(dt) {
+  toastTime = Math.max(0, toastTime - dt);
+  if (toastTime > 0) return;
+  if (hud.toast.style.opacity === '1') {
+    hud.toast.style.opacity = 0;
+    toastTime = 0.25; // let the current notice fade before replacing it
+    return;
+  }
+
+  const next = toastQueue.shift();
+  if (!next) return;
+  const { text, color, pickup } = next;
+  const firstPickup = pickup && !seenDrops.has(pickup.id);
   hud.toastTitle.textContent = text;
-  hud.toastDetail.textContent = detail;
+  hud.toastDetail.textContent = firstPickup ? pickup.detail : '';
   hud.toast.style.color = color;
   hud.toast.style.opacity = 1;
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => { hud.toast.style.opacity = 0; }, detail ? 2200 : 1400);
+  toastTime = firstPickup ? 2.2 : 1.4;
+  if (firstPickup) {
+    seenDrops.add(pickup.id);
+    store.set('seen-drops', [...seenDrops]);
+  }
 }
 
 function showBanner(text, sub, dur = 1.6) {
@@ -2047,12 +2065,7 @@ function spawnDrop(type, pos) {
 
 function collect(type) {
   audio.pickup(type.id);
-  const firstPickup = !seenDrops.has(type.id);
-  showToast(type.name, type.tint, firstPickup ? type.detail : '');
-  if (firstPickup) {
-    seenDrops.add(type.id);
-    store.set('seen-drops', [...seenDrops]);
-  }
+  toastQueue.push({ text: type.name, color: type.tint, pickup: type });
   if (type.id === 'med') state.hp = Math.min(state.maxHp, state.hp + 1);
   else if (type.id === 'dmg') state.pDamage = 10;
   else if (type.id === 'ammo') { state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }
@@ -2168,7 +2181,7 @@ function choose(i) {
   clearTimeout(choose._t);
   choose._t = setTimeout(() => hud.picker.classList.add('hidden'), 320);
   state.intermission = 2.0;
-  showToast(u.name, UPGRADE_CATS[u.cat]);
+  toastQueue.push({ text: u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
 
@@ -2223,6 +2236,9 @@ function clearRun() {
   for (const d of debris) scene.remove(d);
   removeCorpses();
   bullets.length = 0; drones.length = 0; particles.length = 0; drops.length = 0; debris.length = 0;
+  toastQueue.length = 0;
+  toastTime = 0;
+  hud.toast.style.opacity = 0;
   hud.picker.classList.add('hidden');
 }
 
@@ -2858,6 +2874,7 @@ function update(dt) {
 
   updateCamera(dt);
 
+  if (state.running && !state.choosing) updateToast(dt);
   updateHUD();
 }
 

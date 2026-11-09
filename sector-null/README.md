@@ -17,7 +17,7 @@ npm run dev
 
 `npm run build` writes a static site to `dist/`. Use `npm run preview` to serve that build locally. The browser needs WebGL. The soundtrack loops across the intro and main menu. If the browser blocks autoplay, use the title screen's Start prompt to enable sound. Selecting Play stops the music and gameplay uses sound effects.
 
-Each supply drop type shows a short effect description on first pickup. The game remembers discovered types in the browser.
+Supply pickup notices appear one at a time. Each drop type shows a short effect description the first time its notice appears, and the game remembers discovered types in the browser.
 
 | Action | Keyboard and mouse | Touch |
 | --- | --- | --- |
