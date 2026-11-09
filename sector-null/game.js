@@ -1567,8 +1567,8 @@ function spawnWaveBoss() {
     sub = 'BOSS · Wide slam strikes — do not stand still';
   } else if (kind === 1) {
     type = {
-      name: 'CHARGER', kit: 4, health: hp * 0.92, speed: 1.35, size: 1.28,
-      style: 'rusher', boss: true, volley: 0, loco: 'skitter',
+      name: 'CHARGER', kit: 4, health: hp * 0.92, speed: 1.4, size: 1.28,
+      style: 'rusher', boss: true, volley: 0, loco: 'charge',
     };
     sub = 'BOSS · It charges and swipes — stay mobile';
   } else if (kind === 2) {
@@ -1773,7 +1773,8 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
 
   z.position.set(pos.x, 0, pos.z);
   z.scale.setScalar(Z_SCALE * type.size);
-  const limp = Math.random() < 0.25 ? 0.2 + Math.random() * 0.55 : 0;
+  // Bosses (especially Charger) should not drag a bad leg — it reads as stupid walking.
+  const limp = type.boss ? 0 : (Math.random() < 0.25 ? 0.2 + Math.random() * 0.55 : 0);
   const pace = type.speed;
   z.userData = {
     hp: Math.ceil(state.droneHp * type.health),
@@ -1832,13 +1833,14 @@ function animateDrone(z, dt, near) {
   const sp = u.speed * gait;
   const run = THREE.MathUtils.clamp((u.speed - 3) / 2, 0, 1);
   const freq = loco === 'skitter' ? 2.2 + sp * 0.35
+    : loco === 'charge' ? 1.55 + sp * 0.28
     : loco === 'stomp' ? 0.75 + sp * 0.12
     : loco === 'roll' ? 1.6 + sp * 0.3
     : 1.1 + sp * 0.22;
-  const beta = loco === 'roll' ? 0.5 : 0.6 - 0.18 * run;
+  const beta = loco === 'roll' ? 0.5 : loco === 'charge' ? 0.42 : 0.6 - 0.18 * run;
   u.phase = (u.phase + freq * dt) % 1;
   const ph = u.phase * Math.PI * 2;
-  const L = Math.min(loco === 'stomp' ? 0.55 : 0.7, sp * beta / Math.max(0.4, freq));
+  const L = Math.min(loco === 'stomp' ? 0.55 : loco === 'charge' ? 0.85 : 0.7, sp * beta / Math.max(0.4, freq));
   const t = performance.now() / 1000 + u.seed;
   u.flinch *= Math.exp(-7 * dt);
   u.groan *= Math.exp(-2.5 * dt);
@@ -1855,23 +1857,24 @@ function animateDrone(z, dt, near) {
   // pelvis: dips on every step, and drops hard onto the bad leg
   const badStance = u.limp && loco === 'walk' ? Math.max(0, Math.sin(ph + (u.limpSide > 0 ? 0 : Math.PI))) : 0;
   const pelvisY = Z_HIP - 0.05
-    - (loco === 'roll' ? 0.12 : loco === 'skitter' ? 0.1 : 0.06 * run)
+    - (loco === 'roll' ? 0.12 : loco === 'skitter' ? 0.1 : loco === 'charge' ? 0.04 : 0.06 * run)
     - (loco === 'roll' ? 0 : 0.05 * Math.abs(Math.sin(ph)) * gait)
     - 0.06 * slam - 0.08 * u.limp * badStance;
   u.pelvis.position.set(0, pelvisY, 0);
   u.pelvis.rotation.set(
-    loco === 'roll' ? 0.08 * gait : 0,
-    loco === 'roll' ? u.phase * Math.PI * 2 * gait : 0.12 * Math.sin(ph),
-    loco === 'roll' ? 0 : 0.1 * Math.sin(ph) + 0.12 * u.limp * badStance * u.limpSide,
+    loco === 'roll' ? 0.08 * gait : loco === 'charge' ? 0.06 * gait : 0,
+    loco === 'roll' ? u.phase * Math.PI * 2 * gait : 0.12 * Math.sin(ph) * (loco === 'charge' ? 0.35 : 1),
+    loco === 'roll' ? 0 : 0.1 * Math.sin(ph) * (loco === 'charge' ? 0.4 : 1) + 0.12 * u.limp * badStance * u.limpSide,
   );
   u.pelvis.updateMatrix();
 
   // torso: hunched, lurching side to side against the hips, kicked back by hits
   u.upper.position.set(0, pelvisY + 0.08, 0);
   u.upper.rotation.set(
-    u.hunch + 0.12 * run + 0.25 * u.attack - 0.55 * rear + 0.5 * slam - 0.6 * u.flinch,
-    loco === 'roll' ? 0 : -0.15 * Math.sin(ph),
-    loco === 'skitter' ? 0.22 * Math.sin(ph * 2) : -0.14 * Math.sin(ph) - 0.1 * u.limp * badStance * u.limpSide + 0.04 * Math.sin(t * 0.7));
+    u.hunch + (loco === 'charge' ? 0.22 : 0.12 * run) + 0.25 * u.attack - 0.55 * rear + 0.5 * slam - 0.6 * u.flinch,
+    loco === 'roll' ? 0 : -0.15 * Math.sin(ph) * (loco === 'charge' ? 0.3 : 1),
+    loco === 'skitter' ? 0.22 * Math.sin(ph * 2)
+      : -0.14 * Math.sin(ph) * (loco === 'charge' ? 0.35 : 1) - 0.1 * u.limp * badStance * u.limpSide + 0.04 * Math.sin(t * 0.7));
   u.upper.updateMatrix();
   // head lolls, nods with each step, comes up to look at its meal, snaps back when shot
   u.head.rotation.set(
@@ -1897,8 +1900,11 @@ function animateDrone(z, dt, near) {
       l.shin.rotation.x += u.phase * Math.PI * 2 * gait;
     } else {
       const { s, lift, pitch } = footCycle(p, beta);
-      const liftMul = loco === 'stomp' ? 0.2 : loco === 'skitter' ? 0.08 : (bad ? 0.03 : 0.12 + 0.1 * run);
-      const stride = loco === 'skitter' ? L * 0.65 : L;
+      const liftMul = loco === 'stomp' ? 0.2
+        : loco === 'skitter' ? 0.08
+        : loco === 'charge' ? 0.16 + 0.08 * run
+        : (bad ? 0.03 : 0.12 + 0.1 * run);
+      const stride = loco === 'skitter' ? L * 0.65 : loco === 'charge' ? L : L;
       l.foot3.set(l.side * (loco === 'skitter' ? 0.2 : 0.15), Z_ANKLE + lift * liftMul * gait + 0.3 * clamber, s * stride - 0.2 * clamber);
       l.hipP.copy(l.hip).applyMatrix4(u.pelvis.matrix);
       ik2(l.hipP, l.foot3, Z_THIGH, Z_SHIN, Z_POLE_KNEE, l.knee);
@@ -3157,10 +3163,13 @@ function huntPoint(z, px, pz) {
     tx *= 0.78;
     tz *= 0.78;
   }
-  const side = Math.sin(z.userData.seed * 7.13);
-  const dx = px - z.position.x, dz = pz - z.position.z, d = Math.hypot(dx, dz) || 1;
-  tx += (-dz / d) * side * 0.65;
-  tz += (dx / d) * side * 0.65;
+  // Chargers commit straight in; everyone else fans slightly so packs don't stack.
+  if (z.userData.type.style !== 'rusher') {
+    const side = Math.sin(z.userData.seed * 7.13);
+    const dx = px - z.position.x, dz = pz - z.position.z, d = Math.hypot(dx, dz) || 1;
+    tx += (-dz / d) * side * 0.65;
+    tz += (dx / d) * side * 0.65;
+  }
   return { x: tx, z: tz };
 }
 
