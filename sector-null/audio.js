@@ -145,9 +145,10 @@ export function createAudio(settings, listener) {
     shot(hot, spread, charge = 1) {
       // A subtle three-semitone descent across the cell, without losing punch.
       const pitch = 2 ** ((Math.max(0, Math.min(1, charge)) - 1) * 3 / 12);
-      voice((hot ? 1250 : 1450) * pitch, 430 * pitch, 0.12, 0.2, { type: 'sine' });
-      voice((hot ? 280 : 240) * pitch, 95 * pitch, 0.095, 0.23 + Math.min(spread, 3) * 0.015, { type: 'triangle' });
-      grain(4600, 0.035, 0.07);
+      voice((hot ? 520 : 620) * pitch, 180 * pitch, 0.09, 0.1, { type: 'sine' });
+      voice((hot ? 210 : 250) * pitch, 65 * pitch, 0.15, 0.32 + Math.min(spread, 3) * 0.015, { type: 'triangle' });
+      voice(110 * pitch, 48 * pitch, 0.12, 0.13);
+      grain(1900, 0.045, 0.1);
     },
     lowCharge() {
       if (!ctx) return;
@@ -156,15 +157,15 @@ export function createAudio(settings, listener) {
     reloadOut(duration) {
       if (!ctx) return;
       cancelReload();
-      voice(540, 150, 0.18, 0.2);
+      voice(300, 130, 0.12, 0.055);
       const t = ctx.currentTime;
       const oscillator = ctx.createOscillator();
       const gain = ctx.createGain();
-      oscillator.frequency.setValueAtTime(180, t);
-      oscillator.frequency.exponentialRampToValueAtTime(740, t + duration);
+      oscillator.frequency.setValueAtTime(140, t);
+      oscillator.frequency.exponentialRampToValueAtTime(280, t + duration);
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.13, t + Math.min(0.16, duration / 3));
-      gain.gain.linearRampToValueAtTime(0.18, t + duration);
+      gain.gain.linearRampToValueAtTime(0.025, t + Math.min(0.16, duration / 3));
+      gain.gain.linearRampToValueAtTime(0.035, t + duration);
       gain.gain.linearRampToValueAtTime(0, t + duration + 0.06);
       oscillator.connect(gain).connect(master);
       oscillator.start(t);
@@ -175,8 +176,7 @@ export function createAudio(settings, listener) {
     reloadIn() {
       cancelReload();
       if (!ctx) return;
-      voice(880, 880, 0.12, 0.19);
-      voice(1320, 1320, 0.16, 0.16, { t: ctx.currentTime + 0.075 });
+      voice(440, 520, 0.12, 0.065);
     },
     hit(pos) { const out = spatial(pos); grain(2200, 0.08, 0.26, out); voice(290, 87, 0.1, 0.21, { out, type: 'triangle' }); },
     explode(pos) {
