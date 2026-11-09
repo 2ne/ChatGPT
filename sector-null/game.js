@@ -2671,7 +2671,7 @@ const UPGRADES = [
   { id: 'shock', cat: 'engineer', name: 'SLOWING MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: s => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
   { id: 'regen', cat: 'survival', name: 'REGEN SHIELD', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: s => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
   { id: 'pulse', cat: 'survival', name: 'BLAST ON HIT', desc: 'Getting hit blasts nearby enemies', max: 3, stat: s => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
-  { id: 'mag',    cat: 'handling',  name: 'INCREASE AMMO',  desc: '+4 shots per magazine',     max: 5, stat: s => [s.magSize, s.magSize + 4 + ' shots'],                            apply: s => { s.magSize += 4; s.mag = s.magSize; } },
+  { id: 'mag',    cat: 'handling',  name: 'INCREASE CELLS', desc: '+4 charges per cell',       max: 5, stat: s => [s.magSize, s.magSize + 4 + ' charges'],                         apply: s => { s.magSize += 4; s.mag = s.magSize; } },
   { id: 'reload', cat: 'handling',  name: 'FASTER RELOAD',  desc: 'Reload 25% faster',          max: 4, stat: s => [s.reloadTime.toFixed(2), (s.reloadTime * 0.75).toFixed(2) + 's'], apply: s => { s.reloadTime *= 0.75; } },
   { id: 'damage', cat: 'firepower', name: 'INCREASE DAMAGE', desc: '+50% shot damage',         max: 6, stat: s => [s.damage + '×', s.damage + 0.5 + '×'],                       apply: s => { s.damage += 0.5; } },
   { id: 'rate',   cat: 'firepower', name: 'FIRE FASTER',    desc: 'Fire 20% faster',            max: 4, stat: s => [(1 / s.fireRate).toFixed(1), (1 / (s.fireRate * 0.8)).toFixed(1) + '/s'], apply: s => { s.fireRate *= 0.8; } },
