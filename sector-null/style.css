@@ -158,8 +158,15 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     color: #64dfee;
     text-shadow: 0 0 18px #64dfee66, 0 0 4px #000;
   }
-  #pickerSub { font-size: 16px; letter-spacing: 6px; color: #8a9098; margin-top: 2px; }
-  #pickerSub::before, #pickerSub::after { content: ""; display: inline-block; width: 40px; height: 1px; background: #4a4f58; vertical-align: middle; margin: 0 14px; }
+  #pickerSub {
+    font-size: 16px; font-weight: 700; letter-spacing: 6px; margin-top: 2px;
+    color: #d4e8f0;
+    text-shadow: 0 0 10px #000c, 0 1px 2px #000;
+  }
+  #pickerSub::before, #pickerSub::after {
+    content: ""; display: inline-block; width: 40px; height: 1px;
+    background: #9ec4d0; vertical-align: middle; margin: 0 14px;
+  }
   #cards { display: flex; gap: 22px; margin-top: 34px; perspective: 900px; }
   /* cards ignore the mouse until they've dealt in, so click-spam firing can't pick one blind */
   #cards:not(.ready) .card { pointer-events: none; }
@@ -470,9 +477,9 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     line-height: 1.05;
   }
   #pickerSub {
-    font-size: clamp(10px, 3.1dvh, 13px);
-    letter-spacing: 0.34em;
-    margin-top: 0;
+    font-size: clamp(11px, 3.5dvh, 14px);
+    letter-spacing: 0.32em;
+    margin-top: 1px;
     line-height: 1.2;
   }
   #pickerSub::before,
@@ -486,7 +493,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     justify-content: center;
     align-items: stretch;
     gap: clamp(6px, 1.3vw, 12px);
-    margin-top: clamp(4px, 2dvh, 12px);
+    margin-top: clamp(18px, 6.2dvh, 28px);
     padding: 0;
     max-width: 100%;
   }
@@ -496,9 +503,9 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     min-width: 120px;
     min-height: 44px;
     padding:
-      clamp(6px, 1.8dvh, 11px)
+      clamp(5px, 1.5dvh, 9px)
       clamp(8px, 1.3vw, 14px)
-      clamp(7px, 2dvh, 12px);
+      clamp(6px, 1.6dvh, 10px);
   }
   .ctop {
     font-size: clamp(8px, 2.4dvh, 11px);
@@ -510,9 +517,9 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     font-size: clamp(10px, 2.6dvh, 12px);
   }
   .cicon {
-    width: clamp(32px, 10.5dvh, 48px);
-    height: clamp(32px, 10.5dvh, 48px);
-    margin: clamp(6px, 2dvh, 12px) 0 clamp(5px, 1.6dvh, 10px);
+    width: clamp(28px, 9.2dvh, 42px);
+    height: clamp(28px, 9.2dvh, 42px);
+    margin: clamp(4px, 1.4dvh, 9px) 0 clamp(3px, 1.2dvh, 7px);
   }
   .cname {
     font-size: clamp(14px, 4.8dvh, 20px);
@@ -520,18 +527,18 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   }
   .cdesc {
     font-size: clamp(11px, 3.4dvh, 14px);
-    margin-top: clamp(2px, 0.8dvh, 6px);
+    margin-top: clamp(2px, 0.7dvh, 5px);
     min-height: 0;
     line-height: 1.15;
   }
   .cstat {
     font-size: clamp(12px, 3.8dvh, 16px);
-    margin-top: clamp(4px, 1.4dvh, 8px);
-    padding-top: clamp(4px, 1.4dvh, 8px);
+    margin-top: clamp(3px, 1.2dvh, 7px);
+    padding-top: clamp(3px, 1.2dvh, 7px);
   }
   .clvl {
     gap: 3px;
-    margin-top: clamp(4px, 1.3dvh, 8px);
+    margin-top: clamp(3px, 1.1dvh, 7px);
     height: 6px;
   }
   .clvl i { width: 10px; height: 4px; }
