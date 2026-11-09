@@ -51,8 +51,8 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 
 | Action | Keyboard and mouse | Touch |
 | --- | --- | --- |
-| Move | WASD or arrow keys | Plant and drag on the left side |
-| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim |
+| Move | WASD or arrow keys | Plant and drag on the left side (also turns the gun) |
+| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim independently |
 | Recharge | R | Recharge button |
 | Pause | Esc or P | Pause button |
 | Choose an upgrade | 1–3 or click | Tap a card |

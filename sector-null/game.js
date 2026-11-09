@@ -1128,8 +1128,8 @@ const aimPoint = new THREE.Vector3();
 const aimPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.9);
 const raycaster = new THREE.Raycaster();
 const touchControls = document.getElementById('touchControls');
-const STICK_RADIUS = 64;   // px to full deflection — large enough for thumbs
-const STICK_KNOB = 36;     // visual knob travel
+const STICK_RADIUS = 48;   // px to full deflection
+const STICK_KNOB = 28;     // visual knob travel
 const AIM_DEAD = 0.18;     // aim stick deadzone (normalized); fire still holds
 const moveStick = { dot: document.getElementById('moveStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
 const aimStick = { dot: document.getElementById('aimStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
@@ -1250,6 +1250,10 @@ window.addEventListener('mousemove', e => {
 canvas.addEventListener('mousedown', e => { if (e.button === 0) firing = true; });
 window.addEventListener('mouseup', () => { firing = false; });
 window.addEventListener('contextmenu', e => e.preventDefault());
+window.addEventListener('selectstart', e => e.preventDefault());
+window.addEventListener('gesturestart', e => e.preventDefault());
+window.addEventListener('gesturechange', e => e.preventDefault());
+window.addEventListener('gestureend', e => e.preventDefault());
 
 // the death screen: go again, or back to the title
 document.getElementById('retryBtn').addEventListener('click', () => startGame());
@@ -2982,8 +2986,18 @@ function update(dt) {
     player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
     // --- aim ---
     raycaster.setFromCamera(mouse, camera);
+    // Right stick steers aim when deflected; otherwise the gun follows the move stick
+    // so walking up also points the rifle up until you override with the right thumb.
+    const aimSteer = aimStick.id !== null && aimStick.delta.lengthSq() > AIM_DEAD * AIM_DEAD;
+    const moveSteer = moveStick.id !== null && moveStick.delta.lengthSq() > AIM_DEAD * AIM_DEAD;
+    if (aimSteer) {
+      touchDirection.copy(aimStick.delta).normalize();
+      touchAiming = true;
+    } else if (moveSteer) {
+      touchDirection.copy(moveStick.delta).normalize();
+      touchAiming = true;
+    }
     if (touchAiming) {
-      // Smooth the turn toward the stick — snapping feels jittery on thumbs.
       const targetYaw = Math.atan2(touchDirection.x, touchDirection.y);
       touchYaw += wrapA(targetYaw - touchYaw) * (1 - Math.exp(-18 * dt));
       player.rotation.y = touchYaw;

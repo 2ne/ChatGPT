@@ -1,5 +1,16 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; overflow: hidden; background: #080e16; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden; background: #080e16;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+html, body, #game, #hud, #touchControls, #menu, #picker, #death, #flash,
+button, canvas, img, svg, a {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
 #game { display: block; width: 100vw; height: 100dvh; touch-action: none; }
 body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; color: #d5e7ee; }
 button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
@@ -332,39 +343,25 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   .stick {
     display: none;
     position: absolute;
-    width: 118px;
+    width: 84px;
     aspect-ratio: 1;
     transform: translate(-50%, -50%);
     border: 1px solid #6bc7db9c;
     border-radius: 50%;
     background: #0916236a;
-    box-shadow: inset 0 0 0 1px #0c243680;
   }
   .stick.active { display: block; }
-  .stick.firing {
-    border-color: #ffad61cc;
-    background: #1a120c6a;
-  }
-  .stick::before {
-    content: "";
-    position: absolute;
-    inset: 38%;
-    border-radius: 50%;
-    border: 1px dashed #6bc7db55;
-  }
+  .stick.firing { border-color: #ffad61cc; background: #1a120c6a; }
   .stick::after {
     content: "";
     position: absolute;
-    inset: 34px;
+    inset: 24px;
     border-radius: 50%;
     border: 1px solid #b4f4ff;
     background: #60cae052;
     transform: translate(var(--dx), var(--dy));
   }
-  .stick.firing::after {
-    border-color: #ffd4a8;
-    background: #ffad6152;
-  }
+  .stick.firing::after { border-color: #ffd4a8; background: #ffad6152; }
   #reloadHint { display: none; }
   #howPanel .mrows { display: none; }
   .touch-help { display: block; font-size: 19px; margin-top: 12px; }
