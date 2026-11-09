@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sector Null</title>
+<meta name="theme-color" content="#080e16">
+</head>
+<body>
+<canvas id="game" aria-label="Reactor defence arena"></canvas>
+<div id="bootError" class="overlay hidden" role="alert">Sector Null needs a browser with WebGL enabled.</div>
+<div id="touchControls" class="hidden">
+  <button type="button" id="touchReload">Reload</button>
+  <button type="button" id="touchPause">Pause</button>
+  <div class="stick" id="moveStick" aria-hidden="true"></div>
+  <div class="stick" id="aimStick" aria-hidden="true"></div>
+</div>
+
+<div id="hud">
+  <div id="topbar">
+    <div>
+      <div class="stat"><span class="label">WAVE</span> <span id="waveNum">1</span></div>
+      <div id="health" role="img" aria-label="Shields"></div>
+      <div id="powerups"></div>
+    </div>
+    <div class="stat" style="text-align:right">
+      <span class="label">UNITS DOWN</span> <span id="kills">0</span><br>
+      <span class="label" id="zleft"></span>
+    </div>
+  </div>
+
+  <div id="ammoWrap">
+    <div id="mag"></div>
+    <div id="reloadBar"><div id="reloadFill"></div></div>
+    <div id="reloadHint">[R] RELOAD</div>
+  </div>
+
+  <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
+  <div id="toast"></div>
+</div>
+
+<div id="flash"></div>
+
+<div id="picker" class="hidden">
+  <div id="pickerTitle"></div>
+  <div id="pickerSub"></div>
+  <div id="cards"></div>
+</div>
+
+<div id="menu" class="splash">
+  <div id="menuShade"></div>
+  <div id="menuCol">
+    <div class="station-label"><i></i> ORBITAL SYSTEMS / REACTOR DECK 07</div>
+    <h1 id="title"><span id="titleTop">SECTOR</span><span id="titleMain">NULL<span class="title-dot">.</span></span></h1>
+    <p id="mission">Security has turned on the crew. Hold the reactor deck.</p>
+    <button type="button" id="pressAny">INITIALISE <span>↗</span></button>
+    <nav id="menuList">
+      <div id="menuMarker"></div>
+      <button data-act="play"><i>01</i><span>PLAY</span></button>
+      <button data-act="how"><i>02</i><span>HOW TO PLAY</span></button>
+      <button data-act="settings"><i>03</i><span>SETTINGS</span></button>
+      </nav>
+  </div>
+
+  <section id="howPanel" class="mpanel">
+    <h2>HOW TO PLAY</h2>
+    <button type="button" class="close-panel" aria-label="Close how to play">×</button>
+    <p class="touch-help">Drag on the left to move. Drag and hold on the right to aim and fire. Use Reload to swap your power cell.</p>
+    <div class="mrows">
+      <div class="crow"><span class="caps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><b>MOVE</b></div>
+      <div class="crow"><span class="caps"><kbd class="wide">MOUSE</kbd></span><b>AIM</b></div>
+      <div class="crow"><span class="caps"><kbd class="wide">CLICK</kbd></span><b>SHOOT</b><em>hold to keep firing</em></div>
+      <div class="crow"><span class="caps"><kbd>R</kbd></span><b>RELOAD</b></div>
+      <div class="crow"><span class="caps"><kbd class="wide">ESC</kbd></span><b>PAUSE</b></div>
+      <div class="crow"><span class="caps"><kbd>M</kbd></span><b>MUTE</b></div>
+    </div>
+  </section>
+
+  <section id="settingsPanel" class="mpanel">
+    <h2>SETTINGS</h2>
+    <button type="button" class="close-panel" aria-label="Close settings">×</button>
+    <div class="mrows" id="settingRows">
+      <div class="srow" data-key="master"><b>MASTER VOLUME</b><span class="meter"></span><em></em></div>
+      <div class="srow" data-key="music"><b>MUSIC VOLUME</b><span class="meter"></span><em></em></div>
+      <div class="srow" data-key="shake"><b>SCREEN SHAKE</b><span class="toggle"></span><em></em></div>
+    </div>
+  </section>
+
+  <div class="station-tag" aria-hidden="true"><span>07 / NUL</span><b>REACTOR ONLINE</b></div>
+  <div id="menuFoot">
+    <div id="bestRun"></div>
+    <div id="menuHints"></div>
+  </div>
+</div>
+<div id="fadeIn"></div>
+
+<div id="pause" class="overlay hidden">
+  <div id="pauseTitle" >PAUSED</div>
+  <div id="pauseStat"></div>
+  <div id="pauseMenu" class="vmenu">
+    <button id="resumeBtn">RESUME</button>
+    <button id="quitBtn">QUIT TO TITLE</button>
+  </div>
+  <div class="sub" style="margin-top:28px"><span class="key">ESC</span> resume</div>
+</div>
+
+<div id="death" class="overlay hidden">
+  <div id="deathTitle" >SIGNAL LOST</div>
+  <div id="deathStat"></div>
+  <div id="deathBest"></div>
+  <div id="deathMenu" class="vmenu">
+    <button id="retryBtn">TRY AGAIN</button>
+    <button id="deathQuitBtn">MAIN MENU</button>
+  </div>
+</div>
+
+<script type="module" src="./game.js"></script>
+</body>
+</html>
