@@ -959,7 +959,7 @@ function animatePlayer(dt, mx, mz) {
   for (const leg of legs) {
     const p = (rig.phase + leg.phase) % 1;
     const { s, lift, pitch } = footCycle(p, BETA);
-    if (p < leg.prev && drive > 0.3) audio.step();    // a footfall each time a boot lands
+    if (!state.choosing && p < leg.prev && drive > 0.3) audio.step(); // a footfall each time a boot lands
     leg.prev = p;
     const restZ = leg.side > 0 ? 0.12 : -0.1;          // standing: left foot leads
     leg.foot.set(leg.side * (0.17 + 0.03 * (1 - rig.gait)), ANKLE_H + lift * liftH, restZ * (1 - rig.gait))
@@ -2709,7 +2709,7 @@ function separateDrones() {
 
 function update(dt) {
   const px = player.position.x, pz = player.position.z;
-  if (state.running) {
+  if (state.running && !state.choosing) {
     // --- movement ---
     let mx = 0, mz = 0;
     if (keys['KeyW'] || keys['ArrowUp']) mz -= 1;
@@ -2737,7 +2737,9 @@ function update(dt) {
       const a = Math.atan2(aimPoint.x - player.position.x, aimPoint.z - player.position.z);
       player.rotation.y = a;
     }
+  }
 
+  if (state.running) {
     // --- weapon ---
     state.fireCd -= dt;
     if (firing && !state.choosing) fire();
