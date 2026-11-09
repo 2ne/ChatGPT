@@ -33,7 +33,15 @@
   </div>
 
   <div id="ammoWrap">
-    <div id="mag"></div>
+    <svg id="weaponIcon" viewBox="0 0 176 60" role="img" aria-label="Pulse rifle">
+      <g stroke="#a4e4fa" stroke-width="1.2" stroke-linejoin="round">
+        <path fill="#4388ab" d="M23 28h25l8-4h28l6-3h41l6 5h13l5-4h13v15l-5 5h-18l-6-6h-16l-5 13h-10l4-13h-9l-5 11H87l2-11H57l-7-4H23Z"/>
+        <path fill="#78c0dc" d="M24 26h12v8H24zM95 21v-6h27l4 6z"/>
+      </g>
+      <path fill="none" stroke="#c4f2ff" stroke-opacity=".65" d="M58 28h26m6 0h18m6 0h12m19 4h17"/>
+      <g id="weaponMods" fill="#83cbe6" stroke="#c4f2ff" stroke-width="1.2" stroke-linejoin="round"></g>
+    </svg>
+    <div id="mag" role="img" aria-label="Magazine"></div>
     <div id="reloadBar"><div id="reloadFill"></div></div>
     <div id="reloadHint">[R] RELOAD</div>
   </div>

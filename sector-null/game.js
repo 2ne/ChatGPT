@@ -1230,6 +1230,8 @@ const hud = {
   pickerTitle: document.getElementById('pickerTitle'),
   pickerSub: document.getElementById('pickerSub'),
   cards: document.getElementById('cards'),
+  weaponIcon: document.getElementById('weaponIcon'),
+  weaponMods: document.getElementById('weaponMods'),
   mag: document.getElementById('mag'),
   reloadBar: document.getElementById('reloadBar'),
   reloadFill: document.getElementById('reloadFill'),
@@ -1238,6 +1240,22 @@ const hud = {
   bannerText: document.getElementById('bannerText'),
   bannerSub: document.getElementById('bannerSub'),
 };
+
+function updateWeaponIcon() {
+  const { mag = 0, reload = 0, damage = 0, rate = 0, pierce = 0, spread = 0 } = state.upgrades;
+  hud.weaponMods.innerHTML = [
+    pierce && `<path d="M${22 - 4 * pierce} 27H35v6H${22 - 4 * pierce}z"/>`,
+    spread && `<path d="M${42 - 5 * spread} 35H66v5H${42 - 5 * spread}z"/>`,
+    damage && `<path d="M${80 - 5 * damage} 24l5-7h${8 + 5 * damage}l6 7z"/>`,
+    rate && `<path d="M93 21v-${6 + 2 * rate}h34l5 ${6 + 2 * rate}z"/>`,
+    mag && `<path d="M106 36h15l-5 ${10 + 2 * mag}h-13z"/>`,
+    reload && `<path d="M134 30h${8 + 3 * reload}l-4 6h-${4 + 3 * reload}z"/>`,
+  ].filter(Boolean).join('');
+  const installed = UPGRADES
+    .filter(u => (u.cat === 'firepower' || u.cat === 'handling') && state.upgrades[u.id])
+    .map(u => `${u.name} level ${state.upgrades[u.id]}`);
+  hud.weaponIcon.setAttribute('aria-label', ['Pulse rifle', ...installed].join(', '));
+}
 
 function updateHUD() {
   syncTouchControls();
@@ -1261,11 +1279,12 @@ function updateHUD() {
   if (state.pDamage > 0) pu += `<div style="color:#ff7a2e">OVERCHARGE ${clock(state.pDamage)}</div>`;
   if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}</div>`;
   hud.powerups.innerHTML = pu;
-  let m = '';
-  for (let i = 0; i < state.magSize; i++) {
-    m += `<span class="${i < state.mag ? 'live' : 'empty'}">▮</span>`;
+  const magLabel = `Magazine: ${state.mag} of ${state.magSize}`;
+  if (hud.mag.getAttribute('aria-label') !== magLabel) {
+    hud.mag.setAttribute('aria-label', magLabel);
+    hud.mag.innerHTML = '<span class="live"></span>'.repeat(state.mag)
+      + '<span class="empty"></span>'.repeat(state.magSize - state.mag);
   }
-  hud.mag.innerHTML = m;
   hud.reloadBar.classList.toggle('active', state.reloading);
   if (state.reloading) hud.reloadFill.style.width = (state.reloadT / state.reloadTime * 100) + '%';
 }
@@ -2175,6 +2194,7 @@ function choose(i) {
   if (!state.choosing || !u) return;
   state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
   u.apply(state);
+  if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
   state.choosing = false;
   // brief beat so the pick registers visually before the picker closes
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
@@ -2257,6 +2277,7 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0,
   });
+  updateWeaponIcon();
   if (keep) {
     state.intermission = SWOOP_TIME * 0.85;
     for (const z of drones) Object.assign(z.userData, { cross: null, idle: 0, via: -1 });

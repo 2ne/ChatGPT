@@ -61,12 +61,23 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   }
 
   /* magazine / reload */
-  #ammoWrap { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); text-align: center; }
-  #mag { font-size: 18px; letter-spacing: 3px; }
-  #mag .empty { color: #4a3030; }
-  #mag .live { color: #ffbd78; text-shadow: 0 0 6px #ffbd7888; }
+  #ammoWrap {
+    position: absolute;
+    right: max(18px, env(safe-area-inset-right));
+    bottom: max(18px, env(safe-area-inset-bottom));
+    width: clamp(136px, 17vw, 176px);
+    padding: 4px 10px 8px;
+    border-bottom: 1px solid #6dd9ed80;
+    background: linear-gradient(transparent, #081623e6);
+    text-align: right;
+  }
+  #weaponIcon { display: block; width: 100%; filter: drop-shadow(0 2px 2px #000); }
+  #mag { display: flex; justify-content: flex-end; gap: 2px; }
+  #mag span { flex: 0 1 5px; height: 9px; border-radius: 1px; }
+  #mag .empty { background: #29414e; }
+  #mag .live { background: #a4e4fa; box-shadow: 0 0 5px #64dfee60; }
   #reloadBar {
-    width: 180px; height: 6px; margin: 8px auto 0; background: #1a1c22;
+    height: 6px; margin-top: 6px; background: #1a1c22;
     border: 1px solid #2c2f37; opacity: 0; transition: opacity .12s;
   }
   #reloadBar.active { opacity: 1; }
@@ -302,6 +313,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     touch-action: manipulation;
   }
   #touchReload { bottom: max(18px, env(safe-area-inset-bottom)); right: 18px; }
+  #ammoWrap { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 52px); }
   #touchPause { bottom: max(18px, env(safe-area-inset-bottom)); left: 18px; }
   .stick {
     display: none;

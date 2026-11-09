@@ -19,6 +19,8 @@ npm run dev
 
 Supply pickup notices appear one at a time. Each drop type shows a short effect description the first time its notice appears, and the game remembers discovered types in the browser.
 
+The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
+
 | Action | Keyboard and mouse | Touch |
 | --- | --- | --- |
 | Move | WASD or arrow keys | Drag on the left side |
