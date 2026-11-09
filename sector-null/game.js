@@ -8,6 +8,7 @@ import './title.css';
 import { createAudio } from './audio.js';
 import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
+import { firstBlocker, resolveShotStart } from './shot-collision.js';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -1517,6 +1518,55 @@ function finishReload() {
   audio.reloadIn();
 }
 
+function shotWorld() {
+  return { wallBoxes, solids: SOLIDS, openings };
+}
+
+function wallSpark(x, y, z, dir) {
+  const origin = new THREE.Vector3(x, y, z);
+  for (let i = 0; i < 7; i++) {
+    const spark = new THREE.Mesh(BOX, sparkMat);
+    spark.scale.set(0.03, 0.03, rnd(0.12, 0.3));
+    spark.position.copy(origin);
+    const vx = -dir.x * rnd(2.5, 6) + rnd(-2, 2);
+    const vz = -dir.z * rnd(2.5, 6) + rnd(-2, 2);
+    const velocity = new THREE.Vector3(vx, rnd(1.5, 5), vz);
+    spark.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), velocity.clone().normalize());
+    spawnDebris(spark, velocity, { life: rnd(0.16, 0.34), bounce: 0.02 });
+  }
+  audio.bash(origin, 0.28);
+}
+
+function strikeShotBlock(hit, dir, y) {
+  if (hit.kind === 'window' && hit.opening) {
+    breakOpening(hit.opening);
+    return false;
+  }
+  if (hit.kind === 'door' && hit.opening) {
+    hit.opening.jolt = 0.4;
+    burst(hit.opening, 1, metalChip, 0.08, 1.5);
+    audio.bash(hit.opening, 0.4);
+    return true;
+  }
+  wallSpark(hit.x, y, hit.z, dir);
+  return true;
+}
+
+function spawnPulse(fromX, fromZ, muzzlePos, dir, userData, hot) {
+  const start = resolveShotStart(fromX, fromZ, muzzlePos.x, muzzlePos.z, dir.x, dir.z, shotWorld());
+  if (start.shatter) breakOpening(start.shatter);
+  if (start.impact) {
+    strikeShotBlock(start.impact, dir, muzzlePos.y);
+    return;
+  }
+  const b = makeTracer(hot);
+  b.position.set(start.x, muzzlePos.y, start.z);
+  b.lookAt(b.position.clone().add(dir));
+  b.userData = { dir, ...userData };
+  scene.add(b);
+  bullets.push(b);
+}
+
 function fire() {
   if (state.fireCd > 0 || state.reloading || state.mag <= 0 || !state.running) return;
   const aim = new THREE.Vector3(aimPoint.x - player.position.x, 0, aimPoint.z - player.position.z);
@@ -1534,13 +1584,10 @@ function fire() {
     const a = (k - (count - 1) / 2) * 0.13;
     const c = Math.cos(a), s = Math.sin(a);
     const dir = new THREE.Vector3(aim.x * c - aim.z * s, 0, aim.x * s + aim.z * c);
-    const b = makeTracer(state.pDamage > 0);
-    b.position.copy(mp);
-    b.lookAt(mp.clone().add(dir));
-    b.userData = { dir, life: 0.9, pierce: state.pierce, hits: new Set() };
-    scene.add(b);
-    bullets.push(b);
     state.shotsFired++;
+    spawnPulse(player.position.x, player.position.z, mp, dir, {
+      life: 0.9, pierce: state.pierce, hits: new Set(),
+    }, state.pDamage > 0);
   }
 
   muzzleFlash(state.pDamage > 0);
@@ -2616,12 +2663,13 @@ function updateEquipment(dt) {
         helper.updateWorldMatrix(true, true);
         equipment.shot = helperShotInterval(u.bot, u);
         for (let k = 0; k < (u.botGun ? 2 : 1); k++) {
-          const b = makeTracer(!!u.botBomb);
-          helperBarrels[k].getWorldPosition(b.position);
-          const dir = target.position.clone().sub(b.position); dir.y = 0; dir.normalize();
-          b.lookAt(b.position.clone().add(dir));
-          b.userData = { dir, life: 0.7, pierce: 0, hits: new Set(), helper: true, damage: helperDamage(u.bot), blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0 };
-          bullets.push(b); scene.add(b);
+          const muzzlePos = new THREE.Vector3();
+          helperBarrels[k].getWorldPosition(muzzlePos);
+          const dir = target.position.clone().sub(muzzlePos); dir.y = 0; dir.normalize();
+          spawnPulse(helper.position.x, helper.position.z, muzzlePos, dir, {
+            life: 0.7, pierce: 0, hits: new Set(), helper: true,
+            damage: helperDamage(u.bot), blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0,
+          }, !!u.botBomb);
         }
       }
     }
@@ -3708,19 +3756,13 @@ function update(dt) {
     b.position.addScaledVector(b.userData.dir, 38 * dt);
     b.userData.life -= dt;
     let hit = false;
-    // wall collision: sample the path traveled this frame so fast bullets
-    // can't tunnel through the thin walls (openings have no wall box; shut ones are checked below)
-    const steps = Math.max(1, Math.ceil(Math.hypot(b.position.x - px, b.position.z - pz) / (WALL_T * 0.5)));
-    for (let s = 1; s <= steps && !hit; s++) {
-      const t = s / steps;
-      const sx = px + (b.position.x - px) * t, sz = pz + (b.position.z - pz) * t;
-      for (const w of wallBoxes) {
-        if (sx >= w.minX && sx <= w.maxX && sz >= w.minZ && sz <= w.maxZ) { hit = true; break; }
+    const block = firstBlocker(px, pz, b.position.x, b.position.z, wallBoxes, SOLIDS, openings);
+    if (block) {
+      if (strikeShotBlock(block, b.userData.dir, b.position.y)) {
+        b.position.x = block.x;
+        b.position.z = block.z;
+        hit = true;
       }
-      // a shut door stops the round; glass shatters and lets it through
-      const o = !hit && shutAt(sx, sz);
-      if (o?.kind === 'door') { hit = true; o.jolt = 0.4; burst(o, 1, metalChip, 0.08, 1.5); audio.bash(o, 0.4); }
-      else if (o) breakOpening(o);
     }
     for (let j = drones.length - 1; j >= 0 && !hit; j--) {
       const z = drones[j];

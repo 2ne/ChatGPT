@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --base=./",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:shots": "node check-shots.mjs"
   },
   "dependencies": {
     "@fontsource/oxanium": "^5.3.0",
