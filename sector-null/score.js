@@ -9,12 +9,14 @@ const CLEAR_FADE = 0.9;
 const ABILITY_VOLUME = 0.38;
 const ABILITY_CUTOFF = 1000;
 const BAR = 1.65704;
-const COMBAT_CROSSFADE = 0.25;
+const COMBAT_CROSSFADE = 0.6;
+// The late asset measures ~3.5 dB louder in RMS than early; trim it at every entry.
+const CLIP_GAIN = { early: 1, late: 0.65, ability: 1 };
 const LATE_WAVE = 5;
 
 export function createScore(ctx, musicBus) {
   const level = ctx.createGain();
-  level.gain.value = 5.5;
+  level.gain.value = 3.8;
   level.connect(musicBus);
 
   // Keep the decoded loop boundaries at the assets' native sample rate.
@@ -42,6 +44,7 @@ export function createScore(ctx, musicBus) {
   }
 
   function play(name, start, { loop = false, phase = start, fadeIn = 0, volume = 1, cutoff = 20000 } = {}) {
+    volume *= CLIP_GAIN[name];
     const gain = ctx.createGain();
     const filter = ctx.createBiquadFilter();
     filter.type = 'lowpass';

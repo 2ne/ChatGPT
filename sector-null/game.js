@@ -1311,7 +1311,6 @@ function updateToast(dt) {
     // Remember a lesson only after the player has had its full reading time.
     if (activePickupHint) {
       seenDrops.add(activePickupHint);
-      store.set(PICKUP_HINTS_KEY, [...seenDrops]);
       activePickupHint = null;
     }
     hud.toast.style.opacity = 0;
@@ -1319,7 +1318,9 @@ function updateToast(dt) {
     return;
   }
 
-  const next = toastQueue.shift();
+  // Teach new pickups before routine upgrade/repeat notices, in collection order.
+  const lessonIndex = toastQueue.findIndex(notice => notice.pickup && !seenDrops.has(notice.pickup.id));
+  const next = toastQueue.splice(lessonIndex < 0 ? 0 : lessonIndex, 1)[0];
   if (!next) return;
   const { text, color, pickup } = next;
   const firstPickup = pickup && !seenDrops.has(pickup.id);
@@ -1878,9 +1879,8 @@ const DROP_TYPES = [
   { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Deal double damage for 10 seconds.', icon: '↑', color: 0xffa64c, weight: 25 },
   { id: 'ammo', name: 'INFINITE CELL', detail: 'Refills your magazine. Fire without reloading for 8 seconds.', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
-// Fresh lesson history lets existing players see the expanded explanations once.
-const PICKUP_HINTS_KEY = 'pickup-hints-v2';
-const seenDrops = new Set(store.get(PICKUP_HINTS_KEY, []));
+// Teach each item once per run; saved browser history must not suppress a lesson.
+const seenDrops = new Set();
 const DROP_MODELS = {
   med: [  // first-aid case, crosses on top and front
     [0.52, 0.34, 0.36, 0, 0, 0, 0xe6e2da, 0, 0, 0, 0.05],
@@ -1976,6 +1976,10 @@ function spawnDrop(type, pos) {
 function collect(type) {
   audio.pickup(type.id);
   toastQueue.push({ text: type.name, color: type.tint, pickup: type });
+  if (!seenDrops.has(type.id) && !activePickupHint) {
+    // Let a routine notice yield promptly, but never cut another lesson short.
+    toastTime = Math.min(toastTime, 0.15);
+  }
   if (type.id === 'med') state.hp = Math.min(state.maxHp, state.hp + 1);
   else if (type.id === 'dmg') state.pDamage = 10;
   else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }
@@ -2216,6 +2220,7 @@ const BASE_STATS = { maxHp: 3, magSize: 8, reloadTime: 1.2, fireRate: 0.13, dama
 // they are and the yard's drones join wave 1, which starts once the camera is down)
 function resetGame(keep = false) {
   if (!keep) { clearRun(); resetOpenings(); }
+  seenDrops.clear();
   pressure.set(0);
   Object.assign(state, {
     ...BASE_STATS, running: true, hp: BASE_STATS.maxHp, kills: 0, wave: 0,
@@ -2829,7 +2834,7 @@ function update(dt) {
 
   updateCamera(dt);
 
-  if (state.running && !state.choosing) updateToast(dt);
+  if (state.running && !state.choosing && hud.picker.classList.contains('hidden')) updateToast(dt);
   updateHUD();
 }
 
