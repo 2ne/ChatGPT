@@ -28,6 +28,12 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
   }
   .stat[hidden] { display: none; }
+  #bossPanel { position: absolute; top: max(116px, calc(env(safe-area-inset-top) + 104px)); left: 50%; transform: translateX(-50%); width: min(280px, 65vw); padding: 7px 12px; background: #170e18e8; border: 1px solid #cf5267; color: #ffb2bd; text-align: center; font-size: 13px; letter-spacing: 2px; }
+  #bossPanel[hidden] { display: none; }
+  #bossHealth { display: block; width: 100%; height: 7px; margin-top: 5px; border: 0; appearance: none; background: #40222b; }
+  #bossHealth::-webkit-progress-bar { background: #40222b; }
+  #bossHealth::-webkit-progress-value { background: #ff708c; }
+  #bossHealth::-moz-progress-bar { background: #ff708c; }
   .stat + .stat { margin-top: 3px; }
   .enemy-stats .stat { justify-content: space-between; }
   .label { color: #bdd1dc; }

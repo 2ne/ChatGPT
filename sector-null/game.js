@@ -1233,6 +1233,9 @@ const hud = {
   weaponIcon: document.getElementById('weaponIcon'),
   weaponMods: document.getElementById('weaponMods'),
   mag: document.getElementById('mag'),
+  bossPanel: document.getElementById('bossPanel'),
+  bossName: document.getElementById('bossName'),
+  bossHealth: document.getElementById('bossHealth'),
   ammoWrap: document.getElementById('ammoWrap'),
   cellStatus: document.getElementById('cellStatus'),
   reloadBar: document.getElementById('reloadBar'),
@@ -1263,7 +1266,16 @@ function updateHUD() {
   syncTouchControls();
   hud.wave.textContent = state.wave;
   hud.kills.textContent = state.kills;
-  const remaining = drones.length + state.toSpawn;
+  const remaining = drones.length + state.toSpawn + (state.bossPending ? 1 : 0);
+  const boss = drones.find(z => z.userData.boss);
+  hud.bossPanel.hidden = !boss || !state.running;
+  if (boss) {
+    const u = boss.userData;
+    hud.bossName.textContent = u.type.name;
+    hud.bossHealth.max = u.maxHp;
+    hud.bossHealth.value = Math.max(0, u.hp);
+    hud.bossHealth.setAttribute('aria-label', `${u.type.name}: ${Math.ceil(u.hp)} of ${u.maxHp} health`);
+  }
   hud.remainingStat.hidden = state.intermission > 0 || state.choosing;
   hud.zleft.textContent = remaining;
   if (hud.shieldPips.children.length !== state.maxHp) {
@@ -1401,9 +1413,38 @@ const Z_UPPER_ARM = 0.4, Z_FOREARM = 0.39;
 const Z_SCALE = 1.08, Z_UPPER = 1.1;
 const DRONE_PALETTES = [
   { plate: 0x405565, joint: 0x1c2630, trim: 0xaf793a, optic: 0xff9749 },
-  { plate: 0x68747e, joint: 0x26313b, trim: 0x9b5148, optic: 0xff6e62 },
-  { plate: 0x384956, joint: 0x19242c, trim: 0x8c5fa2, optic: 0xe396ff },
+  { plate: 0x187c92, joint: 0x16323b, trim: 0x79e8ed, optic: 0xafffff },
+  { plate: 0x654080, joint: 0x242038, trim: 0xb87ee4, optic: 0xe396ff },
+  { plate: 0x997124, joint: 0x342b20, trim: 0xffd177, optic: 0xffe6a0 },
+  { plate: 0xa32e39, joint: 0x321c28, trim: 0xff8c75, optic: 0xffe4d1 },
 ];
+const BOT_TYPES = {
+  patrol: { name: 'PATROL', kit: 0, health: 1, speed: 1, size: 1, style: 'melee' },
+  runner: { name: 'FLANKER', kit: 1, health: 0.7, speed: 1.35, size: 0.88, style: 'flank' },
+  gunner: { name: 'PULSE GUNNER', kit: 2, health: 1.25, speed: 0.8, size: 1, style: 'ranged' },
+  heavy: { name: 'BULWARK', kit: 3, health: 2.5, speed: 0.62, size: 1.18, style: 'heavy' },
+};
+function waveBotType() {
+  const r = Math.random();
+  if (state.wave >= 2 && r < 0.25) return BOT_TYPES.runner;
+  if (state.wave >= 3 && r >= 0.25 && r < 0.45) return BOT_TYPES.gunner;
+  if (state.wave >= 4 && r >= 0.45 && r < 0.6) return BOT_TYPES.heavy;
+  return BOT_TYPES.patrol;
+}
+function spawnWaveBoss() {
+  state.bossPending = false;
+  clearEnemyBolts();
+  const armed = state.wave >= 3;
+  const fast = state.wave % 3 === 2;
+  const type = {
+    name: armed ? (fast ? 'HUNTER PRIME' : 'SIEGE WARDEN') : (fast ? 'HUNTER' : 'WARDEN'),
+    kit: 4, health: 6 + state.wave * 0.75, speed: fast ? 1.1 : 0.72,
+    size: 1.4, style: armed ? 'ranged' : fast ? 'flank' : 'heavy',
+    boss: true, volley: armed ? (state.wave >= 6 ? 5 : 3) : 0,
+  };
+  spawnDrone(undefined, type);
+  showBanner(type.name, armed ? 'BOSS · Dodge the charged volley' : 'BOSS · Keep moving and keep your distance', 2.5);
+}
 function bakeDrone({ plate, joint, trim, optic }, seed) {
   const rng = seeded(seed);
   const b = parts => bakeBlocks(parts, rng);
@@ -1442,6 +1483,47 @@ function bakeDrone({ plate, joint, trim, optic }, seed) {
 const DRONE_KITS = DRONE_PALETTES.map((palette, i) => bakeDrone(palette, 7 + i * 31));
 const droneShell = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32 });
 const droneHurt = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32, emissive: 0xffb64b, emissiveIntensity: 0.85 });
+const enemyCannonGeo = new THREE.BoxGeometry(0.25, 0.25, 0.95);
+const enemyCannonMat = new THREE.MeshStandardMaterial({ color: 0x252c42, metalness: 0.7, roughness: 0.3 });
+const enemyMuzzleGeo = new THREE.BoxGeometry(0.18, 0.18, 0.06);
+const enemyChargeGeo = new THREE.RingGeometry(0.7, 0.8, 32);
+const enemyChargeMat = new THREE.MeshBasicMaterial({ color: 0xff708c, side: THREE.DoubleSide });
+const enemyBoltGeo = new THREE.SphereGeometry(0.16, 8, 6);
+const enemyBoltMat = new THREE.MeshBasicMaterial({ color: 0xff708c });
+const enemyBolts = [];
+function clearEnemyBolts() {
+  for (const bolt of enemyBolts) scene.remove(bolt);
+  enemyBolts.length = 0;
+}
+function fireEnemyVolley(z) {
+  const u = z.userData;
+  const angle = Math.atan2(u.shotTarget.x - z.position.x, u.shotTarget.z - z.position.z);
+  const count = u.type.volley || 1;
+  for (let i = 0; i < count; i++) {
+    const a = angle + (i - (count - 1) / 2) * 0.22;
+    const bolt = new THREE.Mesh(enemyBoltGeo, enemyBoltMat);
+    bolt.position.copy(z.position); bolt.position.y = 1.1;
+    bolt.userData = { dir: new THREE.Vector3(Math.sin(a), 0, Math.cos(a)), life: 3 };
+    scene.add(bolt); enemyBolts.push(bolt);
+  }
+  audio.enemyShot(z.position);
+}
+function updateEnemyBolts(dt) {
+  for (let i = enemyBolts.length - 1; i >= 0; i--) {
+    const b = enemyBolts[i], from = b.position.clone();
+    b.position.addScaledVector(b.userData.dir, 8 * dt);
+    b.userData.life -= dt;
+    const blocked = wallBetween(from, b.position) || !clearPath(from.x, from.z, b.position.x, b.position.z);
+    const delta = b.position.clone().sub(from);
+    const t = THREE.MathUtils.clamp(player.position.clone().sub(from).dot(delta) / (delta.lengthSq() || 1), 0, 1);
+    const closest = from.clone().addScaledVector(delta, t);
+    const hit = Math.hypot(closest.x - player.position.x, closest.z - player.position.z) < 0.55;
+    if (hit && !blocked) hurtPlayer();
+    if (blocked || hit || b.userData.life <= 0 || !state.running) {
+      scene.remove(b); enemyBolts.splice(i, 1);
+    }
+  }
+}
 
 // Spawn points sit just past the edge of the gameplay view (worked out from where the
 // follow camera will be, whatever the window's shape), so nothing pops in on screen.
@@ -1474,8 +1556,8 @@ function spawnPoint(out) {
   return out;
 }
 
-function spawnDrone(pos = spawnPoint(new THREE.Vector3())) {
-  const kit = DRONE_KITS[(Math.random() * DRONE_KITS.length) | 0];
+function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patrol) {
+  const kit = DRONE_KITS[type.kit];
   const z = new THREE.Group();
   z.rotation.order = 'YXZ';
   const body = [];
@@ -1489,6 +1571,20 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3())) {
   const pelvis = mesh(kit.pelvis, z);
   const upper = new THREE.Group(); upper.rotation.order = 'YXZ'; upper.scale.setScalar(Z_UPPER); z.add(upper); // waist pivot
   mesh(kit.torso, upper);
+  if (type.style === 'ranged') {
+    // A visible shoulder cannon, aimed by the bot's facing direction.
+    const cannon = new THREE.Mesh(enemyCannonGeo, enemyCannonMat);
+    cannon.position.set(0.48, 0.48, 0.4);
+    upper.add(cannon);
+    const tip = new THREE.Mesh(enemyMuzzleGeo, kit.optic);
+    tip.position.set(0.48, 0.48, 0.93);
+    upper.add(tip);
+  }
+  const chargeRing = new THREE.Mesh(enemyChargeGeo, enemyChargeMat);
+  chargeRing.rotation.x = -Math.PI / 2;
+  chargeRing.position.y = 0.06;
+  chargeRing.visible = false;
+  z.add(chargeRing);
   const head = new THREE.Group(); head.position.set(0, 0.68, 0.06); head.rotation.order = 'YXZ'; upper.add(head);
   mesh(kit.head, head);
   mesh(kit.eyes, head, kit.optic);
@@ -1505,13 +1601,15 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3())) {
   const limbs = [side(1), side(-1)];
 
   z.position.set(pos.x, 0, pos.z);
-  z.scale.setScalar(Z_SCALE * (0.94 + Math.random() * 0.12));
+  z.scale.setScalar(Z_SCALE * type.size);
   const limp = Math.random() < 0.25 ? 0.2 + Math.random() * 0.55 : 0;
-  const pace = 0.85 + Math.random() * 0.3;
+  const pace = type.speed;
   z.userData = {
-    hp: state.droneHp,
+    hp: Math.ceil(state.droneHp * type.health),
+    maxHp: Math.ceil(state.droneHp * type.health),
+    type, boss: !!type.boss, chargeRing, shotCd: 1.5, chargeT: 0, shotTarget: null,
     pace,                                               // its speed relative to the wave's
-    speed: state.droneSpeed * pace,
+    speed: Math.min(5.5, state.droneSpeed * pace),
     hurt: 0, body, pelvis, upper, head, jaw, limbs,
     // gait personality
     phase: Math.random(),
@@ -1553,6 +1651,7 @@ const _zPole = new THREE.Vector3(), _zReach = new THREE.Vector3();
 // loping run on later waves, arms groping toward the operator or hanging dead.
 function animateDrone(z, dt, near) {
   const u = z.userData;
+  const Z_STRIKE = u.type.style === 'heavy' ? 0.4 : 0.2;
   const gait = u.gait; // 0 when it's standing its ground
   const sp = u.speed * gait;
   const run = THREE.MathUtils.clamp((u.speed - 3) / 2, 0, 1); // later waves lope instead of shamble
@@ -1864,6 +1963,8 @@ function killDrone(z, idx) {
   drones.splice(idx, 1);
   state.kills++;
   if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
+    if (state.bossPending) { spawnWaveBoss(); return; }
+    clearEnemyBolts();
     const healed = state.hp < state.maxHp;
     state.hp = Math.min(state.maxHp, state.hp + 1);
     audio.waveClear();
@@ -2180,17 +2281,22 @@ function queueWave(delay) {
 
 function startWave(n) {
   state.wave = n;
+  state.bossPending = true;
   // Drones toughen steadily but slower than upgrades let the player scale, so
   // runs can go long; speed caps below the player's so kiting always works.
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
   state.droneHp = 2 + (n - 1) * 0.4;
   // anything already up counts toward the wave (the yard's shamblers when you leave the title)
   state.toSpawn = Math.max(0, 5 + n * 3 - drones.length);
-  for (const z of drones) { z.userData.speed = state.droneSpeed * z.userData.pace; z.userData.hp = state.droneHp; }
+  for (const z of drones) {
+    const u = z.userData;
+    u.speed = Math.min(5.5, state.droneSpeed * u.pace);
+    u.hp = u.maxHp = Math.ceil(state.droneHp * u.type.health);
+  }
   state.spawnTimer = 0;
   state.intermission = 0;
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
-  const omens = { 1: 'Rogue security units inbound', 3: 'Reactor load rising', 7: 'Containment warning', 12: 'Reactor at critical load' };
+  const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
   showBanner('WAVE ' + n, omens[n] || 'Hostile signatures detected');
 }
 
@@ -2200,6 +2306,8 @@ function startWave(n) {
 // clear everything a run leaves lying around
 function clearRun() {
   audio.cancelReload();
+  clearEnemyBolts();
+  state.bossPending = false;
   for (const b of bullets) scene.remove(b);
   for (const z of drones) scene.remove(z);
   for (const d of drops) scene.remove(d);
@@ -2225,7 +2333,7 @@ function resetGame(keep = false) {
   Object.assign(state, {
     ...BASE_STATS, running: true, hp: BASE_STATS.maxHp, kills: 0, wave: 0,
     mag: BASE_STATS.magSize, reloading: false, reloadT: 0,
-    fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0,
+    fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0,
   });
@@ -2542,7 +2650,6 @@ const Z_LET_GO = 1.5;     // ...and only gives chase again once you're this far 
 const Z_CLOSE = 0.95;     // never gets nearer than this (no standing inside the operator)
 const Z_SPACE = 0.8;      // drones keep this far apart, so a crowd fans out around you
 const Z_SWING = 0.85;     // seconds from wind-up to recovered
-const Z_STRIKE = 0.2;     // the moment in the swing the blow lands
 const Z_HIT_RANGE = 1.65; // the blow connects if you're still this close
 const Z_TRACK = 7;        // rad/s a drone turns to keep facing you while it stands and swings
 const HURT_IFRAMES = 1.5; // after a hit, the operator can't be hit again for this long (and flickers)
@@ -2575,9 +2682,9 @@ function walkToward(z, dx, dz, speed, turn, dt) {
   z.position.z += Math.cos(ud.heading) * v * dt;
 }
 
-function hurtPlayer() {
+function hurtPlayer(damage = 1) {
   if (state.dmgCd > 0) return false;
-  state.hp--;
+  state.hp = Math.max(0, state.hp - damage);
   state.dmgCd = HURT_IFRAMES;
   damageFlash();
   audio.hurt();
@@ -2587,7 +2694,38 @@ function hurtPlayer() {
 
 function chaseDrone(z, dt) {
   const ud = z.userData, p = player.position;
+  const Z_STRIKE = ud.type.style === 'heavy' ? 0.4 : 0.2;
   const pdx = p.x - z.position.x, pdz = p.z - z.position.z, pd = Math.hypot(pdx, pdz);
+  ud.shotCd = Math.max(0, ud.shotCd - dt);
+  const canShoot = ud.type.style === 'ranged' && ud.climb < 0 && ud.swing < 0
+    && inside(z.position) && pd > 2.5 && pd < 11 && !wallBetween(z.position, p)
+    && clearPath(z.position.x, z.position.z, p.x, p.z);
+  if (canShoot) {
+    let moving = false;
+    if (ud.chargeT > 0) {
+      ud.chargeT -= dt;
+      faceToward(z, ud.shotTarget.x - z.position.x, ud.shotTarget.z - z.position.z, Z_TRACK, dt);
+      ud.chargeRing.scale.setScalar(1 + Math.max(0, ud.chargeT) * 0.5);
+      if (ud.chargeT <= 0) {
+        fireEnemyVolley(z); ud.shotCd = ud.boss ? 2.2 : 2.8;
+        ud.chargeRing.visible = false;
+      }
+    } else if (ud.shotCd <= 0) {
+      ud.chargeT = ud.boss ? 1 : 0.8;
+      ud.shotTarget = p.clone(); // aim locks before firing, so the volley can be dodged
+      ud.chargeRing.visible = true;
+      audio.enemyCharge(z.position);
+    } else {
+      const side = Math.sin(ud.seed) > 0 ? 1 : -1;
+      const retreat = pd < 5 ? -0.7 : pd > 8 ? 0.7 : 0;
+      walkToward(z, pdx * retreat + pdz * side * 0.45, pdz * retreat - pdx * side * 0.45, ud.speed * 0.7, ud.turn * 2, dt);
+      moving = true;
+    }
+    ud.gait = damp(ud.gait, moving ? 1 : 0, 8, dt);
+    animateDrone(z, dt, pd);
+    return;
+  }
+  ud.chargeT = 0; ud.chargeRing.visible = false;
   let walking = false;
   if (ud.climb >= 0) {
     climbStep(z, dt);
@@ -2599,7 +2737,7 @@ function chaseDrone(z, dt) {
     if (!ud.struck && ud.swing >= Z_STRIKE) {
       ud.struck = true;
       if (o) hitOpening(o);
-      else if (!(pd < Z_HIT_RANGE && !wallBetween(z.position, p) && hurtPlayer())) audio.swipe(z.position);
+      else if (!(pd < Z_HIT_RANGE && !wallBetween(z.position, p) && hurtPlayer(ud.type.style === 'heavy' && !ud.boss ? 2 : 1))) audio.swipe(z.position);
     }
     if (ud.swing >= Z_SWING) { ud.swing = -1; ud.swingCd = rnd(0.25, 0.6); }
   } else if (pd < (ud.standing ? Z_LET_GO : Z_REACH) && !wallBetween(z.position, p)) {
@@ -2616,6 +2754,10 @@ function chaseDrone(z, dt) {
     let tx = p.x, tz = p.z;
     if (inside(z.position)) {
       ud.opening = null; ud.stage = 0; // through the wall — re-pick if knocked back out
+      if (ud.type.style === 'flank' && pd > 3) {
+        const side = Math.sin(ud.seed) > 0 ? 1 : -1;
+        tx += pdz / pd * 2.5 * side; tz -= pdx / pd * 2.5 * side;
+      }
     } else {
       // Commit to one opening (no per-frame re-pick): walk up via its outer waypoint so
       // it comes at the door or window square-on, then break it and go through
@@ -2738,7 +2880,7 @@ function update(dt) {
         if (state.spawnTimer <= 0 && drones.length < MAX_ALIVE) {
           // spawn 1-2 at a time, faster on higher waves
           const burst = 1 + (Math.random() < Math.min(0.6, state.wave * 0.08) ? 1 : 0);
-          for (let i = 0; i < burst && state.toSpawn > 0; i++) { spawnDrone(); state.toSpawn--; }
+          for (let i = 0; i < burst && state.toSpawn > 0; i++) { spawnDrone(undefined, waveBotType()); state.toSpawn--; }
           if (state.wave === 4 && drones.length >= 8) audio.intensify();
           state.spawnTimer = Math.max(0.35, 1.4 - state.wave * 0.08);
         }
@@ -2789,10 +2931,10 @@ function update(dt) {
       const sx = b.position.x - px, sz = b.position.z - pz;
       const t = Math.max(0, Math.min(1, ((z.position.x - px) * sx + (z.position.z - pz) * sz) / (sx * sx + sz * sz || 1)));
       const dx = z.position.x - (px + sx * t), dz = z.position.z - (pz + sz * t);
-      if (dx * dx + dz * dz < 0.55) {
+      if (dx * dx + dz * dz < 0.55 * z.userData.type.size ** 2) {
         z.userData.hp -= state.damage * (state.pDamage > 0 ? 2 : 1);
         // small knockback
-        z.position.addScaledVector(b.userData.dir, 0.25);
+        z.position.addScaledVector(b.userData.dir, z.userData.boss ? 0.04 : z.userData.type.style === 'heavy' ? 0.08 : 0.25);
         if (z.userData.hp <= 0) killDrone(z, j);
         else { hitDrone(z); audio.hit(z.position); }
         b.userData.hits.add(z);
@@ -2802,6 +2944,8 @@ function update(dt) {
     }
     if (hit || b.userData.life <= 0) { scene.remove(b); bullets.splice(i, 1); }
   }
+
+  if (state.running && !state.choosing) updateEnemyBolts(dt);
 
   // --- drones ---
   for (let j = drones.length - 1; j >= 0; j--) {

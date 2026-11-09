@@ -6,6 +6,20 @@ A top-down sci-fi survival shooter and competition remix of [Abandon All Hope by
 
 Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Best runs and settings are saved in the browser.
 
+## Enemy roles and wave bosses
+
+Each wave ends with one larger red boss after all regular bots are defeated. The boss has a named health bar, extra armour and reduced knockback; the upgrade choice opens only after it dies. Wave 1 contains grey patrols and a melee Warden. Wave 2 introduces cyan flankers and a faster Hunter boss. From wave 3, bosses carry visible shoulder cannons and fire three-shot spreads (five from wave 6), preceded by a one-second charge ring and sound. They lock their aim before firing, allowing the player to dodge. Enemy shots stop at cover and are cleared between combat phases.
+
+| Bot | First wave | Health multiplier | Movement and attack |
+| --- | --- | --- | --- |
+| Grey Patrol | 1 | 1× | Standard pursuit and melee strike |
+| Cyan Flanker | 2 | 0.7× | Faster, smaller, approaches from the side |
+| Purple Pulse Gunner | 3 | 1.25× | Strafes at range, visible cannon, charged single bolts |
+| Gold Bulwark | 4 | 2.5× | Slow, larger, resists knockback; slower wind-up strikes deal 2 shield damage |
+| Red Boss | Every wave | 6 + 0.75 × wave | Larger, durable; alternates faster Hunter and slower Warden variants, armed from wave 3 |
+
+Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes, movement and introduction banners provide additional cues.
+
 ## Run locally
 
 Use Node.js 22 or later.

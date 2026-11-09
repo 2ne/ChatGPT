@@ -154,6 +154,8 @@ export function createAudio(settings, listener) {
       if (!ctx) return;
       voice(620, 490, 0.16, 0.16, { t: ctx.currentTime + 0.035 });
     },
+    enemyCharge(pos) { voice(180, 380, 0.65, 0.07, { out: spatial(pos), attack: 0.2 }); },
+    enemyShot(pos) { voice(420, 110, 0.18, 0.16, { out: spatial(pos), type: 'triangle' }); },
     reloadOut(duration) {
       if (!ctx) return;
       cancelReload();
