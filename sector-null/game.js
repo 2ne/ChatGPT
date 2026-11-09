@@ -1412,13 +1412,13 @@ function updateHUD() {
   // power-up time left as a clock: 0:10 … 0:01
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
-  if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}<small>DOUBLE DAMAGE${state.pDamage > 10 ? ' · EXTENDED' : ''}</small></div>`;
-  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}<small>NO RECHARGING${state.pAmmo > 8 ? ' · EXTENDED' : ''}</small></div>`;
+  if (state.pDamage > 0) pu += `<div style="color:#ffa64c">DOUBLE DAMAGE ${clock(state.pDamage)}<small>${state.pDamage > 10 ? 'EXTENDED' : '2× OUTPUT'}</small></div>`;
+  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">UNLIMITED AMMO ${clock(state.pAmmo)}<small>${state.pAmmo > 8 ? 'EXTENDED' : 'NO RELOAD'}</small></div>`;
   if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
   hud.powerups.innerHTML = pu;
   const infinite = state.pAmmo > 0;
   const lastCharge = !infinite && !state.reloading && state.mag === 1;
-  const cellStatus = state.reloading ? 'RECHARGING…' : infinite ? 'INFINITE CELL' : lastCharge ? 'LAST CHARGE' : 'CELL READY';
+  const cellStatus = state.reloading ? 'RECHARGING…' : infinite ? 'UNLIMITED AMMO' : lastCharge ? 'LAST CHARGE' : 'CELL READY';
   if (hud.cellStatus.textContent !== cellStatus) hud.cellStatus.textContent = cellStatus;
   hud.ammoWrap.classList.toggle('low-charge', lastCharge);
   hud.ammoWrap.classList.toggle('recharging', state.reloading);
@@ -2305,9 +2305,9 @@ function killDrone(z, idx) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '+', color: 0xff78b5, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
+  { id: 'med',  name: '+1 SHIELD',      detail: 'Restores one shield', icon: '+', color: 0xff78b5, weight: 40 },
+  { id: 'dmg',  name: 'DOUBLE DAMAGE',  detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'UNLIMITED AMMO', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
 // Teach each item once per run; saved browser history must not suppress a lesson.
 const seenDrops = new Set();
@@ -2665,22 +2665,22 @@ function updateEquipment(dt) {
 // card while it would do nothing. `stat` returns [now, after] for the card.
 const UPGRADES = [
   { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'Deploy one automatic companion', max: 3, stat: s => [s.upgrades.bot ? helperDamage(s.upgrades.bot).toFixed(1) : 'Shot damage', `${helperDamage((s.upgrades.bot || 0) + 1).toFixed(1)} damage`], apply: () => {} },
-  { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botBomb, stat: s => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
-  { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botGun, stat: s => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
-  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: s => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
-  { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: s => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
-  { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: s => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
-  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Getting hit blasts nearby enemies', max: 3, stat: s => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
-  { id: 'mag',    cat: 'handling',  name: 'HIGH-CAP CELL',  desc: '+4 pulses per cell',     max: 5, stat: s => [s.magSize, s.magSize + 4 + ' pulses'],                            apply: s => { s.magSize += 4; s.mag = s.magSize; } },
-  { id: 'reload', cat: 'handling',  name: 'HOT SWAP',   desc: 'reload 25% faster',          max: 4, stat: s => [s.reloadTime.toFixed(2), (s.reloadTime * 0.75).toFixed(2) + 's'], apply: s => { s.reloadTime *= 0.75; } },
-  { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+50% pulse damage',         max: 6, stat: s => [s.damage + '×', s.damage + 0.5 + '×'],                       apply: s => { s.damage += 0.5; } },
-  { id: 'rate',   cat: 'firepower', name: 'RAPID CYCLER',  desc: 'fire 20% faster',            max: 4, stat: s => [(1 / s.fireRate).toFixed(1), (1 / (s.fireRate * 0.8)).toFixed(1) + '/s'], apply: s => { s.fireRate *= 0.8; } },
-  { id: 'pierce', cat: 'firepower', name: 'PIERCING',      desc: 'shots pierce +1 drone', max: 3, stat: s => [s.pierce, s.pierce + 1 + ' thru'],                     apply: s => { s.pierce++; } },
-  { id: 'spread', cat: 'firepower', name: 'SPLIT BEAM',      desc: '+1 pulse per shot', max: 3, stat: s => [1 + s.spread, 2 + s.spread + ' per shot'],             apply: s => { s.spread++; } },
-  { id: 'hp',     cat: 'survival',  name: 'SHIELD ARRAY',    desc: '+1 shield and recharge it', max: 3, stat: s => [s.maxHp, s.maxHp + 1 + ' max hp'],                         apply: s => { s.maxHp++; s.hp++; } },
-  { id: 'speed',  cat: 'survival',  name: 'MOTION SERVO',    desc: 'move 12% faster',            max: 3, stat: s => [Math.round(s.speed / 6.2 * 100) + '%', Math.round(s.speed * 1.12 / 6.2 * 100) + '%'], apply: s => { s.speed *= 1.12; } },
-  { id: 'luck',   cat: 'fortune',   name: 'SALVAGE SCANNER',     desc: 'more supply drops', max: 3, stat: s => [Math.round((DROP_CHANCE + s.dropBonus) * 100) + '%', Math.round((DROP_CHANCE + s.dropBonus + 0.03) * 100) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
-  { id: 'heal',   cat: 'survival',  name: 'SHIELD RESET',      desc: 'restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
+  { id: 'botGun', cat: 'engineer', name: 'DOUBLE BOT FIRE', desc: 'Twin guns • locks out bombs', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botBomb, stat: s => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
+  { id: 'botBomb', cat: 'engineer', name: 'BOT BOMBS', desc: 'Area blasts • locks out twin guns', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botGun, stat: s => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
+  { id: 'mine', cat: 'engineer', name: 'DROP MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: s => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
+  { id: 'shock', cat: 'engineer', name: 'SLOWING MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: s => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
+  { id: 'regen', cat: 'survival', name: 'REGEN SHIELD', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: s => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
+  { id: 'pulse', cat: 'survival', name: 'BLAST ON HIT', desc: 'Getting hit blasts nearby enemies', max: 3, stat: s => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
+  { id: 'mag',    cat: 'handling',  name: 'INCREASE AMMO',  desc: '+4 shots per magazine',     max: 5, stat: s => [s.magSize, s.magSize + 4 + ' shots'],                            apply: s => { s.magSize += 4; s.mag = s.magSize; } },
+  { id: 'reload', cat: 'handling',  name: 'FASTER RELOAD',  desc: 'Reload 25% faster',          max: 4, stat: s => [s.reloadTime.toFixed(2), (s.reloadTime * 0.75).toFixed(2) + 's'], apply: s => { s.reloadTime *= 0.75; } },
+  { id: 'damage', cat: 'firepower', name: 'INCREASE DAMAGE', desc: '+50% shot damage',         max: 6, stat: s => [s.damage + '×', s.damage + 0.5 + '×'],                       apply: s => { s.damage += 0.5; } },
+  { id: 'rate',   cat: 'firepower', name: 'FIRE FASTER',    desc: 'Fire 20% faster',            max: 4, stat: s => [(1 / s.fireRate).toFixed(1), (1 / (s.fireRate * 0.8)).toFixed(1) + '/s'], apply: s => { s.fireRate *= 0.8; } },
+  { id: 'pierce', cat: 'firepower', name: 'PIERCE SHOTS',   desc: 'Shots pierce +1 drone', max: 3, stat: s => [s.pierce, s.pierce + 1 + ' thru'],                     apply: s => { s.pierce++; } },
+  { id: 'spread', cat: 'firepower', name: 'EXTRA SHOT',     desc: '+1 shot per trigger pull', max: 3, stat: s => [1 + s.spread, 2 + s.spread + ' per shot'],             apply: s => { s.spread++; } },
+  { id: 'hp',     cat: 'survival',  name: '+1 SHIELD',      desc: '+1 max shield and refill it', max: 3, stat: s => [s.maxHp, s.maxHp + 1 + ' max'],                         apply: s => { s.maxHp++; s.hp++; } },
+  { id: 'speed',  cat: 'survival',  name: 'MOVE FASTER',    desc: 'Move 12% faster',            max: 3, stat: s => [Math.round(s.speed / 6.2 * 100) + '%', Math.round(s.speed * 1.12 / 6.2 * 100) + '%'], apply: s => { s.speed *= 1.12; } },
+  { id: 'luck',   cat: 'fortune',   name: 'MORE DROPS',     desc: 'More supply drops', max: 3, stat: s => [Math.round((DROP_CHANCE + s.dropBonus) * 100) + '%', Math.round((DROP_CHANCE + s.dropBonus + 0.03) * 100) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
+  { id: 'heal',   cat: 'survival',  name: 'FULL SHIELDS',   desc: 'Restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
 ];
 const UPGRADE_CATS = {
   engineer: '#a7a1ff',
