@@ -10,7 +10,7 @@
 <canvas id="game" aria-label="Reactor defence arena"></canvas>
 <div id="bootError" class="overlay hidden" role="alert">Sector Null needs a browser with WebGL enabled.</div>
 <div id="touchControls" class="hidden">
-  <button type="button" id="touchReload">Reload</button>
+  <button type="button" id="touchReload">Recharge</button>
   <button type="button" id="touchPause">Pause</button>
   <div class="stick" id="moveStick" aria-hidden="true"></div>
   <div class="stick" id="aimStick" aria-hidden="true"></div>
@@ -41,9 +41,10 @@
       <path fill="none" stroke="#c4f2ff" stroke-opacity=".65" d="M58 28h26m6 0h18m6 0h12m19 4h17"/>
       <g id="weaponMods" fill="#83cbe6" stroke="#c4f2ff" stroke-width="1.2" stroke-linejoin="round"></g>
     </svg>
-    <div id="mag" role="img" aria-label="Magazine"></div>
+    <div id="cellStatus" role="status" aria-live="polite">CELL READY</div>
+    <div id="mag" role="img" aria-label="Energy cell"></div>
     <div id="reloadBar"><div id="reloadFill"></div></div>
-    <div id="reloadHint">[R] RELOAD</div>
+    <div id="reloadHint">[R] RECHARGE</div>
   </div>
 
   <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
@@ -101,7 +102,7 @@
       <div class="crow"><span class="caps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><b>MOVE</b></div>
       <div class="crow"><span class="caps"><kbd class="wide">MOUSE</kbd></span><b>AIM</b></div>
       <div class="crow"><span class="caps"><kbd class="wide">CLICK</kbd></span><b>SHOOT</b><em>hold to keep firing</em></div>
-      <div class="crow"><span class="caps"><kbd>R</kbd></span><b>RELOAD</b></div>
+      <div class="crow"><span class="caps"><kbd>R</kbd></span><b>RECHARGE</b></div>
       <div class="crow"><span class="caps"><kbd class="wide">ESC</kbd></span><b>PAUSE</b></div>
       <div class="crow"><span class="caps"><kbd>M</kbd></span><b>MUTE</b></div>
     </div>

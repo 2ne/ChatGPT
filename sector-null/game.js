@@ -1233,6 +1233,8 @@ const hud = {
   weaponIcon: document.getElementById('weaponIcon'),
   weaponMods: document.getElementById('weaponMods'),
   mag: document.getElementById('mag'),
+  ammoWrap: document.getElementById('ammoWrap'),
+  cellStatus: document.getElementById('cellStatus'),
   reloadBar: document.getElementById('reloadBar'),
   reloadFill: document.getElementById('reloadFill'),
   flash: document.getElementById('flash'),
@@ -1279,7 +1281,13 @@ function updateHUD() {
   if (state.pDamage > 0) pu += `<div style="color:#ff7a2e">OVERCHARGE ${clock(state.pDamage)}</div>`;
   if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}</div>`;
   hud.powerups.innerHTML = pu;
-  const magLabel = `Magazine: ${state.mag} of ${state.magSize}`;
+  const infinite = state.pAmmo > 0;
+  const lastCharge = !infinite && !state.reloading && state.mag === 1;
+  const cellStatus = state.reloading ? 'RECHARGING…' : infinite ? 'INFINITE CELL' : lastCharge ? 'LAST CHARGE' : 'CELL READY';
+  if (hud.cellStatus.textContent !== cellStatus) hud.cellStatus.textContent = cellStatus;
+  hud.ammoWrap.classList.toggle('low-charge', lastCharge);
+  hud.ammoWrap.classList.toggle('recharging', state.reloading);
+  const magLabel = infinite ? 'Unlimited charges' : `Cell: ${state.mag} of ${state.magSize} charges`;
   if (hud.mag.getAttribute('aria-label') !== magLabel) {
     hud.mag.setAttribute('aria-label', magLabel);
     hud.mag.innerHTML = '<span class="live"></span>'.repeat(state.mag)
@@ -1335,10 +1343,10 @@ function showBanner(text, sub, dur = 1.6) {
 // WEAPON
 // ===================================================================
 function startReload() {
-  if (!state.running || state.reloading || state.mag === state.magSize) return;
+  if (!state.running || state.reloading || state.pAmmo > 0 || state.mag === state.magSize) return;
   state.reloading = true;
   state.reloadT = 0;
-  audio.reloadOut();
+  audio.reloadOut(state.reloadTime);
 }
 function finishReload() {
   state.reloading = false;
@@ -1348,15 +1356,12 @@ function finishReload() {
 
 function fire() {
   if (state.fireCd > 0 || state.reloading || state.mag <= 0 || !state.running) return;
-  if (state.pAmmo <= 0) {
-    state.mag--;
-    if (state.mag <= 0) startReload();
-  }
-  state.fireCd = state.fireRate;
-
   const aim = new THREE.Vector3(aimPoint.x - player.position.x, 0, aimPoint.z - player.position.z);
   if (aim.lengthSq() < 1e-4) return;
   aim.normalize();
+  const charge = state.pAmmo > 0 ? 1 : (state.mag - 1) / Math.max(1, state.magSize - 1);
+  if (state.pAmmo <= 0) state.mag--;
+  state.fireCd = state.fireRate;
 
   // spawn at muzzle world position; SPLIT BEAM fans extra bullets around the aim line
   const mp = new THREE.Vector3();
@@ -1376,7 +1381,9 @@ function fire() {
 
   muzzleFlash(state.pDamage > 0);
   state.shake = Math.max(state.shake, 0.12);
-  audio.shot(state.pDamage > 0, state.spread);
+  audio.shot(state.pDamage > 0, state.spread, charge);
+  if (state.pAmmo <= 0 && state.mag === 1) audio.lowCharge();
+  if (state.mag <= 0) startReload();
 }
 
 // ===================================================================
@@ -1971,7 +1978,7 @@ function collect(type) {
   toastQueue.push({ text: type.name, color: type.tint, pickup: type });
   if (type.id === 'med') state.hp = Math.min(state.maxHp, state.hp + 1);
   else if (type.id === 'dmg') state.pDamage = 10;
-  else if (type.id === 'ammo') { state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }
+  else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }
 }
 
 function updateDrops(dt) {
@@ -2188,6 +2195,7 @@ function startWave(n) {
 // ===================================================================
 // clear everything a run leaves lying around
 function clearRun() {
+  audio.cancelReload();
   for (const b of bullets) scene.remove(b);
   for (const z of drones) scene.remove(z);
   for (const d of drops) scene.remove(d);

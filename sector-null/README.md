@@ -23,13 +23,15 @@ Supply pickup notices appear one at a time. The first pickup of each type shows 
 
 The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
 
+The pulse rifle uses a short energy sweep with a quieter noise transient. Shot pitch gradually drops by up to three semitones as the cell empties. At one remaining charge, a low-energy beep and amber LAST CHARGE label warn you; recharging shows RECHARGING… and a progress bar. A power-down tone leads into a rising charge hum timed to the recharge duration, followed by a ready chirp and cyan CELL READY label. These labels also appear on mobile. Infinite Cell keeps full-energy shot pitch and suppresses low-charge warnings and manual recharging. Pausing freezes the charge audio; interrupted recharges stop their hum.
+
 Destroyed drones burst into sparks and scattered parts. Reduced-motion settings suppress the blast flash and cut the spark count.
 
 | Action | Keyboard and mouse | Touch |
 | --- | --- | --- |
 | Move | WASD or arrow keys | Drag on the left side |
 | Aim and fire | Mouse and left click | Drag and hold on the right side |
-| Reload | R | Reload button |
+| Recharge | R | Recharge button |
 | Pause | Esc or P | Pause button |
 | Choose an upgrade | 1–3 or click | Tap a card |
 | Mute | M or volume settings | Volume settings |

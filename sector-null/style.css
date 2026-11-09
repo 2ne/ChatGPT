@@ -76,6 +76,10 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   #mag span { flex: 0 1 5px; height: 9px; border-radius: 1px; }
   #mag .empty { background: #29414e; }
   #mag .live { background: #a4e4fa; box-shadow: 0 0 5px #64dfee60; }
+  #cellStatus { min-height: 18px; margin: 4px 0 6px; color: #a4e4fa; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+  #ammoWrap.low-charge, #ammoWrap.recharging { border-bottom-color: #ffbd78; }
+  #ammoWrap.low-charge #cellStatus, #ammoWrap.recharging #cellStatus { color: #ffbd78; }
+  #ammoWrap.low-charge #mag .live { background: #ffbd78; box-shadow: 0 0 8px #ffbd7880; }
   #reloadBar {
     height: 6px; margin-top: 6px; background: #1a1c22;
     border: 1px solid #2c2f37; opacity: 0; transition: opacity .12s;

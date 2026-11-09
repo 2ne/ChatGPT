@@ -9,6 +9,16 @@ export function createAudio(settings, listener) {
   let muted = false;
   let paused = false;
   let titleMusic = false;
+  let recharge;
+
+  function cancelReload() {
+    if (!recharge) return;
+    const { oscillator, gain } = recharge;
+    gain.gain.cancelScheduledValues(ctx.currentTime);
+    gain.gain.setTargetAtTime(0, ctx.currentTime, 0.015);
+    oscillator.stop(ctx.currentTime + 0.08);
+    recharge = null;
+  }
 
   function ensure() {
     if (!ctx) {
@@ -76,6 +86,7 @@ export function createAudio(settings, listener) {
     if (echo) envelope.connect(reverb);
     oscillator.start(t);
     oscillator.stop(t + duration + 0.015);
+    oscillator.onended = () => { oscillator.disconnect(); envelope.disconnect(); };
   }
 
   function grain(freq, duration, volume, out = master, type = 'bandpass') {
@@ -105,10 +116,11 @@ export function createAudio(settings, listener) {
   }
 
   return {
-    ensure, applyVolume,
+    ensure, applyVolume, cancelReload,
     setTitleMusic(on) {
       titleMusic = on;
       if (on) {
+        cancelReload();
         score?.stop();
         ensure();
       } else {
@@ -130,13 +142,42 @@ export function createAudio(settings, listener) {
       applyVolume();
       return muted;
     },
-    shot(hot, spread) {
-      voice(hot ? 510 : 390, 47, 0.16, 0.31 + spread * 0.03, { type: 'triangle' });
-      voice(1950, hot ? 190 : 380, 0.105, 0.115, { type: 'sawtooth', echo: true });
-      grain(3600, 0.085, 0.24);
+    shot(hot, spread, charge = 1) {
+      // A subtle three-semitone descent across the cell, without losing punch.
+      const pitch = 2 ** ((Math.max(0, Math.min(1, charge)) - 1) * 3 / 12);
+      voice((hot ? 1250 : 1450) * pitch, 430 * pitch, 0.12, 0.2, { type: 'sine' });
+      voice((hot ? 280 : 240) * pitch, 95 * pitch, 0.095, 0.23 + Math.min(spread, 3) * 0.015, { type: 'triangle' });
+      grain(4600, 0.035, 0.07);
     },
-    reloadOut() { grain(2400, 0.14, 0.24); voice(190, 95, 0.16, 0.11, { type: 'triangle' }); },
-    reloadIn() { grain(1500, 0.1, 0.23); signal([61, 73], 0.06, 0.048); },
+    lowCharge() {
+      if (!ctx) return;
+      voice(620, 490, 0.16, 0.16, { t: ctx.currentTime + 0.035 });
+    },
+    reloadOut(duration) {
+      if (!ctx) return;
+      cancelReload();
+      voice(540, 150, 0.18, 0.2);
+      const t = ctx.currentTime;
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.frequency.setValueAtTime(180, t);
+      oscillator.frequency.exponentialRampToValueAtTime(740, t + duration);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.13, t + Math.min(0.16, duration / 3));
+      gain.gain.linearRampToValueAtTime(0.18, t + duration);
+      gain.gain.linearRampToValueAtTime(0, t + duration + 0.06);
+      oscillator.connect(gain).connect(master);
+      oscillator.start(t);
+      oscillator.stop(t + duration + 0.08);
+      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+      recharge = { oscillator, gain };
+    },
+    reloadIn() {
+      cancelReload();
+      if (!ctx) return;
+      voice(880, 880, 0.12, 0.19);
+      voice(1320, 1320, 0.16, 0.16, { t: ctx.currentTime + 0.075 });
+    },
     hit(pos) { const out = spatial(pos); grain(2200, 0.08, 0.26, out); voice(290, 87, 0.1, 0.21, { out, type: 'triangle' }); },
     explode(pos) {
       const out = spatial(pos);
@@ -154,7 +195,7 @@ export function createAudio(settings, listener) {
     shatter(pos) { const out = spatial(pos); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
     waveClear() { score?.clearWave(); },
     alarm(level) { signal(level > 0.8 ? [45, 52, 45] : [45, 52], 0.075, 0.16); },
-    death() { score?.stop(); signal([57, 54, 49, 35], 0.19, 0.17); },
+    death() { cancelReload(); score?.stop(); signal([57, 54, 49, 35], 0.19, 0.17); },
     pickup(id) { signal(id === 'med' ? [66, 73, 78] : [61, 69, 73], 0.11, 0.06); },
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },
