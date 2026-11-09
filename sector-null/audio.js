@@ -138,7 +138,6 @@ export function createAudio(settings, listener) {
     scoreTime() { return ctx?.state === 'running' ? ctx.currentTime : null; },
     queueWave(wave, delay) { return score?.queueWave(wave, delay) ?? null; },
     intensify() { score?.intensify(); },
-    setCombatRate(rate) { score?.setCombatRate(rate); },
     toggleMute() {
       ensure();
       muted = !muted;

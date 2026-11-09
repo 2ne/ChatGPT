@@ -3410,12 +3410,6 @@ function update(dt) {
       updateDrops(dt);
       updateEmeralds(dt);
       if (state.intermission <= 0) state.waveTime += dt;
-      // Combat music edges up as more bots make it onto the deck.
-      let insideBots = 0;
-      for (const d of drones) if (inside(d.position)) insideBots++;
-      audio.setCombatRate(1 + Math.min(0.18, insideBots * 0.015));
-    } else {
-      audio.setCombatRate(1);
     }
 
     // --- waves ---
