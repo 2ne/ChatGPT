@@ -1,10 +1,13 @@
+import { createScore } from './score.js';
+
 const midiHz = note => 440 * 2 ** ((note - 69) / 12);
 
 export function createAudio(settings, listener) {
   const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
   soundtrack.loop = true;
-  let ctx, master, musicBus, reverb, noise;
+  let ctx, master, musicBus, reverb, noise, score;
   let muted = false;
+  let paused = false;
   let titleMusic = false;
 
   function ensure() {
@@ -19,6 +22,7 @@ export function createAudio(settings, listener) {
       musicBus.gain.value = 0;
       ctx.createMediaElementSource(soundtrack).connect(musicBus);
       musicBus.connect(master);
+      score = createScore(ctx, musicBus);
       reverb = ctx.createDelay(0.5);
       reverb.delayTime.value = 0.115;
       const feedback = ctx.createGain();
@@ -34,7 +38,7 @@ export function createAudio(settings, listener) {
 
       applyVolume();
     }
-    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    if (!paused && ctx.state !== 'running') ctx.resume().catch(() => {});
     if (titleMusic && soundtrack.paused) soundtrack.play().catch(() => {});
   }
 
@@ -104,12 +108,22 @@ export function createAudio(settings, listener) {
     ensure, applyVolume,
     setTitleMusic(on) {
       titleMusic = on;
-      if (on) ensure();
-      else {
+      if (on) {
+        score?.stop();
+        ensure();
+      } else {
         soundtrack.pause();
         soundtrack.currentTime = 0;
       }
     },
+    setPaused(on) {
+      paused = on;
+      if (on) ctx?.suspend().catch(() => {});
+      else ensure();
+    },
+    scoreTime() { return ctx?.state === 'running' ? ctx.currentTime : null; },
+    queueWave(wave, delay) { return score?.queueWave(wave, delay) ?? null; },
+    intensify() { score?.intensify(); },
     toggleMute() {
       ensure();
       muted = !muted;
@@ -138,10 +152,9 @@ export function createAudio(settings, listener) {
     crack(pos) { grain(4300, 0.14, 0.3, spatial(pos)); },
     doorBreak(pos) { const out = spatial(pos); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
     shatter(pos) { const out = spatial(pos); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
-    waveStart(n) { signal([42, 49, n > 4 ? 56 : 54], 0.16, 0.12); },
-    waveClear() { signal([54, 61, 66, 73], 0.13); },
+    waveClear() { score?.clearWave(); },
     alarm(level) { signal(level > 0.8 ? [45, 52, 45] : [45, 52], 0.075, 0.16); },
-    death() { signal([57, 54, 49, 35], 0.19, 0.17); },
+    death() { score?.stop(); signal([57, 54, 49, 35], 0.19, 0.17); },
     pickup(id) { signal(id === 'med' ? [66, 73, 78] : [61, 69, 73], 0.11, 0.06); },
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },

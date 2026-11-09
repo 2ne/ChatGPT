@@ -6,6 +6,7 @@ import '@fontsource/oxanium/latin-700.css';
 import './style.css';
 import './title.css';
 import { createAudio } from './audio.js';
+import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
@@ -1850,6 +1851,12 @@ function killDrone(z, idx) {
   scene.remove(z);
   drones.splice(idx, 1);
   state.kills++;
+  if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
+    const healed = state.hp < state.maxHp;
+    state.hp = Math.min(state.maxHp, state.hp + 1);
+    audio.waveClear();
+    openPicker(healed);
+  }
 }
 
 // ===================================================================
@@ -2036,7 +2043,7 @@ function openPicker(healed) {
   const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
   for (let i = pool.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [pool[i], pool[j]] = [pool[j], pool[i]]; }
   offered = pool.slice(0, 3);
-  if (!offered.length) { state.intermission = 3.2; return; } // everything maxed out
+  if (!offered.length) { queueWave(3.2); return; } // everything maxed out
   state.choosing = true;
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
@@ -2071,7 +2078,7 @@ function choose(i) {
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
   choose._t = setTimeout(() => hud.picker.classList.add('hidden'), 320);
-  state.intermission = 2.0;
+  queueWave(2.0);
   toastQueue.push({ text: u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
@@ -2147,6 +2154,13 @@ function updateDroneBlasts(dt) {
 // ===================================================================
 // WAVES
 // ===================================================================
+let waveAt = null;
+
+function queueWave(delay) {
+  state.intermission = delay;
+  waveAt = audio.queueWave(state.wave + 1, delay);
+}
+
 function startWave(n) {
   state.wave = n;
   // Drones toughen steadily but slower than upgrades let the player scale, so
@@ -2161,7 +2175,6 @@ function startWave(n) {
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Rogue security units inbound', 3: 'Reactor load rising', 7: 'Containment warning', 12: 'Reactor at critical load' };
   showBanner('WAVE ' + n, omens[n] || 'Hostile signatures detected');
-  audio.waveStart(n);
 }
 
 // ===================================================================
@@ -2198,11 +2211,11 @@ function resetGame(keep = false) {
   });
   updateWeaponIcon();
   if (keep) {
-    state.intermission = SWOOP_TIME * 0.85;
+    queueWave(SWOOP_TIME * 0.85);
     for (const z of drones) Object.assign(z.userData, { cross: null, idle: 0, via: -1 });
   } else {
     player.position.set(0, 0, 0);
-    startWave(1);
+    queueWave(WAVE_LEAD_IN);
   }
   updateHUD();
 }
@@ -2222,6 +2235,7 @@ function setPaused(on) {
   if (on && !state.running) return; // only a live run can pause
   if (on === state.paused) return;
   state.paused = on;
+  audio.setPaused(on);
   document.body.classList.toggle('paused', on);
   syncTouchControls();
   firing = false;
@@ -2695,7 +2709,8 @@ function update(dt) {
     if (state.choosing) {
       // wave cleared — waiting on the upgrade pick
     } else if (state.intermission > 0) {
-      state.intermission -= dt;
+      const scoreTime = audio.scoreTime();
+      state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
       if (state.intermission <= 0) startWave(state.wave + 1);
     } else {
       if (state.toSpawn > 0) {
@@ -2704,14 +2719,9 @@ function update(dt) {
           // spawn 1-2 at a time, faster on higher waves
           const burst = 1 + (Math.random() < Math.min(0.6, state.wave * 0.08) ? 1 : 0);
           for (let i = 0; i < burst && state.toSpawn > 0; i++) { spawnDrone(); state.toSpawn--; }
+          if (state.wave === 4 && drones.length >= 8) audio.intensify();
           state.spawnTimer = Math.max(0.35, 1.4 - state.wave * 0.08);
         }
-      } else if (drones.length === 0) {
-        // wave cleared
-        const healed = state.hp < state.maxHp;
-        state.hp = Math.min(state.maxHp, state.hp + 1);
-        audio.waveClear();
-        openPicker(healed);
       }
     }
 
