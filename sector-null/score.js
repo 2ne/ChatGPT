@@ -2,16 +2,14 @@ const CLIPS = {
   early: new URL('./assets/score/early-waves.wav', import.meta.url).href,
   late: new URL('./assets/score/late-waves.wav', import.meta.url).href,
   ability: new URL('./assets/score/ability-select.wav', import.meta.url).href,
-  start: new URL('./assets/score/wave-start.wav', import.meta.url).href,
-  clear: new URL('./assets/score/wave-clear.wav', import.meta.url).href,
 };
 
 export const WAVE_LEAD_IN = 0.83;
-const OPENING_CUE_VOLUME = 0.45;
-const CLEAR_FADE = 0.4;
-const ABILITY_ENTRY = 2.2;
+const CLEAR_FADE = 0.9;
+const ABILITY_VOLUME = 0.38;
+const ABILITY_CUTOFF = 1000;
 const BAR = 1.65704;
-const COMBAT_CROSSFADE = 0.08;
+const COMBAT_CROSSFADE = 0.25;
 const LATE_WAVE = 5;
 
 export function createScore(ctx, musicBus) {
@@ -35,20 +33,25 @@ export function createScore(ctx, musicBus) {
 
   const tracks = new Set();
   let ability, combat;
-  let clearedAt = -Infinity;
 
   function release(track) {
     tracks.delete(track);
     track.source?.disconnect();
+    track.filter.disconnect();
     track.gain.disconnect();
   }
 
-  function play(name, start, { loop = false, phase = start, fadeIn = 0, volume = 1 } = {}) {
+  function play(name, start, { loop = false, phase = start, fadeIn = 0, volume = 1, cutoff = 20000 } = {}) {
     const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = Math.min(cutoff, ctx.sampleRate / 2);
+    filter.Q.value = 0.7;
+    filter.connect(gain);
     gain.connect(level);
     gain.gain.setValueAtTime(fadeIn ? 0 : volume, start);
     if (fadeIn) gain.gain.linearRampToValueAtTime(volume, start + fadeIn);
-    const track = { name, start, phase, fadeIn, volume, gain, source: null, end: Infinity, fadeAt: Infinity };
+    const track = { name, start, phase, fadeIn, volume, gain, filter, source: null, end: Infinity, fadeAt: Infinity };
     tracks.add(track);
     buffers[name].then(buffer => {
       if (!tracks.has(track)) return;
@@ -61,7 +64,7 @@ export function createScore(ctx, musicBus) {
       const source = ctx.createBufferSource();
       source.buffer = buffer;
       source.loop = loop;
-      source.connect(gain);
+      source.connect(filter);
       source.onended = () => release(track);
       track.source = source;
       source.start(at, loop ? elapsed % buffer.duration : elapsed);
@@ -90,11 +93,10 @@ export function createScore(ctx, musicBus) {
 
   return {
     queueWave(wave, delay) {
-      const start = Math.max(ctx.currentTime + delay, clearedAt + ABILITY_ENTRY + WAVE_LEAD_IN);
-      const cue = start - WAVE_LEAD_IN;
-      fadeOut(ability, cue, WAVE_LEAD_IN);
-      play('start', cue, { volume: wave === 1 ? OPENING_CUE_VOLUME : 1 });
-      combat = play(wave >= LATE_WAVE ? 'late' : 'early', start, { loop: true });
+      const start = ctx.currentTime + delay;
+      // Keep the breather calm until enemies arrive; no overlapping wave stingers.
+      fadeOut(ability, start, CLEAR_FADE);
+      combat = play(wave >= LATE_WAVE ? 'late' : 'early', start, { loop: true, fadeIn: CLEAR_FADE });
       return start;
     },
     intensify() {
@@ -105,13 +107,14 @@ export function createScore(ctx, musicBus) {
       combat = play('late', nextBar, { loop: true, phase, fadeIn: COMBAT_CROSSFADE });
     },
     clearWave() {
-      clearedAt = ctx.currentTime;
-      play('clear', clearedAt);
+      const clearedAt = ctx.currentTime;
       for (const track of tracks) {
-        if (track.name === 'early' || track.name === 'late') fadeOut(track, clearedAt, CLEAR_FADE);
+        fadeOut(track, clearedAt, CLEAR_FADE);
       }
       combat = null;
-      ability = play('ability', clearedAt + ABILITY_ENTRY, { loop: true });
+      ability = play('ability', clearedAt, {
+        loop: true, fadeIn: CLEAR_FADE, volume: ABILITY_VOLUME, cutoff: ABILITY_CUTOFF,
+      });
     },
     stop() {
       for (const track of tracks) {
@@ -119,7 +122,6 @@ export function createScore(ctx, musicBus) {
         release(track);
       }
       combat = ability = null;
-      clearedAt = -Infinity;
     },
   };
 }
