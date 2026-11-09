@@ -19,7 +19,7 @@ npm run dev
 
 The gameplay score uses the full-length loops in `assets/score/`. Wave-start and wave-clear stingers are disabled to avoid overlapping cues. Clearing a wave crossfades over 0.9 seconds into the upgrade loop at 38% gain with a 1 kHz low-pass filter, giving the break a quieter, softer sound. Combat music fades back in only when the next wave starts. Waves 1–4 use the early loop and wave 5 onward uses the late loop. Wave 4 switches on the next bar with a short crossfade if eight drones are alive at once. Pausing freezes the music and wave timing together.
 
-Supply pickup notices appear one at a time. Each drop type shows a short effect description the first time its notice appears, and the game remembers discovered types in the browser.
+Supply pickup notices appear one at a time. The first pickup of each type shows an explanation beneath its name for 4.5 seconds: shields restore 1 shield, Overcharge doubles damage for 10 seconds, and Infinite Cell refills the magazine and allows firing without reloading for 8 seconds. Later pickups show only the name. The game remembers each explanation in this browser after its full reading time; interrupted hints can appear again next run. Existing players see the expanded explanations once after this update.
 
 The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
 

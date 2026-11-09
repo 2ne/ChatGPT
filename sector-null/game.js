@@ -1294,11 +1294,18 @@ function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; s
 
 const toastQueue = [];
 let toastTime = 0;
+let activePickupHint = null;
 
 function updateToast(dt) {
   toastTime = Math.max(0, toastTime - dt);
   if (toastTime > 0) return;
   if (hud.toast.style.opacity === '1') {
+    // Remember a lesson only after the player has had its full reading time.
+    if (activePickupHint) {
+      seenDrops.add(activePickupHint);
+      store.set(PICKUP_HINTS_KEY, [...seenDrops]);
+      activePickupHint = null;
+    }
     hud.toast.style.opacity = 0;
     toastTime = 0.25; // let the current notice fade before replacing it
     return;
@@ -1312,11 +1319,8 @@ function updateToast(dt) {
   hud.toastDetail.textContent = firstPickup ? pickup.detail : '';
   hud.toast.style.color = color;
   hud.toast.style.opacity = 1;
-  toastTime = firstPickup ? 2.2 : 1.4;
-  if (firstPickup) {
-    seenDrops.add(pickup.id);
-    store.set('seen-drops', [...seenDrops]);
-  }
+  toastTime = firstPickup ? 4.5 : 1.4;
+  activePickupHint = firstPickup ? pickup.id : null;
 }
 
 function showBanner(text, sub, dur = 1.6) {
@@ -1863,11 +1867,13 @@ function killDrone(z, idx) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores 1 shield', icon: '+', color: 0xff78b5, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage',    icon: '↑', color: 0xffa64c, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo',   icon: '∞', color: 0x76bcf0, weight: 25 },
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores 1 shield, up to your maximum.', icon: '+', color: 0xff78b5, weight: 40 },
+  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Deal double damage for 10 seconds.', icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'INFINITE CELL', detail: 'Refills your magazine. Fire without reloading for 8 seconds.', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
-const seenDrops = new Set(store.get('seen-drops', []));
+// Fresh lesson history lets existing players see the expanded explanations once.
+const PICKUP_HINTS_KEY = 'pickup-hints-v2';
+const seenDrops = new Set(store.get(PICKUP_HINTS_KEY, []));
 const DROP_MODELS = {
   med: [  // first-aid case, crosses on top and front
     [0.52, 0.34, 0.36, 0, 0, 0, 0xe6e2da, 0, 0, 0, 0.05],
@@ -2190,6 +2196,7 @@ function clearRun() {
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   toastQueue.length = 0;
   toastTime = 0;
+  activePickupHint = null;
   hud.toast.style.opacity = 0;
   hud.picker.classList.add('hidden');
 }
