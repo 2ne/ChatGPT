@@ -1,16 +1,12 @@
 const midiHz = note => 440 * 2 ** ((note - 69) / 12);
-const PROGRESSION = [
-  [35, 54, 57, 61], [35, 52, 54, 62], [31, 50, 54, 57], [33, 52, 57, 59],
-];
-const MOTIF = [66, 69, 73, 71, 66, 62, 69, 64];
 
 export function createAudio(settings, listener) {
+  const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
+  soundtrack.loop = true;
   let ctx, master, musicBus, reverb, noise, hum, humGain;
   let muted = false;
   let paused = false;
-  let mode = 'title';
-  let nextBeat = 0;
-  let beat = 0;
+  let titleMusic = false;
 
   function ensure() {
     if (!ctx) {
@@ -21,6 +17,8 @@ export function createAudio(settings, listener) {
       const compressor = ctx.createDynamicsCompressor();
       master.connect(compressor).connect(ctx.destination);
       musicBus = ctx.createGain();
+      musicBus.gain.value = 0;
+      ctx.createMediaElementSource(soundtrack).connect(musicBus);
       musicBus.connect(master);
       reverb = ctx.createDelay(0.5);
       reverb.delayTime.value = 0.115;
@@ -42,16 +40,16 @@ export function createAudio(settings, listener) {
       humGain.gain.value = 0.045;
       hum.connect(humGain).connect(master);
       hum.start();
-      nextBeat = ctx.currentTime + 0.05;
       applyVolume();
     }
     if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    if (titleMusic && soundtrack.paused) soundtrack.play().catch(() => {});
   }
 
   function applyVolume() {
     if (!ctx) return;
     master.gain.setTargetAtTime(muted ? 0 : (settings.master / 10) ** 1.5 * 0.75, ctx.currentTime, 0.04);
-    musicBus.gain.setTargetAtTime(paused ? 0 : (settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
+    musicBus.gain.setTargetAtTime((settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
   }
 
   function spatial(position) {
@@ -110,45 +108,18 @@ export function createAudio(settings, listener) {
     });
   }
 
-  function setMode(value) {
-    if (value === mode) return;
-    mode = value;
-    beat = 0;
-    if (ctx) nextBeat = ctx.currentTime + 0.08;
-  }
-
-  function schedule(pressure) {
-    if (paused || mode === 'dead') return;
-    if (nextBeat < ctx.currentTime) nextBeat = ctx.currentTime + 0.015;
-    const combat = mode === 'combat';
-    const interval = combat ? 0.267 - pressure * 0.05 : 0.44;
-    while (nextBeat < ctx.currentTime + 0.095) {
-      const chord = PROGRESSION[Math.floor(beat / 8) % PROGRESSION.length];
-      const step = beat % 8;
-      const opts = { t: nextBeat, out: musicBus };
-      if (step === 0) {
-        for (const n of chord.slice(1)) voice(midiHz(n), midiHz(n) * 0.998, interval * 7.8, 0.029, { ...opts, attack: 0.29 });
-      }
-      if (step === 0 || (combat && step % 2 === 0)) {
-        const root = midiHz(chord[0] + (step === 6 ? 12 : 0));
-        voice(root, root * 0.96, interval * 1.7, combat ? 0.155 : 0.076, { ...opts, type: 'triangle' });
-        if (combat) voice(85, 39, 0.16, 0.13, opts);
-      }
-      if ((combat && step % 2 === 1) || (!combat && (step === 2 || step === 6))) {
-        const n = midiHz(MOTIF[(Math.floor(beat / 2) + (mode === 'calm' ? 2 : 0)) % MOTIF.length]);
-        voice(n, n * 0.986, interval * 2.3, 0.068, { ...opts, type: 'triangle' });
-        voice(n * 2.003, n * 2, 0.16, 0.018, opts);
-      }
-      nextBeat += interval;
-      beat++;
-    }
-  }
-
   return {
-    ensure, applyVolume, setMode,
+    ensure, applyVolume,
+    setTitleMusic(on) {
+      titleMusic = on;
+      if (on) ensure();
+      else {
+        soundtrack.pause();
+        soundtrack.currentTime = 0;
+      }
+    },
     pause(on) {
       paused = on;
-      applyVolume();
       if (ctx && on) humGain.gain.setTargetAtTime(0, ctx.currentTime, 0.08);
     },
     toggleMute() {
@@ -161,7 +132,6 @@ export function createAudio(settings, listener) {
       if (!ctx || ctx.state !== 'running') return;
       hum.frequency.setTargetAtTime(47 + pressure * 17, ctx.currentTime, 0.18);
       humGain.gain.setTargetAtTime(paused ? 0 : 0.043 + pressure * 0.04, ctx.currentTime, 0.18);
-      schedule(pressure);
     },
     shot(hot, spread) {
       voice(hot ? 510 : 390, 47, 0.16, 0.31 + spread * 0.03, { type: 'triangle' });
@@ -180,10 +150,10 @@ export function createAudio(settings, listener) {
     crack(pos) { grain(4300, 0.14, 0.3, spatial(pos)); },
     doorBreak(pos) { const out = spatial(pos); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
     shatter(pos) { const out = spatial(pos); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
-    waveStart(n) { setMode('combat'); signal([42, 49, n > 4 ? 56 : 54], 0.16, 0.12); },
-    waveClear() { setMode('calm'); signal([54, 61, 66, 73], 0.13); },
+    waveStart(n) { signal([42, 49, n > 4 ? 56 : 54], 0.16, 0.12); },
+    waveClear() { signal([54, 61, 66, 73], 0.13); },
     alarm(level) { signal(level > 0.8 ? [45, 52, 45] : [45, 52], 0.075, 0.16); },
-    death() { setMode('dead'); signal([57, 54, 49, 35], 0.19, 0.17); },
+    death() { signal([57, 54, 49, 35], 0.19, 0.17); },
     pickup(id) { signal(id === 'med' ? [66, 73, 78] : [61, 69, 73], 0.11, 0.06); },
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },

@@ -2244,6 +2244,7 @@ function resetGame(keep = false) {
 }
 
 function startGame(fromTitle = false) {
+  audio.setTitleMusic(false);
   audio.ensure(); // create/resume AudioContext within the click gesture
   document.getElementById('death').classList.add('hidden');
   title.active = false;
@@ -2272,7 +2273,6 @@ function quitToTitle() {
   state.running = false;
   document.getElementById('death').classList.add('hidden');
   enterTitle(false);
-  audio.setMode('title');
 }
 
 function die() {
@@ -2321,6 +2321,7 @@ function crossYard(z, dir, x = -dir * crossX()) {
 
 function enterTitle(splash) {
   title.active = true;
+  audio.setTitleMusic(true);
   clearRun();
   resetOpenings();
   pressure.set(0); // reset reactor load on the title screen
