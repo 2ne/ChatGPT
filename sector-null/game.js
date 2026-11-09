@@ -2202,11 +2202,13 @@ function setPaused(on) {
   if (on && !state.running) return; // only a live run can pause
   if (on === state.paused) return;
   state.paused = on;
+  document.body.classList.toggle('paused', on);
   syncTouchControls();
   firing = false;
   for (const k in keys) keys[k] = false; // keyups are missed while the menu is up
   document.getElementById('pauseStat').textContent = `WAVE ${state.wave} · ${state.kills} UNITS DOWN`;
   document.getElementById('pause').classList.toggle('hidden', !on);
+  if (on) document.getElementById('resumeBtn').focus({ preventScroll: true });
   audio.pause(on);
 }
 

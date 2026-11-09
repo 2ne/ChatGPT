@@ -94,14 +94,16 @@
 </div>
 <div id="fadeIn"></div>
 
-<div id="pause" class="overlay hidden">
-  <div id="pauseTitle" >PAUSED</div>
-  <div id="pauseStat"></div>
-  <div id="pauseMenu" class="vmenu">
-    <button id="resumeBtn">RESUME</button>
-    <button id="quitBtn">QUIT TO TITLE</button>
+<div id="pause" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+  <div id="pausePanel">
+    <h2 id="pauseTitle">PAUSED</h2>
+    <div id="pauseStat"></div>
+    <div id="pauseMenu">
+      <button id="resumeBtn">Resume</button>
+      <button id="quitBtn">Quit to title</button>
+    </div>
+    <div class="sub"><span class="key">Esc</span> to resume</div>
   </div>
-  <div class="sub" style="margin-top:28px"><span class="key">ESC</span> resume</div>
 </div>
 
 <div id="death" class="overlay hidden">

@@ -42,8 +42,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   /* banner */
   #banner {
     position: fixed; top: 38%; left: 0; right: 0; text-align: center;
-    font-family: "Jim Nightshade", cursive;
-    font-size: 72px; letter-spacing: 8px; color: #64dfee; opacity: 0;
+    opacity: 0;
     text-shadow: 0 0 18px #64dfee66, 0 0 4px #000; transition: opacity .35s;
   }
   #bannerSub { display:block; font-size: 16px; letter-spacing: 4px; color:#8a9098; margin-top: 10px; }
@@ -65,7 +64,14 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     background: radial-gradient(circle at center, rgba(10,8,10,.5), rgba(2,2,4,.85));
     z-index: 5;
   }
-  #pickerTitle { font-family: "Jim Nightshade", cursive; font-size: 64px; letter-spacing: 6px; color: #64dfee; text-shadow: 0 0 18px #64dfee66, 0 0 4px #000; }
+  #bannerText, #pickerTitle {
+    font-family: "Rajdhani", sans-serif;
+    font-size: clamp(32px, 7vw, 64px);
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: #64dfee;
+    text-shadow: 0 0 18px #64dfee66, 0 0 4px #000;
+  }
   #pickerSub { font-size: 16px; letter-spacing: 6px; color: #8a9098; margin-top: 2px; }
   #pickerSub::before, #pickerSub::after { content: ""; display: inline-block; width: 40px; height: 1px; background: #4a4f58; vertical-align: middle; margin: 0 14px; }
   #cards { display: flex; gap: 22px; margin-top: 34px; perspective: 900px; }
@@ -234,9 +240,35 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   #deathBest { color: #8a9098; font-size: 16px; letter-spacing: 4px; margin-top: 8px; min-height: 1.2em; }
   #deathBest.record { color: #ffbd78; }
   /* the pause and death menus */
-  #pause { background: radial-gradient(circle at center, rgba(10,8,10,.55), rgba(2,2,4,.85)); }
-  #pauseTitle { font-family: "Rajdhani", sans-serif; font-size: clamp(64px, 10vw, 140px); letter-spacing: 10px; padding-left: 10px; color: #e4f1f5; filter: drop-shadow(0 4px 0 #000) drop-shadow(0 0 28px #64dfee44); }
-  #pauseStat { color: #8a9098; font-size: 18px; letter-spacing: 4px; margin-top: 14px; }
+  body.paused #hud, body.paused #picker, body.paused #flash { visibility: hidden; }
+  #pause { background: #060e19bd; padding: 16px; }
+  #pausePanel {
+    width: min(100%, 380px);
+    max-height: 100%;
+    overflow: auto;
+    padding: clamp(18px, 5vw, 32px);
+    background: #0c1925;
+    border: 1px solid #36576c;
+    border-top: 2px solid #64dfee;
+    box-shadow: 0 18px 54px #0009;
+  }
+  #pauseTitle { font-size: clamp(36px, 8vw, 56px); line-height: 1; letter-spacing: .1em; color: #e4f1f5; }
+  #pauseStat { color: #b2c8d6; font-size: 16px; letter-spacing: .1em; margin-top: 8px; }
+  #pauseMenu { display: grid; gap: 8px; margin-top: 22px; }
+  #pauseMenu button {
+    min-height: 44px;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 18px;
+    background: #122736;
+    color: #e4f1f5;
+    border: 1px solid #416376;
+    cursor: pointer;
+  }
+  #pauseMenu #resumeBtn { background: #a2f2fa; color: #0b1a23; border-color: #a2f2fa; }
+  #pauseMenu button:hover { background: #1e3b4e; }
+  #pauseMenu #resumeBtn:hover { background: #cefaff; }
+  #pause .sub { color: #b2c8d6; font-size: 14px; letter-spacing: .08em; margin-top: 12px; }
   .vmenu { display: flex; flex-direction: column; gap: 6px; margin-top: 34px; }
   .vmenu button {
     font: inherit; font-size: 30px; letter-spacing: 6px; color: #8a9098;
@@ -302,8 +334,8 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
 #menuList button { min-height: 42px; }
 #menuList button span { font-weight: 700; font-size: clamp(24px, 2.5vw, 36px); }
 #menuMarker { width: 2px; }
-#deathTitle, #pauseTitle { font-weight: 700; font-size: clamp(50px, 12vw, 130px); }
-#deathStat, #pauseStat { text-align: center; }
+#deathTitle { font-weight: 700; font-size: clamp(50px, 12vw, 130px); }
+#deathStat { text-align: center; }
 #bootError { z-index: 40; color: #e4f1f5; background: #080e16; padding: 24px; text-align: center; font-size: 22px; }
 #topbar { top: max(18px, env(safe-area-inset-top)); left: 20px; right: 20px; }
 #topbar > div {
@@ -313,7 +345,7 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   background: linear-gradient(#0a1b26e8, #08162396);
 }
 .stat { color: #e2f8ff; font-size: 16px; letter-spacing: 1.3px; }
-#bannerText, #pickerTitle, .cname, .mpanel h2 { font-weight: 700; }
+.cname, .mpanel h2 { font-weight: 700; }
 @media (max-width: 760px) {
   #menuCol { left: 22px; width: calc(100% - 44px); }
   .station-tag { display: none; }
@@ -339,7 +371,6 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
 }
 
 #game { cursor: crosshair; }
-#pickerTitle { font-family: "Rajdhani", sans-serif; font-size: clamp(32px, 7vw, 64px); text-align: center; }
 #reloadHint { color: #a0bac8; }
 #touchControls, .touch-help { display: none; }
 @media (any-pointer: coarse) {
