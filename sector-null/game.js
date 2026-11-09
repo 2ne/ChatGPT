@@ -2089,9 +2089,9 @@ function killDrone(z, idx) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores 1 shield, up to your maximum.', icon: '+', color: 0xff78b5, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Adds 10 seconds of double damage. Repeat pickups add time.', icon: '↑', color: 0xffa64c, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', detail: 'Refills your cell and adds 8 seconds without recharging.', icon: '∞', color: 0x76bcf0, weight: 25 },
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '+', color: 0xff78b5, weight: 40 },
+  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
 // Teach each item once per run; saved browser history must not suppress a lesson.
 const seenDrops = new Set();
