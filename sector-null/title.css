@@ -75,7 +75,6 @@ body.titling #game { cursor: default; }
   width: clamp(18px, 4cqw, 55px);
   height: clamp(18px, 4cqw, 48px);
   border: 1px solid;
-  border-radius: 5px;
 }
 .station-frame i:nth-child(1) { top: 0; left: 0; color: var(--pink); border-right: 0; border-bottom: 0; }
 .station-frame i:nth-child(2) { top: 0; right: 0; color: var(--cyan); border-left: 0; border-bottom: 0; }

@@ -1219,7 +1219,10 @@ const hud = {
   wave: document.getElementById('waveNum'),
   kills: document.getElementById('kills'),
   zleft: document.getElementById('zleft'),
+  remainingStat: document.getElementById('remainingStat'),
   health: document.getElementById('health'),
+  shieldPips: document.getElementById('shieldPips'),
+  shieldCount: document.getElementById('shieldCount'),
   powerups: document.getElementById('powerups'),
   toast: document.getElementById('toast'),
   picker: document.getElementById('picker'),
@@ -1240,13 +1243,17 @@ function updateHUD() {
   hud.wave.textContent = state.wave;
   hud.kills.textContent = state.kills;
   const remaining = drones.length + state.toSpawn;
-  hud.zleft.textContent = state.intermission > 0 || state.choosing ? '' : remaining + ' HOSTILES';
-  if (hud.health.children.length !== state.maxHp) {
-    hud.health.innerHTML = '<span class="shield-pip" aria-hidden="true"></span>'.repeat(state.maxHp);
+  hud.remainingStat.hidden = state.intermission > 0 || state.choosing;
+  hud.zleft.textContent = remaining;
+  if (hud.shieldPips.children.length !== state.maxHp) {
+    hud.shieldPips.innerHTML = '<span class="shield-pip"></span>'.repeat(state.maxHp);
   }
   const shieldLabel = `Shields: ${state.hp} of ${state.maxHp}`;
-  if (hud.health.getAttribute('aria-label') !== shieldLabel) hud.health.setAttribute('aria-label', shieldLabel);
-  [...hud.health.children].forEach((p, i) => p.classList.toggle('dead', i >= state.hp));
+  if (hud.health.getAttribute('aria-label') !== shieldLabel) {
+    hud.health.setAttribute('aria-label', shieldLabel);
+    hud.shieldCount.textContent = `${state.hp} / ${state.maxHp}`;
+    [...hud.shieldPips.children].forEach((pip, i) => pip.classList.toggle('dead', i >= state.hp));
+  }
   // power-up time left as a clock: 0:10 … 0:01
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
@@ -1939,12 +1946,10 @@ function killDrone(z, idx, dir) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  { id: 'med',  name: '+1 SHIELD',      color: 0x64dfee, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',  color: 0xff7a2e, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', color: 0x76bcf0, weight: 25 },
+  { id: 'med',  name: '+1 SHIELD',     icon: '+', color: 0xff78b5, weight: 40 },
+  { id: 'dmg',  name: 'OVERCHARGE',    icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'INFINITE CELL', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
-// each pickup is a little blocky item in a soft glow of its color
-const K = 0x1a1a1a;
 const DROP_MODELS = {
   med: [  // first-aid case, crosses on top and front
     [0.52, 0.34, 0.36, 0, 0, 0, 0xe6e2da, 0, 0, 0, 0.05],
@@ -1961,11 +1966,45 @@ const DROP_MODELS = {
     [0.24, 0.04, 0.06, 0, 0.215, 0, 0x2a2c24, 0, 0, 0, 0.01], [0.3, 0.06, 0.006, 0, 0, 0.143, 0x76bcf0, 0, 0, 0, 0.002],
   ],
 };
-const dropMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.5, emissive: 0x1c1c1c });
 const dropGlow = glowTexture();
+const dropRing = new THREE.RingGeometry(0.65, 0.73, 40).rotateX(-Math.PI / 2);
+
+function pickupLabel(type) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 320;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  ctx.beginPath();
+  ctx.roundRect(3, 3, 314, 58, 9);
+  ctx.fillStyle = '#071520';
+  ctx.fill();
+  ctx.strokeStyle = type.tint;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = type.tint;
+  ctx.font = 'bold 36px sans-serif';
+  ctx.fillText(type.icon, 15, 33);
+  ctx.fillStyle = '#f3fbff';
+  ctx.font = 'bold 29px sans-serif';
+  ctx.fillText(type.name, 61, 33);
+  const map = new THREE.CanvasTexture(canvas);
+  map.colorSpace = THREE.SRGBColorSpace;
+  return new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, toneMapped: false });
+}
+
 for (const t of DROP_TYPES) {
+  t.tint = '#' + t.color.toString(16).padStart(6, '0');
   t.geo = bakeBlocks(DROP_MODELS[t.id], seeded(3));
-  t.glow = new THREE.SpriteMaterial({ map: dropGlow, color: t.color, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false });
+  t.item = new THREE.MeshStandardMaterial({
+    vertexColors: true, roughness: 0.5, emissive: t.color, emissiveIntensity: 0.28,
+  });
+  t.ring = new THREE.MeshBasicMaterial({ color: t.color, toneMapped: false });
+  t.glow = new THREE.SpriteMaterial({
+    map: dropGlow, color: t.color, transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+  });
+  t.label = pickupLabel(t);
 }
 const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
@@ -1984,17 +2023,28 @@ function maybeDrop(pos) {
 
 function spawnDrop(type, pos) {
   const d = new THREE.Group();
-  const item = new THREE.Mesh(type.geo, dropMat); item.castShadow = true; item.scale.setScalar(1.25); d.add(item);
-  const glow = new THREE.Sprite(type.glow); glow.scale.setScalar(2.6); d.add(glow);
-  d.position.set(pos.x, 0.7, pos.z);
-  d.userData = { type, life: DROP_LIFE, t: Math.random() * 6 };
+  const item = new THREE.Mesh(type.geo, type.item);
+  item.position.y = 0.68;
+  item.scale.setScalar(1.45);
+  item.castShadow = true;
+  const ring = new THREE.Mesh(dropRing, type.ring);
+  const glow = new THREE.Sprite(type.glow);
+  glow.position.y = 0.56;
+  glow.scale.setScalar(3.3);
+  const label = new THREE.Sprite(type.label);
+  label.position.y = 1.52;
+  label.scale.set(3.2, 0.64, 1);
+  label.renderOrder = 1;
+  d.add(ring, glow, item, label);
+  d.position.set(pos.x, 0.035, pos.z);
+  d.userData = { type, item, life: DROP_LIFE, t: Math.random() * 6 };
   scene.add(d);
   drops.push(d);
 }
 
 function collect(type) {
   audio.pickup(type.id);
-  showToast(type.name, '#' + type.color.toString(16).padStart(6, '0'));
+  showToast(type.name, type.tint);
   if (type.id === 'med') state.hp = Math.min(state.maxHp, state.hp + 1);
   else if (type.id === 'dmg') state.pDamage = 10;
   else if (type.id === 'ammo') { state.pAmmo = 8; state.reloading = false; state.mag = state.magSize; }
@@ -2018,8 +2068,8 @@ function updateDrops(dt) {
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
       if (od > 0.01) { const st = Math.min(od, 6 * dt); p.x += (ox / od) * st; p.z += (oz / od) * st; }
     }
-    p.y = 0.7 + Math.sin(ud.t * 3) * 0.15;
-    d.rotation.y += dt * 2;
+    ud.item.position.y = 0.68 + Math.sin(ud.t * 3) * 0.15;
+    ud.item.rotation.y += dt * 2;
     d.visible = ud.life > 3 || ((ud.t * 8) | 0) % 2 === 0; // blink before vanishing
     if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); }
   }

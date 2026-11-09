@@ -19,13 +19,16 @@
 <div id="hud">
   <div id="topbar">
     <div>
-      <div class="stat"><span class="label">WAVE</span> <span id="waveNum">1</span></div>
-      <div id="health" role="img" aria-label="Shields"></div>
+      <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
+      <div id="health" role="img" aria-label="Shields">
+        <span id="shieldPips" aria-hidden="true"></span>
+        <span id="shieldCount" aria-hidden="true"></span>
+      </div>
       <div id="powerups"></div>
     </div>
-    <div class="stat" style="text-align:right">
-      <span class="label">UNITS DOWN</span> <span id="kills">0</span><br>
-      <span class="label" id="zleft"></span>
+    <div class="enemy-stats">
+      <div class="stat"><span class="label">Units down</span> <span class="stat-value" id="kills">0</span></div>
+      <div class="stat" id="remainingStat"><span class="label">Hostiles left</span> <span class="stat-value" id="zleft">0</span></div>
     </div>
   </div>
 

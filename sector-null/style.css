@@ -9,19 +9,56 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
     position: fixed; inset: 0; pointer-events: none; user-select: none;
   }
   #topbar {
-    position: absolute; top: 14px; left: 16px; right: 16px;
-    display: flex; justify-content: space-between; align-items: flex-start;
+    position: absolute;
+    top: max(18px, env(safe-area-inset-top));
+    left: max(clamp(10px, 2vw, 20px), env(safe-area-inset-left));
+    right: max(clamp(10px, 2vw, 20px), env(safe-area-inset-right));
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
     text-shadow: 0 0 8px #000, 0 0 2px #000;
   }
-  .stat { font-size: 14px; letter-spacing: 2px; line-height: 1.7; }
-  .label { color: #97b0bd; }
-  #waveNum { color: #64dfee; font-weight: bold; }
+  #topbar > div {
+    min-width: 116px;
+    padding: 8px clamp(9px, 1.3vw, 16px);
+    border-top: 1px solid #6dd9ed99;
+    background: linear-gradient(#0a1b26f2, #081623c9);
+  }
+  .stat {
+    display: flex; align-items: baseline; gap: .42em;
+    font-size: clamp(15px, 2.15vw, 20px); line-height: 1.15;
+    letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+  }
+  .stat[hidden] { display: none; }
+  .stat + .stat { margin-top: 3px; }
+  .enemy-stats .stat { justify-content: space-between; }
+  .label { color: #bdd1dc; }
+  .stat-value { color: #e2f8ff; font-size: 1.27em; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .enemy-stats .stat-value { min-width: 2ch; text-align: right; }
+  #waveNum, #zleft { color: #82eaf5; }
   #kills { color: #71dabb; }
 
   /* health pips */
-  #health { display: flex; gap: 5px; margin-top: 4px; }
-  .pip { width: 22px; height: 22px; color: #64dfee; filter: drop-shadow(0 0 4px #64dfee99); }
-  .pip.dead { color: #2a2d33; filter: none; }
+  #health {
+    display: flex; align-items: center; gap: clamp(5px, 1vw, 9px); margin-top: 7px;
+    --shield-pink: #ff78b5;
+  }
+  #shieldPips { display: flex; gap: clamp(3px, .48vw, 6px); }
+  .shield-pip {
+    display: grid; place-items: center;
+    width: clamp(12px, 1.65vw, 19px); aspect-ratio: 19 / 21;
+    background: var(--shield-pink);
+    clip-path: polygon(50% 0, 100% 18%, 90% 68%, 50% 100%, 10% 68%, 0 18%);
+  }
+  .shield-pip.dead { background: #90617a; }
+  .shield-pip.dead::after {
+    content: "";
+    width: 73%; height: 75%;
+    background: #102031;
+    clip-path: inherit;
+  }
+  #shieldCount {
+    color: var(--shield-pink); font-size: clamp(13px, 1.55vw, 17px); line-height: 1;
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
 
   /* magazine / reload */
   #ammoWrap { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); text-align: center; }
@@ -223,14 +260,6 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
 #deathTitle { font-weight: 700; font-size: clamp(50px, 12vw, 130px); }
 #deathStat { text-align: center; }
 #bootError { z-index: 40; color: #e4f1f5; background: #080e16; padding: 24px; text-align: center; font-size: 22px; }
-#topbar { top: max(18px, env(safe-area-inset-top)); left: 20px; right: 20px; }
-#topbar > div {
-  min-width: 122px;
-  padding: 8px 14px;
-  border-top: 1px solid #6dd9ed99;
-  background: linear-gradient(#0a1b26e8, #08162396);
-}
-.stat { color: #e2f8ff; font-size: 16px; letter-spacing: 1.3px; }
 .cname, .mpanel h2 { font-weight: 700; }
 @media (max-width: 760px) {
   .mpanel { z-index: 2; left: 22px; width: calc(100% - 44px); padding: 16px; }
@@ -307,11 +336,3 @@ button:focus-visible { outline: 2px solid #75e8f5; outline-offset: 4px; }
   cursor: pointer;
 }
 .close-panel:hover { color: #e4f1f5; }
-#health { display: flex; gap: 5px; align-items: center; min-height: 22px; }
-.shield-pip {
-  width: 14px;
-  height: 15px;
-  background: #9cf3fb;
-  clip-path: polygon(50% 0, 100% 18%, 90% 70%, 50% 100%, 10% 70%, 0 18%);
-}
-.shield-pip.dead { background: #466271; }
