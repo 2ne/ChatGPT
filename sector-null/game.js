@@ -2109,7 +2109,8 @@ for (const t of DROP_TYPES) {
 }
 const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
-const DROP_LIFE = 12;     // seconds before an uncollected drop vanishes
+const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
+const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
 const drops = [];
 
 function maybeDrop(pos) {
@@ -2138,7 +2139,7 @@ function spawnDrop(type, pos) {
   label.renderOrder = 1;
   d.add(ring, glow, item, label);
   d.position.set(pos.x, 0.035, pos.z);
-  d.userData = { type, item, life: DROP_LIFE, t: Math.random() * 6 };
+  d.userData = { type, item, ring, life: DROP_LIFE, t: Math.random() * 6 };
   scene.add(d);
   drops.push(d);
 }
@@ -2160,6 +2161,7 @@ function updateDrops(dt) {
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i], ud = d.userData;
     ud.life -= dt; ud.t += dt;
+    if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); continue; }
     const p = d.position;
     const dx = player.position.x - p.x, dz = player.position.z - p.z;
     const dist = Math.hypot(dx, dz);
@@ -2175,8 +2177,11 @@ function updateDrops(dt) {
     }
     ud.item.position.y = 0.68 + Math.sin(ud.t * 3) * 0.15;
     ud.item.rotation.y += dt * 2;
-    d.visible = ud.life > 3 || ((ud.t * 8) | 0) % 2 === 0; // blink before vanishing
-    if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); }
+    const warning = ud.life <= DROP_WARNING;
+    // Two blinks per second, synchronised to expiry rather than random bobbing phase.
+    d.visible = !warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0;
+    // A shrinking ground ring also communicates expiry without flashing in reduced motion.
+    ud.ring.scale.setScalar(warning ? Math.max(0.15, ud.life / DROP_WARNING) : 1);
   }
 }
 
@@ -2956,7 +2961,7 @@ function update(dt) {
     }
     state.pDamage = Math.max(0, state.pDamage - dt);
     state.pAmmo = Math.max(0, state.pAmmo - dt);
-    updateDrops(dt);
+    if (!state.choosing) updateDrops(dt);
 
     // --- waves ---
     if (state.choosing) {

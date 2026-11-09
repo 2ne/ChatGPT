@@ -22,6 +22,8 @@ Health multipliers apply to the wave's base health and round up. Boss melee and 
 
 ## Navigation and power-up feedback
 
+Uncollected supplies expire after 6 seconds of active play. During the final 2 seconds they blink twice per second and their ground ring shrinks. Reduced-motion mode keeps them visible and uses only the shrinking ring. Drop timers pause while choosing an upgrade or pausing the game.
+
 Bots plan around both cover and bulkheads using navigation graphs sized to their bodies. Routes refresh as the target moves, with stable corner choices to limit jitter. Movement checks clearance before stepping, turns in place for sharp corners, and limits steps at waypoints. Ranged strafing uses the same navigation; crowd separation avoids pushing bots into obstacles. Melee attacks cannot pass through solid cover.
 
 Power-ups tint the operator orange for Overcharge and blue for Infinite Cell, with a gentle pulse (steady glow under reduced motion). If both are active, the torso and limbs show separate colours. Shield kits produce a one-second pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the effect description. Glow strength is capped to keep it readable.
