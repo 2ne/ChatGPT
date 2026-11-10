@@ -2584,15 +2584,16 @@ function finishWaveClear() {
   openPicker(healed);
 }
 
-function killDrone(z, idx) {
+function killDrone(z, idx, allowShieldDrop = true) {
   const type = z.userData.type;
+  z.userData.allowShieldDrop = allowShieldDrop;
   if (type.boss && state.running && !bossDeath.active && !z.userData.dying) {
     beginBossDeath(z);
     return;
   }
   explodeDrone(z);
   if (z.userData.climb >= 0) endClimb(z, true);
-  maybeDrop(z.position);
+  maybeDrop(z.position, allowShieldDrop);
   scene.remove(z);
   drones.splice(idx, 1);
   state.kills++;
@@ -2608,7 +2609,7 @@ function killDrone(z, idx) {
 // ===================================================================
 const DROP_TYPES = [
   // Name already carries the +; an icon of '+' made the toast read "++1 SHIELD".
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 40 },
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 0 },
   { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
   { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
@@ -2677,17 +2678,34 @@ for (const t of DROP_TYPES) {
   t.label = pickupLabel(t);
 }
 const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
+const SHIELD_DROP_CHANCE = 0.005; // independent roll; no scanner or pity bonus
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
 const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
 const drops = [];
 
-function maybeDrop(pos) {
+function supplyDropScale() {
+  // Keep roughly wave 5's supply budget as the regular enemy count grows.
+  return Math.min(1, 20 / (5 + Math.max(1, state.wave) * 3));
+}
+
+function maybeDrop(pos, allowShieldDrop = true) {
   state.sinceDrop++;
-  if (Math.random() > DROP_CHANCE + state.dropBonus && state.sinceDrop < DROP_PITY) return;
+  const scale = supplyDropScale();
+  // Damage-triggered blasts cannot refund their shield cost. Limit healing even
+  // when late waves contain hundreds of kills; missing HP never boosts the odds.
+  if (allowShieldDrop && state.hp < state.maxHp && state.shieldDropsThisWave < 1
+      && Math.random() < SHIELD_DROP_CHANCE * scale) {
+    state.shieldDropsThisWave++;
+    state.sinceDrop = 0;
+    spawnDrop(DROP_TYPES.find(t => t.id === 'med'), pos);
+    return;
+  }
+  const chance = (DROP_CHANCE + state.dropBonus) * scale;
+  const pityKills = Math.ceil(DROP_PITY / scale);
+  if (Math.random() >= chance && state.sinceDrop < pityKills) return;
   state.sinceDrop = 0;
-  // no medkits at full health — they'd be a wasted drop
-  const pool = DROP_TYPES.filter(t => t.id !== 'med' || state.hp < state.maxHp);
+  const pool = DROP_TYPES.filter(t => t.id !== 'med');
   let r = Math.random() * pool.reduce((a, t) => a + t.weight, 0);
   spawnDrop(pool.find(t => (r -= t.weight) < 0) || pool[0], pos);
 }
@@ -2955,7 +2973,7 @@ function detonateReactorZone(ring) {
   state.shake = Math.max(state.shake, 0.5);
   if (Math.hypot(player.position.x - pos.x, player.position.z - pos.z) < radius + 0.2) hurtPlayer();
 }
-function equipmentBlast(position, radius, damage, slow = false) {
+function equipmentBlast(position, radius, damage, slow = false, allowShieldDrop = true) {
   groundRing(position, radius, slow ? 0x7cefff : 0xffc17b, 0.35, equipment.effects);
   audio.hit(position);
   for (let i = drones.length - 1; i >= 0; i--) {
@@ -2963,7 +2981,7 @@ function equipmentBlast(position, radius, damage, slow = false) {
     if (Math.hypot(z.position.x - position.x, z.position.z - position.z) > radius || wallBetween(position, z.position) || !clearPath(position.x, position.z, z.position.x, z.position.z, 0.05)) continue;
     z.userData.hp -= damage * (z.userData.recovery > 0 ? 1.75 : 1);
     if (slow) z.userData.slow = 3;
-    if (z.userData.hp <= 0) killDrone(z, i);
+    if (z.userData.hp <= 0) killDrone(z, i, allowShieldDrop);
     else { hitDrone(z); maybeSplitBoss(z); }
     if (state.choosing) break;
   }
@@ -2979,7 +2997,7 @@ function updateEquipment(dt) {
   }
   if (equipment.pulse) {
     equipment.pulse = false;
-    equipmentBlast(player.position.clone(), 2.8 + u.pulse * 0.4, 2 + u.pulse * 2, true);
+    equipmentBlast(player.position.clone(), 2.8 + u.pulse * 0.4, 2 + u.pulse * 2, true, false);
   }
   while (equipment.blasts.length && !state.choosing) {
     const blast = equipment.blasts.shift();
@@ -3087,7 +3105,7 @@ const UPGRADES = [
   { id: 'spread', cat: 'firepower', name: 'SPLIT BEAM',      desc: '+1 pulse per shot', max: 3, stat: s => [1 + s.spread, 2 + s.spread + ' per shot'],             apply: s => { s.spread++; } },
   { id: 'hp',     cat: 'survival',  name: 'SHIELD ARRAY',    desc: '+1 shield and recharge it', max: 3, stat: s => [s.maxHp, s.maxHp + 1 + ' max hp'],                         apply: s => { s.maxHp++; s.hp++; } },
   { id: 'speed',  cat: 'survival',  name: 'MOTION SERVO',    desc: 'move 12% faster',            max: 3, stat: s => [Math.round(s.speed / 6.2 * 100) + '%', Math.round(s.speed * 1.12 / 6.2 * 100) + '%'], apply: s => { s.speed *= 1.12; } },
-  { id: 'luck',   cat: 'fortune',   name: 'SALVAGE SCANNER',     desc: 'more supply drops', max: 3, stat: s => [Math.round((DROP_CHANCE + s.dropBonus) * 100) + '%', Math.round((DROP_CHANCE + s.dropBonus + 0.03) * 100) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
+  { id: 'luck',   cat: 'fortune',   name: 'SALVAGE SCANNER',     desc: 'More Overcharge / Infinite Cell drops', max: 3, stat: s => [((DROP_CHANCE + s.dropBonus) * supplyDropScale() * 100).toFixed(1) + '%', ((DROP_CHANCE + s.dropBonus + 0.03) * supplyDropScale() * 100).toFixed(1) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
   { id: 'heal',   cat: 'survival',  name: 'SHIELD RESET',      desc: 'restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
   // Score path: pick this instead of another gun / gear upgrade and vacuum every emerald.
   { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
@@ -3466,7 +3484,7 @@ function finalizeBossDeath(z) {
     const count = 8 + ((Math.random() * 5) | 0);
     spawnEmeralds(origin, count);
   }
-  maybeDrop(z.position);
+  maybeDrop(z.position, z.userData.allowShieldDrop !== false);
   scene.remove(z);
   const idx = drones.indexOf(z);
   if (idx >= 0) drones.splice(idx, 1);
@@ -3528,6 +3546,7 @@ function queueWave(delay) {
 
 function startWave(n) {
   state.wave = n;
+  state.shieldDropsThisWave = 0;
   state.mortarsSpawned = 0;
   state.bossPending = true;
   state.waveTime = 0;
@@ -3611,7 +3630,7 @@ function resetGame(keep = false) {
     mag: BASE_STATS.magSize, reloading: false, reloadT: 0,
     fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
-    pDamage: 0, pAmmo: 0, sinceDrop: 0,
+    pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0,
   });
   emeraldChain = 0;
   botMilestonesDone.clear();
