@@ -1268,7 +1268,16 @@ window.addEventListener('pointerup', releaseStick, true);
 window.addEventListener('pointercancel', releaseStick, true);
 canvas.addEventListener('lostpointercapture', releaseStick);
 document.getElementById('touchReload').addEventListener('click', startReload);
-document.getElementById('touchPause').addEventListener('click', () => setPaused(true));
+document.getElementById('touchPause').addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse') return;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+document.getElementById('touchPause').addEventListener('click', e => {
+  e.preventDefault();
+  e.stopPropagation();
+  setPaused(true);
+});
 document.getElementById('ammoWrap').addEventListener('pointerdown', e => {
   if (e.pointerType === 'mouse') return;
   e.preventDefault();

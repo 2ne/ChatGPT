@@ -14,24 +14,26 @@
 <div id="bootError" class="overlay hidden" role="alert">Sector Null needs a browser with WebGL enabled.</div>
 <div id="touchControls" class="hidden">
   <button type="button" id="touchReload">Recharge</button>
-  <button type="button" id="touchPause" aria-label="Pause">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
-    </svg>
-  </button>
   <div class="stick" id="moveStick" aria-hidden="true"></div>
   <div class="stick" id="aimStick" aria-hidden="true"></div>
 </div>
 
 <div id="hud">
   <div id="topbar">
-    <div>
-      <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
-      <div id="health" role="img" aria-label="Shields">
-        <span id="shieldPips" aria-hidden="true"></span>
-        <span id="shieldCount" aria-hidden="true"></span>
+    <div class="run-stats">
+      <button type="button" id="touchPause" aria-label="Pause">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
+        </svg>
+      </button>
+      <div class="run-copy">
+        <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
+        <div id="health" role="img" aria-label="Shields">
+          <span id="shieldPips" aria-hidden="true"></span>
+          <span id="shieldCount" aria-hidden="true"></span>
+        </div>
+        <div id="powerups"></div>
       </div>
-      <div id="powerups"></div>
     </div>
     <div class="enemy-stats">
       <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
