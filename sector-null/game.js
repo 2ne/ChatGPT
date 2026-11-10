@@ -1789,7 +1789,7 @@ const BOT_TYPES = {
   runner: { name: 'FLANKER', kit: 1, health: 0.7, speed: 1.35, size: 0.88, style: 'flank', loco: 'roll' },
   gunner: { name: 'PULSE GUNNER', kit: 2, health: 1.25, speed: 0.8, size: 1, style: 'ranged', loco: 'walk' },
   heavy: { name: 'BULWARK', kit: 3, health: 2.5, speed: 0.62, size: 1.18, style: 'heavy', loco: 'stomp' },
-  mortar: { name: 'BOMBARDIER', kit: 5, health: 1.25, speed: 0.55, size: 1, style: 'mortar', loco: 'tracks' },
+  mortar: { name: 'BOMBARDIER', kit: 5, health: 0.55, speed: 1.05, size: 0.7, style: 'mortar', loco: 'tracks' },
 };
 function waveBotType() {
   // Guaranteed introduction, then a few replacements rather than extra enemies.
@@ -2153,7 +2153,8 @@ function animateDrone(z, dt, near) {
     u.pelvis.position.set(0, 0, 0);
     u.pelvis.rotation.set(0, 0, 0);
     u.upper.position.set(0, 0.62, -u.mortarRecoil * 0.12);
-    u.upper.rotation.set(-u.flinch * 0.12 - u.mortarRecoil * 0.16, 0, 0);
+    const aim = Math.atan2(player.position.x - z.position.x, player.position.z - z.position.z);
+    u.upper.rotation.set(-u.flinch * 0.12 - u.mortarRecoil * 0.16, wrapA(aim - u.heading), 0);
     return;
   }
   const loco = u.type.loco || 'walk';
@@ -4055,17 +4056,23 @@ function chaseDrone(z, dt) {
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
   const onDeck = inside(z.position);
-  if (ud.type.style === 'mortar' && onDeck && ud.climb < 0 && ud.swing < 0) {
+  // Artillery fires independently of driving, door breaking and line of sight.
+  // Keep the normal entry navigation running while shells travel over outer walls.
+  if (ud.type.style === 'mortar') {
     ud.mortarCd = Math.max(0, ud.mortarCd - dt);
+    if (ud.mortarCd <= 0 && !equipment.zones.some(r => r.userData.mortar)) {
+      fireMortar(z);
+      ud.mortarCd = 5;
+    }
+  }
+  const fullyOnDeck = Math.abs(z.position.x) < HALF - botRadius(z) - 0.2
+    && Math.abs(z.position.z) < HALF - botRadius(z) - 0.2;
+  if (ud.type.style === 'mortar' && fullyOnDeck && ud.climb < 0 && ud.swing < 0) {
     let moving = false;
     if (pd >= 4.5 && pd <= 22) {
-      const off = faceToward(z, pdx, pdz, Z_TRACK, dt);
-      if (ud.mortarCd <= 0 && off < 0.3 && !equipment.zones.some(r => r.userData.mortar)) {
-        fireMortar(z);
-        ud.mortarCd = 5;
-      }
+      faceToward(z, pdx, pdz, Z_TRACK, dt);
     } else {
-      // Closing the distance stops artillery fire; the tank slowly repositions.
+      // Reposition without interrupting the independent mortar firing cycle.
       const direction = pd < 4.5 ? -1 : 1;
       const distance = pd || 1;
       const target = routeAround(z, z.position.x + pdx / distance * direction * 3,
