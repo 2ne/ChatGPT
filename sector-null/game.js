@@ -13,6 +13,8 @@ import {
   fetchScores,
   normalizeName,
   readPlayerName,
+  rejectMessage,
+  startRun,
   submitScore,
   writePlayerName,
 } from './scores.js';
@@ -3743,6 +3745,7 @@ function startGame(fromTitle = false) {
   menuEl.classList.add('gone');
   menuEl.inert = true;
   resetGame(fromTitle);
+  beginScoreRun();
   focusGame();
 }
 
@@ -3781,6 +3784,7 @@ const deathSubmitBtn = document.getElementById('deathSubmit');
 const deathSubmitStatus = document.getElementById('deathSubmitStatus');
 let pendingSubmit = null;
 let submittingScore = false;
+let activeRunId = null;
 
 function setDeathSubmitBusy(busy) {
   submittingScore = busy;
@@ -3797,6 +3801,12 @@ function resetDeathSubmit() {
   deathNameForm.classList.add('hidden');
 }
 
+function beginScoreRun() {
+  activeRunId = null;
+  // Fire-and-forget: never block gameplay if the board is offline.
+  startRun().then((id) => { activeRunId = id; }).catch(() => { activeRunId = null; });
+}
+
 async function publishRunScore(name) {
   const clean = writePlayerName(name);
   if (!clean || !pendingSubmit || submittingScore) return null;
@@ -3805,6 +3815,7 @@ async function publishRunScore(name) {
   deathSubmitStatus.className = '';
   try {
     const result = await submitScore({
+      runId: activeRunId || pendingSubmit.runId,
       name: clean,
       score: pendingSubmit.score,
       wave: pendingSubmit.wave,
@@ -3813,12 +3824,13 @@ async function publishRunScore(name) {
       input: pendingSubmit.input || dominantPlayInput(),
       device: pendingSubmit.device || runDevice,
     });
-    pendingSubmit = null;
-    if (result.offline) {
-      deathSubmitStatus.textContent = 'Saved locally · board offline';
+    if (result.offline || result.rejected || result.error) {
+      deathSubmitStatus.textContent = rejectMessage(result.error || 'offline');
       deathSubmitStatus.className = 'err';
       return result;
     }
+    pendingSubmit = null;
+    activeRunId = null;
     const rank = result.entry?.rank;
     deathSubmitStatus.textContent = rank
       ? `Logged · Rank ${rank}`
@@ -3827,7 +3839,7 @@ async function publishRunScore(name) {
     deathNameForm.classList.add('hidden');
     return result;
   } catch {
-    deathSubmitStatus.textContent = 'Upload failed · try again';
+    deathSubmitStatus.textContent = rejectMessage('offline');
     deathSubmitStatus.className = 'err';
     return null;
   } finally {
@@ -3855,6 +3867,7 @@ function die() {
   resetDeathSubmit();
   if (state.score > 0) {
     pendingSubmit = {
+      runId: activeRunId,
       score: state.score,
       wave: state.wave,
       kills: state.kills,
