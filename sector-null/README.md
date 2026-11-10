@@ -92,7 +92,7 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 | Action | Keyboard and mouse | Touch | Xbox / standard gamepad |
 | --- | --- | --- | --- |
 | Move | WASD or arrow keys | Plant and drag on the left side (also turns the gun) | Left stick (radial deadzone) |
-| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim independently | Right stick aims (keeps last aim); RT or RB hold to fire |
+| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim independently | Right stick aims and fires (Geometry Wars-style); release stops fire, last aim kept |
 | Recharge | R | Tap the weapon panel | X or LB |
 | Pause | Esc or P | Menu icon in the score panel | Menu / Start |
 | Choose an upgrade | 1–3 or click | Tap a card | D-pad / left stick + A |

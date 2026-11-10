@@ -1287,11 +1287,23 @@ body.paused #flash {
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
     linear-gradient(90deg, #062538, #081825 70%, #0b3548);
 }
-.card:focus-visible {
+/* Keyboard :focus-visible and gamepad .pad-sel — never sticky tap :focus */
+.card:focus-visible,
+.card.pad-sel {
+  transform: translateY(-8px);
   border-color: var(--accent);
   box-shadow:
     0 16px 34px #000d,
     0 0 22px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.card:focus-visible .cicon,
+.card.pad-sel .cicon {
+  filter: drop-shadow(0 0 10px var(--accent)) brightness(1.25);
+  transform: scale(1.06);
+}
+.card:focus:not(:focus-visible):not(.pad-sel) {
+  /* Touch tap focus must not look selected */
+  outline: none;
 }
 @media (hover: hover) and (pointer: fine) and (orientation: landscape) and (max-height: 540px) {
   .card:hover {
