@@ -27,6 +27,8 @@ Early upgrade picks bias toward firepower, and Split Beam is guaranteed among th
 
 Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes and movement provide additional cues. The boss intro banner shows only the name.
 
+From about wave 12 the game soft-caps debris, enemy bolts and live score gems, trims spark counts, and budgets SFX voices so late runs (wave 25+) stay responsive without changing early-wave feel. Overflow gems still bank their score.
+
 ## Navigation and power-up feedback
 
 Uncollected supplies expire after 6 seconds of active play. During the final 2 seconds they blink twice per second and their ground ring shrinks. Reduced-motion mode keeps them visible and uses only the shrinking ring. Drop timers pause while choosing an upgrade or pausing the game.
