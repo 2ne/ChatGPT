@@ -3875,7 +3875,6 @@ function die() {
   }
   audio.death();
   updateHUD();
-  showBest();
 }
 
 // ===================================================================
@@ -3928,7 +3927,6 @@ function enterTitle(splash) {
   menuEl.classList.toggle('splash', splash);
   menu.open(null);
   menu.select(0, true);
-  showBest();
 }
 
 function wanderDrone(z, dt) {
@@ -4116,14 +4114,6 @@ for (const button of document.querySelectorAll('.close-panel')) {
   });
 }
 const BUILD_VERSION = typeof __BUILD_VERSION__ !== 'undefined' ? __BUILD_VERSION__ : 'dev';
-
-function showBest() {
-  const b = readHighScore();
-  const build = `BUILD <b>${BUILD_VERSION}</b>`;
-  document.getElementById('bestRun').innerHTML = b.score > 0
-    ? `<span class="lbl">HIGH SCORE</span><b>${formatScore(b.score)}</b> · WAVE <b>${b.wave}</b> · ${build}`
-    : build;
-}
 
 let scoresLoadToken = 0;
 
