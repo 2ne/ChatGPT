@@ -1266,6 +1266,59 @@ function resetGameplayInput() {
   firing = false;
 }
 
+// Lightweight run telemetry for the board (hidden columns). Last-used type + dt buckets only.
+const playInputTime = { touch: 0, pointer: 0, gamepad: 0 };
+let lastPlayInput = 'pointer';
+let gamepadLive = !![...(navigator.getGamepads?.() || [])].some(Boolean);
+const runDevice = (() => {
+  const ua = navigator.userAgent || '';
+  const touchPoints = navigator.maxTouchPoints || 0;
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  const longEdge = Math.max(screen.width || 0, screen.height || 0);
+  // iPadOS 13+ often reports as Macintosh with multi-touch.
+  if (/Macintosh/i.test(ua) && touchPoints > 1) return 'tablet';
+  if (/iPhone|iPod|Windows Phone/i.test(ua) || (/Android/i.test(ua) && /Mobile/i.test(ua))) return 'phone';
+  if (/iPad/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua))) return 'tablet';
+  if ((touchPoints > 0 || coarse) && longEdge > 0 && longEdge < 700) return 'phone';
+  if ((touchPoints > 0 || coarse) && longEdge > 0 && longEdge < 1100) return 'tablet';
+  return 'desktop';
+})();
+
+function notePlayInput(kind) {
+  if (kind === 'touch' || kind === 'pointer' || kind === 'gamepad') lastPlayInput = kind;
+}
+
+function resetPlayInputStats() {
+  playInputTime.touch = playInputTime.pointer = playInputTime.gamepad = 0;
+  lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
+}
+
+function tickPlayInput(dt) {
+  if (!state.running || state.paused || state.choosing) return;
+  if (gamepadLive && typeof navigator.getGamepads === 'function') {
+    for (const pad of navigator.getGamepads()) {
+      if (!pad) continue;
+      let active = false;
+      for (const button of pad.buttons) { if (button.pressed) { active = true; break; } }
+      if (!active) for (const axis of pad.axes) { if (Math.abs(axis) > 0.25) { active = true; break; } }
+      if (active) { lastPlayInput = 'gamepad'; break; }
+    }
+  }
+  playInputTime[lastPlayInput] += dt;
+}
+
+function dominantPlayInput() {
+  const total = playInputTime.touch + playInputTime.pointer + playInputTime.gamepad;
+  if (total <= 0) return null;
+  let best = 'pointer', bestT = -1;
+  for (const key of ['touch', 'pointer', 'gamepad']) {
+    if (playInputTime[key] > bestT) { best = key; bestT = playInputTime[key]; }
+  }
+  // Minority share ≥ ~25% of active play → mixed.
+  if ((total - bestT) / total >= 0.25) return 'mixed';
+  return best;
+}
+
 function focusGame() {
   canvas.focus({ preventScroll: true });
 }
@@ -1353,6 +1406,7 @@ function bindTap(el, handler, opts = {}) {
 canvas.addEventListener('pointerdown', e => {
   if (isMousePointer(e) || !state.running || state.paused || state.choosing) return;
   if (e.target?.closest?.(UI_ROOTS) || hudControlFromEvent(e)) return;
+  notePlayInput('touch');
   for (const k of movementKeys) delete keys[k];
   const stick = e.clientX < layoutSize().w / 2 ? moveStick : aimStick;
   if (stick.id !== null) return;
@@ -1405,6 +1459,7 @@ window.addEventListener('pointerdown', e => {
   const which = hudControlFromEvent(e);
   if (!which) return;
   claimPointer(e);
+  notePlayInput('touch');
   if (which === 'pause') setPaused(true);
   else startReload();
 }, { capture: true, passive: false });
@@ -1421,6 +1476,7 @@ window.addEventListener('keydown', e => {
   if (movementKeys.has(e.code)) {
     if (!keys[e.code]) keys[e.code] = ++movementPressOrder;
   } else keys[e.code] = true;
+  if (state.running) notePlayInput('pointer');
   if (e.code === 'Escape' || e.code === 'KeyP') { if (!e.repeat) setPaused(!state.paused); return; }
   if (state.paused) return;
   if (e.code === 'KeyR') startReload();
@@ -1433,12 +1489,22 @@ window.addEventListener('keydown', e => {
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
   touchAiming = false;
+  if (state.running) notePlayInput('pointer');
   const view = layoutSize();
   mouse.x = (e.clientX / view.w) * 2 - 1;
   mouse.y = -(e.clientY / view.h) * 2 + 1;
 });
-canvas.addEventListener('mousedown', e => { if (e.button === 0) firing = true; });
+canvas.addEventListener('mousedown', e => {
+  if (e.button === 0) {
+    firing = true;
+    if (state.running) notePlayInput('pointer');
+  }
+});
 window.addEventListener('mouseup', () => { firing = false; });
+window.addEventListener('gamepadconnected', () => { gamepadLive = true; });
+window.addEventListener('gamepaddisconnected', () => {
+  gamepadLive = !![...(navigator.getGamepads?.() || [])].some(Boolean);
+});
 window.addEventListener('contextmenu', e => e.preventDefault());
 window.addEventListener('selectstart', e => e.preventDefault());
 window.addEventListener('gesturestart', e => e.preventDefault());
@@ -3642,6 +3708,7 @@ const BASE_STATS = { maxHp: 3, magSize: 8, reloadTime: 1.2, fireRate: 0.13, dama
 // they are and the yard's drones join wave 1, which starts once the camera is down)
 function resetGame(keep = false) {
   resetGameplayInput();
+  resetPlayInputStats();
   if (!keep) { clearRun(); resetOpenings(); }
   seenDrops.clear();
   healGlow = 0; powerGlowTime = 0;
@@ -3743,6 +3810,8 @@ async function publishRunScore(name) {
       wave: pendingSubmit.wave,
       kills: pendingSubmit.kills,
       build: BUILD_VERSION,
+      input: pendingSubmit.input || dominantPlayInput(),
+      device: pendingSubmit.device || runDevice,
     });
     pendingSubmit = null;
     if (result.offline) {
@@ -3785,7 +3854,13 @@ function die() {
 
   resetDeathSubmit();
   if (state.score > 0) {
-    pendingSubmit = { score: state.score, wave: state.wave, kills: state.kills };
+    pendingSubmit = {
+      score: state.score,
+      wave: state.wave,
+      kills: state.kills,
+      input: dominantPlayInput(),
+      device: runDevice,
+    };
     deathNameInput.value = readPlayerName();
     deathNameForm.classList.remove('hidden');
   }
@@ -4560,6 +4635,7 @@ function separateDrones() {
 
 function update(dt, lightFrame = false) {
   const px = player.position.x, pz = player.position.z;
+  tickPlayInput(dt);
   if (state.running && !state.choosing) {
     // --- movement (always first, even on hitch frames) ---
     let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);

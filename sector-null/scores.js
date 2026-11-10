@@ -35,7 +35,7 @@ export async function fetchScores() {
   return res.json();
 }
 
-export async function submitScore({ name, score, wave, kills, build }) {
+export async function submitScore({ name, score, wave, kills, build, input, device }) {
   if (!SCORES_API) return { offline: true, entry: null, scores: [] };
   const res = await fetch(SCORES_API, {
     method: 'POST',
@@ -43,7 +43,7 @@ export async function submitScore({ name, score, wave, kills, build }) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name, score, wave, kills, build }),
+    body: JSON.stringify({ name, score, wave, kills, build, input, device }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
