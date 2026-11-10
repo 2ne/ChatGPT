@@ -3920,11 +3920,14 @@ for (const button of document.querySelectorAll('.close-panel')) {
     menuButtons[menu.sel].focus();
   });
 }
+const BUILD_VERSION = typeof __BUILD_VERSION__ !== 'undefined' ? __BUILD_VERSION__ : 'dev';
+
 function showBest() {
   const b = readHighScore();
+  const build = `<span class="lbl">BUILD</span><b>${BUILD_VERSION}</b>`;
   document.getElementById('bestRun').innerHTML = b.score > 0
-    ? `<span class="lbl">HIGH SCORE</span><b>${formatScore(b.score)}</b> · WAVE <b>${b.wave}</b>`
-    : '';
+    ? `<span class="lbl">HIGH SCORE</span><b>${formatScore(b.score)}</b> · WAVE <b>${b.wave}</b> · ${build}`
+    : build;
 }
 menuButtons.forEach((b, i) => {
   b.addEventListener('mouseenter', () => {
