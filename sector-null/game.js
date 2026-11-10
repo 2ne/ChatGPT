@@ -4006,7 +4006,7 @@ const BUILD_VERSION = typeof __BUILD_VERSION__ !== 'undefined' ? __BUILD_VERSION
 
 function showBest() {
   const b = readHighScore();
-  const build = `<span class="lbl">BUILD</span><b>${BUILD_VERSION}</b>`;
+  const build = `BUILD <b>${BUILD_VERSION}</b>`;
   document.getElementById('bestRun').innerHTML = b.score > 0
     ? `<span class="lbl">HIGH SCORE</span><b>${formatScore(b.score)}</b> · WAVE <b>${b.wave}</b> · ${build}`
     : build;
