@@ -1302,12 +1302,22 @@ body.paused #flash {
 #game {
   cursor: crosshair;
 }
+body.pad-aiming #game {
+  cursor: none;
+}
 #reloadHint {
   color: #a0bac8;
 }
 #touchControls,
 .touch-help {
   display: none;
+}
+.pad-help {
+  margin-top: 12px;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #c3d2d9;
+  letter-spacing: 0.04em;
 }
 @media (any-pointer: coarse) {
   #pause .sub {
@@ -1449,6 +1459,9 @@ body.paused #flash {
     display: block;
     font-size: 19px;
     margin-top: 12px;
+  }
+  .pad-help {
+    font-size: 16px;
   }
 }
 
