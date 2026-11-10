@@ -2100,7 +2100,7 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     hp: Math.ceil(state.droneHp * type.health),
     maxHp: Math.ceil(state.droneHp * type.health),
     type, boss: !!type.boss, chargeRing, shotCd: 1.5, chargeT: 0, shotTarget: null,
-    splitsDone: 0, mortarCd: 1.5, mortarRecoil: 0,
+    splitsDone: 0, mortarCd: 1.5, mortarRecoil: 0, mortarShots: 0,
     reformT: type.fragment ? 5.5 : 0,
     seekBoss: false,
     pace,                                               // its speed relative to the wave's
@@ -2907,7 +2907,10 @@ function groundRing(position, radius, color, life, list) {
 }
 
 function fireMortar(z) {
-  const ring = groundRing(player.position.clone(), 1.8, 0xffc17b, 1.6, equipment.zones);
+  // An off-screen tank's opening shot needs time to announce the new threat.
+  const warningTime = z.userData.mortarShots === 0 ? 3 : 1.6;
+  z.userData.mortarShots++;
+  const ring = groundRing(player.position.clone(), 1.8, 0xffc17b, warningTime, equipment.zones);
   const origin = z.userData.upper.getWorldPosition(new THREE.Vector3());
   origin.y += 0.6;
   const shell = new THREE.Mesh(enemyBoltGeo, DRONE_KITS[5].optic);
@@ -2915,7 +2918,8 @@ function fireMortar(z) {
   scene.add(shell);
   Object.assign(ring.userData, { mortar: true, shell, origin });
   z.userData.mortarRecoil = 1;
-  audio.enemyCharge(origin);
+  // Sound the warning at the impact marker so an off-screen launch is audible.
+  audio.enemyCharge(ring.position);
 }
 
 function detonateMortarZone(ring) {
@@ -3045,7 +3049,9 @@ function updateEquipment(dt) {
       ring.userData.shell.position.lerpVectors(ring.userData.origin, ring.position, progress);
       ring.userData.shell.position.y += 4 * Math.sin(Math.PI * progress);
     }
-    ring.material.opacity = 0.35 + 0.55 * u + (reducedMotion.matches ? 0 : 0.2 * Math.sin(u * Math.PI * 8));
+    ring.material.opacity = ring.userData.mortar
+      ? 0.7 + 0.25 * u + (reducedMotion.matches ? 0 : 0.05 * Math.sin(u * Math.PI * 8))
+      : 0.35 + 0.55 * u + (reducedMotion.matches ? 0 : 0.2 * Math.sin(u * Math.PI * 8));
     if (ring.userData.life <= 0) {
       if (ring.userData.mortar) detonateMortarZone(ring);
       else detonateReactorZone(ring);
