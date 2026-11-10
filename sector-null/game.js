@@ -841,10 +841,22 @@ const casingGeo = bevelBox(0.05, 0.05, 0.12, 0.012);
 const smokeMats = Array.from({ length: 24 }, () =>
   new THREE.MeshStandardMaterial({ color: 0x8d8f94, roughness: 1, transparent: true, opacity: 0, depthWrite: false }));
 let smokeI = 0;
+const DEBRIS_SOFT_CAP = 90;
 function spawnDebris(mesh, vel, o) {
+  // Late waves can dump hundreds of sparks — keep a soft ceiling.
+  while (debris.length >= DEBRIS_SOFT_CAP) {
+    const old = debris.shift();
+    scene.remove(old);
+  }
   mesh.userData = { vel, spin: o.spin || new THREE.Vector3(), life: o.life, max: o.life, bounce: o.bounce, smoke: o.smoke, size: mesh.scale.clone() };
   scene.add(mesh);
   debris.push(mesh);
+}
+
+// 0 before wave 12, ~1 by wave 25 — scales FX/gem load without touching early game.
+function fxPressure() {
+  if (!state.running) return 0;
+  return Math.max(0, Math.min(1, (state.wave - 12) / 13));
 }
 function updateDebris(dt) {
   for (let i = debris.length - 1; i >= 0; i--) {
@@ -1678,7 +1690,8 @@ function shotWorld() {
 
 function wallSpark(x, y, z, dir) {
   const origin = new THREE.Vector3(x, y, z);
-  for (let i = 0; i < 7; i++) {
+  const sparks = Math.max(2, Math.round(7 * (1 - fxPressure() * 0.7)));
+  for (let i = 0; i < sparks; i++) {
     const spark = new THREE.Mesh(BOX, sparkMat);
     spark.scale.set(0.03, 0.03, rnd(0.12, 0.3));
     spark.position.copy(origin);
@@ -1903,12 +1916,19 @@ function clearEnemyBolts() {
   for (const bolt of enemyBolts) scene.remove(bolt);
   enemyBolts.length = 0;
 }
+const ENEMY_BOLT_CAP = 36;
 function fireEnemyVolley(z, target = null, countOverride = null) {
   const u = z.userData;
   const aim = target || u.shotTarget;
   const angle = Math.atan2(aim.x - z.position.x, aim.z - z.position.z);
-  const count = countOverride ?? (u.type.volley || 1);
+  let count = countOverride ?? (u.type.volley || 1);
+  // Trim volleys when the field is already packed with bolts.
+  if (enemyBolts.length > ENEMY_BOLT_CAP * 0.7) count = Math.min(count, 2);
   for (let i = 0; i < count; i++) {
+    if (enemyBolts.length >= ENEMY_BOLT_CAP) {
+      const old = enemyBolts.shift();
+      scene.remove(old);
+    }
     const a = angle + (i - (count - 1) / 2) * 0.22;
     const bolt = new THREE.Mesh(enemyBoltGeo, enemyBoltMat);
     bolt.position.copy(z.position); bolt.position.y = 1.1;
@@ -1925,16 +1945,25 @@ function fireEntryWarning(z, opening) {
   const tz = opening.iz + (opening.axis === 'z' ? jitter : 0);
   fireEnemyVolley(z, new THREE.Vector3(tx, 0, tz), Math.min(2, z.userData.type.volley || 1));
 }
+const _boltFrom = new THREE.Vector3();
+const _boltDelta = new THREE.Vector3();
+const _boltClosest = new THREE.Vector3();
 function updateEnemyBolts(dt) {
   for (let i = enemyBolts.length - 1; i >= 0; i--) {
-    const b = enemyBolts[i], from = b.position.clone();
+    const b = enemyBolts[i];
+    _boltFrom.copy(b.position);
     b.position.addScaledVector(b.userData.dir, 8 * dt);
     b.userData.life -= dt;
-    const blocked = wallBetween(from, b.position) || !clearPath(from.x, from.z, b.position.x, b.position.z);
-    const delta = b.position.clone().sub(from);
-    const t = THREE.MathUtils.clamp(player.position.clone().sub(from).dot(delta) / (delta.lengthSq() || 1), 0, 1);
-    const closest = from.clone().addScaledVector(delta, t);
-    const hit = Math.hypot(closest.x - player.position.x, closest.z - player.position.z) < 0.55;
+    const blocked = wallBetween(_boltFrom, b.position) || !clearPath(_boltFrom.x, _boltFrom.z, b.position.x, b.position.z);
+    _boltDelta.subVectors(b.position, _boltFrom);
+    const lenSq = _boltDelta.lengthSq() || 1;
+    const t = THREE.MathUtils.clamp(
+      ((player.position.x - _boltFrom.x) * _boltDelta.x + (player.position.z - _boltFrom.z) * _boltDelta.z) / lenSq,
+      0,
+      1,
+    );
+    _boltClosest.copy(_boltFrom).addScaledVector(_boltDelta, t);
+    const hit = Math.hypot(_boltClosest.x - player.position.x, _boltClosest.z - player.position.z) < 0.55;
     if (hit && !blocked) hurtPlayer();
     if (blocked || hit || b.userData.life <= 0 || !state.running) {
       scene.remove(b); enemyBolts.splice(i, 1);
@@ -2681,17 +2710,28 @@ const EMERALD_CHAIN_MS = 750;
 const emeraldGeo = new THREE.OctahedronGeometry(0.11, 0).scale(0.72, 1.2, 0.72);
 const emeraldMat = new THREE.MeshBasicMaterial({ color: 0x7cff4a, toneMapped: false });
 const emeraldGlowMap = glowTexture();
+// Shared glow — per-gem materials used to thrash GC when dozens are alive.
+const emeraldGlowMat = new THREE.SpriteMaterial({
+  map: emeraldGlowMap, color: 0x6dff55, transparent: true, opacity: 0.85,
+  blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+});
+const EMERALD_SOFT_CAP = 56;
 const emeralds = [];
 let emeraldChain = 0;
 let lastEmeraldAt = -Infinity;
+let emeraldGlowPulse = 0;
 
 function spawnEmeralds(origin, count) {
-  for (let i = 0; i < count; i++) {
+  const pressure = fxPressure();
+  // Late waves spawn fewer meshes; overflow still scores so farming isn't lost.
+  let n = Math.max(1, Math.round(count * (1 - pressure * 0.6)));
+  const room = Math.max(0, EMERALD_SOFT_CAP - emeralds.length);
+  const bank = Math.max(0, n - room);
+  if (bank) addScore(EMERALD_VALUE * bank);
+  n = Math.min(n, room);
+  for (let i = 0; i < n; i++) {
     const gem = new THREE.Mesh(emeraldGeo, emeraldMat);
-    const glow = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: emeraldGlowMap, color: 0x6dff55, transparent: true, opacity: 0.85,
-      blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
-    }));
+    const glow = new THREE.Sprite(emeraldGlowMat);
     glow.scale.setScalar(0.55);
     gem.add(glow);
     const ang = rnd(0, Math.PI * 2), dist = rnd(0.15, 0.7);
@@ -2705,7 +2745,7 @@ function spawnEmeralds(origin, count) {
 
 function disposeEmerald(e) {
   scene.remove(e);
-  e.userData.glow?.material.dispose();
+  // Shared glow material — do not dispose.
 }
 
 function clearEmeralds() {
@@ -2725,6 +2765,8 @@ function collectEmerald() {
 function updateEmeralds(dt) {
   const magnetRange = state.upgrades.magnet ? EMERALD_MAGNET_ABILITY : EMERALD_MAGNET;
   const surge = !!state.upgrades.magnet;
+  emeraldGlowPulse += dt;
+  if (emeralds.length) emeraldGlowMat.opacity = 0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8);
   for (let i = emeralds.length - 1; i >= 0; i--) {
     const e = emeralds[i], ud = e.userData;
     ud.life -= dt; ud.t += dt;
@@ -2745,7 +2787,6 @@ function updateEmeralds(dt) {
     e.rotation.x = 0.35 + Math.sin(ud.t * 3) * 0.15;
     const warning = ud.life <= EMERALD_WARN;
     e.visible = !warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0;
-    ud.glow.material.opacity = 0.55 + 0.35 * Math.sin(ud.t * 8);
   }
 }
 
@@ -3142,7 +3183,8 @@ function spawnBlastFlare(origin, scale = 1, color = 0xff9b42) {
 }
 
 function spawnBlastSparks(origin, count, speedMul = 1, sizeMul = 1) {
-  const n = reducedMotion.matches ? Math.max(4, (count / 3) | 0) : count;
+  const trimmed = Math.max(2, Math.round(count * (1 - fxPressure() * 0.7)));
+  const n = reducedMotion.matches ? Math.max(2, (trimmed / 3) | 0) : trimmed;
   for (let i = 0; i < n; i++) {
     const spark = new THREE.Mesh(BOX, sparkMat);
     spark.scale.set(0.035 * sizeMul, 0.035 * sizeMul, rnd(0.2, 0.45) * sizeMul);
@@ -3170,7 +3212,8 @@ function explodeDrone(drone) {
   const origin = drone.userData.upper.getWorldPosition(new THREE.Vector3());
   origin.y += 0.35;
   audio.explode(origin);
-  spawnBlastFlare(origin, 1);
+  // Skip the flash when the field is already saturated with FX.
+  if (fxPressure() < 0.85 || droneBlasts.length < 10) spawnBlastFlare(origin, 1);
   spawnBlastSparks(origin, 16);
 
   // Score gems replace lasting body-part debris (see SCORING.md).
@@ -4080,10 +4123,10 @@ function separateDrones() {
   }
 }
 
-function update(dt) {
+function update(dt, lightFrame = false) {
   const px = player.position.x, pz = player.position.z;
   if (state.running && !state.choosing) {
-    // --- movement ---
+    // --- movement (always first, even on hitch frames) ---
     let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);
     let mz = keyboardAxis(['KeyW', 'ArrowUp'], ['KeyS', 'ArrowDown']);
     mx += moveStick.delta.x;
@@ -4091,8 +4134,10 @@ function update(dt) {
     const moving = !!(mx || mz);
     if (moving) {
       const l = Math.max(1, Math.hypot(mx, mz));
-      player.position.x += (mx / l) * state.speed * dt;
-      player.position.z += (mz / l) * state.speed * dt;
+      // Cap the move step so a hitch can't shove the operator a huge distance.
+      const stepDt = Math.min(dt, 0.04);
+      player.position.x += (mx / l) * state.speed * stepDt;
+      player.position.z += (mz / l) * state.speed * stepDt;
     }
     // clamp inside deck
     const lim = HALF - 0.7;
@@ -4237,13 +4282,16 @@ function update(dt) {
     if (state.running) chaseDrone(z, dt);
     else if (title.active) wanderDrone(z, dt);
   }
-  if (state.running || title.active) separateDrones();
+  // Crowd separation is expensive with a full field — thin it out during hitch recovery.
+  if (state.running || title.active) {
+    if (!lightFrame || ((performance.now() / 90) | 0) % 2 === 0) separateDrones();
+  }
   updateEquipment(dt);
 
   updateBossDeath(dt);
   updateDroneBlasts(dt);
   updateOpenings(dt);
-  updateWorld(dt);
+  if (!lightFrame) updateWorld(dt);
 
   // --- operator rig, driven by how far the operator actually moved (so pushing into a
   // wall doesn't run in place). Runs on the title and death screens too, so the pose settles ---
@@ -4253,7 +4301,8 @@ function update(dt) {
   updateMagnetAura();
   // flicker while the post-hit grace period lasts
   player.visible = !state.running || state.dmgCd <= 0 || Math.floor(state.dmgCd * 12) % 2 === 0;
-  updateDebris(dt);
+  // Debris is pure cosmetics — drop updates briefly after a hitch so movement recovers first.
+  if (!lightFrame || debris.length < 40) updateDebris(dt);
 
   // damage flash fade
   if (flashT > 0) { flashT -= dt; hud.flash.style.opacity = Math.max(0, flashT) * 0.6; }
@@ -4268,10 +4317,16 @@ function update(dt) {
 // LOOP
 // ===================================================================
 let last = performance.now();
+let hitchCool = 0;
 function loop(now) {
-  const dt = Math.min(0.05, (now - last) / 1000);
+  const raw = (now - last) / 1000;
   last = now;
-  if (!state.paused) update(dt);
+  // A long frame means the last tick blocked the main thread — don't chain more heavy work.
+  if (raw > 0.085) hitchCool = 0.28;
+  const lightFrame = hitchCool > 0 || fxPressure() > 0.75;
+  const dt = Math.min(raw > 0.085 ? 0.033 : 0.05, raw);
+  if (!state.paused) update(dt, lightFrame);
+  hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
   } else {

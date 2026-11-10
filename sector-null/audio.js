@@ -1,6 +1,8 @@
 import { createScore } from './score.js';
 
 const midiHz = note => 440 * 2 ** ((note - 69) / 12);
+// Soft SFX budget — late-wave kill storms used to stall the AudioContext graph.
+const MAX_VOICES = 28;
 
 export function createAudio(settings, listener) {
   const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
@@ -12,6 +14,9 @@ export function createAudio(settings, listener) {
   let recharge;
   let pickupStreak = 0;
   let lastPickupAt = -Infinity;
+  let activeVoices = 0;
+  let lastEmeraldAt = -Infinity;
+  let lastExplodeAt = -Infinity;
 
   function cancelReload() {
     if (!recharge) return;
@@ -60,7 +65,8 @@ export function createAudio(settings, listener) {
     musicBus.gain.setTargetAtTime((settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
   }
 
-  function spatial(position) {
+  // Spatial taps used to leak pan/gain nodes forever — that stalls audio on long runs.
+  function spatial(position, hold = 0.7) {
     if (!position || !ctx) return master;
     const player = listener();
     const dx = (position.x ?? 0) - player.x;
@@ -70,12 +76,38 @@ export function createAudio(settings, listener) {
     pan.pan.value = Math.max(-0.85, Math.min(0.85, dx / 12));
     distance.gain.value = 1 / (1 + Math.hypot(dx, dz) * 0.09);
     pan.connect(distance).connect(master);
+    let users = 0;
+    let dead = false;
+    const dispose = () => {
+      if (dead) return;
+      dead = true;
+      try { pan.disconnect(); } catch { /* */ }
+      try { distance.disconnect(); } catch { /* */ }
+    };
+    pan._acquire = () => { users++; };
+    pan._release = () => {
+      users = Math.max(0, users - 1);
+      if (users === 0) dispose();
+    };
+    setTimeout(dispose, Math.max(80, hold * 1000 + 100));
     return pan;
+  }
+
+  function claimVoice() {
+    if (activeVoices >= MAX_VOICES) return false;
+    activeVoices++;
+    return true;
+  }
+
+  function releaseVoice() {
+    activeVoices = Math.max(0, activeVoices - 1);
   }
 
   function voice(from, to, duration, volume, options = {}) {
     if (!ctx) return;
+    if (!claimVoice()) return;
     const { type = 'sine', t = ctx.currentTime, attack = 0.008, out = master, echo = false } = options;
+    if (out !== master && out._acquire) out._acquire();
     const oscillator = ctx.createOscillator();
     const envelope = ctx.createGain();
     oscillator.type = type;
@@ -88,11 +120,18 @@ export function createAudio(settings, listener) {
     if (echo) envelope.connect(reverb);
     oscillator.start(t);
     oscillator.stop(t + duration + 0.015);
-    oscillator.onended = () => { oscillator.disconnect(); envelope.disconnect(); };
+    oscillator.onended = () => {
+      try { oscillator.disconnect(); } catch { /* */ }
+      try { envelope.disconnect(); } catch { /* */ }
+      if (out !== master && out._release) out._release();
+      releaseVoice();
+    };
   }
 
   function grain(freq, duration, volume, out = master, type = 'bandpass') {
     if (!ctx) return;
+    if (!claimVoice()) return;
+    if (out !== master && out._acquire) out._acquire();
     const t = ctx.currentTime;
     const source = ctx.createBufferSource();
     const filter = ctx.createBiquadFilter();
@@ -107,6 +146,13 @@ export function createAudio(settings, listener) {
     envelope.gain.exponentialRampToValueAtTime(0.0001, t + duration);
     source.connect(filter).connect(envelope).connect(out);
     source.start(t, Math.random() * 0.4, duration + 0.02);
+    source.onended = () => {
+      try { source.disconnect(); } catch { /* */ }
+      try { filter.disconnect(); } catch { /* */ }
+      try { envelope.disconnect(); } catch { /* */ }
+      if (out !== master && out._release) out._release();
+      releaseVoice();
+    };
   }
 
   function signal(notes, volume = 0.13, step = 0.085) {
@@ -156,8 +202,8 @@ export function createAudio(settings, listener) {
       if (!ctx) return;
       voice(620, 490, 0.16, 0.16, { t: ctx.currentTime + 0.035 });
     },
-    enemyCharge(pos) { voice(180, 380, 0.65, 0.07, { out: spatial(pos), attack: 0.2 }); },
-    enemyShot(pos) { voice(420, 110, 0.18, 0.16, { out: spatial(pos), type: 'triangle' }); },
+    enemyCharge(pos) { voice(180, 380, 0.65, 0.07, { out: spatial(pos, 0.85), attack: 0.2 }); },
+    enemyShot(pos) { voice(420, 110, 0.18, 0.16, { out: spatial(pos, 0.35), type: 'triangle' }); },
     reloadOut(duration) {
       if (!ctx) return;
       cancelReload();
@@ -182,30 +228,34 @@ export function createAudio(settings, listener) {
       if (!ctx) return;
       voice(440, 520, 0.12, 0.065);
     },
-    hit(pos) { const out = spatial(pos); grain(2200, 0.08, 0.26, out); voice(290, 87, 0.1, 0.21, { out, type: 'triangle' }); },
+    hit(pos) { const out = spatial(pos, 0.35); grain(2200, 0.08, 0.26, out); voice(290, 87, 0.1, 0.21, { out, type: 'triangle' }); },
     explode(pos) {
-      const out = spatial(pos);
+      // Coalesce rapid multi-kills so the graph doesn't flood.
+      const now = performance.now();
+      if (now - lastExplodeAt < 45) return;
+      lastExplodeAt = now;
+      const out = spatial(pos, 0.45);
       grain(2400, 0.16, 0.34, out);
       grain(520, 0.28, 0.2, out);
       voice(155, 42, 0.24, 0.28, { out, type: 'triangle', echo: true });
     },
     // Layered boom for the boss finale — heavier bass and a longer tail.
     bossExplode(pos) {
-      const out = spatial(pos);
+      const out = spatial(pos, 0.75);
       grain(2200, 0.22, 0.42, out);
       grain(480, 0.38, 0.3, out);
       grain(110, 0.55, 0.4, out);
       voice(140, 28, 0.42, 0.4, { out, type: 'triangle', echo: true });
       voice(52, 18, 0.55, 0.36, { out, type: 'sine' });
     },
-    servo(pos) { const out = spatial(pos); voice(135, 280, 0.24, 0.056, { out, type: 'triangle' }); grain(780, 0.12, 0.05, out); },
-    swipe(pos) { grain(740, 0.21, 0.25, spatial(pos)); },
+    servo(pos) { const out = spatial(pos, 0.4); voice(135, 280, 0.24, 0.056, { out, type: 'triangle' }); grain(780, 0.12, 0.05, out); },
+    swipe(pos) { grain(740, 0.21, 0.25, spatial(pos, 0.35)); },
     hurt() { voice(108, 43, 0.38, 0.42, { type: 'triangle' }); signal([56, 50], 0.12); },
     step() { grain(510, 0.08, 0.11); },
-    bash(pos, strength = 1) { const out = spatial(pos); voice(106, 50, 0.18, 0.29 * strength, { out, type: 'triangle' }); grain(1600, 0.12, 0.24 * strength, out); },
-    crack(pos) { grain(4300, 0.14, 0.3, spatial(pos)); },
-    doorBreak(pos) { const out = spatial(pos); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
-    shatter(pos) { const out = spatial(pos); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
+    bash(pos, strength = 1) { const out = spatial(pos, 0.35); voice(106, 50, 0.18, 0.29 * strength, { out, type: 'triangle' }); grain(1600, 0.12, 0.24 * strength, out); },
+    crack(pos) { grain(4300, 0.14, 0.3, spatial(pos, 0.3)); },
+    doorBreak(pos) { const out = spatial(pos, 0.6); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
+    shatter(pos) { const out = spatial(pos, 0.5); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
     waveClear() { score?.clearWave(); },
     alarm(level) { signal(level > 0.8 ? [45, 52, 45] : [45, 52], 0.075, 0.16); },
     death() { cancelReload(); score?.stop(); signal([57, 54, 49, 35], 0.19, 0.17); },
@@ -220,7 +270,11 @@ export function createAudio(settings, listener) {
     },
     emerald(chain = 0) {
       // Short digital tick — no chord, no reverb. Chain only nudges pitch.
+      // Magnet vacuums can collect dozens per second; throttle the ticks.
       if (!ctx) return;
+      const now = performance.now();
+      if (now - lastEmeraldAt < 55) return;
+      lastEmeraldAt = now;
       const hz = 720 + Math.min(chain, 8) * 70;
       voice(hz, hz * 1.12, 0.045, 0.035, { type: 'square', attack: 0.002 });
       grain(hz * 1.45, 0.03, 0.028);
