@@ -7,7 +7,10 @@
   --menu-width: min(32cqw, 570px);
   --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
   position: fixed;
-  inset: 0;
+  top: var(--safe-top);
+  right: var(--safe-right);
+  bottom: var(--safe-bottom);
+  left: var(--safe-left);
   z-index: 10;
   container-type: size;
   isolation: isolate;

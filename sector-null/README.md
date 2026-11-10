@@ -67,6 +67,8 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 
 Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer.
 
+On iPhone, Add to Home Screen keeps the game full-screen (`black-translucent` status bar, `viewport-fit=cover`). HUD, gun panel, boss bar and overlays sit `18px` past `env(safe-area-inset-*)` so they clear the Dynamic Island and home indicator. Safari already lays the page out below its chrome, so those insets are 0 and the layout does not change. If an older home-screen icon still sits under the status bar, remove it and add the page to the home screen again.
+
 ## Engineer and defence paths
 
 Upgrade cards show a visual preview, explicit rank, current build and a larger recommended option. Recommendations favour an urgently needed shield, a first Split Beam, or continuing owned equipment. All three cards remain deliberate choices; nothing is automatically selected. Use 1–3, tap, or Tab and Enter. Offers include an engineer option whenever an eligible one remains, and owned modules receive higher offer weight.
