@@ -962,12 +962,17 @@ body.paused #flash {
   color: var(--pink);
   text-shadow: 0 0 12px #ff368c66;
 }
+.death-actions,
 #deathMenu {
   display: grid;
   gap: 10px;
   width: min(100%, 320px);
   margin: 28px auto 0;
 }
+#deathArcade .death-actions {
+  margin: 18px auto 0;
+}
+.death-action,
 #deathMenu button {
   --edge: var(--pink);
   --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
@@ -988,6 +993,8 @@ body.paused #flash {
     filter 0.17s,
     color 0.17s;
 }
+.death-action::before,
+.death-action::after,
 #deathMenu button::before,
 #deathMenu button::after {
   content: "";
@@ -997,13 +1004,16 @@ body.paused #flash {
   inset: 0;
   clip-path: var(--cut);
 }
+.death-action::before,
 #deathMenu button::before {
   background: linear-gradient(90deg, var(--edge), #da45876b 57%, transparent 99%);
 }
+.death-action::after,
 #deathMenu button::after {
   inset: 1px 0 1px 3px;
   background: linear-gradient(90deg, #211022f2, #111423bc 62%, #10162309);
 }
+.death-action-primary,
 #deathMenu #retryBtn {
   --edge: var(--cyan);
 }
@@ -1218,14 +1228,17 @@ body.paused #flash {
   #pauseMenu #resumeBtn:hover {
     background: #cefaff;
   }
+  .death-action:hover,
   #deathMenu button:hover {
     --edge: var(--cyan);
     filter: drop-shadow(0 0 10px #19d9f579);
     color: #fff;
   }
+  .death-action:hover::before,
   #deathMenu button:hover::before {
     background: var(--edge);
   }
+  .death-action:hover::after,
   #deathMenu button:hover::after {
     inset: 2px 2px 2px 4px;
     background:
@@ -1243,14 +1256,17 @@ body.paused #flash {
 #pauseMenu #resumeBtn:focus-visible {
   background: #cefaff;
 }
+.death-action:focus-visible,
 #deathMenu button:focus-visible {
   --edge: var(--cyan);
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
+.death-action:focus-visible::before,
 #deathMenu button:focus-visible::before {
   background: var(--edge);
 }
+.death-action:focus-visible::after,
 #deathMenu button:focus-visible::after {
   inset: 2px 2px 2px 4px;
   background:
@@ -2011,51 +2027,6 @@ body.pad-aiming #game {
 .death-reel.pad-sel .death-reel-chev {
   opacity: 1;
 }
-#deathArcadeSubmit {
-  --edge: var(--cyan, #45ecff);
-  --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 54px;
-  padding: 0 16px;
-  border: 0;
-  background: none;
-  color: #f2eff9;
-  font: 700 16px/1 "Rajdhani", sans-serif;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: filter 0.17s, color 0.17s;
-}
-#deathArcadeSubmit::before,
-#deathArcadeSubmit::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  z-index: -1;
-  inset: 0;
-  clip-path: var(--cut);
-}
-#deathArcadeSubmit::before {
-  background: linear-gradient(90deg, var(--cyan, #45ecff), #7adfff88 42%, var(--pink, #ff368c));
-}
-#deathArcadeSubmit::after {
-  inset: 2px;
-  background: linear-gradient(90deg, #0a2230f2, #111423bc 62%, #10162309);
-}
-#deathArcadeSubmit.pad-sel,
-#deathArcadeSubmit:focus-visible:not(.busy) {
-  filter: drop-shadow(0 0 12px #19d9f579);
-  color: #fff;
-}
-#deathArcadeSubmit.pad-sel::before,
-#deathArcadeSubmit:focus-visible:not(.busy)::before {
-  background: linear-gradient(90deg, var(--cyan, #45ecff), var(--pink, #ff368c));
-}
 #deathArcadeSubmit.busy {
   pointer-events: none;
   color: transparent;
@@ -2074,7 +2045,7 @@ body.pad-aiming #game {
   opacity: 1;
   animation: death-submit-spin .7s linear infinite;
 }
-#deathArcadeSubmit:focus:not(:focus-visible):not(.pad-sel) {
+.death-action:focus:not(:focus-visible):not(.pad-sel) {
   filter: none;
   color: #f2eff9;
 }
@@ -2123,14 +2094,17 @@ body.pad-aiming #game {
     0 0 14px #ff368c55,
     inset 0 0 16px #0008;
 }
+.death-action.pad-sel,
 #deathMenu button.pad-sel {
   --edge: var(--cyan);
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
+.death-action.pad-sel::before,
 #deathMenu button.pad-sel::before {
   background: var(--edge);
 }
+.death-action.pad-sel::after,
 #deathMenu button.pad-sel::after {
   inset: 2px 2px 2px 4px;
   background:

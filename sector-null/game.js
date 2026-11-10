@@ -1451,26 +1451,27 @@ function handlePadUiNav(dir) {
     return;
   }
   if (!document.getElementById('death').classList.contains('hidden')) {
-    if (deathArcadeLocked() || (deathPadEntry && !deathArcade.classList.contains('hidden') && arcadeFocus < 3)) {
-      handleArcadePadNav(dir);
-      return;
-    }
-    if (deathPadEntry && !deathArcade.classList.contains('hidden') && arcadeFocus === 3) {
-      if (dir === 'up' || dir === 'left') {
-        setArcadeFocus(2);
-        audio.ui('move');
+    // While arcade reels/submit are the active pad UI, never fall through to generic menu cycling
+    // (stick-axis down used to steal focus onto Submit / Play again).
+    if (deathPadEntry && !deathArcade.classList.contains('hidden') && arcadeFocus <= 3) {
+      if (arcadeFocus < 3 || deathArcadeLocked() || dir === 'up' || dir === 'left') {
+        handleArcadePadNav(dir);
         return;
       }
-      if ((dir === 'down' || dir === 'right') && !deathMenu.classList.contains('hidden')) {
+      if (arcadeFocus === 3 && (dir === 'down' || dir === 'right') && !deathMenu.classList.contains('hidden')) {
         arcadeFocus = 4;
+        clearDeathPadSel();
+        deathArcadeSubmit.classList.remove('pad-sel');
         setDeathPadFocus(document.getElementById('retryBtn'));
         audio.ui('move');
         return;
       }
+      handleArcadePadNav(dir);
+      return;
     }
     if (deathPadEntry && arcadeFocus >= 4 && (dir === 'up' || dir === 'left') && !deathArcade.classList.contains('hidden')) {
       const list = deathFocusables();
-      if (document.activeElement === list[0]) {
+      if (document.activeElement === list[0] || list[0] === document.getElementById('retryBtn')) {
         arcadeFocus = 3;
         setArcadeFocus(3);
         audio.ui('move');
@@ -4237,8 +4238,9 @@ function nudgeArcadeChar(dir) {
 
 function handleArcadePadNav(dir) {
   if (arcadeFocus < 3) {
+    // Up/down only spin the focused reel; left/right move (right past last → Submit).
     if (dir === 'up') { nudgeArcadeChar(-1); return; }
-    if (dir === 'down') { setArcadeFocus(3); audio.ui('move'); return; }
+    if (dir === 'down') { nudgeArcadeChar(1); return; }
     if (dir === 'left') {
       if (arcadeFocus > 0) { setArcadeFocus(arcadeFocus - 1); audio.ui('move'); }
       return;
