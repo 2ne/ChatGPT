@@ -9,6 +9,13 @@ import { createAudio } from './audio.js';
 import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
 import { firstBlocker, resolveShotStart } from './shot-collision.js';
+import {
+  fetchScores,
+  normalizeName,
+  readPlayerName,
+  submitScore,
+  writePlayerName,
+} from './scores.js';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -1438,8 +1445,18 @@ window.addEventListener('gesturechange', e => e.preventDefault());
 window.addEventListener('gestureend', e => e.preventDefault());
 
 // the death screen: go again, or back to the title
-bindTap(document.getElementById('retryBtn'), () => startGame());
-bindTap(document.getElementById('deathQuitBtn'), () => quitToTitle());
+bindTap(document.getElementById('retryBtn'), async () => {
+  if (pendingSubmit && normalizeName(deathNameInput.value)) {
+    await publishRunScore(deathNameInput.value);
+  }
+  startGame();
+});
+bindTap(document.getElementById('deathQuitBtn'), async () => {
+  if (pendingSubmit && normalizeName(deathNameInput.value)) {
+    await publishRunScore(deathNameInput.value);
+  }
+  quitToTitle();
+});
 bindTap(document.getElementById('resumeBtn'), () => setPaused(false));
 bindTap(document.getElementById('quitBtn'), () => quitToTitle());
 // alt-tabbing away mid-run pauses (and would otherwise leave WASD stuck down)
@@ -3680,6 +3697,56 @@ function quitToTitle() {
   enterTitle(false);
 }
 
+const deathNameForm = document.getElementById('deathNameForm');
+const deathNameInput = document.getElementById('deathName');
+const deathSubmitStatus = document.getElementById('deathSubmitStatus');
+let pendingSubmit = null;
+let submittingScore = false;
+
+function resetDeathSubmit() {
+  pendingSubmit = null;
+  submittingScore = false;
+  deathSubmitStatus.textContent = '';
+  deathSubmitStatus.className = '';
+  deathNameForm.classList.add('hidden');
+}
+
+async function publishRunScore(name) {
+  const clean = writePlayerName(name);
+  if (!clean || !pendingSubmit || submittingScore) return null;
+  submittingScore = true;
+  deathSubmitStatus.textContent = 'Uploading…';
+  deathSubmitStatus.className = '';
+  try {
+    const result = await submitScore({
+      name: clean,
+      score: pendingSubmit.score,
+      wave: pendingSubmit.wave,
+      kills: pendingSubmit.kills,
+      build: BUILD_VERSION,
+    });
+    pendingSubmit = null;
+    if (result.offline) {
+      deathSubmitStatus.textContent = 'Saved locally · board offline';
+      deathSubmitStatus.className = 'err';
+      return result;
+    }
+    const rank = result.entry?.rank;
+    deathSubmitStatus.textContent = rank
+      ? `Logged · Rank ${rank}`
+      : 'Logged to board';
+    deathSubmitStatus.className = 'ok';
+    deathNameForm.classList.add('hidden');
+    return result;
+  } catch {
+    deathSubmitStatus.textContent = 'Upload failed · try again';
+    deathSubmitStatus.className = 'err';
+    return null;
+  } finally {
+    submittingScore = false;
+  }
+}
+
 function die() {
   state.running = false;
   firing = false;
@@ -3696,8 +3763,21 @@ function die() {
     ? 'New high score'
     : shown.score > 0 ? `High score ${formatScore(shown.score)} · Wave ${shown.wave}` : '';
   db.classList.toggle('record', record);
+
+  resetDeathSubmit();
+  if (state.score > 0) {
+    pendingSubmit = { score: state.score, wave: state.wave, kills: state.kills };
+    deathNameInput.value = readPlayerName();
+    deathNameForm.classList.remove('hidden');
+  }
+
   document.getElementById('death').classList.remove('hidden');
-  document.getElementById('retryBtn').focus({ preventScroll: true });
+  if (!deathNameForm.classList.contains('hidden')) {
+    deathNameInput.focus({ preventScroll: true });
+    deathNameInput.select();
+  } else {
+    document.getElementById('retryBtn').focus({ preventScroll: true });
+  }
   audio.death();
   updateHUD();
   showBest();
@@ -3831,8 +3911,10 @@ const menu = {
   open(panel) {
     this.panel = panel;
     document.getElementById('howPanel').classList.toggle('open', panel === 'how');
+    document.getElementById('scoresPanel').classList.toggle('open', panel === 'scores');
     document.getElementById('settingsPanel').classList.toggle('open', panel === 'settings');
     if (panel === 'settings') this.selectRow(this.row, true);
+    if (panel === 'scores') loadScoresBoard();
     this.hints();
   },
   activate(i = this.sel) {
@@ -3929,6 +4011,69 @@ function showBest() {
     ? `<span class="lbl">HIGH SCORE</span><b>${formatScore(b.score)}</b> · WAVE <b>${b.wave}</b> · ${build}`
     : build;
 }
+
+const WREATH = `<svg class="wreath" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14c-1.5-1.5-2-3.5-1.5-5.5M17 14c1.5-1.5 2-3.5 1.5-5.5M8.5 17c-1.2-.4-2.3-1.4-2.8-2.7M15.5 17c1.2-.4 2.3-1.4 2.8-2.7M9 19c-1-.8-1.6-1.8-1.8-3M15 19c1-.8 1.6-1.8 1.8-3"/></svg>`;
+
+function formatBoardDate(value) {
+  if (!value) return '';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).slice(0, 16);
+  return d.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+async function loadScoresBoard() {
+  const list = document.getElementById('scoresList');
+  const status = document.getElementById('scoresStatus');
+  list.innerHTML = '';
+  status.textContent = 'Loading board…';
+  try {
+    const data = await fetchScores();
+    const scores = data.scores || [];
+    if (data.offline) {
+      status.textContent = 'Board offline';
+      return;
+    }
+    if (!scores.length) {
+      status.textContent = 'No scores yet — finish a run';
+      return;
+    }
+    list.innerHTML = scores.map((row) => {
+      const top = Number(row.rank) === 1;
+      return `<div class="scores-row${top ? ' top' : ''}" role="listitem">
+        <span class="scores-rank">${top ? WREATH : ''}<b>${row.rank}</b></span>
+        <span class="scores-score">${formatScore(row.score)}</span>
+        <span class="scores-name">${row.name}</span>
+        <span class="scores-meta">BUILD ${row.build || '—'} · ${formatBoardDate(row.createdAt)}</span>
+      </div>`;
+    }).join('');
+    status.textContent = `${scores.length} logged`;
+  } catch {
+    status.textContent = 'Board unreachable';
+  }
+}
+
+deathNameInput.addEventListener('input', () => {
+  const start = deathNameInput.selectionStart;
+  deathNameInput.value = normalizeName(deathNameInput.value);
+  deathNameInput.setSelectionRange(start, start);
+});
+deathNameForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = normalizeName(deathNameInput.value);
+  if (name.length < 1) {
+    deathSubmitStatus.textContent = 'Enter a callsign';
+    deathSubmitStatus.className = 'err';
+    deathNameInput.focus();
+    return;
+  }
+  await publishRunScore(name);
+});
 menuButtons.forEach((b, i) => {
   b.addEventListener('mouseenter', () => {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;

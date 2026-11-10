@@ -1579,3 +1579,55 @@ body.paused #flash {
 #cards .recommended {
   border-radius: 0;
 }
+
+/* Death callsign entry */
+#deathNameForm {
+  width: min(100%, 320px);
+  margin: 18px auto 0;
+  text-align: start;
+}
+#deathNameForm.hidden { display: none; }
+#deathNameForm label {
+  display: block;
+  color: var(--cyan, #45ecff);
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.death-name-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 10px;
+}
+#deathName {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid #ff368c88;
+  background: #0a1520;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .35em;
+  font: 700 22px/1 "Oxanium", "Rajdhani", sans-serif;
+  -webkit-user-select: text;
+  user-select: text;
+}
+#deathName:focus {
+  outline: 1px solid #45ecff;
+  box-shadow: 0 0 12px #45ecff44;
+}
+#deathSubmit {
+  --edge: var(--cyan, #45ecff);
+}
+#deathNameHint,
+#deathSubmitStatus {
+  margin-top: 8px;
+  color: #7f96a4;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  min-height: 1.2em;
+}
+#deathSubmitStatus.ok { color: #8ef5ff; }
+#deathSubmitStatus.err { color: #ff7aa8; }

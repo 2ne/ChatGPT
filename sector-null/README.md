@@ -4,7 +4,7 @@ A top-down sci-fi survival shooter and competition remix of [Abandon All Hope by
 
 ## Status
 
-Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Score, high score and settings are saved in the browser.
+Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Local high score and settings are saved in the browser. Global high scores go to a Neon-backed board (name, score, wave, kills, build, timestamp). On death the game asks for a 3-letter callsign, prefills the last one from local storage, and posts any score above zero.
 
 Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORING.md](./SCORING.md).
 
@@ -51,7 +51,7 @@ npm ci
 npm run dev
 ```
 
-`npm run build` writes a static site to `dist/`. Use `npm run preview` to serve that build locally. Each build stamps a sequential `BUILD` number from the sector-null git commit count (override with `SECTOR_NULL_BUILD`). It shows on the main menu after the high score when one exists. The browser needs WebGL. The menu track loops across the intro and main menu. If the browser blocks autoplay, use the title screen's Start prompt to enable sound. Selecting Play switches to the gameplay score.
+`npm run build` writes a static site to `dist/`. Use `npm run preview` to serve that build locally. Each build stamps a sequential `BUILD` number from the sector-null git commit count (override with `SECTOR_NULL_BUILD`). It shows on the main menu after the high score when one exists. The live board URL defaults to the Neon Function endpoint (override with `SECTOR_NULL_SCORES_API`). Function source lives in `functions/scores/`. The browser needs WebGL. The menu track loops across the intro and main menu. If the browser blocks autoplay, use the title screen's Start prompt to enable sound. Selecting Play switches to the gameplay score.
 
 The gameplay score uses the full-length loops in `assets/score/`. Wave-start and wave-clear stingers are disabled to avoid overlapping cues. Clearing a wave crossfades over 0.9 seconds into the upgrade loop at 38% gain with a 1 kHz low-pass filter, giving the break a quieter, softer sound. Combat music fades back in only when the next wave starts. Waves 1–4 use the early loop and wave 5 onward uses the late loop. Wave 4 switches on the next bar with a 0.6-second crossfade if eight drones are alive at once. The late loop has a 0.65 gain trim to compensate for its louder recording; overall gameplay score gain is 3.8, down from 5.5. Pausing freezes the music and wave timing together.
 

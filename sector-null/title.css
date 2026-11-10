@@ -334,3 +334,90 @@ body.titling #game { cursor: default; }
   #pressAny { margin-top: 6cqh; }
   #menu .mpanel { max-height: 88cqh; overflow: auto; }
 }
+
+/* High scores board */
+#scoresPanel {
+  --edge: var(--pink);
+  width: min(420px, 78cqw);
+  border-color: #ff368c99;
+  box-shadow: 0 0 0 1px #45ecff33, 0 0 28px #ff368c33;
+}
+#scoresPanel h2 { color: #fff; letter-spacing: .22em; }
+.scores-head,
+.scores-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 72px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+}
+.scores-head {
+  margin: 4px 0 8px;
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: .2em;
+}
+.scores-list {
+  display: grid;
+  gap: 7px;
+  max-height: min(52cqh, 420px);
+  overflow: auto;
+}
+.scores-row {
+  --cut: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  position: relative;
+  isolation: isolate;
+  min-height: 42px;
+  color: #f4fbff;
+  font: 700 15px/1 "Rajdhani", sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.scores-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: var(--cut);
+  background: linear-gradient(90deg, #122231, #0b1622 70%, #101823);
+  border: 1px solid #3d6f8633;
+}
+.scores-row.top {
+  color: #fff;
+  text-shadow: 0 0 10px #ff368c88;
+}
+.scores-row.top::before {
+  background: linear-gradient(90deg, #ff368ccc, #b21f6eaa 42%, #1a1020ee);
+  box-shadow: 0 0 18px #ff368c55;
+}
+.scores-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 2.2em;
+}
+.scores-rank .wreath {
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.6;
+}
+.scores-score { font-variant-numeric: tabular-nums; }
+.scores-name { text-align: end; letter-spacing: .28em; }
+.scores-meta {
+  grid-column: 1 / -1;
+  margin-top: -4px;
+  margin-bottom: 2px;
+  color: #7f96a4;
+  font-size: 10px;
+  letter-spacing: .16em;
+}
+.scores-status {
+  margin-top: 12px;
+  color: #7f96a4;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
