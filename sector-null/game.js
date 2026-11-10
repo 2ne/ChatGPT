@@ -2928,8 +2928,8 @@ function upgradeWeight(u) {
   if (u.id === 'rate' && !(state.upgrades.rate)) w += 1.2;
   if (u.id === 'luck' && state.wave <= 2) w *= 0.35;
   if (u.id === 'heal') w *= state.hp < state.maxHp ? 1 : 0;
-  // Ability path: score alternative to stacking guns — weight hard enough to show up.
-  if (u.cat === 'ability') w += state.wave >= 2 ? 5.5 : 2.5;
+  // Ability path: a real alternative to stacking firepower once you can stay alive.
+  if (u.cat === 'ability') w += state.wave >= 2 ? 2.2 : 1.1;
   return Math.max(0.05, w);
 }
 
@@ -2949,14 +2949,6 @@ function pickUpgradeOffers(count = 3) {
     if (spread) {
       picks.push(spread);
       pool.splice(pool.indexOf(spread), 1);
-    }
-  }
-  // Pity: from wave 3 on, always offer Magnetic Gems until taken so the score path is real.
-  if (!(state.upgrades.magnet) && state.wave >= 3) {
-    const magnet = pool.find(u => u.id === 'magnet');
-    if (magnet) {
-      picks.push(magnet);
-      pool.splice(pool.indexOf(magnet), 1);
     }
   }
   while (picks.length < count && pool.length) {
