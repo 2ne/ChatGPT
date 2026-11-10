@@ -1451,6 +1451,92 @@ body.paused #flash {
     margin-top: 12px;
   }
 }
+
+/* Phone landscape only: shrink HUD chrome and hug safe-area edges so the
+   right-thumb press-and-hold fire zone stays clear. Desktop / portrait untouched. */
+@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --hud-phone-margin: 8px;
+  }
+  #topbar {
+    top: calc(var(--safe-top) + var(--hud-phone-margin));
+    left: calc(var(--safe-left) + var(--hud-phone-margin));
+    right: calc(var(--safe-right) + var(--hud-phone-margin));
+    gap: 6px;
+  }
+  #topbar > div {
+    min-height: 26px;
+    min-width: 90px;
+    padding: 5px 8px;
+  }
+  #topbar .run-stats,
+  #topbar .score-copy,
+  #topbar .enemy-stats {
+    pointer-events: none;
+  }
+  #topbar #touchPause {
+    pointer-events: auto;
+  }
+  .stat {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .stat + .stat {
+    margin-top: 2px;
+  }
+  #health {
+    margin-top: 4px;
+    gap: 5px;
+  }
+  .shield-pip {
+    width: 11px;
+  }
+  #shieldCount {
+    font-size: 11px;
+  }
+  #touchPause {
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    min-height: 16px;
+    padding: 12px;
+    margin: -12px -12px -12px -6px;
+  }
+  #touchPause svg {
+    width: 16px;
+    height: 16px;
+  }
+  #ammoWrap {
+    right: calc(var(--safe-right) + var(--hud-phone-margin));
+    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
+    /* ~72% of the default 136–176px panel; sits on safe-area + 8px only */
+    width: clamp(98px, 12.5vw, 128px);
+    padding: 2px 6px 5px;
+  }
+  #cellStatus {
+    min-height: 13px;
+    margin: 2px 0 3px;
+    font-size: 9px;
+    letter-spacing: 0.6px;
+  }
+  #mag {
+    gap: 1px;
+  }
+  #mag span {
+    flex: 0 1 4px;
+    height: 7px;
+  }
+  #reloadBar {
+    height: 4px;
+    margin-top: 4px;
+  }
+  #bossPanel {
+    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
+    left: calc(var(--safe-left) + var(--hud-phone-margin));
+    right: calc(var(--safe-right) + clamp(98px, 12.5vw, 128px) + 16px);
+    pointer-events: none;
+  }
+}
 .close-panel {
   position: absolute;
   top: 8px;
