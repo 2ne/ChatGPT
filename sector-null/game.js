@@ -1797,7 +1797,7 @@ function spawnWaveBoss() {
 
 function maybeSplitBoss(z) {
   const ud = z.userData;
-  if (!ud.type.split || !ud.boss || ud.splitsDone >= 2) return;
+  if (ud.dying || !ud.type.split || !ud.boss || ud.splitsDone >= 2) return;
   const thresholds = [0.55, 0.28];
   const next = thresholds[ud.splitsDone];
   if (ud.hp / ud.maxHp > next) return;
@@ -2441,8 +2441,25 @@ function killPoints(type) {
   return 100;
 }
 
+function finishWaveClear() {
+  clearEnemyBolts();
+  awardWaveBonuses();
+  // Victory banks the reward, including gems from the final boss.
+  for (const gem of emeralds) collectEmerald();
+  clearEmeralds();
+  clearEquipmentField();
+  const healed = state.hp < state.maxHp;
+  state.hp = Math.min(state.maxHp, state.hp + 1);
+  audio.waveClear();
+  openPicker(healed);
+}
+
 function killDrone(z, idx) {
   const type = z.userData.type;
+  if (type.boss && state.running && !bossDeath.active && !z.userData.dying) {
+    beginBossDeath(z);
+    return;
+  }
   explodeDrone(z);
   if (z.userData.climb >= 0) endClimb(z, true);
   maybeDrop(z.position);
@@ -2452,16 +2469,7 @@ function killDrone(z, idx) {
   if (state.running) addScore(killPoints(type));
   if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
     if (state.bossPending) { spawnWaveBoss(); return; }
-    clearEnemyBolts();
-    awardWaveBonuses();
-    // Victory banks the reward, including gems from the final boss.
-    for (const gem of emeralds) collectEmerald();
-    clearEmeralds();
-    clearEquipmentField();
-    const healed = state.hp < state.maxHp;
-    state.hp = Math.min(state.maxHp, state.hp + 1);
-    audio.waveClear();
-    openPicker(healed);
+    finishWaveClear();
   }
 }
 
@@ -2980,13 +2988,26 @@ function openPicker(healed) {
       fireRate +
       `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
+  hud.picker.classList.remove('shown');
   hud.picker.classList.remove('hidden');
+  // Double rAF so the opacity transition starts from 0 after display flips on.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (!hud.picker.classList.contains('hidden')) hud.picker.classList.add('shown');
+    });
+  });
+  if (reducedMotion.matches) hud.picker.classList.add('shown');
   hud.cards.classList.remove('ready');
   audio.deal(offered.length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
     if (state.choosing && !state.paused) hud.cards.querySelector('button')?.focus({ preventScroll: true });
   }, PICK_LOCKOUT_MS);
+}
+
+function hidePicker() {
+  hud.picker.classList.remove('shown');
+  hud.picker.classList.add('hidden');
 }
 
 function choose(i) {
@@ -3001,7 +3022,7 @@ function choose(i) {
   // brief beat so the pick registers visually before the picker closes
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
-  choose._t = setTimeout(() => hud.picker.classList.add('hidden'), 320);
+  choose._t = setTimeout(hidePicker, 320);
   queueWave(2.0);
   toastQueue.push({ text: u.id === 'bot' ? (state.upgrades.bot === 1 ? 'HELPER BOT DEPLOYED' : `HELPER BOT UPGRADED · RANK ${state.upgrades.bot}`) : u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
@@ -3011,36 +3032,55 @@ function choose(i) {
 // DRONE EXPLOSIONS
 // ===================================================================
 const droneBlasts = [];
+const shockwaves = [];
 const blastGlow = glowTexture();
 const sparkForward = new THREE.Vector3(0, 0, 1);
 const BLAST_TIME = 0.22;
+const shockwaveGeo = new THREE.RingGeometry(0.55, 0.72, 48).rotateX(-Math.PI / 2);
+
+function spawnBlastFlare(origin, scale = 1, color = 0xff9b42) {
+  if (reducedMotion.matches) return;
+  const flare = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: blastGlow, color, transparent: true, opacity: 0.95, depthWrite: false,
+    blending: THREE.AdditiveBlending, toneMapped: false,
+  }));
+  flare.position.copy(origin);
+  flare.scale.setScalar(1.8 * scale);
+  scene.add(flare);
+  droneBlasts.push({ flare, time: 0, life: BLAST_TIME * (0.85 + scale * 0.25), base: 1.8 * scale, grow: 2.8 * scale });
+}
+
+function spawnBlastSparks(origin, count, speedMul = 1, sizeMul = 1) {
+  const n = reducedMotion.matches ? Math.max(4, (count / 3) | 0) : count;
+  for (let i = 0; i < n; i++) {
+    const spark = new THREE.Mesh(BOX, sparkMat);
+    spark.scale.set(0.035 * sizeMul, 0.035 * sizeMul, rnd(0.2, 0.45) * sizeMul);
+    spark.position.copy(origin);
+    const angle = rnd(0, Math.PI * 2), speed = rnd(4, 9) * speedMul;
+    const velocity = new THREE.Vector3(Math.cos(angle) * speed, rnd(1, 5) * speedMul, Math.sin(angle) * speed);
+    spark.quaternion.setFromUnitVectors(sparkForward, velocity.clone().normalize());
+    spawnDebris(spark, velocity, { life: rnd(0.18, 0.55) * (0.8 + sizeMul * 0.3), bounce: 0.025 });
+  }
+}
+
+function spawnShockwave(origin, maxRadius = 4.5, color = 0xffc17b) {
+  if (reducedMotion.matches) return;
+  const ring = new THREE.Mesh(shockwaveGeo, new THREE.MeshBasicMaterial({
+    color, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide,
+  }));
+  ring.position.copy(origin);
+  ring.position.y = 0.08;
+  ring.scale.setScalar(0.35);
+  scene.add(ring);
+  shockwaves.push({ ring, time: 0, life: 0.55, maxRadius });
+}
 
 function explodeDrone(drone) {
   const origin = drone.userData.upper.getWorldPosition(new THREE.Vector3());
   origin.y += 0.35;
   audio.explode(origin);
-
-  const reduced = reducedMotion.matches;
-  if (!reduced) {
-    const flare = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: blastGlow, color: 0xff9b42, transparent: true, opacity: 0.9, depthWrite: false,
-      blending: THREE.AdditiveBlending, toneMapped: false,
-    }));
-    flare.position.copy(origin);
-    flare.scale.setScalar(1.8);
-    scene.add(flare);
-    droneBlasts.push({ flare, time: 0 });
-  }
-
-  for (let i = 0; i < (reduced ? 6 : 16); i++) {
-    const spark = new THREE.Mesh(BOX, sparkMat);
-    spark.scale.set(0.035, 0.035, rnd(0.2, 0.45));
-    spark.position.copy(origin);
-    const angle = rnd(0, Math.PI * 2), speed = rnd(4, 9);
-    const velocity = new THREE.Vector3(Math.cos(angle) * speed, rnd(1, 5), Math.sin(angle) * speed);
-    spark.quaternion.setFromUnitVectors(sparkForward, velocity.clone().normalize());
-    spawnDebris(spark, velocity, { life: rnd(0.18, 0.45), bounce: 0.025 });
-  }
+  spawnBlastFlare(origin, 1);
+  spawnBlastSparks(origin, 16);
 
   // Score gems replace lasting body-part debris (see SCORING.md).
   if (state.running) {
@@ -3059,13 +3099,161 @@ function updateDroneBlasts(dt) {
   for (let i = droneBlasts.length - 1; i >= 0; i--) {
     const blast = droneBlasts[i];
     blast.time += dt;
-    const progress = blast.time / BLAST_TIME;
+    const life = blast.life || BLAST_TIME;
+    const progress = blast.time / life;
     if (progress >= 1) {
       removeDroneBlast(blast.flare);
       droneBlasts.splice(i, 1);
     } else {
-      blast.flare.scale.setScalar(1.8 + 2.8 * progress);
-      blast.flare.material.opacity = 0.9 * (1 - progress) ** 2;
+      const base = blast.base ?? 1.8;
+      const grow = blast.grow ?? 2.8;
+      blast.flare.scale.setScalar(base + grow * progress);
+      blast.flare.material.opacity = 0.95 * (1 - progress) ** 2;
+    }
+  }
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    const wave = shockwaves[i];
+    wave.time += dt;
+    const progress = wave.time / wave.life;
+    if (progress >= 1) {
+      scene.remove(wave.ring);
+      wave.ring.material.dispose();
+      shockwaves.splice(i, 1);
+    } else {
+      wave.ring.scale.setScalar(0.35 + wave.maxRadius * progress);
+      wave.ring.material.opacity = 0.85 * (1 - progress) ** 1.4;
+    }
+  }
+}
+
+// ===================================================================
+// BOSS DEATH SEQUENCE
+// Staggered body blasts (~1.2s) → final burst → short hold → fade to picker.
+// ===================================================================
+const bossDeath = {
+  active: false,
+  t: 0,
+  boss: null,
+  nextBlastAt: 0,
+  blasts: 0,
+  phase: 'stagger', // stagger | final | hold
+  hold: 0,
+};
+
+function bossOrigin(z) {
+  const origin = z.userData.upper?.getWorldPosition(new THREE.Vector3()) || z.position.clone();
+  origin.y += 0.35;
+  return origin;
+}
+
+function bumpShake(amount) {
+  if (!settings.shake || reducedMotion.matches) return;
+  state.shake = Math.max(state.shake, amount);
+}
+
+function beginBossDeath(z) {
+  const ud = z.userData;
+  ud.dying = true;
+  ud.hp = 0;
+  if (ud.chargeRing) ud.chargeRing.visible = false;
+  if (ud.climb >= 0) endClimb(z, true);
+  clearEnemyBolts();
+  bossDeath.active = true;
+  bossDeath.t = 0;
+  bossDeath.boss = z;
+  bossDeath.nextBlastAt = 0.05;
+  bossDeath.blasts = 0;
+  bossDeath.phase = 'stagger';
+  bossDeath.hold = 0;
+  bumpShake(0.28);
+  // Freeze the body in a hurt glow so the blasts read against a lit silhouette.
+  for (const m of ud.body || []) m.material = droneHurt;
+}
+
+function clearBossDeath() {
+  bossDeath.active = false;
+  bossDeath.boss = null;
+  bossDeath.phase = 'stagger';
+  bossDeath.t = 0;
+  bossDeath.hold = 0;
+}
+
+function spawnBossBodyBlast(z, scale = 1) {
+  const origin = bossOrigin(z);
+  const size = z.userData.type?.size || 1.4;
+  origin.x += (Math.random() - 0.5) * 1.5 * size;
+  origin.y += rnd(-0.15, 0.9) * size;
+  origin.z += (Math.random() - 0.5) * 1.5 * size;
+  spawnBlastFlare(origin, scale, Math.random() < 0.35 ? 0xffe0a0 : 0xff9b42);
+  spawnBlastSparks(origin, Math.round(10 * scale), 0.85 + scale * 0.2, 0.85 + scale * 0.15);
+  audio.explode(origin);
+  bumpShake(0.16 + scale * 0.08);
+}
+
+function finalizeBossDeath(z) {
+  const origin = bossOrigin(z);
+  const type = z.userData.type;
+  audio.bossExplode(origin);
+  audio.explode(origin);
+  spawnBlastFlare(origin, 3.2, 0xfff0d0);
+  spawnBlastFlare(origin.clone().add(new THREE.Vector3(0, 0.6, 0)), 2.2, 0xff9b42);
+  spawnBlastSparks(origin, reducedMotion.matches ? 14 : 42, 1.7, 1.45);
+  spawnShockwave(origin, 5.5 + type.size, 0xffe0a8);
+  spawnShockwave(origin, 3.2 + type.size * 0.5, 0xff9b42);
+  hud.flash.style.background = '#fff4e4';
+  flashT = reducedMotion.matches ? 0.18 : 0.38;
+  bumpShake(0.85);
+
+  if (state.running) {
+    const count = 8 + ((Math.random() * 5) | 0);
+    spawnEmeralds(origin, count);
+  }
+  maybeDrop(z.position);
+  scene.remove(z);
+  const idx = drones.indexOf(z);
+  if (idx >= 0) drones.splice(idx, 1);
+  state.kills++;
+  if (state.running) addScore(killPoints(type));
+  bossDeath.boss = null;
+}
+
+function updateBossDeath(dt) {
+  if (!bossDeath.active) return;
+  bossDeath.t += dt;
+
+  if (bossDeath.phase === 'stagger') {
+    const z = bossDeath.boss;
+    if (!z) { clearBossDeath(); return; }
+    // Keep remaining shots from landing during the show.
+    if (enemyBolts.length) clearEnemyBolts();
+    const reduced = reducedMotion.matches;
+    const maxBlasts = reduced ? 3 : 6;
+    const staggerEnd = reduced ? 0.55 : 1.15;
+    if (bossDeath.t >= bossDeath.nextBlastAt && bossDeath.blasts < maxBlasts) {
+      spawnBossBodyBlast(z, 0.85 + bossDeath.blasts * 0.12);
+      bossDeath.blasts++;
+      bossDeath.nextBlastAt = bossDeath.t + (reduced ? 0.14 : 0.17);
+    }
+    if (bossDeath.blasts >= maxBlasts || bossDeath.t >= staggerEnd) {
+      bossDeath.phase = 'final';
+    }
+    return;
+  }
+
+  if (bossDeath.phase === 'final') {
+    if (bossDeath.boss) finalizeBossDeath(bossDeath.boss);
+    bossDeath.phase = 'hold';
+    bossDeath.hold = reducedMotion.matches ? 0.35 : 0.7;
+    return;
+  }
+
+  if (bossDeath.phase === 'hold') {
+    bossDeath.hold -= dt;
+    if (bossDeath.hold > 0) return;
+    clearBossDeath();
+    if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
+      if (state.bossPending) spawnWaveBoss();
+      else finishWaveClear();
     }
   }
 }
@@ -3122,8 +3310,11 @@ function clearRun() {
   for (const d of drops) scene.remove(d);
   for (const d of debris) scene.remove(d);
   for (const { flare } of droneBlasts) removeDroneBlast(flare);
+  for (const wave of shockwaves) { scene.remove(wave.ring); wave.ring.material.dispose(); }
   clearEmeralds();
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
+  shockwaves.length = 0;
+  clearBossDeath();
   toastQueue.length = 0;
   toastTime = 0;
   activePickupHint = null;
@@ -3132,7 +3323,7 @@ function clearRun() {
   hud.toastDetail.textContent = '';
   hud.toast.style.opacity = 0;
   toastIsBotsLeft = false;
-  hud.picker.classList.add('hidden');
+  hidePicker();
 }
 
 // the operator's stats before any upgrades
@@ -3547,7 +3738,7 @@ function walkToward(z, dx, dz, speed, turn, dt) {
 }
 
 function hurtPlayer(damage = 1) {
-  if (state.dmgCd > 0) return false;
+  if (bossDeath.active || state.dmgCd > 0) return false;
   equipment.safe = 0;
   if (state.upgrades.pulse) equipment.pulse = true;
   state.hp = Math.max(0, state.hp - damage);
@@ -3582,6 +3773,7 @@ function huntPoint(z, px, pz) {
 
 function chaseDrone(z, dt) {
   const ud = z.userData, p = player.position;
+  if (ud.dying || bossDeath.active && ud.boss) return;
   ud.slow = Math.max(0, (ud.slow || 0) - dt);
   if (ud.type.milestone && inside(z.position) && ud.climb < 0) {
     if (ud.recovery > 0) {
@@ -3850,7 +4042,7 @@ function update(dt) {
       const scoreTime = audio.scoreTime();
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
       if (state.intermission <= 0) startWave(state.wave + 1);
-    } else {
+    } else if (!bossDeath.active) {
       if (state.toSpawn > 0) {
         state.spawnTimer -= dt;
         if (state.spawnTimer <= 0 && drones.length < MAX_ALIVE) {
@@ -3895,6 +4087,7 @@ function update(dt) {
     }
     for (let j = drones.length - 1; j >= 0 && !hit; j--) {
       const z = drones[j];
+      if (z.userData.dying) continue;
       if (b.userData.hits.has(z)) continue; // a piercing bullet already went through this one
       // distance from the drone to the path traveled this frame (not just the
       // end point), so bullets can't skip past drones at low frame rates
@@ -3921,7 +4114,7 @@ function update(dt) {
     if (hit || b.userData.life <= 0) { scene.remove(b); bullets.splice(i, 1); }
   }
 
-  if (state.running && !state.choosing) updateEnemyBolts(dt);
+  if (state.running && !state.choosing && !bossDeath.active) updateEnemyBolts(dt);
 
   // --- drones ---
   for (let j = drones.length - 1; j >= 0; j--) {
@@ -3943,6 +4136,7 @@ function update(dt) {
   if (state.running || title.active) separateDrones();
   updateEquipment(dt);
 
+  updateBossDeath(dt);
   updateDroneBlasts(dt);
   updateOpenings(dt);
   updateWorld(dt);
@@ -4011,4 +4205,27 @@ function whenViewportSettled(done) {
 whenViewportSettled(() => {
   document.body.classList.remove('viewport-pending');
   onResize();
+  // ?demo=boss-death — auto-plays the finale for capture / QA.
+  if (new URLSearchParams(location.search).get('demo') === 'boss-death') {
+    setTimeout(() => {
+      startGame(true);
+      state.intermission = 0;
+      waveAt = null;
+      state.toSpawn = 0;
+      state.bossPending = false;
+      state.wave = 1;
+      for (let i = drones.length - 1; i >= 0; i--) {
+        scene.remove(drones[i]);
+        drones.splice(i, 1);
+      }
+      const type = {
+        name: 'SLAMMER', kit: 4, health: 1, speed: 0.88, size: 1.5,
+        style: 'heavy', boss: true, volley: 0, slam: true, loco: 'stomp',
+      };
+      const z = spawnDrone(new THREE.Vector3(0, 0, 5.2), type);
+      player.position.set(0, 0, 0);
+      player.rotation.y = 0;
+      beginBossDeath(z);
+    }, 350);
+  }
 });

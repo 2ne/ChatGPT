@@ -189,6 +189,15 @@ export function createAudio(settings, listener) {
       grain(520, 0.28, 0.2, out);
       voice(155, 42, 0.24, 0.28, { out, type: 'triangle', echo: true });
     },
+    // Layered boom for the boss finale — heavier bass and a longer tail.
+    bossExplode(pos) {
+      const out = spatial(pos);
+      grain(2200, 0.22, 0.42, out);
+      grain(480, 0.38, 0.3, out);
+      grain(110, 0.55, 0.4, out);
+      voice(140, 28, 0.42, 0.4, { out, type: 'triangle', echo: true });
+      voice(52, 18, 0.55, 0.36, { out, type: 'sine' });
+    },
     servo(pos) { const out = spatial(pos); voice(135, 280, 0.24, 0.056, { out, type: 'triangle' }); grain(780, 0.12, 0.05, out); },
     swipe(pos) { grain(740, 0.21, 0.25, spatial(pos)); },
     hurt() { voice(108, 43, 0.38, 0.42, { type: 'triangle' }); signal([56, 50], 0.12); },
