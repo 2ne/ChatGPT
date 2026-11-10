@@ -78,7 +78,7 @@ Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If 
 
 On iPhone, Add to Home Screen keeps the game full-screen (`black-translucent` status bar, `viewport-fit=cover`). HUD, gun panel, boss bar and overlays sit `18px` past `env(safe-area-inset-*)` so they clear the Dynamic Island and home indicator. Safari already lays the page out below its chrome, so those insets are 0 and the layout does not change. If an older home-screen icon still sits under the status bar, remove it and add the page to the home screen again.
 
-The canvas size follows `visualViewport` (not a one-shot `innerHeight`), and the document is `position: fixed` with overflow hidden so iOS standalone cannot scroll the page after the safe-area/visual viewport settles. Layout, renderer size and camera aspect remeasure on `resize`, `visualViewport` resize, `orientationchange` (with a delayed pass), `pageshow`, and at startup. The title menu fades in and accepts taps only after that size has been stable for a couple of frames (or ~1s).
+The canvas size follows `visualViewport` (not a one-shot `innerHeight`), and the document is `position: fixed` with overflow hidden so iOS standalone cannot scroll the page after the safe-area/visual viewport settles. Layout, renderer size and camera aspect remeasure on `resize`, `visualViewport` resize, `orientationchange` (with a delayed pass), `pageshow`, and at startup. The title menu fades in and accepts taps only after that size has been stable for a couple of frames (or ~1s). On touch devices, menu/pause/death button highlights use `:focus-visible` and clear sticky selection when How / Scores / Settings close, so a tap cannot leave SETTINGS (or similar) looking active.
 
 ## Engineer and defence paths
 
