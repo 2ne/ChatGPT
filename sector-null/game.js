@@ -4012,14 +4012,17 @@ function showBest() {
     : build;
 }
 
-const WREATH = `<svg class="wreath" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14c-1.5-1.5-2-3.5-1.5-5.5M17 14c1.5-1.5 2-3.5 1.5-5.5M8.5 17c-1.2-.4-2.3-1.4-2.8-2.7M15.5 17c1.2-.4 2.3-1.4 2.8-2.7M9 19c-1-.8-1.6-1.8-1.8-3M15 19c1-.8 1.6-1.8 1.8-3"/></svg>`;
+/* Traditional laurel wreath around rank 1. */
+const WREATH = `<svg class="wreath" viewBox="0 0 64 64" aria-hidden="true"><g fill="currentColor"><ellipse transform="translate(28.5 13) rotate(-28)" rx="2.1" ry="5.4"/><ellipse transform="translate(23.2 15.8) rotate(-42)" rx="2.2" ry="5.6"/><ellipse transform="translate(18.4 20.2) rotate(-58)" rx="2.3" ry="5.8"/><ellipse transform="translate(15 25.8) rotate(-74)" rx="2.35" ry="5.9"/><ellipse transform="translate(13.4 32) rotate(-90)" rx="2.4" ry="6"/><ellipse transform="translate(15 38.2) rotate(-106)" rx="2.35" ry="5.9"/><ellipse transform="translate(18.4 43.8) rotate(-122)" rx="2.3" ry="5.8"/><ellipse transform="translate(23.2 48.2) rotate(-138)" rx="2.2" ry="5.6"/><ellipse transform="translate(28.5 51) rotate(-152)" rx="2.1" ry="5.4"/><ellipse transform="translate(26.8 17.2) rotate(-35)" rx="1.6" ry="4.2"/><ellipse transform="translate(21.6 21) rotate(-52)" rx="1.7" ry="4.4"/><ellipse transform="translate(18.2 26.4) rotate(-70)" rx="1.75" ry="4.5"/><ellipse transform="translate(16.8 32) rotate(-90)" rx="1.8" ry="4.6"/><ellipse transform="translate(18.2 37.6) rotate(-110)" rx="1.75" ry="4.5"/><ellipse transform="translate(21.6 43) rotate(-128)" rx="1.7" ry="4.4"/><ellipse transform="translate(26.8 46.8) rotate(-145)" rx="1.6" ry="4.2"/><ellipse transform="translate(35.5 13) rotate(28)" rx="2.1" ry="5.4"/><ellipse transform="translate(40.8 15.8) rotate(42)" rx="2.2" ry="5.6"/><ellipse transform="translate(45.6 20.2) rotate(58)" rx="2.3" ry="5.8"/><ellipse transform="translate(49 25.8) rotate(74)" rx="2.35" ry="5.9"/><ellipse transform="translate(50.6 32) rotate(90)" rx="2.4" ry="6"/><ellipse transform="translate(49 38.2) rotate(106)" rx="2.35" ry="5.9"/><ellipse transform="translate(45.6 43.8) rotate(122)" rx="2.3" ry="5.8"/><ellipse transform="translate(40.8 48.2) rotate(138)" rx="2.2" ry="5.6"/><ellipse transform="translate(35.5 51) rotate(152)" rx="2.1" ry="5.4"/><ellipse transform="translate(37.2 17.2) rotate(35)" rx="1.6" ry="4.2"/><ellipse transform="translate(42.4 21) rotate(52)" rx="1.7" ry="4.4"/><ellipse transform="translate(45.8 26.4) rotate(70)" rx="1.75" ry="4.5"/><ellipse transform="translate(47.2 32) rotate(90)" rx="1.8" ry="4.6"/><ellipse transform="translate(45.8 37.6) rotate(110)" rx="1.75" ry="4.5"/><ellipse transform="translate(42.4 43) rotate(128)" rx="1.7" ry="4.4"/><ellipse transform="translate(37.2 46.8) rotate(145)" rx="1.6" ry="4.2"/></g><path fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" d="M29 12.2C20.5 14.5 14.2 22.2 13.2 32c1 9.8 7.3 17.5 15.8 19.8M35 12.2C43.5 14.5 49.8 22.2 50.8 32c-1 9.8-7.3 17.5-15.8 19.8"/></svg>`;
 
 async function loadScoresBoard() {
   const list = document.getElementById('scoresList');
   const status = document.getElementById('scoresStatus');
+  const head = document.querySelector('#scoresPanel .scores-head');
   list.innerHTML = '';
   status.textContent = 'Loading board…';
   status.hidden = false;
+  if (head) head.hidden = true;
   try {
     const data = await fetchScores();
     const scores = data.scores || [];
@@ -4031,10 +4034,11 @@ async function loadScoresBoard() {
       status.textContent = 'No scores recorded yet';
       return;
     }
+    if (head) head.hidden = false;
     list.innerHTML = scores.map((row) => {
       const top = Number(row.rank) === 1;
       return `<div class="scores-row${top ? ' top' : ''}" role="listitem">
-        <span class="scores-rank">${top ? WREATH : ''}<b>${row.rank}</b></span>
+        <span class="scores-rank${top ? ' crowned' : ''}">${top ? WREATH : ''}<b>${row.rank}</b></span>
         <span class="scores-score">${formatScore(row.score)}</span>
         <span class="scores-name">${row.name}</span>
       </div>`;

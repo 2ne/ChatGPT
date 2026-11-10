@@ -396,18 +396,32 @@ body.titling #game { cursor: default; }
   box-shadow: 0 0 18px #ff368c55;
 }
 .scores-rank {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   min-width: 2.2em;
+  min-height: 1.6em;
+}
+.scores-rank.crowned {
+  width: 2.55em;
+  height: 2.1em;
+  min-width: 2.55em;
+}
+.scores-rank.crowned b {
+  position: relative;
+  z-index: 1;
+  font-size: 1.05em;
+  text-shadow: 0 0 8px #ff9ac8, 0 0 14px #ff368c88;
 }
 .scores-rank .wreath {
-  width: 1.15em;
-  height: 1.15em;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.6;
+  position: absolute;
+  inset: -12% -18%;
+  width: auto;
+  height: auto;
+  color: #fff;
+  filter: drop-shadow(0 0 3px #ff368caa);
+  pointer-events: none;
 }
 .scores-score { font-variant-numeric: tabular-nums; }
 .scores-status {
@@ -417,4 +431,5 @@ body.titling #game { cursor: default; }
   letter-spacing: .16em;
   text-transform: uppercase;
 }
-.scores-status[hidden] { display: none; }
+.scores-status[hidden],
+.scores-head[hidden] { display: none; }
