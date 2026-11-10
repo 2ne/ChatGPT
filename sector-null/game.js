@@ -2277,7 +2277,7 @@ function nearestOpening(pos, skip, z = null) {
   let best = null, bd = Infinity;
   for (const o of openings) {
     if (o === skip) continue;
-    if (z?.userData.type.style === 'mortar' && o.kind !== 'door') continue;
+    if ((preferDoor || z?.userData.type.style === 'mortar') && o.kind !== 'door') continue;
     let d = (o.x - pos.x) ** 2 + (o.z - pos.z) ** 2;
     if (preferDoor && o.kind === 'window') d *= 3.5;
     if (preferDoor && o.kind === 'door') d *= 0.55;
@@ -2517,7 +2517,7 @@ const _goal = { x: 0, z: 0 };
 // way is clearly shorter, so it doesn't dither between two even routes.
 function routeAround(z, tx, tz) {
   const ud = z.userData, radius = botRadius(z);
-  if (inside(z.position)) {
+  if (inside(z.position) && !ud.opening) {
     tx = THREE.MathUtils.clamp(tx, -HALF + radius + 0.2, HALF - radius - 0.2);
     tz = THREE.MathUtils.clamp(tz, -HALF + radius + 0.2, HALF - radius - 0.2);
   }
@@ -3176,10 +3176,19 @@ function pickUpgradeOffers(count = 3) {
     const j = (Math.random() * (i + 1)) | 0;
     [picks[i], picks[j]] = [picks[j], picks[i]];
   }
-  return picks.sort((a, b) => recommendationScore(b) - recommendationScore(a));
+  picks.sort((a, b) => recommendationScore(b) - recommendationScore(a));
+  const magnetIndex = picks.findIndex(u => u.id === 'magnet');
+  if (magnetIndex >= 0) {
+    const [magnet] = picks.splice(magnetIndex, 1);
+    // Preserve slot 3 and its keyboard shortcut even near the end of the pool.
+    while (picks.length < 2) picks.push(null);
+    picks.push(magnet);
+  }
+  return picks;
 }
 
 function recommendationScore(u) {
+  if (u.id === 'magnet') return -Infinity;
   if (state.hp <= 1 && (u.id === 'heal' || u.id === 'hp')) return 100;
   if (u.id === 'spread' && !state.spread) return 20;
   return (state.upgrades[u.id] ? 10 : 0) + upgradeWeight(u);
@@ -3216,6 +3225,8 @@ function openPicker(healed) {
   hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
   hud.pickerSub.textContent = (healed ? '+1 SHIELD  ·  ' : '') + 'CHOOSE YOUR NEXT UPGRADE';
   hud.cards.innerHTML = offered.map((u, i) => {
+    if (!u) return '<div aria-hidden="true"></div>';
+    const recommended = i === 0 && u.id !== 'magnet';
     const owned = state.upgrades[u.id] || 0;
     const botUpgrade = u.id === 'bot' && owned > 0;
     const name = botUpgrade ? 'UPGRADE HELPER BOT' : u.name;
@@ -3225,8 +3236,8 @@ function openPicker(healed) {
     // (max 3); only infinite cards like Shield Reset skip the row.
     const pips = u.max === Infinity ? '' :
       Array.from({ length: u.max }, (_, k) => `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`).join('');
-    return `<button type="button" class="card ${i === 0 ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
-      `<div class="ctop"><span>${i === 0 ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
+    return `<button type="button" class="card ${recommended ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
+      `<div class="ctop"><span>${recommended ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
       upgradePreview(u) +
       `<div class="cname">${name}</div><div class="cdesc">${desc}</div>` +
       `<div class="cstat">${now} → <b>${after}</b></div>` +
@@ -3242,7 +3253,7 @@ function openPicker(healed) {
   });
   if (reducedMotion.matches) hud.picker.classList.add('shown');
   hud.cards.classList.remove('ready');
-  audio.deal(offered.length);
+  audio.deal(offered.filter(Boolean).length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
     if (state.choosing && !state.paused) hud.cards.querySelector('button')?.focus({ preventScroll: true });
@@ -3967,15 +3978,16 @@ function faceToward(z, dx, dz, rate, dt) {
 // Ease the heading toward the target instead of snapping, so drones arc into their
 // turns, and slow down while facing well off it: a drone that overshoots turns round
 // and comes back instead of orbiting.
-function walkToward(z, dx, dz, speed, turn, dt) {
+function walkToward(z, dx, dz, speed, turn, dt, precise = false) {
   if (z.userData.slow > 0) speed *= 0.4;
   const distance = Math.hypot(dx, dz);
   if (distance < 0.03) return false;
   const ud = z.userData, off = faceToward(z, dx, dz, turn, dt);
   // Turn on the spot for sharp corners instead of grinding forward into cover.
-  if (off > 0.9) return false;
+  if (off > (precise ? 0.1 : 0.9)) return false;
   const step = Math.min(distance, speed * Math.cos(off) ** 2 * dt);
-  const sx = Math.sin(ud.heading), sz = Math.cos(ud.heading);
+  const sx = precise ? dx / distance : Math.sin(ud.heading);
+  const sz = precise ? dz / distance : Math.cos(ud.heading);
   const look = Math.min(distance, Math.max(step, 0.25));
   if (!navClear(z.position.x, z.position.z, z.position.x + sx * look, z.position.z + sz * look, botRadius(z), true)) {
     ud.navPlan = null;
@@ -3984,6 +3996,9 @@ function walkToward(z, dx, dz, speed, turn, dt) {
       ud.via = -1; ud.blockedFor = 0;
       if (ud.opening && !inside(z.position) && ud.stage === 0) {
         ud.opening = nearestOpening(z.position, ud.opening, z);
+      } else if (ud.boss && ud.opening?.kind === 'door') {
+        // Re-align outside the frame after knockback or a blocked crossing.
+        ud.stage = 0;
       }
     }
     return false;
@@ -4032,7 +4047,13 @@ function chaseDrone(z, dt) {
   const ud = z.userData, p = player.position;
   if (ud.dying || bossDeath.active && ud.boss) return;
   ud.slow = Math.max(0, (ud.slow || 0) - dt);
-  if (ud.type.milestone && inside(z.position) && ud.climb < 0) {
+  const clearance = WALL_T / 2 + botRadius(z) + 0.15;
+  const bossEntering = ud.boss && (!inside(z.position) || (ud.opening && (
+    Math.abs(z.position.x) >= HALF - clearance || Math.abs(z.position.z) >= HALF - clearance
+    || (ud.stage === 1 && Math.hypot(z.position.x - ud.opening.ix, z.position.z - ud.opening.iz) > 0.12))));
+  const onDeck = inside(z.position) && !bossEntering;
+  if (ud.boss && onDeck) { ud.opening = null; ud.stage = 0; }
+  if (ud.type.milestone && onDeck && ud.climb < 0) {
     if (ud.recovery > 0) {
       ud.recovery -= dt;
       ud.chargeRing.visible = true;
@@ -4067,7 +4088,6 @@ function chaseDrone(z, dt) {
   const pdx = p.x - z.position.x, pdz = p.z - z.position.z, pd = Math.hypot(pdx, pdz);
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
-  const onDeck = inside(z.position);
   // Artillery fires independently of driving, door breaking and line of sight.
   // Keep the normal entry navigation running while shells travel over outer walls.
   if (ud.type.style === 'mortar') {
@@ -4145,7 +4165,7 @@ function chaseDrone(z, dt) {
       }
     }
     if (ud.swing >= Z_SWING) { ud.swing = -1; ud.swingCd = rnd(0.25, 0.6); }
-  } else if (pd < (ud.standing ? letGo : reach) && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05)) {
+  } else if (!bossEntering && pd < (ud.standing ? letGo : reach) && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05)) {
     // at arm's length: stand, square up, and swing as soon as it's facing you (no
     // cooldown left over from battering its way in)
     if (!ud.standing) ud.swingCd = 0;
@@ -4173,7 +4193,7 @@ function chaseDrone(z, dt) {
         }
       }
     }
-    if (inside(z.position)) {
+    if (onDeck) {
       ud.opening = null; ud.stage = 0; // through the wall — re-pick if knocked back out
       if (!(ud.type.fragment && ud.reformT <= 0)) {
         // Same pursuit for every role: hunt the operator (with corner-safe offset).
@@ -4187,7 +4207,8 @@ function chaseDrone(z, dt) {
       const o = ud.opening;
       if (ud.stage === 0) {
         tx = o.ox; tz = o.oz;
-        if ((o.ox - z.position.x) ** 2 + (o.oz - z.position.z) ** 2 < 1.4) ud.stage = 1;
+        const alignment = ud.boss ? 0.1 ** 2 : 1.4;
+        if ((o.ox - z.position.x) ** 2 + (o.oz - z.position.z) ** 2 < alignment) ud.stage = 1;
       }
       if (ud.stage === 1) {
         if (o.kind === 'door' && o.hp <= 0) { tx = o.ix; tz = o.iz; } // broken down: straight through
@@ -4216,7 +4237,7 @@ function chaseDrone(z, dt) {
       const rush = rusher && onDeck ? 1.2 : 1;
       // Bosses close the outside gap fast — they were lingering too long past the walls.
       const approach = ud.boss && !onDeck ? 2.8 : rush;
-      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * approach, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1) * (ud.boss && !onDeck ? 1.35 : 1), dt);
+      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * approach, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1) * (ud.boss && !onDeck ? 1.35 : 1), dt, bossEntering && ud.opening?.kind === 'door');
     }
   }
   // progress check: jammed bots (corner packs, window frames, doors) forget their plan
