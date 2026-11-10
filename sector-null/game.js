@@ -2882,7 +2882,8 @@ const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
 const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
 const equipment = { shot: 0, mine: 0, safe: 0, pulse: false, mines: [], blasts: [], zones: [], effects: [] };
 const helperDamage = rank => 0.8 + rank * 0.7;
-const helperShotInterval = (rank, upgrades) => upgrades.botBomb ? 1.7 : 0.65 / (1 + 0.25 * (rank - 1) + (upgrades.botGun === 2 ? 0.35 : 0));
+// Fire speed is Twin Guns rank 2 only — Helper Bot ranks are damage, not cadence.
+const helperShotInterval = upgrades => upgrades.botBomb ? 1.7 : 0.65 / (1 + (upgrades.botGun === 2 ? 0.35 : 0));
 
 function removeFieldObject(o) {
   scene.remove(o);
@@ -2996,7 +2997,7 @@ function updateEquipment(dt) {
       helper.lookAt(target.position.x, helper.position.y, target.position.z);
       if (equipment.shot <= 0) {
         helper.updateWorldMatrix(true, true);
-        equipment.shot = helperShotInterval(u.bot, u);
+        equipment.shot = helperShotInterval(u);
         for (let k = 0; k < (u.botGun ? 2 : 1); k++) {
           const muzzlePos = new THREE.Vector3();
           helperBarrels[k].getWorldPosition(muzzlePos);
@@ -3209,9 +3210,7 @@ function openPicker(healed) {
     const owned = state.upgrades[u.id] || 0;
     const botUpgrade = u.id === 'bot' && owned > 0;
     const name = botUpgrade ? 'UPGRADE HELPER BOT' : u.name;
-    const desc = botUpgrade ? 'Improve your existing companion' : u.desc;
-    const fireRate = botUpgrade && !state.upgrades.botBomb
-      ? `<div class="cstat">Shot interval ${helperShotInterval(owned, state.upgrades).toFixed(2)}s → <b>${helperShotInterval(owned + 1, state.upgrades).toFixed(2)}s</b></div>` : '';
+    const desc = botUpgrade ? 'Stronger companion shots' : u.desc;
     const [now, after] = u.stat(state);
     // Helper Bot uses the same rank pips as every other capped upgrade
     // (max 3); only infinite cards like Shield Reset skip the row.
@@ -3222,7 +3221,6 @@ function openPicker(healed) {
       upgradePreview(u) +
       `<div class="cname">${name}</div><div class="cdesc">${desc}</div>` +
       `<div class="cstat">${now} → <b>${after}</b></div>` +
-      fireRate +
       `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
   hud.picker.classList.remove('shown');
