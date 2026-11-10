@@ -405,32 +405,13 @@ body.titling #game { cursor: default; }
   box-shadow: 0 0 18px #ff368c55;
 }
 .scores-rank {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 2.2em;
-  min-height: 1.6em;
 }
-.scores-rank.crowned {
-  width: 2.55em;
-  height: 2.1em;
-  min-width: 2.55em;
-}
-.scores-rank.crowned b {
-  position: relative;
-  z-index: 1;
-  font-size: 1.05em;
+.scores-row.top .scores-rank {
   text-shadow: 0 0 8px #ff9ac8, 0 0 14px #ff368c88;
-}
-.scores-rank .wreath {
-  position: absolute;
-  inset: -12% -18%;
-  width: auto;
-  height: auto;
-  color: #fff;
-  filter: drop-shadow(0 0 3px #ff368caa);
-  pointer-events: none;
 }
 .scores-score { font-variant-numeric: tabular-nums; }
 .scores-status {
