@@ -1219,8 +1219,54 @@ function syncTouchControls() {
   }
 }
 
+const HUD_CLAIM = '#touchPause, #ammoWrap';
+const UI_ROOTS = '#menu, #pause, #death, #picker, #bootError';
+function isMousePointer(e) {
+  return e.pointerType === 'mouse';
+}
+function hudControlFromEvent(e) {
+  const direct = e.target?.closest?.(HUD_CLAIM);
+  if (direct) return direct.closest('#touchPause') ? 'pause' : 'reload';
+  if (typeof document.elementsFromPoint !== 'function') return null;
+  for (const el of document.elementsFromPoint(e.clientX, e.clientY)) {
+    if (el.closest?.('#touchPause')) return 'pause';
+    if (el.closest?.('#ammoWrap')) return 'reload';
+  }
+  return null;
+}
+function claimPointer(e) {
+  e.stopPropagation();
+  if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+  if (e.cancelable) e.preventDefault();
+}
+// Overlay buttons must not wait for a synthesized click: html/body use
+// touch-action:none, and iOS often drops click after the first audio unlock.
+function bindTap(el, handler, opts = {}) {
+  let last = 0;
+  const run = e => {
+    if (opts.filter && !opts.filter(e)) return false;
+    const now = performance.now();
+    if (now - last < 320) return false;
+    last = now;
+    handler(e);
+    return true;
+  };
+  el.addEventListener('pointerdown', e => {
+    if (isMousePointer(e)) return;
+    if (typeof e.button === 'number' && e.button !== 0) return;
+    if (opts.filter && !opts.filter(e)) return;
+    if (opts.claim) claimPointer(e);
+    run(e);
+  }, { capture: !!opts.capture, passive: false });
+  el.addEventListener('click', e => {
+    if (opts.filter && !opts.filter(e)) return;
+    run(e);
+  }, { capture: !!opts.capture });
+}
+
 canvas.addEventListener('pointerdown', e => {
-  if (e.pointerType === 'mouse' || !state.running || state.paused || state.choosing) return;
+  if (isMousePointer(e) || !state.running || state.paused || state.choosing) return;
+  if (e.target?.closest?.(UI_ROOTS) || hudControlFromEvent(e)) return;
   for (const k of movementKeys) delete keys[k];
   const stick = e.clientX < window.innerWidth / 2 ? moveStick : aimStick;
   if (stick.id !== null) return;
@@ -1268,27 +1314,14 @@ window.addEventListener('pointerup', releaseStick, true);
 window.addEventListener('pointercancel', releaseStick, true);
 canvas.addEventListener('lostpointercapture', releaseStick);
 document.getElementById('touchReload').addEventListener('click', startReload);
-document.getElementById('touchPause').addEventListener('pointerdown', e => {
-  if (e.pointerType === 'mouse') return;
-  e.preventDefault();
-  e.stopPropagation();
-}, true);
-document.getElementById('touchPause').addEventListener('click', e => {
-  e.preventDefault();
-  e.stopPropagation();
-  setPaused(true);
-});
-document.getElementById('ammoWrap').addEventListener('pointerdown', e => {
-  if (e.pointerType === 'mouse') return;
-  e.preventDefault();
-  e.stopPropagation();
-}, true);
-document.getElementById('ammoWrap').addEventListener('click', e => {
-  if (!window.matchMedia('(any-pointer: coarse)').matches) return;
-  e.preventDefault();
-  e.stopPropagation();
-  startReload();
-}, true);
+window.addEventListener('pointerdown', e => {
+  if (isMousePointer(e) || document.body.classList.contains('titling')) return;
+  const which = hudControlFromEvent(e);
+  if (!which) return;
+  claimPointer(e);
+  if (which === 'pause') setPaused(true);
+  else startReload();
+}, { capture: true, passive: false });
 
 window.addEventListener('keydown', e => {
   if (menu.key(e)) { e.preventDefault(); return; }
@@ -1326,20 +1359,21 @@ window.addEventListener('gesturechange', e => e.preventDefault());
 window.addEventListener('gestureend', e => e.preventDefault());
 
 // the death screen: go again, or back to the title
-document.getElementById('retryBtn').addEventListener('click', () => startGame());
-document.getElementById('deathQuitBtn').addEventListener('click', quitToTitle);
-document.getElementById('resumeBtn').addEventListener('click', () => setPaused(false));
-document.getElementById('quitBtn').addEventListener('click', quitToTitle);
+bindTap(document.getElementById('retryBtn'), () => startGame());
+bindTap(document.getElementById('deathQuitBtn'), () => quitToTitle());
+bindTap(document.getElementById('resumeBtn'), () => setPaused(false));
+bindTap(document.getElementById('quitBtn'), () => quitToTitle());
 // alt-tabbing away mid-run pauses (and would otherwise leave WASD stuck down)
 window.addEventListener('blur', () => { resetGameplayInput(); setPaused(true); });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { resetGameplayInput(); setPaused(true); }
 });
-document.getElementById('cards').addEventListener('click', e => {
+bindTap(document.getElementById('cards'), e => {
   const c = e.target.closest('.card');
   if (c) choose(+c.dataset.i);
-});
+}, { filter: e => e.target.closest('.card') });
 document.getElementById('cards').addEventListener('mouseover', e => {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const c = e.target.closest('.card');
   if (c && !c.contains(e.relatedTarget) && state.choosing) audio.hover(+c.dataset.i);
 });
@@ -3358,7 +3392,7 @@ const menu = {
 };
 menu.drawSettings();
 for (const button of document.querySelectorAll('.close-panel')) {
-  button.addEventListener('click', () => {
+  bindTap(button, () => {
     audio.ui('back');
     menu.open(null);
     menuButtons[menu.sel].focus();
@@ -3371,22 +3405,28 @@ function showBest() {
     : '';
 }
 menuButtons.forEach((b, i) => {
-  b.addEventListener('mouseenter', () => { if (!menu.panel || menu.panel !== b.dataset.act) menu.select(i); });
+  b.addEventListener('mouseenter', () => {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (!menu.panel || menu.panel !== b.dataset.act) menu.select(i);
+  });
   b.addEventListener('focus', () => menu.select(i, true));
-  b.addEventListener('click', () => menu.activate(i));
+  bindTap(b, () => menu.activate(i));
 });
 settingRows.forEach((r, i) => {
-  r.addEventListener('mouseenter', () => menu.selectRow(i));
-  r.addEventListener('click', e => {
+  r.addEventListener('mouseenter', () => {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    menu.selectRow(i);
+  });
+  bindTap(r, e => {
     const v = e.target.dataset.v, key = r.dataset.key;
     if (v === undefined) { if (key === 'shake') menu.adjust(key, 0); return; }
     if (key === 'shake') menu.adjust(key, v === '1' ? 1 : -1);
     else menu.adjust(key, +v - settings[key]);
   });
 });
-menuEl.addEventListener('click', e => {
+bindTap(menuEl, e => {
   if (menuEl.classList.contains('splash')) return menu.leaveSplash();
-  // clicking the open scene (not the column or a panel) closes a panel
+  if (e.target.closest('#menuList button, .close-panel, .srow')) return;
   if (menu.panel && !e.target.closest('.mpanel, #menuList')) { audio.ui('back'); menu.open(null); }
 });
 

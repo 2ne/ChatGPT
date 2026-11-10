@@ -21,23 +21,23 @@
 <div id="hud">
   <div id="topbar">
     <div class="run-stats">
+      <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
+      <div id="health" role="img" aria-label="Shields">
+        <span id="shieldPips" aria-hidden="true"></span>
+        <span id="shieldCount" aria-hidden="true"></span>
+      </div>
+      <div id="powerups"></div>
+    </div>
+    <div class="enemy-stats">
+      <div class="score-copy">
+        <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
+        <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
+      </div>
       <button type="button" id="touchPause" aria-label="Pause">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
         </svg>
       </button>
-      <div class="run-copy">
-        <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
-        <div id="health" role="img" aria-label="Shields">
-          <span id="shieldPips" aria-hidden="true"></span>
-          <span id="shieldCount" aria-hidden="true"></span>
-        </div>
-        <div id="powerups"></div>
-      </div>
-    </div>
-    <div class="enemy-stats">
-      <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
-      <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
     </div>
   </div>
 
@@ -86,13 +86,13 @@
     <h1 id="title" aria-label="Sector Null"><span id="titleTop">Sector</span><span id="titleMain"><span class="title-word" data-text="Null">Null</span><i class="title-dot" aria-hidden="true"></i></span></h1>
     <button type="button" id="pressAny"><span>Press</span> <b>Start</b> <span>to begin</span></button>
     <nav id="menuList" aria-label="Main menu">
-      <button data-act="play">
+      <button type="button" data-act="play">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M7 4v16l13 -8l-13 -8" />
         </svg>
         <span>Play</span>
       </button>
-      <button data-act="how">
+      <button type="button" data-act="how">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M2 8a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2l0 -8" />
           <path d="M6 12h4m-2 -2v4" />
@@ -101,7 +101,7 @@
         </svg>
         <span>How to play</span>
       </button>
-      <button data-act="settings">
+      <button type="button" data-act="settings">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
           <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />

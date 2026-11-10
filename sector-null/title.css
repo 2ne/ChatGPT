@@ -225,8 +225,10 @@ body.titling #game { cursor: default; }
   color: #fff;
   background: #6f164055;
 }
-#pressAny:hover { filter: drop-shadow(0 0 15px #f830989e); }
-#pressAny:hover::after { background: linear-gradient(90deg, #551d43, #20172d 56%, #3f1737); }
+@media (hover: hover) and (pointer: fine) {
+  #pressAny:hover { filter: drop-shadow(0 0 15px #f830989e); }
+  #pressAny:hover::after { background: linear-gradient(90deg, #551d43, #20172d 56%, #3f1737); }
+}
 
 #menu:not(.splash) #pressAny, #menu.splash :is(#menuList, #menuFoot) { display: none; }
 #menuList {
