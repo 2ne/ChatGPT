@@ -2817,6 +2817,11 @@ model(helper, new THREE.SphereGeometry(0.36, 24, 16), helperShell, 0, 0, 0);
 model(helper, new THREE.SphereGeometry(0.12, 12, 8), carbon, 0, 0, 0.33);
 const helperBarrels = [0, 0.065].map(x => box(helper, alloy, x, 0, 0.45, 0.085, 0.085, 0.28));
 scene.add(helper); helper.visible = false;
+let helperOrbit = 0; // radians around the operator — keeps the bot off the head
+const helperDesired = new THREE.Vector3();
+const HELPER_ORBIT_R = 1.35;
+const HELPER_ORBIT_H = 1.12; // shoulder height, not through the helmet
+const HELPER_ORBIT_SPEED = 0.95;
 const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
 const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
 const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
@@ -2896,8 +2901,15 @@ function updateEquipment(dt) {
   }
   if (state.choosing) return;
   if (u.bot) {
-    const desired = player.position.clone().add(new THREE.Vector3(-0.85, 1.75, 0.6));
-    helper.position.lerp(desired, Math.min(1, dt * 9));
+    // Orbit the operator at shoulder height so the sphere never sits inside the head.
+    helperOrbit += dt * (reducedMotion.matches ? HELPER_ORBIT_SPEED * 0.45 : HELPER_ORBIT_SPEED);
+    const bob = reducedMotion.matches ? 0 : Math.sin(helperOrbit * 2.2) * 0.08;
+    helperDesired.set(
+      player.position.x + Math.cos(helperOrbit) * HELPER_ORBIT_R,
+      HELPER_ORBIT_H + bob,
+      player.position.z + Math.sin(helperOrbit) * HELPER_ORBIT_R,
+    );
+    helper.position.lerp(helperDesired, Math.min(1, dt * 8));
     helperBarrels[1].visible = !!u.botGun;
     helperBarrels[0].position.x = u.botGun ? -0.065 : 0;
     equipment.shot -= dt;
@@ -2917,6 +2929,13 @@ function updateEquipment(dt) {
           }, !!u.botBomb);
         }
       }
+    } else {
+      // Drift facing along the orbit tangent when idle so it doesn't stare through the operator.
+      helper.lookAt(
+        player.position.x - Math.sin(helperOrbit) * 2,
+        helper.position.y,
+        player.position.z + Math.cos(helperOrbit) * 2,
+      );
     }
   }
   equipment.mine -= dt;
@@ -3436,7 +3455,12 @@ function clearRun() {
   clearEquipmentField();
   equipment.shot = equipment.mine = equipment.safe = 0;
   helper.visible = false;
-  helper.position.copy(player.position);
+  helperOrbit = Math.PI * 0.75;
+  helper.position.set(
+    player.position.x + Math.cos(helperOrbit) * HELPER_ORBIT_R,
+    HELPER_ORBIT_H,
+    player.position.z + Math.sin(helperOrbit) * HELPER_ORBIT_R,
+  );
   audio.cancelReload();
   clearEnemyBolts();
   state.bossPending = false;
