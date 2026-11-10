@@ -3869,8 +3869,10 @@ function chaseDrone(z, dt) {
   const pdx = p.x - z.position.x, pdz = p.z - z.position.z, pd = Math.hypot(pdx, pdz);
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
+  const onDeck = inside(z.position);
+  // Bosses may fire from outside through broken openings so window-sniping isn't free.
   const canShoot = ud.type.style === 'ranged' && ud.climb < 0 && ud.swing < 0
-    && inside(z.position) && pd > 2.5 && pd < shotMax && !wallBetween(z.position, p)
+    && (onDeck || ud.boss) && pd > 2.5 && pd < shotMax && !wallBetween(z.position, p)
     && clearPath(z.position.x, z.position.z, p.x, p.z);
   if (canShoot) {
     let moving = false;
@@ -3978,8 +3980,10 @@ function chaseDrone(z, dt) {
     if (tx !== null) {
       const g = routeAround(z, tx, tz);
       // turn harder up close so the last few steps home in on you
-      const rush = rusher && inside(z.position) ? 1.2 : 1;
-      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * rush, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1), dt);
+      const rush = rusher && onDeck ? 1.2 : 1;
+      // Bosses close the outside gap fast — they were lingering too long past the walls.
+      const approach = ud.boss && !onDeck ? 2.8 : rush;
+      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * approach, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1) * (ud.boss && !onDeck ? 1.35 : 1), dt);
     }
   }
   // progress check: jammed bots (corner packs, window frames, doors) forget their plan
