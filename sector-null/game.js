@@ -1251,8 +1251,7 @@ const touchControls = document.getElementById('touchControls');
 const STICK_RADIUS = 48;   // px to full deflection
 const STICK_KNOB = 28;     // visual knob travel
 const AIM_DEAD = 0.18;     // aim stick deadzone (normalized); fire still holds
-const PAD_DEAD = 0.18;     // standard gamepad radial deadzone
-const PAD_FIRE_AXIS = 0.35; // RT analog threshold
+const PAD_DEAD = 0.18;     // standard gamepad radial deadzone (move + Geometry Wars aim/fire)
 const PAD_UI_DELAY = 0.32;
 const PAD_UI_REPEAT = 0.16;
 const moveStick = { dot: document.getElementById('moveStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
@@ -1308,10 +1307,6 @@ function readStandardPad() {
 function padBtnDown(pad, i) {
   const b = pad.buttons[i];
   return !!(b && (b.pressed || b.value >= 0.5));
-}
-
-function padBtnValue(pad, i) {
-  return pad.buttons[i]?.value || 0;
 }
 
 function padJust(pad, i) {
@@ -1410,8 +1405,7 @@ function handlePadUiNav(dir) {
     const cards = [...hud.cards.querySelectorAll('button.card')];
     if (!cards.length) return;
     const step = dir === 'left' || dir === 'up' ? -1 : 1;
-    padPickerSel = (padPickerSel + step + cards.length) % cards.length;
-    cards[padPickerSel].focus({ preventScroll: true });
+    setPadPickerSel(padPickerSel + step);
     audio.ui('move');
     return;
   }
@@ -1442,7 +1436,7 @@ function handlePadUiConfirm() {
   }
   if (state.choosing && !state.paused) {
     const cards = [...hud.cards.querySelectorAll('button.card')];
-    const card = cards[padPickerSel] || cards[0];
+    const card = cards[padPickerSel] || cards.find((c) => c.classList.contains('pad-sel')) || cards[0];
     if (card) choose(+card.dataset.i);
     return;
   }
@@ -1470,31 +1464,46 @@ function handlePadUiBack() {
   }
 }
 
+function setPadPickerSel(i) {
+  const cards = [...hud.cards.querySelectorAll('button.card')];
+  if (!cards.length) return;
+  padPickerSel = ((i % cards.length) + cards.length) % cards.length;
+  cards.forEach((c, k) => c.classList.toggle('pad-sel', k === padPickerSel));
+  // Focus for a11y; visual selection is .pad-sel (programmatic focus is not :focus-visible).
+  cards[padPickerSel].focus({ preventScroll: true });
+}
+
+function clearPadPickerSel() {
+  hud.cards?.querySelectorAll('.pad-sel').forEach((c) => c.classList.remove('pad-sel'));
+}
+
 function pollGamepad(dt) {
   const pad = readStandardPad();
   if (!pad) {
     padMove.set(0, 0);
-    padFire = false;
-    syncFiring();
+    if (padFire) {
+      padFire = false;
+      syncFiring();
+    }
     return;
   }
 
   const move = padRadial(pad.axes[0] || 0, pad.axes[1] || 0);
   padMove.set(move.x, move.y);
+  // Geometry Wars: right stick past deadzone aims and fires; release stops fire (keep last aim).
   const aim = padRadial(pad.axes[2] || 0, pad.axes[3] || 0);
   if (aim.len > 0) {
     touchDirection.set(aim.x, aim.y).normalize();
     touchAiming = true;
     setPadAiming(true);
+    if (!padFire) {
+      padFire = true;
+      syncFiring();
+    }
     notePlayInput('gamepad');
-  }
-
-  const rt = padBtnValue(pad, 7);
-  const wantFire = rt >= PAD_FIRE_AXIS || padBtnDown(pad, 5);
-  if (wantFire !== padFire) {
-    padFire = wantFire;
+  } else if (padFire) {
+    padFire = false;
     syncFiring();
-    if (padFire) notePlayInput('gamepad');
   }
   if (padMove.lengthSq() > 0) notePlayInput('gamepad');
 
@@ -3642,16 +3651,16 @@ function openPicker(healed) {
   audio.deal(offered.filter(Boolean).length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
-    if (state.choosing && !state.paused && (finePointerUi() || gamepadLive)) {
-      padPickerSel = 0;
-      hud.cards.querySelector('button')?.focus({ preventScroll: true });
-    }
+    if (!state.choosing || state.paused) return;
+    if (gamepadLive) setPadPickerSel(0);
+    else if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
   }, PICK_LOCKOUT_MS);
 }
 
 function hidePicker() {
   hud.picker.classList.remove('shown');
   hud.picker.classList.add('hidden');
+  clearPadPickerSel();
   const ae = document.activeElement;
   if (ae && typeof ae.blur === 'function' && ae.closest?.('#picker')) ae.blur();
 }
@@ -4046,7 +4055,8 @@ function setPaused(on) {
   if (on) {
     if (finePointerUi() || gamepadLive) document.getElementById('resumeBtn').focus({ preventScroll: true });
   } else if (state.choosing) {
-    if (finePointerUi() || gamepadLive) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+    if (gamepadLive) setPadPickerSel(padPickerSel);
+    else if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
   } else {
     const ae = document.activeElement;
     if (ae && typeof ae.blur === 'function' && ae.closest?.('#pause')) ae.blur();
