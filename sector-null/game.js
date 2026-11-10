@@ -34,15 +34,57 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x080e16);
 scene.fog = new THREE.Fog(0x080e16, 26, 67);
 
-const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 const CAM_OFFSET = new THREE.Vector3(0, 24, 11);
 
-function onResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+function pinViewport() {
+  window.scrollTo(0, 0);
 }
-window.addEventListener('resize', onResize);
+
+function layoutSize() {
+  // Prefer visualViewport: iOS Home Screen standalone often reports a stale
+  // innerHeight (status bar / Dynamic Island still opening) and may never
+  // fire window.resize when it shrinks. Menu hit-testing then sits ~one
+  // button above the painted buttons.
+  const vv = window.visualViewport;
+  const w = vv?.width || document.documentElement.clientWidth || window.innerWidth;
+  const h = vv?.height || document.documentElement.clientHeight || window.innerHeight;
+  return { w: Math.max(1, Math.round(w)), h: Math.max(1, Math.round(h)) };
+}
+
+function onResize() {
+  pinViewport();
+  const { w, h } = layoutSize();
+  document.documentElement.style.setProperty('--vv-w', w + 'px');
+  document.documentElement.style.setProperty('--vv-h', h + 'px');
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  // updateStyle=false: CSS owns the canvas box. Stamping innerWidth/innerHeight
+  // as inline width/height overflows the visual viewport on standalone iOS.
+  renderer.setSize(w, h, false);
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+}
+
+function scheduleResize() {
+  onResize();
+  requestAnimationFrame(() => {
+    onResize();
+    setTimeout(onResize, 80);
+    setTimeout(onResize, 300);
+  });
+}
+
+window.addEventListener('resize', scheduleResize);
+window.addEventListener('orientationchange', scheduleResize);
+window.addEventListener('pageshow', scheduleResize);
+if (window.visualViewport) {
+  visualViewport.addEventListener('resize', scheduleResize);
+  visualViewport.addEventListener('scroll', () => {
+    pinViewport();
+    onResize();
+  });
+}
 onResize();
 
 // ---------- shared geometry / materials ----------
@@ -1268,7 +1310,7 @@ canvas.addEventListener('pointerdown', e => {
   if (isMousePointer(e) || !state.running || state.paused || state.choosing) return;
   if (e.target?.closest?.(UI_ROOTS) || hudControlFromEvent(e)) return;
   for (const k of movementKeys) delete keys[k];
-  const stick = e.clientX < window.innerWidth / 2 ? moveStick : aimStick;
+  const stick = e.clientX < layoutSize().w / 2 ? moveStick : aimStick;
   if (stick.id !== null) return;
   stick.id = e.pointerId;
   stick.x = e.clientX;
@@ -1347,8 +1389,9 @@ window.addEventListener('keydown', e => {
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
   touchAiming = false;
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  const view = layoutSize();
+  mouse.x = (e.clientX / view.w) * 2 - 1;
+  mouse.y = -(e.clientY / view.h) * 2 + 1;
 });
 canvas.addEventListener('mousedown', e => { if (e.button === 0) firing = true; });
 window.addEventListener('mouseup', () => { firing = false; });
@@ -1869,7 +1912,7 @@ function offscreen(x, z) {
   return true;
 }
 function spawnPoint(out) {
-  spawnCam.aspect = window.innerWidth / window.innerHeight;
+  spawnCam.aspect = layoutSize().w / layoutSize().h;
   spawnCam.updateProjectionMatrix();
   spawnCam.position.copy(player.position).add(CAM_OFFSET);
   spawnCam.lookAt(player.position.x, 0, player.position.z);
@@ -3303,7 +3346,7 @@ function updateCamera(dt) {
 const menuButtons = [...document.querySelectorAll('#menuList button')];
 const settingRows = [...document.querySelectorAll('#settingRows .srow')];
 const menu = {
-  sel: 0, panel: null, row: 0,
+  sel: 0, panel: null, row: 0, ignoreUntil: 0,
   select(i, quiet) {
     i = (i + menuButtons.length) % menuButtons.length;
     if (i !== this.sel && !quiet) audio.ui('move');
@@ -3318,6 +3361,9 @@ const menu = {
     this.hints();
   },
   activate(i = this.sel) {
+    // Start's pointerdown reveals the list; the leftover click retargets onto
+    // whichever button now sits under that point (How, on landscape).
+    if (performance.now() < this.ignoreUntil) return;
     const act = menuButtons[i].dataset.act;
     this.select(i, true);
     if (act === 'play') { this.open(null); startGame(true); return; }
@@ -3388,6 +3434,7 @@ const menu = {
     menuEl.classList.remove('splash');
     this.select(0, true);
     this.hints();
+    this.ignoreUntil = performance.now() + 120;
   },
 };
 menu.drawSettings();
@@ -3425,7 +3472,11 @@ settingRows.forEach((r, i) => {
   });
 });
 bindTap(menuEl, e => {
-  if (menuEl.classList.contains('splash')) return menu.leaveSplash();
+  if (menuEl.classList.contains('splash')) {
+    if (e.cancelable) e.preventDefault();
+    e.stopPropagation();
+    return menu.leaveSplash();
+  }
   if (e.target.closest('#menuList button, .close-panel, .srow')) return;
   if (menu.panel && !e.target.closest('.mpanel, #menuList')) { audio.ui('back'); menu.open(null); }
 });
@@ -3936,3 +3987,31 @@ function loop(now) {
 enterTitle(true);
 updateCamera(0);
 requestAnimationFrame(loop);
+
+function whenViewportSettled(done) {
+  const started = performance.now();
+  let prev = '';
+  let same = 0;
+  const tick = () => {
+    pinViewport();
+    onResize();
+    const { w, h } = layoutSize();
+    const key = w + 'x' + h;
+    if (key === prev) same += 1;
+    else { prev = key; same = 0; }
+    const elapsed = performance.now() - started;
+    // Two matching frames after a short wait, or give up around 1s so a
+    // late iOS safe-area/visualViewport jump is included when it happens.
+    if ((same >= 2 && elapsed >= 240) || elapsed > 900) {
+      onResize();
+      done();
+      return;
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+whenViewportSettled(() => {
+  document.body.classList.remove('viewport-pending');
+  onResize();
+});

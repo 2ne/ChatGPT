@@ -11,7 +11,13 @@
   --hud-edge: clamp(10px, 2vw, 20px);
 }
 html, body {
-  width: 100%; height: 100%; overflow: hidden; background: #080e16;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--vv-w, 100%);
+  height: var(--vv-h, 100%);
+  overflow: hidden;
+  background: #080e16;
   touch-action: none;
   overscroll-behavior: none;
 }
@@ -22,7 +28,14 @@ button, canvas, img, svg, a {
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 }
-#game { display: block; width: 100vw; height: 100dvh; touch-action: none; }
+#game {
+  display: block;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
 body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; color: #d5e7ee; }
 :focus, :focus-visible { outline: none; }
 
@@ -247,7 +260,12 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
   body.titling #hud { opacity: 0; }
   body.titling #touchPause,
   body.titling #ammoWrap { pointer-events: none; }
-  #fadeIn { position: fixed; inset: 0; background: #000; z-index: 30; pointer-events: none; animation: fadeIn 1.1s ease-out forwards; }
+  #fadeIn { position: fixed; inset: 0; background: #000; z-index: 30; opacity: 1; pointer-events: auto; }
+  body:not(.viewport-pending) #fadeIn {
+    pointer-events: none;
+    animation: fadeIn 1.1s ease-out forwards;
+  }
+  body.viewport-pending #menu { pointer-events: none; }
   @keyframes fadeIn { to { opacity: 0; } }
 
   kbd {
@@ -262,11 +280,11 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     width: min(480px, 38vw); padding: 26px 30px 28px;
     background: linear-gradient(180deg, rgba(14,28,40,.97), rgba(7,15,24,.97));
     border: 1px solid #2c4858; box-shadow: 0 24px 60px #000c;
-    opacity: 0; visibility: hidden; transform: translate(24px, -50%);
+    opacity: 0; visibility: hidden; pointer-events: none; transform: translate(24px, -50%);
     transition: opacity .22s, transform .3s cubic-bezier(.2, .8, .2, 1), visibility 0s .3s;
   }
   .mpanel::before { content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 3px; background: #64dfee; box-shadow: 0 0 12px #64dfee; }
-  .mpanel.open { opacity: 1; visibility: visible; transform: translate(0, -50%); transition-delay: 0s; }
+  .mpanel.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(0, -50%); transition-delay: 0s; }
   .mpanel h2 { font-family: "Rajdhani", sans-serif; font-weight: normal; font-size: 30px; letter-spacing: 3px; color: #e4f1f5; }
   .mrows { margin-top: 14px; display: flex; flex-direction: column; }
   .crow { display: flex; align-items: center; gap: 16px; padding: 6px 0; border-bottom: 1px solid #1f1f24; font-size: 19px; letter-spacing: 2px; }

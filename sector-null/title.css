@@ -287,9 +287,9 @@ body.titling #game { cursor: default; }
     linear-gradient(90deg, #062538, #081825 70%, #0b3548);
 }
 @starting-style {
-  #menu:not(.splash) #menuList { opacity: 0; transform: translateX(-14px); }
+  #menu:not(.splash) #menuList { opacity: 0; }
 }
-#menuList { transition: opacity .3s, transform .3s; }
+#menuList { transition: opacity .3s; }
 
 #menuFoot {
   position: absolute;
@@ -316,8 +316,13 @@ body.titling #game { cursor: default; }
   #title { font-size: clamp(52px, 15cqw, 105px); }
   #menuList { margin-top: 5cqh; }
   #pressAny { width: min(72cqw, 395px); margin-top: 6cqh; }
-  #menu .mpanel { left: 22px; width: calc(100% - 44px); }
   #menuHints { display: none; }
+}
+/* Full-width How/Settings overlay is for tall/narrow (portrait) only.
+   Landscape iPhone with safe-area insets shrinks the menu below 760px
+   and must not drop an invisible panel over Play / How / Settings. */
+@container (max-width: 760px) and (min-height: 501px) {
+  #menu .mpanel { left: 22px; width: calc(100% - 44px); }
 }
 @container (max-height: 500px) and (min-width: 600px) {
   #menuCol { top: 17cqh; }
