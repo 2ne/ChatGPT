@@ -1,5 +1,8 @@
 const SCORES_API = typeof __SCORES_API__ !== 'undefined' ? __SCORES_API__ : '';
 
+// Must match functions/scores MIN_WAVE: finish wave 1 before a board submit is offered.
+export const MIN_SUBMIT_WAVE = 2;
+
 const REJECT_COPY = {
   too_short: 'SCORE NOT SUBMITTED — FINISH WAVE 1 FIRST',
   rate_limited: 'TOO MANY SUBMISSIONS — TRY AGAIN SHORTLY',
@@ -14,6 +17,11 @@ const REJECT_COPY = {
 
 export function rejectMessage(code) {
   return REJECT_COPY[code] || 'COULDN’T REACH LEADERBOARD';
+}
+
+/** Same eligibility the server uses for too_short (wave ≥ 2) plus a positive score. */
+export function canSubmitScore(wave, score) {
+  return Number(score) > 0 && Number(wave) >= MIN_SUBMIT_WAVE;
 }
 
 export function readPlayerName() {

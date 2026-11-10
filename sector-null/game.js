@@ -10,6 +10,7 @@ import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
 import { firstBlocker, resolveShotStart } from './shot-collision.js';
 import {
+  canSubmitScore,
   fetchScores,
   normalizeName,
   readPlayerName,
@@ -3865,7 +3866,8 @@ function die() {
   db.classList.toggle('record', record);
 
   resetDeathSubmit();
-  if (state.score > 0) {
+  // Hide callsign/submit when the server would reject as too_short (wave < 2).
+  if (canSubmitScore(state.wave, state.score)) {
     pendingSubmit = {
       runId: activeRunId,
       score: state.score,
