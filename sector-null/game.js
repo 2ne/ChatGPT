@@ -1381,7 +1381,6 @@ window.addEventListener('keydown', e => {
   if (state.paused) return;
   if (e.code === 'KeyR') startReload();
   if (state.choosing && /^Digit[1-3]$/.test(e.code)) choose(+e.code.slice(5) - 1);
-  if (state.choosing && e.code === 'Digit4') claimAbility();
   if (e.code === 'KeyM') {
     const m = audio.toggleMute();
     document.getElementById('reloadHint').textContent = m ? '[R] RELOAD   ·   [M] MUTED' : '[R] RELOAD';
@@ -1416,7 +1415,6 @@ bindTap(document.getElementById('cards'), e => {
   const c = e.target.closest('.card');
   if (c) choose(+c.dataset.i);
 }, { filter: e => e.target.closest('.card') });
-bindTap(document.getElementById('abilityClaim'), () => claimAbility());
 document.getElementById('cards').addEventListener('mouseover', e => {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const c = e.target.closest('.card');
@@ -1442,7 +1440,6 @@ const hud = {
   pickerTitle: document.getElementById('pickerTitle'),
   pickerSub: document.getElementById('pickerSub'),
   cards: document.getElementById('cards'),
-  abilityClaim: document.getElementById('abilityClaim'),
   weaponIcon: document.getElementById('weaponIcon'),
   weaponMods: document.getElementById('weaponMods'),
   mag: document.getElementById('mag'),
@@ -2882,7 +2879,7 @@ const UPGRADES = [
   { id: 'speed',  cat: 'survival',  name: 'MOTION SERVO',    desc: 'move 12% faster',            max: 3, stat: s => [Math.round(s.speed / 6.2 * 100) + '%', Math.round(s.speed * 1.12 / 6.2 * 100) + '%'], apply: s => { s.speed *= 1.12; } },
   { id: 'luck',   cat: 'fortune',   name: 'SALVAGE SCANNER',     desc: 'more supply drops', max: 3, stat: s => [Math.round((DROP_CHANCE + s.dropBonus) * 100) + '%', Math.round((DROP_CHANCE + s.dropBonus + 0.03) * 100) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
   { id: 'heal',   cat: 'survival',  name: 'SHIELD RESET',      desc: 'restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
-  // Free bonus ability — offered beside the combat pick, never costs an upgrade slot.
+  // Score path: pick this instead of another gun / gear upgrade and vacuum every emerald.
   { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
 ];
 const UPGRADE_CATS = {
@@ -2931,12 +2928,13 @@ function upgradeWeight(u) {
   if (u.id === 'rate' && !(state.upgrades.rate)) w += 1.2;
   if (u.id === 'luck' && state.wave <= 2) w *= 0.35;
   if (u.id === 'heal') w *= state.hp < state.maxHp ? 1 : 0;
+  // Ability path: a real alternative to stacking firepower once you can stay alive.
+  if (u.cat === 'ability') w += state.wave >= 2 ? 2.2 : 1.1;
   return Math.max(0.05, w);
 }
 
 function pickUpgradeOffers(count = 3) {
-  // Abilities are free bonus claims — never compete with combat / engineer cards.
-  const pool = UPGRADES.filter(u => u.cat !== 'ability' && (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
+  const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
   const picks = [];
   // Keep an equipment path available, including follow-up modules once owned.
   const equipment = pool.filter(u => u.cat === 'engineer');
@@ -2969,39 +2967,6 @@ function pickUpgradeOffers(count = 3) {
     [picks[i], picks[j]] = [picks[j], picks[i]];
   }
   return picks.sort((a, b) => recommendationScore(b) - recommendationScore(a));
-}
-
-function abilityOffer() {
-  return UPGRADES.find(u => u.cat === 'ability' && (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state))) || null;
-}
-
-function syncAbilityClaim() {
-  const u = abilityOffer();
-  if (!u) {
-    hud.abilityClaim.classList.add('hidden');
-    hud.abilityClaim.classList.remove('ready', 'claimed');
-    return null;
-  }
-  hud.abilityClaim.classList.remove('hidden', 'claimed');
-  hud.abilityClaim.style.setProperty('--accent', UPGRADE_CATS[u.cat]);
-  hud.abilityClaim.querySelector('.ability-name').textContent = u.name;
-  hud.abilityClaim.querySelector('.ability-desc').textContent = u.desc;
-  return u;
-}
-
-function claimAbility() {
-  const u = abilityOffer();
-  if (!state.choosing || !u || state.paused || !hud.cards.classList.contains('ready')) return;
-  if (hud.abilityClaim.classList.contains('claimed')) return;
-  state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
-  u.apply(state);
-  hud.abilityClaim.classList.add('claimed');
-  toastQueue.push({ text: u.name, color: UPGRADE_CATS[u.cat] });
-  audio.upgrade(u.cat);
-  // Keep the combat pick open — ability is free, not a forfeit.
-  setTimeout(() => {
-    if (state.choosing) syncAbilityClaim();
-  }, 280);
 }
 
 function recommendationScore(u) {
@@ -3058,8 +3023,6 @@ function openPicker(healed) {
       fireRate +
       `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
-  syncAbilityClaim();
-  hud.abilityClaim.classList.remove('ready');
   hud.picker.classList.remove('shown');
   hud.picker.classList.remove('hidden');
   // Double rAF so the opacity transition starts from 0 after display flips on.
@@ -3073,7 +3036,6 @@ function openPicker(healed) {
   audio.deal(offered.length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
-    hud.abilityClaim.classList.add('ready');
     if (state.choosing && !state.paused) hud.cards.querySelector('button')?.focus({ preventScroll: true });
   }, PICK_LOCKOUT_MS);
 }
@@ -3081,8 +3043,6 @@ function openPicker(healed) {
 function hidePicker() {
   hud.picker.classList.remove('shown');
   hud.picker.classList.add('hidden');
-  hud.abilityClaim.classList.add('hidden');
-  hud.abilityClaim.classList.remove('ready', 'claimed');
 }
 
 function choose(i) {
