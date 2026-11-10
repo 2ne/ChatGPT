@@ -1452,12 +1452,48 @@ body.paused #flash {
   }
 }
 
-/* Phone landscape only: shrink HUD chrome and hug safe-area edges so the
-   right-thumb press-and-hold fire zone stays clear. Desktop / portrait untouched. */
-@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+/* Phone portrait + landscape: compact gun panel hugs safe-area + ~8px.
+   Desktop unchanged. Header shrink stays landscape-only below. */
+@media (any-pointer: coarse) and (orientation: portrait) and (max-width: 500px),
+       (any-pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
   :root {
     --hud-phone-margin: 8px;
+    /* ~72% of the default 136–176px panel */
+    --hud-ammo-w: clamp(98px, 12.5vw, 128px);
   }
+  #ammoWrap {
+    right: calc(var(--safe-right) + var(--hud-phone-margin));
+    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
+    width: var(--hud-ammo-w);
+    padding: 2px 6px 5px;
+  }
+  #cellStatus {
+    min-height: 13px;
+    margin: 2px 0 3px;
+    font-size: 9px;
+    letter-spacing: 0.6px;
+  }
+  #mag {
+    gap: 1px;
+  }
+  #mag span {
+    flex: 0 1 4px;
+    height: 7px;
+  }
+  #reloadBar {
+    height: 4px;
+    margin-top: 4px;
+  }
+  #bossPanel {
+    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
+    left: calc(var(--safe-left) + var(--hud-phone-margin));
+    right: calc(var(--safe-right) + var(--hud-ammo-w) + 16px);
+    pointer-events: none;
+  }
+}
+
+/* Phone landscape only: also pull the header stats flush to the edges. */
+@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
   #topbar {
     top: calc(var(--safe-top) + var(--hud-phone-margin));
     left: calc(var(--safe-left) + var(--hud-phone-margin));
@@ -1505,36 +1541,6 @@ body.paused #flash {
   #touchPause svg {
     width: 16px;
     height: 16px;
-  }
-  #ammoWrap {
-    right: calc(var(--safe-right) + var(--hud-phone-margin));
-    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
-    /* ~72% of the default 136–176px panel; sits on safe-area + 8px only */
-    width: clamp(98px, 12.5vw, 128px);
-    padding: 2px 6px 5px;
-  }
-  #cellStatus {
-    min-height: 13px;
-    margin: 2px 0 3px;
-    font-size: 9px;
-    letter-spacing: 0.6px;
-  }
-  #mag {
-    gap: 1px;
-  }
-  #mag span {
-    flex: 0 1 4px;
-    height: 7px;
-  }
-  #reloadBar {
-    height: 4px;
-    margin-top: 4px;
-  }
-  #bossPanel {
-    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
-    left: calc(var(--safe-left) + var(--hud-phone-margin));
-    right: calc(var(--safe-right) + clamp(98px, 12.5vw, 128px) + 16px);
-    pointer-events: none;
   }
 }
 .close-panel {
