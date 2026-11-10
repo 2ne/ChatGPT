@@ -27,7 +27,7 @@ Early upgrade picks bias toward firepower, and Split Beam is guaranteed among th
 
 Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes and movement provide additional cues. The boss intro banner shows only the name.
 
-From about wave 12 the game soft-caps debris, enemy bolts and live score gems, trims spark counts, and budgets SFX voices so late runs (wave 25+) stay responsive without changing early-wave feel. Overflow gems still bank their score.
+From about wave 12 the game soft-caps debris, enemy bolts and live score gems, trims spark counts, and budgets SFX voices so late runs (wave 25+) stay responsive without changing early-wave feel. Overflow gems still bank their score. After a hitch the loop briefly sheds cosmetic work and caps the player move step so control doesn’t feel stuck then suddenly lunge.
 
 ## Navigation and power-up feedback
 
