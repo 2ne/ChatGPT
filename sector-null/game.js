@@ -5,6 +5,7 @@ import '@fontsource/rajdhani/latin-700.css';
 import '@fontsource/oxanium/latin-700.css';
 import './style.css';
 import './title.css';
+import { enhanceScrollArea } from './scroll-area.js';
 import { createAudio } from './audio.js';
 import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
@@ -4008,6 +4009,7 @@ function updateCamera(dt) {
 // --- the menu itself: keyboard (arrows/WASD, enter, esc) and mouse both drive it ---
 const menuButtons = [...document.querySelectorAll('#menuList button')];
 const settingRows = [...document.querySelectorAll('#settingRows .srow')];
+for (const area of document.querySelectorAll('#menu .mpanel, #scoresList')) enhanceScrollArea(area);
 function blurMenuFocus() {
   const ae = document.activeElement;
   if (ae && typeof ae.blur === 'function' && menuEl.contains(ae)) ae.blur();
@@ -4102,6 +4104,16 @@ const menu = {
       else if (ok && key === 'shake') this.adjust(key, 0);
       else if (back) { audio.ui('back'); this.open(null); }
     } else if (this.panel) {
+      if (this.panel === 'scores') {
+        const list = document.getElementById('scoresList');
+        const page = Math.max(42, list.clientHeight * 0.85);
+        if (up || down || ['PageUp', 'PageDown', 'Home', 'End', 'Space'].includes(c)) {
+          if (c === 'Home') list.scrollTop = 0;
+          else if (c === 'End') list.scrollTop = list.scrollHeight;
+          else list.scrollTop += up ? -49 : down ? 49 : c === 'PageUp' || (c === 'Space' && e.shiftKey) ? -page : page;
+          return true;
+        }
+      }
       if (back || ok) { audio.ui('back'); this.open(null); }
     } else if (up) { this.kbdHighlight = true; this.select(this.sel - 1); }
     else if (down) { this.kbdHighlight = true; this.select(this.sel + 1); }
@@ -4169,6 +4181,7 @@ async function loadScoresBoard() {
   const body = document.getElementById('scoresBody');
 
   list.innerHTML = '';
+  list.scrollTop = 0;
   if (head) head.hidden = true;
   setScoresStatus('Loading board…', { loading: true });
   lockScoresBodyHeight(measureScoresBody(), false);

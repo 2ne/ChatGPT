@@ -335,6 +335,35 @@ body.titling #game { cursor: default; }
 }
 
 /* Leaderboard */
+/* A lightweight scroll-area treatment for the game's existing vanilla UI. */
+html:has(body.titling), body.titling, body.titling #menu {
+  touch-action: pan-y pinch-zoom;
+}
+.game-scroll-area {
+  --fade-top: 0px;
+  --fade-bottom: 0px;
+  overscroll-behavior: contain;
+  touch-action: pan-y pinch-zoom;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyan) #102733;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent);
+}
+.game-scroll-area::-webkit-scrollbar { width: 10px; height: 10px; }
+.game-scroll-area::-webkit-scrollbar-track { background: #102733; border-radius: 10px; }
+.game-scroll-area::-webkit-scrollbar-thumb {
+  background: var(--cyan);
+  border: 3px solid #102733;
+  border-radius: 10px;
+  min-height: 36px;
+}
+.game-scroll-area:hover, .game-scroll-area:focus-visible { scrollbar-color: var(--pink) #102733; }
+.game-scroll-area::-webkit-scrollbar-thumb:hover,
+.game-scroll-area::-webkit-scrollbar-thumb:active { background: var(--pink); }
+.game-scroll-area:focus-visible { outline: 1px solid var(--cyan); outline-offset: -1px; }
+@media (forced-colors: active) {
+  .game-scroll-area { -webkit-mask-image: none; mask-image: none; scrollbar-color: auto; }
+}
 #scoresPanel {
   --edge: var(--pink);
   width: min(420px, 78cqw);
@@ -376,10 +405,15 @@ body.titling #game { cursor: default; }
 }
 .scores-list {
   display: grid;
+  grid-auto-rows: minmax(42px, auto);
   gap: 7px;
   max-height: min(52cqh, 420px);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding-block: 2px;
 }
+.scores-head { padding-right: 28px; }
 .scores-row {
   --cut: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   position: relative;
@@ -447,3 +481,17 @@ body.titling #game { cursor: default; }
 }
 .scores-status[hidden],
 .scores-head[hidden] { display: none; }
+
+@container (max-width: 520px) {
+  .scores-head, .scores-row {
+    grid-template-columns: 30px minmax(0, 1fr) 36px 44px;
+    gap: 6px;
+    padding-inline: 8px;
+    letter-spacing: .06em;
+  }
+  .scores-head { padding-right: 20px; font-size: 10px; }
+  .scores-row { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scores-body { transition: none; }
+}

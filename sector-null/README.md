@@ -44,6 +44,8 @@ Power-ups light the operator orange for Overcharge and blue for Infinite Cell wi
 
 ## Run locally
 
+The leaderboard uses a themed native scroll area inspired by shadcn/ui: a slim cyan scrollbar with pink hover/active feedback, fixed column headings, and position-aware fades that disappear at each end. The same scrollbar and fade treatment applies to overflowing menu panels. Touch swipes, wheel/trackpad input and dragging the desktop scrollbar use browser-native scrolling. On the leaderboard, arrows/W/S move by a row, Page Up/Down and Space/Shift+Space move by a page, and Home/End jump to either end. Narrow layouts keep all score columns visible; high-contrast mode removes masks and reduced-motion mode disables panel resizing animation. No React or additional UI dependencies are required.
+
 ### Neon agent tooling
 
 The official Neon skills are installed for this project in `.agents/skills/` with source hashes in `skills-lock.json`: Neon overview, Postgres, Functions, Auth, Object Storage, AI Gateway and Realtime. Existing application services and credentials are reused; installing skills does not enable those optional services.
