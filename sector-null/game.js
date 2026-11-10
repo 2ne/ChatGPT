@@ -1573,6 +1573,8 @@ const toastQueue = [];
 let toastTime = 0;
 let activePickupHint = null;
 let toastIsBotsLeft = false;
+// Shared read time for first power-up lessons and wave title/subtitle banners.
+const NOTICE_READ_HOLD = 4.5;
 // No "1 BOT LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
@@ -1650,7 +1652,7 @@ function updateToast(dt) {
   hud.toastDetail.textContent = firstPickup ? pickup.detail : '';
   hud.toast.style.color = color;
   hud.toast.style.opacity = 1;
-  toastTime = firstPickup ? 4.5 : 1.4;
+  toastTime = firstPickup ? NOTICE_READ_HOLD : 1.4;
   activePickupHint = firstPickup ? pickup.id : null;
   toastIsBotsLeft = !!next.botsLeft;
 }
@@ -3536,7 +3538,11 @@ function startWave(n) {
   state.intermission = 0;
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
-  showBanner('WAVE ' + n, n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected');
+  showBanner(
+    'WAVE ' + n,
+    n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected',
+    NOTICE_READ_HOLD,
+  );
 }
 
 // ===================================================================
