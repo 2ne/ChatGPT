@@ -2487,7 +2487,8 @@ function killDrone(z, idx) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '+', color: 0xff78b5, weight: 40 },
+  // Name already carries the +; an icon of '+' made the toast read "++1 SHIELD".
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 40 },
   { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
   { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
@@ -2525,12 +2526,18 @@ function pickupLabel(type) {
   ctx.lineWidth = 3;
   ctx.stroke();
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = type.tint;
-  ctx.font = 'bold 36px sans-serif';
-  ctx.fillText(type.icon, 15, 33);
   ctx.fillStyle = '#f3fbff';
   ctx.font = 'bold 29px sans-serif';
-  ctx.fillText(type.name, 61, 33);
+  if (type.icon) {
+    ctx.fillStyle = type.tint;
+    ctx.font = 'bold 36px sans-serif';
+    ctx.fillText(type.icon, 15, 33);
+    ctx.fillStyle = '#f3fbff';
+    ctx.font = 'bold 29px sans-serif';
+    ctx.fillText(type.name, 61, 33);
+  } else {
+    ctx.fillText(type.name, 24, 33);
+  }
   const map = new THREE.CanvasTexture(canvas);
   map.colorSpace = THREE.SRGBColorSpace;
   return new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, toneMapped: false });
