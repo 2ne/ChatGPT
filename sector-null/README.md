@@ -33,7 +33,7 @@ Uncollected supplies expire after 6 seconds of active play. During the final 2 s
 
 Bots plan around both cover and bulkheads using navigation graphs sized to their bodies. Routes refresh as the target moves, with stable corner choices to limit jitter. Movement checks clearance before stepping, turns in place for sharp corners, and limits steps at waypoints. Ranged strafing uses the same navigation; crowd separation avoids pushing bots into obstacles. Melee attacks cannot pass through solid cover.
 
-Power-ups light the operator orange for Overcharge and blue for Infinite Cell with a strong pulsing glow (steady under reduced motion). Peaks flash toward white so the buff feels active. If both are active, the torso and limbs pulse on separate phases. Shield kits produce a short pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the active timer. What each power-up does is taught once on first pickup; the HUD timer does not repeat that explanation. Magnetic Gems is listed in green on the HUD for the rest of the run once owned.
+Power-ups light the operator orange for Overcharge and blue for Infinite Cell with a strong pulsing glow (steady under reduced motion). Peaks flash toward white so the buff feels active. If both are active, the torso and limbs pulse on separate phases. Shield kits produce a short pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the active timer. What each power-up does is taught once on first pickup; the HUD timer does not repeat that explanation. Magnetic Gems shows as a soft green circle around the operator once owned — not a timed HUD line.
 
 ## Run locally
 
@@ -50,7 +50,7 @@ The gameplay score uses the full-length loops in `assets/score/`. Wave-start and
 
 Supply pickup notices appear one at a time. The first pickup of each type in every run shows a short explanation for 4.5 seconds: +1 Shield restores one shield, Overcharge doubles damage for 10 seconds, and Infinite Cell gives unlimited ammo for 8 seconds. Later pickups in the same run show only the name. Learning notices take priority over routine notices without interrupting another explanation. Their reading timer waits until the upgrade picker is fully closed. Lesson history resets each run, so an earlier session cannot suppress a new explanation.
 
-**Magnetic Gems** is a permanent green **ability** upgrade. It appears in the normal three-card wave-clear picker as an alternative to firepower / engineer / survival — take it instead of another option when you want the score path. Once picked it stays for the run, lists on the HUD without a countdown, and pulls score gems through walls at a readable surge. Timed supplies (Overcharge / Infinite Cell) stay short combat spikes.
+**Magnetic Gems** is a permanent green **ability** upgrade. It appears in the normal three-card wave-clear picker as an alternative to firepower / engineer / survival — take it instead of another option when you want the score path. Once picked it stays for the run, marks the operator with a soft green floor circle, and pulls score gems through walls at a readable surge. Timed supplies (Overcharge / Infinite Cell) stay short combat spikes.
 
 The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
 
