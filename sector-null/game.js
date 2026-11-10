@@ -4048,6 +4048,7 @@ async function loadScoresBoard() {
       return `<div class="scores-row${top ? ' top' : ''}" role="listitem">
         <span class="scores-rank${top ? ' crowned' : ''}">${top ? WREATH : ''}<b>${row.rank}</b></span>
         <span class="scores-score">${formatScore(row.score)}</span>
+        <span class="scores-wave">${row.wave}</span>
         <span class="scores-name">${row.name}</span>
       </div>`;
     }).join('');

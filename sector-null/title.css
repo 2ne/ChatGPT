@@ -350,7 +350,7 @@ body.titling #game { cursor: default; }
 .scores-head,
 .scores-row {
   display: grid;
-  grid-template-columns: 64px 1fr 64px;
+  grid-template-columns: 64px 1fr 52px 64px;
   align-items: center;
   gap: 10px;
   padding: 0 16px;
@@ -360,6 +360,11 @@ body.titling #game { cursor: default; }
   color: var(--cyan);
   font-size: 11px;
   letter-spacing: .2em;
+}
+.scores-head span:nth-child(3),
+.scores-wave {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
 }
 .scores-head span:last-child,
 .scores-name {
