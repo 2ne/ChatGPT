@@ -1458,14 +1458,6 @@ body.paused #flash {
 .clvl {
   margin-top: 12px;
 }
-#buildSummary {
-  max-width: 820px;
-  margin-top: 18px;
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.7;
-  color: #a9c4ce;
-}
 .preview-shot {
   animation: previewPulse 1.6s ease-in-out infinite;
 }
@@ -1489,13 +1481,11 @@ body.paused #flash {
   #pickerTitle {
     margin-top: auto;
   }
-  #buildSummary {
-    margin-bottom: auto;
-  }
   #cards {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 18px;
+    margin-bottom: auto;
     padding: 0;
   }
   #cards .recommended {
@@ -1536,9 +1526,6 @@ body.paused #flash {
   #pickerSub::after {
     display: none;
   }
-  #buildSummary {
-    margin-top: 12px;
-  }
 }
 @media (max-height: 500px) {
   #picker {
@@ -1567,10 +1554,6 @@ body.paused #flash {
   .cstat {
     font-size: 12px;
     padding-top: 5px;
-  }
-  #buildSummary {
-    font-size: 10px;
-    margin-top: 8px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

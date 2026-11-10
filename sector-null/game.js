@@ -2980,7 +2980,6 @@ function openPicker(healed) {
       fireRate +
       `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
-  document.getElementById('buildSummary').textContent = UPGRADES.filter(u => state.upgrades[u.id]).map(u => `${u.id === 'bot' ? '1 HELPER BOT' : u.name} · Rank ${state.upgrades[u.id]}`).join(' · ') || 'Choose a weapon, engineer or defence path';
   hud.picker.classList.remove('hidden');
   hud.cards.classList.remove('ready');
   audio.deal(offered.length);

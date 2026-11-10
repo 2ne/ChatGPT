@@ -73,7 +73,7 @@ The canvas size follows `visualViewport` (not a one-shot `innerHeight`), and the
 
 ## Engineer and defence paths
 
-Upgrade cards show a visual preview, pip ranks, current build and a larger recommended option. Recommendations favour an urgently needed shield, a first Split Beam, or continuing owned equipment. All three cards remain deliberate choices; nothing is automatically selected. Use 1–3, tap, or Tab and Enter. Offers include an engineer option whenever an eligible one remains, and owned modules receive higher offer weight.
+Upgrade cards show a visual preview, pip ranks and a larger recommended option. Owned gear is visible on the cards themselves (filled pips / UPGRADE HELPER BOT), so the picker does not repeat a build summary underneath. Recommendations favour an urgently needed shield, a first Split Beam, or continuing owned equipment. All three cards remain deliberate choices; nothing is automatically selected. Use 1–3, tap, or Tab and Enter. Offers include an engineer option whenever an eligible one remains, and owned modules receive higher offer weight.
 
 - **Helper Bot (3 ranks):** a white floating sphere with a small centred gun; follows and fires automatically. Ranks increase shot damage and firing speed. Specialise in **Twin Guns (2 ranks)** for doubled shots then faster firing, or **Bomb Launcher (2 ranks)** for slower area blasts then a wider blast. Twin barrels sit together in the central socket; the shell stays white with either specialisation. These specialisations are mutually exclusive for that run. Bot fire does not affect rifle accuracy bonuses.
 - **Trail Mines (3 ranks):** automatically deploy every 8 seconds at every rank, with at most three active. Ranks increase damage (4/5/6) and blast radius (2/2.2/2.4 units), not deployment frequency. Mines last 18 seconds and arm after 0.6 seconds. **Shock Mines** adds a 60% movement slow for three seconds to blast survivors. This keeps mines as occasional positioning tools rather than a constant source of area damage.
@@ -87,7 +87,7 @@ Waves 5, 10, 15 and onward in multiples of five replace the regular boss with th
 
 Boss base health scaling is now `6 + 1.3×wave + 0.1×wave²` times regular wave health; milestone bosses use 1.2× this value. This reduces health-only attrition while new attack patterns provide pressure. Remaining emeralds are banked automatically at victory, including the final boss drop, before the upgrade screen opens.
 
-Helper Bot repeat offers explicitly say UPGRADE HELPER BOT, show the actual damage/fire interval changes, and confirm the upgrade after selection. Bomb builds show damage improvements only because their firing interval stays fixed. Build summaries label ranks explicitly instead of implying equipment counts.
+Helper Bot repeat offers explicitly say UPGRADE HELPER BOT, show the actual damage/fire interval changes, and confirm the upgrade after selection. Bomb builds show damage improvements only because their firing interval stays fixed.
 
 Movement input is cleared when entering/leaving upgrades, starting a run, pausing or losing window/tab focus. Gameplay focus returns to the canvas after UI choices. Arrow keys suppress browser scrolling during a run; key releases are captured at window level, and switching between keyboard movement and touch clears the previous movement source. These safeguards prevent stale inputs from carrying across UI transitions.
 
