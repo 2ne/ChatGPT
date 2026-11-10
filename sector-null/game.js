@@ -2797,9 +2797,31 @@ function groundRing(position, radius, color, life, list) {
   const ring = new THREE.Mesh(fieldRing, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, depthWrite: false, side: THREE.DoubleSide }));
   ring.position.copy(position); ring.position.y = 0.06;
   ring.scale.setScalar(radius);
-  ring.userData = { life, radius };
+  ring.userData = { life, maxLife: life, radius };
   scene.add(ring); list.push(ring);
   return ring;
+}
+
+// Milestone boss strike — warning rings must resolve into a real blast, not a silent fade.
+function detonateReactorZone(ring) {
+  const pos = ring.position.clone();
+  const radius = ring.userData.radius;
+  const origin = pos.clone(); origin.y = 1.15;
+  audio.explode(origin);
+  spawnBlastFlare(origin, 1.7, 0xff708c);
+  spawnBlastSparks(origin, 26, 1.25, 1.35);
+  spawnShockwave(pos, radius * 1.75, 0xff7098);
+  if (!reducedMotion.matches) {
+    const bolt = new THREE.Mesh(BOX, new THREE.MeshBasicMaterial({
+      color: 0xffc0d4, transparent: true, opacity: 0.95, depthWrite: false,
+      blending: THREE.AdditiveBlending, toneMapped: false,
+    }));
+    bolt.scale.set(0.28, 4.6, 0.28);
+    bolt.position.set(pos.x, 2.3, pos.z);
+    spawnDebris(bolt, new THREE.Vector3(0, 0.4, 0), { life: 0.32, bounce: 0, spin: new THREE.Vector3(0, 14, 0) });
+  }
+  state.shake = Math.max(state.shake, 0.5);
+  if (Math.hypot(player.position.x - pos.x, player.position.z - pos.z) < radius + 0.2) hurtPlayer();
 }
 function equipmentBlast(position, radius, damage, slow = false) {
   groundRing(position, radius, slow ? 0x7cefff : 0xffc17b, 0.35, equipment.effects);
@@ -2875,10 +2897,12 @@ function updateEquipment(dt) {
   }
   for (let i = equipment.zones.length - 1; i >= 0; i--) {
     const ring = equipment.zones[i]; ring.userData.life -= dt;
-    ring.material.opacity = 0.4 + 0.5 * Math.min(1, 1 - ring.userData.life / 1.4);
+    const warn = Math.max(0.05, ring.userData.maxLife || 1.4);
+    // Pulse harder as the strike lands so the warning reads as an incoming blast.
+    const u = 1 - ring.userData.life / warn;
+    ring.material.opacity = 0.35 + 0.55 * u + (reducedMotion.matches ? 0 : 0.2 * Math.sin(u * Math.PI * 8));
     if (ring.userData.life <= 0) {
-      if (Math.hypot(player.position.x - ring.position.x, player.position.z - ring.position.z) < ring.userData.radius) hurtPlayer();
-      groundRing(ring.position, ring.userData.radius, 0xff708c, 0.4, equipment.effects);
+      detonateReactorZone(ring);
       removeFieldObject(ring); equipment.zones.splice(i, 1);
     }
   }

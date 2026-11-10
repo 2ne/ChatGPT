@@ -85,7 +85,7 @@ Equipment uses active combat time and pauses with the game or upgrade selection.
 
 ## Milestone encounters
 
-Waves 5, 10, 15 and onward in multiples of five replace the regular boss with the Reactor Warden / Null Overseer. Reactor lighting gradually shifts to amber or violet during the encounter. The boss marks three ground zones (four from wave 10) with a 1.4-second warning before striking. Its exposed phase grants 75% bonus incoming damage for 3.2 seconds, followed by pursuit before the next cycle. Move out of the marked rings and use that opening to attack.
+Waves 5, 10, 15 and onward in multiples of five replace the regular boss with the Reactor Warden / Null Overseer. Reactor lighting gradually shifts to amber or violet during the encounter. The boss marks three ground zones (four from wave 10) with a 1.4-second warning, then each ring detonates as a reactor blast (shockwave, sparks, lightning column, 1 shield if you are still inside). Its exposed phase grants 75% bonus incoming damage for 3.2 seconds, followed by pursuit before the next cycle. Move out of the marked rings and use that opening to attack.
 
 Boss base health scaling is now `6 + 1.3×wave + 0.1×wave²` times regular wave health; milestone bosses use 1.2× this value. This reduces health-only attrition while new attack patterns provide pressure. Remaining emeralds are banked automatically at victory, including the final boss drop, before the upgrade screen opens.
 
