@@ -50,7 +50,7 @@ The gameplay score uses the full-length loops in `assets/score/`. Wave-start and
 
 Supply pickup notices appear one at a time. The first pickup of each type in every run shows a short explanation for 4.5 seconds: +1 Shield restores one shield, Overcharge doubles damage for 10 seconds, and Infinite Cell gives unlimited ammo for 8 seconds. Later pickups in the same run show only the name. Learning notices take priority over routine notices without interrupting another explanation. Their reading timer waits until the upgrade picker is fully closed. Lesson history resets each run, so an earlier session cannot suppress a new explanation.
 
-**Magnetic Gems** is a permanent green **ability** claimed free on the wave-clear screen (key `4` or tap the ability strip). It never replaces a combat / engineer upgrade — take both. Once claimed it stays for the run, lists on the HUD without a countdown, and pulls score gems through walls at a readable surge (slower than a snap so you can watch them stream in). Timed supplies (Overcharge / Infinite Cell) stay short combat spikes.
+**Magnetic Gems** is a permanent green **ability** upgrade. It appears in the normal three-card wave-clear picker as an alternative to firepower / engineer / survival — take it instead of another option when you want the score path. Once picked it stays for the run, lists on the HUD without a countdown, and pulls score gems through walls at a readable surge. Timed supplies (Overcharge / Infinite Cell) stay short combat spikes.
 
 The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
 
@@ -65,7 +65,6 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 | Recharge | R | Tap the weapon panel |
 | Pause | Esc or P | Menu icon in the score panel |
 | Choose an upgrade | 1–3 or click | Tap a card |
-| Claim Magnetic Gems | 4 or click | Tap the free ability strip |
 | Mute | M or volume settings | Volume settings |
 
 Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer.
@@ -76,7 +75,7 @@ The canvas size follows `visualViewport` (not a one-shot `innerHeight`), and the
 
 ## Engineer and defence paths
 
-Upgrade cards show a visual preview, pip ranks and a larger recommended option. Owned gear is visible on the cards themselves (filled pips / UPGRADE HELPER BOT), so the picker does not repeat a build summary underneath. Recommendations favour an urgently needed shield, a first Split Beam, or continuing owned equipment. All three cards remain deliberate choices; nothing is automatically selected. Use 1–3, tap, or Tab and Enter. Offers include an engineer option whenever an eligible one remains, and owned modules receive higher offer weight. While Magnetic Gems is unclaimed, a free ability strip sits under the cards — claim it with 4 or a tap without giving up a combat upgrade.
+Upgrade cards show a visual preview, pip ranks and a larger recommended option. Owned gear is visible on the cards themselves (filled pips / UPGRADE HELPER BOT), so the picker does not repeat a build summary underneath. Recommendations favour an urgently needed shield, a first Split Beam, or continuing owned equipment. All three cards remain deliberate choices; nothing is automatically selected. Use 1–3, tap, or Tab and Enter. Offers include an engineer option whenever an eligible one remains, and owned modules receive higher offer weight. Ability cards such as Magnetic Gems compete in the same three offers — pick them instead of another upgrade when you want the score path.
 
 - **Helper Bot (3 ranks):** a white floating sphere with a small centred gun; follows and fires automatically. Ranks increase shot damage and firing speed. Specialise in **Twin Guns (2 ranks)** for doubled shots then faster firing, or **Bomb Launcher (2 ranks)** for slower area blasts then a wider blast. Twin barrels sit together in the central socket; the shell stays white with either specialisation. These specialisations are mutually exclusive for that run. Bot fire does not affect rifle accuracy bonuses.
 - **Trail Mines (3 ranks):** automatically deploy every 8 seconds at every rank, with at most three active. Ranks increase damage (4/5/6) and blast radius (2/2.2/2.4 units), not deployment frequency. Mines last 18 seconds and arm after 0.6 seconds. **Shock Mines** adds a 60% movement slow for three seconds to blast survivors. This keeps mines as occasional positioning tools rather than a constant source of area damage.

@@ -443,76 +443,6 @@ body {
   margin-top: 34px;
   perspective: 900px;
 }
-/* Free ability claim — sits under the combat cards, never replaces one. */
-#abilityClaim {
-  --accent: #7cff4a;
-  position: relative;
-  margin-top: 22px;
-  min-width: min(420px, 88vw);
-  padding: 12px 48px 12px 16px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2px;
-  text-align: left;
-  cursor: pointer;
-  border-radius: 0;
-  -webkit-appearance: none;
-  appearance: none;
-  color: #e8ffe0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 18%, #0d1a14), #0a1410 70%);
-  border: 1px solid color-mix(in srgb, var(--accent) 55%, #2c4858);
-  box-shadow: 0 8px 24px #000a, inset 0 0 0 1px #ffffff08;
-  animation: dealIn 0.38s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.18s backwards;
-  transition: transform 0.14s ease-out, border-color 0.14s, opacity 0.25s, box-shadow 0.14s;
-}
-#abilityClaim::before {
-  content: "";
-  position: absolute;
-  left: -1px;
-  top: -1px;
-  bottom: -1px;
-  width: 3px;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent);
-}
-#abilityClaim:not(.ready),
-#abilityClaim.claimed {
-  pointer-events: none;
-}
-#abilityClaim.claimed {
-  opacity: 0;
-  transform: translateY(10px) scale(0.98);
-}
-.ability-tag {
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  color: var(--accent);
-  font-weight: 700;
-}
-.ability-name {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1.1;
-}
-.ability-desc {
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  color: #b7d8c4;
-}
-.ability-key {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  min-width: 20px;
-  padding: 0 5px;
-  border: 1px solid #3a5545;
-  color: #cdd2d8;
-  font-size: 14px;
-  text-align: center;
-}
 /* cards ignore the mouse until they've dealt in, so click-spam firing can't pick one blind */
 #cards:not(.ready) .card {
   pointer-events: none;
@@ -1124,17 +1054,6 @@ body.paused #flash {
     padding: 8px;
     justify-content: center;
   }
-  #abilityClaim {
-    margin-top: 12px;
-    min-width: min(320px, 92vw);
-    padding: 10px 40px 10px 12px;
-  }
-  .ability-name {
-    font-size: 18px;
-  }
-  .ability-desc {
-    font-size: 12px;
-  }
   .card {
     width: 122px;
     padding: 9px 7px;
@@ -1188,20 +1107,6 @@ body.paused #flash {
     margin-top: clamp(18px, 6.2dvh, 28px);
     padding: 0;
     max-width: 100%;
-  }
-  #abilityClaim {
-    margin-top: clamp(8px, 2.8dvh, 14px);
-    min-width: min(460px, 70vw);
-    padding: clamp(6px, 1.6dvh, 10px) 42px clamp(6px, 1.6dvh, 10px) 12px;
-  }
-  .ability-tag {
-    font-size: clamp(9px, 2.4dvh, 11px);
-  }
-  .ability-name {
-    font-size: clamp(15px, 4.2dvh, 20px);
-  }
-  .ability-desc {
-    font-size: clamp(11px, 3dvh, 13px);
   }
   .card {
     flex: 0 1 auto;
@@ -1302,13 +1207,6 @@ body.paused #flash {
   .card:hover .cicon {
     filter: drop-shadow(0 0 10px var(--accent)) brightness(1.25);
     transform: scale(1.06);
-  }
-  #abilityClaim:hover:not(.claimed) {
-    transform: translateY(-3px);
-    border-color: var(--accent);
-    box-shadow:
-      0 12px 28px #000c,
-      0 0 18px color-mix(in srgb, var(--accent) 30%, transparent);
   }
   #pauseMenu button:hover {
     background: #1e3b4e;
