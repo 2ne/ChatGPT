@@ -4123,10 +4123,10 @@ function separateDrones() {
   }
 }
 
-function update(dt) {
+function update(dt, lightFrame = false) {
   const px = player.position.x, pz = player.position.z;
   if (state.running && !state.choosing) {
-    // --- movement ---
+    // --- movement (always first, even on hitch frames) ---
     let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);
     let mz = keyboardAxis(['KeyW', 'ArrowUp'], ['KeyS', 'ArrowDown']);
     mx += moveStick.delta.x;
@@ -4134,8 +4134,10 @@ function update(dt) {
     const moving = !!(mx || mz);
     if (moving) {
       const l = Math.max(1, Math.hypot(mx, mz));
-      player.position.x += (mx / l) * state.speed * dt;
-      player.position.z += (mz / l) * state.speed * dt;
+      // Cap the move step so a hitch can't shove the operator a huge distance.
+      const stepDt = Math.min(dt, 0.04);
+      player.position.x += (mx / l) * state.speed * stepDt;
+      player.position.z += (mz / l) * state.speed * stepDt;
     }
     // clamp inside deck
     const lim = HALF - 0.7;
@@ -4280,13 +4282,16 @@ function update(dt) {
     if (state.running) chaseDrone(z, dt);
     else if (title.active) wanderDrone(z, dt);
   }
-  if (state.running || title.active) separateDrones();
+  // Crowd separation is expensive with a full field — thin it out during hitch recovery.
+  if (state.running || title.active) {
+    if (!lightFrame || ((performance.now() / 90) | 0) % 2 === 0) separateDrones();
+  }
   updateEquipment(dt);
 
   updateBossDeath(dt);
   updateDroneBlasts(dt);
   updateOpenings(dt);
-  updateWorld(dt);
+  if (!lightFrame) updateWorld(dt);
 
   // --- operator rig, driven by how far the operator actually moved (so pushing into a
   // wall doesn't run in place). Runs on the title and death screens too, so the pose settles ---
@@ -4296,7 +4301,8 @@ function update(dt) {
   updateMagnetAura();
   // flicker while the post-hit grace period lasts
   player.visible = !state.running || state.dmgCd <= 0 || Math.floor(state.dmgCd * 12) % 2 === 0;
-  updateDebris(dt);
+  // Debris is pure cosmetics — drop updates briefly after a hitch so movement recovers first.
+  if (!lightFrame || debris.length < 40) updateDebris(dt);
 
   // damage flash fade
   if (flashT > 0) { flashT -= dt; hud.flash.style.opacity = Math.max(0, flashT) * 0.6; }
@@ -4311,10 +4317,16 @@ function update(dt) {
 // LOOP
 // ===================================================================
 let last = performance.now();
+let hitchCool = 0;
 function loop(now) {
-  const dt = Math.min(0.05, (now - last) / 1000);
+  const raw = (now - last) / 1000;
   last = now;
-  if (!state.paused) update(dt);
+  // A long frame means the last tick blocked the main thread — don't chain more heavy work.
+  if (raw > 0.085) hitchCool = 0.28;
+  const lightFrame = hitchCool > 0 || fxPressure() > 0.75;
+  const dt = Math.min(raw > 0.085 ? 0.033 : 0.05, raw);
+  if (!state.paused) update(dt, lightFrame);
+  hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
   } else {
