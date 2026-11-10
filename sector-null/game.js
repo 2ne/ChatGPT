@@ -1903,10 +1903,11 @@ function clearEnemyBolts() {
   for (const bolt of enemyBolts) scene.remove(bolt);
   enemyBolts.length = 0;
 }
-function fireEnemyVolley(z) {
+function fireEnemyVolley(z, target = null, countOverride = null) {
   const u = z.userData;
-  const angle = Math.atan2(u.shotTarget.x - z.position.x, u.shotTarget.z - z.position.z);
-  const count = u.type.volley || 1;
+  const aim = target || u.shotTarget;
+  const angle = Math.atan2(aim.x - z.position.x, aim.z - z.position.z);
+  const count = countOverride ?? (u.type.volley || 1);
   for (let i = 0; i < count; i++) {
     const a = angle + (i - (count - 1) / 2) * 0.22;
     const bolt = new THREE.Mesh(enemyBoltGeo, enemyBoltMat);
@@ -1915,6 +1916,14 @@ function fireEnemyVolley(z) {
     scene.add(bolt); enemyBolts.push(bolt);
   }
   audio.enemyShot(z.position);
+}
+
+// Outside ranged bosses keep sprinting in — just spray warning bolts through their entry.
+function fireEntryWarning(z, opening) {
+  const jitter = (Math.random() - 0.5) * Math.min(1.1, opening.w * 0.45);
+  const tx = opening.ix + (opening.axis === 'x' ? jitter : 0);
+  const tz = opening.iz + (opening.axis === 'z' ? jitter : 0);
+  fireEnemyVolley(z, new THREE.Vector3(tx, 0, tz), Math.min(2, z.userData.type.volley || 1));
 }
 function updateEnemyBolts(dt) {
   for (let i = enemyBolts.length - 1; i >= 0; i--) {
@@ -3870,9 +3879,9 @@ function chaseDrone(z, dt) {
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
   const onDeck = inside(z.position);
-  // Bosses may fire from outside through broken openings so window-sniping isn't free.
+  // Full aimed volleys only on the deck — outside Cannon uses entry warning shots instead.
   const canShoot = ud.type.style === 'ranged' && ud.climb < 0 && ud.swing < 0
-    && (onDeck || ud.boss) && pd > 2.5 && pd < shotMax && !wallBetween(z.position, p)
+    && onDeck && pd > 2.5 && pd < shotMax && !wallBetween(z.position, p)
     && clearPath(z.position.x, z.position.z, p.x, p.z);
   if (canShoot) {
     let moving = false;
@@ -3974,6 +3983,14 @@ function chaseDrone(z, dt) {
           ud.swingCd -= dt;
           if (o.hp > 0) { if (ud.swingCd <= 0 && off < 0.5) { ud.swing = 0; ud.struck = false; ud.swingAt = o; } }
           else if (!o.climber) startClimb(z, o);
+        }
+      }
+      // Cannon keeps moving in; warning bolts spray through the entry, not aimed at you.
+      if (ud.boss && ud.type.style === 'ranged' && ud.climb < 0 && ud.swing < 0 && ud.shotCd <= 0) {
+        const faceOpen = Math.abs(wrapA(Math.atan2(o.x - z.position.x, o.z - z.position.z) - ud.heading));
+        if (faceOpen < 1.0) {
+          fireEntryWarning(z, o);
+          ud.shotCd = 1.35;
         }
       }
     }
