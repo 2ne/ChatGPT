@@ -811,6 +811,30 @@ flashGlow.position.z = 0.15;
 flash.add(flashGlow);
 scene.add(player);
 
+// Soft green floor aura — permanent Magnetic Gems tell (not a timed HUD line).
+const magnetDiscMat = new THREE.MeshBasicMaterial({
+  color: 0x7cff4a, transparent: true, opacity: 0.07,
+  depthWrite: false, toneMapped: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+});
+const magnetRingMat = new THREE.MeshBasicMaterial({
+  color: 0x7cff4a, transparent: true, opacity: 0.28,
+  depthWrite: false, toneMapped: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+});
+const magnetAura = new THREE.Group();
+magnetAura.add(new THREE.Mesh(new THREE.CircleGeometry(1.35, 48).rotateX(-Math.PI / 2), magnetDiscMat));
+magnetAura.add(new THREE.Mesh(new THREE.RingGeometry(1.05, 1.32, 48).rotateX(-Math.PI / 2), magnetRingMat));
+magnetAura.position.y = 0.05;
+magnetAura.visible = false;
+player.add(magnetAura);
+function updateMagnetAura() {
+  const on = state.running && !!state.upgrades.magnet;
+  magnetAura.visible = on;
+  if (!on) return;
+  const pulse = reducedMotion.matches ? 0.26 : 0.2 + 0.12 * (0.5 + 0.5 * Math.sin(powerGlowTime * 2.1));
+  magnetRingMat.opacity = pulse;
+  magnetDiscMat.opacity = pulse * 0.28;
+}
+
 // --- shell casings, dropped magazines and gun smoke ---
 const debris = [];
 const casingGeo = bevelBox(0.05, 0.05, 0.12, 0.012);
@@ -1510,7 +1534,6 @@ function updateHUD() {
   // power-up time left as a clock: 0:10 … 0:01 (what they do was taught on first pickup)
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
-  if (state.upgrades.magnet) pu += '<div style="color:#7cff4a">MAGNETIC GEMS</div>';
   if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}${state.pDamage > 10 ? ' · EXTENDED' : ''}</div>`;
   if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}${state.pAmmo > 8 ? ' · EXTENDED' : ''}</div>`;
   if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
@@ -4182,6 +4205,7 @@ function update(dt) {
   const inv = dt > 0 ? 1 / dt : 0;
   animatePlayer(dt, (player.position.x - px) * inv, (player.position.z - pz) * inv);
   updatePowerGlow(dt);
+  updateMagnetAura();
   // flicker while the post-hit grace period lasts
   player.visible = !state.running || state.dmgCd <= 0 || Math.floor(state.dmgCd * 12) % 2 === 0;
   updateDebris(dt);
