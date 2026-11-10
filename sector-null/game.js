@@ -1338,11 +1338,33 @@ function gamepadRumble(duration = 90, weak = 0.35, strong = 0.65) {
 
 function deathFocusables() {
   const list = [];
-  if (!deathNameForm.classList.contains('hidden')) {
+  if (deathPadEntry && !deathArcade.classList.contains('hidden')) {
+    if (arcadeFocus >= 3) list.push(deathArcadeSubmit);
+  } else if (!deathNameForm.classList.contains('hidden')) {
     list.push(deathNameInput, deathSubmitBtn);
   }
-  list.push(document.getElementById('retryBtn'), document.getElementById('deathQuitBtn'));
+  if (!deathMenu.classList.contains('hidden')) {
+    list.push(document.getElementById('retryBtn'), document.getElementById('deathQuitBtn'));
+  }
   return list.filter((el) => el && !el.disabled && el.offsetParent !== null);
+}
+
+function deathArcadeLocked() {
+  return deathPadEntry
+    && !deathArcade.classList.contains('hidden')
+    && !!pendingSubmit
+    && deathMenu.classList.contains('hidden');
+}
+
+function clearDeathPadSel() {
+  document.querySelectorAll('#death .pad-sel').forEach((el) => el.classList.remove('pad-sel'));
+}
+
+function setDeathPadFocus(el) {
+  clearDeathPadSel();
+  if (!el) return;
+  el.classList.add('pad-sel');
+  el.focus({ preventScroll: true });
 }
 
 function pauseFocusables() {
@@ -1361,12 +1383,26 @@ function cycleFocus(list, dir) {
 function activateFocusedUi() {
   const ae = document.activeElement;
   if (!ae) return false;
+  if (deathPadEntry && !deathArcade.classList.contains('hidden')) {
+    if (arcadeFocus < 3) {
+      if (arcadeFocus >= 2) setArcadeFocus(3);
+      else setArcadeFocus(arcadeFocus + 1);
+      audio.ui('move');
+      return true;
+    }
+    void submitArcadeCallsign();
+    return true;
+  }
   if (ae === deathNameInput) {
-    if (normalizeName(deathNameInput.value)) deathSubmitBtn.focus({ preventScroll: true });
+    if (normalizeName(deathNameInput.value)) setDeathPadFocus(deathSubmitBtn);
     return true;
   }
   if (ae === deathSubmitBtn) {
     deathNameForm.requestSubmit?.() || deathNameForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    return true;
+  }
+  if (ae === deathArcadeSubmit) {
+    void submitArcadeCallsign();
     return true;
   }
   if (typeof ae.click === 'function' && (ae.matches('button, .card, .srow, .close-panel') || ae.closest?.('#pauseMenu, #deathMenu, #menuList'))) {
@@ -1415,7 +1451,36 @@ function handlePadUiNav(dir) {
     return;
   }
   if (!document.getElementById('death').classList.contains('hidden')) {
-    cycleFocus(deathFocusables(), dir === 'up' || dir === 'left' ? -1 : 1);
+    if (deathArcadeLocked() || (deathPadEntry && !deathArcade.classList.contains('hidden') && arcadeFocus < 3)) {
+      handleArcadePadNav(dir);
+      return;
+    }
+    if (deathPadEntry && !deathArcade.classList.contains('hidden') && arcadeFocus === 3) {
+      if (dir === 'up' || dir === 'left') {
+        setArcadeFocus(2);
+        audio.ui('move');
+        return;
+      }
+      if ((dir === 'down' || dir === 'right') && !deathMenu.classList.contains('hidden')) {
+        arcadeFocus = 4;
+        setDeathPadFocus(document.getElementById('retryBtn'));
+        audio.ui('move');
+        return;
+      }
+    }
+    if (deathPadEntry && arcadeFocus >= 4 && (dir === 'up' || dir === 'left') && !deathArcade.classList.contains('hidden')) {
+      const list = deathFocusables();
+      if (document.activeElement === list[0]) {
+        arcadeFocus = 3;
+        setArcadeFocus(3);
+        audio.ui('move');
+        return;
+      }
+    }
+    const step = dir === 'up' || dir === 'left' ? -1 : 1;
+    cycleFocus(deathFocusables(), step);
+    const ae = document.activeElement;
+    if (gamepadLive && ae && deathFocusables().includes(ae)) setDeathPadFocus(ae);
     audio.ui('move');
   }
 }
@@ -1443,7 +1508,7 @@ function handlePadUiConfirm() {
   if (state.paused || !document.getElementById('death').classList.contains('hidden')) {
     if (!activateFocusedUi()) {
       if (state.paused) setPaused(false);
-      else startGame();
+      else if (!deathArcadeLocked()) startGame();
     }
   }
 }
@@ -1455,12 +1520,19 @@ function handlePadUiBack() {
   }
   if (state.paused) { setPaused(false); return; }
   if (!document.getElementById('death').classList.contains('hidden')) {
-    const ae = document.activeElement;
-    if (ae === deathNameInput) {
-      document.getElementById('retryBtn').focus({ preventScroll: true });
+    if (deathPadEntry && !deathArcade.classList.contains('hidden') && (deathArcadeLocked() || arcadeFocus <= 3)) {
+      if (arcadeFocus > 0) {
+        setArcadeFocus(arcadeFocus - 1);
+        audio.ui('back');
+      }
       return;
     }
-    document.getElementById('deathQuitBtn')?.focus({ preventScroll: true });
+    const ae = document.activeElement;
+    if (ae === deathNameInput) {
+      if (!deathMenu.classList.contains('hidden')) setDeathPadFocus(document.getElementById('retryBtn'));
+      return;
+    }
+    if (!deathMenu.classList.contains('hidden')) setDeathPadFocus(document.getElementById('deathQuitBtn'));
   }
 }
 
@@ -1747,7 +1819,10 @@ window.addEventListener('pointerdown', e => {
 
 window.addEventListener('keydown', e => {
   if (menu.key(e)) { e.preventDefault(); return; }
-  if (e.code === 'Enter' && !state.running && !document.getElementById('death').classList.contains('hidden')) return startGame();
+  if (e.code === 'Enter' && !state.running && !document.getElementById('death').classList.contains('hidden')) {
+    if (deathArcadeLocked()) return;
+    return startGame();
+  }
   if (movementKeys.has(e.code) && state.running) {
     e.preventDefault(); // Arrow keys control movement, never a focused UI panel.
     if (state.paused || state.choosing) return;
@@ -1804,16 +1879,22 @@ window.addEventListener('gesturestart', e => e.preventDefault());
 window.addEventListener('gesturechange', e => e.preventDefault());
 window.addEventListener('gestureend', e => e.preventDefault());
 
+function pendingDeathCallsign() {
+  if (deathPadEntry && !deathArcade.classList.contains('hidden')) return arcadeCallsign();
+  return normalizeName(deathNameInput.value);
+}
+
 // the death screen: go again, or back to the title
 bindTap(document.getElementById('retryBtn'), async () => {
-  if (pendingSubmit && normalizeName(deathNameInput.value)) {
-    await publishRunScore(deathNameInput.value);
+  // Arcade entry locks the menu until submit; keyboard/touch can still auto-post on leave.
+  if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign()) {
+    await publishRunScore(pendingDeathCallsign());
   }
   startGame();
 });
 bindTap(document.getElementById('deathQuitBtn'), async () => {
-  if (pendingSubmit && normalizeName(deathNameInput.value)) {
-    await publishRunScore(deathNameInput.value);
+  if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign()) {
+    await publishRunScore(pendingDeathCallsign());
   }
   quitToTitle();
 });
@@ -4071,27 +4152,151 @@ function quitToTitle() {
   enterTitle(false);
 }
 
+const deathPanel = document.getElementById('deathPanel');
 const deathNameForm = document.getElementById('deathNameForm');
 const deathNameInput = document.getElementById('deathName');
 const deathSubmitBtn = document.getElementById('deathSubmit');
 const deathSubmitStatus = document.getElementById('deathSubmitStatus');
+const deathArcade = document.getElementById('deathArcade');
+const deathArcadeSubmit = document.getElementById('deathArcadeSubmit');
+const deathArcadeStatus = document.getElementById('deathArcadeStatus');
+const deathReels = [...document.querySelectorAll('#deathReels .death-reel')];
+const deathSubmitted = document.getElementById('deathSubmitted');
+const deathScoreBox = document.getElementById('deathScoreBox');
+const deathCallsignPill = document.getElementById('deathCallsignPill');
+const deathMenu = document.getElementById('deathMenu');
+const deathTitleWord = document.querySelector('#deathTitle .death-word');
+const CALLSIGN_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 let pendingSubmit = null;
 let submittingScore = false;
 let activeRunId = null;
+let deathPadEntry = false;
+let arcadeChars = [0, 0, 0];
+let arcadeFocus = 0;
 
 function setDeathSubmitBusy(busy) {
   submittingScore = busy;
-  deathSubmitBtn.classList.toggle('busy', busy);
-  deathSubmitBtn.disabled = busy;
-  deathSubmitBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
+  for (const btn of [deathSubmitBtn, deathArcadeSubmit]) {
+    if (!btn) continue;
+    btn.classList.toggle('busy', busy);
+    btn.disabled = busy;
+    btn.setAttribute('aria-busy', busy ? 'true' : 'false');
+  }
+}
+
+function setDeathTitle(text) {
+  if (!deathTitleWord) return;
+  deathTitleWord.textContent = text;
+  deathTitleWord.setAttribute('data-text', text);
+}
+
+function arcadeCallsign() {
+  return arcadeChars.map((i) => CALLSIGN_CHARS[i] || 'A').join('');
+}
+
+function setArcadeFromName(name) {
+  const clean = normalizeName(name);
+  const padded = (clean + 'AAA').slice(0, 3);
+  arcadeChars = [...padded].map((ch) => {
+    const idx = CALLSIGN_CHARS.indexOf(ch);
+    return idx >= 0 ? idx : 0;
+  });
+}
+
+function renderArcadeReels() {
+  const n = CALLSIGN_CHARS.length;
+  deathReels.forEach((reel, i) => {
+    const cur = arcadeChars[i] || 0;
+    const prev = (cur - 1 + n) % n;
+    const next = (cur + 1) % n;
+    reel.querySelector('.prev').textContent = CALLSIGN_CHARS[prev];
+    reel.querySelector('.cur').textContent = CALLSIGN_CHARS[cur];
+    reel.querySelector('.next').textContent = CALLSIGN_CHARS[next];
+    const focused = arcadeFocus === i;
+    reel.classList.toggle('is-focused', focused);
+    reel.classList.toggle('pad-sel', focused);
+    reel.setAttribute('aria-pressed', focused ? 'true' : 'false');
+  });
+  deathArcadeSubmit.classList.toggle('pad-sel', arcadeFocus === 3);
+}
+
+function setArcadeFocus(i) {
+  arcadeFocus = Math.max(0, Math.min(3, i));
+  renderArcadeReels();
+  if (arcadeFocus === 3) deathArcadeSubmit.focus({ preventScroll: true });
+  else deathReels[arcadeFocus]?.focus({ preventScroll: true });
+}
+
+function nudgeArcadeChar(dir) {
+  if (arcadeFocus > 2) return;
+  const n = CALLSIGN_CHARS.length;
+  arcadeChars[arcadeFocus] = (arcadeChars[arcadeFocus] + dir + n) % n;
+  renderArcadeReels();
+  audio.ui('move');
+}
+
+function handleArcadePadNav(dir) {
+  if (arcadeFocus < 3) {
+    if (dir === 'up') { nudgeArcadeChar(-1); return; }
+    if (dir === 'down') { setArcadeFocus(3); audio.ui('move'); return; }
+    if (dir === 'left') {
+      if (arcadeFocus > 0) { setArcadeFocus(arcadeFocus - 1); audio.ui('move'); }
+      return;
+    }
+    if (dir === 'right') {
+      setArcadeFocus(arcadeFocus + 1);
+      audio.ui('move');
+    }
+    return;
+  }
+  if (dir === 'up' || dir === 'left') {
+    setArcadeFocus(2);
+    audio.ui('move');
+  }
+}
+
+async function submitArcadeCallsign() {
+  await publishRunScore(arcadeCallsign());
+}
+
+function showDeathSubmitted({ name, score, wave, kills }) {
+  deathPadEntry = false;
+  deathNameForm.classList.add('hidden');
+  deathArcade.classList.add('hidden');
+  deathArcade.setAttribute('aria-hidden', 'true');
+  deathSubmitted.classList.remove('hidden');
+  deathSubmitted.setAttribute('aria-hidden', 'false');
+  deathPanel.classList.add('is-submitted');
+  setDeathTitle('SCORE SUBMITTED');
+  document.getElementById('deathStat').textContent =
+    `Wave ${wave} · ${kills} bots down`;
+  document.getElementById('deathBest').textContent = '';
+  document.getElementById('deathBest').classList.remove('record');
+  deathScoreBox.textContent = formatScore(score);
+  deathCallsignPill.textContent = `Callsign ${name}`;
+  deathMenu.classList.remove('hidden');
+  clearDeathPadSel();
+  if (finePointerUi() || gamepadLive) setDeathPadFocus(document.getElementById('retryBtn'));
 }
 
 function resetDeathSubmit() {
   pendingSubmit = null;
+  deathPadEntry = false;
+  arcadeFocus = 0;
   setDeathSubmitBusy(false);
   deathSubmitStatus.textContent = '';
   deathSubmitStatus.className = '';
+  deathArcadeStatus.textContent = '';
+  deathArcadeStatus.className = '';
   deathNameForm.classList.add('hidden');
+  deathArcade.classList.add('hidden');
+  deathArcade.setAttribute('aria-hidden', 'true');
+  deathSubmitted.classList.add('hidden');
+  deathSubmitted.setAttribute('aria-hidden', 'true');
+  deathPanel.classList.remove('is-submitted');
+  deathMenu.classList.remove('hidden');
+  setDeathTitle('GAME OVER');
+  clearDeathPadSel();
 }
 
 function beginScoreRun() {
@@ -4106,34 +4311,51 @@ async function publishRunScore(name) {
   setDeathSubmitBusy(true);
   deathSubmitStatus.textContent = '';
   deathSubmitStatus.className = '';
+  deathArcadeStatus.textContent = '';
+  deathArcadeStatus.className = '';
+  const snapshot = {
+    name: clean,
+    score: pendingSubmit.score,
+    wave: pendingSubmit.wave,
+    kills: pendingSubmit.kills,
+  };
   try {
     const result = await submitScore({
       runId: activeRunId || pendingSubmit.runId,
       name: clean,
-      score: pendingSubmit.score,
-      wave: pendingSubmit.wave,
-      kills: pendingSubmit.kills,
+      score: snapshot.score,
+      wave: snapshot.wave,
+      kills: snapshot.kills,
       build: BUILD_VERSION,
       input: pendingSubmit.input || dominantPlayInput(),
       device: pendingSubmit.device || runDevice,
     });
     if (result.offline || result.rejected || result.error) {
-      deathSubmitStatus.textContent = rejectMessage(result.error || 'offline');
+      const msg = rejectMessage(result.error || 'offline');
+      deathSubmitStatus.textContent = msg;
       deathSubmitStatus.className = 'err';
+      deathArcadeStatus.textContent = msg;
+      deathArcadeStatus.className = 'err';
+      if (deathPadEntry) {
+        deathMenu.classList.remove('hidden');
+        setDeathPadFocus(document.getElementById('retryBtn'));
+      }
       return result;
     }
     pendingSubmit = null;
     activeRunId = null;
-    const rank = result.entry?.rank;
-    deathSubmitStatus.textContent = rank
-      ? `Logged · Rank ${rank}`
-      : 'Logged to board';
-    deathSubmitStatus.className = 'ok';
-    deathNameForm.classList.add('hidden');
+    showDeathSubmitted(snapshot);
     return result;
   } catch {
-    deathSubmitStatus.textContent = rejectMessage('offline');
+    const msg = rejectMessage('offline');
+    deathSubmitStatus.textContent = msg;
     deathSubmitStatus.className = 'err';
+    deathArcadeStatus.textContent = msg;
+    deathArcadeStatus.className = 'err';
+    if (deathPadEntry) {
+      deathMenu.classList.remove('hidden');
+      setDeathPadFocus(document.getElementById('retryBtn'));
+    }
     return null;
   } finally {
     setDeathSubmitBusy(false);
@@ -4171,17 +4393,29 @@ function die() {
       input: dominantPlayInput(),
       device: runDevice,
     };
-    deathNameInput.value = readPlayerName();
-    deathNameForm.classList.remove('hidden');
+    const saved = readPlayerName();
+    deathPadEntry = lastPlayInput === 'gamepad';
+    if (deathPadEntry) {
+      setArcadeFromName(saved || 'AAA');
+      deathArcade.classList.remove('hidden');
+      deathArcade.setAttribute('aria-hidden', 'false');
+      deathMenu.classList.add('hidden');
+      setArcadeFocus(0);
+    } else {
+      deathNameInput.value = saved;
+      deathNameForm.classList.remove('hidden');
+    }
   }
 
   document.getElementById('death').classList.remove('hidden');
-  if (!deathNameForm.classList.contains('hidden')) {
+  if (deathPadEntry) {
+    setArcadeFocus(0);
+  } else if (!deathNameForm.classList.contains('hidden')) {
     // Callsign field still needs caret focus on touch; buttons must not.
     deathNameInput.focus({ preventScroll: true });
     deathNameInput.select();
   } else if (finePointerUi() || gamepadLive) {
-    document.getElementById('retryBtn').focus({ preventScroll: true });
+    setDeathPadFocus(document.getElementById('retryBtn'));
   }
   audio.death();
   updateHUD();
@@ -4553,6 +4787,15 @@ deathNameForm.addEventListener('submit', async (e) => {
   }
   await publishRunScore(name);
 });
+deathReels.forEach((reel) => {
+  reel.addEventListener('click', () => {
+    if (deathArcade.classList.contains('hidden')) return;
+    const i = +reel.dataset.reel;
+    if (arcadeFocus === i) nudgeArcadeChar(1);
+    else setArcadeFocus(i);
+  });
+});
+bindTap(deathArcadeSubmit, () => { void submitArcadeCallsign(); });
 menuButtons.forEach((b, i) => {
   b.addEventListener('mouseenter', () => {
     if (!finePointerUi()) return;
