@@ -3129,7 +3129,9 @@ function openPicker(healed) {
     const fireRate = botUpgrade && !state.upgrades.botBomb
       ? `<div class="cstat">Shot interval ${helperShotInterval(owned, state.upgrades).toFixed(2)}s → <b>${helperShotInterval(owned + 1, state.upgrades).toFixed(2)}s</b></div>` : '';
     const [now, after] = u.stat(state);
-    const pips = u.max === Infinity || u.id === 'bot' ? '' :
+    // Helper Bot uses the same rank pips as every other capped upgrade
+    // (max 3); only infinite cards like Shield Reset skip the row.
+    const pips = u.max === Infinity ? '' :
       Array.from({ length: u.max }, (_, k) => `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`).join('');
     return `<button type="button" class="card ${i === 0 ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
       `<div class="ctop"><span>${i === 0 ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
