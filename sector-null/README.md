@@ -44,6 +44,28 @@ Power-ups light the operator orange for Overcharge and blue for Infinite Cell wi
 
 ## Run locally
 
+### Neon agent tooling
+
+The official Neon skills are installed for this project in `.agents/skills/` with source hashes in `skills-lock.json`: Neon overview, Postgres, Functions, Auth, Object Storage, AI Gateway and Realtime. Existing application services and credentials are reused; installing skills does not enable those optional services.
+
+Neon CLI 9.3.0 is installed on the setup machine. The local, git-ignored `.neon` file links this directory to the existing Sector Null project and its `main` branch. Linking uses `--no-env-pull --no-config` to preserve environment files and avoid generating infrastructure configuration. Other machines can link with:
+
+```sh
+neon link --project-id orange-sea-32353718 --branch main --no-env-pull --no-config -y
+```
+
+The setup machine's Codex user configuration has a Neon MCP entry pinned to this project, authenticated by a project-scoped API key stored outside the repository. Other Codex settings and MCP entries are preserved. This connection can modify resources within Sector Null; it cannot access other projects. Skills are project files; MCP authentication remains machine-local.
+
+Deploy only the leaderboard function, preserving other services and existing function environment variables:
+
+```sh
+neon function deploy scores --src functions/scores/index.ts
+```
+
+GitHub Pages deployment does not deploy Neon Functions. The `scores` function returns up to 25 leaderboard entries. During setup, `neon skills status` incorrectly marked freshly installed skills as outdated while `neon skills update -y` reported all current; all 35 installed files were independently confirmed to match the upstream repository.
+
+### Game development
+
 Use Node.js 22 or later.
 
 ```sh
