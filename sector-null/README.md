@@ -4,7 +4,7 @@ A top-down sci-fi survival shooter and competition remix of [Abandon All Hope by
 
 ## Status
 
-Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Local high score and settings are saved in the browser. The global leaderboard shows the top 25 runs in a scrollable list and is Neon-backed (name, score, wave, kills, build, timestamp; build/time stay server-side only). On death the game asks for a 3-letter callsign, prefills the last one from local storage, and posts any score above zero.
+Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Local high score and settings are saved in the browser. The global leaderboard shows the top 25 runs in a scrollable list and is Neon-backed (name, score, wave, kills, build, timestamp; build/time stay server-side only). On death (after finishing wave 1) the game asks for a 3-character callsign (A–Z, 0–9), prefills the last one from local storage, and posts the score. Keyboard/mouse/touch use a text field; controller mode uses arcade letter reels, then a Score Submitted screen with Play again / Main menu.
 
 Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORING.md](./SCORING.md).
 
@@ -97,6 +97,7 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 | Pause | Esc or P | Menu icon in the score panel | Menu / Start |
 | Choose an upgrade | 1–3 or click | Tap a card | D-pad / left stick + A |
 | Menus | Arrows / Enter / Esc | Tap | D-pad or left stick, A confirm, B back |
+| Callsign (Game Over) | Type 3 characters + Submit | Type / Submit | Arcade reels: up/down change letter, left/right move, A submit |
 | Mute | M or volume settings | Volume settings | View / Back |
 
 Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer. A Bluetooth Xbox controller works in desktop browsers and in the iOS Safari / Home Screen web app via the standard Gamepad API mapping. Mixed mouse/keyboard/touch/pad input is fine mid-run; pad aim hides the mouse crosshair.

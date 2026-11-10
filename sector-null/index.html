@@ -122,7 +122,7 @@
     <h2>HOW TO PLAY</h2>
     <button type="button" class="close-panel" aria-label="Close how to play">×</button>
     <p class="touch-help">Left thumb moves you and turns the gun that way. Right thumb fires — drag it to aim independently. Collect green emeralds for score before they fade. Use Recharge to swap your power cell.</p>
-    <p class="pad-help">Controller (Xbox / standard pad): left stick move, right stick aim and fire (Geometry Wars-style — push to shoot, release to stop), X or LB recharge, Menu pause. Menus use the D-pad or left stick, A to confirm, B to back.</p>
+    <p class="pad-help">Controller (Xbox / standard pad): left stick move, right stick aim and fire (Geometry Wars-style — push to shoot, release to stop), X or LB recharge, Menu pause. Menus use the D-pad or left stick, A to confirm, B to back. On Game Over, cycle the callsign reels with up/down, move between letters with left/right, then Submit score with A.</p>
     <div class="mrows">
       <div class="crow"><span class="caps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><b>MOVE</b></div>
       <div class="crow"><span class="caps"><kbd class="wide">MOUSE</kbd></span><b>AIM</b></div>
@@ -196,8 +196,46 @@
       <p id="deathNameHint">3 letters. Saved for next run.</p>
       <p id="deathSubmitStatus" role="status"></p>
     </form>
+    <div id="deathArcade" class="hidden" aria-hidden="true">
+      <div class="death-callsign-band" aria-hidden="true">
+        <span class="death-callsign-rule"></span>
+        <span class="death-callsign-label">Callsign</span>
+        <span class="death-callsign-rule"></span>
+      </div>
+      <div id="deathReels" class="death-reels" role="group" aria-label="Callsign letters">
+        <button type="button" class="death-reel" data-reel="0" aria-label="Callsign character 1">
+          <span class="death-reel-chev up" aria-hidden="true"></span>
+          <span class="death-reel-stack"><span class="prev"></span><span class="cur"></span><span class="next"></span></span>
+          <span class="death-reel-chev down" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="death-reel" data-reel="1" aria-label="Callsign character 2">
+          <span class="death-reel-chev up" aria-hidden="true"></span>
+          <span class="death-reel-stack"><span class="prev"></span><span class="cur"></span><span class="next"></span></span>
+          <span class="death-reel-chev down" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="death-reel" data-reel="2" aria-label="Callsign character 3">
+          <span class="death-reel-chev up" aria-hidden="true"></span>
+          <span class="death-reel-stack"><span class="prev"></span><span class="cur"></span><span class="next"></span></span>
+          <span class="death-reel-chev down" aria-hidden="true"></span>
+        </button>
+      </div>
+      <button type="button" id="deathArcadeSubmit">
+        <span class="death-submit-label">Submit score</span>
+        <span class="death-submit-spin" aria-hidden="true"></span>
+      </button>
+      <p id="deathArcadeStatus" role="status"></p>
+    </div>
+    <div id="deathSubmitted" class="hidden" aria-hidden="true">
+      <div class="death-score-band" aria-hidden="true">
+        <span class="death-score-rule"></span>
+        <span class="death-score-label">Score</span>
+        <span class="death-score-rule"></span>
+      </div>
+      <div id="deathScoreBox" class="death-score-box">0</div>
+      <div id="deathCallsignPill" class="death-callsign-pill">Callsign —</div>
+    </div>
     <div id="deathMenu">
-      <button type="button" id="retryBtn">Try again</button>
+      <button type="button" id="retryBtn">Play again</button>
       <button type="button" id="deathQuitBtn">Main menu</button>
     </div>
   </div>
