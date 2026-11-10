@@ -1,4 +1,4 @@
-const LIMIT = 8;
+const LIMIT = 25;
 const NAME_RE = /^[A-Z0-9]{1,3}$/;
 const BUILD_RE = /^[A-Za-z0-9._-]{1,32}$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
