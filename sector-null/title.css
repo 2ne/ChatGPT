@@ -342,7 +342,11 @@ body.titling #game { cursor: default; }
   border-color: #ff368c99;
   box-shadow: 0 0 0 1px #45ecff33, 0 0 28px #ff368c33;
 }
-#scoresPanel h2 { color: #fff; letter-spacing: .22em; }
+#scoresPanel h2 {
+  color: #fff;
+  letter-spacing: .22em;
+  margin-bottom: 22px;
+}
 .scores-head,
 .scores-row {
   display: grid;
