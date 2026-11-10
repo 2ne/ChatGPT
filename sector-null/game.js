@@ -3699,13 +3699,21 @@ function quitToTitle() {
 
 const deathNameForm = document.getElementById('deathNameForm');
 const deathNameInput = document.getElementById('deathName');
+const deathSubmitBtn = document.getElementById('deathSubmit');
 const deathSubmitStatus = document.getElementById('deathSubmitStatus');
 let pendingSubmit = null;
 let submittingScore = false;
 
+function setDeathSubmitBusy(busy) {
+  submittingScore = busy;
+  deathSubmitBtn.classList.toggle('busy', busy);
+  deathSubmitBtn.disabled = busy;
+  deathSubmitBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
+}
+
 function resetDeathSubmit() {
   pendingSubmit = null;
-  submittingScore = false;
+  setDeathSubmitBusy(false);
   deathSubmitStatus.textContent = '';
   deathSubmitStatus.className = '';
   deathNameForm.classList.add('hidden');
@@ -3714,8 +3722,8 @@ function resetDeathSubmit() {
 async function publishRunScore(name) {
   const clean = writePlayerName(name);
   if (!clean || !pendingSubmit || submittingScore) return null;
-  submittingScore = true;
-  deathSubmitStatus.textContent = 'Uploading…';
+  setDeathSubmitBusy(true);
+  deathSubmitStatus.textContent = '';
   deathSubmitStatus.className = '';
   try {
     const result = await submitScore({
@@ -3743,7 +3751,7 @@ async function publishRunScore(name) {
     deathSubmitStatus.className = 'err';
     return null;
   } finally {
-    submittingScore = false;
+    setDeathSubmitBusy(false);
   }
 }
 
