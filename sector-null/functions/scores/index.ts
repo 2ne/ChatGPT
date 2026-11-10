@@ -1,6 +1,8 @@
 const LIMIT = 8;
 const NAME_RE = /^[A-Z0-9]{1,3}$/;
 const BUILD_RE = /^[A-Za-z0-9._-]{1,32}$/;
+const INPUT_OK = new Set(['touch', 'pointer', 'gamepad', 'mixed']);
+const DEVICE_OK = new Set(['phone', 'tablet', 'desktop']);
 const ALLOWED = new Set([
   'https://2ne.github.io',
   'http://localhost:5173',
@@ -58,6 +60,7 @@ async function query(text: string, params: unknown[] = []): Promise<Row[]> {
 }
 
 function mapRow(row: Row) {
+  // Board UI stays name/score/wave/kills only; input/device are stored but hidden.
   return {
     id: String(row.id),
     name: String(row.name),
@@ -68,6 +71,11 @@ function mapRow(row: Row) {
     createdAt: String(row.created_at),
     rank: Number(row.rank),
   };
+}
+
+function optEnum(value: unknown, allowed: Set<string>): string | null {
+  const v = String(value ?? '').trim().toLowerCase();
+  return allowed.has(v) ? v : null;
 }
 
 async function listScores() {
@@ -98,6 +106,8 @@ export default {
         const wave = Math.max(1, Math.round(Number(body.wave) || 1));
         const kills = Math.max(0, Math.round(Number(body.kills) || 0));
         const build = String(body.build || body.build_version || 'dev').slice(0, 32);
+        const input = optEnum(body.input, INPUT_OK);
+        const device = optEnum(body.device, DEVICE_OK);
 
         if (!NAME_RE.test(name)) return json(req, { error: 'invalid_name' }, 400);
         if (!Number.isFinite(score) || score <= 0 || score > 100_000_000) return json(req, { error: 'invalid_score' }, 400);
@@ -105,10 +115,10 @@ export default {
         if (!BUILD_RE.test(build)) return json(req, { error: 'invalid_build' }, 400);
 
         const inserted = await query(
-          `INSERT INTO scores (name, score, wave, kills, build_version)
-           VALUES ($1, $2, $3, $4, $5)
-           RETURNING id, name, score, wave, kills, build_version, created_at`,
-          [name, score, wave, kills, build],
+          `INSERT INTO scores (name, score, wave, kills, build_version, input, device)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)
+           RETURNING id, name, score, wave, kills, build_version, created_at, input, device`,
+          [name, score, wave, kills, build, input, device],
         );
         const row = inserted[0];
         const rankRows = await query(
@@ -117,7 +127,11 @@ export default {
           [Number(row.score), String(row.created_at)],
         );
         return json(req, {
-          entry: mapRow({ ...row, rank: rankRows[0]?.rank || 1 }),
+          entry: {
+            ...mapRow({ ...row, rank: rankRows[0]?.rank || 1 }),
+            input: row.input == null ? null : String(row.input),
+            device: row.device == null ? null : String(row.device),
+          },
           scores: (await listScores()).map(mapRow),
         }, 201);
       }
