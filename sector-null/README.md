@@ -33,7 +33,7 @@ Uncollected supplies expire after 6 seconds of active play. During the final 2 s
 
 Bots plan around both cover and bulkheads using navigation graphs sized to their bodies. Routes refresh as the target moves, with stable corner choices to limit jitter. Movement checks clearance before stepping, turns in place for sharp corners, and limits steps at waypoints. Ranged strafing uses the same navigation; crowd separation avoids pushing bots into obstacles. Melee attacks cannot pass through solid cover.
 
-Power-ups light the operator orange for Overcharge and blue for Infinite Cell with a strong pulsing glow (steady under reduced motion). Peaks flash toward white so the buff feels active. If both are active, the torso and limbs pulse on separate phases. Shield kits produce a short pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the effect description.
+Power-ups light the operator orange for Overcharge and blue for Infinite Cell with a strong pulsing glow (steady under reduced motion). Peaks flash toward white so the buff feels active. If both are active, the torso and limbs pulse on separate phases. Shield kits produce a short pink glow. Repeat Overcharge pickups add 10 seconds and Infinite Cell pickups add 8 seconds to the remaining duration; damage stays at 2×. Extra stored time strengthens the glow and shows EXTENDED beside the active timer. What each power-up does is taught once on first pickup; the HUD timer does not repeat that explanation.
 
 ## Run locally
 

@@ -1507,11 +1507,11 @@ function updateHUD() {
     hud.shieldCount.textContent = `${state.hp} / ${state.maxHp}`;
     [...hud.shieldPips.children].forEach((pip, i) => pip.classList.toggle('dead', i >= state.hp));
   }
-  // power-up time left as a clock: 0:10 … 0:01
+  // power-up time left as a clock: 0:10 … 0:01 (what they do was taught on first pickup)
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
-  if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}<small>DOUBLE DAMAGE${state.pDamage > 10 ? ' · EXTENDED' : ''}</small></div>`;
-  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}<small>NO RECHARGING${state.pAmmo > 8 ? ' · EXTENDED' : ''}</small></div>`;
+  if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}${state.pDamage > 10 ? ' · EXTENDED' : ''}</div>`;
+  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}${state.pAmmo > 8 ? ' · EXTENDED' : ''}</div>`;
   if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
   hud.powerups.innerHTML = pu;
   const infinite = state.pAmmo > 0;
