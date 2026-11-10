@@ -1793,8 +1793,8 @@ const BOT_TYPES = {
 };
 function waveBotType() {
   // Guaranteed introduction, then a few replacements rather than extra enemies.
-  const mortarLimit = state.wave === 15 ? 1 : 3;
-  if (state.wave >= 15 && state.mortarsSpawned < mortarLimit
+  const mortarLimit = state.wave === 10 ? 1 : 3;
+  if (state.wave >= 10 && state.mortarsSpawned < mortarLimit
       && !drones.some(z => z.userData.type.style === 'mortar')
       && !equipment.zones.some(r => r.userData.mortar)
       && (state.mortarsSpawned === 0 || Math.random() < 0.08)) {
@@ -3530,7 +3530,7 @@ function startWave(n) {
   state.intermission = 0;
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
-  showBanner('WAVE ' + n, n === 15 ? 'White Bombardier · Mortars clear cover · Dodge the marked blast' : omens[n] || 'Hostile signatures detected');
+  showBanner('WAVE ' + n, n === 10 ? 'White Bombardier · Mortars clear cover · Dodge the marked blast' : omens[n] || 'Hostile signatures detected');
 }
 
 // ===================================================================
