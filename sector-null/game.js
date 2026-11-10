@@ -2937,7 +2937,6 @@ function recommendationScore(u) {
 }
 
 function upgradePreview(u) {
-  const rank = (state.upgrades[u.id] || 0) + 1;
   const paths = {
     bot: '<circle cx="48" cy="29" r="19" fill="#eef3f7" stroke="#fff"/><circle cx="48" cy="29" r="6" fill="#172733" stroke="#172733"/><path d="M48 29h19" stroke="#506375" stroke-width="6"/>',
     mine: '<path d="M20 42h60M36 38l5-12h18l5 12zM50 18v-8M25 20l8 6m42-6-8 6"/>',
@@ -2949,10 +2948,9 @@ function upgradePreview(u) {
   else if (u.cat === 'firepower' || u.cat === 'handling') art += '<path class="preview-shot" d="M48 28h14m9 0h14"/><path d="M92 14v28"/>';
   if (u.id === 'botBomb') art += '<circle class="preview-shot" cx="83" cy="28" r="7"/>';
   if (u.id === 'botGun') art += '<path class="preview-shot" d="M74 22h20m-20 12h20"/>';
-  const label = u.id === 'bot'
-    ? (rank === 1 ? 'NEW · 1 BOT' : `1 BOT · RANK ${rank - 1} → ${rank}`)
-    : `${state.upgrades[u.id] ? 'UPGRADE' : 'NEW'} · RANK ${rank}${u.max !== Infinity ? ' / ' + u.max : ''}`;
-  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg><span class="rank-label">${label}</span>`;
+  // Rank is already shown by the pip row under the card; NEW/UPGRADE is
+  // obvious from empty vs filled pips and the card name.
+  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg>`;
 }
 
 function openPicker(healed) {

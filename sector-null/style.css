@@ -1440,12 +1440,6 @@ body.paused #flash {
   margin: 8px 0;
   color: var(--accent);
 }
-.rank-label {
-  color: var(--accent);
-  font-size: 12px;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
 .cname {
   font-size: 23px;
   letter-spacing: 1px;
@@ -1561,10 +1555,6 @@ body.paused #flash {
   .upgrade-preview {
     height: 44px;
     margin: 2px 0;
-  }
-  .rank-label {
-    font-size: 10px;
-    margin-bottom: 4px;
   }
   .cname {
     font-size: 18px;
