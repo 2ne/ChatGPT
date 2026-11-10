@@ -58,7 +58,11 @@ body {
   font-weight: 600;
   color: #d5e7ee;
 }
-:focus,
+/* Kill the default ring; interactive chrome uses :focus-visible styles below.
+   Plain :focus must stay unstyled so iOS tap-focus cannot look "selected". */
+:focus {
+  outline: none;
+}
 :focus-visible {
   outline: none;
 }
@@ -1231,6 +1235,63 @@ body.paused #flash {
   .close-panel:hover {
     color: #e4f1f5;
   }
+}
+/* Keyboard/gamepad only — mirrors hover/selected without sticky tap :focus */
+#pauseMenu button:focus-visible {
+  background: #1e3b4e;
+}
+#pauseMenu #resumeBtn:focus-visible {
+  background: #cefaff;
+}
+#deathMenu button:focus-visible {
+  --edge: var(--cyan);
+  filter: drop-shadow(0 0 10px #19d9f579);
+  color: #fff;
+}
+#deathMenu button:focus-visible::before {
+  background: var(--edge);
+}
+#deathMenu button:focus-visible::after {
+  inset: 2px 2px 2px 4px;
+  background:
+    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
+    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
+}
+.close-panel:focus-visible {
+  color: #e4f1f5;
+}
+#menuList button:focus-visible {
+  --edge: var(--cyan);
+  filter: drop-shadow(0 0 10px #19d9f579);
+  color: #fff;
+}
+#menuList button:focus-visible::before {
+  background: var(--edge);
+}
+#menuList button:focus-visible::after {
+  inset: 2px 2px 2px 4px;
+  background:
+    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / clamp(18px, 3.5cqw, 56px) 100% no-repeat,
+    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
+}
+#deathSubmit:focus-visible:not(.busy) {
+  filter: drop-shadow(0 0 10px #19d9f579);
+  color: #fff;
+}
+#deathSubmit:focus-visible:not(.busy)::before {
+  background: var(--edge);
+}
+#deathSubmit:focus-visible:not(.busy)::after {
+  inset: 2px 2px 2px 4px;
+  background:
+    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
+    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
+}
+.card:focus-visible {
+  border-color: var(--accent);
+  box-shadow:
+    0 16px 34px #000d,
+    0 0 22px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 @media (hover: hover) and (pointer: fine) and (orientation: landscape) and (max-height: 540px) {
   .card:hover {

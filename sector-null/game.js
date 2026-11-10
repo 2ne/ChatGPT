@@ -31,6 +31,7 @@ function createRenderer() {
 const renderer = createRenderer();
 const titleScene = createTitleScene();
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const finePointerUi = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.65));
@@ -3291,13 +3292,17 @@ function openPicker(healed) {
   audio.deal(offered.filter(Boolean).length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
-    if (state.choosing && !state.paused) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+    if (state.choosing && !state.paused && finePointerUi()) {
+      hud.cards.querySelector('button')?.focus({ preventScroll: true });
+    }
   }, PICK_LOCKOUT_MS);
 }
 
 function hidePicker() {
   hud.picker.classList.remove('shown');
   hud.picker.classList.add('hidden');
+  const ae = document.activeElement;
+  if (ae && typeof ae.blur === 'function' && ae.closest?.('#picker')) ae.blur();
 }
 
 function choose(i) {
@@ -3685,9 +3690,15 @@ function setPaused(on) {
   document.getElementById('pauseStat').textContent =
     `WAVE ${state.wave} · ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
-  if (on) document.getElementById('resumeBtn').focus({ preventScroll: true });
-  else if (state.choosing) hud.cards.querySelector('button')?.focus({ preventScroll: true });
-  else focusGame();
+  if (on) {
+    if (finePointerUi()) document.getElementById('resumeBtn').focus({ preventScroll: true });
+  } else if (state.choosing) {
+    if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+  } else {
+    const ae = document.activeElement;
+    if (ae && typeof ae.blur === 'function' && ae.closest?.('#pause')) ae.blur();
+    focusGame();
+  }
 }
 
 function quitToTitle() {
@@ -3781,9 +3792,10 @@ function die() {
 
   document.getElementById('death').classList.remove('hidden');
   if (!deathNameForm.classList.contains('hidden')) {
+    // Callsign field still needs caret focus on touch; buttons must not.
     deathNameInput.focus({ preventScroll: true });
     deathNameInput.select();
-  } else {
+  } else if (finePointerUi()) {
     document.getElementById('retryBtn').focus({ preventScroll: true });
   }
   audio.death();
@@ -3908,13 +3920,23 @@ function updateCamera(dt) {
 // --- the menu itself: keyboard (arrows/WASD, enter, esc) and mouse both drive it ---
 const menuButtons = [...document.querySelectorAll('#menuList button')];
 const settingRows = [...document.querySelectorAll('#settingRows .srow')];
+function blurMenuFocus() {
+  const ae = document.activeElement;
+  if (ae && typeof ae.blur === 'function' && menuEl.contains(ae)) ae.blur();
+}
 const menu = {
-  sel: 0, panel: null, row: 0, ignoreUntil: 0,
+  sel: 0, panel: null, row: 0, ignoreUntil: 0, kbdHighlight: false,
   select(i, quiet) {
     i = (i + menuButtons.length) % menuButtons.length;
     if (i !== this.sel && !quiet) audio.ui('move');
     this.sel = i;
-    menuButtons.forEach((b, k) => b.classList.toggle('sel', k === i));
+    this.paintSel();
+  },
+  paintSel() {
+    // Touch taps still track sel for confirm/back, but only paint cyan when a
+    // panel is open, a keyboard/gamepad path asked for it, or fine pointer UI.
+    const show = finePointerUi() || this.kbdHighlight || !!this.panel;
+    menuButtons.forEach((b, k) => b.classList.toggle('sel', show && k === this.sel));
   },
   open(panel) {
     this.panel = panel;
@@ -3922,7 +3944,13 @@ const menu = {
     document.getElementById('scoresPanel').classList.toggle('open', panel === 'scores');
     document.getElementById('settingsPanel').classList.toggle('open', panel === 'settings');
     if (panel === 'settings') this.selectRow(this.row, true);
+    else settingRows.forEach(r => r.classList.remove('sel'));
     if (panel === 'scores') loadScoresBoard();
+    if (!panel && !finePointerUi()) {
+      this.kbdHighlight = false;
+      blurMenuFocus();
+    }
+    this.paintSel();
     this.hints();
   },
   activate(i = this.sel) {
@@ -3980,15 +4008,15 @@ const menu = {
     const ok = c === 'Enter' || c === 'Space', back = c === 'Escape' || c === 'Backspace';
     if (this.panel === 'settings') {
       const key = settingRows[this.row].dataset.key;
-      if (up) this.selectRow(this.row - 1);
-      else if (down) this.selectRow(this.row + 1);
+      if (up) { this.kbdHighlight = true; this.selectRow(this.row - 1); }
+      else if (down) { this.kbdHighlight = true; this.selectRow(this.row + 1); }
       else if (left || right) this.adjust(key, left ? -1 : 1);
       else if (ok && key === 'shake') this.adjust(key, 0);
       else if (back) { audio.ui('back'); this.open(null); }
     } else if (this.panel) {
       if (back || ok) { audio.ui('back'); this.open(null); }
-    } else if (up) this.select(this.sel - 1);
-    else if (down) this.select(this.sel + 1);
+    } else if (up) { this.kbdHighlight = true; this.select(this.sel - 1); }
+    else if (down) { this.kbdHighlight = true; this.select(this.sel + 1); }
     else if (ok) this.activate();
     return true;
   },
@@ -3997,6 +4025,7 @@ const menu = {
     audio.ensure();
     audio.ui('select');
     menuEl.classList.remove('splash');
+    this.kbdHighlight = finePointerUi();
     this.select(0, true);
     this.hints();
     this.ignoreUntil = performance.now() + 120;
@@ -4007,7 +4036,8 @@ for (const button of document.querySelectorAll('.close-panel')) {
   bindTap(button, () => {
     audio.ui('back');
     menu.open(null);
-    menuButtons[menu.sel].focus();
+    // Desktop keeps keyboard focus on the opener; touch must not leave it lit.
+    if (finePointerUi()) menuButtons[menu.sel].focus({ preventScroll: true });
   });
 }
 const BUILD_VERSION = typeof __BUILD_VERSION__ !== 'undefined' ? __BUILD_VERSION__ : 'dev';
@@ -4138,15 +4168,21 @@ deathNameForm.addEventListener('submit', async (e) => {
 });
 menuButtons.forEach((b, i) => {
   b.addEventListener('mouseenter', () => {
-    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (!finePointerUi()) return;
     if (!menu.panel || menu.panel !== b.dataset.act) menu.select(i);
   });
-  b.addEventListener('focus', () => menu.select(i, true));
+  // Tap :focus must not light the cyan selection; keyboard :focus-visible may.
+  b.addEventListener('focus', () => {
+    if (finePointerUi() || b.matches(':focus-visible')) {
+      menu.kbdHighlight = true;
+      menu.select(i, true);
+    }
+  });
   bindTap(b, () => menu.activate(i));
 });
 settingRows.forEach((r, i) => {
   r.addEventListener('mouseenter', () => {
-    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (!finePointerUi()) return;
     menu.selectRow(i);
   });
   bindTap(r, e => {
