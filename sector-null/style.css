@@ -120,6 +120,7 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     color: #d4e8f0; margin-top: 10px;
     text-shadow: 0 0 10px #000c, 0 1px 2px #000;
   }
+  #bannerSub:empty { display: none; }
 
   /* pickup toast */
   #toast {
@@ -589,9 +590,6 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     white-space: normal;
   }
 }
-@media (max-width: 540px) {
-  #ammoWrap { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 52px); }
-}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
@@ -613,10 +611,42 @@ body { font-family: "Rajdhani", "Arial Narrow", sans-serif; font-weight: 600; co
     font-size: 17px;
     pointer-events: auto;
     touch-action: manipulation;
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
   }
-  #touchReload { bottom: max(18px, env(safe-area-inset-bottom)); right: 18px; }
-  #ammoWrap { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 52px); }
-  #touchPause { bottom: max(18px, env(safe-area-inset-bottom)); left: 18px; }
+  #touchReload { display: none; }
+  #ammoWrap {
+    bottom: max(18px, env(safe-area-inset-bottom));
+    right: max(18px, env(safe-area-inset-right));
+    pointer-events: auto;
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  #bossPanel {
+    left: max(18px, env(safe-area-inset-left, 0px));
+    right: calc(clamp(136px, 17vw, 176px) + 28px);
+    width: min(180px, 100%);
+    transform: none;
+    margin: 0 auto;
+  }
+  #touchPause {
+    top: max(18px, env(safe-area-inset-top));
+    left: max(10px, env(safe-area-inset-left));
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+  }
+  #touchPause svg { width: 22px; height: 22px; display: block; }
+  #topbar {
+    left: max(62px, calc(env(safe-area-inset-left, 0px) + 54px));
+  }
   .stick {
     display: none;
     position: absolute;

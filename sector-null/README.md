@@ -25,7 +25,7 @@ Early upgrade picks bias toward firepower, and Split Beam is guaranteed among th
 | Cannon / Skirmisher | Wave 3, 7, 11… | Boss curve | Charged volleys from wave 3, or fast pressure earlier |
 | Spawner | Wave 4, 8, 12… | Boss curve | Spawns runners that later return to the core |
 
-Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes, movement and introduction banners provide additional cues.
+Health multipliers apply to the wave's base health and round up. Boss melee and projectiles deal 1 shield damage. Projectile speed stays at 8 units/second and enemy movement caps at 5.5, below the operator's base speed. Colour identifies the role; size, cannon silhouettes and movement provide additional cues. The boss intro banner shows only the name.
 
 ## Navigation and power-up feedback
 
@@ -60,8 +60,8 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 | --- | --- | --- |
 | Move | WASD or arrow keys | Plant and drag on the left side (also turns the gun) |
 | Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim independently |
-| Recharge | R | Recharge button |
-| Pause | Esc or P | Pause button |
+| Recharge | R | Tap the weapon panel |
+| Pause | Esc or P | Menu button (top left) |
 | Choose an upgrade | 1–3 or click | Tap a card |
 | Mute | M or volume settings | Volume settings |
 

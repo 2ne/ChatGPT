@@ -1269,6 +1269,17 @@ window.addEventListener('pointercancel', releaseStick, true);
 canvas.addEventListener('lostpointercapture', releaseStick);
 document.getElementById('touchReload').addEventListener('click', startReload);
 document.getElementById('touchPause').addEventListener('click', () => setPaused(true));
+document.getElementById('ammoWrap').addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse') return;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+document.getElementById('ammoWrap').addEventListener('click', e => {
+  if (!window.matchMedia('(any-pointer: coarse)').matches) return;
+  e.preventDefault();
+  e.stopPropagation();
+  startReload();
+}, true);
 
 window.addEventListener('keydown', e => {
   if (menu.key(e)) { e.preventDefault(); return; }
@@ -1451,9 +1462,13 @@ function bannerShowing() {
   return hud.banner.style.opacity === '1';
 }
 
+function bossOnField() {
+  return drones.some(z => z.userData.boss);
+}
+
 function checkBotMilestones(remaining) {
   if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
-  if (bannerShowing()) return;
+  if (bannerShowing() || bossOnField()) return;
   // Mark every crossed threshold, but only announce the lowest new one so rapid
   // multi-kills do not stack 10 / 5 / 3 toasts back-to-back.
   let hit = null;
@@ -1490,8 +1505,8 @@ function updateToast(dt) {
   const lessonIndex = toastQueue.findIndex(notice => notice.pickup && !seenDrops.has(notice.pickup.id));
   const next = toastQueue.splice(lessonIndex < 0 ? 0 : lessonIndex, 1)[0];
   if (!next) return;
-  if (next.botsLeft && bannerShowing()) {
-    toastQueue.unshift(next);
+  if (next.botsLeft && (bannerShowing() || bossOnField())) {
+    if (!bossOnField()) toastQueue.unshift(next);
     return;
   }
   const { text, color, pickup } = next;
@@ -1659,19 +1674,17 @@ function spawnWaveBoss() {
   const volley = state.wave >= 6 ? 5 : 3;
   // Names mirror the trick: Slammer, Charger, Cannon/Skirmisher, Spawner.
   const kind = (state.wave - 1) % 4;
-  let type, sub;
+  let type;
   if (kind === 0) {
     type = {
       name: 'SLAMMER', kit: 4, health: hp, speed: 0.88, size: 1.42,
       style: 'heavy', boss: true, volley: 0, slam: true, loco: 'stomp',
     };
-    sub = 'BOSS · Wide slam strikes — do not stand still';
   } else if (kind === 1) {
     type = {
       name: 'CHARGER', kit: 4, health: hp * 0.92, speed: 1.4, size: 1.28,
       style: 'rusher', boss: true, volley: 0, loco: 'charge',
     };
-    sub = 'BOSS · It charges and swipes — stay mobile';
   } else if (kind === 2) {
     const armed = state.wave >= 3;
     type = {
@@ -1680,20 +1693,20 @@ function spawnWaveBoss() {
       style: armed ? 'ranged' : 'flank', boss: true, volley: armed ? volley : 0,
       loco: armed ? 'stomp' : 'roll',
     };
-    sub = armed ? 'BOSS · Dodge the charged volley' : 'BOSS · Fast flanking pressure';
   } else {
     type = {
       name: 'SPAWNER', kit: 4, health: hp * 1.08, speed: 0.85, size: 1.45,
       style: 'heavy', boss: true, volley: 0, split: true, loco: 'stomp',
     };
-    sub = 'BOSS · Spawns runners that later return to the core';
   }
   if (state.wave % 5 === 0) {
     type = { name: Math.floor(state.wave / 5) % 2 ? 'REACTOR WARDEN' : 'NULL OVERSEER', kit: 4, health: hp * 1.2, speed: 0.72, size: 1.55, style: 'heavy', boss: true, milestone: true, loco: 'stomp' };
-    sub = 'MILESTONE · Leave marked zones · Strike during recovery';
   }
   spawnDrone(undefined, type);
-  showBanner(type.name, sub, 2.5, 'boss');
+  for (let i = toastQueue.length - 1; i >= 0; i--) {
+    if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
+  }
+  showBanner(type.name, '', 2.5, 'boss');
 }
 
 function maybeSplitBoss(z) {
@@ -1718,7 +1731,7 @@ function maybeSplitBoss(z) {
     pushOutOfSolids(pos, 0.35);
     spawnDrone(pos, fragment);
   }
-  showBanner('SPAWNER', 'Spawns loose — clear them or they reform', 1.6, 'boss');
+  showBanner('SPAWNER', '', 1.6, 'boss');
   audio.explode(z.position);
 }
 function bakeDrone({ plate, joint, trim, optic }, seed) {
@@ -3494,7 +3507,7 @@ function chaseDrone(z, dt) {
       }
       ud.patternTimer = 3.6;
       ud.recovery = 3.2;
-      showBanner('REACTOR SURGE', 'Leave the rings · Boss exposed: +75% damage', 1.6, 'boss');
+      showBanner('REACTOR SURGE', '', 1.6, 'boss');
       audio.enemyCharge(z.position);
       return;
     }
