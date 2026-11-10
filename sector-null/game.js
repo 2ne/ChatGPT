@@ -3536,7 +3536,7 @@ function startWave(n) {
   state.intermission = 0;
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
-  showBanner('WAVE ' + n, n === 10 ? 'Mortar tanks incoming · Move out of the orange circles' : omens[n] || 'Hostile signatures detected');
+  showBanner('WAVE ' + n, n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected');
 }
 
 // ===================================================================
