@@ -4020,25 +4020,92 @@ function showBest() {
     : build;
 }
 
-async function loadScoresBoard() {
-  const list = document.getElementById('scoresList');
+let scoresLoadToken = 0;
+
+function measureScoresBody() {
+  const body = document.getElementById('scoresBody');
+  const prev = body.style.height;
+  body.style.height = 'auto';
+  const height = body.scrollHeight;
+  body.style.height = prev;
+  return height;
+}
+
+function lockScoresBodyHeight(px, animate) {
+  const body = document.getElementById('scoresBody');
+  if (!animate) {
+    body.style.transition = 'none';
+    body.style.height = `${Math.max(1, Math.round(px))}px`;
+    void body.offsetHeight;
+    body.style.transition = '';
+    return;
+  }
+  body.style.height = `${Math.max(1, Math.round(px))}px`;
+}
+
+function setScoresStatus(text, { loading = false, hidden = false } = {}) {
   const status = document.getElementById('scoresStatus');
+  const label = status.querySelector('.scores-status-text');
+  status.hidden = hidden;
+  status.classList.toggle('loading', loading && !hidden);
+  if (label) label.textContent = text;
+  else status.textContent = text;
+}
+
+async function loadScoresBoard() {
+  const token = ++scoresLoadToken;
+  const list = document.getElementById('scoresList');
   const head = document.querySelector('#scoresPanel .scores-head');
+  const body = document.getElementById('scoresBody');
+
   list.innerHTML = '';
-  status.textContent = 'Loading board…';
-  status.hidden = false;
   if (head) head.hidden = true;
+  setScoresStatus('Loading board…', { loading: true });
+  lockScoresBodyHeight(measureScoresBody(), false);
+
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  let data = null;
+  let failed = false;
   try {
-    const data = await fetchScores();
-    const scores = data.scores || [];
-    if (data.offline) {
-      status.textContent = 'Board offline';
-      return;
-    }
-    if (!scores.length) {
-      status.textContent = 'No scores recorded yet';
-      return;
-    }
+    [data] = await Promise.all([
+      fetchScores(),
+      wait(2000),
+    ]);
+  } catch {
+    failed = true;
+    await wait(2000);
+  }
+  if (token !== scoresLoadToken) return;
+
+  const finish = (render) => {
+    render();
+    const next = measureScoresBody();
+    requestAnimationFrame(() => {
+      if (token !== scoresLoadToken) return;
+      lockScoresBodyHeight(next, true);
+      const onEnd = (e) => {
+        if (e.target !== body || e.propertyName !== 'height') return;
+        body.removeEventListener('transitionend', onEnd);
+        if (token === scoresLoadToken) body.style.height = '';
+      };
+      body.addEventListener('transitionend', onEnd);
+    });
+  };
+
+  if (failed) {
+    finish(() => setScoresStatus('Board unreachable'));
+    return;
+  }
+  const scores = data?.scores || [];
+  if (data?.offline) {
+    finish(() => setScoresStatus('Board offline'));
+    return;
+  }
+  if (!scores.length) {
+    finish(() => setScoresStatus('No scores recorded yet'));
+    return;
+  }
+  finish(() => {
     if (head) head.hidden = false;
     list.innerHTML = scores.map((row) => {
       const top = Number(row.rank) === 1;
@@ -4049,11 +4116,8 @@ async function loadScoresBoard() {
         <span class="scores-name">${row.name}</span>
       </div>`;
     }).join('');
-    status.textContent = '';
-    status.hidden = true;
-  } catch {
-    status.textContent = 'Board unreachable';
-  }
+    setScoresStatus('', { hidden: true });
+  });
 }
 
 deathNameInput.addEventListener('input', () => {

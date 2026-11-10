@@ -135,11 +135,16 @@
   <section id="scoresPanel" class="mpanel scores-panel">
     <h2>LEADERBOARD</h2>
     <button type="button" class="close-panel" aria-label="Close leaderboard">×</button>
-    <div class="scores-head" hidden aria-hidden="true">
-      <span>RANK</span><span>SCORE</span><span>WAVE</span><span>NAME</span>
+    <div id="scoresBody" class="scores-body">
+      <div class="scores-head" hidden aria-hidden="true">
+        <span>RANK</span><span>SCORE</span><span>WAVE</span><span>NAME</span>
+      </div>
+      <div id="scoresList" class="scores-list" role="list" aria-live="polite"></div>
+      <p id="scoresStatus" class="scores-status loading" role="status">
+        <span class="scores-spinner" aria-hidden="true"></span>
+        <span class="scores-status-text">Loading board…</span>
+      </p>
     </div>
-    <div id="scoresList" class="scores-list" role="list" aria-live="polite"></div>
-    <p id="scoresStatus" class="scores-status">Loading board…</p>
   </section>
 
   <section id="settingsPanel" class="mpanel">

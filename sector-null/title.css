@@ -371,6 +371,10 @@ body.titling #game { cursor: default; }
   text-align: end;
   letter-spacing: .28em;
 }
+.scores-body {
+  overflow: hidden;
+  transition: height .55s cubic-bezier(.2, .8, .2, 1);
+}
 .scores-list {
   display: grid;
   gap: 7px;
@@ -415,11 +419,32 @@ body.titling #game { cursor: default; }
 }
 .scores-score { font-variant-numeric: tabular-nums; }
 .scores-status {
-  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  min-height: 48px;
   color: #7f96a4;
   font-size: 12px;
   letter-spacing: .16em;
   text-transform: uppercase;
+}
+.scores-status.loading {
+  justify-content: center;
+  color: #9eb8c6;
+}
+.scores-status:not(.loading) .scores-spinner { display: none; }
+.scores-spinner {
+  width: 1.15em;
+  height: 1.15em;
+  border: 2px solid #45ecff44;
+  border-top-color: #45ecff;
+  border-radius: 50%;
+  animation: scores-spin .7s linear infinite;
+  flex: 0 0 auto;
+}
+@keyframes scores-spin {
+  to { transform: rotate(360deg); }
 }
 .scores-status[hidden],
 .scores-head[hidden] { display: none; }
