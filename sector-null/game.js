@@ -1154,8 +1154,6 @@ const state = {
   // timed power-ups from drops (seconds remaining)
   pDamage: 0,
   pAmmo: 0,
-  // permanent ability drops (kept for the rest of the run)
-  magneticGems: false,
   sinceDrop: 0,  // kills since the last drop (pity timer)
   // wave control
   toSpawn: 0,
@@ -1383,6 +1381,7 @@ window.addEventListener('keydown', e => {
   if (state.paused) return;
   if (e.code === 'KeyR') startReload();
   if (state.choosing && /^Digit[1-3]$/.test(e.code)) choose(+e.code.slice(5) - 1);
+  if (state.choosing && e.code === 'Digit4') claimAbility();
   if (e.code === 'KeyM') {
     const m = audio.toggleMute();
     document.getElementById('reloadHint').textContent = m ? '[R] RELOAD   ·   [M] MUTED' : '[R] RELOAD';
@@ -1417,6 +1416,7 @@ bindTap(document.getElementById('cards'), e => {
   const c = e.target.closest('.card');
   if (c) choose(+c.dataset.i);
 }, { filter: e => e.target.closest('.card') });
+bindTap(document.getElementById('abilityClaim'), () => claimAbility());
 document.getElementById('cards').addEventListener('mouseover', e => {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const c = e.target.closest('.card');
@@ -1442,6 +1442,7 @@ const hud = {
   pickerTitle: document.getElementById('pickerTitle'),
   pickerSub: document.getElementById('pickerSub'),
   cards: document.getElementById('cards'),
+  abilityClaim: document.getElementById('abilityClaim'),
   weaponIcon: document.getElementById('weaponIcon'),
   weaponMods: document.getElementById('weaponMods'),
   mag: document.getElementById('mag'),
@@ -1512,7 +1513,7 @@ function updateHUD() {
   // power-up time left as a clock: 0:10 … 0:01 (what they do was taught on first pickup)
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
-  if (state.magneticGems) pu += '<div style="color:#7cff4a">MAGNETIC GEMS</div>';
+  if (state.upgrades.magnet) pu += '<div style="color:#7cff4a">MAGNETIC GEMS</div>';
   if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}${state.pDamage > 10 ? ' · EXTENDED' : ''}</div>`;
   if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}${state.pAmmo > 8 ? ' · EXTENDED' : ''}</div>`;
   if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
@@ -2491,11 +2492,9 @@ function killDrone(z, idx) {
 // ===================================================================
 const DROP_TYPES = [
   // Name already carries the +; an icon of '+' made the toast read "++1 SHIELD".
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 40, kind: 'supply' },
-  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25, kind: 'supply' },
-  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25, kind: 'supply' },
-  // Permanent ability: score path for players who can live without another gun upgrade.
-  { id: 'magnet', name: 'MAGNETIC GEMS', detail: 'Gems surge toward you', icon: '◈', color: 0x7cff4a, weight: 18, kind: 'ability', once: true },
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 40 },
+  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
+  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
 ];
 // Teach each item once per run; saved browser history must not suppress a lesson.
 const seenDrops = new Set();
@@ -2513,12 +2512,6 @@ const DROP_MODELS = {
   ammo: [ // ammo can with a stenciled band
     [0.52, 0.3, 0.28, 0, 0, 0, 0x33566f, 0, 0, 0, 0.04], [0.54, 0.06, 0.3, 0, 0.17, 0, 0x243d55, 0, 0, 0, 0.02],
     [0.24, 0.04, 0.06, 0, 0.215, 0, 0x2a2c24, 0, 0, 0, 0.01], [0.3, 0.06, 0.006, 0, 0, 0.143, 0x76bcf0, 0, 0, 0, 0.002],
-  ],
-  magnet: [ // green crystal cluster — reads as an ability gem, not a supply crate
-    [0.18, 0.42, 0.18, 0, 0.02, 0, 0x7cff4a, 0.35, 0.4, 0.2, 0.04],
-    [0.14, 0.28, 0.14, -0.16, -0.04, 0.08, 0x4ad66a, -0.25, -0.5, 0.3, 0.03],
-    [0.12, 0.24, 0.12, 0.15, -0.06, -0.1, 0x9dff6a, 0.4, 0.35, -0.25, 0.03],
-    [0.08, 0.14, 0.08, 0.02, 0.22, 0.12, 0xc8ff9a, 0.2, 0.15, 0.5, 0.02],
   ],
 };
 const dropGlow = glowTexture();
@@ -2573,19 +2566,12 @@ const DROP_LIFE = 6;      // seconds of active play before an uncollected drop v
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
 const drops = [];
 
-function dropAllowed(t) {
-  if (t.id === 'med' && state.hp >= state.maxHp) return false;
-  // Permanent abilities only drop once per run.
-  if (t.once && t.id === 'magnet' && state.magneticGems) return false;
-  return true;
-}
-
 function maybeDrop(pos) {
   state.sinceDrop++;
   if (Math.random() > DROP_CHANCE + state.dropBonus && state.sinceDrop < DROP_PITY) return;
   state.sinceDrop = 0;
-  const pool = DROP_TYPES.filter(dropAllowed);
-  if (!pool.length) return;
+  // no medkits at full health — they'd be a wasted drop
+  const pool = DROP_TYPES.filter(t => t.id !== 'med' || state.hp < state.maxHp);
   let r = Math.random() * pool.reduce((a, t) => a + t.weight, 0);
   spawnDrop(pool.find(t => (r -= t.weight) < 0) || pool[0], pos);
 }
@@ -2621,7 +2607,6 @@ function collect(type) {
   if (type.id === 'med') { state.hp = Math.min(state.maxHp, state.hp + 1); healGlow = 1; }
   else if (type.id === 'dmg') state.pDamage += 10;
   else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo += 8; state.reloading = false; state.mag = state.magSize; }
-  else if (type.id === 'magnet') state.magneticGems = true;
 }
 
 function updateDrops(dt) {
@@ -2709,8 +2694,8 @@ function collectEmerald() {
 }
 
 function updateEmeralds(dt) {
-  const magnetRange = state.magneticGems ? EMERALD_MAGNET_ABILITY : EMERALD_MAGNET;
-  const surge = state.magneticGems;
+  const magnetRange = state.upgrades.magnet ? EMERALD_MAGNET_ABILITY : EMERALD_MAGNET;
+  const surge = !!state.upgrades.magnet;
   for (let i = emeralds.length - 1; i >= 0; i--) {
     const e = emeralds[i], ud = e.userData;
     ud.life -= dt; ud.t += dt;
@@ -2719,9 +2704,9 @@ function updateEmeralds(dt) {
     const dist = Math.hypot(dx, dz);
     if (dist < EMERALD_PICK) { collectEmerald(); disposeEmerald(e); emeralds.splice(i, 1); continue; }
     if (dist < magnetRange && dist > 1e-4) {
-      // Ability pull is a real surge — strong enough to yank gems in from outside the walls.
+      // Ability pull reaches through walls, but stays slow enough to watch the stream.
       const pull = surge
-        ? 14 + (1 - dist / magnetRange) * 22
+        ? 8 + (1 - dist / magnetRange) * 13
         : 9 + (1 - dist / magnetRange) * 10;
       e.position.x += (dx / dist) * pull * dt;
       e.position.z += (dz / dist) * pull * dt;
@@ -2897,6 +2882,8 @@ const UPGRADES = [
   { id: 'speed',  cat: 'survival',  name: 'MOTION SERVO',    desc: 'move 12% faster',            max: 3, stat: s => [Math.round(s.speed / 6.2 * 100) + '%', Math.round(s.speed * 1.12 / 6.2 * 100) + '%'], apply: s => { s.speed *= 1.12; } },
   { id: 'luck',   cat: 'fortune',   name: 'SALVAGE SCANNER',     desc: 'more supply drops', max: 3, stat: s => [Math.round((DROP_CHANCE + s.dropBonus) * 100) + '%', Math.round((DROP_CHANCE + s.dropBonus + 0.03) * 100) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
   { id: 'heal',   cat: 'survival',  name: 'SHIELD RESET',      desc: 'restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
+  // Free bonus ability — offered beside the combat pick, never costs an upgrade slot.
+  { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
 ];
 const UPGRADE_CATS = {
   engineer: '#a7a1ff',
@@ -2904,6 +2891,7 @@ const UPGRADE_CATS = {
   handling:  '#76bcf0',
   survival:  '#70dfb8',
   fortune:   '#bdadfa',
+  ability:   '#7cff4a',
 };
 // 8x8 pixel icons in the game's blocky style: X = solid, o = dim
 const UPGRADE_ICONS = {
@@ -2917,6 +2905,7 @@ const UPGRADE_ICONS = {
   speed:  ['........', 'XX..XX..', '.XX..XX.', '..XX..XX', '.XX..XX.', 'XX..XX..', '........', '........'],
   luck:   ['XXXXXXXX', 'XX....XX', 'X.X..X.X', 'X..XX..X', 'X..XX..X', 'X.X..X.X', 'XX....XX', 'XXXXXXXX'],
   heal:   ['.XX..XX.', 'XXXXXXXX', 'XXXXXXXX', 'XXXXXXXX', '.XXXXXX.', '..XXXX..', '...XX...', '........'],
+  magnet: ['...XX...', '..XXXX..', '.XX..XX.', 'XX....XX', '.XX..XX.', '..XXXX..', '...XX...', '........'],
 };
 function pixelIcon(rows, cls = 'cicon') {
   rows ||= ['..XXXX..', '.XXXXXX.', 'XX.XX.XX', 'XXXXXXXX', '..XXXX..', '.X.XX.X.', 'XX....XX', '........'];
@@ -2946,7 +2935,8 @@ function upgradeWeight(u) {
 }
 
 function pickUpgradeOffers(count = 3) {
-  const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
+  // Abilities are free bonus claims — never compete with combat / engineer cards.
+  const pool = UPGRADES.filter(u => u.cat !== 'ability' && (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
   const picks = [];
   // Keep an equipment path available, including follow-up modules once owned.
   const equipment = pool.filter(u => u.cat === 'engineer');
@@ -2981,6 +2971,39 @@ function pickUpgradeOffers(count = 3) {
   return picks.sort((a, b) => recommendationScore(b) - recommendationScore(a));
 }
 
+function abilityOffer() {
+  return UPGRADES.find(u => u.cat === 'ability' && (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state))) || null;
+}
+
+function syncAbilityClaim() {
+  const u = abilityOffer();
+  if (!u) {
+    hud.abilityClaim.classList.add('hidden');
+    hud.abilityClaim.classList.remove('ready', 'claimed');
+    return null;
+  }
+  hud.abilityClaim.classList.remove('hidden', 'claimed');
+  hud.abilityClaim.style.setProperty('--accent', UPGRADE_CATS[u.cat]);
+  hud.abilityClaim.querySelector('.ability-name').textContent = u.name;
+  hud.abilityClaim.querySelector('.ability-desc').textContent = u.desc;
+  return u;
+}
+
+function claimAbility() {
+  const u = abilityOffer();
+  if (!state.choosing || !u || state.paused || !hud.cards.classList.contains('ready')) return;
+  if (hud.abilityClaim.classList.contains('claimed')) return;
+  state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
+  u.apply(state);
+  hud.abilityClaim.classList.add('claimed');
+  toastQueue.push({ text: u.name, color: UPGRADE_CATS[u.cat] });
+  audio.upgrade(u.cat);
+  // Keep the combat pick open — ability is free, not a forfeit.
+  setTimeout(() => {
+    if (state.choosing) syncAbilityClaim();
+  }, 280);
+}
+
 function recommendationScore(u) {
   if (state.hp <= 1 && (u.id === 'heal' || u.id === 'hp')) return 100;
   if (u.id === 'spread' && !state.spread) return 20;
@@ -2993,8 +3016,12 @@ function upgradePreview(u) {
     mine: '<path d="M20 42h60M36 38l5-12h18l5 12zM50 18v-8M25 20l8 6m42-6-8 6"/>',
     shield: '<path d="M50 8l23 8v14c0 12-23 23-23 23S27 42 27 30V16zM40 30h20m-10-10v20"/>',
     rifle: '<path d="M10 28h25m-6-7 8 7-8 7"/>',
+    gems: '<path d="M50 8l10 14-10 30L40 22zM28 20l8 10-6 18-10-12zM72 18l8 12-8 16-8-10z"/><path class="preview-shot" d="M20 48h60"/>',
   };
-  let art = u.cat === 'engineer' ? paths[u.id === 'mine' || u.id === 'shock' ? 'mine' : 'bot'] : u.cat === 'survival' ? paths.shield : paths.rifle;
+  let art = u.cat === 'engineer' ? paths[u.id === 'mine' || u.id === 'shock' ? 'mine' : 'bot']
+    : u.cat === 'survival' ? paths.shield
+    : u.cat === 'ability' ? paths.gems
+    : paths.rifle;
   if (u.id === 'spread') art += Array.from({ length: 2 + state.spread }, (_, i) => `<path class="preview-shot" d="M45 28L90 ${10 + i * 36 / (1 + state.spread)}"/>`).join('');
   else if (u.cat === 'firepower' || u.cat === 'handling') art += '<path class="preview-shot" d="M48 28h14m9 0h14"/><path d="M92 14v28"/>';
   if (u.id === 'botBomb') art += '<circle class="preview-shot" cx="83" cy="28" r="7"/>';
@@ -3031,6 +3058,8 @@ function openPicker(healed) {
       fireRate +
       `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
   }).join('');
+  syncAbilityClaim();
+  hud.abilityClaim.classList.remove('ready');
   hud.picker.classList.remove('shown');
   hud.picker.classList.remove('hidden');
   // Double rAF so the opacity transition starts from 0 after display flips on.
@@ -3044,6 +3073,7 @@ function openPicker(healed) {
   audio.deal(offered.length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
+    hud.abilityClaim.classList.add('ready');
     if (state.choosing && !state.paused) hud.cards.querySelector('button')?.focus({ preventScroll: true });
   }, PICK_LOCKOUT_MS);
 }
@@ -3051,6 +3081,8 @@ function openPicker(healed) {
 function hidePicker() {
   hud.picker.classList.remove('shown');
   hud.picker.classList.add('hidden');
+  hud.abilityClaim.classList.add('hidden');
+  hud.abilityClaim.classList.remove('ready', 'claimed');
 }
 
 function choose(i) {
@@ -3387,7 +3419,7 @@ function resetGame(keep = false) {
     mag: BASE_STATS.magSize, reloading: false, reloadT: 0,
     fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
-    pDamage: 0, pAmmo: 0, magneticGems: false, sinceDrop: 0,
+    pDamage: 0, pAmmo: 0, sinceDrop: 0,
   });
   emeraldChain = 0;
   botMilestonesDone.clear();

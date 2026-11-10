@@ -39,11 +39,11 @@ Missed shots still count against accuracy. Pierce hits can credit multiple hits 
 - **Count:** Regular ≈ 3–5; boss ≈ 8–12 (scaled slightly by type size).
 - **Lifetime:** ~2.2 s active play (pauses during picker / pause). Final ~0.6 s blinks.
 - **Motion:** Idle bob + spin; within magnet range (~5.5) accelerate toward the player like supply drops.
-- **Magnetic Gems ability:** Permanent for the run once picked up. Magnet range jumps to ~72 so gems outside the deck walls also surge in, with a stronger pull. Gems still expire — you still have to play for them.
+- **Magnetic Gems ability:** Permanent for the run once claimed free on the wave-clear picker (does not cost an upgrade slot). Magnet range jumps to ~72 so gems outside the deck walls also stream in; pull speed is moderated so the surge stays visible. Gems still expire — you still have to play for them.
 - **Pickup radius:** ~0.75.
 - **Uncollected:** Vanish with no points.
 
-Supply drops (shield / overcharge / cell) are timed or instant. Ability drops (Magnetic Gems) are permanent and separate from emeralds themselves.
+Supply drops (shield / overcharge / cell) are timed or instant. Magnetic Gems is a permanent ability claim on the upgrade screen, separate from floor supplies and from the three competing combat cards.
 
 ## Accuracy tracking
 
