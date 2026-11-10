@@ -1782,14 +1782,25 @@ const DRONE_PALETTES = [
   { plate: 0x654080, joint: 0x242038, trim: 0xb87ee4, optic: 0xe396ff },
   { plate: 0x997124, joint: 0x342b20, trim: 0xffd177, optic: 0xffe6a0 },
   { plate: 0xa32e39, joint: 0x321c28, trim: 0xff8c75, optic: 0xffe4d1 },
+  { plate: 0xf2f5f7, joint: 0x26313a, trim: 0xaab9c4, optic: 0xffc17b },
 ];
 const BOT_TYPES = {
   patrol: { name: 'PATROL', kit: 0, health: 1, speed: 1, size: 1, style: 'melee', loco: 'walk' },
   runner: { name: 'FLANKER', kit: 1, health: 0.7, speed: 1.35, size: 0.88, style: 'flank', loco: 'roll' },
   gunner: { name: 'PULSE GUNNER', kit: 2, health: 1.25, speed: 0.8, size: 1, style: 'ranged', loco: 'walk' },
   heavy: { name: 'BULWARK', kit: 3, health: 2.5, speed: 0.62, size: 1.18, style: 'heavy', loco: 'stomp' },
+  mortar: { name: 'BOMBARDIER', kit: 5, health: 1.25, speed: 0.55, size: 1, style: 'mortar', loco: 'tracks' },
 };
 function waveBotType() {
+  // Guaranteed introduction, then a few replacements rather than extra enemies.
+  const mortarLimit = state.wave === 15 ? 1 : 3;
+  if (state.wave >= 15 && state.mortarsSpawned < mortarLimit
+      && !drones.some(z => z.userData.type.style === 'mortar')
+      && !equipment.zones.some(r => r.userData.mortar)
+      && (state.mortarsSpawned === 0 || Math.random() < 0.08)) {
+    state.mortarsSpawned++;
+    return BOT_TYPES.mortar;
+  }
   const r = Math.random();
   if (state.wave >= 2 && r < 0.25) return BOT_TYPES.runner;
   if (state.wave >= 3 && r >= 0.25 && r < 0.45) return BOT_TYPES.gunner;
@@ -1804,6 +1815,11 @@ function bossHealthMult() {
 function spawnWaveBoss() {
   state.bossPending = false;
   clearEnemyBolts();
+  for (let i = equipment.zones.length - 1; i >= 0; i--) {
+    if (!equipment.zones[i].userData.mortar) continue;
+    removeFieldObject(equipment.zones[i]);
+    equipment.zones.splice(i, 1);
+  }
   const hp = bossHealthMult();
   const volley = state.wave >= 6 ? 5 : 3;
   // Names mirror the trick: Slammer, Charger, Cannon/Skirmisher, Spawner.
@@ -1902,6 +1918,20 @@ function bakeDrone({ plate, joint, trim, optic }, seed) {
   };
 }
 const DRONE_KITS = DRONE_PALETTES.map((palette, i) => bakeDrone(palette, 7 + i * 31));
+// Low white hull, dark continuous tracks and a separate armoured turret.
+const tankHullGeo = bakeBlocks([
+  [0.9, 0.3, 1.05, 0, 0.38, 0, 0xf2f5f7],
+  [0.3, 0.38, 1.2, -0.52, 0.24, 0, 0x26313a],
+  [0.3, 0.38, 1.2, 0.52, 0.24, 0, 0x26313a],
+  [0.32, 0.09, 1.18, -0.52, 0.46, 0, 0xf2f5f7],
+  [0.32, 0.09, 1.18, 0.52, 0.46, 0, 0xf2f5f7],
+  ...[-1, 1].flatMap(side => [-0.4, -0.2, 0, 0.2, 0.4].map(z =>
+    [0.035, 0.22, 0.08, side * 0.68, 0.24, z, 0xaab9c4])),
+], seeded(208));
+const tankTurretGeo = bakeBlocks([
+  [0.62, 0.28, 0.65, 0, 0.08, 0, 0xf2f5f7],
+  [0.36, 0.1, 0.38, 0, 0.27, -0.08, 0xaab9c4],
+], seeded(209));
 const droneShell = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32 });
 const droneHurt = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32, emissive: 0xffb64b, emissiveIntensity: 0.85 });
 const enemyCannonGeo = new THREE.BoxGeometry(0.25, 0.25, 0.95);
@@ -2014,9 +2044,18 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     if (mat === droneShell) body.push(m);
     return m;
   };
-  const pelvis = mesh(kit.pelvis, z);
+  const tank = type.style === 'mortar';
+  const pelvis = mesh(tank ? tankHullGeo : kit.pelvis, z);
   const upper = new THREE.Group(); upper.rotation.order = 'YXZ'; upper.scale.setScalar(Z_UPPER); z.add(upper); // waist pivot
-  mesh(kit.torso, upper);
+  mesh(tank ? tankTurretGeo : kit.torso, upper);
+  if (tank) {
+    const barrel = mesh(enemyCannonGeo, upper, enemyCannonMat);
+    barrel.position.set(0, 0.43, 0.34);
+    barrel.rotation.x = -0.85;
+    const tip = mesh(enemyMuzzleGeo, upper, kit.optic);
+    tip.position.set(0, 0.79, 0.66);
+    tip.rotation.x = -0.85;
+  }
   if (type.style === 'ranged') {
     // A visible shoulder cannon, aimed by the bot's facing direction.
     const cannon = new THREE.Mesh(enemyCannonGeo, enemyCannonMat);
@@ -2045,6 +2084,12 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     hipP: new THREE.Vector3(), knee: new THREE.Vector3(), ankle: new THREE.Vector3(), foot3: new THREE.Vector3(),
   });
   const limbs = [side(1), side(-1)];
+  if (tank) {
+    head.visible = false;
+    for (const limb of limbs) {
+      for (const part of ['upperArm', 'forearm', 'thigh', 'shin', 'foot']) limb[part].visible = false;
+    }
+  }
 
   z.position.set(pos.x, 0, pos.z);
   z.scale.setScalar(Z_SCALE * type.size);
@@ -2055,7 +2100,7 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     hp: Math.ceil(state.droneHp * type.health),
     maxHp: Math.ceil(state.droneHp * type.health),
     type, boss: !!type.boss, chargeRing, shotCd: 1.5, chargeT: 0, shotTarget: null,
-    splitsDone: 0,
+    splitsDone: 0, mortarCd: 1.5, mortarRecoil: 0,
     reformT: type.fragment ? 5.5 : 0,
     seekBoss: false,
     pace,                                               // its speed relative to the wave's
@@ -2102,6 +2147,15 @@ const _zPole = new THREE.Vector3(), _zReach = new THREE.Vector3();
 // skitter / stomp) changes how the rig reads while it moves.
 function animateDrone(z, dt, near) {
   const u = z.userData;
+  if (u.type.loco === 'tracks') {
+    u.flinch *= Math.exp(-7 * dt);
+    u.mortarRecoil = Math.max(0, u.mortarRecoil - dt * 3);
+    u.pelvis.position.set(0, 0, 0);
+    u.pelvis.rotation.set(0, 0, 0);
+    u.upper.position.set(0, 0.62, -u.mortarRecoil * 0.12);
+    u.upper.rotation.set(-u.flinch * 0.12 - u.mortarRecoil * 0.16, 0, 0);
+    return;
+  }
   const loco = u.type.loco || 'walk';
   const Z_STRIKE = u.type.style === 'heavy' || u.type.slam ? 0.45 : 0.2;
   const gait = u.gait; // 0 when it's standing its ground
@@ -2220,6 +2274,7 @@ function nearestOpening(pos, skip, z = null) {
   let best = null, bd = Infinity;
   for (const o of openings) {
     if (o === skip) continue;
+    if (z?.userData.type.style === 'mortar' && o.kind !== 'door') continue;
     let d = (o.x - pos.x) ** 2 + (o.z - pos.z) ** 2;
     if (preferDoor && o.kind === 'window') d *= 3.5;
     if (preferDoor && o.kind === 'door') d *= 0.55;
@@ -2424,7 +2479,7 @@ const navObstacles = [...SOLIDS, ...wallBoxes.map(w => ({
   x: (w.minX + w.maxX) / 2, z: (w.minZ + w.maxZ) / 2,
   hx: (w.maxX - w.minX) / 2, hz: (w.maxZ - w.minZ) / 2, c: 1, s: 0,
 }))];
-const botRadius = z => Z_RADIUS * z.userData.type.size;
+const botRadius = z => (z.userData.type.style === 'mortar' ? 0.74 : Z_RADIUS) * z.userData.type.size;
 function navClear(ax, az, bx, bz, radius, entrances = false) {
   if (!clearPath(ax, az, bx, bz, radius)) return false;
   for (const w of wallBoxes) {
@@ -2831,6 +2886,7 @@ const helperShotInterval = (rank, upgrades) => upgrades.botBomb ? 1.7 : 0.65 / (
 
 function removeFieldObject(o) {
   scene.remove(o);
+  if (o.userData.shell) scene.remove(o.userData.shell);
   if (o.geometry === fieldRing) o.material.dispose();
 }
 function clearEquipmentField() {
@@ -2846,6 +2902,28 @@ function groundRing(position, radius, color, life, list) {
   ring.userData = { life, maxLife: life, radius };
   scene.add(ring); list.push(ring);
   return ring;
+}
+
+function fireMortar(z) {
+  const ring = groundRing(player.position.clone(), 1.8, 0xffc17b, 1.6, equipment.zones);
+  const origin = z.userData.upper.getWorldPosition(new THREE.Vector3());
+  origin.y += 0.6;
+  const shell = new THREE.Mesh(enemyBoltGeo, DRONE_KITS[5].optic);
+  shell.position.copy(origin);
+  scene.add(shell);
+  Object.assign(ring.userData, { mortar: true, shell, origin });
+  z.userData.mortarRecoil = 1;
+  audio.enemyCharge(origin);
+}
+
+function detonateMortarZone(ring) {
+  const pos = ring.position.clone();
+  const origin = pos.clone(); origin.y = 0.3;
+  audio.explode(origin);
+  spawnBlastFlare(origin, 0.9, 0xffc17b);
+  spawnBlastSparks(origin, 12);
+  spawnShockwave(pos, ring.userData.radius, 0xffc17b);
+  if (Math.hypot(player.position.x - pos.x, player.position.z - pos.z) < ring.userData.radius + 0.2) hurtPlayer();
 }
 
 // Milestone boss strike — warning rings must resolve into a real blast, not a silent fade.
@@ -2960,9 +3038,15 @@ function updateEquipment(dt) {
     const warn = Math.max(0.05, ring.userData.maxLife || 1.4);
     // Pulse harder as the strike lands so the warning reads as an incoming blast.
     const u = 1 - ring.userData.life / warn;
+    if (ring.userData.shell) {
+      const progress = THREE.MathUtils.clamp(u, 0, 1);
+      ring.userData.shell.position.lerpVectors(ring.userData.origin, ring.position, progress);
+      ring.userData.shell.position.y += 4 * Math.sin(Math.PI * progress);
+    }
     ring.material.opacity = 0.35 + 0.55 * u + (reducedMotion.matches ? 0 : 0.2 * Math.sin(u * Math.PI * 8));
     if (ring.userData.life <= 0) {
-      detonateReactorZone(ring);
+      if (ring.userData.mortar) detonateMortarZone(ring);
+      else detonateReactorZone(ring);
       removeFieldObject(ring); equipment.zones.splice(i, 1);
     }
   }
@@ -3426,6 +3510,7 @@ function queueWave(delay) {
 
 function startWave(n) {
   state.wave = n;
+  state.mortarsSpawned = 0;
   state.bossPending = true;
   state.waveTime = 0;
   state.shotsFired = 0;
@@ -3446,7 +3531,7 @@ function startWave(n) {
   state.intermission = 0;
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
-  showBanner('WAVE ' + n, omens[n] || 'Hostile signatures detected');
+  showBanner('WAVE ' + n, n === 15 ? 'White Bombardier · Mortars clear cover · Dodge the marked blast' : omens[n] || 'Hostile signatures detected');
 }
 
 // ===================================================================
@@ -3972,6 +4057,27 @@ function chaseDrone(z, dt) {
   ud.shotCd = Math.max(0, ud.shotCd - dt);
   const shotMax = ud.boss ? Z_BOSS_SHOT_MAX : Z_SHOT_MAX;
   const onDeck = inside(z.position);
+  if (ud.type.style === 'mortar' && onDeck && ud.climb < 0 && ud.swing < 0) {
+    ud.mortarCd = Math.max(0, ud.mortarCd - dt);
+    let moving = false;
+    if (pd >= 4.5 && pd <= 22) {
+      const off = faceToward(z, pdx, pdz, Z_TRACK, dt);
+      if (ud.mortarCd <= 0 && off < 0.3 && !equipment.zones.some(r => r.userData.mortar)) {
+        fireMortar(z);
+        ud.mortarCd = 5;
+      }
+    } else {
+      // Closing the distance stops artillery fire; the tank slowly repositions.
+      const direction = pd < 4.5 ? -1 : 1;
+      const distance = pd || 1;
+      const target = routeAround(z, z.position.x + pdx / distance * direction * 3,
+        z.position.z + pdz / distance * direction * 3);
+      moving = walkToward(z, target.x - z.position.x, target.z - z.position.z, ud.speed, ud.turn, dt);
+    }
+    ud.gait = damp(ud.gait, moving ? 1 : 0, 8, dt);
+    animateDrone(z, dt, pd);
+    return;
+  }
   // Full aimed volleys only on the deck — outside Cannon uses entry warning shots instead.
   const canShoot = ud.type.style === 'ranged' && ud.climb < 0 && ud.swing < 0
     && onDeck && pd > 2.5 && pd < shotMax && !wallBetween(z.position, p)
