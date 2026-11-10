@@ -89,16 +89,17 @@ The pulse rifle uses a low, weighty energy pulse with a short midrange attack an
 
 Destroyed drones burst into sparks and scattered parts. Reduced-motion settings suppress the blast flash and cut the spark count.
 
-| Action | Keyboard and mouse | Touch |
-| --- | --- | --- |
-| Move | WASD or arrow keys | Plant and drag on the left side (also turns the gun) |
-| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim independently |
-| Recharge | R | Tap the weapon panel |
-| Pause | Esc or P | Menu icon in the score panel |
-| Choose an upgrade | 1–3 or click | Tap a card |
-| Mute | M or volume settings | Volume settings |
+| Action | Keyboard and mouse | Touch | Xbox / standard gamepad |
+| --- | --- | --- | --- |
+| Move | WASD or arrow keys | Plant and drag on the left side (also turns the gun) | Left stick (radial deadzone) |
+| Aim and fire | Mouse and left click | Plant the right thumb to fire; drag to aim independently | Right stick aims (keeps last aim); RT or RB hold to fire |
+| Recharge | R | Tap the weapon panel | X or LB |
+| Pause | Esc or P | Menu icon in the score panel | Menu / Start |
+| Choose an upgrade | 1–3 or click | Tap a card | D-pad / left stick + A |
+| Menus | Arrows / Enter / Esc | Tap | D-pad or left stick, A confirm, B back |
+| Mute | M or volume settings | Volume settings | View / Back |
 
-Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer.
+Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer. A Bluetooth Xbox controller works in desktop browsers and in the iOS Safari / Home Screen web app via the standard Gamepad API mapping. Mixed mouse/keyboard/touch/pad input is fine mid-run; pad aim hides the mouse crosshair.
 
 On iPhone, Add to Home Screen keeps the game full-screen (`black-translucent` status bar, `viewport-fit=cover`). HUD, gun panel, boss bar and overlays sit `18px` past `env(safe-area-inset-*)` so they clear the Dynamic Island and home indicator. On phone (touch portrait ≤500px wide, or landscape with a short viewport) the gun panel is ~72% size and hugs safe-area + ~8px; phone landscape also pulls the header flush so the right-thumb fire zone stays open. Desktop keeps the roomier layout. Safari already lays the page out below its chrome, so those insets are 0 and the layout does not change. If an older home-screen icon still sits under the status bar, remove it and add the page to the home screen again.
 

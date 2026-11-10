@@ -1241,6 +1241,8 @@ function keyboardAxis(negativeKeys, positiveKeys) {
   return negative === positive ? 0 : positive > negative ? 1 : -1;
 }
 const mouse = new THREE.Vector2();
+let mouseFire = false;
+let padFire = false;
 let firing = false;
 const aimPoint = new THREE.Vector3();
 const aimPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.9);
@@ -1249,11 +1251,25 @@ const touchControls = document.getElementById('touchControls');
 const STICK_RADIUS = 48;   // px to full deflection
 const STICK_KNOB = 28;     // visual knob travel
 const AIM_DEAD = 0.18;     // aim stick deadzone (normalized); fire still holds
+const PAD_DEAD = 0.18;     // standard gamepad radial deadzone
+const PAD_FIRE_AXIS = 0.35; // RT analog threshold
+const PAD_UI_DELAY = 0.32;
+const PAD_UI_REPEAT = 0.16;
 const moveStick = { dot: document.getElementById('moveStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
 const aimStick = { dot: document.getElementById('aimStick'), delta: new THREE.Vector2(), id: null, x: 0, y: 0 };
 const touchDirection = new THREE.Vector2(0, -1);
 let touchAiming = false;
+let padAiming = false;
 let touchYaw = 0; // smoothed facing while the aim stick is active
+const padMove = new THREE.Vector2();
+let padPrevButtons = [];
+let padUiAxis = '';
+let padUiTimer = 0;
+let padPickerSel = 0;
+
+function syncFiring() {
+  firing = mouseFire || padFire || aimStick.id !== null;
+}
 
 function resetStick(stick) {
   const pointerId = stick.id;
@@ -1267,7 +1283,259 @@ function resetGameplayInput() {
   for (const k in keys) delete keys[k];
   resetStick(moveStick);
   resetStick(aimStick);
+  mouseFire = false;
+  padFire = false;
+  padMove.set(0, 0);
   firing = false;
+}
+
+function padRadial(x, y, dead = PAD_DEAD) {
+  const len = Math.hypot(x, y);
+  if (len < dead) return { x: 0, y: 0, len: 0 };
+  const scale = Math.min(1, (len - dead) / (1 - dead)) / len;
+  return { x: x * scale, y: y * scale, len };
+}
+
+function readStandardPad() {
+  if (!gamepadLive || typeof navigator.getGamepads !== 'function') return null;
+  for (const pad of navigator.getGamepads()) {
+    if (!pad) continue;
+    if (pad.mapping === 'standard' || pad.axes.length >= 4) return pad;
+  }
+  return null;
+}
+
+function padBtnDown(pad, i) {
+  const b = pad.buttons[i];
+  return !!(b && (b.pressed || b.value >= 0.5));
+}
+
+function padBtnValue(pad, i) {
+  return pad.buttons[i]?.value || 0;
+}
+
+function padJust(pad, i) {
+  return padBtnDown(pad, i) && !padPrevButtons[i];
+}
+
+function snapPadButtons(pad) {
+  padPrevButtons = pad.buttons.map((b) => !!(b && (b.pressed || b.value >= 0.5)));
+}
+
+function setPadAiming(on) {
+  padAiming = on;
+  document.body.classList.toggle('pad-aiming', on);
+}
+
+function gamepadRumble(duration = 90, weak = 0.35, strong = 0.65) {
+  try {
+    const pad = readStandardPad();
+    const actuator = pad?.vibrationActuator;
+    if (!actuator?.playEffect) return;
+    actuator.playEffect('dual-rumble', {
+      startDelay: 0,
+      duration,
+      weakMagnitude: weak,
+      strongMagnitude: strong,
+    });
+  } catch { /* optional haptic */ }
+}
+
+function deathFocusables() {
+  const list = [];
+  if (!deathNameForm.classList.contains('hidden')) {
+    list.push(deathNameInput, deathSubmitBtn);
+  }
+  list.push(document.getElementById('retryBtn'), document.getElementById('deathQuitBtn'));
+  return list.filter((el) => el && !el.disabled && el.offsetParent !== null);
+}
+
+function pauseFocusables() {
+  return [document.getElementById('resumeBtn'), document.getElementById('quitBtn')].filter(Boolean);
+}
+
+function cycleFocus(list, dir) {
+  if (!list.length) return;
+  const ae = document.activeElement;
+  let i = list.indexOf(ae);
+  if (i < 0) i = dir > 0 ? -1 : 0;
+  i = (i + dir + list.length) % list.length;
+  list[i].focus({ preventScroll: true });
+}
+
+function activateFocusedUi() {
+  const ae = document.activeElement;
+  if (!ae) return false;
+  if (ae === deathNameInput) {
+    if (normalizeName(deathNameInput.value)) deathSubmitBtn.focus({ preventScroll: true });
+    return true;
+  }
+  if (ae === deathSubmitBtn) {
+    deathNameForm.requestSubmit?.() || deathNameForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    return true;
+  }
+  if (typeof ae.click === 'function' && (ae.matches('button, .card, .srow, .close-panel') || ae.closest?.('#pauseMenu, #deathMenu, #menuList'))) {
+    ae.click();
+    return true;
+  }
+  return false;
+}
+
+function padUiDirection(pad) {
+  // Left stick steers menus only when combat isn't reading it for movement.
+  const stickNav = !(state.running && !state.paused && !state.choosing);
+  const stick = stickNav ? padRadial(pad.axes[0] || 0, pad.axes[1] || 0, 0.45) : { x: 0, y: 0 };
+  if (padBtnDown(pad, 12) || stick.y < -0.55) return 'up';
+  if (padBtnDown(pad, 13) || stick.y > 0.55) return 'down';
+  if (padBtnDown(pad, 14) || stick.x < -0.55) return 'left';
+  if (padBtnDown(pad, 15) || stick.x > 0.55) return 'right';
+  return '';
+}
+
+function handlePadUiNav(dir) {
+  if (!dir) return;
+  if (title.active && !menuEl.classList.contains('gone')) {
+    menu.kbdHighlight = true;
+    if (menuEl.classList.contains('splash')) {
+      menu.leaveSplash();
+      return;
+    }
+    const code = dir === 'up' ? 'ArrowUp' : dir === 'down' ? 'ArrowDown' : dir === 'left' ? 'ArrowLeft' : 'ArrowRight';
+    menu.key({ code, shiftKey: false, preventDefault() {} });
+    const focusBtn = menu.panel === 'settings' ? settingRows[menu.row] : menuButtons[menu.sel];
+    focusBtn?.focus?.({ preventScroll: true });
+    return;
+  }
+  if (state.choosing && !state.paused) {
+    const cards = [...hud.cards.querySelectorAll('button.card')];
+    if (!cards.length) return;
+    const step = dir === 'left' || dir === 'up' ? -1 : 1;
+    padPickerSel = (padPickerSel + step + cards.length) % cards.length;
+    cards[padPickerSel].focus({ preventScroll: true });
+    audio.ui('move');
+    return;
+  }
+  if (state.paused) {
+    cycleFocus(pauseFocusables(), dir === 'up' || dir === 'left' ? -1 : 1);
+    audio.ui('move');
+    return;
+  }
+  if (!document.getElementById('death').classList.contains('hidden')) {
+    cycleFocus(deathFocusables(), dir === 'up' || dir === 'left' ? -1 : 1);
+    audio.ui('move');
+  }
+}
+
+function handlePadUiConfirm() {
+  if (title.active && !menuEl.classList.contains('gone')) {
+    menu.kbdHighlight = true;
+    if (menuEl.classList.contains('splash')) { menu.leaveSplash(); return; }
+    if (menu.panel === 'settings') {
+      const key = settingRows[menu.row]?.dataset.key;
+      if (key === 'shake') menu.adjust(key, 0);
+      else menu.adjust(key, 1);
+      return;
+    }
+    if (menu.panel) { audio.ui('back'); menu.open(null); return; }
+    menu.activate();
+    return;
+  }
+  if (state.choosing && !state.paused) {
+    const cards = [...hud.cards.querySelectorAll('button.card')];
+    const card = cards[padPickerSel] || cards[0];
+    if (card) choose(+card.dataset.i);
+    return;
+  }
+  if (state.paused || !document.getElementById('death').classList.contains('hidden')) {
+    if (!activateFocusedUi()) {
+      if (state.paused) setPaused(false);
+      else startGame();
+    }
+  }
+}
+
+function handlePadUiBack() {
+  if (title.active && !menuEl.classList.contains('gone')) {
+    if (menu.panel) { audio.ui('back'); menu.open(null); }
+    return;
+  }
+  if (state.paused) { setPaused(false); return; }
+  if (!document.getElementById('death').classList.contains('hidden')) {
+    const ae = document.activeElement;
+    if (ae === deathNameInput) {
+      document.getElementById('retryBtn').focus({ preventScroll: true });
+      return;
+    }
+    document.getElementById('deathQuitBtn')?.focus({ preventScroll: true });
+  }
+}
+
+function pollGamepad(dt) {
+  const pad = readStandardPad();
+  if (!pad) {
+    padMove.set(0, 0);
+    padFire = false;
+    syncFiring();
+    return;
+  }
+
+  const move = padRadial(pad.axes[0] || 0, pad.axes[1] || 0);
+  padMove.set(move.x, move.y);
+  const aim = padRadial(pad.axes[2] || 0, pad.axes[3] || 0);
+  if (aim.len > 0) {
+    touchDirection.set(aim.x, aim.y).normalize();
+    touchAiming = true;
+    setPadAiming(true);
+    notePlayInput('gamepad');
+  }
+
+  const rt = padBtnValue(pad, 7);
+  const wantFire = rt >= PAD_FIRE_AXIS || padBtnDown(pad, 5);
+  if (wantFire !== padFire) {
+    padFire = wantFire;
+    syncFiring();
+    if (padFire) notePlayInput('gamepad');
+  }
+  if (padMove.lengthSq() > 0) notePlayInput('gamepad');
+
+  const uiDir = padUiDirection(pad);
+  if (uiDir) {
+    if (uiDir !== padUiAxis) {
+      padUiAxis = uiDir;
+      padUiTimer = PAD_UI_DELAY;
+      handlePadUiNav(uiDir);
+      notePlayInput('gamepad');
+    } else {
+      padUiTimer -= dt;
+      if (padUiTimer <= 0) {
+        padUiTimer = PAD_UI_REPEAT;
+        handlePadUiNav(uiDir);
+        notePlayInput('gamepad');
+      }
+    }
+  } else {
+    padUiAxis = '';
+    padUiTimer = 0;
+  }
+
+  if (padJust(pad, 0)) { handlePadUiConfirm(); notePlayInput('gamepad'); }
+  if (padJust(pad, 1)) { handlePadUiBack(); notePlayInput('gamepad'); }
+  if (padJust(pad, 2) || padJust(pad, 4)) {
+    if (state.running && !state.paused && !state.choosing) startReload();
+    notePlayInput('gamepad');
+  }
+  if (padJust(pad, 8)) {
+    const m = audio.toggleMute();
+    document.getElementById('reloadHint').textContent = m ? '[R] RELOAD   ·   [M] MUTED' : '[R] RELOAD';
+    notePlayInput('gamepad');
+  }
+  if (padJust(pad, 9)) {
+    if (state.running) setPaused(!state.paused);
+    else if (title.active && menuEl.classList.contains('splash')) menu.leaveSplash();
+    notePlayInput('gamepad');
+  }
+
+  snapPadButtons(pad);
 }
 
 // Lightweight run telemetry for the board (hidden columns). Last-used type + dt buckets only.
@@ -1428,7 +1696,8 @@ canvas.addEventListener('pointerdown', e => {
       touchYaw = player.rotation.y;
     }
     touchAiming = true;
-    firing = true;
+    setPadAiming(false);
+    syncFiring();
     stick.dot.classList.add('firing');
   }
   canvas.setPointerCapture(e.pointerId);
@@ -1443,16 +1712,15 @@ canvas.addEventListener('pointermove', e => {
       touchDirection.copy(stick.delta).normalize();
     }
     touchAiming = true;
-    firing = true;
+    setPadAiming(false);
+    syncFiring();
     stick.dot.classList.add('firing');
   }
 });
 function releaseStick(e) {
   if (e.pointerId === moveStick.id) resetStick(moveStick);
-  if (e.pointerId === aimStick.id) {
-    resetStick(aimStick);
-    firing = false;
-  }
+  if (e.pointerId === aimStick.id) resetStick(aimStick);
+  syncFiring();
 }
 window.addEventListener('pointerup', releaseStick, true);
 window.addEventListener('pointercancel', releaseStick, true);
@@ -1493,6 +1761,7 @@ window.addEventListener('keydown', e => {
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
   touchAiming = false;
+  setPadAiming(false);
   if (state.running) notePlayInput('pointer');
   const view = layoutSize();
   mouse.x = (e.clientX / view.w) * 2 - 1;
@@ -1500,14 +1769,25 @@ window.addEventListener('mousemove', e => {
 });
 canvas.addEventListener('mousedown', e => {
   if (e.button === 0) {
-    firing = true;
+    mouseFire = true;
+    syncFiring();
     if (state.running) notePlayInput('pointer');
   }
 });
-window.addEventListener('mouseup', () => { firing = false; });
-window.addEventListener('gamepadconnected', () => { gamepadLive = true; });
+window.addEventListener('mouseup', () => { mouseFire = false; syncFiring(); });
+window.addEventListener('gamepadconnected', () => {
+  gamepadLive = true;
+  padPrevButtons = [];
+});
 window.addEventListener('gamepaddisconnected', () => {
   gamepadLive = !![...(navigator.getGamepads?.() || [])].some(Boolean);
+  if (!gamepadLive) {
+    padMove.set(0, 0);
+    padFire = false;
+    setPadAiming(false);
+    syncFiring();
+    padPrevButtons = [];
+  }
 });
 window.addEventListener('contextmenu', e => e.preventDefault());
 window.addEventListener('selectstart', e => e.preventDefault());
@@ -3362,7 +3642,8 @@ function openPicker(healed) {
   audio.deal(offered.filter(Boolean).length);
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
-    if (state.choosing && !state.paused && finePointerUi()) {
+    if (state.choosing && !state.paused && (finePointerUi() || gamepadLive)) {
+      padPickerSel = 0;
       hud.cards.querySelector('button')?.focus({ preventScroll: true });
     }
   }, PICK_LOCKOUT_MS);
@@ -3763,9 +4044,9 @@ function setPaused(on) {
     `WAVE ${state.wave} · ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) {
-    if (finePointerUi()) document.getElementById('resumeBtn').focus({ preventScroll: true });
+    if (finePointerUi() || gamepadLive) document.getElementById('resumeBtn').focus({ preventScroll: true });
   } else if (state.choosing) {
-    if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+    if (finePointerUi() || gamepadLive) hud.cards.querySelector('button')?.focus({ preventScroll: true });
   } else {
     const ae = document.activeElement;
     if (ae && typeof ae.blur === 'function' && ae.closest?.('#pause')) ae.blur();
@@ -3851,7 +4132,10 @@ async function publishRunScore(name) {
 
 function die() {
   state.running = false;
+  mouseFire = false;
+  padFire = false;
   firing = false;
+  setPadAiming(false);
   // Bank a partial accuracy bonus for the unfinished wave.
   addScore(accuracyBonus());
   document.getElementById('deathStat').textContent =
@@ -3886,7 +4170,7 @@ function die() {
     // Callsign field still needs caret focus on touch; buttons must not.
     deathNameInput.focus({ preventScroll: true });
     deathNameInput.select();
-  } else if (finePointerUi()) {
+  } else if (finePointerUi() || gamepadLive) {
     document.getElementById('retryBtn').focus({ preventScroll: true });
   }
   audio.death();
@@ -4375,6 +4659,7 @@ function hurtPlayer(damage = 1) {
   state.dmgCd = HURT_IFRAMES;
   damageFlash();
   audio.hurt();
+  gamepadRumble(state.hp <= 0 ? 220 : 90, state.hp <= 0 ? 0.55 : 0.3, state.hp <= 0 ? 0.95 : 0.6);
   if (state.hp <= 0) die();
   return true;
 }
@@ -4658,8 +4943,8 @@ function update(dt, lightFrame = false) {
     // --- movement (always first, even on hitch frames) ---
     let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);
     let mz = keyboardAxis(['KeyW', 'ArrowUp'], ['KeyS', 'ArrowDown']);
-    mx += moveStick.delta.x;
-    mz += moveStick.delta.y;
+    mx += moveStick.delta.x + padMove.x;
+    mz += moveStick.delta.y + padMove.y;
     const moving = !!(mx || mz);
     if (moving) {
       const l = Math.max(1, Math.hypot(mx, mz));
@@ -4674,15 +4959,22 @@ function update(dt, lightFrame = false) {
     player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
     // --- aim ---
     raycaster.setFromCamera(mouse, camera);
-    // Right stick steers aim when deflected; otherwise the gun follows the move stick
+    // Right stick / pad steers aim when deflected; otherwise the gun follows the move stick
     // so walking up also points the rifle up until you override with the right thumb.
     const aimSteer = aimStick.id !== null && aimStick.delta.lengthSq() > AIM_DEAD * AIM_DEAD;
     const moveSteer = moveStick.id !== null && moveStick.delta.lengthSq() > AIM_DEAD * AIM_DEAD;
     if (aimSteer) {
       touchDirection.copy(aimStick.delta).normalize();
       touchAiming = true;
+      setPadAiming(false);
+    } else if (padAiming) {
+      touchAiming = true;
     } else if (moveSteer) {
       touchDirection.copy(moveStick.delta).normalize();
+      touchAiming = true;
+    } else if (padMove.lengthSq() > PAD_DEAD * PAD_DEAD && !padAiming) {
+      // Left stick alone turns the gun the way you walk until right stick aims.
+      touchDirection.copy(padMove).normalize();
       touchAiming = true;
     }
     if (touchAiming) {
@@ -4854,6 +5146,7 @@ function loop(now) {
   if (raw > 0.085) hitchCool = 0.28;
   const lightFrame = hitchCool > 0 || fxPressure() > 0.75;
   const dt = Math.min(raw > 0.085 ? 0.033 : 0.05, raw);
+  if (gamepadLive) pollGamepad(dt);
   if (!state.paused) update(dt, lightFrame);
   hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
