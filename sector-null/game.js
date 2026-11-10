@@ -1154,6 +1154,8 @@ const state = {
   // timed power-ups from drops (seconds remaining)
   pDamage: 0,
   pAmmo: 0,
+  // permanent ability drops (kept for the rest of the run)
+  magneticGems: false,
   sinceDrop: 0,  // kills since the last drop (pity timer)
   // wave control
   toSpawn: 0,
@@ -1510,6 +1512,7 @@ function updateHUD() {
   // power-up time left as a clock: 0:10 … 0:01 (what they do was taught on first pickup)
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
   let pu = '';
+  if (state.magneticGems) pu += '<div style="color:#7cff4a">MAGNETIC GEMS</div>';
   if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}${state.pDamage > 10 ? ' · EXTENDED' : ''}</div>`;
   if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}${state.pAmmo > 8 ? ' · EXTENDED' : ''}</div>`;
   if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
@@ -2488,9 +2491,11 @@ function killDrone(z, idx) {
 // ===================================================================
 const DROP_TYPES = [
   // Name already carries the +; an icon of '+' made the toast read "++1 SHIELD".
-  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 40 },
-  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
-  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
+  { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 40, kind: 'supply' },
+  { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25, kind: 'supply' },
+  { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25, kind: 'supply' },
+  // Permanent ability: score path for players who can live without another gun upgrade.
+  { id: 'magnet', name: 'MAGNETIC GEMS', detail: 'Gems surge toward you', icon: '◈', color: 0x7cff4a, weight: 18, kind: 'ability', once: true },
 ];
 // Teach each item once per run; saved browser history must not suppress a lesson.
 const seenDrops = new Set();
@@ -2508,6 +2513,12 @@ const DROP_MODELS = {
   ammo: [ // ammo can with a stenciled band
     [0.52, 0.3, 0.28, 0, 0, 0, 0x33566f, 0, 0, 0, 0.04], [0.54, 0.06, 0.3, 0, 0.17, 0, 0x243d55, 0, 0, 0, 0.02],
     [0.24, 0.04, 0.06, 0, 0.215, 0, 0x2a2c24, 0, 0, 0, 0.01], [0.3, 0.06, 0.006, 0, 0, 0.143, 0x76bcf0, 0, 0, 0, 0.002],
+  ],
+  magnet: [ // green crystal cluster — reads as an ability gem, not a supply crate
+    [0.18, 0.42, 0.18, 0, 0.02, 0, 0x7cff4a, 0.35, 0.4, 0.2, 0.04],
+    [0.14, 0.28, 0.14, -0.16, -0.04, 0.08, 0x4ad66a, -0.25, -0.5, 0.3, 0.03],
+    [0.12, 0.24, 0.12, 0.15, -0.06, -0.1, 0x9dff6a, 0.4, 0.35, -0.25, 0.03],
+    [0.08, 0.14, 0.08, 0.02, 0.22, 0.12, 0xc8ff9a, 0.2, 0.15, 0.5, 0.02],
   ],
 };
 const dropGlow = glowTexture();
@@ -2562,12 +2573,19 @@ const DROP_LIFE = 6;      // seconds of active play before an uncollected drop v
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
 const drops = [];
 
+function dropAllowed(t) {
+  if (t.id === 'med' && state.hp >= state.maxHp) return false;
+  // Permanent abilities only drop once per run.
+  if (t.once && t.id === 'magnet' && state.magneticGems) return false;
+  return true;
+}
+
 function maybeDrop(pos) {
   state.sinceDrop++;
   if (Math.random() > DROP_CHANCE + state.dropBonus && state.sinceDrop < DROP_PITY) return;
   state.sinceDrop = 0;
-  // no medkits at full health — they'd be a wasted drop
-  const pool = DROP_TYPES.filter(t => t.id !== 'med' || state.hp < state.maxHp);
+  const pool = DROP_TYPES.filter(dropAllowed);
+  if (!pool.length) return;
   let r = Math.random() * pool.reduce((a, t) => a + t.weight, 0);
   spawnDrop(pool.find(t => (r -= t.weight) < 0) || pool[0], pos);
 }
@@ -2603,6 +2621,7 @@ function collect(type) {
   if (type.id === 'med') { state.hp = Math.min(state.maxHp, state.hp + 1); healGlow = 1; }
   else if (type.id === 'dmg') state.pDamage += 10;
   else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo += 8; state.reloading = false; state.mag = state.magSize; }
+  else if (type.id === 'magnet') state.magneticGems = true;
 }
 
 function updateDrops(dt) {
@@ -2640,6 +2659,8 @@ function updateDrops(dt) {
 const EMERALD_LIFE = 2.2;
 const EMERALD_WARN = 0.6;
 const EMERALD_MAGNET = 5.5;
+// With Magnetic Gems, pull reaches past the deck walls to off-map kills.
+const EMERALD_MAGNET_ABILITY = 72;
 const EMERALD_PICK = 0.75;
 const EMERALD_VALUE = 40;
 const EMERALD_CHAIN_MS = 750;
@@ -2688,6 +2709,8 @@ function collectEmerald() {
 }
 
 function updateEmeralds(dt) {
+  const magnetRange = state.magneticGems ? EMERALD_MAGNET_ABILITY : EMERALD_MAGNET;
+  const surge = state.magneticGems;
   for (let i = emeralds.length - 1; i >= 0; i--) {
     const e = emeralds[i], ud = e.userData;
     ud.life -= dt; ud.t += dt;
@@ -2695,8 +2718,11 @@ function updateEmeralds(dt) {
     const dx = player.position.x - e.position.x, dz = player.position.z - e.position.z;
     const dist = Math.hypot(dx, dz);
     if (dist < EMERALD_PICK) { collectEmerald(); disposeEmerald(e); emeralds.splice(i, 1); continue; }
-    if (dist < EMERALD_MAGNET && dist > 1e-4) {
-      const pull = 9 + (1 - dist / EMERALD_MAGNET) * 10;
+    if (dist < magnetRange && dist > 1e-4) {
+      // Ability pull is a real surge — strong enough to yank gems in from outside the walls.
+      const pull = surge
+        ? 14 + (1 - dist / magnetRange) * 22
+        : 9 + (1 - dist / magnetRange) * 10;
       e.position.x += (dx / dist) * pull * dt;
       e.position.z += (dz / dist) * pull * dt;
     }
@@ -3361,7 +3387,7 @@ function resetGame(keep = false) {
     mag: BASE_STATS.magSize, reloading: false, reloadT: 0,
     fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
-    pDamage: 0, pAmmo: 0, sinceDrop: 0,
+    pDamage: 0, pAmmo: 0, magneticGems: false, sinceDrop: 0,
   });
   emeraldChain = 0;
   botMilestonesDone.clear();
