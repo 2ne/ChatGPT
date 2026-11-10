@@ -4014,24 +4014,12 @@ function showBest() {
 
 const WREATH = `<svg class="wreath" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14c-1.5-1.5-2-3.5-1.5-5.5M17 14c1.5-1.5 2-3.5 1.5-5.5M8.5 17c-1.2-.4-2.3-1.4-2.8-2.7M15.5 17c1.2-.4 2.3-1.4 2.8-2.7M9 19c-1-.8-1.6-1.8-1.8-3M15 19c1-.8 1.6-1.8 1.8-3"/></svg>`;
 
-function formatBoardDate(value) {
-  if (!value) return '';
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return String(value).slice(0, 16);
-  return d.toLocaleString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
 async function loadScoresBoard() {
   const list = document.getElementById('scoresList');
   const status = document.getElementById('scoresStatus');
   list.innerHTML = '';
   status.textContent = 'Loading board…';
+  status.hidden = false;
   try {
     const data = await fetchScores();
     const scores = data.scores || [];
@@ -4040,7 +4028,7 @@ async function loadScoresBoard() {
       return;
     }
     if (!scores.length) {
-      status.textContent = 'No scores yet — finish a run';
+      status.textContent = 'No scores recorded yet';
       return;
     }
     list.innerHTML = scores.map((row) => {
@@ -4049,10 +4037,10 @@ async function loadScoresBoard() {
         <span class="scores-rank">${top ? WREATH : ''}<b>${row.rank}</b></span>
         <span class="scores-score">${formatScore(row.score)}</span>
         <span class="scores-name">${row.name}</span>
-        <span class="scores-meta">BUILD ${row.build || '—'} · ${formatBoardDate(row.createdAt)}</span>
       </div>`;
     }).join('');
-    status.textContent = `${scores.length} logged`;
+    status.textContent = '';
+    status.hidden = true;
   } catch {
     status.textContent = 'Board unreachable';
   }

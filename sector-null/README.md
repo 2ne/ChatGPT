@@ -4,7 +4,7 @@ A top-down sci-fi survival shooter and competition remix of [Abandon All Hope by
 
 ## Status
 
-Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Local high score and settings are saved in the browser. Global high scores go to a Neon-backed board (name, score, wave, kills, build, timestamp). On death the game asks for a 3-letter callsign, prefills the last one from local storage, and posts any score above zero.
+Playable first build. The wave system, enemy pathing, destructible entrances and character animation are adapted from the supplied original. Sector Null has a new Three.js reactor deck, armoured operator, security drones, interface and procedural Web Audio effects. The Core Zero art direction informed the smoked glass, machined hardware and cyan and amber lighting. Local high score and settings are saved in the browser. The global leaderboard is Neon-backed (name, score, wave, kills, build, timestamp; build/time stay server-side only). On death the game asks for a 3-letter callsign, prefills the last one from local storage, and posts any score above zero.
 
 Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORING.md](./SCORING.md).
 
