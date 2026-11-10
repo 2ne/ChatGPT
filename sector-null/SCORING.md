@@ -69,7 +69,7 @@ On wave clear, apply the accuracy bonus, then reset counters for the next wave. 
 | Title menu | Best run uses high score |
 | Death / Game Over | Final score, wave, bots down + high-score callout |
 | Pause | Wave · score |
-| Combat toasts | Milestone notices at 10 / 5 / 3 / 1 bots left |
+| Combat toasts | Milestone notices at 10 / 5 / 3 bots left (not 1 — that clashes with the boss finale / picker) |
 
 No floating “+100” spam required for v1; live Score ticking is enough. Emerald chain can optionally flash the score colour briefly.
 

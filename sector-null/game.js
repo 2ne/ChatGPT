@@ -1537,11 +1537,12 @@ const toastQueue = [];
 let toastTime = 0;
 let activePickupHint = null;
 let toastIsBotsLeft = false;
-const BOT_MILESTONES = [10, 5, 3, 1];
+// No "1 BOT LEFT" — that fires as the boss dies / wave clears and fights the picker.
+const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
 
 function botsLeftLabel(n) {
-  return n === 1 ? '1 BOT LEFT' : `${n} BOTS LEFT`;
+  return `${n} BOTS LEFT`;
 }
 
 function bannerShowing() {
@@ -1552,8 +1553,20 @@ function bossOnField() {
   return drones.some(z => z.userData.boss);
 }
 
+function clearBotsLeftToasts() {
+  for (let i = toastQueue.length - 1; i >= 0; i--) {
+    if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
+  }
+  if (toastIsBotsLeft) {
+    hud.toast.style.opacity = 0;
+    toastTime = 0.15;
+    toastIsBotsLeft = false;
+  }
+}
+
 function checkBotMilestones(remaining) {
   if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
+  if (bossDeath.active || remaining <= 0) return;
   if (bannerShowing() || bossOnField()) return;
   // Mark every crossed threshold, but only announce the lowest new one so rapid
   // multi-kills do not stack 10 / 5 / 3 toasts back-to-back.
@@ -1565,9 +1578,7 @@ function checkBotMilestones(remaining) {
     }
   }
   if (hit === null) return;
-  for (let i = toastQueue.length - 1; i >= 0; i--) {
-    if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
-  }
+  clearBotsLeftToasts();
   toastQueue.push({ text: botsLeftLabel(hit), color: '#82eaf5', botsLeft: true });
   if (!activePickupHint) toastTime = Math.min(toastTime, 0.12);
 }
@@ -1789,9 +1800,7 @@ function spawnWaveBoss() {
     type = { name: Math.floor(state.wave / 5) % 2 ? 'REACTOR WARDEN' : 'NULL OVERSEER', kit: 4, health: hp * 1.2, speed: 0.72, size: 1.55, style: 'heavy', boss: true, milestone: true, loco: 'stomp' };
   }
   spawnDrone(undefined, type);
-  for (let i = toastQueue.length - 1; i >= 0; i--) {
-    if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
-  }
+  clearBotsLeftToasts();
   showBanner(type.name, '', 2.5, 'boss');
 }
 
@@ -2442,6 +2451,7 @@ function killPoints(type) {
 }
 
 function finishWaveClear() {
+  clearBotsLeftToasts();
   clearEnemyBolts();
   awardWaveBonuses();
   // Victory banks the reward, including gems from the final boss.
@@ -3158,6 +3168,7 @@ function beginBossDeath(z) {
   if (ud.chargeRing) ud.chargeRing.visible = false;
   if (ud.climb >= 0) endClimb(z, true);
   clearEnemyBolts();
+  clearBotsLeftToasts();
   bossDeath.active = true;
   bossDeath.t = 0;
   bossDeath.boss = z;
