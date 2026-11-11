@@ -1558,11 +1558,13 @@ body.pad-aiming #game {
   letter-spacing: 1px;
   gap: 6px;
 }
-.upgrade-preview {
+.icon-stage {
   width: 100%;
   height: 88px;
-  margin: 8px 0;
-  color: var(--accent);
+  margin: 0;
+  display: block;
+  pointer-events: none;
+  background: transparent;
 }
 .cname {
   font-size: 23px;
@@ -1622,9 +1624,12 @@ body.pad-aiming #game {
   .recommended .ctop {
     grid-column: 1 / -1;
   }
-  .recommended .upgrade-preview {
+  .recommended .icon-stage {
     grid-row: 2 / 6;
     height: 100px;
+  }
+  .recommended .cname {
+    margin-top: 0;
   }
   .recommended .clvl {
     grid-column: 2;
@@ -1633,11 +1638,12 @@ body.pad-aiming #game {
   #cards .card {
     padding: 12px;
   }
-  .upgrade-preview {
+  .icon-stage {
     height: 62px;
   }
   .cname {
     font-size: 20px;
+    margin-top: -18px;
   }
   .cdesc {
     font-size: 14px;
@@ -1663,12 +1669,13 @@ body.pad-aiming #game {
   #cards .card {
     padding: 8px;
   }
-  .upgrade-preview {
+  .icon-stage {
     height: 44px;
-    margin: 2px 0;
+    margin: 0;
   }
   .cname {
     font-size: 18px;
+    margin-top: -12px;
   }
   .cdesc {
     font-size: 13px;
@@ -2118,8 +2125,23 @@ body.pad-aiming #game {
   clip-path: polygon(0 0, 100% 0, 100% 65%, calc(100% - 9px) 100%, 0 100%);
 }
 #cards .ckey { font-family: "Oxanium", sans-serif; font-size: 18px; padding: 3px 8px; border-color: color-mix(in srgb, var(--accent) 45%, #263747); background: #06101ba8; }
-#cards .upgrade-preview { height: 130px; margin: 14px 0 10px; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 65%, transparent)); }
-#cards .cname { font-size: clamp(24px, 2.3vw, 32px); letter-spacing: .025em; line-height: 1.1; }
+#cards .icon-stage {
+  height: 168px;
+  margin: 0;
+  position: relative;
+  top: -10px;
+  pointer-events: none;
+  background: transparent;
+}
+#cards .cname {
+  position: relative;
+  z-index: 1;
+  margin-top: -48px;
+  font-size: clamp(24px, 2.3vw, 32px);
+  letter-spacing: .025em;
+  line-height: 1.1;
+  text-shadow: 0 2px 0 #000, 0 0 12px #040e18, 0 0 4px #040e18;
+}
 #cards .cdesc { font-size: 18px; line-height: 1.25; min-height: 46px; margin: 8px 0 18px; }
 #cards .cstat {
   width: 100%;
@@ -2184,9 +2206,9 @@ body.pad-aiming #game {
   #cards .ctop { font-size: 10px; letter-spacing: .03em; }
   #cards .ckey { font-size: 13px; padding: 2px 5px; }
   .recommended .ctop > span:first-child { padding: 4px 8px; }
-  #cards .upgrade-preview { height: 74px; margin: 5px 0; }
-  #cards .recommended .upgrade-preview { height: 100px; }
-  #cards .cname { font-size: 21px; }
+  #cards .icon-stage { height: 96px; top: -4px; }
+  #cards .recommended .icon-stage { height: 118px; }
+  #cards .cname { font-size: 21px; margin-top: -28px; }
   #cards .cdesc { font-size: 14px; min-height: 36px; margin: 6px 0 10px; }
   #cards .cstat { font-size: 13px; padding: 8px 3px; }
   #cards .clvl { margin-top: 10px; }
@@ -2200,8 +2222,8 @@ body.pad-aiming #game {
   #cards .ctop { font-size: 11px; min-height: 20px; }
   #cards .ckey { font-size: 12px; padding: 2px 5px; }
   .recommended .ctop > span:first-child { padding: 3px 8px; }
-  #cards .upgrade-preview { height: clamp(40px, 12vh, 70px); margin: 5px 0; }
-  #cards .cname { font-size: 21px; }
+  #cards .icon-stage { height: clamp(48px, 14vh, 88px); top: -4px; }
+  #cards .cname { font-size: 21px; margin-top: -22px; }
   #cards .cdesc { font-size: 14px; min-height: 32px; margin: 5px 0 8px; }
   #cards .cstat { font-size: 13px; padding: 7px 3px; }
   #cards .clvl { margin-top: 10px; }

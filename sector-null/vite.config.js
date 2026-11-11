@@ -27,4 +27,13 @@ export default defineConfig({
     __BUILD_VERSION__: JSON.stringify(buildVersion),
     __SCORES_API__: JSON.stringify(scoresApi),
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(projectRoot, 'index.html'),
+        upgradeCards3d: path.resolve(projectRoot, 'upgrade-cards-3d.html'),
+        upgradeCards: path.resolve(projectRoot, 'upgrade-cards.html'),
+      },
+    },
+  },
 });
