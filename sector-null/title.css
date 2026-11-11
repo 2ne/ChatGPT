@@ -518,7 +518,7 @@ body.titling #menu {
 #scoresPanel h2 {
   color: #fff;
   letter-spacing: 0.22em;
-  margin-bottom: 40px;
+  margin-bottom: 22px;
 }
 #settingsPanel h2 {
   margin-bottom: 22px;
@@ -532,7 +532,7 @@ body.titling #menu {
   padding: 0 16px;
 }
 .scores-head {
-  margin: 0 0 8px;
+  margin: 4px 0 8px;
   color: #45ecff;
   font-size: 13px;
   font-weight: 700;
