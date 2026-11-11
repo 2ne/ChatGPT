@@ -1122,7 +1122,7 @@ body.paused #flash {
     justify-content: center;
     align-items: stretch;
     gap: clamp(6px, 1.3vw, 12px);
-    margin-top: clamp(18px, 6.2dvh, 28px);
+    margin-top: clamp(6px, 2.2dvh, 12px);
     padding: 0;
     max-width: 100%;
   }
@@ -1132,6 +1132,17 @@ body.paused #flash {
     min-width: 120px;
     min-height: 44px;
     padding: clamp(5px, 1.5dvh, 9px) clamp(8px, 1.3vw, 14px) clamp(6px, 1.6dvh, 10px);
+  }
+  /* Short landscape phones: grow 3D icons into spare vertical space (~80px on ~473px-tall viewports). */
+  #cards .icon-stage {
+    height: clamp(108px, 30dvh, 148px);
+    top: -8px;
+  }
+  #cards .recommended .icon-stage {
+    height: clamp(118px, 32dvh, 156px);
+  }
+  #cards .cname {
+    margin-top: clamp(-42px, -8.5dvh, -32px);
   }
   .ctop {
     font-size: clamp(8px, 2.4dvh, 11px);
@@ -1664,18 +1675,19 @@ body.pad-aiming #game {
     padding: calc(var(--safe-top) + 8px) calc(var(--safe-right) + 16px) calc(var(--safe-bottom) + 8px) calc(var(--safe-left) + 16px);
   }
   #cards {
-    margin-top: clamp(18px, 6dvh, 28px);
+    margin-top: clamp(6px, 2.2dvh, 12px);
   }
   #cards .card {
     padding: 8px;
   }
+  /* Generic short-height fallback; #cards .icon-stage media rules above override for the picker. */
   .icon-stage {
-    height: 44px;
+    height: 72px;
     margin: 0;
   }
   .cname {
     font-size: 18px;
-    margin-top: -12px;
+    margin-top: -18px;
   }
   .cdesc {
     font-size: 13px;
@@ -2214,19 +2226,21 @@ body.pad-aiming #game {
   #cards .clvl { margin-top: 10px; }
 }
 @media (max-height: 600px) and (min-width: 601px) {
-  #pickerTitle { font-size: 30px; padding-bottom: 4px; }
-  #pickerTitle::after { height: 7px; margin-top: 4px; }
+  #pickerTitle { font-size: 28px; padding-bottom: 2px; }
+  #pickerTitle::after { height: 6px; margin-top: 2px; }
   #pickerSub { font-size: 11px; letter-spacing: .15em; }
-  #cards { width: min(920px, 100%); gap: 16px; margin-top: 16px; }
-  #cards .card { padding: 14px; }
-  #cards .ctop { font-size: 11px; min-height: 20px; }
+  #cards { width: min(960px, 100%); gap: 14px; margin-top: 8px; }
+  #cards .card { padding: 10px 12px 8px; }
+  #cards .ctop { font-size: 11px; min-height: 18px; }
   #cards .ckey { font-size: 12px; padding: 2px 5px; }
   .recommended .ctop > span:first-child { padding: 3px 8px; }
-  #cards .icon-stage { height: clamp(48px, 14vh, 88px); top: -4px; }
-  #cards .cname { font-size: 21px; margin-top: -22px; }
-  #cards .cdesc { font-size: 14px; min-height: 32px; margin: 5px 0 8px; }
-  #cards .cstat { font-size: 13px; padding: 7px 3px; }
-  #cards .clvl { margin-top: 10px; }
+  /* Was capped ~66px on a 473px-tall phone; use spare height so icons read closer to desktop. */
+  #cards .icon-stage { height: clamp(108px, 30dvh, 148px); top: -8px; }
+  #cards .recommended .icon-stage { height: clamp(118px, 32dvh, 156px); }
+  #cards .cname { font-size: 20px; margin-top: clamp(-42px, -8.5dvh, -32px); }
+  #cards .cdesc { font-size: 13px; min-height: 28px; margin: 4px 0 6px; }
+  #cards .cstat { font-size: 12px; padding: 6px 3px; }
+  #cards .clvl { margin-top: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   #cards .card, .card-frame { transition: none; }
