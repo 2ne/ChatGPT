@@ -797,23 +797,6 @@ kbd.wide {
   background: #31798a;
   box-shadow: none;
 }
-.toggle {
-  display: flex;
-  gap: 6px;
-  font-size: 16px;
-}
-.toggle i {
-  font-style: normal;
-  padding: 1px 10px;
-  border: 1px solid #2c2f37;
-  color: #97b0bd;
-}
-.toggle i.on {
-  border-color: #45ecff;
-  color: #e2fcff;
-  background: #45ecff33;
-}
-
 /* the pause and death menus */
 body.paused #hud,
 body.paused #picker,

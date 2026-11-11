@@ -204,12 +204,13 @@ const store = {
   set(k, v) { try { localStorage.setItem('sector-null-' + k, JSON.stringify(v)); } catch { /* storage is optional */ } },
 };
 const settings = (() => {
-  const defaults = { music: 7, sfx: 8, shake: !matchMedia('(prefers-reduced-motion: reduce)').matches };
+  const defaults = { music: 7, sfx: 8 };
   const saved = store.get('settings', {});
   const next = Object.assign({}, defaults, saved);
   // Older builds stored a single master fader; treat it as Sound FX.
   if (saved.sfx == null && typeof saved.master === 'number') next.sfx = saved.master;
   delete next.master;
+  delete next.shake;
   return next;
 })();
 const audio = createAudio(settings, () => player.position);
@@ -1525,8 +1526,7 @@ function handlePadUiConfirm() {
     if (menuEl.classList.contains('splash')) { menu.leaveSplash(); return; }
     if (menu.panel === 'settings') {
       const key = settingRows[menu.row]?.dataset.key;
-      if (key === 'shake') menu.adjust(key, 0);
-      else menu.adjust(key, 1);
+      if (key) menu.adjust(key, 1);
       return;
     }
     if (menu.panel) { audio.ui('back'); menu.open(null); return; }
@@ -1542,9 +1542,7 @@ function handlePadUiConfirm() {
   if (state.paused) {
     const row = pauseSettingRowFocused();
     if (row) {
-      const key = row.dataset.key;
-      if (key === 'shake') menu.adjust(key, 0);
-      else menu.adjust(key, 1);
+      menu.adjust(row.dataset.key, 1);
       return;
     }
     if (!activateFocusedUi()) setPaused(false);
@@ -1887,11 +1885,8 @@ window.addEventListener('keydown', e => {
       menu.adjust(row.dataset.key, left ? -1 : 1);
       e.preventDefault();
     } else if (ok) {
-      if (row) {
-        const key = row.dataset.key;
-        if (key === 'shake') menu.adjust(key, 0);
-        else menu.adjust(key, 1);
-      } else activateFocusedUi();
+      if (row) menu.adjust(row.dataset.key, 1);
+      else activateFocusedUi();
       e.preventDefault();
     }
     return;
@@ -3921,7 +3916,7 @@ function bossOrigin(z) {
 }
 
 function bumpShake(amount) {
-  if (!settings.shake || reducedMotion.matches) return;
+  if (reducedMotion.matches) return;
   state.shake = Math.max(state.shake, amount);
 }
 
@@ -4636,8 +4631,8 @@ const menu = {
     settingRows.forEach((r, k) => r.classList.toggle('sel', k === i));
   },
   adjust(key, dir) {
-    if (key === 'shake') settings.shake = dir === 0 ? !settings.shake : dir > 0;
-    else settings[key] = THREE.MathUtils.clamp(settings[key] + dir, 0, 10);
+    if (!Object.prototype.hasOwnProperty.call(settings, key)) return;
+    settings[key] = THREE.MathUtils.clamp(settings[key] + dir, 0, 10);
     store.set('settings', settings);
     audio.applyVolume();
     audio.ui('move');
@@ -4646,13 +4641,8 @@ const menu = {
   drawSettings() {
     for (const r of [...titleSettingRows, ...pauseSettingRows]) {
       const k = r.dataset.key, v = settings[k];
-      if (k === 'shake') {
-        r.querySelector('.toggle').innerHTML = `<i class="${v ? 'on' : ''}" data-v="1">ON</i><i class="${v ? '' : 'on'}" data-v="0">OFF</i>`;
-        r.querySelector('em').textContent = '';
-      } else {
-        r.querySelector('.meter').innerHTML = Array.from({ length: 10 }, (_, n) => `<i class="${n < v ? 'on' : ''}" data-v="${n + 1}"></i>`).join('');
-        r.querySelector('em').textContent = v * 10;
-      }
+      r.querySelector('.meter').innerHTML = Array.from({ length: 10 }, (_, n) => `<i class="${n < v ? 'on' : ''}" data-v="${n + 1}"></i>`).join('');
+      r.querySelector('em').textContent = v * 10;
     }
   },
   // keyboard: returns true if the title used the key
@@ -4668,7 +4658,6 @@ const menu = {
       if (up) { this.kbdHighlight = true; this.selectRow(this.row - 1); }
       else if (down) { this.kbdHighlight = true; this.selectRow(this.row + 1); }
       else if (left || right) this.adjust(key, left ? -1 : 1);
-      else if (ok && key === 'shake') this.adjust(key, 0);
       else if (back) { audio.ui('back'); this.open(null); }
     } else if (this.panel) {
       if (this.panel === 'scores') {
@@ -4856,9 +4845,8 @@ function bindSettingRow(r, onSelect) {
   r.addEventListener('focus', onSelect);
   bindTap(r, e => {
     const v = e.target.dataset.v, key = r.dataset.key;
-    if (v === undefined) { if (key === 'shake') menu.adjust(key, 0); return; }
-    if (key === 'shake') menu.adjust(key, v === '1' ? 1 : -1);
-    else menu.adjust(key, +v - settings[key]);
+    if (v === undefined) return;
+    menu.adjust(key, +v - settings[key]);
   });
 }
 titleSettingRows.forEach((r, i) => bindSettingRow(r, () => menu.selectRow(i)));
