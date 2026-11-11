@@ -3765,12 +3765,22 @@ function recommendationScore(u) {
 }
 
 function upgradePreview(u) {
+  // Facets share the category colour, with lighter crown faces and a dark keel.
+  const crystal = '<path d="M0-15L-11-1 0 20 11-1Z" fill="currentColor" fill-opacity=".28"/>' +
+    '<path d="M0-15L-11-1H0Z" fill="#eaffdc" fill-opacity=".8" stroke="none"/>' +
+    '<path d="M0-15L11-1H0Z" fill="currentColor" fill-opacity=".85" stroke="none"/>' +
+    '<path d="M-11-1L0 20V-1Z" fill="currentColor" fill-opacity=".55" stroke="none"/>' +
+    '<path d="M0-15V20M-11-1H11" stroke="#dcffbc" stroke-width=".7"/>';
   const paths = {
-    bot: '<circle cx="48" cy="29" r="19" fill="#eef3f7" stroke="#fff"/><circle cx="48" cy="29" r="6" fill="#172733" stroke="#172733"/><path d="M48 29h19" stroke="#506375" stroke-width="6"/>',
+    bot: '<circle cx="48" cy="29" r="24" stroke-width="1.3"/><circle cx="48" cy="29" r="19" fill="#eef3f7" stroke="#fff"/><circle cx="48" cy="29" r="6" fill="#172733" stroke="#172733"/><path d="M48 29h19" stroke="#506375" stroke-width="6"/>',
     mine: '<path d="M20 42h60M36 38l5-12h18l5 12zM50 18v-8M25 20l8 6m42-6-8 6"/>',
     shield: '<path d="M50 8l23 8v14c0 12-23 23-23 23S27 42 27 30V16zM40 30h20m-10-10v20"/>',
     rifle: '<path d="M10 28h25m-6-7 8 7-8 7"/>',
-    gems: '<path d="M50 8l10 14-10 30L40 22zM28 20l8 10-6 18-10-12zM72 18l8 12-8 16-8-10z"/><path class="preview-shot" d="M20 48h60"/>',
+    gems: '<ellipse cx="50" cy="54" rx="20" ry="4.5" stroke-width=".7" opacity=".45"/>' +
+      '<ellipse cx="50" cy="54" rx="12" ry="2.5" stroke-width="2"/>' +
+      '<path d="M50 38V52M33 40Q43 42 46 52M67 40Q57 42 54 52" stroke-width="1.2"/>' +
+      '<path d="M48 39L50 51 52 39Z" fill="currentColor" stroke="none"/>' +
+      `<g stroke-width="1" stroke-linejoin="round"><g transform="translate(50 17)">${crystal}</g><g transform="translate(23 28) rotate(-17) scale(.6)">${crystal}</g><g transform="translate(77 28) rotate(17) scale(.6)">${crystal}</g></g>`,
   };
   let art = u.cat === 'engineer' ? paths[u.id === 'mine' || u.id === 'shock' ? 'mine' : 'bot']
     : u.cat === 'survival' ? paths.shield
@@ -3778,11 +3788,11 @@ function upgradePreview(u) {
     : paths.rifle;
   if (u.id === 'spread') art += Array.from({ length: 2 + state.spread }, (_, i) => `<path class="preview-shot" d="M45 28L90 ${10 + i * 36 / (1 + state.spread)}"/>`).join('');
   else if (u.cat === 'firepower' || u.cat === 'handling') art += '<path class="preview-shot" d="M48 28h14m9 0h14"/><path d="M92 14v28"/>';
-  if (u.id === 'botBomb') art += '<circle class="preview-shot" cx="83" cy="28" r="7"/>';
-  if (u.id === 'botGun') art += '<path class="preview-shot" d="M74 22h20m-20 12h20"/>';
+  if (u.id === 'botBomb') art += '<circle cx="84" cy="29" r="7"/>';
+  if (u.id === 'botGun') art += '<path d="M72 23h22M72 35h22"/>';
   // Rank is already shown by the pip row under the card; NEW/UPGRADE is
   // obvious from empty vs filled pips and the card name.
-  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle class="preview-orbit" cx="50" cy="30" r="27" stroke-width="0.5"/>${art}</svg>`;
+  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg>`;
 }
 
 function openPicker(healed) {

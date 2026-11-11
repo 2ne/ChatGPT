@@ -2119,7 +2119,6 @@ body.pad-aiming #game {
 }
 #cards .ckey { font-family: "Oxanium", sans-serif; font-size: 18px; padding: 3px 8px; border-color: color-mix(in srgb, var(--accent) 45%, #263747); background: #06101ba8; }
 #cards .upgrade-preview { height: 130px; margin: 14px 0 10px; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 65%, transparent)); }
-.preview-orbit { opacity: .22; }
 #cards .cname { font-size: clamp(24px, 2.3vw, 32px); letter-spacing: .025em; line-height: 1.1; }
 #cards .cdesc { font-size: 18px; line-height: 1.25; min-height: 46px; margin: 8px 0 18px; }
 #cards .cstat {
