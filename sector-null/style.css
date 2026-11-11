@@ -833,61 +833,134 @@ body.paused #flash {
   visibility: hidden;
 }
 #pause {
-  background: #060e19bd;
+  --ice: #e2fcff;
+  --cyan: #45ecff;
+  --pink: #ff368c;
+  background: radial-gradient(ellipse at 50% 28%, #0a1a2ecc 0%, #050c18d8 42%, #030811f2 100%), linear-gradient(90deg, #5e103428, transparent 28%, transparent 78%, #07142540);
 }
 #pausePanel {
-  width: min(100%, 440px);
+  position: relative;
+  width: min(100%, 420px);
   max-height: 100%;
   overflow: auto;
-  padding: clamp(18px, 5vw, 32px);
-  background: #0c1925;
-  border: 1px solid #36576c;
-  border-top: 2px solid #64dfee;
-  box-shadow: 0 18px 54px #0009;
+  padding: clamp(28px, 5vw, 40px) clamp(22px, 4vw, 36px) clamp(24px, 4vw, 32px);
+  text-align: center;
+  color: var(--ice);
+  isolation: isolate;
+  container-type: inline-size;
+}
+#pausePanel .station-frame {
+  inset: 0;
+  background:
+    linear-gradient(90deg, #ff3d9760, #ff3d9735 18%, transparent 31%) top left / 100% 1px no-repeat,
+    linear-gradient(90deg, transparent 58%, #24e7f076) bottom left / 100% 1px no-repeat,
+    linear-gradient(#ff3d9790, #ff3d9745 84%, transparent) left / 1px 100% no-repeat,
+    linear-gradient(transparent 17%, #22e8fa1d 76%, #22e8fa7a) right / 1px 100% no-repeat;
 }
 #pauseTitle {
-  font-size: clamp(36px, 8vw, 56px);
-  line-height: 1;
-  letter-spacing: 0.1em;
-  color: #e4f1f5;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  font:
+    700 clamp(40px, 9vw, 64px)/0.9 "Oxanium",
+    "Rajdhani",
+    sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.pause-word {
+  position: relative;
+  display: inline-block;
+  color: #8ef5ff;
+  background: linear-gradient(180deg, #eaffff 6%, #b6faff 31%, #66e8ff 63%, #53ddf3 94%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 0.065em #2cdefa54);
+}
+.pause-word::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 12%;
+  bottom: 8%;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, #ff368c88, #ff368c22 55%, transparent) 18% 0 / 4px 100% no-repeat,
+    linear-gradient(180deg, #ff368c66, #ff368c18 55%, transparent) 28% 0 / 3px 88% no-repeat;
+  pointer-events: none;
 }
 #pauseStat {
-  color: #b2c8d6;
-  font-size: 16px;
-  letter-spacing: 0.1em;
-  margin-top: 8px;
+  margin-top: 14px;
+  color: #9ec8d8;
+  font-size: clamp(14px, 2.2vw, 17px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 #pauseSettings {
-  margin-top: 18px;
+  margin-top: 22px;
+  text-align: left;
 }
 #pauseSettings .srow {
   outline: none;
+  margin: 0;
+  padding: 10px 8px 10px 14px;
+  border-left: 2px solid #45ecff66;
+  grid-template-columns: 1fr auto 40px;
+  gap: 12px;
+  font-size: 16px;
+  letter-spacing: 0.14em;
+  color: #9ec8d8;
+}
+#pauseSettings .srow.sel {
+  border-left-color: var(--cyan);
+  background: linear-gradient(90deg, #45ecff22, transparent);
+  color: var(--ice);
+}
+#pauseSettings .srow b {
+  color: inherit;
+}
+#pauseSettings .meter i {
+  width: 10px;
+  height: 16px;
+}
+#pauseSettings .meter i.on {
+  background: var(--cyan);
+  box-shadow: 0 0 8px #45ecff66;
+}
+#pauseSettings .srow:not(.sel) .meter i.on {
+  background: #31798a;
+  box-shadow: none;
+}
+#pauseSettings .toggle i.on {
+  border-color: var(--cyan);
+  color: var(--ice);
+  background: #45ecff33;
 }
 #pauseMenu {
   display: grid;
-  gap: 8px;
-  margin-top: 18px;
+  gap: 10px;
+  width: min(100%, 320px);
+  margin: 26px auto 0;
 }
-#pauseMenu button {
-  min-height: 44px;
-  padding: 8px 16px;
-  font: inherit;
-  font-size: 18px;
-  background: #122736;
-  color: #e4f1f5;
-  border: 1px solid #416376;
-  cursor: pointer;
+#pauseMenu .death-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
 }
-#pauseMenu #resumeBtn {
-  background: #a2f2fa;
-  color: #0b1a23;
-  border-color: #a2f2fa;
+#pauseMenu .pause-ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: currentColor;
 }
-#pause .sub {
-  color: #b2c8d6;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  margin-top: 12px;
+#pauseMenu #resumeBtn::after {
+  background:
+    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
+    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
 }
 #death {
   --ice: #e2fcff;
@@ -1243,24 +1316,21 @@ body.paused #flash {
     filter: drop-shadow(0 0 10px var(--accent)) brightness(1.25);
     transform: scale(1.06);
   }
-  #pauseMenu button:hover {
-    background: #1e3b4e;
-  }
-  #pauseMenu #resumeBtn:hover {
-    background: #cefaff;
-  }
   .death-action:hover,
-  #deathMenu button:hover {
+  #deathMenu button:hover,
+  #pauseMenu .death-action:hover {
     --edge: var(--cyan);
     filter: drop-shadow(0 0 10px #19d9f579);
     color: #fff;
   }
   .death-action:hover::before,
-  #deathMenu button:hover::before {
+  #deathMenu button:hover::before,
+  #pauseMenu .death-action:hover::before {
     background: var(--edge);
   }
   .death-action:hover::after,
-  #deathMenu button:hover::after {
+  #deathMenu button:hover::after,
+  #pauseMenu .death-action:hover::after {
     inset: 2px 2px 2px 4px;
     background:
       repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
@@ -1271,24 +1341,21 @@ body.paused #flash {
   }
 }
 /* Keyboard/gamepad only — mirrors hover/selected without sticky tap :focus */
-#pauseMenu button:focus-visible {
-  background: #1e3b4e;
-}
-#pauseMenu #resumeBtn:focus-visible {
-  background: #cefaff;
-}
 .death-action:focus-visible,
-#deathMenu button:focus-visible {
+#deathMenu button:focus-visible,
+#pauseMenu .death-action:focus-visible {
   --edge: var(--cyan);
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
 .death-action:focus-visible::before,
-#deathMenu button:focus-visible::before {
+#deathMenu button:focus-visible::before,
+#pauseMenu .death-action:focus-visible::before {
   background: var(--edge);
 }
 .death-action:focus-visible::after,
-#deathMenu button:focus-visible::after {
+#deathMenu button:focus-visible::after,
+#pauseMenu .death-action:focus-visible::after {
   inset: 2px 2px 2px 4px;
   background:
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
@@ -1361,9 +1428,6 @@ body.pad-aiming #game {
   display: none;
 }
 @media (any-pointer: coarse) {
-  #pause .sub {
-    display: none;
-  }
   #hud {
     z-index: 4;
   }
@@ -2103,17 +2167,20 @@ body.pad-aiming #game {
     inset 0 0 16px #0008;
 }
 .death-action.pad-sel,
-#deathMenu button.pad-sel {
+#deathMenu button.pad-sel,
+#pauseMenu .death-action.pad-sel {
   --edge: var(--cyan);
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
 .death-action.pad-sel::before,
-#deathMenu button.pad-sel::before {
+#deathMenu button.pad-sel::before,
+#pauseMenu .death-action.pad-sel::before {
   background: var(--edge);
 }
 .death-action.pad-sel::after,
-#deathMenu button.pad-sel::after {
+#deathMenu button.pad-sel::after,
+#pauseMenu .death-action.pad-sel::after {
   inset: 2px 2px 2px 4px;
   background:
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,

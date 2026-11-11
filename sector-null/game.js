@@ -1379,6 +1379,7 @@ function pauseFocusables() {
   return [
     ...document.querySelectorAll('#pauseSettings .srow'),
     document.getElementById('resumeBtn'),
+    document.getElementById('restartBtn'),
     document.getElementById('quitBtn'),
   ].filter(Boolean);
 }
@@ -1387,6 +1388,9 @@ function syncPauseSettingSel() {
   const ae = document.activeElement;
   for (const r of document.querySelectorAll('#pauseSettings .srow')) {
     r.classList.toggle('sel', r === ae);
+  }
+  for (const btn of document.querySelectorAll('#pauseMenu .death-action')) {
+    btn.classList.toggle('pad-sel', gamepadLive && btn === ae);
   }
 }
 
@@ -1975,6 +1979,7 @@ bindTap(document.getElementById('deathQuitBtn'), async () => {
   quitToTitle();
 });
 bindTap(document.getElementById('resumeBtn'), () => setPaused(false));
+bindTap(document.getElementById('restartBtn'), () => restartRun());
 bindTap(document.getElementById('quitBtn'), () => quitToTitle());
 // alt-tabbing away mid-run pauses (and would otherwise leave WASD stuck down)
 window.addEventListener('blur', () => { resetGameplayInput(); setPaused(true); });
@@ -4207,7 +4212,7 @@ function setPaused(on) {
   syncTouchControls();
   resetGameplayInput();
   document.getElementById('pauseStat').textContent =
-    `WAVE ${state.wave} · ${formatScore(state.score)} PTS`;
+    `WAVE ${state.wave}  ·  ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) {
     menu.drawSettings();
@@ -4223,6 +4228,12 @@ function setPaused(on) {
     if (ae && typeof ae.blur === 'function' && ae.closest?.('#pause')) ae.blur();
     focusGame();
   }
+}
+
+function restartRun() {
+  if (!state.running) return;
+  setPaused(false);
+  startGame(false);
 }
 
 function quitToTitle() {
