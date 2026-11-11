@@ -203,7 +203,15 @@ const store = {
   get(k, fallback) { try { return JSON.parse(localStorage.getItem('sector-null-' + k)) ?? fallback; } catch { return fallback; } },
   set(k, v) { try { localStorage.setItem('sector-null-' + k, JSON.stringify(v)); } catch { /* storage is optional */ } },
 };
-const settings = Object.assign({ master: 8, music: 7, shake: !matchMedia('(prefers-reduced-motion: reduce)').matches }, store.get('settings', {}));
+const settings = (() => {
+  const defaults = { music: 7, sfx: 8, shake: !matchMedia('(prefers-reduced-motion: reduce)').matches };
+  const saved = store.get('settings', {});
+  const next = Object.assign({}, defaults, saved);
+  // Older builds stored a single master fader; treat it as Sound FX.
+  if (saved.sfx == null && typeof saved.master === 'number') next.sfx = saved.master;
+  delete next.master;
+  return next;
+})();
 const audio = createAudio(settings, () => player.position);
 
 // Reactor deck. Collision footprints stay independent of the decorative geometry.

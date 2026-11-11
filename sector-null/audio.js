@@ -7,7 +7,7 @@ const MAX_VOICES = 28;
 export function createAudio(settings, listener) {
   const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
   soundtrack.loop = true;
-  let ctx, master, musicBus, reverb, noise, score;
+  let ctx, sfxBus, musicBus, reverb, noise, score;
   let paused = false;
   let titleMusic = false;
   let recharge;
@@ -31,13 +31,13 @@ export function createAudio(settings, listener) {
       const AudioContext = window.AudioContext ?? window.webkitAudioContext;
       if (!AudioContext) return;
       ctx = new AudioContext();
-      master = ctx.createGain();
       const compressor = ctx.createDynamicsCompressor();
-      master.connect(compressor).connect(ctx.destination);
+      compressor.connect(ctx.destination);
+      sfxBus = ctx.createGain();
       musicBus = ctx.createGain();
-      musicBus.gain.value = 0;
+      sfxBus.connect(compressor);
+      musicBus.connect(compressor);
       ctx.createMediaElementSource(soundtrack).connect(musicBus);
-      musicBus.connect(master);
       score = createScore(ctx, musicBus);
       reverb = ctx.createDelay(0.5);
       reverb.delayTime.value = 0.115;
@@ -46,7 +46,7 @@ export function createAudio(settings, listener) {
       reverb.connect(feedback).connect(reverb);
       const wet = ctx.createGain();
       wet.gain.value = 0.17;
-      reverb.connect(wet).connect(master);
+      reverb.connect(wet).connect(sfxBus);
 
       noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
       const samples = noise.getChannelData(0);
@@ -60,13 +60,13 @@ export function createAudio(settings, listener) {
 
   function applyVolume() {
     if (!ctx) return;
-    master.gain.setTargetAtTime((settings.master / 10) ** 1.5 * 0.75, ctx.currentTime, 0.04);
+    sfxBus.gain.setTargetAtTime((settings.sfx / 10) ** 1.5 * 0.75, ctx.currentTime, 0.04);
     musicBus.gain.setTargetAtTime((settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
   }
 
   // Spatial taps used to leak pan/gain nodes forever — that stalls audio on long runs.
   function spatial(position, hold = 0.7) {
-    if (!position || !ctx) return master;
+    if (!position || !ctx) return sfxBus;
     const player = listener();
     const dx = (position.x ?? 0) - player.x;
     const dz = (position.z ?? 0) - player.z;
@@ -74,7 +74,7 @@ export function createAudio(settings, listener) {
     const distance = ctx.createGain();
     pan.pan.value = Math.max(-0.85, Math.min(0.85, dx / 12));
     distance.gain.value = 1 / (1 + Math.hypot(dx, dz) * 0.09);
-    pan.connect(distance).connect(master);
+    pan.connect(distance).connect(sfxBus);
     let users = 0;
     let dead = false;
     const dispose = () => {
@@ -105,8 +105,8 @@ export function createAudio(settings, listener) {
   function voice(from, to, duration, volume, options = {}) {
     if (!ctx) return;
     if (!claimVoice()) return;
-    const { type = 'sine', t = ctx.currentTime, attack = 0.008, out = master, echo = false } = options;
-    if (out !== master && out._acquire) out._acquire();
+    const { type = 'sine', t = ctx.currentTime, attack = 0.008, out = sfxBus, echo = false } = options;
+    if (out !== sfxBus && out._acquire) out._acquire();
     const oscillator = ctx.createOscillator();
     const envelope = ctx.createGain();
     oscillator.type = type;
@@ -122,15 +122,15 @@ export function createAudio(settings, listener) {
     oscillator.onended = () => {
       try { oscillator.disconnect(); } catch { /* */ }
       try { envelope.disconnect(); } catch { /* */ }
-      if (out !== master && out._release) out._release();
+      if (out !== sfxBus && out._release) out._release();
       releaseVoice();
     };
   }
 
-  function grain(freq, duration, volume, out = master, type = 'bandpass') {
+  function grain(freq, duration, volume, out = sfxBus, type = 'bandpass') {
     if (!ctx) return;
     if (!claimVoice()) return;
-    if (out !== master && out._acquire) out._acquire();
+    if (out !== sfxBus && out._acquire) out._acquire();
     const t = ctx.currentTime;
     const source = ctx.createBufferSource();
     const filter = ctx.createBiquadFilter();
@@ -149,7 +149,7 @@ export function createAudio(settings, listener) {
       try { source.disconnect(); } catch { /* */ }
       try { filter.disconnect(); } catch { /* */ }
       try { envelope.disconnect(); } catch { /* */ }
-      if (out !== master && out._release) out._release();
+      if (out !== sfxBus && out._release) out._release();
       releaseVoice();
     };
   }
@@ -210,7 +210,7 @@ export function createAudio(settings, listener) {
       gain.gain.linearRampToValueAtTime(0.025, t + Math.min(0.16, duration / 3));
       gain.gain.linearRampToValueAtTime(0.035, t + duration);
       gain.gain.linearRampToValueAtTime(0, t + duration + 0.06);
-      oscillator.connect(gain).connect(master);
+      oscillator.connect(gain).connect(sfxBus);
       oscillator.start(t);
       oscillator.stop(t + duration + 0.08);
       oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
