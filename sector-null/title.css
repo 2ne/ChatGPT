@@ -509,7 +509,7 @@ body.titling #menu {
 }
 #scoresPanel {
   --edge: var(--pink);
-  width: min(420px, 78cqw);
+  width: min(480px, 78cqw);
   border-color: #ff368c99;
   box-shadow:
     0 0 0 1px #45ecff33,
@@ -526,16 +526,17 @@ body.titling #menu {
 .scores-head,
 .scores-row {
   display: grid;
-  grid-template-columns: 64px 1fr 52px 64px;
+  grid-template-columns: 72px 1fr 56px 72px;
   align-items: center;
   gap: 10px;
   padding: 0 16px;
 }
 .scores-head {
   margin: 4px 0 8px;
-  color: var(--cyan);
-  font-size: 11px;
-  letter-spacing: 0.2em;
+  color: #45ecff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 .scores-head span:nth-child(3),
 .scores-wave {
@@ -553,7 +554,7 @@ body.titling #menu {
 }
 .scores-list {
   display: grid;
-  grid-auto-rows: minmax(42px, auto);
+  grid-auto-rows: minmax(48px, auto);
   gap: 7px;
   max-height: min(52cqh, 420px);
   overflow-y: auto;
@@ -569,12 +570,12 @@ body.titling #menu {
   --cut: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   position: relative;
   isolation: isolate;
-  min-height: 42px;
+  min-height: 48px;
   color: #f4fbff;
   font:
-    700 15px/1 "Rajdhani",
+    700 19px/1 "Rajdhani",
     sans-serif;
-  letter-spacing: 0.14em;
+  letter-spacing: 2px;
   text-transform: uppercase;
 }
 .scores-row::before {
@@ -648,17 +649,18 @@ body.titling #menu {
 @container (max-width: 520px) {
   .scores-head,
   .scores-row {
-    grid-template-columns: 30px minmax(0, 1fr) 36px 44px;
+    grid-template-columns: 36px minmax(0, 1fr) 42px 52px;
     gap: 6px;
     padding-inline: 8px;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
   }
   .scores-head {
     padding-right: 20px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .scores-row {
-    font-size: 13px;
+    font-size: 16px;
+    min-height: 44px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
