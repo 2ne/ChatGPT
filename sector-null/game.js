@@ -1369,11 +1369,37 @@ function clearDeathPadSel() {
   document.querySelectorAll('#death .pad-sel').forEach((el) => el.classList.remove('pad-sel'));
 }
 
+// Pause and game-over controls share one visual selection, regardless of input.
+let overlayInput = 'pointer';
+let overlayPointerTarget = null;
+let lastUiPointerPosition = null;
+function syncOverlaySelection() {
+  const root = state.paused ? document.getElementById('pause')
+    : !document.getElementById('death').classList.contains('hidden') ? document.getElementById('death') : null;
+  if (!root) return;
+  const target = overlayInput === 'pointer' ? overlayPointerTarget : document.activeElement;
+  const selected = target?.closest?.('button, input, .srow');
+  document.querySelectorAll('#pause .ui-selected, #death .ui-selected, #pauseSettings .sel').forEach(el => {
+    el.classList.remove('ui-selected', 'sel');
+  });
+  if (selected && root.contains(selected) && !selected.disabled && selected.offsetParent !== null) {
+    selected.classList.add('ui-selected');
+    if (selected.matches('.srow')) selected.classList.add('sel');
+  }
+}
+
+function setOverlayInput(kind, target) {
+  overlayInput = kind;
+  if (kind === 'pointer') overlayPointerTarget = target;
+  syncOverlaySelection();
+}
+
 function setDeathPadFocus(el) {
   clearDeathPadSel();
   if (!el) return;
   el.classList.add('pad-sel');
   el.focus({ preventScroll: true });
+  syncOverlaySelection();
 }
 
 function pauseFocusables() {
@@ -1393,6 +1419,7 @@ function syncPauseSettingSel() {
   for (const btn of document.querySelectorAll('#pauseMenu .death-action')) {
     btn.classList.toggle('pad-sel', gamepadLive && btn === ae);
   }
+  syncOverlaySelection();
 }
 
 function pauseSettingRowFocused() {
@@ -1453,6 +1480,7 @@ function padUiDirection(pad) {
 
 function handlePadUiNav(dir) {
   if (!dir) return;
+  setOverlayInput('gamepad');
   if (title.active && !menuEl.classList.contains('gone')) {
     menu.kbdHighlight = true;
     if (menuEl.classList.contains('splash')) {
@@ -1521,6 +1549,7 @@ function handlePadUiNav(dir) {
 }
 
 function handlePadUiConfirm() {
+  setOverlayInput('gamepad');
   if (title.active && !menuEl.classList.contains('gone')) {
     menu.kbdHighlight = true;
     if (menuEl.classList.contains('splash')) { menu.leaveSplash(); return; }
@@ -1554,6 +1583,7 @@ function handlePadUiConfirm() {
 }
 
 function handlePadUiBack() {
+  setOverlayInput('gamepad');
   if (title.active && !menuEl.classList.contains('gone')) {
     if (menu.panel) { audio.ui('back'); menu.open(null); }
     return;
@@ -1660,6 +1690,7 @@ function pollGamepad(dt) {
     notePlayInput('gamepad');
   }
   if (padJust(pad, 9)) {
+    setOverlayInput('gamepad');
     if (state.running) setPaused(!state.paused);
     else if (title.active && menuEl.classList.contains('splash')) menu.leaveSplash();
     notePlayInput('gamepad');
@@ -1867,6 +1898,7 @@ window.addEventListener('pointerdown', e => {
 }, { capture: true, passive: false });
 
 window.addEventListener('keydown', e => {
+  setOverlayInput('keyboard');
   if (!e.isComposing && !e.ctrlKey && !e.metaKey && !e.altKey) setPickerInput('keyboard');
   if (menu.key(e)) { e.preventDefault(); return; }
   if (e.code === 'Enter' && !state.running && !document.getElementById('death').classList.contains('hidden')) {
@@ -1874,9 +1906,9 @@ window.addEventListener('keydown', e => {
     return startGame();
   }
   if (movementKeys.has(e.code) && state.running) {
-    e.preventDefault(); // Arrow keys control movement, never a focused UI panel.
-    if (state.paused || state.choosing) return;
-    resetStick(moveStick); // Keyboard movement must not cancel against a stale touch vector.
+    e.preventDefault(); // Prevent browser scrolling; pause navigation is handled below.
+    if (state.choosing && !state.paused) return;
+    if (!state.paused) resetStick(moveStick); // Keyboard movement must not cancel against a stale touch vector.
   }
   // OS key-repeat must not let an older held direction steal priority back.
   if (movementKeys.has(e.code)) {
@@ -1911,7 +1943,12 @@ window.addEventListener('keydown', e => {
 });
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
-  if (e.movementX || e.movementY) setPickerInput('pointer', e.target);
+  const moved = !lastUiPointerPosition || e.clientX !== lastUiPointerPosition.x || e.clientY !== lastUiPointerPosition.y;
+  lastUiPointerPosition = { x: e.clientX, y: e.clientY };
+  if (moved) {
+    setOverlayInput('pointer', e.target);
+    setPickerInput('pointer', e.target);
+  }
   touchAiming = false;
   setPadAiming(false);
   if (state.running) notePlayInput('pointer');
@@ -1919,8 +1956,12 @@ window.addEventListener('mousemove', e => {
   mouse.x = (e.clientX / view.w) * 2 - 1;
   mouse.y = -(e.clientY / view.h) * 2 + 1;
 });
-window.addEventListener('pointerdown', e => setPickerInput('pointer', e.target), true);
+window.addEventListener('pointerdown', e => {
+  setOverlayInput('pointer', e.target);
+  setPickerInput('pointer', e.target);
+}, true);
 window.addEventListener('focusin', e => {
+  syncOverlaySelection();
   if (state.choosing && e.target.closest?.('#cards') && hud.cards.dataset.input === 'keyboard') {
     setPickerInput('keyboard', e.target);
   }
@@ -4202,6 +4243,7 @@ function setPaused(on) {
     if (ae && typeof ae.blur === 'function' && ae.closest?.('#pause')) ae.blur();
     focusGame();
   }
+  syncOverlaySelection();
 }
 
 function restartRun() {
@@ -4283,6 +4325,7 @@ function renderArcadeReels() {
     reel.setAttribute('aria-pressed', focused ? 'true' : 'false');
   });
   deathArcadeSubmit.classList.toggle('pad-sel', arcadeFocus === 3);
+  syncOverlaySelection();
 }
 
 function setArcadeFocus(i) {
@@ -4429,6 +4472,7 @@ async function publishRunScore(name) {
 }
 
 function die() {
+  if (lastPlayInput === 'gamepad') overlayInput = 'gamepad';
   state.running = false;
   mouseFire = false;
   padFire = false;
@@ -4877,6 +4921,7 @@ titleSettingRows.forEach((r, i) => bindSettingRow(r, () => menu.selectRow(i)));
 pauseSettingRows.forEach((r) => bindSettingRow(r, () => {
   pauseSettingRows.forEach((x) => x.classList.toggle('sel', x === r));
   if (document.activeElement !== r) r.focus({ preventScroll: true });
+  syncOverlaySelection();
 }));
 bindTap(menuEl, e => {
   if (menuEl.classList.contains('splash')) {

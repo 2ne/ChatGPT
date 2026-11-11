@@ -1217,51 +1217,13 @@ body.paused #flash {
       0 16px 34px #000d,
       0 0 22px color-mix(in srgb, var(--accent) 35%, transparent);
   }
-  .death-action:hover,
-  #deathMenu button:hover,
-  #pauseMenu .death-action:hover {
-    --edge: var(--cyan);
-    filter: drop-shadow(0 0 10px #19d9f579);
-    color: #fff;
-  }
-  .death-action:hover::before,
-  #deathMenu button:hover::before,
-  #pauseMenu .death-action:hover::before {
-    background: var(--edge);
-  }
-  .death-action:hover::after,
-  #deathMenu button:hover::after,
-  #pauseMenu .death-action:hover::after {
-    inset: 2px 2px 2px 4px;
-    background:
-      repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
-      linear-gradient(90deg, #062538, #081825 70%, #0b3548);
-  }
+
   .close-panel:hover {
     color: #e4f1f5;
   }
 }
 /* Keyboard/gamepad only — mirrors hover/selected without sticky tap :focus */
-.death-action:focus-visible,
-#deathMenu button:focus-visible,
-#pauseMenu .death-action:focus-visible {
-  --edge: var(--cyan);
-  filter: drop-shadow(0 0 10px #19d9f579);
-  color: #fff;
-}
-.death-action:focus-visible::before,
-#deathMenu button:focus-visible::before,
-#pauseMenu .death-action:focus-visible::before {
-  background: var(--edge);
-}
-.death-action:focus-visible::after,
-#deathMenu button:focus-visible::after,
-#pauseMenu .death-action:focus-visible::after {
-  inset: 2px 2px 2px 4px;
-  background:
-    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
-    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
-}
+
 .close-panel:focus-visible {
   color: #e4f1f5;
 }
@@ -1279,14 +1241,14 @@ body.paused #flash {
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / clamp(18px, 3.5cqw, 56px) 100% no-repeat,
     linear-gradient(90deg, #062538, #081825 70%, #0b3548);
 }
-#deathSubmit:focus-visible:not(.busy) {
+#deathSubmit.ui-selected:not(.busy) {
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
-#deathSubmit:focus-visible:not(.busy)::before {
+#deathSubmit.ui-selected:not(.busy)::before {
   background: var(--edge);
 }
-#deathSubmit:focus-visible:not(.busy)::after {
+#deathSubmit.ui-selected:not(.busy)::after {
   inset: 2px 2px 2px 4px;
   background:
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
@@ -1771,7 +1733,7 @@ body.pad-aiming #game {
   -webkit-user-select: text;
   user-select: text;
 }
-#deathName:focus {
+#deathName.ui-selected {
   outline: 1px solid #45ecff;
   box-shadow: 0 0 12px #45ecff44;
 }
@@ -1832,21 +1794,7 @@ body.pad-aiming #game {
 @keyframes death-submit-spin {
   to { transform: rotate(360deg); }
 }
-@media (hover: hover) and (pointer: fine) {
-  #deathSubmit:hover:not(.busy) {
-    filter: drop-shadow(0 0 10px #19d9f579);
-    color: #fff;
-  }
-  #deathSubmit:hover:not(.busy)::before {
-    background: var(--edge);
-  }
-  #deathSubmit:hover:not(.busy)::after {
-    inset: 2px 2px 2px 4px;
-    background:
-      repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
-      linear-gradient(90deg, #062538, #081825 70%, #0b3548);
-  }
-}
+
 #deathNameHint,
 #deathSubmitStatus,
 #deathArcadeStatus {
@@ -1923,21 +1871,19 @@ body.pad-aiming #game {
   background: linear-gradient(180deg, #071018ee, #0a1520f2 45%, #071018ee);
   pointer-events: none;
 }
-.death-reel.is-focused,
-.death-reel.pad-sel {
+.death-reel.ui-selected {
   --reel-edge: var(--cyan, #45ecff);
   transform: scale(1.04);
   z-index: 1;
 }
-.death-reel.is-focused::before,
-.death-reel.pad-sel::before {
+.death-reel.ui-selected::before {
   box-shadow:
     0 0 18px #45ecff88,
     0 0 4px #45ecff,
     inset 0 0 18px #000a;
 }
 .death-reel:focus { outline: none; }
-.death-reel:focus:not(:focus-visible):not(.is-focused):not(.pad-sel) {
+.death-reel:focus:not(:focus-visible):not(.ui-selected) {
   /* no sticky tap focus */
   --reel-edge: var(--pink, #ff368c);
   transform: none;
@@ -1986,8 +1932,7 @@ body.pad-aiming #game {
   border-top: 8px solid var(--cyan, #45ecff);
   filter: drop-shadow(0 0 6px #45ecff);
 }
-.death-reel.is-focused .death-reel-chev,
-.death-reel.pad-sel .death-reel-chev {
+.death-reel.ui-selected .death-reel-chev {
   opacity: 1;
 }
 #deathArcadeSubmit.busy {
@@ -2008,7 +1953,7 @@ body.pad-aiming #game {
   opacity: 1;
   animation: death-submit-spin .7s linear infinite;
 }
-.death-action:focus:not(:focus-visible):not(.pad-sel) {
+.death-action:focus:not(:focus-visible):not(.ui-selected) {
   filter: none;
   color: #f2eff9;
 }
@@ -2057,21 +2002,21 @@ body.pad-aiming #game {
     0 0 14px #ff368c55,
     inset 0 0 16px #0008;
 }
-.death-action.pad-sel,
-#deathMenu button.pad-sel,
-#pauseMenu .death-action.pad-sel {
+.death-action.ui-selected,
+#deathMenu button.ui-selected,
+#pauseMenu .death-action.ui-selected {
   --edge: var(--cyan);
   filter: drop-shadow(0 0 10px #19d9f579);
   color: #fff;
 }
-.death-action.pad-sel::before,
-#deathMenu button.pad-sel::before,
-#pauseMenu .death-action.pad-sel::before {
+.death-action.ui-selected::before,
+#deathMenu button.ui-selected::before,
+#pauseMenu .death-action.ui-selected::before {
   background: var(--edge);
 }
-.death-action.pad-sel::after,
-#deathMenu button.pad-sel::after,
-#pauseMenu .death-action.pad-sel::after {
+.death-action.ui-selected::after,
+#deathMenu button.ui-selected::after,
+#pauseMenu .death-action.ui-selected::after {
   inset: 2px 2px 2px 4px;
   background:
     repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / 48px 100% no-repeat,
