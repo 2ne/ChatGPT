@@ -714,8 +714,23 @@ kbd {
   letter-spacing: 3px;
   color: #e4f1f5;
 }
+.how-group {
+  margin-top: 16px;
+}
+.how-group:first-of-type {
+  margin-top: 10px;
+}
+.how-group h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #64dfee;
+}
+.how-touch {
+  display: none;
+}
 .mrows {
-  margin-top: 14px;
   display: flex;
   flex-direction: column;
 }
@@ -1342,16 +1357,8 @@ body.pad-aiming #game {
 #reloadHint {
   color: #a0bac8;
 }
-#touchControls,
-.touch-help {
+#touchControls {
   display: none;
-}
-.pad-help {
-  margin-top: 12px;
-  font-size: 17px;
-  line-height: 1.45;
-  color: #c3d2d9;
-  letter-spacing: 0.04em;
 }
 @media (any-pointer: coarse) {
   #pause .sub {
@@ -1486,16 +1493,11 @@ body.pad-aiming #game {
   #reloadHint {
     display: none;
   }
-  #howPanel .mrows {
-    display: none;
-  }
-  .touch-help {
+  #howPanel .how-touch {
     display: block;
-    font-size: 19px;
-    margin-top: 12px;
   }
-  .pad-help {
-    font-size: 16px;
+  #howPanel .how-kbm {
+    display: none;
   }
 }
 
