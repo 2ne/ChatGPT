@@ -520,6 +520,9 @@ body.titling #menu {
   letter-spacing: 0.22em;
   margin-bottom: 22px;
 }
+#settingsPanel h2 {
+  margin-bottom: 22px;
+}
 .scores-head,
 .scores-row {
   display: grid;
