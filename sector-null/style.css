@@ -2094,3 +2094,144 @@ body.pad-aiming #game {
   }
   #deathMenu { margin-top: 16px; }
 }
+
+/* Reactor upgrade modules: SVG hardware edges over responsive smoked-glass panels. */
+#picker {
+  background: radial-gradient(ellipse at 50% 45%, #04101c55, #020810d9);
+  backdrop-filter: blur(2px);
+}
+#pickerTitle {
+  position: relative;
+  width: min(1080px, 100%);
+  padding-bottom: 12px;
+  font-family: "Oxanium", "Rajdhani", sans-serif;
+  font-size: clamp(28px, 4vw, 56px);
+  line-height: 1.15;
+  letter-spacing: .09em;
+  color: #9af5ff;
+  text-shadow: 0 0 8px #45ecff99, 0 0 30px #45ecff55;
+}
+#pickerTitle::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 14px;
+  margin-top: 10px;
+  background: #45ecff;
+  clip-path: polygon(0 0, 13% 0, 16% 90%, 84% 90%, 87% 0, 100% 0, 100% 10%, 87.2% 10%, 84.2% 100%, 15.8% 100%, 12.8% 10%, 0 10%);
+  opacity: .7;
+}
+#pickerSub { font-size: 14px; letter-spacing: .3em; }
+#pickerSub::before, #pickerSub::after { background: #45ecff; }
+#cards {
+  width: min(1120px, 100%);
+  grid-template-columns: 1.06fr 1fr 1fr;
+  gap: 24px;
+  margin-top: 34px;
+}
+#cards .card {
+  isolation: isolate;
+  padding: 22px 22px 25px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+#cards .card::before {
+  inset: 1px;
+  height: auto;
+  z-index: -2;
+  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px);
+  background: radial-gradient(ellipse at 50% 28%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 65%), linear-gradient(145deg, #0b1623f5, #040e18f5);
+  box-shadow: none;
+}
+.card-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: -1;
+  fill: none;
+  stroke: var(--accent);
+  transition: filter .18s ease;
+}
+.card-frame path { vector-effect: non-scaling-stroke; }
+.frame-edge { stroke-opacity: .55; }
+.frame-inner { stroke-opacity: .12; }
+.frame-rail { fill: var(--accent); fill-opacity: .55; stroke-opacity: .8; }
+.recommended .card-frame { filter: drop-shadow(0 0 5px var(--accent)); }
+.recommended .frame-edge { stroke-width: 2; stroke-opacity: 1; }
+.recommended .frame-inner { stroke-opacity: .65; }
+.recommended .frame-rail { fill-opacity: .9; }
+#cards .ctop { font-size: 14px; font-weight: 700; letter-spacing: .07em; min-height: 28px; }
+.recommended .ctop > span:first-child {
+  padding: 5px 12px;
+  color: #07111a;
+  background: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 65%, calc(100% - 9px) 100%, 0 100%);
+}
+#cards .ckey { font-family: "Oxanium", sans-serif; font-size: 18px; padding: 3px 8px; border-color: color-mix(in srgb, var(--accent) 45%, #263747); background: #06101ba8; }
+#cards .upgrade-preview { height: 130px; margin: 14px 0 10px; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 65%, transparent)); }
+.preview-orbit { opacity: .22; }
+#cards .cname { font-size: clamp(24px, 2.3vw, 32px); letter-spacing: .025em; line-height: 1.1; }
+#cards .cdesc { font-size: 18px; line-height: 1.25; min-height: 46px; margin: 8px 0 18px; }
+#cards .cstat {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 4px;
+  border-top: 1px solid #9ac5d033;
+  border-bottom: 1px solid #9ac5d033;
+  background: linear-gradient(100deg, #34566633, #09172388, #34566633);
+  clip-path: polygon(12px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 8px 100%, 0 calc(100% - 8px), 0 12px);
+  font-size: 17px;
+  color: #d5e5ee;
+}
+#cards .cstat b { font-weight: 700; }
+#cards .clvl { height: 10px; gap: 6px; margin-top: 18px; }
+#cards .clvl i { width: 28px; max-width: 5vw; height: 8px; border: 1px solid #ffffff18; transform: skewX(-16deg); }
+#cards .clvl i.next { animation: none; }
+#cards .card:focus-visible, #cards .card.pad-sel {
+  outline: 2px solid #c2faff;
+  outline-offset: 6px;
+  box-shadow: none;
+}
+#cards .card:focus-visible .card-frame, #cards .card.pad-sel .card-frame, #cards .card.picked .card-frame { filter: drop-shadow(0 0 9px var(--accent)); }
+@media (hover: hover) and (pointer: fine) {
+  #cards .card:hover .card-frame { filter: drop-shadow(0 0 9px var(--accent)); }
+  #cards .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2; }
+}
+@media (max-width: 600px) and (min-height: 501px) {
+  #pickerTitle { font-size: clamp(23px, 6vw, 34px); padding-bottom: 6px; }
+  #pickerTitle::after { margin-top: 8px; height: 8px; }
+  #pickerSub { font-size: 11px; letter-spacing: .12em; }
+  #cards { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  #cards .card { padding: 15px 12px; }
+  #cards .ctop { font-size: 10px; letter-spacing: .03em; }
+  #cards .ckey { font-size: 13px; padding: 2px 5px; }
+  .recommended .ctop > span:first-child { padding: 4px 8px; }
+  #cards .upgrade-preview { height: 74px; margin: 5px 0; }
+  #cards .recommended .upgrade-preview { height: 100px; }
+  #cards .cname { font-size: 21px; }
+  #cards .cdesc { font-size: 14px; min-height: 36px; margin: 6px 0 10px; }
+  #cards .cstat { font-size: 13px; padding: 8px 3px; }
+  #cards .clvl { margin-top: 10px; }
+}
+@media (max-height: 600px) and (min-width: 601px) {
+  #pickerTitle { font-size: 30px; padding-bottom: 4px; }
+  #pickerTitle::after { height: 7px; margin-top: 4px; }
+  #pickerSub { font-size: 11px; letter-spacing: .15em; }
+  #cards { width: min(920px, 100%); gap: 16px; margin-top: 16px; }
+  #cards .card { padding: 14px; }
+  #cards .ctop { font-size: 11px; min-height: 20px; }
+  #cards .ckey { font-size: 12px; padding: 2px 5px; }
+  .recommended .ctop > span:first-child { padding: 3px 8px; }
+  #cards .upgrade-preview { height: clamp(40px, 12vh, 70px); margin: 5px 0; }
+  #cards .cname { font-size: 21px; }
+  #cards .cdesc { font-size: 14px; min-height: 32px; margin: 5px 0 8px; }
+  #cards .cstat { font-size: 13px; padding: 7px 3px; }
+  #cards .clvl { margin-top: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #cards .card, .card-frame { transition: none; }
+}

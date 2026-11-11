@@ -3719,7 +3719,7 @@ function upgradePreview(u) {
   if (u.id === 'botGun') art += '<path class="preview-shot" d="M74 22h20m-20 12h20"/>';
   // Rank is already shown by the pip row under the card; NEW/UPGRADE is
   // obvious from empty vs filled pips and the card name.
-  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg>`;
+  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle class="preview-orbit" cx="50" cy="30" r="27" stroke-width="0.5"/>${art}</svg>`;
 }
 
 function openPicker(healed) {
@@ -3744,6 +3744,7 @@ function openPicker(healed) {
     const pips = u.max === Infinity ? '' :
       Array.from({ length: u.max }, (_, k) => `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`).join('');
     return `<button type="button" class="card ${recommended ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
+      `<svg class="card-frame" viewBox="0 0 320 360" preserveAspectRatio="none" aria-hidden="true"><path class="frame-edge" d="M16 1H304L319 16V344L304 359H16L1 344V16Z"/><path class="frame-inner" d="M18 6H302L314 18V342L302 354H18L6 342V18Z"/><path class="frame-rail" d="M16 1H304L313 10H150L145 14H4Z"/></svg>` +
       `<div class="ctop"><span>${recommended ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
       upgradePreview(u) +
       `<div class="cname">${name}</div><div class="cdesc">${desc}</div>` +
