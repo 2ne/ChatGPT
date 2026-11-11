@@ -906,17 +906,7 @@ body.paused #flash {
   margin: 26px auto 0;
 }
 #pauseMenu .death-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
   width: 100%;
-}
-#pauseMenu .pause-ico {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  fill: currentColor;
 }
 #death {
   --ice: #e2fcff;
@@ -1066,8 +1056,7 @@ body.paused #flash {
   inset: 1px 0 1px 3px;
   background: linear-gradient(90deg, #211022f2, #111423bc 62%, #10162309);
 }
-.death-action-primary,
-#deathMenu #retryBtn {
+.death-action-primary {
   --edge: var(--cyan);
 }
 #bootError {
