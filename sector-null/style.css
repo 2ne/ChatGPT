@@ -390,6 +390,8 @@ body {
   justify-content: center;
   text-align: center;
   background: radial-gradient(circle at center, rgba(10, 8, 10, 0.5), rgba(2, 2, 4, 0.85));
+  -webkit-backdrop-filter: blur(8px) brightness(0.85);
+  backdrop-filter: blur(8px) brightness(0.85);
   z-index: 5;
   opacity: 0;
   pointer-events: none;
@@ -593,6 +595,8 @@ body {
   justify-content: center;
   text-align: center;
   background: radial-gradient(circle at center, rgba(10, 8, 10, 0.78), rgba(2, 2, 4, 0.96));
+  -webkit-backdrop-filter: blur(8px) brightness(0.85);
+  backdrop-filter: blur(8px) brightness(0.85);
   z-index: 10;
   box-sizing: border-box;
   padding: calc(var(--safe-top) + 16px) calc(var(--safe-right) + 16px) calc(var(--safe-bottom) + 16px) calc(var(--safe-left) + 16px);
@@ -877,19 +881,6 @@ body.paused #flash {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 0.065em #2cdefa54);
-}
-.pause-word::before {
-  content: "";
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  top: 12%;
-  bottom: 8%;
-  z-index: -1;
-  background:
-    linear-gradient(180deg, #ff368c88, #ff368c22 55%, transparent) 18% 0 / 4px 100% no-repeat,
-    linear-gradient(180deg, #ff368c66, #ff368c18 55%, transparent) 28% 0 / 3px 88% no-repeat;
-  pointer-events: none;
 }
 #pauseStat {
   margin-top: 14px;
