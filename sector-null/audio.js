@@ -190,6 +190,7 @@ export function createAudio(settings, listener) {
       applyVolume();
       return muted;
     },
+    isMuted() { return muted; },
     shot(hot, spread, charge = 1) {
       // A subtle three-semitone descent across the cell, without losing punch.
       const pitch = 2 ** ((Math.max(0, Math.min(1, charge)) - 1) * 3 / 12);

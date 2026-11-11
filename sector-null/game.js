@@ -1607,9 +1607,9 @@ function pollGamepad(dt) {
     notePlayInput('gamepad');
   }
   if (padJust(pad, 8)) {
-    const m = audio.toggleMute();
-    document.getElementById('reloadHint').textContent = m ? '[R] RELOAD   ·   [M] MUTED' : '[R] RELOAD';
+    audio.toggleMute();
     notePlayInput('gamepad');
+    updateReloadHint();
   }
   if (padJust(pad, 9)) {
     if (state.running) setPaused(!state.paused);
@@ -1639,12 +1639,30 @@ const runDevice = (() => {
 })();
 
 function notePlayInput(kind) {
-  if (kind === 'touch' || kind === 'pointer' || kind === 'gamepad') lastPlayInput = kind;
+  if (kind !== 'touch' && kind !== 'pointer' && kind !== 'gamepad') return;
+  const prev = lastPlayInput;
+  lastPlayInput = kind;
+  if (prev !== kind) updateReloadHint();
+}
+
+function updateReloadHint() {
+  const el = document.getElementById('reloadHint');
+  if (!el) return;
+  const pad = lastPlayInput === 'gamepad';
+  const recharge = pad ? '[X / LB] RECHARGE' : '[R] RECHARGE';
+  const text = audio.isMuted()
+    ? `${recharge}   ·   ${pad ? '[VIEW]' : '[M]'} MUTED`
+    : recharge;
+  if (el.textContent !== text) el.textContent = text;
 }
 
 function resetPlayInputStats() {
   playInputTime.touch = playInputTime.pointer = playInputTime.gamepad = 0;
-  lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
+  // Keep controller preference so the gun-panel hint does not flash back to [R].
+  if (!(gamepadLive && lastPlayInput === 'gamepad')) {
+    lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
+  }
+  updateReloadHint();
 }
 
 function tickPlayInput(dt) {
@@ -1655,7 +1673,13 @@ function tickPlayInput(dt) {
       let active = false;
       for (const button of pad.buttons) { if (button.pressed) { active = true; break; } }
       if (!active) for (const axis of pad.axes) { if (Math.abs(axis) > 0.25) { active = true; break; } }
-      if (active) { lastPlayInput = 'gamepad'; break; }
+      if (active) {
+        if (lastPlayInput !== 'gamepad') {
+          lastPlayInput = 'gamepad';
+          updateReloadHint();
+        }
+        break;
+      }
     }
   }
   playInputTime[lastPlayInput] += dt;
@@ -1839,8 +1863,8 @@ window.addEventListener('keydown', e => {
   if (e.code === 'KeyR') startReload();
   if (state.choosing && /^Digit[1-3]$/.test(e.code)) choose(+e.code.slice(5) - 1);
   if (e.code === 'KeyM') {
-    const m = audio.toggleMute();
-    document.getElementById('reloadHint').textContent = m ? '[R] RELOAD   ·   [M] MUTED' : '[R] RELOAD';
+    audio.toggleMute();
+    updateReloadHint();
   }
 });
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
@@ -1863,6 +1887,7 @@ window.addEventListener('mouseup', () => { mouseFire = false; syncFiring(); });
 window.addEventListener('gamepadconnected', () => {
   gamepadLive = true;
   padPrevButtons = [];
+  updateReloadHint();
 });
 window.addEventListener('gamepaddisconnected', () => {
   gamepadLive = !![...(navigator.getGamepads?.() || [])].some(Boolean);
@@ -1872,7 +1897,9 @@ window.addEventListener('gamepaddisconnected', () => {
     setPadAiming(false);
     syncFiring();
     padPrevButtons = [];
+    if (lastPlayInput === 'gamepad') lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
   }
+  updateReloadHint();
 });
 window.addEventListener('contextmenu', e => e.preventDefault());
 window.addEventListener('selectstart', e => e.preventDefault());
