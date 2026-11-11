@@ -1675,26 +1675,12 @@ const runDevice = (() => {
 })();
 
 function notePlayInput(kind) {
-  if (kind !== 'touch' && kind !== 'pointer' && kind !== 'gamepad') return;
-  const prev = lastPlayInput;
-  lastPlayInput = kind;
-  if (prev !== kind) updateReloadHint();
-}
-
-function updateReloadHint() {
-  const el = document.getElementById('reloadHint');
-  if (!el) return;
-  const text = lastPlayInput === 'gamepad' ? '[X / LB] RECHARGE' : '[R] RECHARGE';
-  if (el.textContent !== text) el.textContent = text;
+  if (kind === 'touch' || kind === 'pointer' || kind === 'gamepad') lastPlayInput = kind;
 }
 
 function resetPlayInputStats() {
   playInputTime.touch = playInputTime.pointer = playInputTime.gamepad = 0;
-  // Keep controller preference so the gun-panel hint does not flash back to [R].
-  if (!(gamepadLive && lastPlayInput === 'gamepad')) {
-    lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
-  }
-  updateReloadHint();
+  lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
 }
 
 function tickPlayInput(dt) {
@@ -1705,13 +1691,7 @@ function tickPlayInput(dt) {
       let active = false;
       for (const button of pad.buttons) { if (button.pressed) { active = true; break; } }
       if (!active) for (const axis of pad.axes) { if (Math.abs(axis) > 0.25) { active = true; break; } }
-      if (active) {
-        if (lastPlayInput !== 'gamepad') {
-          lastPlayInput = 'gamepad';
-          updateReloadHint();
-        }
-        break;
-      }
+      if (active) { lastPlayInput = 'gamepad'; break; }
     }
   }
   playInputTime[lastPlayInput] += dt;
@@ -1939,7 +1919,6 @@ window.addEventListener('mouseup', () => { mouseFire = false; syncFiring(); });
 window.addEventListener('gamepadconnected', () => {
   gamepadLive = true;
   padPrevButtons = [];
-  updateReloadHint();
 });
 window.addEventListener('gamepaddisconnected', () => {
   gamepadLive = !![...(navigator.getGamepads?.() || [])].some(Boolean);
@@ -1949,9 +1928,7 @@ window.addEventListener('gamepaddisconnected', () => {
     setPadAiming(false);
     syncFiring();
     padPrevButtons = [];
-    if (lastPlayInput === 'gamepad') lastPlayInput = finePointerUi() ? 'pointer' : 'touch';
   }
-  updateReloadHint();
 });
 window.addEventListener('contextmenu', e => e.preventDefault());
 window.addEventListener('selectstart', e => e.preventDefault());

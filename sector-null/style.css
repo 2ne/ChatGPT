@@ -282,12 +282,6 @@ body {
   width: 0%;
   background: #ffbd78;
 }
-#reloadHint {
-  font-size: 11px;
-  color: #6a7078;
-  margin-top: 6px;
-  letter-spacing: 2px;
-}
 
 /* damage flash */
 #flash {
@@ -1340,9 +1334,6 @@ body.paused #flash {
 body.pad-aiming #game {
   cursor: none;
 }
-#reloadHint {
-  color: #a0bac8;
-}
 #touchControls {
   display: none;
 }
@@ -1472,9 +1463,6 @@ body.pad-aiming #game {
   .stick.firing::after {
     border-color: #ffd4a8;
     background: #ffad6152;
-  }
-  #reloadHint {
-    display: none;
   }
   #howPanel .how-touch {
     display: block;
