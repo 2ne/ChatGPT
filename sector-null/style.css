@@ -523,16 +523,6 @@ body {
   text-align: center;
   border-radius: 0;
 }
-.cicon {
-  width: 64px;
-  height: 64px;
-  margin: 16px 0 14px;
-  color: var(--accent);
-  filter: drop-shadow(0 0 6px var(--accent));
-  transition:
-    filter 0.14s,
-    transform 0.14s;
-}
 .cname {
   font-family: "Rajdhani", sans-serif;
   font-size: 26px;
@@ -1114,11 +1104,6 @@ body.paused #flash {
     width: 122px;
     padding: 9px 7px;
   }
-  .cicon {
-    width: 30px;
-    height: 30px;
-    margin: 6px;
-  }
   .cname {
     font-size: 17px;
     letter-spacing: 0;
@@ -1179,11 +1164,6 @@ body.paused #flash {
     min-width: 16px;
     padding: 0 3px;
     font-size: clamp(10px, 2.6dvh, 12px);
-  }
-  .cicon {
-    width: clamp(28px, 9.2dvh, 42px);
-    height: clamp(28px, 9.2dvh, 42px);
-    margin: clamp(4px, 1.4dvh, 9px) 0 clamp(3px, 1.2dvh, 7px);
   }
   .cname {
     font-size: clamp(14px, 4.8dvh, 20px);
@@ -1259,10 +1239,6 @@ body.paused #flash {
     box-shadow:
       0 16px 34px #000d,
       0 0 22px color-mix(in srgb, var(--accent) 35%, transparent);
-  }
-  .card:hover .cicon {
-    filter: drop-shadow(0 0 10px var(--accent)) brightness(1.25);
-    transform: scale(1.06);
   }
   .death-action:hover,
   #deathMenu button:hover,
@@ -1347,11 +1323,6 @@ body.paused #flash {
   box-shadow:
     0 16px 34px #000d,
     0 0 22px color-mix(in srgb, var(--accent) 35%, transparent);
-}
-.card:focus-visible .cicon,
-.card.pad-sel .cicon {
-  filter: drop-shadow(0 0 10px var(--accent)) brightness(1.25);
-  transform: scale(1.06);
 }
 .card:focus:not(:focus-visible):not(.pad-sel) {
   /* Touch tap focus must not look selected */

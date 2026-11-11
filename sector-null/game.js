@@ -3657,28 +3657,6 @@ const UPGRADE_CATS = {
   fortune:   '#bdadfa',
   ability:   '#7cff4a',
 };
-// 8x8 pixel icons in the game's blocky style: X = solid, o = dim
-const UPGRADE_ICONS = {
-  mag:    ['XX.XX.XX', 'XX.XX.XX', 'oo.oo.oo', 'oo.oo.oo', 'oo.oo.oo', 'oo.oo.oo', 'XX.XX.XX', '........'],
-  reload: ['..XXXX..', '.X....XX', 'X....XXX', 'X.......', 'X......X', 'X......X', '.X....X.', '..XXXX..'],
-  damage: ['.XXXXXX.', 'XXXXXXXX', 'X..XX..X', 'X..XX..X', 'XXXXXXXX', '.XXX.XX.', '..XXXX..', '..X.X.X.'],
-  rate:   ['....XXX.', '...XXX..', '..XXX...', '.XXXXXX.', '...XXX..', '..XXX...', '.XX.....', '.X......'],
-  pierce: ['.o..o...', '.o..o.X.', '.o..o..X', 'XXXXXXXX', '.o..o..X', '.o..o.X.', '.o..o...', '........'],
-  spread: ['......XX', '....oo..', '..oo....', 'XXooooXX', '..oo....', '....oo..', '......XX', '........'],
-  hp:     ['XXXXXXXX', 'XooooooX', 'XoooXooX', 'XooXXXoX', '.XooXoX.', '.XooooX.', '..XooX..', '...XX...'],
-  speed:  ['........', 'XX..XX..', '.XX..XX.', '..XX..XX', '.XX..XX.', 'XX..XX..', '........', '........'],
-  luck:   ['XXXXXXXX', 'XX....XX', 'X.X..X.X', 'X..XX..X', 'X..XX..X', 'X.X..X.X', 'XX....XX', 'XXXXXXXX'],
-  heal:   ['.XX..XX.', 'XXXXXXXX', 'XXXXXXXX', 'XXXXXXXX', '.XXXXXX.', '..XXXX..', '...XX...', '........'],
-  magnet: ['...XX...', '..XXXX..', '.XX..XX.', 'XX....XX', '.XX..XX.', '..XXXX..', '...XX...', '........'],
-};
-function pixelIcon(rows, cls = 'cicon') {
-  rows ||= ['..XXXX..', '.XXXXXX.', 'XX.XX.XX', 'XXXXXXXX', '..XXXX..', '.X.XX.X.', 'XX....XX', '........'];
-  let r = '';
-  rows.forEach((row, y) => [...row].forEach((c, x) => {
-    if (c !== '.') r += `<rect x="${x}" y="${y}" width="1" height="1"${c === 'o' ? ' opacity=".35"' : ''}/>`;
-  }));
-  return `<svg class="${cls}" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor">${r}</svg>`;
-}
 let offered = [];
 const PICK_LOCKOUT_MS = 650; // ~ when the last card finishes dealing in
 
