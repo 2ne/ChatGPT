@@ -1579,6 +1579,7 @@ function handlePadUiBack() {
 function setPadPickerSel(i) {
   const cards = [...hud.cards.querySelectorAll('button.card')];
   if (!cards.length) return;
+  hud.cards.dataset.input = 'gamepad';
   padPickerSel = ((i % cards.length) + cards.length) % cards.length;
   cards.forEach((c, k) => c.classList.toggle('pad-sel', k === padPickerSel));
   // Focus for a11y; visual selection is .pad-sel (programmatic focus is not :focus-visible).
@@ -1587,6 +1588,19 @@ function setPadPickerSel(i) {
 
 function clearPadPickerSel() {
   hud.cards?.querySelectorAll('.pad-sel').forEach((c) => c.classList.remove('pad-sel'));
+}
+
+function setPickerInput(kind, target) {
+  if (!state.choosing || state.paused) return;
+  hud.cards.dataset.input = kind;
+  clearPadPickerSel();
+  if (kind === 'pointer' && document.activeElement?.closest?.('#cards')) {
+    document.activeElement.blur();
+  }
+  const card = target?.closest?.('button.card');
+  if (card && hud.cards.contains(card)) {
+    padPickerSel = [...hud.cards.querySelectorAll('button.card')].indexOf(card);
+  }
 }
 
 function pollGamepad(dt) {
@@ -1853,6 +1867,7 @@ window.addEventListener('pointerdown', e => {
 }, { capture: true, passive: false });
 
 window.addEventListener('keydown', e => {
+  if (!e.isComposing && !e.ctrlKey && !e.metaKey && !e.altKey) setPickerInput('keyboard');
   if (menu.key(e)) { e.preventDefault(); return; }
   if (e.code === 'Enter' && !state.running && !document.getElementById('death').classList.contains('hidden')) {
     if (deathArcadeLocked()) return;
@@ -1896,12 +1911,19 @@ window.addEventListener('keydown', e => {
 });
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
+  if (e.movementX || e.movementY) setPickerInput('pointer', e.target);
   touchAiming = false;
   setPadAiming(false);
   if (state.running) notePlayInput('pointer');
   const view = layoutSize();
   mouse.x = (e.clientX / view.w) * 2 - 1;
   mouse.y = -(e.clientY / view.h) * 2 + 1;
+});
+window.addEventListener('pointerdown', e => setPickerInput('pointer', e.target), true);
+window.addEventListener('focusin', e => {
+  if (state.choosing && e.target.closest?.('#cards') && hud.cards.dataset.input === 'keyboard') {
+    setPickerInput('keyboard', e.target);
+  }
 });
 canvas.addEventListener('mousedown', e => {
   if (e.button === 0) {
@@ -3726,6 +3748,8 @@ function openPicker(healed) {
   offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
   state.choosing = true;
+  hud.cards.dataset.input = lastPlayInput === 'gamepad' ? 'gamepad' : 'pointer';
+  padPickerSel = 0;
   resetGameplayInput();
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
@@ -3765,8 +3789,7 @@ function openPicker(healed) {
   openPicker._t = setTimeout(() => {
     hud.cards.classList.add('ready');
     if (!state.choosing || state.paused) return;
-    if (gamepadLive) setPadPickerSel(0);
-    else if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+    if (gamepadLive && hud.cards.dataset.input === 'gamepad') setPadPickerSel(0);
   }, PICK_LOCKOUT_MS);
 }
 
@@ -4172,8 +4195,8 @@ function setPaused(on) {
       syncPauseSettingSel();
     }
   } else if (state.choosing) {
-    if (gamepadLive) setPadPickerSel(padPickerSel);
-    else if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
+    if (gamepadLive && hud.cards.dataset.input === 'gamepad') setPadPickerSel(padPickerSel);
+    else if (hud.cards.dataset.input === 'keyboard') hud.cards.querySelectorAll('button.card')[padPickerSel]?.focus({ preventScroll: true });
   } else {
     const ae = document.activeElement;
     if (ae && typeof ae.blur === 'function' && ae.closest?.('#pause')) ae.blur();

@@ -1210,7 +1210,7 @@ body.paused #flash {
 /* Hover lift/highlight is mouse-only. On iPhone the first tap would otherwise
    apply :hover (and mouseenter) and swallow the click. */
 @media (hover: hover) and (pointer: fine) {
-  .card:hover {
+  #cards[data-input="pointer"] .card:hover {
     transform: translateY(-8px);
     border-color: var(--accent);
     box-shadow:
@@ -1306,7 +1306,7 @@ body.paused #flash {
   outline: none;
 }
 @media (hover: hover) and (pointer: fine) and (orientation: landscape) and (max-height: 540px) {
-  .card:hover {
+  #cards[data-input="pointer"] .card:hover {
     transform: translateY(-3px);
   }
 }
@@ -2215,16 +2215,16 @@ body.pad-aiming #game {
 }
 #cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-rail { fill-opacity: 1; }
 @media (hover: hover) and (pointer: fine) {
-  #cards .card:hover:not(.dropped):not(.picked) {
+  #cards[data-input="pointer"] .card:hover:not(.dropped):not(.picked) {
     transform: translateY(var(--lift)) scale(var(--zoom));
     z-index: 2;
   }
-  #cards .card:hover .card-frame { filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent)); }
-  #cards .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2.5; }
-  #cards .card:hover .frame-inner { stroke: #eaffff; stroke-opacity: .95; }
-  #cards .card:hover .frame-rail { fill-opacity: 1; }
+  #cards[data-input="pointer"] .card:hover .card-frame { filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent)); }
+  #cards[data-input="pointer"] .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2.5; }
+  #cards[data-input="pointer"] .card:hover .frame-inner { stroke: #eaffff; stroke-opacity: .95; }
+  #cards[data-input="pointer"] .card:hover .frame-rail { fill-opacity: 1; }
 }
-#cards .card:active:not(.dropped):not(.picked) { transform: translateY(-3px) scale(1.015); }
+#picker #cards .card:active:not(.dropped):not(.picked) { transform: translateY(-3px) scale(1.015); }
 #cards .card.picked { transform: translateY(var(--lift)) scale(1.065); z-index: 3; }
 #cards .card.dropped { transform: translateY(16px) scale(.95); }
 @media (max-width: 600px), (max-height: 600px) {
@@ -2264,5 +2264,5 @@ body.pad-aiming #game {
 }
 @media (prefers-reduced-motion: reduce) {
   #cards .card, .card-frame { transition: none; }
-  #cards .card:is(:hover, :focus-visible, .pad-sel, :active, .picked, .dropped) { transform: none; }
+  #picker #cards .card:is(:hover, :focus-visible, .pad-sel, :active, .picked, .dropped) { transform: none; }
 }
