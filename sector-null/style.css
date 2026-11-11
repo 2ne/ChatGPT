@@ -2042,8 +2042,8 @@ body.pad-aiming #game {
 
 /* Reactor upgrade modules: SVG hardware edges over responsive smoked-glass panels. */
 #picker {
-  background: radial-gradient(ellipse at 50% 45%, #04101c55, #020810d9);
-  backdrop-filter: blur(2px);
+  /* No full-screen backdrop-filter — blur over the live 3D scene is too costly. */
+  background: radial-gradient(ellipse at 50% 45%, #04101ccc, #020810f2);
 }
 #pickerTitle {
   position: relative;
