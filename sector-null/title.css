@@ -317,7 +317,7 @@ body.titling #game {
 }
 
 #menu:not(.splash) #pressAny,
-#menu.splash :is(#menuList, #menuFoot) {
+#menu.splash #menuList {
   display: none;
 }
 #menuList {
@@ -389,30 +389,6 @@ body.titling #game {
   transition: opacity 0.3s;
 }
 
-#menuFoot {
-  position: absolute;
-  inset: auto max(24px, 3.5cqw) max(17px, 2.8cqh) var(--menu-x);
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  color: #adccdc;
-  text-shadow: 0 1px 8px #000;
-  pointer-events: none;
-}
-#menuHints {
-  display: flex;
-  gap: 15px;
-  margin-left: auto;
-}
-#menuHints kbd {
-  min-width: 20px;
-  height: 20px;
-  padding-inline: 4px;
-  font-size: 12px;
-  line-height: 18px;
-}
 #menu .mpanel {
   left: calc(var(--menu-x) + var(--menu-width) + 20px);
 }
@@ -442,9 +418,6 @@ body.titling #game {
   #pressAny {
     width: min(72cqw, 395px);
     margin-top: 6cqh;
-  }
-  #menuHints {
-    display: none;
   }
 }
 /* Full-width How/Settings overlay is for tall/narrow (portrait) only.

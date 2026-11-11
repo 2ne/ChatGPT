@@ -4641,7 +4641,6 @@ const menu = {
       blurMenuFocus();
     }
     this.paintSel();
-    this.hints();
   },
   activate(i = this.sel) {
     // Start's pointerdown reveals the list; the leftover click retargets onto
@@ -4678,14 +4677,6 @@ const menu = {
         r.querySelector('em').textContent = v * 10;
       }
     }
-  },
-  hints() {
-    const keys = this.panel === 'settings'
-      ? [['↑', '↓', 'SELECT'], ['←', '→', 'ADJUST'], ['ESC', 'BACK']]
-      : this.panel ? [['ESC', 'BACK']]
-      : [['↑', '↓', 'SELECT'], ['ENTER', 'CONFIRM']];
-    document.getElementById('menuHints').innerHTML = keys.map(k =>
-      `<span>${k.slice(0, -1).map(c => `<kbd>${c}</kbd>`).join('')}${k[k.length - 1]}</span>`).join('');
   },
   // keyboard: returns true if the title used the key
   key(e) {
@@ -4726,7 +4717,6 @@ const menu = {
     menuEl.classList.remove('splash');
     this.kbdHighlight = finePointerUi();
     this.select(0, true);
-    this.hints();
     this.ignoreUntil = performance.now() + 120;
   },
 };
