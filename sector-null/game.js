@@ -486,12 +486,10 @@ const gates = openings.map(o => {
     const strip = box(root, o.indicator, side * (o.w / 2 + 0.13), 1.4, 0.47, 0.05, 0.84, 0.03);
     box(root, strip.material, side * (o.w / 2 + 0.13), 1.4, -0.47, 0.05, 0.84, 0.03);
   }
-  const light = new THREE.PointLight(CYAN, 12, 8, 2);
-  light.position.set(0, 2.7, 0);
-  root.add(light);
-  const glow = halo(root, CYAN, 0, 2.42, 0, 3.6, 0.22);
+  // Emissive strips + halo only — PointLights here burned the light budget for little gain.
+  const glow = halo(root, CYAN, 0, 2.42, 0, 4.4, 0.3);
   box(root, o.indicator, 0, 2.43, 0, o.w * 0.62, 0.055, 0.72);
-  return { o, light, glow };
+  return { o, glow };
 });
 
 const reactor = new THREE.Group();
@@ -599,14 +597,13 @@ function updateWorld(dt) {
   coreLight.intensity = 135 + 12 * Math.sin(t * 2.8) + warning * 35;
   dust.position.y = Math.sin(t * 0.18) * 0.7;
   dust.rotation.y = t * 0.01;
-  for (const { o, light, glow } of gates) {
+  for (const { o, glow } of gates) {
     const risk = o.hp <= 0 || o.hp < o.maxHp;
     const colour = risk ? AMBER : CYAN;
     const intensity = risk ? 0.75 + 0.25 * Math.sin(t * 6 + o.x) : 1;
-    light.color.setHex(colour);
-    light.intensity = 12 * intensity;
     glow.material.color.setHex(colour);
-    glow.material.opacity = 0.2 * intensity;
+    glow.material.opacity = 0.3 * intensity;
+    glow.scale.setScalar(4.4 * (0.9 + 0.1 * intensity));
     o.indicator.color.setHex(colour);
   }
 }
@@ -780,16 +777,9 @@ const arms = [1, -1].map(side => {
   };
 });
 
-// --- muzzle flash: a real light (with shadows) plus an additive star of blocks and a soft glow ---
+// --- muzzle flash: unshadowed point light + additive star of blocks and a soft glow ---
 const FLASH_COLOR = CYAN, FLASH_HOT = AMBER; // normal / OVERCHARGE
 const muzzleLight = new THREE.PointLight(FLASH_COLOR, 0, 14, 2);
-muzzleLight.castShadow = true;
-muzzleLight.shadow.mapSize.set(512, 512);
-muzzleLight.shadow.camera.near = 0.1;
-muzzleLight.shadow.bias = -0.004;
-// only re-rendered on frames the flash is lit, so an idle gun costs no shadow passes
-muzzleLight.shadow.autoUpdate = false;
-muzzleLight.shadow.needsUpdate = true;
 scene.add(muzzleLight);
 
 function glowTexture() {
@@ -863,13 +853,77 @@ const smokeMats = Array.from({ length: 24 }, () =>
   new THREE.MeshStandardMaterial({ color: 0x8d8f94, roughness: 1, transparent: true, opacity: 0, depthWrite: false }));
 let smokeI = 0;
 const DEBRIS_SOFT_CAP = 90;
+const casingPool = [];
+const smokePool = [];
+const sparkPool = [];
+const chipPool = [];
+const sparkMat = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false });
+const sparkForward = new THREE.Vector3(0, 0, 1);
+const _sparkDir = new THREE.Vector3();
+
+function acquirePooledMesh(pool, factory) {
+  const mesh = pool.pop() || factory();
+  mesh.visible = true;
+  return mesh;
+}
+function acquireCasing() {
+  return acquirePooledMesh(casingPool, () => {
+    const mesh = new THREE.Mesh(casingGeo, M.trim);
+    mesh.userData.pool = 'casing';
+    return mesh;
+  });
+}
+function acquireSmoke() {
+  const mesh = acquirePooledMesh(smokePool, () => {
+    const m = new THREE.Mesh(BOX, smokeMats[0]);
+    m.userData.pool = 'smoke';
+    return m;
+  });
+  mesh.material = smokeMats[smokeI++ % smokeMats.length];
+  mesh.material.opacity = 0;
+  return mesh;
+}
+function acquireSpark() {
+  return acquirePooledMesh(sparkPool, () => {
+    const mesh = new THREE.Mesh(BOX, sparkMat);
+    mesh.userData.pool = 'spark';
+    return mesh;
+  });
+}
+function acquireChip(mat) {
+  const mesh = acquirePooledMesh(chipPool, () => {
+    const m = new THREE.Mesh(BOX, mat);
+    m.userData.pool = 'chip';
+    return m;
+  });
+  mesh.material = mat;
+  return mesh;
+}
+function releaseDebris(mesh) {
+  scene.remove(mesh);
+  mesh.visible = false;
+  const pool = mesh.userData.pool;
+  if (pool === 'casing') casingPool.push(mesh);
+  else if (pool === 'smoke') smokePool.push(mesh);
+  else if (pool === 'spark') sparkPool.push(mesh);
+  else if (pool === 'chip') chipPool.push(mesh);
+}
 function spawnDebris(mesh, vel, o) {
   // Late waves can dump hundreds of sparks — keep a soft ceiling.
-  while (debris.length >= DEBRIS_SOFT_CAP) {
-    const old = debris.shift();
-    scene.remove(old);
-  }
-  mesh.userData = { vel, spin: o.spin || new THREE.Vector3(), life: o.life, max: o.life, bounce: o.bounce, smoke: o.smoke, size: mesh.scale.clone() };
+  while (debris.length >= DEBRIS_SOFT_CAP) releaseDebris(debris.shift());
+  const ud = mesh.userData;
+  if (!(ud.vel instanceof THREE.Vector3)) ud.vel = new THREE.Vector3();
+  ud.vel.copy(vel);
+  if (!(ud.spin instanceof THREE.Vector3)) ud.spin = new THREE.Vector3();
+  if (o.spin) ud.spin.copy(o.spin);
+  else ud.spin.set(0, 0, 0);
+  ud.life = o.life;
+  ud.max = o.life;
+  ud.bounce = o.bounce;
+  ud.smoke = o.smoke;
+  if (!(ud.size instanceof THREE.Vector3)) ud.size = new THREE.Vector3();
+  ud.size.copy(mesh.scale);
+  mesh.visible = true;
   scene.add(mesh);
   debris.push(mesh);
 }
@@ -904,7 +958,7 @@ function updateDebris(dt) {
       }
       if (u.life < 0.4) d.scale.copy(u.size).multiplyScalar(Math.max(0.01, u.life / 0.4)); // shrink away
     }
-    if (u.life <= 0) { scene.remove(d); debris.splice(i, 1); }
+    if (u.life <= 0) { releaseDebris(d); debris.splice(i, 1); }
   }
 }
 
@@ -998,7 +1052,8 @@ function muzzleFlash(hot) {
 
   gun.updateWorldMatrix(true, false);
   // brass flips out of the ejection port to the right
-  const casing = new THREE.Mesh(casingGeo, M.trim);
+  const casing = acquireCasing();
+  casing.scale.set(1, 1, 1);
   casing.position.copy(EJECT).applyMatrix4(gun.matrixWorld);
   casing.quaternion.setFromRotationMatrix(gun.matrixWorld);
   const right = new THREE.Vector3(-1, 0, 0).transformDirection(gun.matrixWorld);
@@ -1006,10 +1061,11 @@ function muzzleFlash(hot) {
   const vel = right.multiplyScalar(2.4 + Math.random() * 1.2).addScaledVector(back, 0.6).add(new THREE.Vector3(0, 3 + Math.random(), 0));
   spawnDebris(casing, vel, {
     life: 2.5, bounce: 0.025,
-    spin: new THREE.Vector3(Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 10),
+    spin: _sparkDir.set(Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 10),
   });
   // a puff of smoke from the muzzle
-  const smoke = new THREE.Mesh(BOX, smokeMats[smokeI++ % smokeMats.length]);
+  const smoke = acquireSmoke();
+  smoke.scale.set(1, 1, 1);
   muzzle.getWorldPosition(smoke.position);
   smoke.rotation.set(Math.random() * 3, Math.random() * 3, 0);
   const fwd = new THREE.Vector3(0, 0, 1).transformDirection(gun.matrixWorld);
@@ -1173,9 +1229,8 @@ function animatePlayer(dt, mx, mz) {
   muzzleLight.intensity = rig.flashPeak * f * f;
   if (f > 0) {
     muzzle.getWorldPosition(muzzleLight.position);
-    muzzleLight.position.x += Math.sin(aim) * 0.4; // just ahead of the brake, so the barrel
-    muzzleLight.position.z += Math.cos(aim) * 0.4; // doesn't shadow the shooter
-    muzzleLight.shadow.needsUpdate = true;
+    muzzleLight.position.x += Math.sin(aim) * 0.4; // just ahead of the brake
+    muzzleLight.position.z += Math.cos(aim) * 0.4;
   }
 }
 
@@ -1224,19 +1279,37 @@ const state = {
 
 const bullets = [];
 const drones = [];
+const tracerPool = [];
+const _tracerLook = new THREE.Vector3();
+const _tracerDir = new THREE.Vector3();
 
 // reusable materials for spawned objects
 // tracers: a white-hot core inside a softer colored streak, both additive so they glow
 const glowMat = (color, opacity) => new THREE.MeshBasicMaterial({ color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false });
 const tracerCore = glowMat(0xe1fcff, 1), tracerGlow = glowMat(CYAN, 0.45), tracerGlowHot = glowMat(0xff5a1e, 0.6); // hot: OVERCHARGE
-function makeTracer(hot) {
+function makeTracer() {
   const b = new THREE.Group(); // +Z is the direction of travel; the streak trails behind the head
   const core = new THREE.Mesh(BOX, tracerCore); core.scale.set(0.05, 0.05, 0.9); core.position.z = -0.35;
-  const glow = new THREE.Mesh(BOX, hot ? tracerGlowHot : tracerGlow); glow.scale.set(0.15, 0.15, 1.05); glow.position.z = -0.42;
+  const glow = new THREE.Mesh(BOX, tracerGlow); glow.scale.set(0.15, 0.15, 1.05); glow.position.z = -0.42;
   b.add(core, glow);
+  b.userData.glow = glow;
   return b;
 }
-const sparkMat = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false });
+function acquireTracer(hot) {
+  const b = tracerPool.pop() || makeTracer();
+  b.userData.glow.material = hot ? tracerGlowHot : tracerGlow;
+  b.visible = true;
+  return b;
+}
+function releaseTracer(b) {
+  scene.remove(b);
+  b.visible = false;
+  const glow = b.userData.glow;
+  const hits = b.userData.hits instanceof Set ? b.userData.hits : new Set();
+  hits.clear();
+  b.userData = { glow, hits };
+  tracerPool.push(b);
+}
 
 // ===================================================================
 // INPUT
@@ -2265,16 +2338,16 @@ function shotWorld() {
 }
 
 function wallSpark(x, y, z, dir) {
-  const origin = new THREE.Vector3(x, y, z);
+  const origin = _tracerLook.set(x, y, z);
   const sparks = Math.max(2, Math.round(7 * (1 - fxPressure() * 0.7)));
   for (let i = 0; i < sparks; i++) {
-    const spark = new THREE.Mesh(BOX, sparkMat);
+    const spark = acquireSpark();
     spark.scale.set(0.03, 0.03, rnd(0.12, 0.3));
     spark.position.copy(origin);
     const vx = -dir.x * rnd(2.5, 6) + rnd(-2, 2);
     const vz = -dir.z * rnd(2.5, 6) + rnd(-2, 2);
-    const velocity = new THREE.Vector3(vx, rnd(1.5, 5), vz);
-    spark.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), velocity.clone().normalize());
+    const velocity = _tracerDir.set(vx, rnd(1.5, 5), vz);
+    spark.quaternion.setFromUnitVectors(sparkForward, _sparkDir.copy(velocity).normalize());
     spawnDebris(spark, velocity, { life: rnd(0.16, 0.34), bounce: 0.02 });
   }
   audio.bash(origin, 0.28);
@@ -2302,10 +2375,12 @@ function spawnPulse(fromX, fromZ, muzzlePos, dir, userData, hot) {
     strikeShotBlock(start.impact, dir, muzzlePos.y);
     return;
   }
-  const b = makeTracer(hot);
+  const b = acquireTracer(hot);
   b.position.set(start.x, muzzlePos.y, start.z);
-  b.lookAt(b.position.clone().add(dir));
-  b.userData = { dir, ...userData };
+  b.lookAt(_tracerLook.copy(b.position).add(dir));
+  const glow = b.userData.glow;
+  b.userData = { ...userData, dir, glow };
+  if (!(b.userData.hits instanceof Set)) b.userData.hits = new Set();
   scene.add(b);
   bullets.push(b);
 }
@@ -2884,14 +2959,14 @@ function resetOpenings() {
 function burst(o, n, mat, size, speed) {
   const sx = o.ix - o.x, sz = o.iz - o.z, l = Math.hypot(sx, sz);
   for (let i = 0; i < n; i++) {
-    const m = new THREE.Mesh(BOX, mat);
+    const m = acquireChip(mat);
     m.scale.set(size * rnd(0.4, 1), size * rnd(0.2, 0.6), size * rnd(1, 2.5));
     const along = rnd(-0.5, 0.5) * (o.w - 0.3);
     m.position.set(o.x + (o.axis === 'x' ? along : 0), o.kind === 'door' ? rnd(0.3, 1.8) : rnd(o.sill + 0.05, o.head - 0.05), o.z + (o.axis === 'z' ? along : 0));
     m.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
     const v = speed * rnd(0.5, 1.2);
-    spawnDebris(m, new THREE.Vector3(sx / l * v + rnd(-1, 1), rnd(0.5, 2.5), sz / l * v + rnd(-1, 1)),
-      { life: rnd(2, 3.5), bounce: 0.02, spin: new THREE.Vector3(rnd(-12, 12), rnd(-12, 12), rnd(-12, 12)) });
+    spawnDebris(m, _tracerDir.set(sx / l * v + rnd(-1, 1), rnd(0.5, 2.5), sz / l * v + rnd(-1, 1)),
+      { life: rnd(2, 3.5), bounce: 0.02, spin: _sparkDir.set(rnd(-12, 12), rnd(-12, 12), rnd(-12, 12)) });
   }
 }
 // a drone's blow (or the operator's bullet, for glass) lands on a door or window
@@ -3876,7 +3951,6 @@ function choose(i) {
 const droneBlasts = [];
 const shockwaves = [];
 const blastGlow = glowTexture();
-const sparkForward = new THREE.Vector3(0, 0, 1);
 const BLAST_TIME = 0.22;
 const shockwaveGeo = new THREE.RingGeometry(0.55, 0.72, 48).rotateX(-Math.PI / 2);
 
@@ -3896,12 +3970,12 @@ function spawnBlastSparks(origin, count, speedMul = 1, sizeMul = 1) {
   const trimmed = Math.max(2, Math.round(count * (1 - fxPressure() * 0.7)));
   const n = reducedMotion.matches ? Math.max(2, (trimmed / 3) | 0) : trimmed;
   for (let i = 0; i < n; i++) {
-    const spark = new THREE.Mesh(BOX, sparkMat);
+    const spark = acquireSpark();
     spark.scale.set(0.035 * sizeMul, 0.035 * sizeMul, rnd(0.2, 0.45) * sizeMul);
     spark.position.copy(origin);
     const angle = rnd(0, Math.PI * 2), speed = rnd(4, 9) * speedMul;
-    const velocity = new THREE.Vector3(Math.cos(angle) * speed, rnd(1, 5) * speedMul, Math.sin(angle) * speed);
-    spark.quaternion.setFromUnitVectors(sparkForward, velocity.clone().normalize());
+    const velocity = _tracerDir.set(Math.cos(angle) * speed, rnd(1, 5) * speedMul, Math.sin(angle) * speed);
+    spark.quaternion.setFromUnitVectors(sparkForward, _sparkDir.copy(velocity).normalize());
     spawnDebris(spark, velocity, { life: rnd(0.18, 0.55) * (0.8 + sizeMul * 0.3), bounce: 0.025 });
   }
 }
@@ -4161,10 +4235,10 @@ function clearRun() {
   audio.cancelReload();
   clearEnemyBolts();
   state.bossPending = false;
-  for (const b of bullets) scene.remove(b);
+  for (const b of bullets) releaseTracer(b);
   for (const z of drones) scene.remove(z);
   for (const d of drops) scene.remove(d);
-  for (const d of debris) scene.remove(d);
+  for (const d of debris) releaseDebris(d);
   for (const { flare } of droneBlasts) removeDroneBlast(flare);
   for (const wave of shockwaves) { scene.remove(wave.ring); wave.ring.material.dispose(); }
   clearEmeralds();
@@ -5445,7 +5519,7 @@ function update(dt, lightFrame = false) {
         else hit = true; // ends the loop; a piercing bullet keeps checking the rest
       }
     }
-    if (hit || b.userData.life <= 0) { scene.remove(b); bullets.splice(i, 1); }
+    if (hit || b.userData.life <= 0) { releaseTracer(b); bullets.splice(i, 1); }
   }
 
   if (state.running && !state.choosing && !bossDeath.active) updateEnemyBolts(dt);
