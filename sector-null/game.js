@@ -4554,7 +4554,7 @@ function updateCamera(dt) {
   tmp.copy(player.position).add(CAM_OFFSET);
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
-    const s = settings.shake ? state.shake : 0;
+    const s = reducedMotion.matches ? 0 : state.shake;
     tmp.x += (Math.random() - 0.5) * s;
     tmp.z += (Math.random() - 0.5) * s;
     tmp.y += (Math.random() - 0.5) * s;
