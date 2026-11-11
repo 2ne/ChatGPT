@@ -138,8 +138,9 @@ function mineBody(shock = false, owned = 0) {
 
 function rifleBase() {
   const g = new THREE.Group();
-  const body = std(0x536d7e);
-  const metal = std(0x8aa0b0, { metalness: 0.75, roughness: 0.28 });
+  // Card-only mesh (not the in-game rifle) — lifted steel so it reads on dark card backs.
+  const body = std(0x8aa4b6, { emissive: 0x243848, emissiveIntensity: 0.22 });
+  const metal = std(0xc2d4e0, { metalness: 0.62, roughness: 0.34, emissive: 0x2a4050, emissiveIntensity: 0.12 });
   addBox(g, body, 0.22, 0.28, 0.55, 0, 0, -0.15);
   addBox(g, metal, 0.16, 0.18, 0.7, 0, 0.04, 0.35);
   addBox(g, metal, 0.1, 0.1, 0.55, 0, 0.05, 0.9);
