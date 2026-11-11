@@ -2117,6 +2117,7 @@ body.pad-aiming #game {
   width: 100%;
   height: 14px;
   margin-top: 10px;
+  transform: translateY(clamp(-16px, -1vw, -8px));
   background: #45ecff;
   clip-path: polygon(0 0, 13% 0, 16% 90%, 84% 90%, 87% 0, 100% 0, 100% 10%, 87.2% 10%, 84.2% 100%, 15.8% 100%, 12.8% 10%, 0 10%);
   opacity: .7;
