@@ -415,8 +415,6 @@ body.titling #game {
 }
 #menu .mpanel {
   left: calc(var(--menu-x) + var(--menu-width) + 20px);
-  background: #081827f7;
-  border-color: #33708a;
 }
 #menu .mpanel.open {
   z-index: 2;
