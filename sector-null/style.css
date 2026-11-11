@@ -821,7 +821,7 @@ body.paused #flash {
   background: #060e19bd;
 }
 #pausePanel {
-  width: min(100%, 380px);
+  width: min(100%, 440px);
   max-height: 100%;
   overflow: auto;
   padding: clamp(18px, 5vw, 32px);
@@ -842,10 +842,16 @@ body.paused #flash {
   letter-spacing: 0.1em;
   margin-top: 8px;
 }
+#pauseSettings {
+  margin-top: 18px;
+}
+#pauseSettings .srow {
+  outline: none;
+}
 #pauseMenu {
   display: grid;
   gap: 8px;
-  margin-top: 22px;
+  margin-top: 18px;
 }
 #pauseMenu button {
   min-height: 44px;

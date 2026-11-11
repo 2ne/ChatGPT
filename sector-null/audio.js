@@ -8,7 +8,6 @@ export function createAudio(settings, listener) {
   const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
   soundtrack.loop = true;
   let ctx, master, musicBus, reverb, noise, score;
-  let muted = false;
   let paused = false;
   let titleMusic = false;
   let recharge;
@@ -61,7 +60,7 @@ export function createAudio(settings, listener) {
 
   function applyVolume() {
     if (!ctx) return;
-    master.gain.setTargetAtTime(muted ? 0 : (settings.master / 10) ** 1.5 * 0.75, ctx.currentTime, 0.04);
+    master.gain.setTargetAtTime((settings.master / 10) ** 1.5 * 0.75, ctx.currentTime, 0.04);
     musicBus.gain.setTargetAtTime((settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
   }
 
@@ -184,13 +183,6 @@ export function createAudio(settings, listener) {
     scoreTime() { return ctx?.state === 'running' ? ctx.currentTime : null; },
     queueWave(wave, delay) { return score?.queueWave(wave, delay) ?? null; },
     intensify() { score?.intensify(); },
-    toggleMute() {
-      ensure();
-      muted = !muted;
-      applyVolume();
-      return muted;
-    },
-    isMuted() { return muted; },
     shot(hot, spread, charge = 1) {
       // A subtle three-semitone descent across the cell, without losing punch.
       const pitch = 2 ** ((Math.max(0, Math.min(1, charge)) - 1) * 3 / 12);

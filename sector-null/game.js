@@ -1368,7 +1368,22 @@ function setDeathPadFocus(el) {
 }
 
 function pauseFocusables() {
-  return [document.getElementById('resumeBtn'), document.getElementById('quitBtn')].filter(Boolean);
+  return [
+    ...document.querySelectorAll('#pauseSettings .srow'),
+    document.getElementById('resumeBtn'),
+    document.getElementById('quitBtn'),
+  ].filter(Boolean);
+}
+
+function syncPauseSettingSel() {
+  const ae = document.activeElement;
+  for (const r of document.querySelectorAll('#pauseSettings .srow')) {
+    r.classList.toggle('sel', r === ae);
+  }
+}
+
+function pauseSettingRowFocused() {
+  return document.activeElement?.closest?.('#pauseSettings .srow') || null;
 }
 
 function cycleFocus(list, dir) {
@@ -1446,7 +1461,13 @@ function handlePadUiNav(dir) {
     return;
   }
   if (state.paused) {
+    const row = pauseSettingRowFocused();
+    if (row && (dir === 'left' || dir === 'right')) {
+      menu.adjust(row.dataset.key, dir === 'left' ? -1 : 1);
+      return;
+    }
     cycleFocus(pauseFocusables(), dir === 'up' || dir === 'left' ? -1 : 1);
+    syncPauseSettingSel();
     audio.ui('move');
     return;
   }
@@ -1506,11 +1527,19 @@ function handlePadUiConfirm() {
     if (card) choose(+card.dataset.i);
     return;
   }
-  if (state.paused || !document.getElementById('death').classList.contains('hidden')) {
-    if (!activateFocusedUi()) {
-      if (state.paused) setPaused(false);
-      else if (!deathArcadeLocked()) startGame();
+  if (state.paused) {
+    const row = pauseSettingRowFocused();
+    if (row) {
+      const key = row.dataset.key;
+      if (key === 'shake') menu.adjust(key, 0);
+      else menu.adjust(key, 1);
+      return;
     }
+    if (!activateFocusedUi()) setPaused(false);
+    return;
+  }
+  if (!document.getElementById('death').classList.contains('hidden')) {
+    if (!activateFocusedUi() && !deathArcadeLocked()) startGame();
   }
 }
 
@@ -1606,11 +1635,6 @@ function pollGamepad(dt) {
     if (state.running && !state.paused && !state.choosing) startReload();
     notePlayInput('gamepad');
   }
-  if (padJust(pad, 8)) {
-    audio.toggleMute();
-    notePlayInput('gamepad');
-    updateReloadHint();
-  }
   if (padJust(pad, 9)) {
     if (state.running) setPaused(!state.paused);
     else if (title.active && menuEl.classList.contains('splash')) menu.leaveSplash();
@@ -1648,11 +1672,7 @@ function notePlayInput(kind) {
 function updateReloadHint() {
   const el = document.getElementById('reloadHint');
   if (!el) return;
-  const pad = lastPlayInput === 'gamepad';
-  const recharge = pad ? '[X / LB] RECHARGE' : '[R] RECHARGE';
-  const text = audio.isMuted()
-    ? `${recharge}   ·   ${pad ? '[VIEW]' : '[M]'} MUTED`
-    : recharge;
+  const text = lastPlayInput === 'gamepad' ? '[X / LB] RECHARGE' : '[R] RECHARGE';
   if (el.textContent !== text) el.textContent = text;
 }
 
@@ -1859,13 +1879,33 @@ window.addEventListener('keydown', e => {
   } else keys[e.code] = true;
   if (state.running) notePlayInput('pointer');
   if (e.code === 'Escape' || e.code === 'KeyP') { if (!e.repeat) setPaused(!state.paused); return; }
-  if (state.paused) return;
+  if (state.paused) {
+    const up = e.code === 'ArrowUp' || e.code === 'KeyW';
+    const down = e.code === 'ArrowDown' || e.code === 'KeyS';
+    const left = e.code === 'ArrowLeft' || e.code === 'KeyA';
+    const right = e.code === 'ArrowRight' || e.code === 'KeyD';
+    const ok = e.code === 'Enter' || e.code === 'Space';
+    const row = pauseSettingRowFocused();
+    if (up || down) {
+      cycleFocus(pauseFocusables(), up ? -1 : 1);
+      syncPauseSettingSel();
+      audio.ui('move');
+      e.preventDefault();
+    } else if ((left || right) && row) {
+      menu.adjust(row.dataset.key, left ? -1 : 1);
+      e.preventDefault();
+    } else if (ok) {
+      if (row) {
+        const key = row.dataset.key;
+        if (key === 'shake') menu.adjust(key, 0);
+        else menu.adjust(key, 1);
+      } else activateFocusedUi();
+      e.preventDefault();
+    }
+    return;
+  }
   if (e.code === 'KeyR') startReload();
   if (state.choosing && /^Digit[1-3]$/.test(e.code)) choose(+e.code.slice(5) - 1);
-  if (e.code === 'KeyM') {
-    audio.toggleMute();
-    updateReloadHint();
-  }
 });
 window.addEventListener('keyup', e => { delete keys[e.code]; }, true);
 window.addEventListener('mousemove', e => {
@@ -4162,7 +4202,11 @@ function setPaused(on) {
     `WAVE ${state.wave} · ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   if (on) {
-    if (finePointerUi() || gamepadLive) document.getElementById('resumeBtn').focus({ preventScroll: true });
+    menu.drawSettings();
+    if (finePointerUi() || gamepadLive) {
+      document.getElementById('resumeBtn').focus({ preventScroll: true });
+      syncPauseSettingSel();
+    }
   } else if (state.choosing) {
     if (gamepadLive) setPadPickerSel(padPickerSel);
     else if (finePointerUi()) hud.cards.querySelector('button')?.focus({ preventScroll: true });
@@ -4565,7 +4609,9 @@ function updateCamera(dt) {
 
 // --- the menu itself: keyboard (arrows/WASD, enter, esc) and mouse both drive it ---
 const menuButtons = [...document.querySelectorAll('#menuList button')];
-const settingRows = [...document.querySelectorAll('#settingRows .srow')];
+const titleSettingRows = [...document.querySelectorAll('#settingRows .srow')];
+const pauseSettingRows = [...document.querySelectorAll('#pauseSettings .srow')];
+const settingRows = titleSettingRows; // title-menu keyboard/pad nav stays on the title panel
 for (const area of document.querySelectorAll('#menu .mpanel, #scoresList')) enhanceScrollArea(area);
 function blurMenuFocus() {
   const ae = document.activeElement;
@@ -4625,7 +4671,7 @@ const menu = {
     this.drawSettings();
   },
   drawSettings() {
-    for (const r of settingRows) {
+    for (const r of [...titleSettingRows, ...pauseSettingRows]) {
       const k = r.dataset.key, v = settings[k];
       if (k === 'shake') {
         r.querySelector('.toggle').innerHTML = `<i class="${v ? 'on' : ''}" data-v="1">ON</i><i class="${v ? '' : 'on'}" data-v="0">OFF</i>`;
@@ -4647,7 +4693,6 @@ const menu = {
   // keyboard: returns true if the title used the key
   key(e) {
     if (!title.active || menuEl.classList.contains('gone')) return false;
-    if (e.code === 'KeyM') return false; // mute works everywhere
     if (e.code === 'Tab') return false;
     if (menuEl.classList.contains('splash')) { this.leaveSplash(); return true; }
     const c = e.code, up = c === 'ArrowUp' || c === 'KeyW', down = c === 'ArrowDown' || c === 'KeyS';
@@ -4839,18 +4884,24 @@ menuButtons.forEach((b, i) => {
   });
   bindTap(b, () => menu.activate(i));
 });
-settingRows.forEach((r, i) => {
+function bindSettingRow(r, onSelect) {
   r.addEventListener('mouseenter', () => {
     if (!finePointerUi()) return;
-    menu.selectRow(i);
+    onSelect();
   });
+  r.addEventListener('focus', onSelect);
   bindTap(r, e => {
     const v = e.target.dataset.v, key = r.dataset.key;
     if (v === undefined) { if (key === 'shake') menu.adjust(key, 0); return; }
     if (key === 'shake') menu.adjust(key, v === '1' ? 1 : -1);
     else menu.adjust(key, +v - settings[key]);
   });
-});
+}
+titleSettingRows.forEach((r, i) => bindSettingRow(r, () => menu.selectRow(i)));
+pauseSettingRows.forEach((r) => bindSettingRow(r, () => {
+  pauseSettingRows.forEach((x) => x.classList.toggle('sel', x === r));
+  if (document.activeElement !== r) r.focus({ preventScroll: true });
+}));
 bindTap(menuEl, e => {
   if (menuEl.classList.contains('splash')) {
     if (e.cancelable) e.preventDefault();

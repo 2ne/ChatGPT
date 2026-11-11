@@ -98,7 +98,7 @@ Destroyed drones burst into sparks and scattered parts. Reduced-motion settings 
 | Choose an upgrade | 1–3 or click | Tap a card | D-pad / left stick + A |
 | Menus | Arrows / Enter / Esc | Tap | D-pad or left stick, A confirm, B back |
 | Callsign (Game Over) | Type 3 characters + Submit | Type / Submit | Arcade reels: up/down spin letter, left/right move (right past last → Submit), A confirm, B back |
-| Mute | M or volume settings | Volume settings | View / Back |
+| Volume / shake | Title Settings or pause menu | Title Settings or pause menu | Title Settings or pause menu (D-pad / stick + A) |
 
 Touch sticks are dynamic: each thumb creates a virtual stick where it lands. If a thumb drifts past the rim, the stick base follows so full input is kept. The right stick starts firing as soon as it is held, using the current facing until you drag to steer. A Bluetooth Xbox controller works in desktop browsers and in the iOS Safari / Home Screen web app via the standard Gamepad API mapping. Mixed mouse/keyboard/touch/pad input is fine mid-run; pad aim hides the mouse crosshair.
 
