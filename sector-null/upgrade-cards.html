@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sector Null — Upgrade Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100dvh;
+    font-family: "Rajdhani", "Arial Narrow", sans-serif;
+    font-weight: 600;
+    color: #d5e7ee;
+    background:
+      radial-gradient(ellipse at 50% 0%, #0a1a28 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 80%, #0a1520 0%, transparent 45%),
+      #080e16;
+    padding: 32px 20px 64px;
+  }
+  .page {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+  }
+  header {
+    margin-bottom: 36px;
+  }
+  header h1 {
+    font-family: "Oxanium", "Rajdhani", sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.09em;
+    color: #9af5ff;
+    text-shadow: 0 0 8px #45ecff99, 0 0 30px #45ecff55;
+  }
+  header p {
+    margin-top: 10px;
+    max-width: 62ch;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #9aaeb8;
+    letter-spacing: 0.04em;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0 8px;
+  }
+  .filters button {
+    appearance: none;
+    border: 1px solid #2c4858;
+    background: #0a141e;
+    color: #c3d2d9;
+    font: 700 13px/1 "Rajdhani", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .filters button[aria-pressed="true"] {
+    border-color: var(--cat, #45ecff);
+    color: #07111a;
+    background: var(--cat, #45ecff);
+  }
+  .section {
+    margin-top: 40px;
+  }
+  .section h2 {
+    font-family: "Oxanium", "Rajdhani", sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cat, #9af5ff);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--cat, #45ecff) 35%, transparent);
+  }
+  .section.hidden { display: none; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+  }
+  .trio {
+    display: grid;
+    grid-template-columns: 1.06fr 1fr 1fr;
+    gap: 24px;
+    width: min(1120px, 100%);
+  }
+  .note {
+    margin-top: 10px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6a8490;
+  }
+  .req {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #7a909c;
+  }
+
+  /* —— in-game card chrome (mirrors style.css picker cards) —— */
+  .card {
+    --accent: #64dfee;
+    --lift: -10px;
+    --zoom: 1.045;
+    position: relative;
+    isolation: isolate;
+    width: auto;
+    min-width: 0;
+    padding: 22px 22px 25px;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: inherit;
+    color: #e4f1f5;
+    text-align: center;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: transform 0.18s ease-out, opacity 0.2s;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -2;
+    clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px);
+    background:
+      radial-gradient(ellipse at 50% 28%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 65%),
+      linear-gradient(145deg, #0b1623f5, #040e18f5);
+  }
+  .card-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: -1;
+    fill: none;
+    stroke: var(--accent);
+    transition: filter 0.18s ease;
+  }
+  .card-frame path { vector-effect: non-scaling-stroke; }
+  .frame-edge { stroke-opacity: 0.55; }
+  .frame-inner { stroke-opacity: 0.12; }
+  .frame-rail { fill: var(--accent); fill-opacity: 0.55; stroke-opacity: 0.8; }
+  .recommended .card-frame { filter: drop-shadow(0 0 5px var(--accent)); }
+  .recommended .frame-edge { stroke-width: 2; stroke-opacity: 1; }
+  .recommended .frame-inner { stroke-opacity: 0.65; }
+  .recommended .frame-rail { fill-opacity: 0.9; }
+  .ctop {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    min-height: 28px;
+    color: var(--accent);
+    gap: 6px;
+  }
+  .recommended .ctop > span:first-child {
+    padding: 5px 12px;
+    color: #07111a;
+    background: var(--accent);
+    clip-path: polygon(0 0, 100% 0, 100% 65%, calc(100% - 9px) 100%, 0 100%);
+  }
+  .ckey {
+    font-family: "Oxanium", sans-serif;
+    font-size: 18px;
+    min-width: 20px;
+    padding: 3px 8px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, #263747);
+    background: #06101ba8;
+    color: #cdd2d8;
+    letter-spacing: 0;
+    text-align: center;
+    border-radius: 0;
+  }
+  .upgrade-preview {
+    width: 100%;
+    height: 130px;
+    margin: 14px 0 10px;
+    color: var(--accent);
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 65%, transparent));
+  }
+  .cname {
+    font-family: "Rajdhani", sans-serif;
+    font-size: clamp(24px, 2.3vw, 32px);
+    letter-spacing: 0.025em;
+    color: #e4f1f5;
+    line-height: 1.1;
+    text-shadow: 0 2px 0 #000;
+  }
+  .cdesc {
+    font-size: 18px;
+    color: #c3d2d9;
+    line-height: 1.25;
+    min-height: 46px;
+    margin: 8px 0 18px;
+    text-align: center;
+  }
+  .cstat {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: auto;
+    padding: 10px 4px;
+    border-top: 1px solid #9ac5d033;
+    border-bottom: 1px solid #9ac5d033;
+    background: linear-gradient(100deg, #34566633, #09172388, #34566633);
+    clip-path: polygon(12px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 8px 100%, 0 calc(100% - 8px), 0 12px);
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: #d5e5ee;
+  }
+  .cstat b { font-weight: 700; color: var(--accent); }
+  .clvl {
+    display: flex;
+    gap: 6px;
+    margin-top: 18px;
+    height: 10px;
+  }
+  .clvl i {
+    width: 28px;
+    max-width: 5vw;
+    height: 8px;
+    background: #24262c;
+    border: 1px solid #ffffff18;
+    border-radius: 0;
+    transform: skewX(-16deg);
+  }
+  .clvl i.own {
+    background: color-mix(in srgb, var(--accent) 55%, #222);
+  }
+  .clvl i.next {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .preview-shot {
+    animation: previewPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes previewPulse {
+    50% { opacity: 0.3; }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card:hover {
+      transform: translateY(var(--lift)) scale(var(--zoom));
+      z-index: 2;
+    }
+    .card:hover .card-frame {
+      filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent));
+    }
+    .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2.5; }
+    .card:hover .frame-inner { stroke: #eaffff; stroke-opacity: 0.95; }
+    .card:hover .frame-rail { fill-opacity: 1; }
+  }
+  @media (max-width: 720px) {
+    .trio { grid-template-columns: 1fr; }
+    .upgrade-preview { height: 90px; }
+    .cdesc { font-size: 15px; min-height: 36px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .preview-shot, .card, .card-frame { animation: none; transition: none; }
+    .card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>UPGRADE CARDS</h1>
+      <p>
+        Static preview of every Sector Null upgrade card at a fresh-run offer
+        (rank 0 → next). Open this file directly — no game build required.
+        Gated modules are shown with their unlock note.
+      </p>
+      <div class="filters" id="filters" role="toolbar" aria-label="Filter by category"></div>
+    </header>
+
+    <section class="section" data-section="sample">
+      <h2 style="--cat:#9af5ff">Sample picker layout</h2>
+      <div class="trio" id="trio"></div>
+      <p class="note">Recommended · alternative · ability (slot 3)</p>
+    </section>
+
+    <div id="catalog"></div>
+  </div>
+
+<script>
+const CATS = {
+  engineer: '#a7a1ff',
+  firepower: '#ffad61',
+  handling:  '#76bcf0',
+  survival:  '#70dfb8',
+  fortune:   '#bdadfa',
+  ability:   '#7cff4a',
+};
+
+const ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'ability'];
+
+// Baseline stats match a fresh run (wave-clear offer, nothing owned).
+const UPGRADES = [
+  { id: 'bot',     cat: 'engineer', name: 'HELPER BOT',      desc: 'Deploy one automatic companion',        max: 3, now: 'Shot damage', after: '1.5 damage' },
+  { id: 'botGun',  cat: 'engineer', name: 'TWIN GUNS',       desc: 'Double bot fire • locks out bombs',    max: 2, now: 'Single', after: 'Twin guns', requires: 'Helper Bot owned · no Bomb Launcher' },
+  { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER',   desc: 'Area blasts • locks out twin guns',    max: 2, now: '1 shot / 1.7s', after: 'Area bombs', requires: 'Helper Bot owned · no Twin Guns' },
+  { id: 'mine',    cat: 'engineer', name: 'TRAIL MINES',     desc: 'One trap every 8s • max 3 active',     max: 3, now: 'Blast damage', after: '4' },
+  { id: 'shock',   cat: 'engineer', name: 'SHOCK MINES',     desc: 'Mine blasts slow survivors for 3s',    max: 1, now: 'Explosive', after: '+60% slow', requires: 'Trail Mines owned' },
+  { id: 'damage',  cat: 'firepower',name: 'PULSE AMPLIFIER', desc: '+50% pulse damage',                   max: 6, now: '1×', after: '1.5×' },
+  { id: 'rate',    cat: 'firepower',name: 'RAPID CYCLER',    desc: 'fire 20% faster',                      max: 4, now: '7.7', after: '9.6/s' },
+  { id: 'pierce',  cat: 'firepower',name: 'PIERCING',        desc: 'shots pierce +1 drone',                max: 3, now: '0', after: '1 thru' },
+  { id: 'spread',  cat: 'firepower',name: 'SPLIT BEAM',      desc: '+1 pulse per shot',                    max: 3, now: '1', after: '2 per shot' },
+  { id: 'mag',     cat: 'handling', name: 'CELL CAPACITY',   desc: '+4 pulses per cell',                   max: 5, now: '8', after: '12 pulses' },
+  { id: 'reload',  cat: 'handling', name: 'HOT SWAP',        desc: 'reload 25% faster',                    max: 4, now: '1.20', after: '0.90s' },
+  { id: 'regen',   cat: 'survival', name: 'SHIELD REGEN',    desc: 'Recover 1 shield after avoiding hits', max: 2, now: 'No damage for', after: '12 seconds' },
+  { id: 'pulse',   cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts enemies',           max: 3, now: '0', after: 'Rank 1' },
+  { id: 'hp',      cat: 'survival', name: 'SHIELD ARRAY',    desc: '+1 shield and recharge it',            max: 3, now: '3', after: '4 max hp' },
+  { id: 'speed',   cat: 'survival', name: 'MOTION SERVO',    desc: 'move 12% faster',                      max: 3, now: '100%', after: '112%' },
+  { id: 'heal',    cat: 'survival', name: 'SHIELD RESET',    desc: 'restore all shield segments',          max: Infinity, now: '2', after: '3 hp', requires: 'Injured (hp < max)' },
+  { id: 'luck',    cat: 'fortune',  name: 'SALVAGE SCANNER', desc: 'More Overcharge / Infinite Cell drops',max: 3, now: '5.0%', after: '8.0% drops' },
+  { id: 'magnet',  cat: 'ability',  name: 'MAGNETIC GEMS',   desc: 'Gems surge toward you',                max: 1, now: 'Short pull', after: 'Through walls' },
+];
+
+function upgradePreview(u) {
+  const crystal =
+    '<path d="M0-15L-11-1 0 20 11-1Z" fill="currentColor" fill-opacity=".28"/>' +
+    '<path d="M0-15L-11-1H0Z" fill="#eaffdc" fill-opacity=".8" stroke="none"/>' +
+    '<path d="M0-15L11-1H0Z" fill="currentColor" fill-opacity=".85" stroke="none"/>' +
+    '<path d="M-11-1L0 20V-1Z" fill="currentColor" fill-opacity=".55" stroke="none"/>' +
+    '<path d="M0-15V20M-11-1H11" stroke="#dcffbc" stroke-width=".7"/>';
+  const paths = {
+    bot: '<circle cx="48" cy="29" r="24" stroke-width="1.3"/><circle cx="48" cy="29" r="19" fill="#eef3f7" stroke="#fff"/><circle cx="48" cy="29" r="6" fill="#172733" stroke="#172733"/><path d="M48 29h19" stroke="#506375" stroke-width="6"/>',
+    mine: '<path d="M20 42h60M36 38l5-12h18l5 12zM50 18v-8M25 20l8 6m42-6-8 6"/>',
+    shield: '<path d="M50 8l23 8v14c0 12-23 23-23 23S27 42 27 30V16zM40 30h20m-10-10v20"/>',
+    rifle: '<path d="M10 28h25m-6-7 8 7-8 7"/>',
+    gems: '<ellipse cx="50" cy="54" rx="20" ry="4.5" stroke-width=".7" opacity=".45"/>' +
+      '<ellipse cx="50" cy="54" rx="12" ry="2.5" stroke-width="2"/>' +
+      '<path d="M50 38V52M33 40Q43 42 46 52M67 40Q57 42 54 52" stroke-width="1.2"/>' +
+      '<path d="M48 39L50 51 52 39Z" fill="currentColor" stroke="none"/>' +
+      `<g stroke-width="1" stroke-linejoin="round"><g transform="translate(50 17)">${crystal}</g><g transform="translate(23 28) rotate(-17) scale(.6)">${crystal}</g><g transform="translate(77 28) rotate(17) scale(.6)">${crystal}</g></g>`,
+  };
+  let art = u.cat === 'engineer' ? paths[u.id === 'mine' || u.id === 'shock' ? 'mine' : 'bot']
+    : u.cat === 'survival' ? paths.shield
+    : u.cat === 'ability' ? paths.gems
+    : paths.rifle;
+  if (u.id === 'spread') {
+    art += '<path class="preview-shot" d="M45 28L90 10"/><path class="preview-shot" d="M45 28L90 46"/>';
+  } else if (u.cat === 'firepower' || u.cat === 'handling') {
+    art += '<path class="preview-shot" d="M48 28h14m9 0h14"/><path d="M92 14v28"/>';
+  }
+  if (u.id === 'botBomb') art += '<circle cx="84" cy="29" r="7"/>';
+  if (u.id === 'botGun') art += '<path d="M72 23h22M72 35h22"/>';
+  return `<svg class="upgrade-preview" viewBox="0 0 100 60" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">${art}</svg>`;
+}
+
+const FRAME =
+  '<svg class="card-frame" viewBox="0 0 320 360" preserveAspectRatio="none" aria-hidden="true">' +
+  '<path class="frame-edge" d="M16 1H304L319 16V344L304 359H16L1 344V16Z"/>' +
+  '<path class="frame-inner" d="M18 6H302L314 18V342L302 354H18L6 342V18Z"/>' +
+  '<path class="frame-rail" d="M16 1H304L313 10H150L145 14H4Z"/></svg>';
+
+function cardHtml(u, { recommended = false, key = '', owned = 0 } = {}) {
+  const pips = u.max === Infinity ? '' :
+    Array.from({ length: u.max }, (_, k) =>
+      `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`
+    ).join('');
+  const top = recommended ? 'RECOMMENDED' : u.cat.toUpperCase();
+  const keyHtml = key ? `<span class="ckey">${key}</span>` : '';
+  return (
+    `<article class="card${recommended ? ' recommended' : ''}" style="--accent:${CATS[u.cat]}">` +
+    FRAME +
+    `<div class="ctop"><span>${top}</span>${keyHtml}</div>` +
+    upgradePreview(u) +
+    `<div class="cname">${u.name}</div><div class="cdesc">${u.desc}</div>` +
+    `<div class="cstat">${u.now} → <b>${u.after}</b></div>` +
+    (pips ? `<div class="clvl" aria-hidden="true">${pips}</div>` : '') +
+    (u.requires ? `<p class="req">${u.requires}</p>` : '') +
+    `</article>`
+  );
+}
+
+const filters = document.getElementById('filters');
+const catalog = document.getElementById('catalog');
+let active = 'all';
+
+filters.innerHTML = [
+  ['all', 'All', '#9af5ff'],
+  ...ORDER.map(c => [c, c, CATS[c]]),
+].map(([id, label, color]) =>
+  `<button type="button" data-cat="${id}" style="--cat:${color}" aria-pressed="${id === 'all'}">${label}</button>`
+).join('');
+
+filters.addEventListener('click', e => {
+  const btn = e.target.closest('button[data-cat]');
+  if (!btn) return;
+  active = btn.dataset.cat;
+  for (const b of filters.querySelectorAll('button')) {
+    b.setAttribute('aria-pressed', String(b.dataset.cat === active));
+  }
+  for (const section of catalog.querySelectorAll('.section')) {
+    section.classList.toggle('hidden', active !== 'all' && section.dataset.cat !== active);
+  }
+});
+
+catalog.innerHTML = ORDER.map(cat => {
+  const cards = UPGRADES.filter(u => u.cat === cat).map(u => cardHtml(u)).join('');
+  return (
+    `<section class="section" data-cat="${cat}" style="--cat:${CATS[cat]}">` +
+    `<h2>${cat}</h2><div class="grid">${cards}</div></section>`
+  );
+}).join('');
+
+const byId = id => UPGRADES.find(u => u.id === id);
+document.getElementById('trio').innerHTML = [
+  cardHtml(byId('spread'), { recommended: true, key: '1' }),
+  cardHtml(byId('bot'), { key: '2' }),
+  cardHtml(byId('magnet'), { key: '3' }),
+].join('');
+</script>
+</body>
+</html>
