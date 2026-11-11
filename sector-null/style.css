@@ -2191,15 +2191,44 @@ body.pad-aiming #game {
 #cards .clvl { height: 10px; gap: 6px; margin-top: 18px; }
 #cards .clvl i { width: 28px; max-width: 5vw; height: 8px; border: 1px solid #ffffff18; transform: skewX(-16deg); }
 #cards .clvl i.next { animation: none; }
-#cards .card:focus-visible, #cards .card.pad-sel {
-  outline: 2px solid #c2faff;
-  outline-offset: 6px;
-  box-shadow: none;
+#cards .card {
+  --lift: -10px;
+  --zoom: 1.045;
+  transition: transform .18s ease-out, opacity .2s;
 }
-#cards .card:focus-visible .card-frame, #cards .card.pad-sel .card-frame, #cards .card.picked .card-frame { filter: drop-shadow(0 0 9px var(--accent)); }
+#cards .card:is(:focus-visible, .pad-sel):not(.dropped):not(.picked) {
+  transform: translateY(var(--lift)) scale(var(--zoom));
+  z-index: 2;
+  outline: none;
+}
+#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .card-frame {
+  filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent));
+}
+#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-edge {
+  stroke-opacity: 1;
+  stroke-width: 2.5;
+}
+#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-inner {
+  stroke: #eaffff;
+  stroke-opacity: .95;
+}
+#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-rail { fill-opacity: 1; }
 @media (hover: hover) and (pointer: fine) {
-  #cards .card:hover .card-frame { filter: drop-shadow(0 0 9px var(--accent)); }
-  #cards .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2; }
+  #cards .card:hover:not(.dropped):not(.picked) {
+    transform: translateY(var(--lift)) scale(var(--zoom));
+    z-index: 2;
+  }
+  #cards .card:hover .card-frame { filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent)); }
+  #cards .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2.5; }
+  #cards .card:hover .frame-inner { stroke: #eaffff; stroke-opacity: .95; }
+  #cards .card:hover .frame-rail { fill-opacity: 1; }
+}
+#cards .card:active:not(.dropped):not(.picked) { transform: translateY(-3px) scale(1.015); }
+#cards .card.picked { transform: translateY(var(--lift)) scale(1.065); z-index: 3; }
+#cards .card.dropped { transform: translateY(16px) scale(.95); }
+@media (max-width: 600px), (max-height: 600px) {
+  #cards .card { --lift: -4px; --zoom: 1.025; }
+  #cards .card.picked { transform: translateY(-4px) scale(1.035); }
 }
 @media (max-width: 600px) and (min-height: 501px) {
   #pickerTitle { font-size: clamp(23px, 6vw, 34px); padding-bottom: 6px; }
@@ -2234,4 +2263,5 @@ body.pad-aiming #game {
 }
 @media (prefers-reduced-motion: reduce) {
   #cards .card, .card-frame { transition: none; }
+  #cards .card:is(:hover, :focus-visible, .pad-sel, :active, .picked, .dropped) { transform: none; }
 }
