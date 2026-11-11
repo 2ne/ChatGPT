@@ -390,8 +390,6 @@ body {
   justify-content: center;
   text-align: center;
   background: radial-gradient(circle at center, rgba(10, 8, 10, 0.5), rgba(2, 2, 4, 0.85));
-  -webkit-backdrop-filter: blur(8px) brightness(0.85);
-  backdrop-filter: blur(8px) brightness(0.85);
   z-index: 5;
   opacity: 0;
   pointer-events: none;
@@ -595,8 +593,6 @@ body {
   justify-content: center;
   text-align: center;
   background: radial-gradient(circle at center, rgba(10, 8, 10, 0.78), rgba(2, 2, 4, 0.96));
-  -webkit-backdrop-filter: blur(8px) brightness(0.85);
-  backdrop-filter: blur(8px) brightness(0.85);
   z-index: 10;
   box-sizing: border-box;
   padding: calc(var(--safe-top) + 16px) calc(var(--safe-right) + 16px) calc(var(--safe-bottom) + 16px) calc(var(--safe-left) + 16px);
@@ -840,7 +836,7 @@ body.paused #flash {
   --ice: #e2fcff;
   --cyan: #45ecff;
   --pink: #ff368c;
-  background: radial-gradient(ellipse at 50% 28%, #0a1a2ecc 0%, #050c18d8 42%, #030811f2 100%), linear-gradient(90deg, #5e103428, transparent 28%, transparent 78%, #07142540);
+  background: rgba(3, 8, 17, 0.28);
 }
 #pausePanel {
   position: relative;
@@ -852,6 +848,9 @@ body.paused #flash {
   color: var(--ice);
   isolation: isolate;
   container-type: inline-size;
+  background: rgba(8, 18, 30, 0.62);
+  -webkit-backdrop-filter: blur(8px) brightness(0.85);
+  backdrop-filter: blur(8px) brightness(0.85);
 }
 #pausePanel .station-frame {
   inset: 0;
@@ -958,7 +957,7 @@ body.paused #flash {
   --cyan: #45ecff;
   --pink: #ff368c;
   --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-  background: radial-gradient(ellipse at 50% 28%, #0a1a2ecc 0%, #050c18d8 42%, #030811f2 100%), linear-gradient(90deg, #5e103428, transparent 28%, transparent 78%, #07142540);
+  background: rgba(3, 8, 17, 0.28);
   padding: calc(var(--safe-top) + 18px) calc(var(--safe-right) + 18px) calc(var(--safe-bottom) + 18px) calc(var(--safe-left) + 18px);
 }
 #deathPanel {
@@ -968,6 +967,9 @@ body.paused #flash {
   text-align: center;
   color: var(--ice);
   isolation: isolate;
+  background: rgba(8, 18, 30, 0.62);
+  -webkit-backdrop-filter: blur(8px) brightness(0.85);
+  backdrop-filter: blur(8px) brightness(0.85);
 }
 #deathPanel .station-frame {
   inset: 0;
