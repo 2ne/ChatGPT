@@ -39,12 +39,14 @@ export function supplyDropScale(wave) {
 }
 
 // Each card can be taken up to `max` times per run. `ok` (optional) hides a
-// card while it would do nothing. `stat` returns [now, after] for the card.
+// card while it would do nothing. `stat` returns [now, after] or a single-value
+// [label] (no arrow) for the card.
 export const UPGRADES = [
   { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'Deploy one automatic companion', max: 3, stat: (s) => {
     const owned = s.upgrades.bot || 0;
     const next = helperDamage(owned + 1);
-    return [owned ? dmgLabel(helperDamage(owned)) : 'Off', `${dmgLabel(next)} dmg`];
+    if (!owned) return [`Single gun · ${dmgLabel(next)} dmg`];
+    return [dmgLabel(helperDamage(owned)), `${dmgLabel(next)} dmg`];
   }, apply: () => {} },
   { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botBomb, stat: (s) => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
   { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botGun, stat: (s) => [s.upgrades.botBomb ? 'Area bombs' : 'Single shots', s.upgrades.botBomb ? 'Wider bombs' : 'Area bombs'], apply: () => {} },
