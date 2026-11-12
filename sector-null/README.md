@@ -75,7 +75,7 @@ npm ci
 npm run dev
 ```
 
-Wave-clear upgrade cards in the game use the animated Three.js icon dioramas from `upgrade-icons.js`. Open `upgrade-cards.html` / `upgrade-cards-3d.html` via the Vite server to preview the full catalog offline (3D page supports drag-to-orbit).
+Wave-clear upgrade cards share `upgrades.js` (catalog + `stat()`), `upgrade-card.js` / `upgrade-cards.css` (chrome), and `upgrade-icons.js` (3D dioramas). Open `upgrade-cards-3d.html` via the Vite server to preview every offer rank offline (drag-to-orbit).
 
 `npm run build` writes a static site to `dist/`. Use `npm run preview` to serve that build locally. Each build stamps a sequential `BUILD` number from the sector-null git commit count (override with `SECTOR_NULL_BUILD`); it is attached to submitted scores, not shown on the title screen. The live board URL defaults to the Neon Function endpoint (override with `SECTOR_NULL_SCORES_API`). Function source lives in `functions/scores/`. Submissions go only through that Neon Function (no anonymous table inserts): the game `start_run`s a token at run start, then `submit`s with it. The server rejects unknown/reused tokens, unfinished wave-1 runs, implausibly fast or high scores, and rate-limited IPs (hashed only). Submitted scores also store hidden nullable `input` (`touch` / `pointer` / `gamepad` / `mixed`) and `device` (`phone` / `tablet` / `desktop`) columns — the board UI does not show them yet. Rejected uploads show a short status on the death screen. The browser needs WebGL. The menu track loops across the intro and main menu. If the browser blocks autoplay, use the title screen's Start prompt to enable sound. Selecting Play switches to the gameplay score.
 

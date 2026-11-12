@@ -11,6 +11,15 @@ import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
 import { firstBlocker, resolveShotStart } from './shot-collision.js';
 import { createUpgradeIconHost } from './upgrade-icons.js';
+import { renderUpgradeCard } from './upgrade-card.js';
+import {
+  BASE_STATS,
+  DROP_CHANCE,
+  UPGRADES,
+  UPGRADE_CATS,
+  helperDamage,
+  supplyDropScale,
+} from './upgrades.js';
 import {
   canSubmitScore,
   fetchScores,
@@ -3327,21 +3336,15 @@ for (const t of DROP_TYPES) {
   });
   t.label = pickupLabel(t);
 }
-const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 const SHIELD_DROP_CHANCE = 0.005; // independent roll; no scanner or pity bonus
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
 const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
 const drops = [];
 
-function supplyDropScale() {
-  // Keep roughly wave 5's supply budget as the regular enemy count grows.
-  return Math.min(1, 20 / (5 + Math.max(1, state.wave) * 3));
-}
-
 function maybeDrop(pos, allowShieldDrop = true) {
   state.sinceDrop++;
-  const scale = supplyDropScale();
+  const scale = supplyDropScale(state.wave);
   // Damage-triggered blasts cannot refund their shield cost. Limit healing even
   // when late waves contain hundreds of kills; missing HP never boosts the odds.
   if (allowShieldDrop && state.hp < state.maxHp && state.shieldDropsThisWave < 1
@@ -3552,7 +3555,6 @@ const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
 const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
 const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
 const equipment = { shot: 0, mine: 0, safe: 0, pulse: false, mines: [], blasts: [], zones: [], effects: [] };
-const helperDamage = rank => 0.8 + rank * 0.7;
 // Fire speed is Twin Guns rank 2 only — Helper Bot ranks are damage, not cadence.
 const helperShotInterval = upgrades => upgrades.botBomb ? 1.7 : 0.65 / (1 + (upgrades.botGun === 2 ? 0.35 : 0));
 
@@ -3735,39 +3737,8 @@ function updateEquipment(dt) {
   }
 }
 
-// UPGRADES — pick one of three after every cleared wave
+// UPGRADES — pick one of three after every cleared wave (catalog in upgrades.js)
 // ===================================================================
-// Each card can be taken up to `max` times per run. `ok` (optional) hides a
-// card while it would do nothing. `stat` returns [now, after] for the card.
-const UPGRADES = [
-  { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'Deploy one automatic companion', max: 3, stat: s => [s.upgrades.bot ? helperDamage(s.upgrades.bot).toFixed(1) : 'Shot damage', `${helperDamage((s.upgrades.bot || 0) + 1).toFixed(1)} damage`], apply: () => {} },
-  { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botBomb, stat: s => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
-  { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: s => s.upgrades.bot && !s.upgrades.botGun, stat: s => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
-  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: s => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
-  { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: s => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
-  { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: s => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
-  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts enemies', max: 3, stat: s => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
-  { id: 'mag',    cat: 'handling',  name: 'CELL CAPACITY',  desc: '+4 pulses per cell',     max: 5, stat: s => [s.magSize, s.magSize + 4 + ' pulses'],                            apply: s => { s.magSize += 4; s.mag = s.magSize; } },
-  { id: 'reload', cat: 'handling',  name: 'HOT SWAP',   desc: 'reload 25% faster',          max: 4, stat: s => [s.reloadTime.toFixed(2), (s.reloadTime * 0.75).toFixed(2) + 's'], apply: s => { s.reloadTime *= 0.75; } },
-  { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+50% pulse damage',         max: 6, stat: s => [s.damage + '×', s.damage + 0.5 + '×'],                       apply: s => { s.damage += 0.5; } },
-  { id: 'rate',   cat: 'firepower', name: 'RAPID CYCLER',  desc: 'fire 20% faster',            max: 4, stat: s => [(1 / s.fireRate).toFixed(1), (1 / (s.fireRate * 0.8)).toFixed(1) + '/s'], apply: s => { s.fireRate *= 0.8; } },
-  { id: 'pierce', cat: 'firepower', name: 'PIERCING',      desc: 'shots pierce +1 drone', max: 3, stat: s => [s.pierce, s.pierce + 1 + ' thru'],                     apply: s => { s.pierce++; } },
-  { id: 'spread', cat: 'firepower', name: 'SPLIT BEAM',      desc: '+1 pulse per shot', max: 3, stat: s => [1 + s.spread, 2 + s.spread + ' per shot'],             apply: s => { s.spread++; } },
-  { id: 'hp',     cat: 'survival',  name: 'SHIELD ARRAY',    desc: '+1 shield and recharge it', max: 3, stat: s => [s.maxHp, s.maxHp + 1 + ' max hp'],                         apply: s => { s.maxHp++; s.hp++; } },
-  { id: 'speed',  cat: 'survival',  name: 'MOTION SERVO',    desc: 'move 12% faster',            max: 3, stat: s => [Math.round(s.speed / 6.2 * 100) + '%', Math.round(s.speed * 1.12 / 6.2 * 100) + '%'], apply: s => { s.speed *= 1.12; } },
-  { id: 'luck',   cat: 'fortune',   name: 'SALVAGE SCANNER',     desc: 'More Overcharge / Infinite Cell drops', max: 3, stat: s => [((DROP_CHANCE + s.dropBonus) * supplyDropScale() * 100).toFixed(1) + '%', ((DROP_CHANCE + s.dropBonus + 0.03) * supplyDropScale() * 100).toFixed(1) + '% drops'], apply: s => { s.dropBonus += 0.03; } },
-  { id: 'heal',   cat: 'survival',  name: 'SHIELD RESET',      desc: 'restore all shield segments',         max: Infinity, ok: s => s.hp < s.maxHp, stat: s => [s.hp, s.maxHp + ' hp'], apply: s => { s.hp = s.maxHp; } },
-  // Score path: pick this instead of another gun / gear upgrade and vacuum every emerald.
-  { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
-];
-const UPGRADE_CATS = {
-  engineer: '#a7a1ff',
-  firepower: '#ffad61',
-  handling:  '#76bcf0',
-  survival:  '#70dfb8',
-  fortune:   '#bdadfa',
-  ability:   '#7cff4a',
-};
 let offered = [];
 const PICK_LOCKOUT_MS = 650; // ~ when the last card finishes dealing in
 
@@ -3846,10 +3817,6 @@ function getUpgradeIconHost() {
   return upgradeIconHost;
 }
 
-function upgradeIconCanvas(u, owned) {
-  return `<canvas class="icon-stage" width="512" height="320" data-id="${u.id}" data-cat="${u.cat}" data-owned="${owned}" aria-hidden="true"></canvas>`;
-}
-
 function openPicker(healed) {
   offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
@@ -3865,21 +3832,16 @@ function openPicker(healed) {
     if (!u) return '<div aria-hidden="true"></div>';
     const recommended = i === 0 && u.id !== 'magnet';
     const owned = state.upgrades[u.id] || 0;
-    const botUpgrade = u.id === 'bot' && owned > 0;
-    const name = botUpgrade ? 'UPGRADE HELPER BOT' : u.name;
-    const desc = botUpgrade ? 'Stronger companion shots' : u.desc;
-    const [now, after] = u.stat(state);
-    // Helper Bot uses the same rank pips as every other capped upgrade
-    // (max 3); only infinite cards like Shield Reset skip the row.
-    const pips = u.max === Infinity ? '' :
-      Array.from({ length: u.max }, (_, k) => `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`).join('');
-    return `<button type="button" class="card ${recommended ? 'recommended' : ''}" data-i="${i}" style="--accent:${UPGRADE_CATS[u.cat]};animation-delay:${i * 90}ms">` +
-      `<svg class="card-frame" viewBox="0 0 320 360" preserveAspectRatio="none" aria-hidden="true"><path class="frame-edge" d="M16 1H304L319 16V344L304 359H16L1 344V16Z"/><path class="frame-inner" d="M18 6H302L314 18V342L302 354H18L6 342V18Z"/><path class="frame-rail" d="M16 1H304L313 10H150L145 14H4Z"/></svg>` +
-      `<div class="ctop"><span>${recommended ? 'RECOMMENDED' : u.cat.toUpperCase()}</span><span class="ckey">${i + 1}</span></div>` +
-      upgradeIconCanvas(u, owned) +
-      `<div class="cname">${name}</div><div class="cdesc">${desc}</div>` +
-      `<div class="cstat">${now} → <b>${after}</b></div>` +
-      `<div class="clvl" aria-hidden="true">${pips}</div></button>`;
+    return renderUpgradeCard({
+      u,
+      state,
+      owned,
+      recommended,
+      slot: i + 1,
+      tag: 'button',
+      attrs: ` type="button" data-i="${i}"`,
+      animationDelayMs: i * 90,
+    });
   }).join('');
   getUpgradeIconHost().mount(hud.cards);
   hud.picker.classList.remove('shown');
@@ -4237,9 +4199,6 @@ function clearRun() {
   toastIsBotsLeft = false;
   hidePicker();
 }
-
-// the operator's stats before any upgrades
-const BASE_STATS = { maxHp: 3, magSize: 8, reloadTime: 1.2, fireRate: 0.13, damage: 1, pierce: 0, spread: 0, speed: 6.2, dropBonus: 0 };
 
 // `keep` carries over what's on the field (coming from the title: the operator stays where
 // they are and the yard's drones join wave 1, which starts once the camera is down)
