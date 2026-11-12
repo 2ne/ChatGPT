@@ -97,8 +97,12 @@ export function createScore(ctx, musicBus) {
   return {
     queueWave(wave, delay) {
       const start = ctx.currentTime + delay;
-      // Keep the breather calm until enemies arrive; no overlapping wave stingers.
-      fadeOut(ability, start, CLEAR_FADE);
+      // Drop every prior loop (combat + ability) so restart / re-queue never stacks music.
+      const fade = Math.min(CLEAR_FADE, Math.max(0.05, delay || CLEAR_FADE));
+      for (const track of [...tracks]) {
+        fadeOut(track, ctx.currentTime, fade);
+      }
+      combat = ability = null;
       combat = play(wave >= LATE_WAVE ? 'late' : 'early', start, { loop: true, fadeIn: CLEAR_FADE });
       return start;
     },

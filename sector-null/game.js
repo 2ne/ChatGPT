@@ -4231,7 +4231,8 @@ function resetGame(keep = false) {
 }
 
 function startGame(fromTitle = false) {
-  audio.setTitleMusic(false);
+  // Stop any in-run score loops / title bed before starting a single new instance.
+  audio.resetRunMusic();
   audio.ensure(); // create/resume AudioContext within the click gesture
   document.getElementById('death').classList.add('hidden');
   title.active = false;

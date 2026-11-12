@@ -175,6 +175,14 @@ export function createAudio(settings, listener) {
         soundtrack.currentTime = 0;
       }
     },
+    /** Hard-reset music for a new run (pause restart, death retry, title play). */
+    resetRunMusic() {
+      titleMusic = false;
+      cancelReload();
+      score?.stop();
+      soundtrack.pause();
+      soundtrack.currentTime = 0;
+    },
     setPaused(on) {
       paused = on;
       if (on) ctx?.suspend().catch(() => {});
