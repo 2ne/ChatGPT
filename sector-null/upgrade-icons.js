@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { UPGRADE_CATS } from './upgrades.js';
+import { createHelperBotMesh } from './helper-bot-mesh.js';
 
 const CAT_COLORS = UPGRADE_CATS;
 
@@ -79,126 +80,10 @@ function enableCast(root) {
   });
 }
 
-/** Card-icon Helper Bot only (in-game helper mesh lives in game.js). */
+/** Card-icon Helper Bot — shared mesh with the in-game companion. */
 function helperBot(variant = 'base', owned = 0) {
-  const g = new THREE.Group();
-  const next = owned + 1;
-  const lav = std(0xe6dced, {
-    metalness: 0.12, roughness: 0.38, emissive: 0xb8a8c8, emissiveIntensity: 0.08,
-  });
-  const coreMat = std(0x2a323c, { metalness: 0.72, roughness: 0.32 });
-  const violet = glow(0xb44fff, 1.35);
-  const cyan = glow(0x45ecff, 1.55);
-  const blue = glow(0x4aa8ff, 1.4);
-  const gun = std(0x3a4450, { metalness: 0.78, roughness: 0.28 });
-
-  // Dark inner sphere + ribbed equator band visible through plate gaps.
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(0.42, 20, 16), coreMat));
-  const band = new THREE.Mesh(
-    new THREE.TorusGeometry(0.4, 0.035, 6, 28),
-    std(0x1c222a, { metalness: 0.65, roughness: 0.4 })
-  );
-  band.rotation.x = Math.PI / 2;
-  g.add(band);
-
-  // Four curved armour shells: left/right × top/bottom.
-  // Three.js SphereGeometry: +Z at phi=π/2, -X at phi=0, +X at phi=π.
-  const R = 0.56;
-  // Wide front/back cleft so barrel(s) read clearly through the shell.
-  const gapPhi = 0.36;
-  const gapTheta = 0.1;
-  const halves = [
-    { phi: Math.PI * 0.5 + gapPhi * 0.5, phiLen: Math.PI - gapPhi }, // right (+X)
-    { phi: Math.PI * 1.5 + gapPhi * 0.5, phiLen: Math.PI - gapPhi }, // left (-X)
-  ];
-  const bands = [
-    { theta: gapTheta, thetaLen: Math.PI * 0.5 - gapTheta * 1.15, top: true },
-    { theta: Math.PI * 0.5 + gapTheta * 0.15, thetaLen: Math.PI * 0.5 - gapTheta * 1.15, top: false },
-  ];
-  halves.forEach((h) => {
-    bands.forEach((b) => {
-      g.add(new THREE.Mesh(
-        new THREE.SphereGeometry(R, 16, 10, h.phi, h.phiLen, b.theta, b.thetaLen),
-        lav
-      ));
-      // Inset violet panel — trapezoid on top plates, strip on bottom.
-      const midPhi = h.phi + h.phiLen * 0.5;
-      const midTheta = b.theta + b.thetaLen * (b.top ? 0.55 : 0.72);
-      const pr = R * 0.94;
-      const inset = new THREE.Mesh(
-        b.top ? new THREE.BoxGeometry(0.15, 0.11, 0.028) : new THREE.BoxGeometry(0.17, 0.04, 0.028),
-        violet
-      );
-      // Match SphereGeometry vertex convention.
-      inset.position.set(
-        -Math.cos(midPhi) * Math.sin(midTheta) * pr,
-        Math.cos(midTheta) * pr,
-        Math.sin(midPhi) * Math.sin(midTheta) * pr,
-      );
-      inset.lookAt(0, 0, 0);
-      g.add(inset);
-    });
-  });
-
-  // Small blue status square at the top seam.
-  const topLight = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.04), blue);
-  topLight.position.set(0, 0.48, 0.06);
-  g.add(topLight);
-
-  if (variant === 'twin') {
-    [-0.11, 0.11].forEach((x) => {
-      const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.38 + owned * 0.04, 10), gun);
-      barrel.rotation.x = Math.PI / 2;
-      barrel.position.set(x, 0.02, 0.58);
-      g.add(barrel);
-      const lens = new THREE.Mesh(new THREE.CircleGeometry(0.045 + owned * 0.008, 12), cyan);
-      lens.position.set(x, 0.02, 0.78 + owned * 0.02);
-      g.add(lens);
-      const tip = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 6), cyan);
-      tip.position.copy(lens.position);
-      tip.position.z += 0.01;
-      g.add(tip);
-      if (!g.userData.pulse) g.userData.pulse = tip;
-    });
-    [-0.08, 0.08].forEach((x) => {
-      const led = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.025, 0.02), cyan);
-      led.position.set(x, 0.14, 0.5);
-      g.add(led);
-    });
-    g.userData.rapid = owned >= 1;
-  } else if (variant === 'bomb') {
-    const bore = 0.14 + owned * 0.03;
-    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(bore, bore + 0.02, 0.42, 14), gun);
-    barrel.rotation.x = Math.PI / 2;
-    barrel.position.set(0, 0.02, 0.58);
-    g.add(barrel);
-    for (const z of [0.48, 0.62]) {
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(bore + 0.04, 0.018, 6, 18), violet);
-      ring.position.set(0, 0.02, z);
-      g.add(ring);
-    }
-    const mouth = new THREE.Mesh(new THREE.CircleGeometry(bore * 0.85, 14), violet);
-    mouth.position.set(0, 0.02, 0.8);
-    g.add(mouth);
-    const tip = new THREE.Mesh(new THREE.SphereGeometry(0.08 + owned * 0.02, 12, 8), violet);
-    tip.position.set(0, 0.02, 0.82);
-    g.add(tip);
-    g.userData.pulse = tip;
-  } else {
-    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.07, 0.4, 10), gun);
-    barrel.rotation.x = Math.PI / 2;
-    barrel.position.set(0, 0.02, 0.58);
-    g.add(barrel);
-    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.05 + next * 0.006, 12), cyan);
-    lens.position.set(0, 0.02, 0.79);
-    g.add(lens);
-    const tip = new THREE.Mesh(new THREE.SphereGeometry(0.045 + next * 0.01, 10, 8), cyan);
-    tip.position.set(0, 0.02, 0.81);
-    g.add(tip);
-    g.userData.pulse = tip;
-  }
-
-  g.scale.setScalar(0.95 + next * 0.04);
+  const g = createHelperBotMesh(variant, { rank: owned + 1, detail: 'card' });
+  g.scale.setScalar(0.95 + (owned + 1) * 0.04);
   return g;
 }
 
