@@ -37,8 +37,13 @@ assert.doesNotMatch(
   /if\s*\(!fromBoss\)\s*restoreShieldSegment/,
   'wave-clear auto-refill should be gone',
 );
-assert.match(game, /BOSS_FULL_SHIELD_GEMS/, 'full-shield boss gem burst should remain');
+assert.match(game, /BOSS_FULL_SHIELD_GEMS/, 'full-shield boss gem payout should remain');
 assert.match(game, /if \(state\.hp < state\.maxHp\) spawnWaveClearShield/, 'boss injured → shield');
+assert.match(game, /addScore\(EMERALD_VALUE \* BOSS_FULL_SHIELD_GEMS\)/, 'full shields bank gem payout');
+assert.match(game, /phase: 'stagger', \/\/ stagger \| final \| hold/, 'boss death uses short hold, not loot linger');
+assert.doesNotMatch(game, /BOSS_LOOT_LINGER/, 'boss loot linger delay should be gone');
+assert.doesNotMatch(game, /fadeBossLoot/, 'boss loot fade should be gone');
+assert.doesNotMatch(game, /phase === 'loot'/, 'loot linger phase should be gone');
 
 // Rule table
 function shouldSpawnClearShield(hp, maxHp, alreadyHas) {
