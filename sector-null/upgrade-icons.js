@@ -4,7 +4,7 @@ import { UPGRADE_CATS } from './upgrades.js';
 const CAT_COLORS = UPGRADE_CATS;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
-const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck']);
+const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag']);
 const SWAY_ANGLE = 20 * Math.PI / 180;
 
 // Same basis as game.js tracers: lookAt aims local -Z forward.
@@ -629,7 +629,9 @@ function makeScene(upgrade) {
   const subject = (builders[upgrade.id] || builders.bot)(owned);
   subject.position.y = 0.08;
   subject.scale.multiplyScalar(0.64);
-  if (upgrade.cat === 'firepower' || upgrade.cat === 'handling') subject.rotation.y = -0.55;
+  // Mag cells sit on +Z — keep them facing the camera (sway only; no full spin).
+  if (upgrade.id === 'mag') subject.rotation.y = -0.28;
+  else if (upgrade.cat === 'firepower' || upgrade.cat === 'handling') subject.rotation.y = -0.55;
   enableCast(subject);
   root.add(subject);
   root.userData.subject = subject;
