@@ -124,7 +124,7 @@ Waves 5, 10, 15 and onward in multiples of five replace the regular boss with th
 
 Boss base health scaling is now `6 + 1.3×wave + 0.1×wave²` times regular wave health; milestone bosses use 1.2× this value. This reduces health-only attrition while new attack patterns provide pressure. Remaining emeralds are banked automatically at victory, including the final boss drop, before the upgrade screen opens.
 
-Helper Bot repeat offers explicitly say UPGRADE HELPER BOT, show the damage change only, and confirm the upgrade after selection. Fire-speed gains come from Twin Guns rank 2, not from Helper Bot ranks.
+Helper Bot repeat offers explicitly say UPGRADE BOT, show the damage change only, and confirm the upgrade after selection. Fire-speed gains come from Twin Guns rank 2, not from Helper Bot ranks.
 
 Movement input is cleared when entering/leaving upgrades, starting a run, pausing or losing window/tab focus. Gameplay focus returns to the canvas after UI choices. Arrow keys suppress browser scrolling during a run; key releases are captured at window level, and switching between keyboard movement and touch clears the previous movement source. These safeguards prevent stale inputs from carrying across UI transitions.
 
