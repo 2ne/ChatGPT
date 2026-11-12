@@ -27,7 +27,7 @@ export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival
 
 export const helperDamage = (rank) => 0.8 + rank * 0.7;
 
-/** Keep roughly wave 5's supply budget as the regular enemy count grows. */
+/** Keep roughly wave 5's supply budget as the regular drone count grows. */
 export function supplyDropScale(wave) {
   return Math.min(1, 20 / (5 + Math.max(1, wave) * 3));
 }
@@ -41,7 +41,7 @@ export const UPGRADES = [
   { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: (s) => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
   { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: (s) => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
   { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: (s) => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
-  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts and slows enemies', max: 3, stat: (s) => {
+  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts and slows drones', max: 3, stat: (s) => {
     const owned = s.upgrades.pulse || 0;
     const nextDmg = 2 + (owned + 1) * 2; // matches equipmentBlast(..., 2 + u.pulse * 2, ...)
     return [owned ? String(2 + owned * 2) : 'Off', `${nextDmg} dmg`];

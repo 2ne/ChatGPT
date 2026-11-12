@@ -12,9 +12,9 @@ Design notes for run score, emerald pickups, accuracy, and high score.
 
 ## Core loop tradeoff
 
-1. Enemies die and shed **green emeralds** (Geometry Wars–style diamonds) instead of lasting body-part debris.
+1. Drones die and shed **green emeralds** (Geometry Wars–style diamonds) instead of lasting body-part debris.
 2. Emeralds **magnet toward the player** the same way supply drops do, but **expire much faster**.
-3. Killing hostiles far away ends the wave sooner → better **wave clear speed** bonus, but emeralds often vanish before you reach them.
+3. Killing drones far away ends the wave sooner → better **wave clear speed** bonus, but emeralds often vanish before you reach them.
 4. Closing in to collect emeralds is slower combat but worth more points per kill.
 
 ## Point sources
@@ -68,9 +68,9 @@ On wave clear, apply the accuracy bonus, then reset counters for the next wave. 
 | --- | --- |
 | HUD top-right | **Score** (live) and **High** |
 | Title menu | Best run uses high score |
-| Death / Game Over | Final score, wave, bots down + high-score callout |
+| Death / Game Over | Final score, wave, drones down + high-score callout |
 | Pause | Wave · score |
-| Combat toasts | Milestone notices at 10 / 5 / 3 bots left (not 1 — that clashes with the boss finale / picker) |
+| Combat toasts | Milestone notices at 10 / 5 / 3 drones left (not 1 — that clashes with the boss finale / picker) |
 
 No floating “+100” spam required for v1; live Score ticking is enough. Emerald chain can optionally flash the score colour briefly.
 

@@ -2232,12 +2232,12 @@ let activePickupHint = null;
 let toastIsBotsLeft = false;
 // Shared read time for first power-up lessons and wave title/subtitle banners.
 const NOTICE_READ_HOLD = 4.5;
-// No "1 BOT LEFT" — that fires as the boss dies / wave clears and fights the picker.
+// No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
 
 function botsLeftLabel(n) {
-  return `${n} BOTS LEFT`;
+  return `${n} DRONES LEFT`;
 }
 
 function bannerShowing() {
@@ -4403,7 +4403,7 @@ function showDeathSubmitted({ name, score, wave, kills }) {
   deathPanel.classList.add('is-submitted');
   setDeathTitle('SCORE SUBMITTED');
   document.getElementById('deathStat').textContent =
-    `Wave ${wave} · ${kills} bots down`;
+    `Wave ${wave} · ${kills} drones down`;
   document.getElementById('deathBest').textContent = '';
   document.getElementById('deathBest').classList.remove('record');
   deathScoreBox.textContent = formatScore(score);
@@ -4506,7 +4506,7 @@ function die() {
   // Bank a partial accuracy bonus for the unfinished wave.
   addScore(accuracyBonus());
   document.getElementById('deathStat').textContent =
-    `Score ${formatScore(state.score)} · Wave ${state.wave} · ${state.kills} bots down`;
+    `Score ${formatScore(state.score)} · Wave ${state.wave} · ${state.kills} drones down`;
   const best = readHighScore();
   const record = state.score > 0 && state.score > best.score;
   if (record) store.set('highscore', { score: state.score, wave: state.wave, kills: state.kills });
