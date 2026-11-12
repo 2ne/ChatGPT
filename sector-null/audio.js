@@ -8,6 +8,9 @@ export function createAudio(settings, listener) {
   const soundtrack = new Audio(new URL('./assets/soundtrack.mp3', import.meta.url).href);
   soundtrack.loop = true;
   let ctx, sfxBus, musicBus, reverb, noise, score;
+  // Menu blips live on a second context so pause can suspend combat/music audio
+  // without silencing title / pause / game-over UI feedback.
+  let uiCtx, uiBus;
   let paused = false;
   let titleMusic = false;
   let recharge;
@@ -55,13 +58,38 @@ export function createAudio(settings, listener) {
       applyVolume();
     }
     if (!paused && ctx.state !== 'running') ctx.resume().catch(() => {});
+    // Unlock the UI bus on the same gesture so pause/death menus can blip after combat audio suspends.
+    ensureUi();
     if (titleMusic && soundtrack.paused) soundtrack.play().catch(() => {});
   }
 
+  function sfxLevel() {
+    return (settings.sfx / 10) ** 1.5 * 0.75;
+  }
+
+  function applyUiVolume() {
+    if (!uiCtx || !uiBus) return;
+    uiBus.gain.setTargetAtTime(sfxLevel(), uiCtx.currentTime, 0.04);
+  }
+
+  function ensureUi() {
+    const AudioContext = window.AudioContext ?? window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!uiCtx) {
+      uiCtx = new AudioContext();
+      uiBus = uiCtx.createGain();
+      uiBus.connect(uiCtx.destination);
+      applyUiVolume();
+    }
+    if (uiCtx.state !== 'running') uiCtx.resume().catch(() => {});
+  }
+
   function applyVolume() {
-    if (!ctx) return;
-    sfxBus.gain.setTargetAtTime((settings.sfx / 10) ** 1.5 * 0.75, ctx.currentTime, 0.04);
-    musicBus.gain.setTargetAtTime((settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
+    if (ctx) {
+      sfxBus.gain.setTargetAtTime(sfxLevel(), ctx.currentTime, 0.04);
+      musicBus.gain.setTargetAtTime((settings.music / 10) ** 1.5, ctx.currentTime, 0.08);
+    }
+    applyUiVolume();
   }
 
   // Spatial taps used to leak pan/gain nodes forever — that stalls audio on long runs.
@@ -159,6 +187,31 @@ export function createAudio(settings, listener) {
     notes.forEach((note, i) => {
       const hz = midiHz(note);
       voice(hz, hz * 0.996, 0.24, volume, { type: 'triangle', t: ctx.currentTime + i * step, echo: true });
+    });
+  }
+
+  /** Same triangle blip shape as signal(), but on the pause-proof UI bus. */
+  function uiSignal(notes, volume = 0.075, step = 0.052) {
+    ensureUi();
+    if (!uiCtx || !uiBus) return;
+    notes.forEach((note, i) => {
+      const t = uiCtx.currentTime + i * step;
+      const hz = midiHz(note);
+      const oscillator = uiCtx.createOscillator();
+      const envelope = uiCtx.createGain();
+      oscillator.type = 'triangle';
+      oscillator.frequency.setValueAtTime(hz, t);
+      oscillator.frequency.exponentialRampToValueAtTime(hz * 0.996, t + 0.24);
+      envelope.gain.setValueAtTime(0.0001, t);
+      envelope.gain.exponentialRampToValueAtTime(volume, t + 0.008);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, t + 0.24);
+      oscillator.connect(envelope).connect(uiBus);
+      oscillator.start(t);
+      oscillator.stop(t + 0.255);
+      oscillator.onended = () => {
+        try { oscillator.disconnect(); } catch { /* */ }
+        try { envelope.disconnect(); } catch { /* */ }
+      };
     });
   }
 
@@ -288,6 +341,8 @@ export function createAudio(settings, listener) {
     upgrade(category) { signal(category === 'firepower' ? [49, 61, 68, 73] : [54, 59, 66, 71], 0.13, 0.065); },
     deal(count) { signal([54, 57, 61].slice(0, count), 0.065, 0.065); },
     hover(i) { signal([59 + i * 2], 0.05); },
-    ui(action) { signal(action === 'move' ? [57] : action === 'back' ? [61, 54] : [61, 66, 73], 0.075, 0.052); },
+    ui(action) {
+      uiSignal(action === 'move' ? [57] : action === 'back' ? [61, 54] : [61, 66, 73], 0.075, 0.052);
+    },
   };
 }
