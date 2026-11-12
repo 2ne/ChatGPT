@@ -2148,6 +2148,7 @@ const hud = {
   toastDetail: document.getElementById('toastDetail'),
   picker: document.getElementById('picker'),
   pickerTitle: document.getElementById('pickerTitle'),
+  pickerHeal: document.getElementById('pickerHeal'),
   pickerSub: document.getElementById('pickerSub'),
   cards: document.getElementById('cards'),
   weaponIcon: document.getElementById('weaponIcon'),
@@ -2210,12 +2211,19 @@ function updateHUD() {
   checkBotMilestones(remaining);
   if (hud.shieldPips.children.length !== state.maxHp) {
     hud.shieldPips.innerHTML = '<span class="shield-pip"></span>'.repeat(state.maxHp);
+    [...hud.shieldPips.children].forEach((pip, i) => pip.classList.toggle('dead', i >= state.hp));
   }
   const shieldLabel = `Shields: ${state.hp} of ${state.maxHp}`;
   if (hud.health.getAttribute('aria-label') !== shieldLabel) {
     hud.health.setAttribute('aria-label', shieldLabel);
     hud.shieldCount.textContent = `${state.hp} / ${state.maxHp}`;
-    [...hud.shieldPips.children].forEach((pip, i) => pip.classList.toggle('dead', i >= state.hp));
+    [...hud.shieldPips.children].forEach((pip, i) => {
+      const dead = i >= state.hp;
+      if (pip.classList.contains('dead') !== dead) {
+        pip.classList.toggle('dead', dead);
+        if (dead) pip.classList.remove('refill');
+      }
+    });
   }
   // power-up time left as a clock: 0:10 … 0:01 (what they do was taught on first pickup)
   const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
@@ -3246,16 +3254,63 @@ function killPoints(type) {
   return 100;
 }
 
-function finishWaveClear() {
+/** True when a shield segment was restored this clear (callout + pip pulse). */
+let shieldRestoredForPicker = false;
+
+function syncShieldPips() {
+  if (hud.shieldPips.children.length !== state.maxHp) {
+    hud.shieldPips.innerHTML = '<span class="shield-pip"></span>'.repeat(state.maxHp);
+  }
+  const shieldLabel = `Shields: ${state.hp} of ${state.maxHp}`;
+  hud.health.setAttribute('aria-label', shieldLabel);
+  hud.shieldCount.textContent = `${state.hp} / ${state.maxHp}`;
+  [...hud.shieldPips.children].forEach((pip, i) => {
+    pip.classList.toggle('dead', i >= state.hp);
+  });
+}
+
+function pulseShieldPip() {
+  syncShieldPips();
+  const pip = hud.shieldPips.children[state.hp - 1];
+  if (!pip || pip.classList.contains('dead')) return;
+  pip.classList.remove('refill');
+  void pip.offsetWidth;
+  pip.classList.add('refill');
+}
+
+function restoreShieldSegment({ sfx = false, forPicker = false } = {}) {
+  if (state.hp >= state.maxHp) return false;
+  state.hp++;
+  healGlow = 1.25;
+  if (forPicker) shieldRestoredForPicker = true;
+  pulseShieldPip();
+  if (sfx) audio.heal();
+  return true;
+}
+
+function bankRemainingLoot() {
+  for (let i = drops.length - 1; i >= 0; i--) {
+    const d = drops[i];
+    // Wave-end banking should still announce a restored shield on the picker.
+    collect(d.userData.type, { forPicker: true });
+    scene.remove(d);
+    drops.splice(i, 1);
+  }
+  for (const gem of emeralds) collectEmerald();
+  clearEmeralds();
+}
+
+function finishWaveClear({ fromBoss = false } = {}) {
   clearBotsLeftToasts();
   clearEnemyBolts();
   awardWaveBonuses();
-  // Victory banks the reward, including gems from the final boss.
-  for (const gem of emeralds) collectEmerald();
-  clearEmeralds();
+  // Bank any leftover boss loot so a missed grab is not lost.
+  bankRemainingLoot();
   clearEquipmentField();
-  const healed = state.hp < state.maxHp;
-  state.hp = Math.min(state.maxHp, state.hp + 1);
+  // Normal waves auto-refill one shield. Boss waves use the death drop instead.
+  if (!fromBoss) restoreShieldSegment({ sfx: true, forPicker: true });
+  const healed = shieldRestoredForPicker;
+  shieldRestoredForPicker = false;
   audio.waveClear();
   openPicker(healed);
 }
@@ -3357,6 +3412,11 @@ const SHIELD_DROP_CHANCE = 0.005; // independent roll; no scanner or pity bonus
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
 const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
+/** Post-boss window so the player can walk onto loot before the picker. */
+const BOSS_LOOT_LINGER = 1.75;
+const BOSS_LOOT_FADE = 0.55;
+/** Extra gems when a boss dies while shields are already full. */
+const BOSS_FULL_SHIELD_GEMS = 5;
 const drops = [];
 
 function maybeDrop(pos, allowShieldDrop = true) {
@@ -3380,35 +3440,59 @@ function maybeDrop(pos, allowShieldDrop = true) {
   spawnDrop(pool.find(t => (r -= t.weight) < 0) || pool[0], pos);
 }
 
-function spawnDrop(type, pos) {
+function spawnDrop(type, pos, opts = {}) {
+  const bossLoot = !!opts.bossLoot;
+  const itemScale = opts.scale ?? (bossLoot ? 1.9 : 1.45);
   const d = new THREE.Group();
   const item = new THREE.Mesh(type.geo, type.item);
-  item.position.y = 0.68;
-  item.scale.setScalar(1.45);
+  item.position.y = bossLoot ? 0.82 : 0.68;
+  item.scale.setScalar(itemScale);
   item.castShadow = true;
   const ring = new THREE.Mesh(dropRing, type.ring);
   const glow = new THREE.Sprite(type.glow);
-  glow.position.y = 0.56;
-  glow.scale.setScalar(3.3);
+  glow.position.y = bossLoot ? 0.7 : 0.56;
+  glow.scale.setScalar(bossLoot ? 5.1 : 3.3);
   const label = new THREE.Sprite(type.label);
-  label.position.y = 1.52;
-  label.scale.set(3.2, 0.64, 1);
+  label.position.y = bossLoot ? 1.85 : 1.52;
+  label.scale.set(bossLoot ? 3.7 : 3.2, bossLoot ? 0.74 : 0.64, 1);
   label.renderOrder = 1;
   d.add(ring, glow, item, label);
   d.position.set(pos.x, 0.035, pos.z);
-  d.userData = { type, item, ring, life: DROP_LIFE, t: Math.random() * 6 };
+  d.userData = {
+    type, item, ring, glow, label,
+    life: opts.life ?? DROP_LIFE,
+    t: Math.random() * 6,
+    bossLoot,
+    pulse: bossLoot || !!opts.pulse,
+    itemScale,
+    glowScale: bossLoot ? 5.1 : 3.3,
+    fade: 1,
+  };
   scene.add(d);
   drops.push(d);
 }
 
-function collect(type) {
+function spawnBossShieldDrop(pos) {
+  state.shieldDropsThisWave++;
+  spawnDrop(DROP_TYPES.find(t => t.id === 'med'), pos, {
+    bossLoot: true,
+    life: BOSS_LOOT_LINGER + 1,
+    pulse: true,
+  });
+}
+
+function collect(type, opts = {}) {
   audio.pickup(type.id);
   toastQueue.push({ text: type.name, color: type.tint, pickup: type });
   if (!seenDrops.has(type.id) && !activePickupHint) {
     // Let a routine notice yield promptly, but never cut another lesson short.
     toastTime = Math.min(toastTime, 0.15);
   }
-  if (type.id === 'med') { state.hp = Math.min(state.maxHp, state.hp + 1); healGlow = 1; }
+  if (type.id === 'med') {
+    // Picker callout for boss-loot grabs or explicit wave-end banking.
+    const forPicker = !!opts.forPicker || (bossDeath.active && bossDeath.phase === 'loot');
+    restoreShieldSegment({ forPicker });
+  }
   else if (type.id === 'dmg') state.pDamage += 10;
   else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo += 8; state.reloading = false; state.mag = state.magSize; }
 }
@@ -3422,7 +3506,9 @@ function updateDrops(dt) {
     const p = d.position;
     const dx = player.position.x - p.x, dz = player.position.z - p.z;
     const dist = Math.hypot(dx, dz);
-    if (dist < 0.9) { collect(ud.type); scene.remove(d); drops.splice(i, 1); continue; }
+    if (dist < (ud.bossLoot ? 1.15 : 0.9)) {
+      collect(ud.type); scene.remove(d); drops.splice(i, 1); continue;
+    }
     if (dist < 2.5) {
       // magnet: close drops fly to the player
       p.x += (dx / dist) * 10 * dt; p.z += (dz / dist) * 10 * dt;
@@ -3432,13 +3518,22 @@ function updateDrops(dt) {
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
       if (od > 0.01) { const st = Math.min(od, 6 * dt); p.x += (ox / od) * st; p.z += (oz / od) * st; }
     }
-    ud.item.position.y = 0.68 + Math.sin(ud.t * 3) * 0.15;
-    ud.item.rotation.y += dt * 2;
-    const warning = ud.life <= DROP_WARNING;
+    const bob = ud.bossLoot ? 0.22 : 0.15;
+    ud.item.position.y = (ud.bossLoot ? 0.82 : 0.68) + Math.sin(ud.t * 3) * bob;
+    ud.item.rotation.y += dt * (ud.bossLoot ? 2.6 : 2);
+    if (ud.pulse) {
+      const pulse = 1 + Math.sin(ud.t * 5.2) * (ud.bossLoot ? 0.12 : 0.06);
+      ud.item.scale.setScalar(ud.itemScale * pulse);
+      ud.glow.scale.setScalar(ud.glowScale * (1 + Math.sin(ud.t * 4.1) * 0.14));
+      ud.ring.scale.setScalar(1 + Math.sin(ud.t * 3.4) * 0.08);
+    }
+    const fade = ud.fade ?? 1;
+    d.scale.setScalar(Math.max(0.05, fade));
+    const warning = !ud.bossLoot && ud.life <= DROP_WARNING;
     // Two blinks per second, synchronised to expiry rather than random bobbing phase.
-    d.visible = !warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0;
+    d.visible = fade > 0.04 && (!warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0);
     // A shrinking ground ring also communicates expiry without flashing in reduced motion.
-    ud.ring.scale.setScalar(warning ? Math.max(0.15, ud.life / DROP_WARNING) : 1);
+    if (!ud.pulse) ud.ring.scale.setScalar(warning ? Math.max(0.15, ud.life / DROP_WARNING) : 1);
   }
 }
 
@@ -3467,7 +3562,7 @@ let emeraldChain = 0;
 let lastEmeraldAt = -Infinity;
 let emeraldGlowPulse = 0;
 
-function spawnEmeralds(origin, count) {
+function spawnEmeralds(origin, count, opts = {}) {
   const pressure = fxPressure();
   // Late waves spawn fewer meshes; overflow still scores so farming isn't lost.
   let n = Math.max(1, Math.round(count * (1 - pressure * 0.6)));
@@ -3475,6 +3570,7 @@ function spawnEmeralds(origin, count) {
   const bank = Math.max(0, n - room);
   if (bank) addScore(EMERALD_VALUE * bank);
   n = Math.min(n, room);
+  const life = opts.life ?? EMERALD_LIFE;
   for (let i = 0; i < n; i++) {
     const gem = new THREE.Mesh(emeraldGeo, emeraldMat);
     const glow = new THREE.Sprite(emeraldGlowMat);
@@ -3483,9 +3579,30 @@ function spawnEmeralds(origin, count) {
     const ang = rnd(0, Math.PI * 2), dist = rnd(0.15, 0.7);
     gem.position.set(origin.x + Math.cos(ang) * dist, 0.35, origin.z + Math.sin(ang) * dist);
     gem.rotation.set(rnd(0, 1), rnd(0, Math.PI * 2), rnd(0, 1));
-    gem.userData = { life: EMERALD_LIFE, t: rnd(0, Math.PI * 2), glow };
+    gem.userData = { life, t: rnd(0, Math.PI * 2), glow, bossLoot: !!opts.bossLoot, fade: 1 };
     scene.add(gem);
     emeralds.push(gem);
+  }
+}
+
+function refreshBossLootTimers() {
+  const keep = BOSS_LOOT_LINGER + 0.35;
+  for (const e of emeralds) e.userData.life = Math.max(e.userData.life, keep);
+  for (const d of drops) d.userData.life = Math.max(d.userData.life, keep);
+}
+
+function fadeBossLoot(fade) {
+  const f = Math.max(0, Math.min(1, fade));
+  for (const d of drops) {
+    d.userData.fade = f;
+    d.scale.setScalar(Math.max(0.05, f));
+  }
+  for (const e of emeralds) {
+    e.userData.fade = f;
+    e.scale.setScalar(Math.max(0.05, f));
+  }
+  if (emeralds.length) {
+    emeraldGlowMat.opacity = (0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8)) * f;
   }
 }
 
@@ -3512,7 +3629,12 @@ function updateEmeralds(dt) {
   const magnetRange = state.upgrades.magnet ? EMERALD_MAGNET_ABILITY : EMERALD_MAGNET;
   const surge = !!state.upgrades.magnet;
   emeraldGlowPulse += dt;
-  if (emeralds.length) emeraldGlowMat.opacity = 0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8);
+  const lootFade = bossDeath.active && bossDeath.phase === 'loot'
+    ? (bossDeath.hold < BOSS_LOOT_FADE ? Math.max(0, bossDeath.hold / BOSS_LOOT_FADE) : 1)
+    : 1;
+  if (emeralds.length) {
+    emeraldGlowMat.opacity = (0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8)) * lootFade;
+  }
   for (let i = emeralds.length - 1; i >= 0; i--) {
     const e = emeralds[i], ud = e.userData;
     ud.life -= dt; ud.t += dt;
@@ -3531,8 +3653,9 @@ function updateEmeralds(dt) {
     e.position.y = 0.32 + Math.sin(ud.t * 5) * 0.08;
     e.rotation.y += dt * 4.5;
     e.rotation.x = 0.35 + Math.sin(ud.t * 3) * 0.15;
-    const warning = ud.life <= EMERALD_WARN;
-    e.visible = !warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0;
+    e.scale.setScalar(Math.max(0.05, lootFade));
+    const warning = !ud.bossLoot && ud.life <= EMERALD_WARN;
+    e.visible = lootFade > 0.04 && (!warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0);
   }
 }
 
@@ -3916,7 +4039,8 @@ function openPicker(healed) {
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
   hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
-  hud.pickerSub.textContent = (healed ? '+1 SHIELD  ·  ' : '') + 'CHOOSE YOUR NEXT UPGRADE';
+  hud.pickerHeal.classList.toggle('hidden', !healed);
+  hud.pickerSub.textContent = 'CHOOSE YOUR NEXT UPGRADE';
   hud.cards.innerHTML = offered.map((u, i) => {
     if (!u) return '<div aria-hidden="true"></div>';
     const recommended = i === 0 && u.id !== 'magnet';
@@ -4087,7 +4211,7 @@ const bossDeath = {
   boss: null,
   nextBlastAt: 0,
   blasts: 0,
-  phase: 'stagger', // stagger | final | hold
+  phase: 'stagger', // stagger | final | loot
   hold: 0,
 };
 
@@ -4158,9 +4282,13 @@ function finalizeBossDeath(z) {
 
   if (state.running) {
     const count = 8 + ((Math.random() * 5) | 0);
-    spawnEmeralds(origin, count);
+    spawnEmeralds(origin, count, { life: BOSS_LOOT_LINGER + 0.5, bossLoot: true });
+    // Injured: guaranteed walk-over shield. Full shields: modest bonus gem burst instead.
+    if (state.hp < state.maxHp) spawnBossShieldDrop(z.position);
+    else spawnEmeralds(origin, BOSS_FULL_SHIELD_GEMS, { life: BOSS_LOOT_LINGER + 0.5, bossLoot: true });
   }
-  maybeDrop(z.position, z.userData.allowShieldDrop !== false);
+  // Other supplies may still drop, but never a second random shield on the boss kill.
+  maybeDrop(z.position, false);
   scene.remove(z);
   const idx = drones.indexOf(z);
   if (idx >= 0) drones.splice(idx, 1);
@@ -4194,18 +4322,23 @@ function updateBossDeath(dt) {
 
   if (bossDeath.phase === 'final') {
     if (bossDeath.boss) finalizeBossDeath(bossDeath.boss);
-    bossDeath.phase = 'hold';
-    bossDeath.hold = reducedMotion.matches ? 0.35 : 0.7;
+    refreshBossLootTimers();
+    bossDeath.phase = 'loot';
+    bossDeath.hold = reducedMotion.matches ? Math.min(1.1, BOSS_LOOT_LINGER) : BOSS_LOOT_LINGER;
+    fadeBossLoot(1);
     return;
   }
 
-  if (bossDeath.phase === 'hold') {
+  if (bossDeath.phase === 'loot') {
     bossDeath.hold -= dt;
+    const fade = bossDeath.hold < BOSS_LOOT_FADE ? Math.max(0, bossDeath.hold / BOSS_LOOT_FADE) : 1;
+    fadeBossLoot(fade);
     if (bossDeath.hold > 0) return;
+    fadeBossLoot(0);
     clearBossDeath();
     if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
       if (state.bossPending) spawnWaveBoss();
-      else finishWaveClear();
+      else finishWaveClear({ fromBoss: true });
     }
   }
 }
@@ -4287,6 +4420,8 @@ function clearRun() {
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   shockwaves.length = 0;
   clearBossDeath();
+  shieldRestoredForPicker = false;
+  if (hud.pickerHeal) hud.pickerHeal.classList.add('hidden');
   toastQueue.length = 0;
   toastTime = 0;
   activePickupHint = null;

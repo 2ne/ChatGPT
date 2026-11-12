@@ -258,6 +258,11 @@ export function createAudio(settings, listener) {
     doorBreak(pos) { const out = spatial(pos, 0.6); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
     shatter(pos) { const out = spatial(pos, 0.5); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
     waveClear() { score?.clearWave(); },
+    /** Soft restorative chime for wave-clear / announced shield refill. */
+    heal() {
+      signal([69, 76, 81], 0.12, 0.07);
+      voice(523, 784, 0.3, 0.09, { type: 'sine', attack: 0.012 });
+    },
     alarm(level) { signal(level > 0.8 ? [45, 52, 45] : [45, 52], 0.075, 0.16); },
     death() { cancelReload(); score?.stop(); signal([57, 54, 49, 35], 0.19, 0.17); },
     pickup(id) {
