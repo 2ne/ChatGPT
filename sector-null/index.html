@@ -199,18 +199,16 @@
 <div id="death" class="overlay hidden">
   <div id="deathPanel">
     <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <p id="deathEyebrow">SECTOR NULL</p>
-    <h1 id="deathTitle"><span class="death-word" data-text="GAME OVER">GAME OVER</span><i class="title-dot" aria-hidden="true"></i></h1>
+    <h1 id="deathTitle"><span class="death-word" data-text="GAME OVER">GAME OVER</span></h1>
     <div id="deathStat"></div>
     <div id="deathBest"></div>
     <form id="deathNameForm" class="hidden" autocomplete="off">
-      <label for="deathName">Callsign</label>
+      <label for="deathName">Name</label>
       <div class="death-name-row">
-        <input id="deathName" name="name" maxlength="3" spellcheck="false" inputmode="text" aria-describedby="deathNameHint" />
+        <input id="deathName" name="name" maxlength="3" spellcheck="false" inputmode="text" aria-describedby="deathSubmitStatus" autocapitalize="characters" enterkeyhint="send" />
         <button type="submit" id="deathSubmit"><span class="death-submit-label">Submit score</span><span class="death-submit-spin" aria-hidden="true"></span></button>
       </div>
-      <p id="deathNameHint">3 letters. Saved for next run.</p>
-      <p id="deathSubmitStatus" role="status"></p>
+      <p id="deathSubmitStatus" role="status" aria-live="polite">Enter 3 letters</p>
     </form>
     <div id="deathArcade" class="hidden" aria-hidden="true">
       <div class="death-callsign-band" aria-hidden="true">

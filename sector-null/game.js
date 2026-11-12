@@ -2193,13 +2193,13 @@ function wireOverlayMenuButton(btn, handler) {
 // the death screen: go again, or back to the title
 wireOverlayMenuButton(document.getElementById('retryBtn'), async () => {
   // Arcade entry locks the menu until submit; keyboard/touch can still auto-post on leave.
-  if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign()) {
+  if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign().length === 3) {
     await publishRunScore(pendingDeathCallsign());
   }
   startGame();
 });
 wireOverlayMenuButton(document.getElementById('deathQuitBtn'), async () => {
-  if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign()) {
+  if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign().length === 3) {
     await publishRunScore(pendingDeathCallsign());
   }
   quitToTitle();
@@ -5019,8 +5019,9 @@ function resetDeathSubmit() {
   deathPadEntry = false;
   arcadeFocus = 0;
   setDeathSubmitBusy(false);
-  deathSubmitStatus.textContent = '';
+  deathSubmitStatus.textContent = 'Enter 3 letters';
   deathSubmitStatus.className = '';
+  deathNameInput.removeAttribute('aria-invalid');
   deathArcadeStatus.textContent = '';
   deathArcadeStatus.className = '';
   deathNameForm.classList.add('hidden');
@@ -5041,11 +5042,20 @@ function beginScoreRun() {
 }
 
 async function publishRunScore(name) {
-  const clean = writePlayerName(name);
-  if (!clean || !pendingSubmit || submittingScore) return null;
+  const clean = normalizeName(name);
+  if (!pendingSubmit || submittingScore) return null;
+  if (clean.length !== 3) {
+    deathSubmitStatus.textContent = 'Enter 3 letters';
+    deathSubmitStatus.className = 'err';
+    deathNameInput.setAttribute('aria-invalid', 'true');
+    deathNameInput.focus({ preventScroll: true });
+    return null;
+  }
+  writePlayerName(clean);
   setDeathSubmitBusy(true);
-  deathSubmitStatus.textContent = '';
+  deathSubmitStatus.textContent = 'Enter 3 letters';
   deathSubmitStatus.className = '';
+  deathNameInput.removeAttribute('aria-invalid');
   deathArcadeStatus.textContent = '';
   deathArcadeStatus.className = '';
   const snapshot = {
@@ -5069,6 +5079,7 @@ async function publishRunScore(name) {
       const msg = rejectMessage(result.error || 'offline');
       deathSubmitStatus.textContent = msg;
       deathSubmitStatus.className = 'err';
+      if (result.error === 'invalid_name') deathNameInput.setAttribute('aria-invalid', 'true');
       deathArcadeStatus.textContent = msg;
       deathArcadeStatus.className = 'err';
       if (deathPadEntry) {
@@ -5496,16 +5507,13 @@ deathNameInput.addEventListener('input', () => {
   const start = deathNameInput.selectionStart;
   deathNameInput.value = normalizeName(deathNameInput.value);
   deathNameInput.setSelectionRange(start, start);
+  deathNameInput.removeAttribute('aria-invalid');
+  deathSubmitStatus.textContent = 'Enter 3 letters';
+  deathSubmitStatus.className = '';
 });
 deathNameForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = normalizeName(deathNameInput.value);
-  if (name.length < 1) {
-    deathSubmitStatus.textContent = 'Enter a callsign';
-    deathSubmitStatus.className = 'err';
-    deathNameInput.focus();
-    return;
-  }
   await publishRunScore(name);
 });
 deathReels.forEach((reel) => {

@@ -2041,6 +2041,125 @@ body.pad-aiming #game {
   #deathMenu { margin-top: 16px; }
 }
 
+/* Simplified game-over layout: one summary, one entry row, two actions. */
+#death {
+  justify-content: flex-start;
+  overflow-y: auto;
+  background: radial-gradient(ellipse at 50% 28%, #052335e8, #020b17f5 75%);
+}
+#deathPanel {
+  width: min(100%, 588px);
+  margin-block: auto;
+  flex-shrink: 0;
+  padding: clamp(20px, 4vw, 36px) clamp(8px, 3vw, 24px);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+#deathPanel .station-frame,
+#deathBest { display: none; }
+#deathTitle {
+  display: block;
+  width: min-content;
+  max-width: 100%;
+  margin-inline: auto;
+  font-size: clamp(64px, 17vw, 102px);
+  line-height: .88;
+  letter-spacing: -.035em;
+}
+.death-word {
+  background-image: linear-gradient(180deg, #eaffff 3%, #a3f6fc 40%, #04d6eb 100%);
+  filter: drop-shadow(0 0 .08em #14ddef66);
+}
+.death-word::after { content: none; }
+#deathStat {
+  margin-top: 26px;
+  color: #b9e0ec;
+  font-size: clamp(12px, 3.2vw, 19px);
+  font-weight: 700;
+  letter-spacing: .15em;
+}
+#deathNameForm {
+  width: min(100%, 412px);
+  margin-top: 30px;
+}
+#deathNameForm label {
+  padding-left: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0be6ee;
+}
+.death-name-row {
+  grid-template-columns: minmax(80px, 1fr) minmax(0, 1.95fr);
+  gap: 12px;
+}
+#deathName {
+  min-width: 0;
+  min-height: 58px;
+  padding: 0 0 0 .3em;
+  border: 1px solid var(--pink);
+  border-radius: 8px;
+  background: #06111ee0;
+  font-size: clamp(22px, 5vw, 28px);
+  letter-spacing: .3em;
+  box-shadow: 0 0 12px #ff368c33, inset 0 0 12px #ff368c10;
+}
+#deathName[aria-invalid="true"] { border-color: #ff7aa8; }
+#deathSubmit {
+  min-height: 58px;
+  padding-inline: 8px;
+  font-size: clamp(14px, 3.3vw, 21px);
+  filter: drop-shadow(0 0 5px #14ddef66);
+}
+#deathSubmit::before { background: #32e9f4; }
+#deathSubmit::after {
+  inset: 2px;
+  background: linear-gradient(135deg, #07303c, #041522);
+}
+#deathSubmitStatus {
+  margin: 14px 0 0;
+  min-height: 1.4em;
+  text-align: center;
+  color: #9cc7db;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  line-height: 1.4;
+}
+#deathSubmitStatus.err { color: #ff7aa8; }
+#deathMenu {
+  width: min(100%, 380px);
+  margin-top: 38px;
+  gap: 20px;
+}
+#deathMenu button {
+  min-height: 60px;
+  font-size: clamp(20px, 4.5vw, 26px);
+  filter: drop-shadow(0 0 6px #ff368c66);
+}
+#deathMenu button::before { background: var(--pink); }
+#deathMenu button::after {
+  inset: 2px;
+  background:
+    repeating-linear-gradient(134deg, #ff368c99 0 1px, transparent 1px 8px) right / 60px 100% no-repeat,
+    linear-gradient(105deg, #281026, #130d20 70%, #32102c);
+}
+#deathMenu button.ui-selected { filter: drop-shadow(0 0 10px #19d9f579); }
+#deathPanel.is-submitted #deathTitle {
+  width: auto;
+  font-size: clamp(36px, 9vw, 64px);
+  line-height: 1;
+}
+@media (max-height: 600px) {
+  #deathPanel { padding-block: 14px; }
+  #deathTitle { font-size: clamp(54px, 13vh, 78px); }
+  #deathStat { margin-top: 14px; }
+  #deathNameForm { margin-top: 18px; }
+  #deathMenu { margin-top: 22px; gap: 12px; }
+  #deathMenu button { min-height: 50px; }
+}
+
 /* Reactor upgrade modules: SVG hardware edges over responsive smoked-glass panels. */
 #picker {
   /* No full-screen backdrop-filter — blur over the live 3D scene is too costly. */
