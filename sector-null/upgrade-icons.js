@@ -568,17 +568,36 @@ const builders = {
   },
   magnet() {
     const g = new THREE.Group();
-    const gems = [
+    const defs = [
       [0, 0.35, 0, 1],
       [-0.7, 0.05, 0.2, 0.62],
       [0.7, 0.05, 0.2, 0.62],
-    ].map(([x, y, z, s]) => {
+    ];
+    const gems = defs.map(([x, y, z, s]) => {
       const gem = gemCrystal(0x7cff4a, s);
       gem.position.set(x, y, z);
+      gem.userData.gemScale = s;
       g.add(gem);
       return gem;
     });
+    // Explicit per-gem ground blobs — realtime map only reads the centre clearly.
+    const shadowMat = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      transparent: true,
+      opacity: 0.52,
+      depthWrite: false,
+    });
+    const gemShadows = defs.map(([x, , z, s]) => {
+      const disc = new THREE.Mesh(new THREE.CircleGeometry(0.36 * s, 20), shadowMat.clone());
+      disc.rotation.x = -Math.PI / 2;
+      disc.position.set(x, -0.58, z);
+      disc.userData.baseRadius = 0.36 * s;
+      disc.renderOrder = -1;
+      g.add(disc);
+      return disc;
+    });
     g.userData.gems = gems;
+    g.userData.gemShadows = gemShadows;
     return g;
   },
 };
@@ -633,6 +652,14 @@ function makeScene(upgrade) {
   if (upgrade.id === 'mag') subject.rotation.y = -0.28;
   else if (upgrade.cat === 'firepower' || upgrade.cat === 'handling') subject.rotation.y = -0.55;
   enableCast(subject);
+  // Magnet uses painted blob shadows under each gem; skip map casts so they don't double.
+  if (subject.userData.gemShadows) {
+    subject.userData.gems?.forEach((gem) => { gem.castShadow = false; });
+    subject.userData.gemShadows.forEach((disc) => {
+      disc.castShadow = false;
+      disc.receiveShadow = false;
+    });
+  }
   root.add(subject);
   root.userData.subject = subject;
 
@@ -719,6 +746,16 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
       } else {
         gem.position.y = 0.25 + Math.sin(t * 2.4) * 0.08;
       }
+      const shadow = ud.gemShadows?.[i];
+      if (!shadow) return;
+      // Sit on the shared ground plane (root y=-0.5) while the subject bobs.
+      shadow.position.x = gem.position.x;
+      shadow.position.z = gem.position.z;
+      shadow.position.y = -0.5 - subject.position.y - 0.01;
+      const lift = Math.max(0, gem.position.y);
+      const shrink = 1 / (1 + lift * 0.55);
+      shadow.scale.setScalar(0.92 + shrink * 0.18);
+      shadow.material.opacity = 0.38 + shrink * 0.22;
     });
   }
   if (ud.swap) {
