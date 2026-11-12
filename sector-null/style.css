@@ -448,12 +448,12 @@ body {
   pointer-events: none;
 }
 
-/* upgrade card — each category sets --accent */
+/* Shared cards use .upgrade-card chrome (upgrade-cards.css). Keep the legacy
+   fixed-width panel styles only for any non-shared .card so they cannot beat
+   width:auto / smoked-glass ::before after the @import. */
 .card {
   --accent: #64dfee;
   position: relative;
-  width: 220px;
-  padding: 14px 16px 16px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -461,11 +461,6 @@ body {
   border-radius: 0;
   -webkit-appearance: none;
   appearance: none;
-  background: radial-gradient(ellipse 90% 55% at 50% 28%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), linear-gradient(180deg, #132531, #0a141e);
-  border: 1px solid #2c4858;
-  box-shadow:
-    0 10px 30px #000c,
-    inset 0 0 0 1px #ffffff06;
   animation: dealIn 0.38s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards;
   transition:
     transform 0.14s ease-out,
@@ -473,7 +468,16 @@ body {
     box-shadow 0.14s,
     opacity 0.2s;
 }
-.card::before {
+.card:not(.upgrade-card) {
+  width: 220px;
+  padding: 14px 16px 16px;
+  background: radial-gradient(ellipse 90% 55% at 50% 28%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), linear-gradient(180deg, #132531, #0a141e);
+  border: 1px solid #2c4858;
+  box-shadow:
+    0 10px 30px #000c,
+    inset 0 0 0 1px #ffffff06;
+}
+.card:not(.upgrade-card)::before {
   /* category stripe */
   content: "";
   position: absolute;
@@ -1079,7 +1083,7 @@ body.paused #flash {
     padding: 8px;
     justify-content: center;
   }
-  .card {
+  .card:not(.upgrade-card) {
     width: 122px;
     padding: 9px 7px;
   }
@@ -1128,12 +1132,18 @@ body.paused #flash {
     padding: 0;
     max-width: 100%;
   }
-  .card {
+  .card:not(.upgrade-card) {
     flex: 0 1 auto;
     width: clamp(132px, 21vw, 184px);
     min-width: 120px;
     min-height: 44px;
     padding: clamp(5px, 1.5dvh, 9px) clamp(8px, 1.3vw, 14px) clamp(6px, 1.6dvh, 10px);
+  }
+  /* Shared upgrade cards fill the row; don't keep the legacy fixed widths. */
+  #cards .upgrade-card {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
   }
   /* Short landscape phones: large icons, with a little height given back for subtitle→card gap. */
   #cards .icon-stage {
