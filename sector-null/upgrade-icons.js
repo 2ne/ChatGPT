@@ -48,6 +48,28 @@ function addShadowGround(root) {
   return ground;
 }
 
+/** Soft radial falloff matching ShadowMaterial + VSM dither (shared by gem blobs). */
+let _softShadowMap = null;
+function softShadowMap() {
+  if (_softShadowMap) return _softShadowMap;
+  const size = 64;
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  // Peak ~halfway between barely-there map shadows and solid black discs.
+  g.addColorStop(0, 'rgba(0,0,0,0.40)');
+  g.addColorStop(0.35, 'rgba(0,0,0,0.28)');
+  g.addColorStop(0.7, 'rgba(0,0,0,0.10)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  _softShadowMap = new THREE.CanvasTexture(c);
+  _softShadowMap.colorSpace = THREE.NoColorSpace;
+  _softShadowMap.userData.shared = true;
+  return _softShadowMap;
+}
+
 function enableCast(root) {
   root.traverse(obj => {
     if (obj.isMesh) {
@@ -580,18 +602,21 @@ const builders = {
       g.add(gem);
       return gem;
     });
-    // Explicit per-gem ground blobs — realtime map only reads the centre clearly.
-    const shadowMat = new THREE.MeshBasicMaterial({
-      color: 0x000000,
-      transparent: true,
-      opacity: 0.52,
-      depthWrite: false,
-    });
+    // Soft feathered blobs per gem (map shadows only read the centre clearly).
+    const map = softShadowMap();
     const gemShadows = defs.map(([x, , z, s]) => {
-      const disc = new THREE.Mesh(new THREE.CircleGeometry(0.36 * s, 20), shadowMat.clone());
+      const disc = new THREE.Mesh(
+        new THREE.CircleGeometry(0.42 * s, 24),
+        new THREE.MeshBasicMaterial({
+          map,
+          transparent: true,
+          opacity: 0.9,
+          depthWrite: false,
+          toneMapped: false,
+        })
+      );
       disc.rotation.x = -Math.PI / 2;
       disc.position.set(x, -0.58, z);
-      disc.userData.baseRadius = 0.36 * s;
       disc.renderOrder = -1;
       g.add(disc);
       return disc;
@@ -608,7 +633,7 @@ function disposeObject(root) {
     const mats = obj.material;
     if (!mats) return;
     for (const m of Array.isArray(mats) ? mats : [mats]) {
-      if (m.map) m.map.dispose();
+      if (m.map && !m.map.userData?.shared) m.map.dispose();
       m.dispose();
     }
   });
@@ -754,8 +779,8 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
       shadow.position.y = -0.5 - subject.position.y - 0.01;
       const lift = Math.max(0, gem.position.y);
       const shrink = 1 / (1 + lift * 0.55);
-      shadow.scale.setScalar(0.92 + shrink * 0.18);
-      shadow.material.opacity = 0.38 + shrink * 0.22;
+      shadow.scale.setScalar(0.94 + shrink * 0.14);
+      shadow.material.opacity = 0.72 + shrink * 0.2;
     });
   }
   if (ud.swap) {
