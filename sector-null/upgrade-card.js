@@ -37,7 +37,7 @@ export function renderUpgradeCard({
   iconLabel = false,
 } = {}) {
   const botUpgrade = u.id === 'bot' && owned > 0;
-  const name = botUpgrade ? 'UPGRADE HELPER BOT' : u.name;
+  const name = botUpgrade ? 'UPGRADE BOT' : u.name;
   const desc = botUpgrade ? 'Stronger companion shots' : u.desc;
   const [now, after] = u.stat(state);
   const pips = upgradeCardPips(u, owned);
