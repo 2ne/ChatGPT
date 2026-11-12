@@ -41,7 +41,11 @@ export const UPGRADES = [
   { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: (s) => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
   { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: (s) => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
   { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: (s) => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
-  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts enemies', max: 3, stat: (s) => [s.upgrades.pulse || 0, `Rank ${(s.upgrades.pulse || 0) + 1}`], apply: () => {} },
+  { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts and slows enemies', max: 3, stat: (s) => {
+    const owned = s.upgrades.pulse || 0;
+    const nextDmg = 2 + (owned + 1) * 2; // matches equipmentBlast(..., 2 + u.pulse * 2, ...)
+    return [owned ? String(2 + owned * 2) : 'Off', `${nextDmg} dmg`];
+  }, apply: () => {} },
   { id: 'mag', cat: 'handling', name: 'CELL CAPACITY', desc: '+4 pulses per cell', max: 5, stat: (s) => [s.magSize, `${s.magSize + 4} pulses`], apply: (s) => { s.magSize += 4; s.mag = s.magSize; } },
   { id: 'reload', cat: 'handling', name: 'HOT SWAP', desc: 'reload 25% faster', max: 4, stat: (s) => [s.reloadTime.toFixed(2), `${(s.reloadTime * 0.75).toFixed(2)}s`], apply: (s) => { s.reloadTime *= 0.75; } },
   { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+50% pulse damage', max: 6, stat: (s) => [`${s.damage}×`, `${s.damage + 0.5}×`], apply: (s) => { s.damage += 0.5; } },
