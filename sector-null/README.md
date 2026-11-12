@@ -85,7 +85,7 @@ Supply pickup notices appear one at a time. The first pickup of each type in eve
 
 **Magnetic Gems** is a permanent green **ability** upgrade. It appears in the normal three-card wave-clear picker as an alternative to firepower / engineer / survival — take it instead of another option when you want the score path. Once picked it stays for the run, marks the operator with a soft green floor circle, and pulls score gems through walls at a readable surge. Timed supplies (Overcharge / Infinite Cell) stay short combat spikes.
 
-The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades.
+The bottom-right weapon display shows your current magazine and adds visible rifle parts as you pick weapon upgrades. While recharging, the operator also plays an in-world energy-cell reload (gun dips, spent cell ejects and fades on the deck, free hand seats a fresh glowing cell) timed to the actual Hot Swap reload duration so firing resumes exactly when the animation ends.
 
 The pulse rifle uses a low, weighty energy pulse with a short midrange attack and bass impact. The recharge hum is subdued, with a single soft ready tone. Shot pitch gradually drops by up to three semitones as the cell empties. At one remaining charge, a low-energy beep and amber LAST CHARGE label warn you; recharging shows RECHARGING… and a progress bar. A power-down tone leads into a rising charge hum timed to the recharge duration, followed by a ready chirp and cyan CELL READY label. These labels also appear on mobile. Infinite Cell keeps full-energy shot pitch and suppresses low-charge warnings and manual recharging. Pausing freezes the charge audio; interrupted recharges stop their hum.
 

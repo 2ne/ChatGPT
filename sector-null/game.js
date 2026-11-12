@@ -768,7 +768,22 @@ blk(M.gunBody, 0.12, 0.17, 0.24, 0, -0.02, 0.15, gun);             // stock
 blk(M.gunBody, 0.1, 0.2, 0.1, 0, -0.11, 0.29, gun).rotation.x = 0.35; // pistol grip
 blk(M.metal, 0.14, 0.15, 0.4, 0, 0.03, 0.44, gun);              // receiver
 blk(M.metal, 0.04, 0.03, 0.12, 0, -0.07, 0.37, gun, 0.01);      // trigger guard
-const mag = blk(M.metal, 0.09, 0.24, 0.12, 0, -0.14, 0.52, gun); mag.rotation.x = -0.12;
+// Energy cell — chunky + emissive so eject/slot reads from the top-down camera.
+const cellGeo = bevelBox(0.11, 0.28, 0.15, 0.02);
+const cellFreshMat = new THREE.MeshStandardMaterial({
+  color: 0x1a4558, roughness: 0.3, metalness: 0.55,
+  emissive: 0x36dcff, emissiveIntensity: 1.2,
+});
+const cellSpentMat = new THREE.MeshStandardMaterial({
+  color: 0x24343c, roughness: 0.48, metalness: 0.45,
+  emissive: 0x145866, emissiveIntensity: 0.22,
+});
+const mag = new THREE.Mesh(cellGeo, cellFreshMat);
+mag.position.set(0, -0.14, 0.52);
+mag.rotation.x = -0.12;
+mag.castShadow = true;
+gun.add(mag);
+blk(M.status, 0.04, 0.2, 0.02, 0, -0.14, 0.595, gun, 0.004); // cell charge stripe
 blk(M.gunBody, 0.13, 0.13, 0.36, 0, 0.01, 0.8, gun);               // handguard
 blk(M.metal, 0.06, 0.06, 0.46, 0, 0.03, 1.18, gun, 0.015);      // barrel
 blk(M.metal, 0.085, 0.085, 0.08, 0, 0.03, 1.42, gun, 0.015);    // muzzle brake
@@ -784,10 +799,13 @@ for (const x of [-0.071, 0.071]) {
 const GRIP_R = new THREE.Vector3(0, -0.1, 0.3);    // firing hand on the pistol grip
 const GRIP_L = new THREE.Vector3(0, -0.07, 0.74);  // support hand under the handguard
 const MAG_Y = mag.position.y;
-const MAG_BASE = new THREE.Vector3(0, -0.29, 0.53); // bottom of the seated magazine
+const MAG_BASE = new THREE.Vector3(0, -0.32, 0.53); // bottom of the seated energy cell
 const EJECT = new THREE.Vector3(-0.08, 0.06, 0.48); // ejection port (right side)
-// the fresh magazine the support hand brings up from the chest rig
-const spareMag = new THREE.Mesh(mag.geometry, M.metal); spareMag.castShadow = true; player.add(spareMag);
+// Fresh cell the support hand brings up from the chest rig
+const spareMag = new THREE.Mesh(cellGeo, cellFreshMat);
+spareMag.castShadow = true;
+spareMag.visible = false;
+player.add(spareMag);
 // bullets spawn here
 const muzzle = new THREE.Object3D(); muzzle.position.set(0, 0.03, 1.47); gun.add(muzzle);
 
@@ -883,12 +901,14 @@ const smokeMats = Array.from({ length: 24 }, () =>
 let smokeI = 0;
 const DEBRIS_SOFT_CAP = 90;
 const casingPool = [];
+const cellPool = [];
 const smokePool = [];
 const sparkPool = [];
 const chipPool = [];
 const sparkMat = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false });
 const sparkForward = new THREE.Vector3(0, 0, 1);
 const _sparkDir = new THREE.Vector3();
+const _cellEject = new THREE.Vector3();
 
 function acquirePooledMesh(pool, factory) {
   const mesh = pool.pop() || factory();
@@ -899,6 +919,14 @@ function acquireCasing() {
   return acquirePooledMesh(casingPool, () => {
     const mesh = new THREE.Mesh(casingGeo, M.trim);
     mesh.userData.pool = 'casing';
+    return mesh;
+  });
+}
+function acquireSpentCell() {
+  return acquirePooledMesh(cellPool, () => {
+    const mesh = new THREE.Mesh(cellGeo, cellSpentMat);
+    mesh.castShadow = true;
+    mesh.userData.pool = 'cell';
     return mesh;
   });
 }
@@ -933,9 +961,28 @@ function releaseDebris(mesh) {
   mesh.visible = false;
   const pool = mesh.userData.pool;
   if (pool === 'casing') casingPool.push(mesh);
+  else if (pool === 'cell') cellPool.push(mesh);
   else if (pool === 'smoke') smokePool.push(mesh);
   else if (pool === 'spark') sparkPool.push(mesh);
   else if (pool === 'chip') chipPool.push(mesh);
+}
+
+function ejectSpentCell() {
+  const cell = acquireSpentCell();
+  mag.updateWorldMatrix(true, false);
+  mag.getWorldPosition(cell.position);
+  mag.getWorldQuaternion(cell.quaternion);
+  gun.updateWorldMatrix(true, false);
+  // Pop out to the operator's right, then arc onto the deck (reads from above).
+  _cellEject.set(-1, 0, 0).transformDirection(gun.matrixWorld).multiplyScalar(3.4);
+  _cellEject.y += 4.2;
+  _cellEject.x += (Math.random() - 0.5) * 0.8;
+  _cellEject.z += (Math.random() - 0.5) * 0.8;
+  spawnDebris(cell, _cellEject, {
+    life: 1.45,
+    bounce: 0.045,
+    spin: new THREE.Vector3(rnd(-10, 10), rnd(-8, 8), rnd(-10, 10)),
+  });
 }
 function spawnDebris(mesh, vel, o) {
   // Late waves can dump hundreds of sparks — keep a soft ceiling.
@@ -1006,6 +1053,8 @@ const rig = {
   flashPeak: 0,
   reload: 0,     // reload pose weight
   magDropped: false,
+  cellSeated: false,
+  cellSnap: 0,   // brief seat jolt when the fresh cell locks in
   t: 0,
 };
 const BETA = 0.38;      // fraction of the gait cycle each boot spends planted (under half: a run)
@@ -1202,33 +1251,51 @@ function animatePlayer(dt, mx, mz) {
   upper.rotation.set(0.05 + 0.1 * rig.leanF * rig.gait - 0.08 * rig.kick, tw, -0.07 * rig.leanS * rig.gait);
   upper.updateMatrix();
 
-  // --- reload: tip the rifle in, strip the mag, pull a fresh one off the chest rig ---
-  rig.reload = damp(rig.reload, state.reloading ? 1 : 0, state.reloading ? 14 : 9, dt);
+  // --- reload: tip the rifle, eject the spent cell, slot a fresh one (timeline = reloadT/reloadTime) ---
+  // Blend in/out so Infinite Cell / death / pause interrupts settle instead of popping.
+  rig.reload = damp(rig.reload, state.reloading ? 1 : 0, state.reloading ? 16 : 11, dt);
+  rig.cellSnap *= Math.exp(-20 * dt);
   const rl = ease(rig.reload);
-  const u = state.reloading ? state.reloadT / state.reloadTime : 1;
-  head.rotation.set(0.1 + 0.32 * rl, -tw * 0.85 + 0.25 * rl, 0);
+  const u = state.reloading ? Math.min(1, state.reloadT / Math.max(0.05, state.reloadTime)) : 1;
+  head.rotation.set(0.1 + 0.4 * rl, -tw * 0.85 + 0.32 * rl, 0);
 
-  // --- rifle: butt in the shoulder pocket, barrel down the aim line ---
+  // --- rifle: butt in the shoulder pocket; reload dips/rolls so the cell swap reads from above ---
   _v.copy(POCKET).applyMatrix4(upper.matrix);
-  gun.position.set(_v.x + 0.1 * rl, _v.y - 0.1 * rl + 0.012 * breathe, _v.z - 0.11 * rig.kick - 0.08 * rl);
-  gun.rotation.set(-0.16 * rig.kick - 0.35 * rl + 0.01 * Math.sin(rig.t * 1.3), 0.15 * rl, 0.65 * rl);
+  const snap = ease(rig.cellSnap);
+  gun.position.set(
+    _v.x + 0.2 * rl,
+    _v.y - 0.26 * rl + 0.012 * breathe + 0.05 * snap,
+    _v.z - 0.11 * rig.kick - 0.14 * rl,
+  );
+  gun.rotation.set(
+    -0.16 * rig.kick - 0.62 * rl + 0.01 * Math.sin(rig.t * 1.3) + 0.08 * snap,
+    0.28 * rl,
+    1.05 * rl - 0.12 * snap,
+  );
   gun.updateMatrix();
 
-  // magazine: rides out with the hand, drops free, the spare rides in from the pouch
-  if (!state.reloading || u < 0.12) rig.magDropped = false;
+  // Spent cell strips out, pops free (pooled), fresh cell rides in with the support hand.
+  if (!state.reloading || u < 0.1) {
+    rig.magDropped = false;
+    rig.cellSeated = false;
+  }
   let magDrop = 0;
-  if (state.reloading && u >= 0.12 && u < 0.22) magDrop = 0.24 * ease((u - 0.12) / 0.1);
-  if (state.reloading && u >= 0.78) magDrop = 0.2 * (1 - ease(Math.min(1, (u - 0.78) / 0.17)));
+  if (state.reloading && u >= 0.1 && u < 0.22) magDrop = 0.34 * ease((u - 0.1) / 0.12);
+  if (state.reloading && u >= 0.78) magDrop = 0.28 * (1 - ease(Math.min(1, (u - 0.78) / 0.17)));
   mag.position.y = MAG_Y - magDrop;
   mag.visible = !state.reloading || u < 0.22 || u >= 0.78;
+  mag.material = cellFreshMat;
+  cellFreshMat.emissiveIntensity = 1.2 + 1.4 * snap;
   if (state.reloading && u >= 0.22 && !rig.magDropped) {
     rig.magDropped = true;
-    const old = new THREE.Mesh(mag.geometry, M.metal);
-    mag.getWorldPosition(old.position); mag.getWorldQuaternion(old.quaternion);
-    spawnDebris(old, new THREE.Vector3(0, -1, 0), { life: 4, bounce: 0.05, spin: new THREE.Vector3(3, 0, 2) });
+    ejectSpentCell();
+  }
+  if (state.reloading && u >= 0.92 && !rig.cellSeated) {
+    rig.cellSeated = true;
+    rig.cellSnap = 1;
   }
 
-  // hands: the firing hand never leaves the grip; the support hand works the reload
+  // Hands: firing hand stays on the grip; support hand runs the cell path.
   _gR.copy(GRIP_R).applyMatrix4(gun.matrix);
   _gL.copy(GRIP_L).applyMatrix4(gun.matrix);
   if (rig.reload > 0.001) _gL.lerp(reloadHand(u, _w), rl);
@@ -1242,10 +1309,10 @@ function animatePlayer(dt, mx, mz) {
     arm.hand.position.copy(arm.wrist);
     arm.hand.quaternion.copy(gun.quaternion);
   }
-  spareMag.visible = state.reloading && u >= 0.45 && u < 0.78;
+  spareMag.visible = state.reloading && u >= 0.42 && u < 0.78;
   if (spareMag.visible) {
     spareMag.quaternion.copy(gun.quaternion);
-    spareMag.position.copy(arms[0].wrist).add(_w.set(0, 0.13, 0).applyQuaternion(gun.quaternion));
+    spareMag.position.copy(arms[0].wrist).add(_w.set(0, 0.14, 0).applyQuaternion(gun.quaternion));
   }
 
   // --- muzzle flash: a few frames of fire, a real light with a fast falloff ---
@@ -2379,15 +2446,30 @@ function showBanner(text, sub, dur = 1.6, kind = 'wave') {
 // ===================================================================
 // WEAPON
 // ===================================================================
+function abortReloadVisuals() {
+  // Infinite Cell / death / finish — settle the cell mesh without leaving a missing mag.
+  rig.magDropped = false;
+  rig.cellSeated = false;
+  mag.visible = true;
+  mag.position.y = MAG_Y;
+  mag.material = cellFreshMat;
+  cellFreshMat.emissiveIntensity = 1.2;
+  spareMag.visible = false;
+}
 function startReload() {
   if (!state.running || state.reloading || state.pAmmo > 0 || state.mag === state.magSize) return;
   state.reloading = true;
   state.reloadT = 0;
+  rig.magDropped = false;
+  rig.cellSeated = false;
+  rig.cellSnap = 0;
   audio.reloadOut(state.reloadTime);
 }
 function finishReload() {
   state.reloading = false;
   state.mag = state.magSize;
+  abortReloadVisuals();
+  rig.cellSnap = 1;
   audio.reloadIn();
 }
 
@@ -3590,7 +3672,13 @@ function collect(type, opts = {}) {
     restoreShieldSegment({ sfx: !silent });
   }
   else if (type.id === 'dmg') state.pDamage += 10;
-  else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo += 8; state.reloading = false; state.mag = state.magSize; }
+  else if (type.id === 'ammo') {
+    audio.cancelReload();
+    state.pAmmo += 8;
+    state.reloading = false;
+    state.mag = state.magSize;
+    abortReloadVisuals();
+  }
 }
 
 function updateDrops(dt) {
@@ -4553,6 +4641,9 @@ function clearRun() {
   for (const { flare } of droneBlasts) removeDroneBlast(flare);
   for (const wave of shockwaves) { scene.remove(wave.ring); wave.ring.material.dispose(); }
   clearEmeralds();
+  audio.cancelReload();
+  state.reloading = false;
+  abortReloadVisuals();
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   shockwaves.length = 0;
   clearBossDeath();
