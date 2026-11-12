@@ -40,9 +40,16 @@ export function renderUpgradeCard({
   const name = botUpgrade ? 'UPGRADE BOT' : u.name;
   const desc = botUpgrade ? 'Stronger companion shots' : u.desc;
   const parts = u.stat(state);
-  const cstat = parts.length < 2 || parts[1] == null
-    ? `<b>${parts[0]}</b>`
-    : `${parts[0]} → <b>${parts[1]}</b>`;
+  // Rank-1 "Off → X" reads as a first unlock — show only the highlighted new value.
+  // Owned ranks keep the before → after pill.
+  let cstat;
+  if (parts.length < 2 || parts[1] == null) {
+    cstat = `<b>${parts[0]}</b>`;
+  } else if (String(parts[0]).toLowerCase() === 'off') {
+    cstat = `<b>${parts[1]}</b>`;
+  } else {
+    cstat = `${parts[0]} → <b>${parts[1]}</b>`;
+  }
   const pips = upgradeCardPips(u, owned);
   const top = recommended ? 'RECOMMENDED' : u.cat.toUpperCase();
   const key = slot == null ? '' : `<span class="ckey">${slot}</span>`;
