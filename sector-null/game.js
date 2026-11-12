@@ -14,6 +14,22 @@ import { createUpgradeIconHost } from './upgrade-icons.js';
 import { renderUpgradeCard } from './upgrade-card.js';
 import { createHelperBotMesh, disposeHelperBotMesh } from './helper-bot-mesh.js';
 import {
+  HELPER_AIM_FIRE,
+  HELPER_AIM_RATE,
+  HELPER_BOT_R,
+  HELPER_MIN_R,
+  HELPER_ORBIT_H,
+  HELPER_ORBIT_R,
+  HELPER_ORBIT_SPEED,
+  HELPER_WORLD_SCALE,
+  enforceMinRadius,
+  forwardFromYaw,
+  helperAligned,
+  stepHelperOrbit,
+  stepHelperYaw,
+  yawToPoint,
+} from './helper-motion.js';
+import {
   BASE_STATS,
   DROP_CHANCE,
   UPGRADES,
@@ -3546,12 +3562,10 @@ scene.add(helper); helper.visible = false;
 let helperMesh = null;
 let helperMuzzles = [];
 let helperVisualKey = '';
-let helperOrbit = 0; // radians around the operator — keeps the bot off the head
-const helperDesired = new THREE.Vector3();
-const HELPER_ORBIT_R = 1.35;
-const HELPER_ORBIT_H = 1.12; // shoulder height, not through the helmet
-const HELPER_ORBIT_SPEED = 0.95;
-const HELPER_WORLD_SCALE = 0.62; // readable from the top-down camera
+let helperOrbit = 0; // radians around the operator — polar phase, not a lerp chord
+let helperYaw = 0; // facing yaw; barrels aim along local +Z
+const _helperMuzzle = new THREE.Vector3();
+const _helperFwd = new THREE.Vector3();
 
 function helperVariantFromUpgrades(u) {
   if (u.botBomb) return 'bomb';
@@ -3577,11 +3591,28 @@ function syncHelperMesh(u = state.upgrades) {
   helperVisualKey = key;
 }
 
-/** Aim local +Z at a world point (Object3D.lookAt faces −Z). */
-function helperAimAt(x, y, z) {
-  helper.lookAt(x, y, z);
-  helper.rotateY(Math.PI);
+function resolveHelperWalls(pos, radius = HELPER_BOT_R) {
+  pushOutOfSolids(pos, radius);
+  for (const w of wallBoxes) {
+    const cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
+    const dx = pos.x - cx, dz = pos.z - cz;
+    const hx = (w.maxX - w.minX) / 2 + radius, hz = (w.maxZ - w.minZ) / 2 + radius;
+    if (Math.abs(dx) >= hx || Math.abs(dz) >= hz) continue;
+    if (hx - Math.abs(dx) < hz - Math.abs(dz)) pos.x = cx + (Math.sign(dx) || 1) * (hx + 0.01);
+    else pos.z = cz + (Math.sign(dz) || 1) * (hz + 0.01);
+  }
 }
+
+function placeHelperClearOfPlayer(fallbackAng = helperOrbit) {
+  const cleared = enforceMinRadius(
+    player.position.x, player.position.z,
+    helper.position.x, helper.position.z,
+    HELPER_MIN_R, fallbackAng,
+  );
+  helper.position.x = cleared.x;
+  helper.position.z = cleared.z;
+}
+
 const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
 const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
 const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
@@ -3689,42 +3720,51 @@ function updateEquipment(dt) {
   if (state.choosing) return;
   if (u.bot) {
     syncHelperMesh(u);
-    // Orbit the operator at shoulder height so the sphere never sits inside the head.
-    helperOrbit += dt * (reducedMotion.matches ? HELPER_ORBIT_SPEED * 0.45 : HELPER_ORBIT_SPEED);
-    const bob = reducedMotion.matches ? 0 : Math.sin(helperOrbit * 2.2) * 0.08;
-    helperDesired.set(
-      player.position.x + Math.cos(helperOrbit) * HELPER_ORBIT_R,
-      HELPER_ORBIT_H + bob,
-      player.position.z + Math.sin(helperOrbit) * HELPER_ORBIT_R,
-    );
-    helper.position.lerp(helperDesired, Math.min(1, dt * 8));
+    const orbitSpeed = reducedMotion.matches ? HELPER_ORBIT_SPEED * 0.45 : HELPER_ORBIT_SPEED;
+    // Polar follow: move by angle + radius so the path goes around the operator, never through.
+    const next = stepHelperOrbit({
+      px: player.position.x,
+      pz: player.position.z,
+      x: helper.position.x,
+      y: helper.position.y,
+      z: helper.position.z,
+      orbit: helperOrbit,
+    }, dt, {
+      orbitSpeed,
+      bob: reducedMotion.matches ? 0 : Math.sin((helperOrbit + dt * orbitSpeed) * 2.2) * 0.08,
+    });
+    helperOrbit = next.orbit;
+    helper.position.set(next.x, next.y, next.z);
+    resolveHelperWalls(helper.position, HELPER_BOT_R);
+    placeHelperClearOfPlayer(next.ang);
+    // Wall shove can push inward — clear solids again, then re-enforce player clearance.
+    resolveHelperWalls(helper.position, HELPER_BOT_R);
+    placeHelperClearOfPlayer(next.ang);
+
     equipment.shot -= dt;
     const target = drones.filter(z => inside(z.position) && !wallBetween(helper.position, z.position) && clearPath(helper.position.x, helper.position.z, z.position.x, z.position.z, 0.05)).sort((a, b) => a.position.distanceToSquared(helper.position) - b.position.distanceToSquared(helper.position))[0];
-    if (target) {
-      helperAimAt(target.position.x, helper.position.y, target.position.z);
-      if (equipment.shot <= 0) {
-        helper.updateWorldMatrix(true, true);
-        equipment.shot = helperShotInterval(u);
-        const shots = u.botGun ? Math.min(2, helperMuzzles.length) : 1;
-        for (let k = 0; k < shots; k++) {
-          const muzzlePos = new THREE.Vector3();
-          const muzzle = helperMuzzles[k] || helperMuzzles[0];
-          if (muzzle) muzzle.getWorldPosition(muzzlePos);
-          else muzzlePos.copy(helper.position);
-          const dir = target.position.clone().sub(muzzlePos); dir.y = 0; dir.normalize();
-          spawnPulse(helper.position.x, helper.position.z, muzzlePos, dir, {
-            life: 0.7, pierce: 0, hits: new Set(), helper: true,
-            damage: helperDamage(u.bot), blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0,
-          }, !!u.botBomb);
-        }
+    // Face the current drone, or the operator's aim/move yaw when idle.
+    const wantYaw = target
+      ? yawToPoint(helper.position.x, helper.position.z, target.position.x, target.position.z)
+      : player.rotation.y;
+    helperYaw = stepHelperYaw(helperYaw, wantYaw, dt, HELPER_AIM_RATE);
+    helper.rotation.set(0, helperYaw, 0);
+
+    if (target && equipment.shot <= 0 && helperAligned(helperYaw, wantYaw, HELPER_AIM_FIRE)) {
+      helper.updateWorldMatrix(true, true);
+      equipment.shot = helperShotInterval(u);
+      const fwd = forwardFromYaw(helperYaw);
+      _helperFwd.set(fwd.x, 0, fwd.z);
+      const shots = u.botGun ? Math.min(2, helperMuzzles.length) : 1;
+      for (let k = 0; k < shots; k++) {
+        const muzzle = helperMuzzles[k] || helperMuzzles[0];
+        if (muzzle) muzzle.getWorldPosition(_helperMuzzle);
+        else _helperMuzzle.copy(helper.position);
+        spawnPulse(helper.position.x, helper.position.z, _helperMuzzle, _helperFwd.clone(), {
+          life: 0.7, pierce: 0, hits: new Set(), helper: true,
+          damage: helperDamage(u.bot), blast: u.botBomb ? 2.4 + 0.5 * u.botBomb : 0,
+        }, !!u.botBomb);
       }
-    } else {
-      // Drift facing along the orbit tangent when idle so it doesn't stare through the operator.
-      helperAimAt(
-        player.position.x - Math.sin(helperOrbit) * 2,
-        helper.position.y,
-        player.position.z + Math.cos(helperOrbit) * 2,
-      );
     }
   }
   equipment.mine -= dt;
@@ -4220,6 +4260,8 @@ function clearRun() {
   equipment.shot = equipment.mine = equipment.safe = 0;
   helper.visible = false;
   helperOrbit = Math.PI * 0.75;
+  helperYaw = player.rotation.y;
+  helper.rotation.set(0, helperYaw, 0);
   helper.position.set(
     player.position.x + Math.cos(helperOrbit) * HELPER_ORBIT_R,
     HELPER_ORBIT_H,
