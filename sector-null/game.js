@@ -3793,33 +3793,49 @@ function upgradeWeight(u) {
   return Math.max(0.05, w);
 }
 
+const HELPER_FAMILY = new Set(['bot', 'botGun', 'botBomb']);
+const isHelperFamily = (u) => HELPER_FAMILY.has(u.id);
+
+function pickWeighted(candidates) {
+  if (!candidates.length) return null;
+  const total = candidates.reduce((sum, u) => sum + upgradeWeight(u), 0);
+  let roll = Math.random() * total;
+  for (let i = 0; i < candidates.length; i++) {
+    roll -= upgradeWeight(candidates[i]);
+    if (roll <= 0) return candidates[i];
+  }
+  return candidates[candidates.length - 1];
+}
+
 function pickUpgradeOffers(count = 3) {
   const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
   const picks = [];
+  const take = (u) => {
+    if (!u) return;
+    picks.push(u);
+    const i = pool.indexOf(u);
+    if (i >= 0) pool.splice(i, 1);
+  };
+  // Prefer non-helper-family once one bot card is already in the offer.
+  const candidates = () => {
+    if (!picks.some(isHelperFamily)) return pool.slice();
+    const others = pool.filter((u) => !isHelperFamily(u));
+    // Fall back to more helper cards only when nothing else can fill a slot.
+    return others.length ? others : pool.slice();
+  };
+
   // Keep an equipment path available, including follow-up modules once owned.
   const equipment = pool.filter(u => u.cat === 'engineer');
-  if (equipment.length) {
-    const weighted = equipment.flatMap(u => Array(Math.ceil(upgradeWeight(u))).fill(u));
-    const u = weighted[Math.floor(Math.random() * weighted.length)];
-    picks.push(u); pool.splice(pool.indexOf(u), 1);
-  }
+  if (equipment.length) take(pickWeighted(equipment));
+
   // Guarantee Split Beam on the first couple of clears if it still hasn't shown up.
   if ((state.upgrades.spread || 0) === 0 && state.wave <= 2) {
-    const spread = pool.find(u => u.id === 'spread');
-    if (spread) {
-      picks.push(spread);
-      pool.splice(pool.indexOf(spread), 1);
-    }
+    take(pool.find(u => u.id === 'spread'));
   }
   while (picks.length < count && pool.length) {
-    const total = pool.reduce((sum, u) => sum + upgradeWeight(u), 0);
-    let roll = Math.random() * total;
-    let idx = 0;
-    for (let i = 0; i < pool.length; i++) {
-      roll -= upgradeWeight(pool[i]);
-      if (roll <= 0) { idx = i; break; }
-    }
-    picks.push(pool.splice(idx, 1)[0]);
+    const u = pickWeighted(candidates());
+    if (!u) break;
+    take(u);
   }
   // Shuffle display order so the guaranteed card isn't always slot 1.
   for (let i = picks.length - 1; i > 0; i--) {
