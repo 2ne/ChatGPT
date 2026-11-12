@@ -27,6 +27,12 @@ export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival
 
 export const helperDamage = (rank) => 0.8 + rank * 0.7;
 
+/** Absolute damage for the stat pill: trim trailing .0, keep one decimal otherwise. */
+export function dmgLabel(n) {
+  const t = Math.round(n * 10) / 10;
+  return Number.isInteger(t) ? String(t) : t.toFixed(1);
+}
+
 /** Keep roughly wave 5's supply budget as the regular drone count grows. */
 export function supplyDropScale(wave) {
   return Math.min(1, 20 / (5 + Math.max(1, wave) * 3));
@@ -35,20 +41,29 @@ export function supplyDropScale(wave) {
 // Each card can be taken up to `max` times per run. `ok` (optional) hides a
 // card while it would do nothing. `stat` returns [now, after] for the card.
 export const UPGRADES = [
-  { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'Deploy one automatic companion', max: 3, stat: (s) => [s.upgrades.bot ? helperDamage(s.upgrades.bot).toFixed(1) : 'Shot damage', `${helperDamage((s.upgrades.bot || 0) + 1).toFixed(1)} damage`], apply: () => {} },
+  { id: 'bot', cat: 'engineer', name: 'HELPER BOT', desc: 'Deploy one automatic companion', max: 3, stat: (s) => {
+    const owned = s.upgrades.bot || 0;
+    const next = helperDamage(owned + 1);
+    return [owned ? dmgLabel(helperDamage(owned)) : 'Off', `${dmgLabel(next)} dmg`];
+  }, apply: () => {} },
   { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botBomb, stat: (s) => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
   { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botGun, stat: (s) => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
-  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: (s) => ['Blast damage', `${4 + (s.upgrades.mine || 0)}`], apply: () => {} },
+  { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: (s) => {
+    // Matches equipmentBlast(..., 3 + u.mine, ...)
+    const owned = s.upgrades.mine || 0;
+    const next = 3 + owned + 1;
+    return [owned ? dmgLabel(3 + owned) : 'Off', `${dmgLabel(next)} dmg`];
+  }, apply: () => {} },
   { id: 'shock', cat: 'engineer', name: 'SHOCK MINES', desc: 'Mine blasts slow survivors for 3s', max: 1, ok: (s) => s.upgrades.mine, stat: () => ['Explosive', '+60% slow'], apply: () => {} },
   { id: 'regen', cat: 'survival', name: 'SHIELD REGEN', desc: 'Recover 1 shield after avoiding hits', max: 2, stat: (s) => ['No damage for', s.upgrades.regen ? '8 seconds' : '12 seconds'], apply: () => {} },
   { id: 'pulse', cat: 'survival', name: 'EMERGENCY PULSE', desc: 'Shield loss blasts and slows drones', max: 3, stat: (s) => {
     const owned = s.upgrades.pulse || 0;
     const nextDmg = 2 + (owned + 1) * 2; // matches equipmentBlast(..., 2 + u.pulse * 2, ...)
-    return [owned ? String(2 + owned * 2) : 'Off', `${nextDmg} dmg`];
+    return [owned ? dmgLabel(2 + owned * 2) : 'Off', `${dmgLabel(nextDmg)} dmg`];
   }, apply: () => {} },
   { id: 'mag', cat: 'handling', name: 'CELL CAPACITY', desc: '+4 pulses per cell', max: 5, stat: (s) => [s.magSize, `${s.magSize + 4} pulses`], apply: (s) => { s.magSize += 4; s.mag = s.magSize; } },
   { id: 'reload', cat: 'handling', name: 'HOT SWAP', desc: 'reload 25% faster', max: 4, stat: (s) => [s.reloadTime.toFixed(2), `${(s.reloadTime * 0.75).toFixed(2)}s`], apply: (s) => { s.reloadTime *= 0.75; } },
-  { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+50% pulse damage', max: 6, stat: (s) => [`${s.damage}×`, `${s.damage + 0.5}×`], apply: (s) => { s.damage += 0.5; } },
+  { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+0.5 pulse damage', max: 6, stat: (s) => [dmgLabel(s.damage), `${dmgLabel(s.damage + 0.5)} dmg`], apply: (s) => { s.damage += 0.5; } },
   { id: 'rate', cat: 'firepower', name: 'RAPID CYCLER', desc: 'fire 20% faster', max: 4, stat: (s) => [(1 / s.fireRate).toFixed(1), `${(1 / (s.fireRate * 0.8)).toFixed(1)}/s`], apply: (s) => { s.fireRate *= 0.8; } },
   { id: 'pierce', cat: 'firepower', name: 'PIERCING', desc: 'shots pierce +1 drone', max: 3, stat: (s) => [s.pierce, `${s.pierce + 1} thru`], apply: (s) => { s.pierce++; } },
   { id: 'spread', cat: 'firepower', name: 'SPLIT BEAM', desc: '+1 pulse per shot', max: 3, stat: (s) => [1 + s.spread, `${2 + s.spread} per shot`], apply: (s) => { s.spread++; } },
