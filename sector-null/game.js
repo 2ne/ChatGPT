@@ -3563,8 +3563,8 @@ function updateDrops(dt) {
       ud.waveClearGrace -= dt;
       if (ud.waveClearGrace <= 0) {
         ud.waveClearGrace = null;
-        // Same lifetime / blink window as a normal uncollected pickup.
-        ud.life = DROP_LIFE;
+        // One second shorter than a normal pickup; blink still uses DROP_WARNING.
+        ud.life = DROP_LIFE - 1;
       }
     } else {
       ud.life -= dt;
