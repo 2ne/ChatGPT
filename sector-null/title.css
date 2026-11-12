@@ -646,6 +646,91 @@ body.titling #menu {
   display: none;
 }
 
+/* The post-run board shares the title leaderboard's rows and columns. */
+html:has(#death:not(.hidden)),
+body:has(#death:not(.hidden)),
+#death { touch-action: pan-y pinch-zoom; }
+#deathPanel.is-submitted {
+  container-type: inline-size;
+  width: min(100%, 760px);
+  padding: clamp(22px, 4vw, 38px) clamp(14px, 4vw, 38px);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(#05131f, #04101b) padding-box,
+    linear-gradient(110deg, #ff368c, #153345 35%, #153345 65%, #45ecff) border-box;
+  box-shadow: -6px 0 24px #ff368c20, 6px 0 24px #45ecff22, inset 0 0 30px #45ecff08;
+}
+#deathPanel.is-submitted #deathTitle {
+  width: auto;
+  font-size: clamp(24px, 5.5vw, 48px);
+  letter-spacing: .12em;
+  line-height: 1.15;
+}
+#deathPanel.is-submitted #deathStat {
+  margin-top: 12px;
+  color: #a6c7d5;
+  font-size: clamp(12px, 2.4vw, 15px);
+  letter-spacing: .12em;
+}
+#deathSubmitted {
+  width: 100%;
+  margin-top: 28px;
+  text-align: start;
+}
+#deathBoardList { max-height: min(38svh, 268px); }
+#deathBoardList[hidden],
+#deathBoardOutside[hidden] { display: none; }
+#deathBoardOutside {
+  margin-top: 12px;
+  padding-top: 12px;
+  padding-right: 18px;
+  border-top: 1px dashed #3d6f8680;
+}
+.scores-row.is-current {
+  color: #efffff;
+  text-shadow: 0 0 10px #45ecff66;
+  filter: drop-shadow(0 0 5px #45ecff55);
+}
+.scores-row.is-current::before { background: #45ecff; }
+.scores-row.is-current::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 2px;
+  clip-path: var(--cut);
+  background: linear-gradient(90deg, #073440, #061a28 70%, #0a3540);
+}
+.scores-row.is-current .scores-rank { color: #45ecff; text-shadow: none; }
+#deathPanel.is-submitted #deathMenu {
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 30px;
+}
+#deathPanel.is-submitted #deathMenu button {
+  min-height: 56px;
+  padding-inline: 10px;
+  font-size: clamp(16px, 2.8vw, 23px);
+  letter-spacing: .15em;
+}
+#deathPanel.is-submitted #deathQuitBtn { --pink: #45ecff; }
+#deathPanel.is-submitted #deathQuitBtn::after {
+  background:
+    repeating-linear-gradient(134deg, #45ecff99 0 1px, transparent 1px 8px) right / 50px 100% no-repeat,
+    linear-gradient(105deg, #07303c, #041522);
+}
+@media (max-width: 400px) {
+  #deathPanel.is-submitted #deathMenu { grid-template-columns: 1fr; gap: 10px; }
+  #deathPanel.is-submitted #deathMenu button { min-height: 48px; }
+}
+@media (max-height: 500px) {
+  #deathPanel.is-submitted { padding-block: 16px; }
+  #deathSubmitted { margin-top: 16px; }
+  #deathBoardList { max-height: 28svh; }
+  #deathPanel.is-submitted #deathMenu { margin-top: 18px; }
+}
+
 @container (max-width: 520px) {
   .scores-head,
   .scores-row {

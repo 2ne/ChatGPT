@@ -6,6 +6,7 @@ import '@fontsource/oxanium/latin-700.css';
 import './style.css';
 import './title.css';
 import { enhanceScrollArea } from './scroll-area.js';
+import { createScoreRow, renderSubmittedBoard } from './leaderboard.js';
 import { createAudio } from './audio.js';
 import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
@@ -1516,6 +1517,9 @@ function gamepadRumble(duration = 90, weak = 0.35, strong = 0.65) {
 
 function deathFocusables() {
   const list = [];
+  if (!deathSubmitted.classList.contains('hidden')) {
+    list.push(document.getElementById('deathBoardList'));
+  }
   if (deathPadEntry && !deathArcade.classList.contains('hidden')) {
     if (arcadeFocus >= 3) list.push(deathArcadeSubmit);
   } else if (!deathNameForm.classList.contains('hidden')) {
@@ -1682,6 +1686,12 @@ function handlePadUiNav(dir) {
     return;
   }
   if (!document.getElementById('death').classList.contains('hidden')) {
+    const board = document.getElementById('deathBoardList');
+    if (document.activeElement === board && (dir === 'up' || dir === 'down')) {
+      const previous = board.scrollTop;
+      board.scrollTop += dir === 'up' ? -54 : 54;
+      if (board.scrollTop !== previous) return;
+    }
     // While arcade reels/submit are the active pad UI, never fall through to generic menu cycling
     // (stick-axis down used to steal focus onto Submit / Play again).
     if (deathPadEntry && !deathArcade.classList.contains('hidden') && arcadeFocus <= 3) {
@@ -4895,8 +4905,6 @@ const deathArcadeSubmit = document.getElementById('deathArcadeSubmit');
 const deathArcadeStatus = document.getElementById('deathArcadeStatus');
 const deathReels = [...document.querySelectorAll('#deathReels .death-reel')];
 const deathSubmitted = document.getElementById('deathSubmitted');
-const deathScoreBox = document.getElementById('deathScoreBox');
-const deathCallsignPill = document.getElementById('deathCallsignPill');
 const deathMenu = document.getElementById('deathMenu');
 const deathTitleWord = document.querySelector('#deathTitle .death-word');
 const CALLSIGN_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -4994,7 +5002,7 @@ async function submitArcadeCallsign() {
   await publishRunScore(arcadeCallsign());
 }
 
-function showDeathSubmitted({ name, score, wave, kills }) {
+function showDeathSubmitted(result, snapshot) {
   deathPadEntry = false;
   deathNameForm.classList.add('hidden');
   deathArcade.classList.add('hidden');
@@ -5002,13 +5010,14 @@ function showDeathSubmitted({ name, score, wave, kills }) {
   deathSubmitted.classList.remove('hidden');
   deathSubmitted.setAttribute('aria-hidden', 'false');
   deathPanel.classList.add('is-submitted');
-  setDeathTitle('SCORE SUBMITTED');
-  document.getElementById('deathStat').textContent =
-    `Wave ${wave} · ${kills} drones down`;
+  setDeathTitle('LEADERBOARD');
+  const rank = renderSubmittedBoard(deathSubmitted, result, snapshot);
+  document.getElementById('deathStat').textContent = rank
+    ? `Score submitted · You placed #${rank.toLocaleString('en-GB')}`
+    : 'Score submitted · Rank unavailable';
+  document.getElementById('deathStat').setAttribute('role', 'status');
   document.getElementById('deathBest').textContent = '';
   document.getElementById('deathBest').classList.remove('record');
-  deathScoreBox.textContent = formatScore(score);
-  deathCallsignPill.textContent = `Callsign ${name}`;
   deathMenu.classList.remove('hidden');
   clearDeathPadSel();
   if (finePointerUi() || gamepadLive) setDeathPadFocus(document.getElementById('retryBtn'));
@@ -5030,6 +5039,7 @@ function resetDeathSubmit() {
   deathSubmitted.classList.add('hidden');
   deathSubmitted.setAttribute('aria-hidden', 'true');
   deathPanel.classList.remove('is-submitted');
+  document.getElementById('deathStat').removeAttribute('role');
   deathMenu.classList.remove('hidden');
   setDeathTitle('GAME OVER');
   clearDeathPadSel();
@@ -5090,7 +5100,7 @@ async function publishRunScore(name) {
     }
     pendingSubmit = null;
     activeRunId = null;
-    showDeathSubmitted(snapshot);
+    showDeathSubmitted(result, snapshot);
     return result;
   } catch {
     const msg = rejectMessage('offline');
@@ -5286,7 +5296,7 @@ const menuButtons = [...document.querySelectorAll('#menuList button')];
 const titleSettingRows = [...document.querySelectorAll('#settingRows .srow')];
 const pauseSettingRows = [...document.querySelectorAll('#pauseSettings .srow')];
 const settingRows = titleSettingRows; // title-menu keyboard/pad nav stays on the title panel
-for (const area of document.querySelectorAll('#menu .mpanel, #scoresList')) enhanceScrollArea(area);
+for (const area of document.querySelectorAll('#menu .mpanel, #scoresList, #deathBoardList')) enhanceScrollArea(area);
 function blurMenuFocus() {
   const ae = document.activeElement;
   if (ae && typeof ae.blur === 'function' && menuEl.contains(ae)) ae.blur();
@@ -5490,15 +5500,7 @@ async function loadScoresBoard() {
   }
   finish(() => {
     if (head) head.hidden = false;
-    list.innerHTML = scores.map((row) => {
-      const top = Number(row.rank) === 1;
-      return `<div class="scores-row${top ? ' top' : ''}" role="listitem">
-        <span class="scores-rank"><b>${row.rank}</b></span>
-        <span class="scores-score">${formatScore(row.score)}</span>
-        <span class="scores-wave">${row.wave}</span>
-        <span class="scores-name">${row.name}</span>
-      </div>`;
-    }).join('');
+    list.replaceChildren(...scores.map(row => createScoreRow(row, row.rank)));
     setScoresStatus('', { hidden: true });
   });
 }

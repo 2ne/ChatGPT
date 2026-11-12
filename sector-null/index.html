@@ -242,13 +242,14 @@
       <p id="deathArcadeStatus" role="status"></p>
     </div>
     <div id="deathSubmitted" class="hidden" aria-hidden="true">
-      <div class="death-score-band" aria-hidden="true">
-        <span class="death-score-rule"></span>
-        <span class="death-score-label">Score</span>
-        <span class="death-score-rule"></span>
+      <div class="submitted-table" role="table" aria-label="Leaderboard after your submission">
+        <div class="scores-head" role="row">
+          <span role="columnheader">RANK</span><span role="columnheader">SCORE</span>
+          <span role="columnheader">WAVE</span><span role="columnheader">NAME</span>
+        </div>
+        <div id="deathBoardList" class="scores-list" role="rowgroup" tabindex="0" aria-label="Top 25 runs. Scroll to see more rankings."></div>
+        <div id="deathBoardOutside" role="rowgroup" aria-label="Your submitted run" hidden></div>
       </div>
-      <div id="deathScoreBox" class="death-score-box">0</div>
-      <div id="deathCallsignPill" class="death-callsign-pill">Callsign —</div>
     </div>
     <div id="deathMenu" class="death-actions">
       <button type="button" id="retryBtn" class="death-action">Play again</button>
