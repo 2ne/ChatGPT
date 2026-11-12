@@ -5,8 +5,8 @@ export const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 /** Shots/sec at Rapid Cycler ranks 0–4 (fireRate = 1 / value). */
 export const FIRE_RATE_SPS = [8, 10, 12, 15, 20];
 
-/** Hot Swap reload seconds at ranks 0–4 (distinct 0.5s steps). */
-export const RELOAD_TIMES = [2.5, 2, 1.5, 1, 0.5];
+/** Hot Swap reload seconds at ranks 0–4. */
+export const RELOAD_TIMES = [1.2, 1, 0.8, 0.6, 0.4];
 
 /** Motion Servo speed multipliers at ranks 0–3. */
 export const SPEED_MULT = [1, 1.15, 1.25, 1.5];
@@ -57,7 +57,8 @@ export function speedForRank(rank) {
 }
 
 function secLabel(t) {
-  return String(t);
+  // Trim floating junk / trailing zeros (1 → "1", 1.2 → "1.2").
+  return String(parseFloat(Number(t).toFixed(2)));
 }
 
 /** Keep roughly wave 5's supply budget as the regular drone count grows. */
