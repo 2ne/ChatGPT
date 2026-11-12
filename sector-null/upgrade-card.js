@@ -39,7 +39,10 @@ export function renderUpgradeCard({
   const botUpgrade = u.id === 'bot' && owned > 0;
   const name = botUpgrade ? 'UPGRADE BOT' : u.name;
   const desc = botUpgrade ? 'Stronger companion shots' : u.desc;
-  const [now, after] = u.stat(state);
+  const parts = u.stat(state);
+  const cstat = parts.length < 2 || parts[1] == null
+    ? `<b>${parts[0]}</b>`
+    : `${parts[0]} → <b>${parts[1]}</b>`;
   const pips = upgradeCardPips(u, owned);
   const top = recommended ? 'RECOMMENDED' : u.cat.toUpperCase();
   const key = slot == null ? '' : `<span class="ckey">${slot}</span>`;
@@ -51,7 +54,7 @@ export function renderUpgradeCard({
     `<div class="ctop"><span>${top}</span>${key}</div>` +
     upgradeIconCanvas(u, owned, { label: iconLabel }) +
     `<div class="cname">${name}</div><div class="cdesc">${desc}</div>` +
-    `<div class="cstat">${now} → <b>${after}</b></div>` +
+    `<div class="cstat">${cstat}</div>` +
     `<div class="clvl" aria-hidden="true">${pips}</div>` +
     extra +
     `</${tag}>`
