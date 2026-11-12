@@ -22,11 +22,18 @@ assert.match(audio, /heal\(\)\s*\{/, 'heal() SFX should remain for pickups');
 assert.match(game, /spawnWaveClearShield/, 'persistent wave-clear shield spawn missing');
 assert.match(game, /waveClearShield/, 'waveClearShield flag missing');
 assert.match(game, /life:\s*Infinity/, 'clear shield starts immortal through the picker');
-assert.match(game, /WAVE_CLEAR_SHIELD_GRACE/, 'post-wave grace before clear-shield expiry missing');
-assert.match(game, /armWaveClearShieldExpiry/, 'startWave must arm clear-shield expiry');
+assert.match(game, /PERSIST_FLOOR_GRACE/, 'post-wave grace before floor-persist expiry missing');
+assert.match(game, /armPersistFloorExpiry/, 'startWave must arm floor-persist expiry');
+assert.match(game, /persistFloor/, 'generic floor-persist flag missing');
+assert.match(game, /maybeDrop\(z\.position, false, \{ persistFloor: true \}\)/, 'boss powerups must persist through picker');
 assert.match(game, /placeReachableDrop/, 'arena placement helper missing');
 assert.match(game, /hasWaveClearShield/, 'single-pickup guard missing');
 assert.match(game, /clearWaveClearShields/, 'replace-existing clear missing');
+assert.match(
+  game,
+  /function clearWaveClearShields\(\) \{[\s\S]*?waveClearShield[\s\S]*?\}/,
+  'clearWaveClearShields must only remove shields, not boss powerups',
+);
 assert.doesNotMatch(game, /restoreShieldSegment\(\{\s*sfx:\s*true,\s*forPicker/, 'auto-refill forPicker path should be gone');
 assert.doesNotMatch(game, /pickerHeal/, 'pickerHeal references should be gone');
 assert.doesNotMatch(

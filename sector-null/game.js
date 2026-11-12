@@ -3330,10 +3330,10 @@ function placeReachableDrop(pos) {
 }
 
 function bankRemainingLoot() {
-  // Bank temporary boss gems / supply crates. Persistent wave-clear shields stay on the floor.
+  // Bank temporary gems / supply crates. Floor-persist pickups (clear shields, boss powerups) stay.
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i];
-    if (d.userData.waveClearShield) continue;
+    if (d.userData.persistFloor) continue;
     collect(d.userData.type, { silent: true });
     scene.remove(d);
     drops.splice(i, 1);
@@ -3454,22 +3454,27 @@ const SHIELD_DROP_CHANCE = 0.005; // independent roll; no scanner or pity bonus
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
 const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
-/** After the next wave starts, wait this long before a clear-shield begins normal expiry. */
-const WAVE_CLEAR_SHIELD_GRACE = 1;
+/**
+ * After the next wave starts, wait this long before a floor-persist pickup
+ * (clear shield or boss powerup) begins its shortened blink/fade lifetime.
+ */
+const PERSIST_FLOOR_GRACE = 1;
 /** Extra gem payout when a boss dies while shields are already full (seek to player). */
 const BOSS_FULL_SHIELD_GEMS = 5;
 const drops = [];
 
-function maybeDrop(pos, allowShieldDrop = true) {
+function maybeDrop(pos, allowShieldDrop = true, opts = {}) {
   state.sinceDrop++;
   const scale = supplyDropScale(state.wave);
+  const persistFloor = !!opts.persistFloor;
+  const dropOpts = persistFloor ? { persistFloor: true, life: Infinity } : {};
   // Damage-triggered blasts cannot refund their shield cost. Limit healing even
   // when late waves contain hundreds of kills; missing HP never boosts the odds.
   if (allowShieldDrop && state.hp < state.maxHp && state.shieldDropsThisWave < 1
       && Math.random() < SHIELD_DROP_CHANCE * scale) {
     state.shieldDropsThisWave++;
     state.sinceDrop = 0;
-    spawnDrop(DROP_TYPES.find(t => t.id === 'med'), pos);
+    spawnDrop(DROP_TYPES.find(t => t.id === 'med'), pos, dropOpts);
     return;
   }
   const chance = (DROP_CHANCE + state.dropBonus) * scale;
@@ -3478,11 +3483,13 @@ function maybeDrop(pos, allowShieldDrop = true) {
   state.sinceDrop = 0;
   const pool = DROP_TYPES.filter(t => t.id !== 'med');
   let r = Math.random() * pool.reduce((a, t) => a + t.weight, 0);
-  spawnDrop(pool.find(t => (r -= t.weight) < 0) || pool[0], pos);
+  spawnDrop(pool.find(t => (r -= t.weight) < 0) || pool[0], pos, dropOpts);
 }
 
 function spawnDrop(type, pos, opts = {}) {
   const waveClearShield = !!opts.waveClearShield;
+  // Clear shields and boss powerups share picker-survive / post-wave expiry; only shields replace.
+  const persistFloor = !!opts.persistFloor || waveClearShield;
   const prominent = waveClearShield;
   const itemScale = opts.scale ?? (prominent ? 1.9 : 1.45);
   const d = new THREE.Group();
@@ -3505,6 +3512,7 @@ function spawnDrop(type, pos, opts = {}) {
     life: opts.life ?? DROP_LIFE,
     t: Math.random() * 6,
     waveClearShield,
+    persistFloor,
     pulse: prominent || !!opts.pulse,
     itemScale,
     glowScale: prominent ? 5.1 : 3.3,
@@ -3524,14 +3532,14 @@ function spawnWaveClearShield(pos) {
   });
 }
 
-/** Arm leftover clear-shields so they begin normal fade/despawn after a short grace. */
-function armWaveClearShieldExpiry() {
+/** Arm leftover floor-persist pickups so they begin blink/fade after a short grace. */
+function armPersistFloorExpiry() {
   for (const d of drops) {
     const ud = d.userData;
-    if (!ud.waveClearShield) continue;
-    if (ud.waveClearGrace != null) continue;
+    if (!ud.persistFloor) continue;
+    if (ud.persistGrace != null) continue;
     if (Number.isFinite(ud.life) && ud.life <= DROP_LIFE) continue;
-    ud.waveClearGrace = WAVE_CLEAR_SHIELD_GRACE;
+    ud.persistGrace = PERSIST_FLOOR_GRACE;
   }
 }
 
@@ -3559,10 +3567,10 @@ function updateDrops(dt) {
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i], ud = d.userData;
     ud.t += dt;
-    if (ud.waveClearGrace != null) {
-      ud.waveClearGrace -= dt;
-      if (ud.waveClearGrace <= 0) {
-        ud.waveClearGrace = null;
+    if (ud.persistGrace != null) {
+      ud.persistGrace -= dt;
+      if (ud.persistGrace <= 0) {
+        ud.persistGrace = null;
         // One second shorter than a normal pickup; blink still uses DROP_WARNING.
         ud.life = DROP_LIFE - 1;
       }
@@ -4348,7 +4356,8 @@ function finalizeBossDeath(z) {
     else spawnEmeralds(origin, BOSS_FULL_SHIELD_GEMS, { seek: true });
   }
   // Other supplies may still drop, but never a second random shield on the boss kill.
-  maybeDrop(z.position, false);
+  // Boss powerups persist through the picker like clear shields (no single-pickup replace).
+  maybeDrop(z.position, false, { persistFloor: true });
   scene.remove(z);
   const idx = drones.indexOf(z);
   if (idx >= 0) drones.splice(idx, 1);
@@ -4430,8 +4439,8 @@ function startWave(n) {
   }
   state.spawnTimer = 0;
   state.intermission = 0;
-  // Leftover clear-shields keep sitting through the picker; once this wave is live they start fading.
-  armWaveClearShieldExpiry();
+  // Leftover clear-shields / boss powerups sit through the picker; once live they start fading.
+  armPersistFloorExpiry();
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
   showBanner(
