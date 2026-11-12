@@ -12,6 +12,7 @@ import { createTitleScene } from './title-scene.js';
 import { firstBlocker, resolveShotStart } from './shot-collision.js';
 import { createUpgradeIconHost } from './upgrade-icons.js';
 import { renderUpgradeCard } from './upgrade-card.js';
+import { createHelperBotMesh, disposeHelperBotMesh } from './helper-bot-mesh.js';
 import {
   BASE_STATS,
   DROP_CHANCE,
@@ -3539,18 +3540,48 @@ function awardWaveBonuses() {
 
 // ===================================================================
 // AUTOMATIC EQUIPMENT — active-play timers, no additional touch buttons.
+// Helper mesh shared with upgrade-card icons (helper-bot-mesh.js); barrels +Z.
 const helper = new THREE.Group();
-const helperShell = new THREE.MeshStandardMaterial({ color: 0xf5f7fa, metalness: 0.12, roughness: 0.32 });
-model(helper, new THREE.SphereGeometry(0.36, 24, 16), helperShell, 0, 0, 0);
-// Small dark socket and centred gun keep the white spherical silhouette clear.
-model(helper, new THREE.SphereGeometry(0.12, 12, 8), carbon, 0, 0, 0.33);
-const helperBarrels = [0, 0.065].map(x => box(helper, alloy, x, 0, 0.45, 0.085, 0.085, 0.28));
 scene.add(helper); helper.visible = false;
+let helperMesh = null;
+let helperMuzzles = [];
+let helperVisualKey = '';
 let helperOrbit = 0; // radians around the operator — keeps the bot off the head
 const helperDesired = new THREE.Vector3();
 const HELPER_ORBIT_R = 1.35;
 const HELPER_ORBIT_H = 1.12; // shoulder height, not through the helmet
 const HELPER_ORBIT_SPEED = 0.95;
+const HELPER_WORLD_SCALE = 0.62; // readable from the top-down camera
+
+function helperVariantFromUpgrades(u) {
+  if (u.botBomb) return 'bomb';
+  if (u.botGun) return 'twin';
+  return 'base';
+}
+
+function syncHelperMesh(u = state.upgrades) {
+  if (!u.bot) return;
+  const variant = helperVariantFromUpgrades(u);
+  const rank = variant === 'bomb' ? u.botBomb : variant === 'twin' ? u.botGun : u.bot;
+  const key = `${variant}:${rank}`;
+  if (key === helperVisualKey && helperMesh) return;
+  if (helperMesh) {
+    helper.remove(helperMesh);
+    disposeHelperBotMesh(helperMesh);
+    helperMesh = null;
+  }
+  helperMesh = createHelperBotMesh(variant, { rank: Math.max(1, rank || 1), detail: 'game' });
+  helperMesh.scale.setScalar(HELPER_WORLD_SCALE);
+  helper.add(helperMesh);
+  helperMuzzles = helperMesh.userData.muzzles || [];
+  helperVisualKey = key;
+}
+
+/** Aim local +Z at a world point (Object3D.lookAt faces −Z). */
+function helperAimAt(x, y, z) {
+  helper.lookAt(x, y, z);
+  helper.rotateY(Math.PI);
+}
 const fieldRing = new THREE.RingGeometry(0.9, 1, 40).rotateX(-Math.PI / 2);
 const mineGeo = new THREE.CylinderGeometry(0.25, 0.32, 0.12, 8);
 const mineMat = new THREE.MeshBasicMaterial({ color: 0xa7a1ff });
@@ -3657,6 +3688,7 @@ function updateEquipment(dt) {
   }
   if (state.choosing) return;
   if (u.bot) {
+    syncHelperMesh(u);
     // Orbit the operator at shoulder height so the sphere never sits inside the head.
     helperOrbit += dt * (reducedMotion.matches ? HELPER_ORBIT_SPEED * 0.45 : HELPER_ORBIT_SPEED);
     const bob = reducedMotion.matches ? 0 : Math.sin(helperOrbit * 2.2) * 0.08;
@@ -3666,18 +3698,19 @@ function updateEquipment(dt) {
       player.position.z + Math.sin(helperOrbit) * HELPER_ORBIT_R,
     );
     helper.position.lerp(helperDesired, Math.min(1, dt * 8));
-    helperBarrels[1].visible = !!u.botGun;
-    helperBarrels[0].position.x = u.botGun ? -0.065 : 0;
     equipment.shot -= dt;
     const target = drones.filter(z => inside(z.position) && !wallBetween(helper.position, z.position) && clearPath(helper.position.x, helper.position.z, z.position.x, z.position.z, 0.05)).sort((a, b) => a.position.distanceToSquared(helper.position) - b.position.distanceToSquared(helper.position))[0];
     if (target) {
-      helper.lookAt(target.position.x, helper.position.y, target.position.z);
+      helperAimAt(target.position.x, helper.position.y, target.position.z);
       if (equipment.shot <= 0) {
         helper.updateWorldMatrix(true, true);
         equipment.shot = helperShotInterval(u);
-        for (let k = 0; k < (u.botGun ? 2 : 1); k++) {
+        const shots = u.botGun ? Math.min(2, helperMuzzles.length) : 1;
+        for (let k = 0; k < shots; k++) {
           const muzzlePos = new THREE.Vector3();
-          helperBarrels[k].getWorldPosition(muzzlePos);
+          const muzzle = helperMuzzles[k] || helperMuzzles[0];
+          if (muzzle) muzzle.getWorldPosition(muzzlePos);
+          else muzzlePos.copy(helper.position);
           const dir = target.position.clone().sub(muzzlePos); dir.y = 0; dir.normalize();
           spawnPulse(helper.position.x, helper.position.z, muzzlePos, dir, {
             life: 0.7, pierce: 0, hits: new Set(), helper: true,
@@ -3687,7 +3720,7 @@ function updateEquipment(dt) {
       }
     } else {
       // Drift facing along the orbit tangent when idle so it doesn't stare through the operator.
-      helper.lookAt(
+      helperAimAt(
         player.position.x - Math.sin(helperOrbit) * 2,
         helper.position.y,
         player.position.z + Math.cos(helperOrbit) * 2,
@@ -4176,6 +4209,13 @@ function clearRun() {
     HELPER_ORBIT_H,
     player.position.z + Math.sin(helperOrbit) * HELPER_ORBIT_R,
   );
+  if (helperMesh) {
+    helper.remove(helperMesh);
+    disposeHelperBotMesh(helperMesh);
+    helperMesh = null;
+    helperMuzzles = [];
+    helperVisualKey = '';
+  }
   audio.cancelReload();
   clearEnemyBolts();
   state.bossPending = false;
