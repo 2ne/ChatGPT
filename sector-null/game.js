@@ -625,9 +625,11 @@ function updateWorld(dt) {
   dust.position.y = Math.sin(t * 0.18) * 0.7;
   dust.rotation.y = t * 0.01;
   for (const { o, glow } of gates) {
-    const risk = o.hp <= 0 || o.hp < o.maxHp;
-    const colour = risk ? AMBER : CYAN;
-    const intensity = risk ? 0.75 + 0.25 * Math.sin(t * 6 + o.x) : 1;
+    // Light colour tracks broken vs intact only — hits may jolt the door, but
+    // the strips stay cyan until HP reaches 0 (and return cyan on resetOpenings).
+    const broken = o.hp <= 0;
+    const colour = broken ? AMBER : CYAN;
+    const intensity = broken ? 0.75 + 0.25 * Math.sin(t * 6 + o.x) : 1;
     glow.material.color.setHex(colour);
     glow.material.opacity = 0.3 * intensity;
     glow.scale.setScalar(4.4 * (0.9 + 0.1 * intensity));
@@ -2987,6 +2989,13 @@ function resetOpenings() {
       o.bars.visible = true;
       o.shards.visible = false;
     }
+    // Intact again — restore cyan gate lights immediately (updateWorld also keeps this).
+    if (o.indicator) o.indicator.color.setHex(CYAN);
+  }
+  for (const { glow } of gates) {
+    glow.material.color.setHex(CYAN);
+    glow.material.opacity = 0.3;
+    glow.scale.setScalar(4.4);
   }
 }
 // bits flying off a door or window, into the deck
