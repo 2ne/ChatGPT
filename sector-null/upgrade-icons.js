@@ -123,18 +123,6 @@ function helperBot(variant = 'base', owned = 0) {
   topLight.position.set(0, 0.48, 0.06);
   g.add(topLight);
 
-  // Soft violet hover disc under the bot.
-  const hover = new THREE.Mesh(
-    new THREE.CircleGeometry(0.55, 24),
-    new THREE.MeshBasicMaterial({
-      color: 0xb44fff, transparent: true, opacity: 0.28,
-      blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
-    })
-  );
-  hover.rotation.x = -Math.PI / 2;
-  hover.position.y = -0.62;
-  g.add(hover);
-
   if (variant === 'twin') {
     [-0.11, 0.11].forEach((x) => {
       const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.38 + owned * 0.04, 10), gun);
