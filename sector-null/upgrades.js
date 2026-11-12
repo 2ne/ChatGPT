@@ -5,10 +5,16 @@ export const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 /** Shots/sec at Rapid Cycler ranks 0–4 (fireRate = 1 / value). */
 export const FIRE_RATE_SPS = [8, 10, 12, 15, 20];
 
+/** Hot Swap reload seconds at ranks 0–4 (distinct 0.5s steps). */
+export const RELOAD_TIMES = [2.5, 2, 1.5, 1, 0.5];
+
+/** Motion Servo speed multipliers at ranks 0–3. */
+export const SPEED_MULT = [1, 1.15, 1.25, 1.5];
+
 export const BASE_STATS = {
   maxHp: 3,
   magSize: 8,
-  reloadTime: 1.2,
+  reloadTime: RELOAD_TIMES[0],
   fireRate: 1 / FIRE_RATE_SPS[0],
   damage: 1,
   pierce: 0,
@@ -38,12 +44,20 @@ export function dmgLabel(n) {
   return Number.isInteger(t) ? String(t) : t.toFixed(1);
 }
 
-function reloadPct(time) {
-  return Math.round((time / BASE_STATS.reloadTime) * 100);
-}
-
 export function fireRateForRank(rank) {
   return 1 / (FIRE_RATE_SPS[rank] ?? FIRE_RATE_SPS[0]);
+}
+
+export function reloadTimeForRank(rank) {
+  return RELOAD_TIMES[rank] ?? RELOAD_TIMES[0];
+}
+
+export function speedForRank(rank) {
+  return BASE_STATS.speed * (SPEED_MULT[rank] ?? 1);
+}
+
+function secLabel(t) {
+  return String(t);
 }
 
 /** Keep roughly wave 5's supply budget as the regular drone count grows. */
@@ -77,11 +91,10 @@ export const UPGRADES = [
     return [owned ? dmgLabel(2 + owned * 2) : 'Off', `${dmgLabel(nextDmg)} dmg`];
   }, apply: () => {} },
   { id: 'mag', cat: 'handling', name: 'CELL CAPACITY', desc: '+4 pulses per cell', max: 5, stat: (s) => [s.magSize, `${s.magSize + 4} pulses`], apply: (s) => { s.magSize += 4; s.mag = s.magSize; } },
-  { id: 'reload', cat: 'handling', name: 'HOT SWAP', desc: 'Reload 25% faster', max: 4, stat: (s) => {
-    const now = reloadPct(s.reloadTime);
-    const after = reloadPct(s.reloadTime * 0.75);
-    return [`${now}%`, `${after}% reload`];
-  }, apply: (s) => { s.reloadTime *= 0.75; } },
+  { id: 'reload', cat: 'handling', name: 'HOT SWAP', desc: 'Reload faster', max: 4, stat: (s) => {
+    const owned = s.upgrades.reload || 0;
+    return [`${secLabel(RELOAD_TIMES[owned])}s`, `${secLabel(RELOAD_TIMES[owned + 1])}s reload`];
+  }, apply: (s) => { s.reloadTime = reloadTimeForRank(s.upgrades.reload || 0); } },
   { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+0.5 pulse damage', max: 6, stat: (s) => [dmgLabel(s.damage), `${dmgLabel(s.damage + 0.5)} dmg`], apply: (s) => { s.damage += 0.5; } },
   { id: 'rate', cat: 'firepower', name: 'RAPID CYCLER', desc: 'Fire faster', max: 4, stat: (s) => {
     const owned = s.upgrades.rate || 0;
@@ -90,7 +103,10 @@ export const UPGRADES = [
   { id: 'pierce', cat: 'firepower', name: 'PIERCING', desc: 'Shots pierce +1 drone', max: 3, stat: (s) => [s.pierce, `${s.pierce + 1} thru`], apply: (s) => { s.pierce++; } },
   { id: 'spread', cat: 'firepower', name: 'SPLIT BEAM', desc: '+1 pulse per shot', max: 3, stat: (s) => [1 + s.spread, `${2 + s.spread} per shot`], apply: (s) => { s.spread++; } },
   { id: 'hp', cat: 'survival', name: 'SHIELD ARRAY', desc: '+1 shield and recharge it', max: 3, stat: (s) => [s.maxHp, `${s.maxHp + 1} max hp`], apply: (s) => { s.maxHp++; s.hp++; } },
-  { id: 'speed', cat: 'survival', name: 'MOTION SERVO', desc: 'Move 12% faster', max: 3, stat: (s) => [`${Math.round(s.speed / 6.2 * 100)}%`, `${Math.round(s.speed * 1.12 / 6.2 * 100)}%`], apply: (s) => { s.speed *= 1.12; } },
+  { id: 'speed', cat: 'survival', name: 'MOTION SERVO', desc: 'Move faster', max: 3, stat: (s) => {
+    const owned = s.upgrades.speed || 0;
+    return [`${Math.round(SPEED_MULT[owned] * 100)}%`, `${Math.round(SPEED_MULT[owned + 1] * 100)}%`];
+  }, apply: (s) => { s.speed = speedForRank(s.upgrades.speed || 0); } },
   { id: 'luck', cat: 'fortune', name: 'SALVAGE SCANNER', desc: 'More Overcharge / Infinite Cell drops', max: 3, stat: (s) => {
     const scale = supplyDropScale(s.wave);
     return [

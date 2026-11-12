@@ -1262,7 +1262,7 @@ const state = {
   magSize: 8,
   reloading: false,
   reloadT: 0,
-  reloadTime: 1.2,
+  reloadTime: BASE_STATS.reloadTime,
   fireCd: 0,
   fireRate: BASE_STATS.fireRate,
   dmgCd: 0,
