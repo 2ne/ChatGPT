@@ -3446,9 +3446,7 @@ const DROP_PITY = 30;     // guaranteed drop after this many dry kills
 const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
 /** Post-boss window so the player can walk onto loot before the picker. */
-const BOSS_LOOT_LINGER = 1.75;
-const BOSS_LOOT_FADE = 0.55;
-/** Extra gems when a boss dies while shields are already full. */
+/** Extra gem payout when a boss dies while shields are already full (banked at clear). */
 const BOSS_FULL_SHIELD_GEMS = 5;
 const drops = [];
 
@@ -3475,8 +3473,7 @@ function maybeDrop(pos, allowShieldDrop = true) {
 
 function spawnDrop(type, pos, opts = {}) {
   const waveClearShield = !!opts.waveClearShield;
-  const bossLoot = !!opts.bossLoot && !waveClearShield;
-  const prominent = waveClearShield || bossLoot;
+  const prominent = waveClearShield;
   const itemScale = opts.scale ?? (prominent ? 1.9 : 1.45);
   const d = new THREE.Group();
   const item = new THREE.Mesh(type.geo, type.item);
@@ -3497,12 +3494,10 @@ function spawnDrop(type, pos, opts = {}) {
     type, item, ring, glow, label,
     life: opts.life ?? DROP_LIFE,
     t: Math.random() * 6,
-    bossLoot,
     waveClearShield,
     pulse: prominent || !!opts.pulse,
     itemScale,
     glowScale: prominent ? 5.1 : 3.3,
-    fade: 1,
   };
   scene.add(d);
   drops.push(d);
@@ -3550,7 +3545,7 @@ function updateDrops(dt) {
     const p = d.position;
     const dx = player.position.x - p.x, dz = player.position.z - p.z;
     const dist = Math.hypot(dx, dz);
-    const pickR = ud.waveClearShield || ud.bossLoot ? 1.15 : 0.9;
+    const pickR = ud.waveClearShield ? 1.15 : 0.9;
     if (canCollect && dist < pickR) {
       collect(ud.type); scene.remove(d); drops.splice(i, 1); continue;
     }
@@ -3563,7 +3558,7 @@ function updateDrops(dt) {
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
       if (od > 0.01) { const st = Math.min(od, 6 * dt); p.x += (ox / od) * st; p.z += (oz / od) * st; }
     }
-    const prominent = ud.waveClearShield || ud.bossLoot;
+    const prominent = ud.waveClearShield;
     const bob = prominent ? 0.22 : 0.15;
     ud.item.position.y = (prominent ? 0.82 : 0.68) + Math.sin(ud.t * 3) * bob;
     ud.item.rotation.y += dt * (prominent ? 2.6 : 2);
@@ -3573,11 +3568,9 @@ function updateDrops(dt) {
       ud.glow.scale.setScalar(ud.glowScale * (1 + Math.sin(ud.t * 4.1) * 0.14));
       ud.ring.scale.setScalar(1 + Math.sin(ud.t * 3.4) * 0.08);
     }
-    const fade = ud.waveClearShield ? 1 : (ud.fade ?? 1);
-    d.scale.setScalar(Math.max(0.05, fade));
-    const warning = !ud.waveClearShield && !ud.bossLoot && ud.life <= DROP_WARNING;
+    const warning = !ud.waveClearShield && ud.life <= DROP_WARNING;
     // Two blinks per second, synchronised to expiry rather than random bobbing phase.
-    d.visible = fade > 0.04 && (!warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0);
+    d.visible = !warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0;
     // A shrinking ground ring also communicates expiry without flashing in reduced motion.
     if (!ud.pulse) ud.ring.scale.setScalar(warning ? Math.max(0.15, ud.life / DROP_WARNING) : 1);
   }
@@ -3608,7 +3601,7 @@ let emeraldChain = 0;
 let lastEmeraldAt = -Infinity;
 let emeraldGlowPulse = 0;
 
-function spawnEmeralds(origin, count, opts = {}) {
+function spawnEmeralds(origin, count) {
   const pressure = fxPressure();
   // Late waves spawn fewer meshes; overflow still scores so farming isn't lost.
   let n = Math.max(1, Math.round(count * (1 - pressure * 0.6)));
@@ -3616,7 +3609,6 @@ function spawnEmeralds(origin, count, opts = {}) {
   const bank = Math.max(0, n - room);
   if (bank) addScore(EMERALD_VALUE * bank);
   n = Math.min(n, room);
-  const life = opts.life ?? EMERALD_LIFE;
   for (let i = 0; i < n; i++) {
     const gem = new THREE.Mesh(emeraldGeo, emeraldMat);
     const glow = new THREE.Sprite(emeraldGlowMat);
@@ -3625,36 +3617,9 @@ function spawnEmeralds(origin, count, opts = {}) {
     const ang = rnd(0, Math.PI * 2), dist = rnd(0.15, 0.7);
     gem.position.set(origin.x + Math.cos(ang) * dist, 0.35, origin.z + Math.sin(ang) * dist);
     gem.rotation.set(rnd(0, 1), rnd(0, Math.PI * 2), rnd(0, 1));
-    gem.userData = { life, t: rnd(0, Math.PI * 2), glow, bossLoot: !!opts.bossLoot, fade: 1 };
+    gem.userData = { life: EMERALD_LIFE, t: rnd(0, Math.PI * 2), glow };
     scene.add(gem);
     emeralds.push(gem);
-  }
-}
-
-function refreshBossLootTimers() {
-  const keep = BOSS_LOOT_LINGER + 0.35;
-  for (const e of emeralds) e.userData.life = Math.max(e.userData.life, keep);
-  for (const d of drops) d.userData.life = Math.max(d.userData.life, keep);
-}
-
-function fadeBossLoot(fade) {
-  const f = Math.max(0, Math.min(1, fade));
-  for (const d of drops) {
-    // Persistent wave-clear shields never fade with temporary boss loot.
-    if (d.userData.waveClearShield) {
-      d.userData.fade = 1;
-      d.scale.setScalar(1);
-      continue;
-    }
-    d.userData.fade = f;
-    d.scale.setScalar(Math.max(0.05, f));
-  }
-  for (const e of emeralds) {
-    e.userData.fade = f;
-    e.scale.setScalar(Math.max(0.05, f));
-  }
-  if (emeralds.length) {
-    emeraldGlowMat.opacity = (0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8)) * f;
   }
 }
 
@@ -3681,12 +3646,7 @@ function updateEmeralds(dt) {
   const magnetRange = state.upgrades.magnet ? EMERALD_MAGNET_ABILITY : EMERALD_MAGNET;
   const surge = !!state.upgrades.magnet;
   emeraldGlowPulse += dt;
-  const lootFade = bossDeath.active && bossDeath.phase === 'loot'
-    ? (bossDeath.hold < BOSS_LOOT_FADE ? Math.max(0, bossDeath.hold / BOSS_LOOT_FADE) : 1)
-    : 1;
-  if (emeralds.length) {
-    emeraldGlowMat.opacity = (0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8)) * lootFade;
-  }
+  if (emeralds.length) emeraldGlowMat.opacity = 0.55 + 0.35 * Math.sin(emeraldGlowPulse * 8);
   for (let i = emeralds.length - 1; i >= 0; i--) {
     const e = emeralds[i], ud = e.userData;
     ud.life -= dt; ud.t += dt;
@@ -3705,9 +3665,8 @@ function updateEmeralds(dt) {
     e.position.y = 0.32 + Math.sin(ud.t * 5) * 0.08;
     e.rotation.y += dt * 4.5;
     e.rotation.x = 0.35 + Math.sin(ud.t * 3) * 0.15;
-    e.scale.setScalar(Math.max(0.05, lootFade));
-    const warning = !ud.bossLoot && ud.life <= EMERALD_WARN;
-    e.visible = lootFade > 0.04 && (!warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0);
+    const warning = ud.life <= EMERALD_WARN;
+    e.visible = !warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0;
   }
 }
 
@@ -4262,7 +4221,7 @@ const bossDeath = {
   boss: null,
   nextBlastAt: 0,
   blasts: 0,
-  phase: 'stagger', // stagger | final | loot
+  phase: 'stagger', // stagger | final | hold
   hold: 0,
 };
 
@@ -4334,10 +4293,10 @@ function finalizeBossDeath(z) {
   lastKillPos.set(z.position.x, 0, z.position.z);
   if (state.running) {
     const count = 8 + ((Math.random() * 5) | 0);
-    spawnEmeralds(origin, count, { life: BOSS_LOOT_LINGER + 0.5, bossLoot: true });
-    // Injured: persistent walk-over shield. Full shields: modest bonus gem burst instead.
+    spawnEmeralds(origin, count);
+    // Injured: persistent walk-over shield. Full shields: modest gem payout (banked at clear).
     if (state.hp < state.maxHp) spawnWaveClearShield(z.position);
-    else spawnEmeralds(origin, BOSS_FULL_SHIELD_GEMS, { life: BOSS_LOOT_LINGER + 0.5, bossLoot: true });
+    else addScore(EMERALD_VALUE * BOSS_FULL_SHIELD_GEMS);
   }
   // Other supplies may still drop, but never a second random shield on the boss kill.
   maybeDrop(z.position, false);
@@ -4374,19 +4333,14 @@ function updateBossDeath(dt) {
 
   if (bossDeath.phase === 'final') {
     if (bossDeath.boss) finalizeBossDeath(bossDeath.boss);
-    refreshBossLootTimers();
-    bossDeath.phase = 'loot';
-    bossDeath.hold = reducedMotion.matches ? Math.min(1.1, BOSS_LOOT_LINGER) : BOSS_LOOT_LINGER;
-    fadeBossLoot(1);
+    bossDeath.phase = 'hold';
+    bossDeath.hold = reducedMotion.matches ? 0.35 : 0.7;
     return;
   }
 
-  if (bossDeath.phase === 'loot') {
+  if (bossDeath.phase === 'hold') {
     bossDeath.hold -= dt;
-    const fade = bossDeath.hold < BOSS_LOOT_FADE ? Math.max(0, bossDeath.hold / BOSS_LOOT_FADE) : 1;
-    fadeBossLoot(fade);
     if (bossDeath.hold > 0) return;
-    fadeBossLoot(0);
     clearBossDeath();
     if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
       if (state.bossPending) spawnWaveBoss();
