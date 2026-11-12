@@ -6,7 +6,7 @@ export const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 export const FIRE_RATE_SPS = [8, 10, 12, 15, 20];
 
 /** Hot Swap reload seconds at ranks 0–4. */
-export const RELOAD_TIMES = [1.2, 1, 0.8, 0.6, 0.4];
+export const RELOAD_TIMES = [1.5, 1.25, 1, 0.75, 0.5];
 
 /** Motion Servo speed multipliers at ranks 0–3. */
 export const SPEED_MULT = [1, 1.15, 1.25, 1.5];
