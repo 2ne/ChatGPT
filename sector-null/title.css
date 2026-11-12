@@ -518,7 +518,15 @@ body.titling #menu {
 #scoresPanel h2 {
   color: #fff;
   letter-spacing: 0.22em;
-  margin-bottom: 22px;
+  margin-bottom: 8px;
+}
+.scores-caption {
+  margin-bottom: 20px;
+  color: #9eb8c6;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 #settingsPanel h2 {
   margin-bottom: 22px;
