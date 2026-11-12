@@ -2101,23 +2101,45 @@ function pendingDeathCallsign() {
   return normalizeName(deathNameInput.value);
 }
 
+// Pause / death action buttons share the title-menu SFX path:
+// mouseenter → ui('move') on selection change; focus syncs quietly; press → ui('select').
+let overlayMenuHover = null;
+function wireOverlayMenuButton(btn, handler) {
+  btn.addEventListener('mouseenter', () => {
+    if (!finePointerUi()) return;
+    if (overlayMenuHover !== btn) {
+      overlayMenuHover = btn;
+      audio.ui('move');
+    }
+    setOverlayInput('pointer', btn);
+  });
+  btn.addEventListener('focus', () => {
+    // Keyboard/pad nav already plays move; keep focus quiet like #menuList.
+    if (finePointerUi() || btn.matches(':focus-visible')) overlayMenuHover = btn;
+  });
+  bindTap(btn, (e) => {
+    audio.ui('select');
+    return handler(e);
+  });
+}
+
 // the death screen: go again, or back to the title
-bindTap(document.getElementById('retryBtn'), async () => {
+wireOverlayMenuButton(document.getElementById('retryBtn'), async () => {
   // Arcade entry locks the menu until submit; keyboard/touch can still auto-post on leave.
   if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign()) {
     await publishRunScore(pendingDeathCallsign());
   }
   startGame();
 });
-bindTap(document.getElementById('deathQuitBtn'), async () => {
+wireOverlayMenuButton(document.getElementById('deathQuitBtn'), async () => {
   if (!deathArcadeLocked() && pendingSubmit && pendingDeathCallsign()) {
     await publishRunScore(pendingDeathCallsign());
   }
   quitToTitle();
 });
-bindTap(document.getElementById('resumeBtn'), () => setPaused(false));
-bindTap(document.getElementById('restartBtn'), () => restartRun());
-bindTap(document.getElementById('quitBtn'), () => quitToTitle());
+wireOverlayMenuButton(document.getElementById('resumeBtn'), () => setPaused(false));
+wireOverlayMenuButton(document.getElementById('restartBtn'), () => restartRun());
+wireOverlayMenuButton(document.getElementById('quitBtn'), () => quitToTitle());
 // alt-tabbing away mid-run pauses (and would otherwise leave WASD stuck down)
 window.addEventListener('blur', () => { resetGameplayInput(); setPaused(true); });
 document.addEventListener('visibilitychange', () => {
