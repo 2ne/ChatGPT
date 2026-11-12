@@ -93,12 +93,6 @@
     color: #7a909c;
     margin: 0 0 12px;
   }
-  .rank-tag {
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    color: color-mix(in srgb, var(--accent) 70%, #fff);
-    margin-top: 6px;
-  }
   .trio {
     display: grid;
     grid-template-columns: 1.06fr 1fr 1fr;
@@ -167,21 +161,14 @@ const PREVIEW_NOTES = {
 };
 
 function expandTiers(u) {
-  const infinite = u.max === Infinity;
-  const count = infinite ? 1 : u.max;
-  return Array.from({ length: count }, (_, owned) => ({
-    u,
-    owned,
-    rankLabel: infinite ? 'Anytime' : `Offer ${owned + 1} / ${u.max}`,
-  }));
+  const count = u.max === Infinity ? 1 : u.max;
+  return Array.from({ length: count }, (_, owned) => ({ u, owned }));
 }
 
-function cardHtml({ u, owned, rankLabel }, { recommended = false, slot = null } = {}) {
+function cardHtml({ u, owned }, { recommended = false, slot = null } = {}) {
   const state = previewStateFor(u, owned);
   const note = PREVIEW_NOTES[u.id];
-  const extra =
-    (rankLabel ? `<p class="rank-tag">${rankLabel}</p>` : '') +
-    (note ? `<p class="req">${note}</p>` : '');
+  const extra = note ? `<p class="req">${note}</p>` : '';
   return renderUpgradeCard({
     u,
     state,
@@ -230,9 +217,9 @@ catalog.innerHTML = ORDER.map((cat) => {
 }).join('');
 
 document.getElementById('trio').innerHTML = [
-  cardHtml({ u: upgradeById('spread'), owned: 0, rankLabel: '' }, { recommended: true, slot: 1 }),
-  cardHtml({ u: upgradeById('bot'), owned: 0, rankLabel: '' }, { slot: 2 }),
-  cardHtml({ u: upgradeById('magnet'), owned: 0, rankLabel: '' }, { slot: 3 }),
+  cardHtml({ u: upgradeById('spread'), owned: 0 }, { recommended: true, slot: 1 }),
+  cardHtml({ u: upgradeById('bot'), owned: 0 }, { slot: 2 }),
+  cardHtml({ u: upgradeById('magnet'), owned: 0 }, { slot: 3 }),
 ].join('');
 
 createUpgradeIconHost({ allowDrag: false }).mount(document.body);
