@@ -118,13 +118,6 @@
     letter-spacing: 0.08em;
     color: #7a909c;
   }
-  /* Preview-only: allow drag-orbit on icon stages */
-  .upgrade-cards-page .upgrade-card .icon-stage {
-    pointer-events: auto;
-    touch-action: none;
-    cursor: grab;
-  }
-  .upgrade-cards-page .upgrade-card .icon-stage:active { cursor: grabbing; }
   @media (max-width: 720px) {
     .trio { grid-template-columns: 1fr; }
   }
@@ -136,7 +129,7 @@
       <h1>3D UPGRADE ICONS</h1>
       <p>
         Every upgrade at every offer rank, rendered with the same card chrome and
-        <code>stat()</code> as the in-game wave-clear picker. Drag any icon stage to orbit.
+        <code>stat()</code> as the in-game wave-clear picker.
       </p>
       <div class="filters" id="filters" role="toolbar" aria-label="Filter by category"></div>
     </header>
@@ -144,7 +137,7 @@
     <section class="section" data-section="sample">
       <h2 style="--cat:#9af5ff">Sample picker layout</h2>
       <div class="trio" id="trio"></div>
-      <p class="note">Drag icons · recommended · alternative · ability</p>
+      <p class="note">Recommended · alternative · ability</p>
     </section>
 
     <div id="catalog"></div>
@@ -242,7 +235,7 @@ document.getElementById('trio').innerHTML = [
   cardHtml({ u: upgradeById('magnet'), owned: 0, rankLabel: '' }, { slot: 3 }),
 ].join('');
 
-createUpgradeIconHost({ allowDrag: true }).mount(document.body);
+createUpgradeIconHost({ allowDrag: false }).mount(document.body);
 </script>
 </body>
 </html>
