@@ -47,7 +47,7 @@ export const UPGRADES = [
     return [owned ? dmgLabel(helperDamage(owned)) : 'Off', `${dmgLabel(next)} dmg`];
   }, apply: () => {} },
   { id: 'botGun', cat: 'engineer', name: 'TWIN GUNS', desc: 'Double bot fire • locks out bombs', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botBomb, stat: (s) => [s.upgrades.botGun ? 'Twin' : 'Single', s.upgrades.botGun ? 'Rapid twin' : 'Twin guns'], apply: () => {} },
-  { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botGun, stat: (s) => ['1 shot / 1.7s', `${s.upgrades.botBomb ? 'Wider' : 'Area'} bombs`], apply: () => {} },
+  { id: 'botBomb', cat: 'engineer', name: 'BOMB LAUNCHER', desc: 'Area blasts • locks out twin guns', max: 2, ok: (s) => s.upgrades.bot && !s.upgrades.botGun, stat: (s) => [s.upgrades.botBomb ? 'Area bombs' : 'Single shots', s.upgrades.botBomb ? 'Wider bombs' : 'Area bombs'], apply: () => {} },
   { id: 'mine', cat: 'engineer', name: 'TRAIL MINES', desc: 'One trap every 8s • max 3 active', max: 3, stat: (s) => {
     // Matches equipmentBlast(..., 3 + u.mine, ...)
     const owned = s.upgrades.mine || 0;
