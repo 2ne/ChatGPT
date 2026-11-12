@@ -21,7 +21,9 @@ assert.match(audio, /heal\(\)\s*\{/, 'heal() SFX should remain for pickups');
 
 assert.match(game, /spawnWaveClearShield/, 'persistent wave-clear shield spawn missing');
 assert.match(game, /waveClearShield/, 'waveClearShield flag missing');
-assert.match(game, /life:\s*Infinity/, 'persistent shield must not expire');
+assert.match(game, /life:\s*Infinity/, 'clear shield starts immortal through the picker');
+assert.match(game, /WAVE_CLEAR_SHIELD_GRACE/, 'post-wave grace before clear-shield expiry missing');
+assert.match(game, /armWaveClearShieldExpiry/, 'startWave must arm clear-shield expiry');
 assert.match(game, /placeReachableDrop/, 'arena placement helper missing');
 assert.match(game, /hasWaveClearShield/, 'single-pickup guard missing');
 assert.match(game, /clearWaveClearShields/, 'replace-existing clear missing');
@@ -39,7 +41,8 @@ assert.doesNotMatch(
 );
 assert.match(game, /BOSS_FULL_SHIELD_GEMS/, 'full-shield boss gem payout should remain');
 assert.match(game, /if \(state\.hp < state\.maxHp\) spawnWaveClearShield/, 'boss injured → shield');
-assert.match(game, /addScore\(EMERALD_VALUE \* BOSS_FULL_SHIELD_GEMS\)/, 'full shields bank gem payout');
+assert.match(game, /spawnEmeralds\(origin, BOSS_FULL_SHIELD_GEMS, \{ seek: true \}\)/, 'full shields seek gem payout');
+assert.match(game, /spawnEmeralds\(origin, count, \{ seek: true \}\)/, 'boss gems seek to player');
 assert.match(game, /phase: 'stagger', \/\/ stagger \| final \| hold/, 'boss death uses short hold, not loot linger');
 assert.doesNotMatch(game, /BOSS_LOOT_LINGER/, 'boss loot linger delay should be gone');
 assert.doesNotMatch(game, /fadeBossLoot/, 'boss loot fade should be gone');

@@ -3454,8 +3454,9 @@ const SHIELD_DROP_CHANCE = 0.005; // independent roll; no scanner or pity bonus
 const DROP_PITY = 30;     // guaranteed drop after this many dry kills
 const DROP_LIFE = 6;      // seconds of active play before an uncollected drop vanishes
 const DROP_WARNING = 2;   // final seconds blink to warn that the pickup is expiring
-/** Post-boss window so the player can walk onto loot before the picker. */
-/** Extra gem payout when a boss dies while shields are already full (banked at clear). */
+/** After the next wave starts, wait this long before a clear-shield begins normal expiry. */
+const WAVE_CLEAR_SHIELD_GRACE = 1;
+/** Extra gem payout when a boss dies while shields are already full (seek to player). */
 const BOSS_FULL_SHIELD_GEMS = 5;
 const drops = [];
 
@@ -3512,7 +3513,7 @@ function spawnDrop(type, pos, opts = {}) {
   drops.push(d);
 }
 
-/** One persistent walk-over +1 SHIELD after a clear / boss kill. Survives the picker. */
+/** One walk-over +1 SHIELD after a clear / boss kill. Survives the picker; expires after the next wave starts. */
 function spawnWaveClearShield(pos) {
   clearWaveClearShields();
   const at = placeReachableDrop(pos);
@@ -3521,6 +3522,17 @@ function spawnWaveClearShield(pos) {
     life: Infinity,
     pulse: true,
   });
+}
+
+/** Arm leftover clear-shields so they begin normal fade/despawn after a short grace. */
+function armWaveClearShieldExpiry() {
+  for (const d of drops) {
+    const ud = d.userData;
+    if (!ud.waveClearShield) continue;
+    if (ud.waveClearGrace != null) continue;
+    if (Number.isFinite(ud.life) && ud.life <= DROP_LIFE) continue;
+    ud.waveClearGrace = WAVE_CLEAR_SHIELD_GRACE;
+  }
 }
 
 function collect(type, opts = {}) {
@@ -3547,7 +3559,14 @@ function updateDrops(dt) {
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i], ud = d.userData;
     ud.t += dt;
-    if (!ud.waveClearShield) {
+    if (ud.waveClearGrace != null) {
+      ud.waveClearGrace -= dt;
+      if (ud.waveClearGrace <= 0) {
+        ud.waveClearGrace = null;
+        // Same lifetime / blink window as a normal uncollected pickup.
+        ud.life = DROP_LIFE;
+      }
+    } else {
       ud.life -= dt;
       if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); continue; }
     }
@@ -3577,11 +3596,12 @@ function updateDrops(dt) {
       ud.glow.scale.setScalar(ud.glowScale * (1 + Math.sin(ud.t * 4.1) * 0.14));
       ud.ring.scale.setScalar(1 + Math.sin(ud.t * 3.4) * 0.08);
     }
-    const warning = !ud.waveClearShield && ud.life <= DROP_WARNING;
+    const warning = Number.isFinite(ud.life) && ud.life <= DROP_WARNING;
     // Two blinks per second, synchronised to expiry rather than random bobbing phase.
     d.visible = !warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0;
     // A shrinking ground ring also communicates expiry without flashing in reduced motion.
     if (!ud.pulse) ud.ring.scale.setScalar(warning ? Math.max(0.15, ud.life / DROP_WARNING) : 1);
+    else if (warning) ud.ring.scale.setScalar(Math.max(0.15, ud.life / DROP_WARNING));
   }
 }
 
@@ -3610,7 +3630,7 @@ let emeraldChain = 0;
 let lastEmeraldAt = -Infinity;
 let emeraldGlowPulse = 0;
 
-function spawnEmeralds(origin, count) {
+function spawnEmeralds(origin, count, opts = {}) {
   const pressure = fxPressure();
   // Late waves spawn fewer meshes; overflow still scores so farming isn't lost.
   let n = Math.max(1, Math.round(count * (1 - pressure * 0.6)));
@@ -3618,6 +3638,7 @@ function spawnEmeralds(origin, count) {
   const bank = Math.max(0, n - room);
   if (bank) addScore(EMERALD_VALUE * bank);
   n = Math.min(n, room);
+  const seek = !!opts.seek;
   for (let i = 0; i < n; i++) {
     const gem = new THREE.Mesh(emeraldGeo, emeraldMat);
     const glow = new THREE.Sprite(emeraldGlowMat);
@@ -3626,7 +3647,14 @@ function spawnEmeralds(origin, count) {
     const ang = rnd(0, Math.PI * 2), dist = rnd(0.15, 0.7);
     gem.position.set(origin.x + Math.cos(ang) * dist, 0.35, origin.z + Math.sin(ang) * dist);
     gem.rotation.set(rnd(0, 1), rnd(0, Math.PI * 2), rnd(0, 1));
-    gem.userData = { life: EMERALD_LIFE, t: rnd(0, Math.PI * 2), glow };
+    gem.userData = {
+      life: seek ? 3.5 : EMERALD_LIFE,
+      t: rnd(0, Math.PI * 2),
+      glow,
+      // Boss kills: snap-home to the operator so the payout is obvious.
+      seek,
+      seekDelay: seek ? i * 0.028 : 0,
+    };
     scene.add(gem);
     emeralds.push(gem);
   }
@@ -3663,18 +3691,30 @@ function updateEmeralds(dt) {
     const dx = player.position.x - e.position.x, dz = player.position.z - e.position.z;
     const dist = Math.hypot(dx, dz);
     if (dist < EMERALD_PICK) { collectEmerald(); disposeEmerald(e); emeralds.splice(i, 1); continue; }
-    if (dist < magnetRange && dist > 1e-4) {
+    if (ud.seek) {
+      if (ud.seekDelay > 0) ud.seekDelay -= dt;
+      else if (dist > 1e-4) {
+        // Fast straight magnet so boss payouts read as scooped, not scavenged.
+        const speed = 48 + Math.min(28, dist * 1.8);
+        const step = Math.min(dist, speed * dt);
+        e.position.x += (dx / dist) * step;
+        e.position.z += (dz / dist) * step;
+      }
+      e.position.y = THREE.MathUtils.damp(e.position.y, 0.95, 10, dt);
+    } else if (dist < magnetRange && dist > 1e-4) {
       // Ability pull reaches through walls, but stays slow enough to watch the stream.
       const pull = surge
         ? 8 + (1 - dist / magnetRange) * 13
         : 9 + (1 - dist / magnetRange) * 10;
       e.position.x += (dx / dist) * pull * dt;
       e.position.z += (dz / dist) * pull * dt;
+      e.position.y = 0.32 + Math.sin(ud.t * 5) * 0.08;
+    } else {
+      e.position.y = 0.32 + Math.sin(ud.t * 5) * 0.08;
     }
-    e.position.y = 0.32 + Math.sin(ud.t * 5) * 0.08;
     e.rotation.y += dt * 4.5;
     e.rotation.x = 0.35 + Math.sin(ud.t * 3) * 0.15;
-    const warning = ud.life <= EMERALD_WARN;
+    const warning = !ud.seek && ud.life <= EMERALD_WARN;
     e.visible = !warning || reducedMotion.matches || Math.floor((EMERALD_WARN - ud.life) * 6) % 2 === 0;
   }
 }
@@ -4302,10 +4342,10 @@ function finalizeBossDeath(z) {
   lastKillPos.set(z.position.x, 0, z.position.z);
   if (state.running) {
     const count = 8 + ((Math.random() * 5) | 0);
-    spawnEmeralds(origin, count);
-    // Injured: persistent walk-over shield. Full shields: modest gem payout (banked at clear).
+    // Boss gems (and the full-shield bonus) fly straight to the operator — no scavenger hunt.
+    spawnEmeralds(origin, count, { seek: true });
     if (state.hp < state.maxHp) spawnWaveClearShield(z.position);
-    else addScore(EMERALD_VALUE * BOSS_FULL_SHIELD_GEMS);
+    else spawnEmeralds(origin, BOSS_FULL_SHIELD_GEMS, { seek: true });
   }
   // Other supplies may still drop, but never a second random shield on the boss kill.
   maybeDrop(z.position, false);
@@ -4390,6 +4430,8 @@ function startWave(n) {
   }
   state.spawnTimer = 0;
   state.intermission = 0;
+  // Leftover clear-shields keep sitting through the picker; once this wave is live they start fading.
+  armWaveClearShieldExpiry();
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
   showBanner(
@@ -5627,8 +5669,9 @@ function update(dt, lightFrame = false) {
     state.pAmmo = Math.max(0, state.pAmmo - dt);
     // Drops keep bobbing under the picker (wave-clear shields persist); collection waits for play.
     updateDrops(dt);
+    // Seek gems keep flying in while the picker is open so boss payouts finish immediately.
+    updateEmeralds(dt);
     if (!state.choosing) {
-      updateEmeralds(dt);
       if (state.intermission <= 0) state.waveTime += dt;
     }
 
