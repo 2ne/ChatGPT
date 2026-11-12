@@ -22,16 +22,23 @@ export function createScore(ctx, musicBus) {
   // Keep the decoded loop boundaries at the assets' native sample rate.
   const OfflineContext = window.OfflineAudioContext ?? window.webkitOfflineAudioContext;
   const decoder = OfflineContext ? new OfflineContext(2, 1, 44100) : ctx;
-  const buffers = Object.fromEntries(Object.entries(CLIPS).map(([name, url]) => [
+  /** Sync cache so queueWave can schedule the next loop in the same turn. */
+  const decoded = Object.create(null);
+  const bufferPromises = Object.fromEntries(Object.entries(CLIPS).map(([name, url]) => [
     name,
     fetch(url).then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.arrayBuffer();
-    }).then(data => decoder.decodeAudioData(data)).catch(error => {
+    }).then(data => decoder.decodeAudioData(data)).then(buffer => {
+      decoded[name] = buffer;
+      return buffer;
+    }).catch(error => {
       console.warn(`Could not load score clip ${name}`, error);
+      decoded[name] = null;
       return null;
     }),
   ]));
+  const ready = Promise.all(Object.values(bufferPromises));
 
   const tracks = new Set();
   let ability, combat;
@@ -41,6 +48,36 @@ export function createScore(ctx, musicBus) {
     track.source?.disconnect();
     track.filter.disconnect();
     track.gain.disconnect();
+  }
+
+  function attachSource(track, buffer) {
+    if (!tracks.has(track)) return;
+    if (!buffer) {
+      release(track);
+      return;
+    }
+    // Schedule against the original start so a late decode still lines up with the crossfade.
+    const at = Math.max(track.start, ctx.currentTime);
+    const elapsed = at - track.phase;
+    if (at >= track.end || (!track.loop && elapsed >= buffer.duration)) {
+      release(track);
+      return;
+    }
+    if (track.source) {
+      try { track.source.stop(); } catch { /* */ }
+      try { track.source.disconnect(); } catch { /* */ }
+    }
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.loop = track.loop;
+    source.connect(track.filter);
+    source.onended = () => release(track);
+    track.source = source;
+    const offset = track.loop
+      ? ((elapsed % buffer.duration) + buffer.duration) % buffer.duration
+      : Math.max(0, elapsed);
+    source.start(at, offset);
+    if (Number.isFinite(track.end)) source.stop(track.end);
   }
 
   function play(name, start, { loop = false, phase = start, fadeIn = 0, volume = 1, cutoff = 20000 } = {}) {
@@ -54,32 +91,24 @@ export function createScore(ctx, musicBus) {
     gain.connect(level);
     gain.gain.setValueAtTime(fadeIn ? 0 : volume, start);
     if (fadeIn) gain.gain.linearRampToValueAtTime(volume, start + fadeIn);
-    const track = { name, start, phase, fadeIn, volume, gain, filter, source: null, end: Infinity, fadeAt: Infinity };
+    const track = {
+      name, start, phase, fadeIn, volume, gain, filter, loop,
+      source: null, end: Infinity, fadeAt: Infinity,
+    };
     tracks.add(track);
-    buffers[name].then(buffer => {
-      if (!tracks.has(track)) return;
-      const at = Math.max(start, ctx.currentTime);
-      const elapsed = at - phase;
-      if (!buffer || at >= track.end || (!loop && elapsed >= buffer.duration)) {
-        release(track);
-        return;
-      }
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      source.loop = loop;
-      source.connect(filter);
-      source.onended = () => release(track);
-      track.source = source;
-      source.start(at, loop ? elapsed % buffer.duration : elapsed);
-      if (Number.isFinite(track.end)) source.stop(track.end);
-    });
+    if (Object.prototype.hasOwnProperty.call(decoded, name)) {
+      attachSource(track, decoded[name]);
+    } else {
+      bufferPromises[name].then(buffer => attachSource(track, buffer));
+    }
     return track;
   }
 
   function fadeOut(track, at, duration) {
     if (!tracks.has(track) || track.end <= at) return;
     if (track.start > at) {
-      track.source?.stop(at);
+      // Pending future start (e.g. re-queued before lead-in) — cancel instead of fading.
+      try { track.source?.stop(at); } catch { /* */ }
       release(track);
       return;
     }
@@ -91,16 +120,17 @@ export function createScore(ctx, musicBus) {
     track.end = at + duration;
     track.fadeAt = at;
     track.gain.gain.linearRampToValueAtTime(0, track.end);
-    track.source?.stop(track.end);
+    try { track.source?.stop(track.end); } catch { /* */ }
   }
 
   return {
+    warm() { return ready; },
     queueWave(wave, delay) {
-      const start = ctx.currentTime + delay;
-      // Drop every prior loop (combat + ability) so restart / re-queue never stacks music.
-      const fade = Math.min(CLEAR_FADE, Math.max(0.05, delay || CLEAR_FADE));
+      const start = ctx.currentTime + Math.max(0, delay || 0);
+      // Mirror clearWave: overlap ability fade-out with combat fade-in at wave start.
+      // (Fading ability immediately here left ~1s of silence before combat began.)
       for (const track of [...tracks]) {
-        fadeOut(track, ctx.currentTime, fade);
+        fadeOut(track, start, CLEAR_FADE);
       }
       combat = ability = null;
       combat = play(wave >= LATE_WAVE ? 'late' : 'early', start, { loop: true, fadeIn: CLEAR_FADE });
@@ -124,8 +154,8 @@ export function createScore(ctx, musicBus) {
       });
     },
     stop() {
-      for (const track of tracks) {
-        track.source?.stop();
+      for (const track of [...tracks]) {
+        try { track.source?.stop(); } catch { /* */ }
         release(track);
       }
       combat = ability = null;

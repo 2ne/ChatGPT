@@ -60,6 +60,8 @@ export function createAudio(settings, listener) {
     if (!paused && ctx.state !== 'running') ctx.resume().catch(() => {});
     // Unlock the UI bus on the same gesture so pause/death menus can blip after combat audio suspends.
     ensureUi();
+    // Decode early/late/ability up front so wave-start crossfades can schedule immediately.
+    score?.warm?.();
     if (titleMusic && soundtrack.paused) soundtrack.play().catch(() => {});
   }
 
