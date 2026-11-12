@@ -3933,7 +3933,7 @@ const helperShotInterval = upgrades => upgrades.botBomb ? 1.7 : 0.65 / (1 + (upg
 
 function removeFieldObject(o) {
   scene.remove(o);
-  if (o.userData.shell) scene.remove(o.userData.shell);
+  if (o.userData.shell) releaseMortarRocket(o.userData.shell);
   if (o.geometry === fieldRing) o.material.dispose();
 }
 function clearEquipmentField() {
@@ -3941,6 +3941,137 @@ function clearEquipmentField() {
     list.forEach(removeFieldObject); list.length = 0;
   }
   equipment.blasts.length = 0; equipment.pulse = false;
+  clearMortarRocketTrails();
+}
+
+// --- Mortar rocket (visual only; arc / telegraph / damage unchanged) ---
+const rocketBodyGeo = new THREE.CylinderGeometry(0.055, 0.075, 0.38, 6).rotateX(Math.PI / 2);
+const rocketNoseGeo = new THREE.ConeGeometry(0.075, 0.18, 6).rotateX(Math.PI / 2).translate(0, 0, 0.28);
+const rocketFinGeo = new THREE.BoxGeometry(0.035, 0.11, 0.12);
+const rocketBodyMat = new THREE.MeshStandardMaterial({ color: 0xd0d4da, metalness: 0.55, roughness: 0.38 });
+const rocketNoseMat = new THREE.MeshStandardMaterial({
+  color: 0xff9a4a, metalness: 0.35, roughness: 0.42, emissive: 0xff6a20, emissiveIntensity: 0.45,
+});
+const rocketFinMat = new THREE.MeshStandardMaterial({ color: 0x3a4550, metalness: 0.4, roughness: 0.5 });
+const rocketExhaustMap = glowTexture();
+const rocketTrailMat = new THREE.SpriteMaterial({
+  map: rocketExhaustMap, color: 0xff9b42, transparent: true, opacity: 0.75,
+  blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+});
+const mortarRocketPool = [];
+const mortarTrailPool = [];
+const mortarTrails = [];
+const MORTAR_TRAIL_CAP = 28;
+const _rocketDir = new THREE.Vector3();
+const _rocketFwd = new THREE.Vector3(0, 0, 1);
+
+function buildMortarRocket() {
+  const rocket = new THREE.Group();
+  rocket.userData.pool = 'mortarRocket';
+  const body = new THREE.Mesh(rocketBodyGeo, rocketBodyMat);
+  body.castShadow = true;
+  rocket.add(body);
+  const nose = new THREE.Mesh(rocketNoseGeo, rocketNoseMat);
+  nose.castShadow = true;
+  rocket.add(nose);
+  for (let i = 0; i < 4; i++) {
+    const ang = (i * Math.PI) / 2;
+    const fin = new THREE.Mesh(rocketFinGeo, rocketFinMat);
+    fin.position.set(Math.sin(ang) * 0.08, Math.cos(ang) * 0.08, -0.14);
+    fin.rotation.z = ang;
+    rocket.add(fin);
+  }
+  const exhaust = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: rocketExhaustMap, color: 0xffb06a, transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+  }));
+  exhaust.position.set(0, 0, -0.28);
+  exhaust.scale.setScalar(0.45);
+  rocket.add(exhaust);
+  rocket.userData.exhaust = exhaust;
+  rocket.userData.trailCd = 0;
+  return rocket;
+}
+
+function acquireMortarRocket() {
+  const rocket = mortarRocketPool.pop() || buildMortarRocket();
+  rocket.visible = true;
+  rocket.userData.trailCd = 0;
+  rocket.userData.exhaust.material.opacity = 0.9;
+  rocket.scale.setScalar(1);
+  return rocket;
+}
+
+function releaseMortarRocket(rocket) {
+  if (!rocket) return;
+  scene.remove(rocket);
+  rocket.visible = false;
+  mortarRocketPool.push(rocket);
+}
+
+function acquireMortarTrail() {
+  const puff = mortarTrailPool.pop() || new THREE.Sprite(rocketTrailMat.clone());
+  puff.visible = true;
+  return puff;
+}
+
+function releaseMortarTrail(puff) {
+  scene.remove(puff);
+  puff.visible = false;
+  mortarTrailPool.push(puff);
+}
+
+function clearMortarRocketTrails() {
+  for (const puff of mortarTrails) releaseMortarTrail(puff);
+  mortarTrails.length = 0;
+}
+
+function spawnMortarRocketTrail(pos) {
+  if (reducedMotion.matches) return;
+  if (mortarTrails.length >= MORTAR_TRAIL_CAP) releaseMortarTrail(mortarTrails.shift());
+  // Soften under late-wave pressure so mobile stays smooth.
+  if (fxPressure() > 0.55 && Math.random() > 0.45) return;
+  const puff = acquireMortarTrail();
+  puff.position.copy(pos);
+  puff.position.x += (Math.random() - 0.5) * 0.08;
+  puff.position.y += (Math.random() - 0.5) * 0.08;
+  puff.position.z += (Math.random() - 0.5) * 0.08;
+  const size = 0.28 + Math.random() * 0.18;
+  puff.scale.setScalar(size);
+  puff.material.opacity = 0.7;
+  puff.userData.life = 0.28 + Math.random() * 0.12;
+  puff.userData.max = puff.userData.life;
+  puff.userData.base = size;
+  scene.add(puff);
+  mortarTrails.push(puff);
+}
+
+function updateMortarRocketTrails(dt) {
+  for (let i = mortarTrails.length - 1; i >= 0; i--) {
+    const puff = mortarTrails[i];
+    puff.userData.life -= dt;
+    const k = 1 - Math.max(0, puff.userData.life) / puff.userData.max;
+    puff.material.opacity = 0.7 * (1 - k) * (1 - k);
+    puff.scale.setScalar(puff.userData.base * (1 + k * 1.6));
+    if (puff.userData.life <= 0) {
+      releaseMortarTrail(puff);
+      mortarTrails.splice(i, 1);
+    }
+  }
+}
+
+function orientMortarRocket(rocket, origin, target, progress) {
+  // Analytical tangent of the same lerp + sin arc used for position.
+  _rocketDir.set(
+    target.x - origin.x,
+    4 * Math.PI * Math.cos(Math.PI * progress),
+    target.z - origin.z,
+  );
+  if (_rocketDir.lengthSq() < 1e-8) return;
+  rocket.quaternion.setFromUnitVectors(_rocketFwd, _rocketDir.normalize());
+  const pulse = 0.75 + 0.25 * Math.sin(progress * Math.PI * 10);
+  rocket.userData.exhaust.material.opacity = 0.55 + 0.4 * pulse;
+  rocket.userData.exhaust.scale.setScalar(0.38 + 0.22 * pulse);
 }
 function groundRing(position, radius, color, life, list) {
   const ring = new THREE.Mesh(fieldRing, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, depthWrite: false, side: THREE.DoubleSide }));
@@ -3958,8 +4089,9 @@ function fireMortar(z) {
   const ring = groundRing(player.position.clone(), 1.8, 0xffc17b, warningTime, equipment.zones);
   const origin = z.userData.upper.getWorldPosition(new THREE.Vector3());
   origin.y += 0.6;
-  const shell = new THREE.Mesh(enemyBoltGeo, DRONE_KITS[5].optic);
+  const shell = acquireMortarRocket();
   shell.position.copy(origin);
+  orientMortarRocket(shell, origin, ring.position, 0);
   scene.add(shell);
   Object.assign(ring.userData, { mortar: true, shell, origin });
   z.userData.mortarRecoil = 1;
@@ -4102,8 +4234,15 @@ function updateEquipment(dt) {
     const u = 1 - ring.userData.life / warn;
     if (ring.userData.shell) {
       const progress = THREE.MathUtils.clamp(u, 0, 1);
-      ring.userData.shell.position.lerpVectors(ring.userData.origin, ring.position, progress);
-      ring.userData.shell.position.y += 4 * Math.sin(Math.PI * progress);
+      const shell = ring.userData.shell;
+      shell.position.lerpVectors(ring.userData.origin, ring.position, progress);
+      shell.position.y += 4 * Math.sin(Math.PI * progress);
+      orientMortarRocket(shell, ring.userData.origin, ring.position, progress);
+      shell.userData.trailCd = (shell.userData.trailCd || 0) - dt;
+      if (shell.userData.trailCd <= 0) {
+        spawnMortarRocketTrail(shell.position);
+        shell.userData.trailCd = reducedMotion.matches ? 0.12 : 0.045;
+      }
     }
     ring.material.opacity = ring.userData.mortar
       ? 0.7 + 0.25 * u + (reducedMotion.matches ? 0 : 0.05 * Math.sin(u * Math.PI * 8))
@@ -4114,6 +4253,7 @@ function updateEquipment(dt) {
       removeFieldObject(ring); equipment.zones.splice(i, 1);
     }
   }
+  updateMortarRocketTrails(dt);
   for (let i = equipment.effects.length - 1; i >= 0; i--) {
     const ring = equipment.effects[i]; ring.userData.life -= dt;
     ring.material.opacity = Math.max(0, ring.userData.life * 2);
