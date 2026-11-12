@@ -1,7 +1,7 @@
 const CLIPS = {
-  early: new URL('./assets/score/early-waves.wav', import.meta.url).href,
-  late: new URL('./assets/score/late-waves.wav', import.meta.url).href,
-  ability: new URL('./assets/score/ability-select.wav', import.meta.url).href,
+  early: new URL('./assets/score/early-waves.mp3', import.meta.url).href,
+  late: new URL('./assets/score/late-waves.mp3', import.meta.url).href,
+  ability: new URL('./assets/score/ability-select.mp3', import.meta.url).href,
 };
 
 export const WAVE_LEAD_IN = 0.83;
