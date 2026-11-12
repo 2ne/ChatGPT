@@ -2500,6 +2500,16 @@ const BOT_TYPES = {
   heavy: { name: 'BULWARK', kit: 3, health: 2.5, speed: 0.62, size: 1.18, style: 'heavy', loco: 'stomp' },
   mortar: { name: 'BOMBARDIER', kit: 5, health: 0.55, speed: 1.05, size: 0.7, style: 'mortar', loco: 'tracks' },
 };
+/** Waves whose subtitle announces a new regular drone — open with a short solo intro. */
+const WAVE_TYPE_INTRO = {
+  1: BOT_TYPES.patrol,
+  2: BOT_TYPES.runner,
+  3: BOT_TYPES.gunner,
+  4: BOT_TYPES.heavy,
+  10: BOT_TYPES.mortar,
+};
+const WAVE_INTRO_HOLD = 4.5; // seconds after intro spawns before the full mix resumes (or sooner if they die)
+
 function waveBotType() {
   // Guaranteed introduction, then a few replacements rather than extra enemies.
   const mortarLimit = state.wave === 10 ? 1 : 3;
@@ -4439,6 +4449,42 @@ function queueWave(delay) {
   waveAt = audio.queueWave(state.wave + 1, delay);
 }
 
+function beginWaveTypeIntro(n) {
+  const type = WAVE_TYPE_INTRO[n];
+  if (!type || state.toSpawn <= 0) {
+    state.introType = null;
+    state.introLeft = 0;
+    state.introHold = false;
+    state.introTimer = 0;
+    return;
+  }
+  // Wave 10 only fields one bombardier; other debuts open with 1–2 of the new type.
+  const want = type.style === 'mortar' ? 1 : 1 + (Math.random() < 0.65 ? 1 : 0);
+  state.introType = type;
+  state.introLeft = Math.min(want, state.toSpawn);
+  state.introHold = true;
+  state.introTimer = WAVE_INTRO_HOLD;
+}
+
+function spawnWaveIntroDrone() {
+  const type = state.introType || BOT_TYPES.patrol;
+  if (type.style === 'mortar') state.mortarsSpawned++;
+  const z = spawnDrone(undefined, type);
+  z.userData.waveIntro = true;
+  return z;
+}
+
+function updateWaveTypeIntro(dt) {
+  if (!state.introHold || state.introLeft > 0) return;
+  state.introTimer -= dt;
+  const introAlive = drones.some((z) => z.userData.waveIntro);
+  if (!introAlive || state.introTimer <= 0) {
+    state.introHold = false;
+    state.introType = null;
+    state.introTimer = 0;
+  }
+}
+
 function startWave(n) {
   state.wave = n;
   state.shieldDropsThisWave = 0;
@@ -4458,9 +4504,11 @@ function startWave(n) {
     const u = z.userData;
     u.speed = Math.min(5.5, state.droneSpeed * u.pace);
     u.hp = u.maxHp = Math.ceil(state.droneHp * u.type.health);
+    u.waveIntro = false;
   }
   state.spawnTimer = 0;
   state.intermission = 0;
+  beginWaveTypeIntro(n);
   // Leftover clear-shields / boss powerups sit through the picker; once live they start fading.
   armPersistFloorExpiry();
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
@@ -4535,6 +4583,7 @@ function resetGame(keep = false) {
     fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0,
+    introType: null, introLeft: 0, introHold: false, introTimer: 0,
   });
   emeraldChain = 0;
   botMilestonesDone.clear();
@@ -5714,12 +5763,24 @@ function update(dt, lightFrame = false) {
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
       if (state.intermission <= 0) startWave(state.wave + 1);
     } else if (!bossDeath.active) {
-      if (state.toSpawn > 0) {
+      updateWaveTypeIntro(dt);
+      // Hold the rest of the wave after the debut drones until they die or the intro timer ends.
+      const holdingIntro = state.introHold && state.introLeft <= 0;
+      if (state.toSpawn > 0 && !holdingIntro) {
         state.spawnTimer -= dt;
         if (state.spawnTimer <= 0 && drones.length < MAX_ALIVE) {
           // spawn 1-2 at a time, faster on higher waves
           const burst = 1 + (Math.random() < Math.min(0.6, state.wave * 0.08) ? 1 : 0);
-          for (let i = 0; i < burst && state.toSpawn > 0; i++) { spawnDrone(undefined, waveBotType()); state.toSpawn--; }
+          for (let i = 0; i < burst && state.toSpawn > 0; i++) {
+            if (state.introHold) {
+              if (state.introLeft <= 0) break; // wait out the hold before the normal mix
+              spawnWaveIntroDrone();
+              state.introLeft--;
+            } else {
+              spawnDrone(undefined, waveBotType());
+            }
+            state.toSpawn--;
+          }
           if (state.wave === 4 && drones.length >= 8) audio.intensify();
           state.spawnTimer = Math.max(0.35, 1.4 - state.wave * 0.08);
         }
