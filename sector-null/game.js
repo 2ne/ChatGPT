@@ -2594,7 +2594,8 @@ const WAVE_INTRO_HOLD = 4.5; // seconds after intro spawns before the full mix r
 
 function waveBotType() {
   // Guaranteed introduction, then a few replacements rather than extra enemies.
-  const mortarLimit = state.wave === 10 ? 1 : 3;
+  // Wave 10 opens with a two-tank intro; later waves still cap at three across the wave.
+  const mortarLimit = state.wave === 10 ? 2 : 3;
   if (state.wave >= 10 && state.mortarsSpawned < mortarLimit
       && !drones.some(z => z.userData.type.style === 'mortar')
       && !equipment.zones.some(r => r.userData.mortar)
@@ -4686,8 +4687,8 @@ function beginWaveTypeIntro(n) {
     state.introTimer = 0;
     return;
   }
-  // Wave 10 only fields one bombardier; other debuts open with 1–2 of the new type.
-  const want = type.style === 'mortar' ? 1 : 1 + (Math.random() < 0.65 ? 1 : 0);
+  // Wave 10 opens with exactly two bombardiers alone; other debuts open with 1–2.
+  const want = type.style === 'mortar' ? 2 : 1 + (Math.random() < 0.65 ? 1 : 0);
   state.introType = type;
   state.introLeft = Math.min(want, state.toSpawn);
   state.introHold = true;
