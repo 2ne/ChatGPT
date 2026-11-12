@@ -1,3 +1,5 @@
+@import "./upgrade-cards.css";
+
 * {
   margin: 0;
   padding: 0;
@@ -1538,62 +1540,16 @@ body.pad-aiming #game {
   touch-action: manipulation;
 }
 
-/* Upgrade choices: one recommendation, two equally actionable alternatives. */
+/* Upgrade choices: one recommendation, two equally actionable alternatives.
+   Desktop card chrome: upgrade-cards.css (.upgrade-card). */
 #picker {
   overflow-y: auto;
   padding: calc(var(--safe-top) + 24px) calc(var(--safe-right) + 16px) calc(var(--safe-bottom) + 24px) calc(var(--safe-left) + 16px);
   box-sizing: border-box;
 }
 #cards {
-  width: min(860px, 100%);
   display: grid;
-  grid-template-columns: 1.25fr 1fr 1fr;
   align-items: stretch;
-  gap: 14px;
-}
-#cards .card {
-  width: auto;
-  min-width: 0;
-  font-family: inherit;
-  color: #e4f1f5;
-  text-align: center;
-  border-radius: 0;
-}
-#cards .recommended {
-  border: 2px solid var(--accent);
-  background-color: #18313b;
-  border-radius: 0;
-}
-.ctop {
-  font-size: 11px;
-  letter-spacing: 1px;
-  gap: 6px;
-}
-.icon-stage {
-  width: 100%;
-  height: 88px;
-  margin: 0;
-  display: block;
-  pointer-events: none;
-  background: transparent;
-}
-.cname {
-  font-size: 23px;
-  letter-spacing: 1px;
-}
-.cdesc {
-  color: #c3d2d9;
-  font-size: 16px;
-  min-height: 40px;
-}
-.cstat {
-  font-size: 15px;
-  color: #a1b4bf;
-  margin-top: auto;
-  padding-top: 10px;
-}
-.clvl {
-  margin-top: 12px;
 }
 .preview-shot {
   animation: previewPulse 1.6s ease-in-out infinite;
@@ -2094,120 +2050,30 @@ body.pad-aiming #game {
   gap: 24px;
   margin-top: 34px;
 }
-#cards .card {
-  isolation: isolate;
-  padding: 22px 22px 25px;
-  border: 0;
-  background: none;
-  box-shadow: none;
-}
-#cards .card::before {
-  inset: 1px;
-  height: auto;
-  z-index: -2;
-  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px);
-  background: radial-gradient(ellipse at 50% 28%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 65%), linear-gradient(145deg, #0b1623f5, #040e18f5);
-  box-shadow: none;
-}
-.card-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-  z-index: -1;
-  fill: none;
-  stroke: var(--accent);
-  transition: filter .18s ease;
-}
-.card-frame path { vector-effect: non-scaling-stroke; }
-.frame-edge { stroke-opacity: .55; }
-.frame-inner { stroke-opacity: .12; }
-.frame-rail { fill: var(--accent); fill-opacity: .55; stroke-opacity: .8; }
-.recommended .card-frame { filter: drop-shadow(0 0 5px var(--accent)); }
-.recommended .frame-edge { stroke-width: 2; stroke-opacity: 1; }
-.recommended .frame-inner { stroke-opacity: .65; }
-.recommended .frame-rail { fill-opacity: .9; }
-#cards .ctop { font-size: 14px; font-weight: 700; letter-spacing: .07em; min-height: 28px; }
-.recommended .ctop > span:first-child {
-  padding: 5px 12px;
-  color: #07111a;
-  background: var(--accent);
-  clip-path: polygon(0 0, 100% 0, 100% 65%, calc(100% - 9px) 100%, 0 100%);
-}
-#cards .ckey { font-family: "Oxanium", sans-serif; font-size: 18px; padding: 3px 8px; border-color: color-mix(in srgb, var(--accent) 45%, #263747); background: #06101ba8; }
-#cards .icon-stage {
-  height: 168px;
-  margin: 0;
-  position: relative;
-  top: -10px;
-  pointer-events: none;
-  background: transparent;
-}
-#cards .cname {
-  position: relative;
-  z-index: 1;
-  margin-top: -48px;
-  font-size: clamp(24px, 2.3vw, 32px);
-  letter-spacing: .025em;
-  line-height: 1.1;
-  text-shadow: 0 2px 0 #000, 0 0 12px #040e18, 0 0 4px #040e18;
-}
-#cards .cdesc { font-size: 18px; line-height: 1.25; min-height: 46px; margin: 8px 0 18px; }
-#cards .cstat {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 4px;
-  border-top: 1px solid #9ac5d033;
-  border-bottom: 1px solid #9ac5d033;
-  background: linear-gradient(100deg, #34566633, #09172388, #34566633);
-  clip-path: polygon(12px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 8px 100%, 0 calc(100% - 8px), 0 12px);
-  font-size: 17px;
-  color: #d5e5ee;
-}
-#cards .cstat b { font-weight: 700; }
-#cards .clvl { height: 10px; gap: 6px; margin-top: 18px; }
-#cards .clvl i { width: 28px; max-width: 5vw; height: 8px; border: 1px solid #ffffff18; transform: skewX(-16deg); }
-#cards .clvl i.next { animation: none; }
-#cards .card {
-  --lift: -10px;
-  --zoom: 1.045;
-  transition: transform .18s ease-out, opacity .2s;
-}
-#cards .card:is(:focus-visible, .pad-sel):not(.dropped):not(.picked) {
+/* Desktop card chrome lives in upgrade-cards.css (.upgrade-card). */
+#cards .upgrade-card:is(:focus-visible, .pad-sel):not(.dropped):not(.picked) {
   transform: translateY(var(--lift)) scale(var(--zoom));
   z-index: 2;
   outline: none;
 }
-#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .card-frame {
+#cards .upgrade-card:is(:focus-visible, .pad-sel, :active, .picked) .card-frame {
   filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent));
 }
-#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-edge {
+#cards .upgrade-card:is(:focus-visible, .pad-sel, :active, .picked) .frame-edge {
   stroke-opacity: 1;
   stroke-width: 2.5;
 }
-#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-inner {
+#cards .upgrade-card:is(:focus-visible, .pad-sel, :active, .picked) .frame-inner {
   stroke: #eaffff;
   stroke-opacity: .95;
 }
-#cards .card:is(:focus-visible, .pad-sel, :active, .picked) .frame-rail { fill-opacity: 1; }
-@media (hover: hover) and (pointer: fine) {
-  #cards[data-input="pointer"] .card:hover:not(.dropped):not(.picked) {
-    transform: translateY(var(--lift)) scale(var(--zoom));
-    z-index: 2;
-  }
-  #cards[data-input="pointer"] .card:hover .card-frame { filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent)); }
-  #cards[data-input="pointer"] .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2.5; }
-  #cards[data-input="pointer"] .card:hover .frame-inner { stroke: #eaffff; stroke-opacity: .95; }
-  #cards[data-input="pointer"] .card:hover .frame-rail { fill-opacity: 1; }
-}
-#picker #cards .card:active:not(.dropped):not(.picked) { transform: translateY(-3px) scale(1.015); }
-#cards .card.picked { transform: translateY(var(--lift)) scale(1.065); z-index: 3; }
-#cards .card.dropped { transform: translateY(16px) scale(.95); }
+#cards .upgrade-card:is(:focus-visible, .pad-sel, :active, .picked) .frame-rail { fill-opacity: 1; }
+#picker #cards .upgrade-card:active:not(.dropped):not(.picked) { transform: translateY(-3px) scale(1.015); }
+#cards .upgrade-card.picked { transform: translateY(var(--lift)) scale(1.065); z-index: 3; }
+#cards .upgrade-card.dropped { transform: translateY(16px) scale(.95); }
 @media (max-width: 600px), (max-height: 600px) {
-  #cards .card { --lift: -4px; --zoom: 1.025; }
-  #cards .card.picked { transform: translateY(-4px) scale(1.035); }
+  #cards .upgrade-card { --lift: -4px; --zoom: 1.025; }
+  #cards .upgrade-card.picked { transform: translateY(-4px) scale(1.035); }
 }
 @media (max-width: 600px) and (min-height: 501px) {
   #pickerTitle { font-size: clamp(23px, 6vw, 34px); padding-bottom: 6px; }

@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./upgrade-cards.css" />
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -37,7 +38,6 @@
     color: #9aaeb8;
     letter-spacing: 0.04em;
   }
-  header a { color: #45ecff; text-decoration: none; border-bottom: 1px solid #45ecff55; }
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -84,9 +84,7 @@
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 22px;
   }
-  .upgrade-block {
-    margin-bottom: 28px;
-  }
+  .upgrade-block { margin-bottom: 28px; }
   .upgrade-block h3 {
     font-family: "Oxanium", "Rajdhani", sans-serif;
     font-size: 13px;
@@ -120,164 +118,25 @@
     letter-spacing: 0.08em;
     color: #7a909c;
   }
-
-  .card {
-    --accent: #64dfee;
-    --lift: -10px;
-    --zoom: 1.045;
-    position: relative;
-    isolation: isolate;
-    padding: 22px 22px 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #e4f1f5;
-    text-align: center;
-    border: 0;
-    background: none;
-  }
-  .card::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    z-index: -2;
-    clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px), 0 16px);
-    background:
-      radial-gradient(ellipse at 50% 22%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%),
-      linear-gradient(145deg, #0b1623f5, #040e18f5);
-  }
-  .card-frame {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    pointer-events: none;
-    z-index: -1;
-    fill: none;
-    stroke: var(--accent);
-  }
-  .card-frame path { vector-effect: non-scaling-stroke; }
-  .frame-edge { stroke-opacity: 0.55; }
-  .frame-inner { stroke-opacity: 0.12; }
-  .frame-rail { fill: var(--accent); fill-opacity: 0.55; stroke-opacity: 0.8; }
-  .recommended .card-frame { filter: drop-shadow(0 0 5px var(--accent)); }
-  .recommended .frame-edge { stroke-width: 2; stroke-opacity: 1; }
-  .recommended .frame-inner { stroke-opacity: 0.65; }
-  .recommended .frame-rail { fill-opacity: 0.9; }
-  .ctop {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    min-height: 28px;
-    color: var(--accent);
-  }
-  .recommended .ctop > span:first-child {
-    padding: 5px 12px;
-    color: #07111a;
-    background: var(--accent);
-    clip-path: polygon(0 0, 100% 0, 100% 65%, calc(100% - 9px) 100%, 0 100%);
-  }
-  .ckey {
-    font-family: "Oxanium", sans-serif;
-    font-size: 18px;
-    padding: 3px 8px;
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, #263747);
-    background: #06101ba8;
-    color: #cdd2d8;
-  }
-  .icon-stage {
-    width: 100%;
-    height: 200px;
-    margin: 0;
-    display: block;
+  /* Preview-only: allow drag-orbit on icon stages */
+  .upgrade-cards-page .upgrade-card .icon-stage {
+    pointer-events: auto;
     touch-action: none;
     cursor: grab;
-    border-radius: 0;
-    background: transparent;
-    position: relative;
-    top: -12px;
-    z-index: 0;
   }
-  .icon-stage:active { cursor: grabbing; }
-  .cname {
-    position: relative;
-    z-index: 1;
-    margin-top: -56px;
-    font-family: "Rajdhani", sans-serif;
-    font-size: clamp(24px, 2.3vw, 32px);
-    letter-spacing: 0.025em;
-    line-height: 1.1;
-    text-shadow:
-      0 2px 0 #000,
-      0 0 12px #040e18,
-      0 0 4px #040e18;
-  }
-  .cdesc {
-    font-size: 18px;
-    color: #c3d2d9;
-    line-height: 1.25;
-    min-height: 46px;
-    margin: 8px 0 18px;
-  }
-  .cstat {
-    width: 100%;
-    margin-top: auto;
-    padding: 10px 4px;
-    border-top: 1px solid #9ac5d033;
-    border-bottom: 1px solid #9ac5d033;
-    background: linear-gradient(100deg, #34566633, #09172388, #34566633);
-    clip-path: polygon(12px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 8px 100%, 0 calc(100% - 8px), 0 12px);
-    font-size: 17px;
-    color: #d5e5ee;
-  }
-  .cstat b { font-weight: 700; color: var(--accent); }
-  .clvl { display: flex; gap: 6px; margin-top: 18px; height: 10px; }
-  .clvl i {
-    width: 28px;
-    max-width: 5vw;
-    height: 8px;
-    background: #24262c;
-    border: 1px solid #ffffff18;
-    transform: skewX(-16deg);
-  }
-  .clvl i.next {
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .card { transition: transform 0.18s ease-out; }
-    .card:hover {
-      transform: translateY(var(--lift)) scale(var(--zoom));
-      z-index: 2;
-    }
-    .card:hover .card-frame {
-      filter: drop-shadow(0 0 5px var(--accent)) drop-shadow(0 0 16px var(--accent));
-    }
-    .card:hover .frame-edge { stroke-opacity: 1; stroke-width: 2.5; }
-  }
+  .upgrade-cards-page .upgrade-card .icon-stage:active { cursor: grabbing; }
   @media (max-width: 720px) {
     .trio { grid-template-columns: 1fr; }
-    .icon-stage { height: 170px; }
-    .cname { margin-top: -48px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .card { transition: none; }
-    .card:hover { transform: none; }
   }
 </style>
 </head>
-<body>
+<body class="upgrade-cards-page">
   <div class="page">
     <header>
       <h1>3D UPGRADE ICONS</h1>
       <p>
-        Every upgrade at every offer rank, with Three.js icon dioramas — drag any stage to orbit.
-        Flat reference: <a href="./upgrade-cards.html">upgrade-cards.html</a>
+        Every upgrade at every offer rank, rendered with the same card chrome and
+        <code>stat()</code> as the in-game wave-clear picker. Drag any icon stage to orbit.
       </p>
       <div class="filters" id="filters" role="toolbar" aria-label="Filter by category"></div>
     </header>
@@ -292,263 +151,55 @@
   </div>
 
 <script type="module">
-import { createUpgradeIconHost, CAT_COLORS } from './upgrade-icons.js';
+import { createUpgradeIconHost } from './upgrade-icons.js';
+import { renderUpgradeCard } from './upgrade-card.js';
+import {
+  UPGRADES,
+  UPGRADE_CATS,
+  UPGRADE_CAT_ORDER,
+  previewStateFor,
+  upgradeById,
+} from './upgrades.js';
 
-const CATS = CAT_COLORS;
-const ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'ability'];
-const helperDamage = rank => 0.8 + rank * 0.7;
+const CATS = UPGRADE_CATS;
+const ORDER = UPGRADE_CAT_ORDER;
 
-const UPGRADES = [
-  {
-    id: 'bot', cat: 'engineer', max: 3, requires: null,
-    tier(owned) {
-      const next = owned + 1;
-      return {
-        name: owned ? 'UPGRADE HELPER BOT' : 'HELPER BOT',
-        desc: owned ? 'Stronger companion shots' : 'Deploy one automatic companion',
-        now: owned ? helperDamage(owned).toFixed(1) : 'Shot damage',
-        after: `${helperDamage(next).toFixed(1)} damage`,
-      };
-    },
-  },
-  {
-    id: 'botGun', cat: 'engineer', max: 2, requires: 'Helper Bot owned · no Bomb Launcher',
-    tier(owned) {
-      return {
-        name: 'TWIN GUNS',
-        desc: 'Double bot fire • locks out bombs',
-        now: owned ? 'Twin' : 'Single',
-        after: owned ? 'Rapid twin' : 'Twin guns',
-      };
-    },
-  },
-  {
-    id: 'botBomb', cat: 'engineer', max: 2, requires: 'Helper Bot owned · no Twin Guns',
-    tier(owned) {
-      return {
-        name: 'BOMB LAUNCHER',
-        desc: 'Area blasts • locks out twin guns',
-        now: '1 shot / 1.7s',
-        after: owned ? 'Wider bombs' : 'Area bombs',
-      };
-    },
-  },
-  {
-    id: 'mine', cat: 'engineer', max: 3, requires: null,
-    tier(owned) {
-      return {
-        name: 'TRAIL MINES',
-        desc: 'One trap every 8s • max 3 active',
-        now: 'Blast damage',
-        after: `${4 + owned}`,
-      };
-    },
-  },
-  {
-    id: 'shock', cat: 'engineer', max: 1, requires: 'Trail Mines owned',
-    tier() {
-      return {
-        name: 'SHOCK MINES',
-        desc: 'Mine blasts slow survivors for 3s',
-        now: 'Explosive',
-        after: '+60% slow',
-      };
-    },
-  },
-  {
-    id: 'damage', cat: 'firepower', max: 6, requires: null,
-    tier(owned) {
-      const dmg = 1 + owned * 0.5;
-      return {
-        name: 'PULSE AMPLIFIER',
-        desc: '+50% pulse damage',
-        now: `${dmg}×`,
-        after: `${dmg + 0.5}×`,
-      };
-    },
-  },
-  {
-    id: 'rate', cat: 'firepower', max: 4, requires: null,
-    tier(owned) {
-      let fireRate = 0.13;
-      for (let i = 0; i < owned; i++) fireRate *= 0.8;
-      return {
-        name: 'RAPID CYCLER',
-        desc: 'fire 20% faster',
-        now: (1 / fireRate).toFixed(1),
-        after: `${(1 / (fireRate * 0.8)).toFixed(1)}/s`,
-      };
-    },
-  },
-  {
-    id: 'pierce', cat: 'firepower', max: 3, requires: null,
-    tier(owned) {
-      return {
-        name: 'PIERCING',
-        desc: 'shots pierce +1 drone',
-        now: `${owned}`,
-        after: `${owned + 1} thru`,
-      };
-    },
-  },
-  {
-    id: 'spread', cat: 'firepower', max: 3, requires: null,
-    tier(owned) {
-      return {
-        name: 'SPLIT BEAM',
-        desc: '+1 pulse per shot',
-        now: `${1 + owned}`,
-        after: `${2 + owned} per shot`,
-      };
-    },
-  },
-  {
-    id: 'mag', cat: 'handling', max: 5, requires: null,
-    tier(owned) {
-      const size = 8 + owned * 4;
-      return {
-        name: 'CELL CAPACITY',
-        desc: '+4 pulses per cell',
-        now: `${size}`,
-        after: `${size + 4} pulses`,
-      };
-    },
-  },
-  {
-    id: 'reload', cat: 'handling', max: 4, requires: null,
-    tier(owned) {
-      let reload = 1.2;
-      for (let i = 0; i < owned; i++) reload *= 0.75;
-      return {
-        name: 'HOT SWAP',
-        desc: 'reload 25% faster',
-        now: reload.toFixed(2),
-        after: `${(reload * 0.75).toFixed(2)}s`,
-      };
-    },
-  },
-  {
-    id: 'regen', cat: 'survival', max: 2, requires: null,
-    tier(owned) {
-      return {
-        name: 'SHIELD REGEN',
-        desc: 'Recover 1 shield after avoiding hits',
-        now: 'No damage for',
-        after: owned ? '8 seconds' : '12 seconds',
-      };
-    },
-  },
-  {
-    id: 'pulse', cat: 'survival', max: 3, requires: null,
-    tier(owned) {
-      return {
-        name: 'EMERGENCY PULSE',
-        desc: 'Shield loss blasts enemies',
-        now: `${owned}`,
-        after: `Rank ${owned + 1}`,
-      };
-    },
-  },
-  {
-    id: 'hp', cat: 'survival', max: 3, requires: null,
-    tier(owned) {
-      return {
-        name: 'SHIELD ARRAY',
-        desc: '+1 shield and recharge it',
-        now: `${3 + owned}`,
-        after: `${4 + owned} max hp`,
-      };
-    },
-  },
-  {
-    id: 'speed', cat: 'survival', max: 3, requires: null,
-    tier(owned) {
-      const pct = Math.round(100 * (1.12 ** owned));
-      return {
-        name: 'MOTION SERVO',
-        desc: 'move 12% faster',
-        now: `${pct}%`,
-        after: `${Math.round(pct * 1.12)}%`,
-      };
-    },
-  },
-  {
-    id: 'heal', cat: 'survival', max: 1, infinite: true, requires: 'Injured (hp < max)',
-    tier() {
-      return {
-        name: 'SHIELD RESET',
-        desc: 'restore all shield segments',
-        now: 'Injured',
-        after: 'Full shields',
-      };
-    },
-  },
-  {
-    id: 'luck', cat: 'fortune', max: 3, requires: null,
-    tier(owned) {
-      const now = (5 + owned * 3).toFixed(1);
-      return {
-        name: 'SALVAGE SCANNER',
-        desc: 'More Overcharge / Infinite Cell drops',
-        now: `${now}%`,
-        after: `${(5 + (owned + 1) * 3).toFixed(1)}% drops`,
-      };
-    },
-  },
-  {
-    id: 'magnet', cat: 'ability', max: 1, requires: null,
-    tier() {
-      return {
-        name: 'MAGNETIC GEMS',
-        desc: 'Gems surge toward you',
-        now: 'Short pull',
-        after: 'Through walls',
-      };
-    },
-  },
-];
+/** Preview-only unlock / scaling notes (not shown in-game). */
+const PREVIEW_NOTES = {
+  botGun: 'Helper Bot owned · no Bomb Launcher',
+  botBomb: 'Helper Bot owned · no Twin Guns',
+  shock: 'Trail Mines owned',
+  heal: 'Injured (hp < max)',
+  luck: 'Scales down after wave 5',
+};
 
 function expandTiers(u) {
-  const count = u.infinite ? 1 : u.max;
-  return Array.from({ length: count }, (_, owned) => {
-    const t = u.tier(owned);
-    return {
-      ...u,
-      ...t,
-      owned,
-      rankLabel: u.infinite ? 'Anytime' : `Offer ${owned + 1} / ${u.max}`,
-    };
-  });
+  const infinite = u.max === Infinity;
+  const count = infinite ? 1 : u.max;
+  return Array.from({ length: count }, (_, owned) => ({
+    u,
+    owned,
+    rankLabel: infinite ? 'Anytime' : `Offer ${owned + 1} / ${u.max}`,
+  }));
 }
 
-const ALL_CARDS = UPGRADES.flatMap(expandTiers);
-
-const FRAME =
-  '<svg class="card-frame" viewBox="0 0 320 360" preserveAspectRatio="none" aria-hidden="true">' +
-  '<path class="frame-edge" d="M16 1H304L319 16V344L304 359H16L1 344V16Z"/>' +
-  '<path class="frame-inner" d="M18 6H302L314 18V342L302 354H18L6 342V18Z"/>' +
-  '<path class="frame-rail" d="M16 1H304L313 10H150L145 14H4Z"/></svg>';
-
-function cardHtml(u, { recommended = false, key = '' } = {}) {
-  const owned = u.owned || 0;
-  const pips = u.infinite ? '' :
-    Array.from({ length: u.max }, (_, k) =>
-      `<i class="${k < owned ? 'own' : k === owned ? 'next' : ''}"></i>`
-    ).join('');
-  const top = recommended ? 'RECOMMENDED' : u.cat.toUpperCase();
-  const keyHtml = key ? `<span class="ckey">${key}</span>` : '';
-  return (
-    `<article class="card${recommended ? ' recommended' : ''}" data-id="${u.id}" data-owned="${owned}" style="--accent:${CATS[u.cat]}">` +
-    FRAME +
-    `<div class="ctop"><span>${top}</span>${keyHtml}</div>` +
-    `<canvas class="icon-stage" width="512" height="320" data-id="${u.id}" data-cat="${u.cat}" data-owned="${owned}" aria-label="${u.name} rank ${owned + 1} 3D icon"></canvas>` +
-    `<div class="cname">${u.name}</div><div class="cdesc">${u.desc}</div>` +
-    `<div class="cstat">${u.now} → <b>${u.after}</b></div>` +
-    (pips ? `<div class="clvl" aria-hidden="true">${pips}</div>` : '') +
-    `<p class="rank-tag">${u.rankLabel || ''}</p>` +
-    (u.requires ? `<p class="req">${u.requires}</p>` : '') +
-    `</article>`
-  );
+function cardHtml({ u, owned, rankLabel }, { recommended = false, slot = null } = {}) {
+  const state = previewStateFor(u, owned);
+  const note = PREVIEW_NOTES[u.id];
+  const extra =
+    (rankLabel ? `<p class="rank-tag">${rankLabel}</p>` : '') +
+    (note ? `<p class="req">${note}</p>` : '');
+  return renderUpgradeCard({
+    u,
+    state,
+    owned,
+    recommended,
+    slot: slot ?? owned + 1,
+    tag: 'article',
+    attrs: ` data-id="${u.id}" data-owned="${owned}"`,
+    extra,
+    iconLabel: true,
+  });
 }
 
 const filters = document.getElementById('filters');
@@ -557,12 +208,12 @@ let active = 'all';
 
 filters.innerHTML = [
   ['all', 'All', '#9af5ff'],
-  ...ORDER.map(c => [c, c, CATS[c]]),
+  ...ORDER.map((c) => [c, c, CATS[c]]),
 ].map(([id, label, color]) =>
   `<button type="button" data-cat="${id}" style="--cat:${color}" aria-pressed="${id === 'all'}">${label}</button>`
 ).join('');
 
-filters.addEventListener('click', e => {
+filters.addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-cat]');
   if (!btn) return;
   active = btn.dataset.cat;
@@ -574,21 +225,21 @@ filters.addEventListener('click', e => {
   }
 });
 
-catalog.innerHTML = ORDER.map(cat => {
-  const defs = UPGRADES.filter(u => u.cat === cat);
-  const blocks = defs.map(def => {
+catalog.innerHTML = ORDER.map((cat) => {
+  const defs = UPGRADES.filter((u) => u.cat === cat);
+  const blocks = defs.map((def) => {
     const tiers = expandTiers(def);
-    const cards = tiers.map(t => cardHtml(t)).join('');
-    return `<div class="upgrade-block"><h3>${tiers[0].name} · ${tiers.length} panel${tiers.length === 1 ? '' : 's'}</h3><div class="grid">${cards}</div></div>`;
+    const cards = tiers.map((t) => cardHtml(t)).join('');
+    const title = tiers[0].u.name;
+    return `<div class="upgrade-block"><h3>${title} · ${tiers.length} panel${tiers.length === 1 ? '' : 's'}</h3><div class="grid">${cards}</div></div>`;
   }).join('');
   return `<section class="section" data-cat="${cat}" style="--cat:${CATS[cat]}"><h2>${cat}</h2>${blocks}</section>`;
 }).join('');
 
-const byId = (id, owned = 0) => ALL_CARDS.find(u => u.id === id && u.owned === owned) || ALL_CARDS.find(u => u.id === id);
 document.getElementById('trio').innerHTML = [
-  cardHtml(byId('spread', 0), { recommended: true, key: '1' }),
-  cardHtml(byId('bot', 0), { key: '2' }),
-  cardHtml(byId('magnet', 0), { key: '3' }),
+  cardHtml({ u: upgradeById('spread'), owned: 0, rankLabel: '' }, { recommended: true, slot: 1 }),
+  cardHtml({ u: upgradeById('bot'), owned: 0, rankLabel: '' }, { slot: 2 }),
+  cardHtml({ u: upgradeById('magnet'), owned: 0, rankLabel: '' }, { slot: 3 }),
 ].join('');
 
 createUpgradeIconHost({ allowDrag: true }).mount(document.body);

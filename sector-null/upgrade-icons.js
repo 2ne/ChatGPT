@@ -1,13 +1,7 @@
 import * as THREE from 'three';
+import { UPGRADE_CATS } from './upgrades.js';
 
-const CAT_COLORS = {
-  engineer: '#a7a1ff',
-  firepower: '#ffad61',
-  handling: '#76bcf0',
-  survival: '#70dfb8',
-  fortune: '#bdadfa',
-  ability: '#7cff4a',
-};
+const CAT_COLORS = UPGRADE_CATS;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
 const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck']);

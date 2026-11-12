@@ -32,7 +32,6 @@ export default defineConfig({
       input: {
         main: path.resolve(projectRoot, 'index.html'),
         upgradeCards3d: path.resolve(projectRoot, 'upgrade-cards-3d.html'),
-        upgradeCards: path.resolve(projectRoot, 'upgrade-cards.html'),
       },
     },
   },
