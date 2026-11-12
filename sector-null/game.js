@@ -2148,7 +2148,6 @@ const hud = {
   toastDetail: document.getElementById('toastDetail'),
   picker: document.getElementById('picker'),
   pickerTitle: document.getElementById('pickerTitle'),
-  pickerHeal: document.getElementById('pickerHeal'),
   pickerSub: document.getElementById('pickerSub'),
   cards: document.getElementById('cards'),
   weaponIcon: document.getElementById('weaponIcon'),
@@ -3254,8 +3253,8 @@ function killPoints(type) {
   return 100;
 }
 
-/** True when a shield segment was restored this clear (callout + pip pulse). */
-let shieldRestoredForPicker = false;
+/** Last drone/boss death — wave-clear shield drops spawn near here. */
+const lastKillPos = new THREE.Vector3();
 
 function syncShieldPips() {
   if (hud.shieldPips.children.length !== state.maxHp) {
@@ -3278,21 +3277,55 @@ function pulseShieldPip() {
   pip.classList.add('refill');
 }
 
-function restoreShieldSegment({ sfx = false, forPicker = false } = {}) {
+function restoreShieldSegment({ sfx = false } = {}) {
   if (state.hp >= state.maxHp) return false;
   state.hp++;
   healGlow = 1.25;
-  if (forPicker) shieldRestoredForPicker = true;
   pulseShieldPip();
   if (sfx) audio.heal();
   return true;
 }
 
+function hasWaveClearShield() {
+  return drops.some((d) => d.userData.waveClearShield);
+}
+
+function clearWaveClearShields() {
+  for (let i = drops.length - 1; i >= 0; i--) {
+    if (!drops[i].userData.waveClearShield) continue;
+    scene.remove(drops[i]);
+    drops.splice(i, 1);
+  }
+}
+
+/** Keep the drop inside the arena and out of cover/walls. */
+function placeReachableDrop(pos) {
+  const out = { x: pos.x ?? 0, y: 0, z: pos.z ?? 0 };
+  const lim = HALF - 0.9;
+  out.x = Math.max(-lim, Math.min(lim, out.x));
+  out.z = Math.max(-lim, Math.min(lim, out.z));
+  for (let pass = 0; pass < 2; pass++) {
+    pushOutOfSolids(out, 0.4);
+    for (const w of wallBoxes) {
+      const cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
+      const dx = out.x - cx, dz = out.z - cz;
+      const hx = (w.maxX - w.minX) / 2 + 0.4, hz = (w.maxZ - w.minZ) / 2 + 0.4;
+      if (Math.abs(dx) >= hx || Math.abs(dz) >= hz) continue;
+      if (hx - Math.abs(dx) < hz - Math.abs(dz)) out.x = cx + (Math.sign(dx) || 1) * (hx + 0.01);
+      else out.z = cz + (Math.sign(dz) || 1) * (hz + 0.01);
+    }
+  }
+  out.x = Math.max(-lim, Math.min(lim, out.x));
+  out.z = Math.max(-lim, Math.min(lim, out.z));
+  return out;
+}
+
 function bankRemainingLoot() {
+  // Bank temporary boss gems / supply crates. Persistent wave-clear shields stay on the floor.
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i];
-    // Wave-end banking should still announce a restored shield on the picker.
-    collect(d.userData.type, { forPicker: true });
+    if (d.userData.waveClearShield) continue;
+    collect(d.userData.type, { silent: true });
     scene.remove(d);
     drops.splice(i, 1);
   }
@@ -3300,19 +3333,18 @@ function bankRemainingLoot() {
   clearEmeralds();
 }
 
-function finishWaveClear({ fromBoss = false } = {}) {
+function finishWaveClear() {
   clearBotsLeftToasts();
   clearEnemyBolts();
   awardWaveBonuses();
-  // Bank any leftover boss loot so a missed grab is not lost.
   bankRemainingLoot();
   clearEquipmentField();
-  // Normal waves auto-refill one shield. Boss waves use the death drop instead.
-  if (!fromBoss) restoreShieldSegment({ sfx: true, forPicker: true });
-  const healed = shieldRestoredForPicker;
-  shieldRestoredForPicker = false;
+  // No auto-refill — if injured, leave one walk-over shield on the floor (boss may already have).
+  if (state.hp < state.maxHp && !hasWaveClearShield()) {
+    spawnWaveClearShield(lastKillPos);
+  }
   audio.waveClear();
-  openPicker(healed);
+  openPicker();
 }
 
 function killDrone(z, idx, allowShieldDrop = true) {
@@ -3322,6 +3354,7 @@ function killDrone(z, idx, allowShieldDrop = true) {
     beginBossDeath(z);
     return;
   }
+  lastKillPos.set(z.position.x, 0, z.position.z);
   explodeDrone(z);
   if (z.userData.climb >= 0) endClimb(z, true);
   maybeDrop(z.position, allowShieldDrop);
@@ -3441,20 +3474,22 @@ function maybeDrop(pos, allowShieldDrop = true) {
 }
 
 function spawnDrop(type, pos, opts = {}) {
-  const bossLoot = !!opts.bossLoot;
-  const itemScale = opts.scale ?? (bossLoot ? 1.9 : 1.45);
+  const waveClearShield = !!opts.waveClearShield;
+  const bossLoot = !!opts.bossLoot && !waveClearShield;
+  const prominent = waveClearShield || bossLoot;
+  const itemScale = opts.scale ?? (prominent ? 1.9 : 1.45);
   const d = new THREE.Group();
   const item = new THREE.Mesh(type.geo, type.item);
-  item.position.y = bossLoot ? 0.82 : 0.68;
+  item.position.y = prominent ? 0.82 : 0.68;
   item.scale.setScalar(itemScale);
   item.castShadow = true;
   const ring = new THREE.Mesh(dropRing, type.ring);
   const glow = new THREE.Sprite(type.glow);
-  glow.position.y = bossLoot ? 0.7 : 0.56;
-  glow.scale.setScalar(bossLoot ? 5.1 : 3.3);
+  glow.position.y = prominent ? 0.7 : 0.56;
+  glow.scale.setScalar(prominent ? 5.1 : 3.3);
   const label = new THREE.Sprite(type.label);
-  label.position.y = bossLoot ? 1.85 : 1.52;
-  label.scale.set(bossLoot ? 3.7 : 3.2, bossLoot ? 0.74 : 0.64, 1);
+  label.position.y = prominent ? 1.85 : 1.52;
+  label.scale.set(prominent ? 3.7 : 3.2, prominent ? 0.74 : 0.64, 1);
   label.renderOrder = 1;
   d.add(ring, glow, item, label);
   d.position.set(pos.x, 0.035, pos.z);
@@ -3463,35 +3498,40 @@ function spawnDrop(type, pos, opts = {}) {
     life: opts.life ?? DROP_LIFE,
     t: Math.random() * 6,
     bossLoot,
-    pulse: bossLoot || !!opts.pulse,
+    waveClearShield,
+    pulse: prominent || !!opts.pulse,
     itemScale,
-    glowScale: bossLoot ? 5.1 : 3.3,
+    glowScale: prominent ? 5.1 : 3.3,
     fade: 1,
   };
   scene.add(d);
   drops.push(d);
 }
 
-function spawnBossShieldDrop(pos) {
-  state.shieldDropsThisWave++;
-  spawnDrop(DROP_TYPES.find(t => t.id === 'med'), pos, {
-    bossLoot: true,
-    life: BOSS_LOOT_LINGER + 1,
+/** One persistent walk-over +1 SHIELD after a clear / boss kill. Survives the picker. */
+function spawnWaveClearShield(pos) {
+  clearWaveClearShields();
+  const at = placeReachableDrop(pos);
+  spawnDrop(DROP_TYPES.find(t => t.id === 'med'), at, {
+    waveClearShield: true,
+    life: Infinity,
     pulse: true,
   });
 }
 
 function collect(type, opts = {}) {
-  audio.pickup(type.id);
-  toastQueue.push({ text: type.name, color: type.tint, pickup: type });
-  if (!seenDrops.has(type.id) && !activePickupHint) {
-    // Let a routine notice yield promptly, but never cut another lesson short.
-    toastTime = Math.min(toastTime, 0.15);
+  const silent = !!opts.silent;
+  if (!silent) {
+    audio.pickup(type.id);
+    toastQueue.push({ text: type.name, color: type.tint, pickup: type });
+    if (!seenDrops.has(type.id) && !activePickupHint) {
+      // Let a routine notice yield promptly, but never cut another lesson short.
+      toastTime = Math.min(toastTime, 0.15);
+    }
   }
   if (type.id === 'med') {
-    // Picker callout for boss-loot grabs or explicit wave-end banking.
-    const forPicker = !!opts.forPicker || (bossDeath.active && bossDeath.phase === 'loot');
-    restoreShieldSegment({ forPicker });
+    // Toast / pip / heal only when the player actually picks it up (not silent banking).
+    restoreShieldSegment({ sfx: !silent });
   }
   else if (type.id === 'dmg') state.pDamage += 10;
   else if (type.id === 'ammo') { audio.cancelReload(); state.pAmmo += 8; state.reloading = false; state.mag = state.magSize; }
@@ -3499,37 +3539,43 @@ function collect(type, opts = {}) {
 
 function updateDrops(dt) {
   const lim = HALF - 0.9;
+  const canCollect = !state.choosing;
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i], ud = d.userData;
-    ud.life -= dt; ud.t += dt;
-    if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); continue; }
+    ud.t += dt;
+    if (!ud.waveClearShield) {
+      ud.life -= dt;
+      if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); continue; }
+    }
     const p = d.position;
     const dx = player.position.x - p.x, dz = player.position.z - p.z;
     const dist = Math.hypot(dx, dz);
-    if (dist < (ud.bossLoot ? 1.15 : 0.9)) {
+    const pickR = ud.waveClearShield || ud.bossLoot ? 1.15 : 0.9;
+    if (canCollect && dist < pickR) {
       collect(ud.type); scene.remove(d); drops.splice(i, 1); continue;
     }
-    if (dist < 2.5) {
+    if (canCollect && dist < 2.5) {
       // magnet: close drops fly to the player
       p.x += (dx / dist) * 10 * dt; p.z += (dz / dist) * 10 * dt;
-    } else {
+    } else if (!ud.waveClearShield) {
       // the player can't leave the deck, so drops that land outside slide in
       const cx = Math.max(-lim, Math.min(lim, p.x)), cz = Math.max(-lim, Math.min(lim, p.z));
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
       if (od > 0.01) { const st = Math.min(od, 6 * dt); p.x += (ox / od) * st; p.z += (oz / od) * st; }
     }
-    const bob = ud.bossLoot ? 0.22 : 0.15;
-    ud.item.position.y = (ud.bossLoot ? 0.82 : 0.68) + Math.sin(ud.t * 3) * bob;
-    ud.item.rotation.y += dt * (ud.bossLoot ? 2.6 : 2);
+    const prominent = ud.waveClearShield || ud.bossLoot;
+    const bob = prominent ? 0.22 : 0.15;
+    ud.item.position.y = (prominent ? 0.82 : 0.68) + Math.sin(ud.t * 3) * bob;
+    ud.item.rotation.y += dt * (prominent ? 2.6 : 2);
     if (ud.pulse) {
-      const pulse = 1 + Math.sin(ud.t * 5.2) * (ud.bossLoot ? 0.12 : 0.06);
+      const pulse = 1 + Math.sin(ud.t * 5.2) * (prominent ? 0.12 : 0.06);
       ud.item.scale.setScalar(ud.itemScale * pulse);
       ud.glow.scale.setScalar(ud.glowScale * (1 + Math.sin(ud.t * 4.1) * 0.14));
       ud.ring.scale.setScalar(1 + Math.sin(ud.t * 3.4) * 0.08);
     }
-    const fade = ud.fade ?? 1;
+    const fade = ud.waveClearShield ? 1 : (ud.fade ?? 1);
     d.scale.setScalar(Math.max(0.05, fade));
-    const warning = !ud.bossLoot && ud.life <= DROP_WARNING;
+    const warning = !ud.waveClearShield && !ud.bossLoot && ud.life <= DROP_WARNING;
     // Two blinks per second, synchronised to expiry rather than random bobbing phase.
     d.visible = fade > 0.04 && (!warning || reducedMotion.matches || Math.floor((DROP_WARNING - ud.life) * 4) % 2 === 0);
     // A shrinking ground ring also communicates expiry without flashing in reduced motion.
@@ -3594,6 +3640,12 @@ function refreshBossLootTimers() {
 function fadeBossLoot(fade) {
   const f = Math.max(0, Math.min(1, fade));
   for (const d of drops) {
+    // Persistent wave-clear shields never fade with temporary boss loot.
+    if (d.userData.waveClearShield) {
+      d.userData.fade = 1;
+      d.scale.setScalar(1);
+      continue;
+    }
     d.userData.fade = f;
     d.scale.setScalar(Math.max(0.05, f));
   }
@@ -4029,7 +4081,7 @@ function getUpgradeIconHost() {
   return upgradeIconHost;
 }
 
-function openPicker(healed) {
+function openPicker() {
   offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
   state.choosing = true;
@@ -4039,7 +4091,6 @@ function openPicker(healed) {
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
   hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
-  hud.pickerHeal.classList.toggle('hidden', !healed);
   hud.pickerSub.textContent = 'CHOOSE YOUR NEXT UPGRADE';
   hud.cards.innerHTML = offered.map((u, i) => {
     if (!u) return '<div aria-hidden="true"></div>';
@@ -4280,11 +4331,12 @@ function finalizeBossDeath(z) {
   flashT = reducedMotion.matches ? 0.18 : 0.38;
   bumpShake(0.85);
 
+  lastKillPos.set(z.position.x, 0, z.position.z);
   if (state.running) {
     const count = 8 + ((Math.random() * 5) | 0);
     spawnEmeralds(origin, count, { life: BOSS_LOOT_LINGER + 0.5, bossLoot: true });
-    // Injured: guaranteed walk-over shield. Full shields: modest bonus gem burst instead.
-    if (state.hp < state.maxHp) spawnBossShieldDrop(z.position);
+    // Injured: persistent walk-over shield. Full shields: modest bonus gem burst instead.
+    if (state.hp < state.maxHp) spawnWaveClearShield(z.position);
     else spawnEmeralds(origin, BOSS_FULL_SHIELD_GEMS, { life: BOSS_LOOT_LINGER + 0.5, bossLoot: true });
   }
   // Other supplies may still drop, but never a second random shield on the boss kill.
@@ -4338,7 +4390,7 @@ function updateBossDeath(dt) {
     clearBossDeath();
     if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
       if (state.bossPending) spawnWaveBoss();
-      else finishWaveClear({ fromBoss: true });
+      else finishWaveClear();
     }
   }
 }
@@ -4420,8 +4472,6 @@ function clearRun() {
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   shockwaves.length = 0;
   clearBossDeath();
-  shieldRestoredForPicker = false;
-  if (hud.pickerHeal) hud.pickerHeal.classList.add('hidden');
   toastQueue.length = 0;
   toastTime = 0;
   activePickupHint = null;
@@ -5612,8 +5662,9 @@ function update(dt, lightFrame = false) {
     }
     state.pDamage = Math.max(0, state.pDamage - dt);
     state.pAmmo = Math.max(0, state.pAmmo - dt);
+    // Drops keep bobbing under the picker (wave-clear shields persist); collection waits for play.
+    updateDrops(dt);
     if (!state.choosing) {
-      updateDrops(dt);
       updateEmeralds(dt);
       if (state.intermission <= 0) state.waveTime += dt;
     }
