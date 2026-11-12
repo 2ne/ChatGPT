@@ -2,11 +2,14 @@
 
 export const DROP_CHANCE = 0.05; // per kill, before SALVAGE SCANNER
 
+/** Shots/sec at Rapid Cycler ranks 0–4 (fireRate = 1 / value). */
+export const FIRE_RATE_SPS = [8, 10, 12, 15, 20];
+
 export const BASE_STATS = {
   maxHp: 3,
   magSize: 8,
   reloadTime: 1.2,
-  fireRate: 0.13,
+  fireRate: 1 / FIRE_RATE_SPS[0],
   damage: 1,
   pierce: 0,
   spread: 0,
@@ -25,12 +28,22 @@ export const UPGRADE_CATS = {
 
 export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'ability'];
 
-export const helperDamage = (rank) => 0.8 + rank * 0.7;
+/** Per-rank helper shot damage (index = owned bot rank). */
+export const HELPER_DAMAGE = [0, 1.5, 2.5, 3];
+export const helperDamage = (rank) => HELPER_DAMAGE[rank] ?? 0;
 
 /** Absolute damage for the stat pill: trim trailing .0, keep one decimal otherwise. */
 export function dmgLabel(n) {
   const t = Math.round(n * 10) / 10;
   return Number.isInteger(t) ? String(t) : t.toFixed(1);
+}
+
+function reloadPct(time) {
+  return Math.round((time / BASE_STATS.reloadTime) * 100);
+}
+
+export function fireRateForRank(rank) {
+  return 1 / (FIRE_RATE_SPS[rank] ?? FIRE_RATE_SPS[0]);
 }
 
 /** Keep roughly wave 5's supply budget as the regular drone count grows. */
@@ -64,13 +77,20 @@ export const UPGRADES = [
     return [owned ? dmgLabel(2 + owned * 2) : 'Off', `${dmgLabel(nextDmg)} dmg`];
   }, apply: () => {} },
   { id: 'mag', cat: 'handling', name: 'CELL CAPACITY', desc: '+4 pulses per cell', max: 5, stat: (s) => [s.magSize, `${s.magSize + 4} pulses`], apply: (s) => { s.magSize += 4; s.mag = s.magSize; } },
-  { id: 'reload', cat: 'handling', name: 'HOT SWAP', desc: 'reload 25% faster', max: 4, stat: (s) => [s.reloadTime.toFixed(2), `${(s.reloadTime * 0.75).toFixed(2)}s`], apply: (s) => { s.reloadTime *= 0.75; } },
+  { id: 'reload', cat: 'handling', name: 'HOT SWAP', desc: 'Reload 25% faster', max: 4, stat: (s) => {
+    const now = reloadPct(s.reloadTime);
+    const after = reloadPct(s.reloadTime * 0.75);
+    return [`${now}%`, `${after}% reload`];
+  }, apply: (s) => { s.reloadTime *= 0.75; } },
   { id: 'damage', cat: 'firepower', name: 'PULSE AMPLIFIER', desc: '+0.5 pulse damage', max: 6, stat: (s) => [dmgLabel(s.damage), `${dmgLabel(s.damage + 0.5)} dmg`], apply: (s) => { s.damage += 0.5; } },
-  { id: 'rate', cat: 'firepower', name: 'RAPID CYCLER', desc: 'fire 20% faster', max: 4, stat: (s) => [(1 / s.fireRate).toFixed(1), `${(1 / (s.fireRate * 0.8)).toFixed(1)}/s`], apply: (s) => { s.fireRate *= 0.8; } },
-  { id: 'pierce', cat: 'firepower', name: 'PIERCING', desc: 'shots pierce +1 drone', max: 3, stat: (s) => [s.pierce, `${s.pierce + 1} thru`], apply: (s) => { s.pierce++; } },
+  { id: 'rate', cat: 'firepower', name: 'RAPID CYCLER', desc: 'Fire faster', max: 4, stat: (s) => {
+    const owned = s.upgrades.rate || 0;
+    return [String(FIRE_RATE_SPS[owned]), `${FIRE_RATE_SPS[owned + 1]}/s`];
+  }, apply: (s) => { s.fireRate = fireRateForRank(s.upgrades.rate || 0); } },
+  { id: 'pierce', cat: 'firepower', name: 'PIERCING', desc: 'Shots pierce +1 drone', max: 3, stat: (s) => [s.pierce, `${s.pierce + 1} thru`], apply: (s) => { s.pierce++; } },
   { id: 'spread', cat: 'firepower', name: 'SPLIT BEAM', desc: '+1 pulse per shot', max: 3, stat: (s) => [1 + s.spread, `${2 + s.spread} per shot`], apply: (s) => { s.spread++; } },
   { id: 'hp', cat: 'survival', name: 'SHIELD ARRAY', desc: '+1 shield and recharge it', max: 3, stat: (s) => [s.maxHp, `${s.maxHp + 1} max hp`], apply: (s) => { s.maxHp++; s.hp++; } },
-  { id: 'speed', cat: 'survival', name: 'MOTION SERVO', desc: 'move 12% faster', max: 3, stat: (s) => [`${Math.round(s.speed / 6.2 * 100)}%`, `${Math.round(s.speed * 1.12 / 6.2 * 100)}%`], apply: (s) => { s.speed *= 1.12; } },
+  { id: 'speed', cat: 'survival', name: 'MOTION SERVO', desc: 'Move 12% faster', max: 3, stat: (s) => [`${Math.round(s.speed / 6.2 * 100)}%`, `${Math.round(s.speed * 1.12 / 6.2 * 100)}%`], apply: (s) => { s.speed *= 1.12; } },
   { id: 'luck', cat: 'fortune', name: 'SALVAGE SCANNER', desc: 'More Overcharge / Infinite Cell drops', max: 3, stat: (s) => {
     const scale = supplyDropScale(s.wave);
     return [
@@ -78,7 +98,7 @@ export const UPGRADES = [
       `${((DROP_CHANCE + s.dropBonus + 0.03) * scale * 100).toFixed(1)}% drops`,
     ];
   }, apply: (s) => { s.dropBonus += 0.03; } },
-  { id: 'heal', cat: 'survival', name: 'SHIELD RESET', desc: 'restore all shield segments', max: Infinity, ok: (s) => s.hp < s.maxHp, stat: (s) => [s.hp, `${s.maxHp} hp`], apply: (s) => { s.hp = s.maxHp; } },
+  { id: 'heal', cat: 'survival', name: 'SHIELD RESET', desc: 'Restore all shield segments', max: Infinity, ok: (s) => s.hp < s.maxHp, stat: (s) => [s.hp, `${s.maxHp} hp`], apply: (s) => { s.hp = s.maxHp; } },
   // Score path: pick this instead of another gun / gear upgrade and vacuum every emerald.
   { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
 ];

@@ -1264,7 +1264,7 @@ const state = {
   reloadT: 0,
   reloadTime: 1.2,
   fireCd: 0,
-  fireRate: 0.13,
+  fireRate: BASE_STATS.fireRate,
   dmgCd: 0,
   // upgradeable stats (see UPGRADES)
   damage: 1,
