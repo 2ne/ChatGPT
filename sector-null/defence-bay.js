@@ -32,6 +32,11 @@ const DECK_TILE = 1.565;
 const DOOR_GAP = Math.abs(ROOM1_NORTH_DOOR.u1 - ROOM1_NORTH_DOOR.u0);
 const CHANNEL_HALF = 0.72;
 const OCT_R = 4.35;
+/**
+ * Bay layout centre X — same as N/S door X (walk line from room 1).
+ * Channels, dais, coil and pillars are symmetric about this, not world x=0.
+ */
+const BAY_CX = BAY_DOOR_X;
 
 /**
  * @param {THREE.Object3D} parent
@@ -72,9 +77,9 @@ export function buildDefenceBay(parent, helpers) {
       const x = ix * DECK_STEP;
       const z = iz * DECK_STEP;
       // Leave trenches + dais footprint clear for recessed channels / platform.
-      if (Math.abs(x) < CHANNEL_HALF + 0.35) continue;
+      if (Math.abs(x - BAY_CX) < CHANNEL_HALF + 0.35) continue;
       if (Math.abs(z - ROOM2_CZ) < CHANNEL_HALF + 0.35) continue;
-      if (Math.hypot(x, z - ROOM2_CZ) < OCT_R + 0.35) continue;
+      if (Math.hypot(x - BAY_CX, z - ROOM2_CZ) < OCT_R + 0.35) continue;
       floorB.add([[
         DECK_TILE, 0.11, DECK_TILE, x, -0.06, z,
         DECK_PANELS[Math.floor(floorRng() * DECK_PANELS.length)],
@@ -86,12 +91,12 @@ export function buildDefenceBay(parent, helpers) {
   for (let z = ROOM2_NORTH + 2; z < ROOM2_SOUTH - 2; z += 0.55) {
     if (Math.abs(z - ROOM2_CZ) < OCT_R) continue;
     floorB.add([
-      [0.11, 0.013, 0.28, CHANNEL_HALF + 0.2, 0.006, z, 0x6f8a9e, 0, 0, 0, 0],
-      [0.11, 0.013, 0.28, -(CHANNEL_HALF + 0.2), 0.006, z, 0x6f8a9e, 0, 0, 0, 0],
+      [0.11, 0.013, 0.28, BAY_CX + CHANNEL_HALF + 0.2, 0.006, z, 0x6f8a9e, 0, 0, 0, 0],
+      [0.11, 0.013, 0.28, BAY_CX - (CHANNEL_HALF + 0.2), 0.006, z, 0x6f8a9e, 0, 0, 0, 0],
     ], floorRng);
   }
   for (let x = -ROOM2_HX + 2; x < ROOM2_HX - 2; x += 0.55) {
-    if (Math.abs(x) < OCT_R) continue;
+    if (Math.abs(x - BAY_CX) < OCT_R) continue;
     floorB.add([
       [0.28, 0.013, 0.11, x, 0.006, ROOM2_CZ + CHANNEL_HALF + 0.2, 0x6f8a9e, 0, 0, 0, 0],
       [0.28, 0.013, 0.11, x, 0.006, ROOM2_CZ - CHANNEL_HALF - 0.2, 0x6f8a9e, 0, 0, 0, 0],
@@ -371,10 +376,9 @@ export function buildDefenceBay(parent, helpers) {
   const chB = new BlockBatch();
   const chRng = seeded(55);
   const trenchY = -0.08;
-  // Trench beds — N–S continuous; E–W split around the cross so the two beds
-  // never share a coplanar face (same y would z-fight at the junction).
+  // Trench beds — N–S on BAY_CX (door/coil line); E–W split around the cross.
   chB.add([
-    [CHANNEL_HALF * 2, 0.06, ROOM2_HZ * 1.85, 0, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+    [CHANNEL_HALF * 2, 0.06, ROOM2_HZ * 1.85, BAY_CX, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
   ], chRng);
   {
     const span = ROOM2_HX * 1.85;
@@ -382,19 +386,19 @@ export function buildDefenceBay(parent, helpers) {
     const arm = (span - gap) / 2;
     if (arm > 0.2) {
       chB.add([
-        [arm, 0.06, CHANNEL_HALF * 2, -(gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
-        [arm, 0.06, CHANNEL_HALF * 2, (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+        [arm, 0.06, CHANNEL_HALF * 2, BAY_CX - (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+        [arm, 0.06, CHANNEL_HALF * 2, BAY_CX + (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
       ], chRng);
     }
   }
   // Grate bars N-S
   for (let z = ROOM2_NORTH + 1.2; z < ROOM2_SOUTH - 1.2; z += 0.38) {
     if (Math.hypot(0, z - ROOM2_CZ) < OCT_R - 0.2) continue;
-    chB.add([[CHANNEL_HALF * 1.85, 0.04, 0.07, 0, trenchY + 0.04, z, 0x3a5060, 0, 0, 0, 0.01]], chRng);
+    chB.add([[CHANNEL_HALF * 1.85, 0.04, 0.07, BAY_CX, trenchY + 0.04, z, 0x3a5060, 0, 0, 0, 0.01]], chRng);
   }
   // Grate bars E-W
   for (let x = -ROOM2_HX + 1.2; x < ROOM2_HX - 1.2; x += 0.38) {
-    if (Math.hypot(x, 0) < OCT_R - 0.2) continue;
+    if (Math.hypot(x - BAY_CX, 0) < OCT_R - 0.2) continue;
     chB.add([[0.07, 0.04, CHANNEL_HALF * 1.85, x, trenchY + 0.04, ROOM2_CZ, 0x3a5060, 0, 0, 0, 0.01]], chRng);
   }
   bake(chB, false);
@@ -402,23 +406,24 @@ export function buildDefenceBay(parent, helpers) {
   const channelTicks = [];
   for (let z = ROOM2_NORTH + 2.2; z < ROOM2_SOUTH - 2.2; z += 0.95) {
     if (Math.abs(z - ROOM2_CZ) < OCT_R) continue;
-    channelTicks.push(box(group, cyanLight, 0.42, 0.012, z, 0.1, 0.028, 0.22));
-    channelTicks.push(box(group, cyanLight, -0.42, 0.012, z, 0.1, 0.028, 0.22));
+    channelTicks.push(box(group, cyanLight, BAY_CX + 0.42, 0.012, z, 0.1, 0.028, 0.22));
+    channelTicks.push(box(group, cyanLight, BAY_CX - 0.42, 0.012, z, 0.1, 0.028, 0.22));
   }
   for (let x = -ROOM2_HX + 2.2; x < ROOM2_HX - 2.2; x += 0.95) {
-    if (Math.abs(x) < OCT_R) continue;
+    if (Math.abs(x - BAY_CX) < OCT_R) continue;
     channelTicks.push(box(group, cyanLight, x, 0.012, ROOM2_CZ + 0.42, 0.22, 0.028, 0.1));
     channelTicks.push(box(group, cyanLight, x, 0.012, ROOM2_CZ - 0.42, 0.22, 0.028, 0.1));
   }
   pulseStrips.push(...channelTicks);
 
   // ── Four pillars (chamfered, cyan base/top bands) ──
+  // Pillars symmetric about BAY_CX (not world 0) so the cross stays centred on the doors.
   const pillarRx = ROOM2_HX * 0.52;
   const pillarRz = ROOM2_HZ * 0.52;
   const pillB = new BlockBatch();
   const pillRng = seeded(91);
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const x = sx * pillarRx;
+    const x = BAY_CX + sx * pillarRx;
     const z = ROOM2_CZ + sz * pillarRz;
     pillB.add([
       [1.9, 2.85, 1.9, x, 1.42, z, 0x1a2a36, 0, 0, 0, 0.06],
@@ -430,7 +435,7 @@ export function buildDefenceBay(parent, helpers) {
   }
   bake(pillB, true);
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const x = sx * pillarRx;
+    const x = BAY_CX + sx * pillarRx;
     const z = ROOM2_CZ + sz * pillarRz;
     const baseBand = box(group, cyanLight, x, 0.38, z, 1.55, 0.09, 1.55);
     const topBand = box(group, cyanLight, x, 3.18, z, 1.35, 0.08, 1.35);
@@ -445,7 +450,7 @@ export function buildDefenceBay(parent, helpers) {
 
   // ── Raised octagon dais (multi-tier, hazard edge, vent grates) ──
   const platform = new THREE.Group();
-  platform.position.set(0, 0, ROOM2_CZ);
+  platform.position.set(BAY_CX, 0, ROOM2_CZ);
   group.add(platform);
 
   const metalA = new THREE.MeshStandardMaterial({ color: 0x31485c, metalness: 0.62, roughness: 0.34 });
@@ -512,11 +517,11 @@ export function buildDefenceBay(parent, helpers) {
     }
   }
   pulseHalos.push(halo(platform, CYAN, 0, 0.85, 0, 6.5, 0.14));
-  addSolid(0, ROOM2_CZ, 4.15, 4.15);
+  addSolid(BAY_CX, ROOM2_CZ, 4.15, 4.15);
 
   // ── Tesla coil (stacked rings, column, polished sphere) ──
   const coil = new THREE.Group();
-  coil.position.set(0, 0.78, ROOM2_CZ);
+  coil.position.set(BAY_CX, 0.78, ROOM2_CZ);
   group.add(coil);
 
   // Base housing
@@ -589,12 +594,12 @@ export function buildDefenceBay(parent, helpers) {
     poolLights.push({ light: pl, base: intensity });
     return pl;
   }
-  poolLight(CYAN, 0, 3.8, ROOM2_CZ, 38, 18);
-  poolLight(0xffa648, 0, 1.4, ROOM2_CZ, 16, 11);
+  poolLight(CYAN, BAY_CX, 3.8, ROOM2_CZ, 38, 18);
+  poolLight(0xffa648, BAY_CX, 1.4, ROOM2_CZ, 16, 11);
   poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_SOUTH - 3.5, 28, 14);
   poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_NORTH + 3.5, 24, 14);
-  poolLight(CYAN, pillarRx * 0.7, 2.0, ROOM2_CZ - pillarRz * 0.7, 18, 11);
-  poolLight(CYAN, -pillarRx * 0.7, 2.0, ROOM2_CZ + pillarRz * 0.7, 18, 11);
+  poolLight(CYAN, BAY_CX + pillarRx * 0.7, 2.0, ROOM2_CZ - pillarRz * 0.7, 18, 11);
+  poolLight(CYAN, BAY_CX - pillarRx * 0.7, 2.0, ROOM2_CZ + pillarRz * 0.7, 18, 11);
 
   // Soft additive floor glow discs under coil + doors
   const floorGlow = (x, z, size, opacity, color = CYAN) => {
@@ -602,7 +607,7 @@ export function buildDefenceBay(parent, helpers) {
     s.material.rotation = 0;
     pulseHalos.push(s);
   };
-  floorGlow(0, ROOM2_CZ, 7.5, 0.14);
+  floorGlow(BAY_CX, ROOM2_CZ, 7.5, 0.14);
   floorGlow(BAY_DOOR_X, ROOM2_SOUTH - 1.5, 4.5, 0.18);
   floorGlow(BAY_DOOR_X, ROOM2_NORTH + 1.5, 4.5, 0.16);
 
