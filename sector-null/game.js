@@ -3330,7 +3330,14 @@ function navClear(ax, az, bx, bz, radius, entrances = false) {
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
   }
   if (entrances) for (const o of openings) {
-    if (o.kind === 'door' && o.hp <= 0) continue;
+    // Open gaps are walkable. Intact doors/windows only block paths that CROSS the wall
+    // plane — same-side moves (hunting along the inside face of a door/window) must not
+    // freeze against the opening box, or drones lock up just outside melee reach.
+    if (o.hp <= 0) continue;
+    const plane = o.axis === 'x' ? o.z : o.x;
+    const aCoord = o.axis === 'x' ? az : ax;
+    const bCoord = o.axis === 'x' ? bz : bx;
+    if ((aCoord - plane) * (bCoord - plane) > 0) continue;
     const w = o.box, cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
     if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
@@ -5627,7 +5634,14 @@ function wallBetween(a, b) {
   for (let i = 1; i < 4; i++) {
     const x = a.x + (b.x - a.x) * i / 4, z = a.z + (b.z - a.z) * i / 4;
     for (const w of wallBoxes) if (x >= w.minX && x <= w.maxX && z >= w.minZ && z <= w.maxZ) return true;
-    if (shutAt(x, z)) return true;
+    const shut = shutAt(x, z);
+    if (!shut) continue;
+    // Intact openings only count when the segment actually crosses that wall plane;
+    // same-side samples that skim an opening box must not block melee along the wall.
+    const plane = shut.axis === 'x' ? shut.z : shut.x;
+    const aCoord = shut.axis === 'x' ? a.z : a.x;
+    const bCoord = shut.axis === 'x' ? b.z : b.x;
+    if ((aCoord - plane) * (bCoord - plane) <= 0) return true;
   }
   return false;
 }
@@ -5976,8 +5990,9 @@ function update(dt, lightFrame = false) {
       player.position.x += (mx / l) * state.speed * stepDt;
       player.position.z += (mz / l) * state.speed * stepDt;
     }
-    // clamp inside deck
-    const lim = HALF - 0.7;
+    // Clamp inside the deck, clear of wall/opening collision slabs so the operator
+    // can't nestle into a door/window gap where drone nav used to freeze.
+    const lim = HALF - 1.05;
     player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
     player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
     // --- aim ---
