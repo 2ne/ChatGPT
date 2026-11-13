@@ -686,9 +686,10 @@ for (const x of [-14.5, 14.5]) {
 // horizontal bars across the bay walk and covered the player.
 bakedMesh(perimeter, false);
 
-// Stage 4 Defence Bay interior (concept): pillars, channels, pads, octagon, coil.
+// Stage 4 Defence Bay interior (concept, room-1 material quality).
 const defenceBay = buildDefenceBay(world, {
   box, model, halo, alloy, carbon, cyanLight, amberLight,
+  BlockBatch, seeded, worldMat,
 });
 const room2SouthDoor = defenceBay.southDoor;
 for (const s of defenceBay.solids) SOLIDS.push(s);
@@ -752,6 +753,7 @@ function updateWorld(dt) {
     glow.scale.setScalar(4.4 * (0.9 + 0.1 * intensity));
     o.indicator.color.setHex(colour);
   }
+  defenceBay.update?.(dt);
 }
 
 // ===================================================================
