@@ -306,13 +306,15 @@ for (let z = -19; z <= 19; z++) {
       insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
   }
 }
+const room1FloorDecor = [];
+const yardExtras = [];
 for (const side of [-1, 1]) {
   for (let n = -8; n <= 8; n += 0.45) {
     deck.add([[0.11, 0.013, 0.34, side * 8.8, 0.006, n, 0x6f8a9e, 0, 0, 0, 0]], deckRandom);
   }
   for (const x of [-6.4, 6.4]) {
-    box(world, cyanLight, x, 0.007, side * 8.3, 2.8, 0.014, 0.035);
-    box(world, cyanLight, x, 0.007, side * 7.9, 0.035, 0.014, 0.8);
+    room1FloorDecor.push(box(world, cyanLight, x, 0.007, side * 8.3, 2.8, 0.014, 0.035));
+    room1FloorDecor.push(box(world, cyanLight, x, 0.007, side * 7.9, 0.035, 0.014, 0.8));
   }
 }
 const room1DeckMesh = bakedMesh(deck, false);
@@ -320,13 +322,16 @@ const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
 for (const radius of [2.85, 3.02, 5.8]) {
-  model(world, new THREE.RingGeometry(radius, radius + 0.027, 96), alloy, 0, 0.009, 0).rotation.x = -Math.PI / 2;
+  const ring = model(world, new THREE.RingGeometry(radius, radius + 0.027, 96), alloy, 0, 0.009, 0);
+  ring.rotation.x = -Math.PI / 2;
+  room1FloorDecor.push(ring);
 }
 for (let i = 0; i < 24; i++) {
   const a = i * Math.PI / 12;
   const marker = box(world, i % 6 === 0 ? cyanLight : alloy, Math.sin(a) * 3.16, 0.012, Math.cos(a) * 3.16,
     0.035, 0.015, i % 6 === 0 ? 0.38 : 0.16);
   marker.rotation.y = a;
+  room1FloorDecor.push(marker);
 }
 const stencil = document.createElement('canvas');
 stencil.width = 256;
@@ -600,26 +605,27 @@ for (const [x, z, rotation] of [[-6.5, 14, 0.26], [12.8, -6.5, -0.18]]) {
   addSolid(x, z, 0.95, 0.57, rotation);
 }
 for (const x of [-24, -16, -12.6, 12.6, 16, 24]) {
-  for (const z of [-21, -13, 9, 18]) {
+  for (const z of [-13, 9, 18, 24]) {  // was -21: that cell sits inside the Defence Bay
     const h = 4.3 + perimeterRandom() * 3;
     perimeter.add([
       [1.7, 0.3, 1.45, x, 0.13, z, 0x304453],
       [0.85, h, 0.9, x, h / 2, z, 0x233542],
       [1.1, 0.35, 1.15, x, h + 0.05, z, 0x4b6174],
     ], perimeterRandom);
-    box(world, x < 0 ? amberLight : cyanLight, x, h - 0.46, z + 0.46, 0.42, 0.09, 0.04);
-    if (z !== 9 && z !== 18) box(world, alloy, x, h + 0.23, z, 0.7, 0.12, 6.5);
+    yardExtras.push(box(world, x < 0 ? amberLight : cyanLight, x, h - 0.46, z + 0.46, 0.42, 0.09, 0.04));
+    if (z !== 9 && z !== 18) yardExtras.push(box(world, alloy, x, h + 0.23, z, 0.7, 0.12, 6.5));
   }
 }
 for (const x of [-14.5, 14.5]) {
   for (let z = -17; z <= 20; z += 2.3) {
-    box(world, amberLight, x, 0.01, z, 0.095, 0.022, 0.54);
+    yardExtras.push(box(world, amberLight, x, 0.01, z, 0.095, 0.022, 0.54));
   }
 }
-for (const z of [-25, -31]) {
+// Keep yard beams clear of the Defence Bay AABB (z ≈ -43.5…-15.5).
+for (const z of [-48, -54]) {
   perimeter.add([[68, 0.36, 1.2, 0, 7.6, z, 0x263947], [68, 0.21, 0.42, 0, 6.9, z, 0x3e5467]], perimeterRandom);
 }
-bakedMesh(perimeter, false);
+const perimeterMesh = bakedMesh(perimeter, false);
 
 // --- Defence Bay (hidden until wave-10 transition) ---
 const BAY_PANELS = [0x3a5568, 0x334d5e, 0x405f74, 0x2e4758];
@@ -633,10 +639,11 @@ const bayWallOpts = {
   half: BAY_HALF, cx: 0, cz: BAY_CZ, batch: bayWallB, boxes: bayWallBoxes,
   openings: bayOpenings, parent: bayGroup, panels: BAY_PANELS,
 };
-buildWall('x', BAY_CZ + BAY_HALF, [[-1.0, 1.0, 'door']], { ...bayWallOpts, spanMid: 0 });
-buildWall('x', BAY_CZ - BAY_HALF, [[-1.0, 1.0, 'door']], { ...bayWallOpts, spanMid: 0 });
-buildWall('z', -BAY_HALF, [[BAY_CZ - 1.0, BAY_CZ + 1.0, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
-buildWall('z',  BAY_HALF, [[BAY_CZ - 1.0, BAY_CZ + 1.0, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
+// Wider centred blast doors (~2.8u) to match the concept art.
+buildWall('x', BAY_CZ + BAY_HALF, [[-1.4, 1.4, 'door']], { ...bayWallOpts, spanMid: 0 });
+buildWall('x', BAY_CZ - BAY_HALF, [[-1.4, 1.4, 'door']], { ...bayWallOpts, spanMid: 0 });
+buildWall('z', -BAY_HALF, [[BAY_CZ - 1.4, BAY_CZ + 1.4, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
+buildWall('z',  BAY_HALF, [[BAY_CZ - 1.4, BAY_CZ + 1.4, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
 const bayWallMesh = new THREE.Mesh(bayWallB.build(), worldMat);
 bayWallMesh.castShadow = true;
 bayWallMesh.receiveShadow = true;
@@ -647,6 +654,27 @@ for (const o of bayOpenings) {
   o.climber = null;
   o.jolt = 0;
   o.fallT = -1;
+  // Concept: X-brace + hazard lip on bay blast doors
+  if (o.kind === 'door' && o.leaf) {
+    const lw = o.w - 2 * JAMB - 0.02;
+    const braceMat = new THREE.MeshStandardMaterial({ color: 0x3a5060, metalness: 0.55, roughness: 0.35 });
+    for (const dir of [-1, 1]) {
+      const brace = new THREE.Mesh(new THREE.BoxGeometry(lw * 0.92, 0.1, 0.06), braceMat);
+      brace.position.set(lw / 2, 1.0, 0.14);
+      brace.rotation.z = dir * 0.55;
+      o.leaf.add(brace);
+    }
+    for (const y of [0.12, 1.78]) {
+      for (let i = 0; i < 6; i++) {
+        const stripe = new THREE.Mesh(
+          new THREE.BoxGeometry(0.16, 0.07, 0.04),
+          i % 2 ? amberLight : carbon,
+        );
+        stripe.position.set(0.2 + i * 0.22, y, 0.17);
+        o.leaf.add(stripe);
+      }
+    }
+  }
 }
 const bayDecor = buildBayDecor(bayGroup, { box, model, halo, alloy, carbon, cyanLight, amberLight });
 const baySolids = bayDecor.solids.slice();
@@ -693,7 +721,7 @@ const room1Solids = SOLIDS.slice();
 const room1Gates = gates.slice();
 let bayActiveLive = false;
 const coilArcs = createCoilArcPool(scene);
-const _coilTip = new THREE.Vector3(0, 2.25, BAY_CZ);
+const _coilTip = new THREE.Vector3(0, 2.35, BAY_CZ);
 const _coilHit = new THREE.Vector3();
 
 function rebuildNavObstacles() {
@@ -708,16 +736,28 @@ function rebuildNavObstacles() {
   }
 }
 
+const KEY_POS_REACTOR = new THREE.Vector3(-14, 28, 18);
+const KEY_POS_BAY = new THREE.Vector3(-16, 34, BAY_CZ + 16);
+
 function setPlayRoom(id) {
   if (id === 'bay') {
     play.half = BAY_HALF; play.cx = 0; play.cz = BAY_CZ; play.id = 'bay';
   } else {
     play.half = HALF; play.cx = 0; play.cz = 0; play.id = 'reactor';
   }
+  // Same top-down pitch as room 1 — pull back with room size, don't change the angle.
   const s = bayCamScale(play.half);
   CAM_OFFSET.copy(CAM_OFFSET0).multiplyScalar(s);
-  scene.fog.near = FOG_NEAR0 * s;
-  scene.fog.far = FOG_FAR0 * s;
+  if (id === 'bay') {
+    // Independent fog so bay walls stay readable (linear scale pushed fog to the player).
+    scene.fog.near = 28;
+    scene.fog.far = 78;
+    key.position.copy(KEY_POS_BAY);
+  } else {
+    scene.fog.near = FOG_NEAR0;
+    scene.fog.far = FOG_FAR0;
+    key.position.copy(KEY_POS_REACTOR);
+  }
   const shadowSpan = 24 * s;
   Object.assign(key.shadow.camera, {
     left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 72 * s,
@@ -733,28 +773,40 @@ function swapCollision(opens, boxes, solids, gateList) {
   rebuildNavObstacles();
 }
 
+function setRoom1YardVisible(on) {
+  room1WallMesh.visible = on;
+  room1DeckMesh.visible = on;
+  reactor.visible = on;
+  deckMark.visible = on;
+  perimeterMesh.visible = on;
+  dust.visible = on;
+  for (const m of room1FloorDecor) m.visible = on;
+  for (const m of yardExtras) m.visible = on;
+  for (const o of room1Openings) {
+    if (o.root) o.root.visible = on;
+    if (o.gateRoot) o.gateRoot.visible = on;
+  }
+}
+
 function activateBay() {
   if (bayActiveLive) return;
   bayActiveLive = true;
   state.bayActive = true;
   bayGroup.visible = true;
   corridorGroup.visible = false;
-  room1WallMesh.visible = false;
-  room1DeckMesh.visible = false;
-  reactor.visible = false;
-  deckMark.visible = false;
-  for (const o of room1Openings) {
-    if (o.root) o.root.visible = false;
-    if (o.gateRoot) o.gateRoot.visible = false;
-  }
+  setRoom1YardVisible(false);
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
   }
-  // Exterior perimeter solids stay; bay adds its own cover. Drop room1-only reactor solid footprint.
-  const solids = baySolids.concat(room1Solids.filter(s => Math.hypot(s.x - 5.3, s.z + 13.6) > 0.5));
-  swapCollision(bayOpenings, bayWallBoxes, solids, bayGates);
+  // Bay cover only — drop reactor / yard collision footprints.
+  swapCollision(bayOpenings, bayWallBoxes, baySolids.slice(), bayGates);
   setPlayRoom('bay');
+  // Snap follow cam so the bigger offset doesn't ease in from the reactor / title shot.
+  camMix = 1;
+  followPos.copy(player.position).add(CAM_OFFSET);
+  camera.position.copy(followPos);
+  camera.lookAt(player.position.x, 0, player.position.z);
   bayDecor.setCoilPower(state.upgrades.coil || 0);
 }
 
@@ -765,20 +817,14 @@ function deactivateBay() {
   state.coilCd = 0;
   bayGroup.visible = false;
   corridorGroup.visible = false;
-  room1WallMesh.visible = true;
-  room1DeckMesh.visible = true;
-  reactor.visible = true;
-  deckMark.visible = true;
-  for (const o of room1Openings) {
-    if (o.root) o.root.visible = true;
-    if (o.gateRoot) o.gateRoot.visible = true;
-  }
+  setRoom1YardVisible(true);
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
   }
   swapCollision(room1Openings, room1WallBoxes, room1Solids, room1Gates);
   setPlayRoom('reactor');
+  followPos.copy(player.position).add(CAM_OFFSET);
   bayDecor.setCoilPower(0);
   coilArcs.clear();
   // Reset bay doors to intact closed leaves for the next run.
@@ -3746,6 +3792,11 @@ function beginBayTransition() {
   const north = findRoom1NorthDoor();
   const south = findBaySouthDoor();
   corridorGroup.visible = true;
+  // Leave the title swoop immediately — otherwise ?dev=bay keeps a low title camera.
+  camMix = 1;
+  followPos.copy(player.position).add(CAM_OFFSET);
+  camera.position.copy(followPos);
+  camera.lookAt(player.position.x, 0, player.position.z);
   // Hold bay south door open for entry (bay still hidden until we cross).
   if (south) swingDoorOpen(south);
   state.scripted = {
@@ -6637,17 +6688,14 @@ whenViewportSettled(() => {
     }, 350);
   } else if (bootParams.get('dev') === 'bay') {
     setTimeout(() => {
-      startGame(true);
+      startGame(false);
       state.intermission = 0;
       waveAt = null;
       state.toSpawn = 0;
       state.bossPending = false;
       state.wave = 10;
       state.choosing = false;
-      for (let i = drones.length - 1; i >= 0; i--) {
-        scene.remove(drones[i]);
-        drones.splice(i, 1);
-      }
+      camMix = 1;
       clearAllFloorPickups();
       clearEmeralds();
       clearEnemyBolts();
@@ -6655,6 +6703,8 @@ whenViewportSettled(() => {
       player.position.set(0, 0, -2);
       player.rotation.y = Math.PI;
       touchYaw = Math.PI;
+      followPos.copy(player.position).add(CAM_OFFSET);
+      camera.position.copy(followPos);
       audio.waveClear();
       beginBayTransition();
     }, 350);
