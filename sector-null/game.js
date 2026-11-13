@@ -3250,6 +3250,8 @@ function resetOpenings() {
     Object.assign(o, { hp: o.maxHp, climber: null, jolt: 0, fallT: -1 });
     if (o.kind === 'door') {
       o.leaf.rotation.y = 0;
+      o.leaf.position.y = 0.02;
+      o.raise = null;
       o.fall.rotation.x = 0; o.fall.position.set(0, 0, -0.02);
     } else {
       o.glass.visible = true; o.glass.material = glassMat;
@@ -3634,11 +3636,34 @@ function findRoom1NorthDoor() {
   return openings.find(o => o.kind === 'door' && o.axis === 'x' && o.z < 0);
 }
 
-function swingDoorOpen(o) {
-  if (!o || o.kind !== 'door') return;
-  o.hp = 0;
-  if (o.leaf) o.leaf.rotation.y = -Math.PI * 0.92;
+/** Start a vertical raise on a room-1 door leaf (bay walk — not a break). */
+function beginDoorRaise(o) {
+  if (!o || o.kind !== 'door' || !o.leaf) return;
+  o.hp = 0; // clear collision so the walk can pass
+  o.leaf.rotation.y = 0;
   if (o.fall) { o.fall.rotation.x = 0; o.fall.position.set(0, 0, -0.02); }
+  o.raise = {
+    t: 0,
+    dur: 0.9,
+    y0: o.leaf.position.y,
+    y1: 2.15,
+  };
+}
+
+function tickDoorRaise(o, dt) {
+  if (!o?.raise || !o.leaf) return false;
+  o.raise.t += dt;
+  const k = Math.min(1, o.raise.t / o.raise.dur);
+  // Ease-out with a touch of overshoot so it feels hydraulic.
+  const c1 = 1.70158, c3 = c1 + 1;
+  const e = 1 + c3 * (k - 1) ** 3 + c1 * (k - 1) ** 2;
+  o.leaf.position.y = o.raise.y0 + (o.raise.y1 - o.raise.y0) * Math.min(e, 1.05);
+  if (k >= 1) {
+    o.leaf.position.y = o.raise.y1;
+    o.raise = null;
+    return true;
+  }
+  return false;
 }
 
 function clearFieldDrones() {
@@ -3682,7 +3707,9 @@ function beginBayTransition() {
   waveAt = null;
   state.choosing = false;
   hidePicker();
-  room2SouthDoor?.open();
+  // Room-2 slab starts shut; it raises as the player approaches.
+  if (room2SouthDoor?.snapShut) room2SouthDoor.snapShut();
+  else room2SouthDoor?.shut?.();
   const north = findRoom1NorthDoor();
   state.scripted = {
     phase: 'walk',
@@ -3691,15 +3718,21 @@ function beginBayTransition() {
     waypoints: bayWalkWaypoints(HALF),
     wi: 0,
     doorOpen: false,
+    bayDoorRaising: false,
     slamT: 0,
     slammed: false,
   };
+  // Raise room-1 north door as the walk begins — heavy hydraulic open.
+  if (north) {
+    beginDoorRaise(north);
+    audio.doorRaise(north);
+    state.scripted.doorOpen = true;
+  }
 }
 
 function finalizeBayArrival() {
   state.bayActive = true;
   activateBayPlayCollision();
-  room2SouthDoor?.shut();
   // Snap clamp inside room 2.
   const lim = room2PlayerClamp(PLAYER_WALL_INSET);
   player.position.x = THREE.MathUtils.clamp(player.position.x, lim.minX, lim.maxX);
@@ -3713,6 +3746,9 @@ function updateBayTransition(dt) {
   xfer.t += dt;
   const speed = state.speed * 0.88;
 
+  // Keep room-1 raise ticking for the whole walk.
+  if (xfer.north?.raise) tickDoorRaise(xfer.north, dt);
+
   if (xfer.phase === 'walk') {
     const wp = xfer.waypoints[xfer.wi];
     if (!wp) {
@@ -3720,11 +3756,15 @@ function updateBayTransition(dt) {
       xfer.slamT = 0;
       return;
     }
-    // Open room-1 north door as we square up on it.
-    if (!xfer.doorOpen && xfer.wi >= 1 && xfer.north) {
-      swingDoorOpen(xfer.north);
-      xfer.doorOpen = true;
-      audio.bash(xfer.north, 0.65);
+    // Raise room-2 south slab as we square up on the door (waypoint ~south sill).
+    if (!xfer.bayDoorRaising && xfer.wi >= 3) {
+      xfer.bayDoorRaising = true;
+      room2SouthDoor?.open();
+      audio.doorRaise(room2SouthDoor || { x: BAY_DOOR_X, z: ROOM2_SOUTH });
+    }
+    // Don't walk through the bay door until it's mostly clear.
+    if (xfer.wi >= 4 && room2SouthDoor && !room2SouthDoor.isOpen && room2SouthDoor.raising) {
+      return;
     }
     const dx = wp.x - player.position.x, dz = wp.z - player.position.z;
     const dist = Math.hypot(dx, dz);
@@ -3745,19 +3785,19 @@ function updateBayTransition(dt) {
     touchYaw = player.rotation.y;
   } else if (xfer.phase === 'slam') {
     xfer.slamT += dt;
-    // Start the heavy leaf swinging shut immediately.
+    // Drop the heavy slab immediately once the player is inside.
     if (!xfer.slamStarted) {
       xfer.slamStarted = true;
       room2SouthDoor?.shut();
     }
-    // Impact lands ~0.42s in (matches the ease-in slam anim).
-    if (xfer.slamT >= 0.42 && !xfer.slammed) {
+    // Impact ~0.4s into the ease-in drop (matches defence-bay slam curve).
+    if (xfer.slamT >= 0.4 && !xfer.slammed) {
       xfer.slammed = true;
       audio.doorSlam(room2SouthDoor || { x: BAY_DOOR_X, z: ROOM2_SOUTH });
-      state.shake = Math.max(state.shake, 0.95);
+      bumpShake(0.38); // subtle thud — respects reduced-motion
       finalizeBayArrival();
     }
-    if (xfer.slamT >= 0.75) {
+    if (xfer.slamT >= 0.85) {
       state.scripted = null;
     }
   }

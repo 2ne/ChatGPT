@@ -304,69 +304,77 @@ export function buildDefenceBay(parent, helpers) {
   makeStaticDoor(ROOM2_WEST + 0.08, ROOM2_CZ, Math.PI / 2, 'ew');
   makeStaticDoor(ROOM2_EAST - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
 
-  // South slam door — massive frame stays; leaves only cover the collision gap
-  // (DOOR_GAP), each on its own hinge. Previously both leaves sat under one left
-  // hinge at full visual width, so the open door looked like a wall chunk on the
-  // left that vanished after the slam.
+  // South blast door — massive frame stays; one thick slab raises/slams vertically
+  // so the entry reads as a heavy guillotine (bigger / weightier than swing leaves).
   const southDoorRoot = new THREE.Group();
   southDoorRoot.position.set(BAY_DOOR_X, 0, ROOM2_SOUTH);
   group.add(southDoorRoot);
   const southDims = buildBlastDoor(southDoorRoot, 'ns', { swingingLeaf: true });
   const jamb = 0.12;
-  const leafClear = DOOR_GAP - 2 * jamb;
-  const leafW = leafClear / 2 - 0.03;
-  const leafH = southDims.h - 0.25;
+  const leafW = DOOR_GAP - 2 * jamb - 0.04;
+  const leafH = southDims.h - 0.2;
   const leafRng = seeded(77);
-  function makeSlamLeaf(side) {
-    // side: -1 left leaf, +1 right leaf
-    const hinge = new THREE.Group();
-    const hingeX = side < 0 ? -DOOR_GAP / 2 + jamb : DOOR_GAP / 2 - jamb;
-    hinge.position.set(hingeX, 0.04, 0.05);
-    southDoorRoot.add(hinge);
+  const raiseGroup = new THREE.Group();
+  raiseGroup.position.set(0, 0.04, 0.05);
+  southDoorRoot.add(raiseGroup);
+  {
     const leafB = new BlockBatch();
-    // Geometry in hinge-local space: leaf extends inward toward centre
-    const cx = side < 0 ? leafW / 2 : -leafW / 2;
     leafB.add([
-      [leafW, leafH, 0.38, cx, leafH / 2, 0, POST, 0, 0, 0, 0.06],
-      [leafW - 0.16, leafH - 0.35, 0.16, cx, leafH / 2, 0.18, FRAME, 0, 0, 0, 0.04],
-      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, side * 0.7, 0.015],
-      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, -side * 0.7, 0.015],
+      [leafW, leafH, 0.42, 0, leafH / 2, 0, POST, 0, 0, 0, 0.06],
+      [leafW - 0.18, leafH - 0.38, 0.18, 0, leafH / 2, 0.2, FRAME, 0, 0, 0, 0.04],
+      [leafW * 0.55, 0.16, 0.1, 0, leafH * 0.5, 0.3, 0x4a6070, 0, 0, 0.7, 0.015],
+      [leafW * 0.55, 0.16, 0.1, 0, leafH * 0.5, 0.3, 0x4a6070, 0, 0, -0.7, 0.015],
+      // Centre lock bar for mass
+      [0.28, leafH - 0.5, 0.14, 0, leafH / 2, 0.32, 0x2a3d4c, 0, 0, 0, 0.02],
     ], leafRng);
-    // Full-width hazard on this leaf
-    const stripeW = 0.22;
-    const nStripe = Math.max(4, Math.floor(leafW / (stripeW + 0.03)));
+    const stripeW = 0.24;
+    const nStripe = Math.max(8, Math.floor(leafW / (stripeW + 0.03)));
     for (let i = 0; i < nStripe; i++) {
-      const hx = cx - leafW / 2 + stripeW / 2 + 0.03 + i * (leafW - 0.06) / nStripe;
+      const hx = -leafW / 2 + stripeW / 2 + 0.04 + i * (leafW - 0.08) / nStripe;
       leafB.add([
-        [stripeW, 0.15, 0.12, hx, 0.22, 0.26, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-        [stripeW, 0.15, 0.12, hx, leafH - 0.22, 0.26, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+        [stripeW, 0.16, 0.13, hx, 0.24, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+        [stripeW, 0.16, 0.13, hx, leafH - 0.24, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
       ], leafRng);
     }
     const leafMesh = new THREE.Mesh(leafB.build(), worldMat);
     leafMesh.castShadow = true;
-    hinge.add(leafMesh);
-    return hinge;
+    raiseGroup.add(leafMesh);
   }
-  const hingeL = makeSlamLeaf(-1);
-  const hingeR = makeSlamLeaf(1);
-  // Open: fold each leaf out against its jamb (~90°), not a 166° flop that reads as a wall.
-  const OPEN_L = Math.PI * 0.92;
-  const OPEN_R = -Math.PI * 0.92;
-  const SHUT = 0;
-  hingeL.rotation.y = OPEN_L;
-  hingeR.rotation.y = OPEN_R;
-  let slamming = false;
-  let slamAnimT = 0;
-  const SLAM_DUR = 0.42;
+  const Y_SHUT = 0;
+  const Y_OPEN = leafH + 0.35;
+  // Start shut; walk sequence raises then slams.
+  raiseGroup.position.y = Y_SHUT;
+  let doorPhase = 'shut'; // shut | raising | open | slamming
+  let doorAnimT = 0;
+  const RAISE_DUR = 0.95;
+  const SLAM_DUR = 0.48;
+  function easeOutBack(t) {
+    const c1 = 1.70158, c3 = c1 + 1;
+    return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2;
+  }
+  function easeInCubic(t) { return t * t * t; }
   const southDoor = {
-    hinge: hingeL, // compat for any code that peeks at .hinge
+    hinge: raiseGroup, // compat
     open() {
-      slamming = false; slamAnimT = 0;
-      hingeL.rotation.y = OPEN_L;
-      hingeR.rotation.y = OPEN_R;
+      if (doorPhase === 'open' || doorPhase === 'raising') return;
+      doorPhase = 'raising';
+      doorAnimT = 0;
     },
-    shut() { slamming = true; slamAnimT = 0; },
-    get slammed() { return !slamming && slamAnimT >= SLAM_DUR; },
+    shut() {
+      if (doorPhase === 'shut' || doorPhase === 'slamming') return;
+      doorPhase = 'slamming';
+      doorAnimT = 0;
+    },
+    /** Snap shut without anim (reset / finalize). */
+    snapShut() {
+      doorPhase = 'shut';
+      doorAnimT = 0;
+      raiseGroup.position.y = Y_SHUT;
+    },
+    get slammed() { return doorPhase === 'shut'; },
+    get isOpen() { return doorPhase === 'open'; },
+    get raising() { return doorPhase === 'raising'; },
+    get slamming() { return doorPhase === 'slamming'; },
     x: BAY_DOOR_X,
     z: ROOM2_SOUTH,
   };
@@ -631,14 +639,33 @@ export function buildDefenceBay(parent, helpers) {
     solids,
     coil,
     update(dt) {
-      // Weighty slam: ease-in so both leaves accelerate into the frame
-      if (slamming) {
-        slamAnimT += dt;
-        const k = Math.min(1, slamAnimT / SLAM_DUR);
-        const e = k * k * k;
-        hingeL.rotation.y = OPEN_L + (SHUT - OPEN_L) * e;
-        hingeR.rotation.y = OPEN_R + (SHUT - OPEN_R) * e;
-        if (k >= 1) slamming = false;
+      // Vertical raise / slam with slight overshoot so the slab feels heavy.
+      if (doorPhase === 'raising') {
+        doorAnimT += dt;
+        const k = Math.min(1, doorAnimT / RAISE_DUR);
+        const e = easeOutBack(k);
+        raiseGroup.position.y = Y_SHUT + (Y_OPEN - Y_SHUT) * Math.min(e, 1.06);
+        if (k >= 1) {
+          raiseGroup.position.y = Y_OPEN;
+          doorPhase = 'open';
+        }
+      } else if (doorPhase === 'slamming') {
+        doorAnimT += dt;
+        const k = Math.min(1, doorAnimT / SLAM_DUR);
+        // Ease-in drop, then a tiny settle bounce past the sill.
+        let y;
+        if (k < 0.82) {
+          const u = k / 0.82;
+          y = Y_OPEN + (Y_SHUT - Y_OPEN) * easeInCubic(u);
+        } else {
+          const u = (k - 0.82) / 0.18;
+          y = Y_SHUT - 0.08 * Math.sin(u * Math.PI) * (1 - u);
+        }
+        raiseGroup.position.y = y;
+        if (k >= 1) {
+          raiseGroup.position.y = Y_SHUT;
+          doorPhase = 'shut';
+        }
       }
 
       const ud = coil.userData;
