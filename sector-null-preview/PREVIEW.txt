@@ -1,9 +1,9 @@
 Sector Null Defence Bay — staged preview (Stage 4).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b233 · e8a8855 · 16:17
-- Bay fully symmetric about BAY_CX (walk line): walls at BAY_CX ± 19
-- Interior 38 × 44 (was 48 × 44 about world 0); equal E–W channel arms
-- Collision, floor hole, shell, mapview updated to ROOM2_WEST/EAST
+Label: PREVIEW b234 · f529ded · 16:22
+- Bay symmetric about walk line (38 × 44)
+- Room-1 north door raises with hydraulic grind on walk start
+- Room-2 south slab raises on approach, slams down with thud + subtle shake
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
