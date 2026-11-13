@@ -213,67 +213,76 @@ export function buildDefenceBay(parent, helpers) {
     if (z3 > z2) box(group, cyanLight, x, SHELL_H - 0.04, (z2 + z3) / 2, 0.08, 0.05, (z3 - z2) * 0.96);
   }
 
-  // ── Powerful blast doors (tall frames, thick slabs, cyan pylons) ──
-  const DOOR_H = 2.45;
-  const DOOR_W = DOOR_GAP + 0.35;
+  // ── Massive blast doors (concept: rise above walls, projecting frames) ──
+  // Visual clear width is wider than the collision gap so the door reads huge
+  // from the top-down camera; collision still uses DOOR_GAP / room2WallBoxes.
+  const DOOR_H = 3.55; // well above SHELL_H (2.4)
+  const DOOR_W_NS = Math.max(DOOR_GAP + 2.4, 5.2);
+  const DOOR_W_EW = Math.max(DOOR_GAP + 1.8, 4.4);
   const pulseHalos = [];
   const pulseStrips = [];
 
-  function addDoorFrame(root, kind) {
-    const w = DOOR_W;
+  /** Build a concept-scale armoured door into `root`. Optional `leafParent` gets the swinging slabs. */
+  function buildBlastDoor(root, kind, { swingingLeaf = false } = {}) {
+    const w = kind === 'ns' ? DOOR_W_NS : DOOR_W_EW;
     const h = DOOR_H;
     const doorB = new BlockBatch();
-    const drng = seeded(Math.round(root.position.x * 11 + root.position.z * 17) + 9);
-    // Chunky outer frame + header
+    const drng = seeded(Math.round(root.position.x * 11 + root.position.z * 17) + 41);
+    // Wide angled side buttresses (project out in +Z local) + tall posts
+    const buttW = 0.85;
+    const buttD = 1.15;
+    const postX = w / 2 + buttW * 0.35;
     doorB.add([
-      [0.42, h + 0.25, 0.55, -w / 2 - 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
-      [0.42, h + 0.25, 0.55, w / 2 + 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
-      [w + 0.85, 0.38, 0.6, 0, h + 0.12, 0.05, 0x243440, 0, 0, 0, 0.05],
-      [w + 0.55, 0.12, 0.42, 0, 0.05, 0.08, POST, 0, 0, 0, 0.02],
+      // Left / right buttress blocks (angled via extra bevelled wedges)
+      [buttW, h + 0.55, buttD, -postX, (h + 0.55) / 2, 0.35, 0x1a2a36, 0, 0, 0, 0.06],
+      [buttW, h + 0.55, buttD, postX, (h + 0.55) / 2, 0.35, 0x1a2a36, 0, 0, 0, 0.06],
+      [buttW * 0.7, h + 0.35, buttD * 0.55, -postX - 0.25, (h + 0.35) / 2, 0.55, 0x152430, 0, 0.18, 0, 0.05],
+      [buttW * 0.7, h + 0.35, buttD * 0.55, postX + 0.25, (h + 0.35) / 2, 0.55, 0x152430, 0, -0.18, 0, 0.05],
+      // Thick header block rising above the wall line
+      [w + buttW * 2.2, 0.72, 0.95, 0, h + 0.28, 0.25, 0x243440, 0, 0, 0, 0.06],
+      [w + buttW * 1.6, 0.22, 0.7, 0, h + 0.58, 0.35, 0x2c4050, 0, 0, 0, 0.04],
+      // Threshold plinth
+      [w + 0.6, 0.14, 0.7, 0, 0.06, 0.45, POST, 0, 0, 0, 0.025],
     ], drng);
-    // Armoured double slabs
-    for (const side of [-1, 1]) {
-      const cx = side * (w / 4);
-      doorB.add([
-        [w / 2 - 0.06, h - 0.08, 0.28, cx, h / 2 - 0.02, 0, POST, 0, 0, 0, 0.055],
-        [w / 2 - 0.2, h - 0.32, 0.12, cx, h / 2, 0.14, FRAME, 0, 0, 0, 0.035],
-        [w / 2 - 0.28, 0.22, 0.1, cx, h * 0.62, 0.2, 0x2a3d4c, 0, 0, 0, 0.02],
-        [w * 0.26, 0.09, 0.07, cx, h * 0.52, 0.22, 0x4a6070, 0, 0, side * 0.72, 0.012],
-        [w * 0.26, 0.09, 0.07, cx, h * 0.52, 0.22, 0x4a6070, 0, 0, -side * 0.72, 0.012],
-      ], drng);
-    }
-    if (kind === 'ns') {
-      for (let i = 0; i < 11; i++) {
-        const hx = (i - 5) * 0.22;
+    // Static double slabs (or leave empty if swingingLeaf — leaf mesh added separately)
+    if (!swingingLeaf) {
+      for (const side of [-1, 1]) {
+        const cx = side * (w / 4);
         doorB.add([
-          [0.18, 0.09, 0.1, hx, 0.14, 0.18, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01],
-          [0.18, 0.09, 0.1, hx, h - 0.14, 0.18, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01],
+          [w / 2 - 0.08, h - 0.15, 0.38, cx, h / 2 - 0.02, 0.05, POST, 0, 0, 0, 0.06],
+          [w / 2 - 0.24, h - 0.4, 0.16, cx, h / 2, 0.2, FRAME, 0, 0, 0, 0.04],
+          [w / 2 - 0.36, 0.28, 0.12, cx, h * 0.58, 0.28, 0x2a3d4c, 0, 0, 0, 0.025],
+          // Big X emboss readable from above
+          [w * 0.32, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, side * 0.7, 0.015],
+          [w * 0.32, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, -side * 0.7, 0.015],
         ], drng);
       }
-    } else {
-      for (const side of [-1, 1]) {
-        for (let i = 0; i < 7; i++) {
-          doorB.add([[
-            0.12, 0.26, 0.08, side * (w / 2 - 0.12), 0.32 + i * 0.28, 0.18,
-            i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01,
-          ]], drng);
-        }
+      // Hazard chevron stripes — top + bottom bands (wide so they read top-down)
+      for (let i = 0; i < 14; i++) {
+        const hx = (i - 6.5) * 0.32;
+        if (Math.abs(hx) > w / 2 - 0.15) continue;
+        doorB.add([
+          [0.28, 0.16, 0.14, hx, 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+          [0.28, 0.16, 0.14, hx, h - 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+        ], drng);
       }
     }
     const mesh = new THREE.Mesh(doorB.build(), worldMat);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     root.add(mesh);
-    // Glowing cyan side pylons + header bar
-    const pylonL = box(root, cyanLight, -w / 2 - 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
-    const pylonR = box(root, cyanLight, w / 2 + 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
-    const header = box(root, cyanLight, 0, h + 0.02, 0.28, w * 0.78, 0.1, 0.12);
+
+    // Tall cyan pylons on buttresses + bright header bar
+    const pylonL = box(root, cyanLight, -postX, h / 2 + 0.1, 0.75, 0.22, h * 0.95, 0.22);
+    const pylonR = box(root, cyanLight, postX, h / 2 + 0.1, 0.75, 0.22, h * 0.95, 0.22);
+    const header = box(root, cyanLight, 0, h + 0.42, 0.55, w * 0.85, 0.16, 0.2);
     pulseStrips.push(pylonL, pylonR, header);
-    const hl = halo(root, CYAN, 0, h * 0.55, 0.4, 3.6, 0.28);
-    pulseHalos.push(hl);
-    halo(root, CYAN, -w / 2 - 0.15, h / 2, 0.35, 2.2, 0.22);
-    halo(root, CYAN, w / 2 + 0.15, h / 2, 0.35, 2.2, 0.22);
-    return root;
+    // Lit threshold strip (orange)
+    box(root, amberLight, 0, 0.09, 0.72, w * 0.7, 0.04, 0.1);
+    pulseHalos.push(halo(root, CYAN, 0, h * 0.6, 0.7, 4.8, 0.26));
+    halo(root, CYAN, -postX, h / 2, 0.8, 2.8, 0.2);
+    halo(root, CYAN, postX, h / 2, 0.8, 2.8, 0.2);
+    return { w, h, postX };
   }
 
   function makeStaticDoor(x, z, rotY, kind) {
@@ -281,57 +290,43 @@ export function buildDefenceBay(parent, helpers) {
     root.position.set(x, 0, z);
     root.rotation.y = rotY;
     group.add(root);
-    return addDoorFrame(root, kind);
+    buildBlastDoor(root, kind);
+    return root;
   }
 
-  makeStaticDoor(BAY_DOOR_X, ROOM2_NORTH + 0.05, Math.PI, 'ns');
-  makeStaticDoor(-(ROOM2_HX - 0.05), ROOM2_CZ, Math.PI / 2, 'ew');
-  makeStaticDoor(ROOM2_HX - 0.05, ROOM2_CZ, -Math.PI / 2, 'ew');
+  makeStaticDoor(BAY_DOOR_X, ROOM2_NORTH + 0.08, Math.PI, 'ns');
+  makeStaticDoor(-(ROOM2_HX - 0.08), ROOM2_CZ, Math.PI / 2, 'ew');
+  makeStaticDoor(ROOM2_HX - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
 
-  // South slam door — thick armoured leaf + frame; animates shut with weight
+  // South slam door — same massive frame; leaf swings shut with weight
   const southDoorRoot = new THREE.Group();
   southDoorRoot.position.set(BAY_DOOR_X, 0, ROOM2_SOUTH);
   group.add(southDoorRoot);
-  // Static frame / pylons (leaf swings separately)
-  {
-    const frameB = new BlockBatch();
-    const frng = seeded(88);
-    const w = DOOR_W;
-    const h = DOOR_H;
-    frameB.add([
-      [0.42, h + 0.25, 0.55, -w / 2 - 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
-      [0.42, h + 0.25, 0.55, w / 2 + 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
-      [w + 0.85, 0.38, 0.6, 0, h + 0.12, 0.05, 0x243440, 0, 0, 0, 0.05],
-      [w + 0.55, 0.12, 0.42, 0, 0.05, 0.08, POST, 0, 0, 0, 0.02],
-    ], frng);
-    const frameMesh = new THREE.Mesh(frameB.build(), worldMat);
-    frameMesh.castShadow = true;
-    southDoorRoot.add(frameMesh);
-    const pylonL = box(southDoorRoot, cyanLight, -w / 2 - 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
-    const pylonR = box(southDoorRoot, cyanLight, w / 2 + 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
-    const header = box(southDoorRoot, cyanLight, 0, h + 0.02, 0.28, w * 0.78, 0.1, 0.12);
-    pulseStrips.push(pylonL, pylonR, header);
-    pulseHalos.push(halo(southDoorRoot, CYAN, 0, h * 0.55, 0.4, 3.8, 0.3));
-  }
-  const jamb = 0.18;
-  const leafW = DOOR_GAP - 2 * jamb + 0.15;
-  const leafH = DOOR_H - 0.12;
+  const southDims = buildBlastDoor(southDoorRoot, 'ns', { swingingLeaf: true });
+  const jamb = 0.2;
+  const leafW = southDims.w / 2 - jamb - 0.06;
+  const leafH = southDims.h - 0.2;
   const hinge = new THREE.Group();
-  hinge.position.set(-DOOR_GAP / 2 + jamb + 0.02, 0.02, 0);
+  hinge.position.set(-southDims.w / 2 + jamb + 0.04, 0.04, 0.05);
   southDoorRoot.add(hinge);
   const leafB = new BlockBatch();
   const leafRng = seeded(77);
-  leafB.add([
-    [leafW, leafH, 0.3, leafW / 2, leafH / 2, 0, POST, 0, 0, 0, 0.055],
-    [leafW - 0.2, leafH - 0.28, 0.12, leafW / 2, leafH / 2, 0.14, FRAME, 0, 0, 0, 0.035],
-    [leafW - 0.32, 0.24, 0.1, leafW / 2, leafH * 0.62, 0.2, 0x2a3d4c, 0, 0, 0, 0.02],
-    [leafW * 0.32, 0.09, 0.07, leafW / 2, leafH * 0.52, 0.22, 0x4a6070, 0, 0, 0.7, 0.012],
-    [leafW * 0.32, 0.09, 0.07, leafW / 2, leafH * 0.52, 0.22, 0x4a6070, 0, 0, -0.7, 0.012],
-  ], leafRng);
-  for (let i = 0; i < 9; i++) {
+  // Two leaves parented under one hinge group for a solid slam silhouette
+  for (const side of [0, 1]) {
+    const cx = leafW * (side + 0.5);
+    leafB.add([
+      [leafW - 0.04, leafH, 0.4, cx, leafH / 2, 0, POST, 0, 0, 0, 0.06],
+      [leafW - 0.22, leafH - 0.35, 0.16, cx, leafH / 2, 0.18, FRAME, 0, 0, 0, 0.04],
+      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, 0.7, 0.015],
+      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, -0.7, 0.015],
+    ], leafRng);
+  }
+  for (let i = 0; i < 16; i++) {
+    const hx = (i - 7.5) * 0.3;
+    if (Math.abs(hx) > southDims.w / 2 - 0.3) continue;
     leafB.add([[
-      0.17, 0.08, 0.09, leafW / 2 + (i - 4) * 0.2, 0.14, 0.18,
-      i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01,
+      0.26, 0.15, 0.12, southDims.w / 4 + hx * 0.5, 0.22, 0.26,
+      i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012,
     ]], leafRng);
   }
   const leafMesh = new THREE.Mesh(leafB.build(), worldMat);
@@ -347,7 +342,6 @@ export function buildDefenceBay(parent, helpers) {
     hinge,
     open() { slamming = false; slamAnimT = 0; hinge.rotation.y = OPEN_Y; },
     shut() { slamming = true; slamAnimT = 0; },
-    /** True once the animated slam has hit the frame. */
     get slammed() { return !slamming && slamAnimT >= SLAM_DUR; },
     x: BAY_DOOR_X,
     z: ROOM2_SOUTH,
@@ -456,26 +450,42 @@ export function buildDefenceBay(parent, helpers) {
   deckPlate.receiveShadow = true;
   platform.add(deckPlate);
 
-  // Hazard edging on lower rim + cyan accents
+  // Edge trim flush along each octagon face (tangent-aligned, not radial spikes).
+  // Cylinder face i is centred at (i+0.5)*2π/8; long box axis needs +π/2 so it
+  // runs parallel to that face instead of sticking out along the normal.
+  const EDGE_LEN = 2 * 4.35 * Math.tan(Math.PI / 8) * 0.92; // ~face length, slightly inset
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
     const c = Math.cos(a);
     const s = Math.sin(a);
-    box(platform, i % 2 ? amberLight : carbon, c * 4.45, 0.42, s * 4.45, 1.05, 0.07, 0.14)
-      .rotation.y = a;
-    const rim = box(platform, i % 2 ? cyanLight : amberLight, c * 3.85, 0.74, s * 3.85, 0.38, 0.06, 0.14);
-    rim.rotation.y = a;
-    pulseStrips.push(rim);
-    // Vent grate panels on vertical faces
-    const grate = box(platform, carbon, c * 4.35, 0.22, s * 4.35, 1.15, 0.32, 0.06);
-    grate.rotation.y = a;
+    const tangent = a + Math.PI / 2;
+    // Orange hazard trim on the top bevel of the lower tier — parallel to the edge
+    const hazard = box(platform, amberLight, c * 4.48, 0.44, s * 4.48, EDGE_LEN, 0.07, 0.11);
+    hazard.rotation.y = tangent;
+    // Dark filler stripe next to hazard for chevron read
+    const hazardDk = box(platform, carbon, c * 4.42, 0.43, s * 4.42, EDGE_LEN * 0.92, 0.05, 0.08);
+    hazardDk.rotation.y = tangent;
+    // Small cyan inset lights centred on each vertical face (cardinal edges get a pulse)
+    const cyanInset = box(platform, cyanLight, c * 4.28, 0.28, s * 4.28, 0.55, 0.14, 0.08);
+    cyanInset.rotation.y = tangent;
+    if (i % 2 === 0) pulseStrips.push(cyanInset);
+    // Cyan ticks on the upper-tier rim, flush to the edge
+    const upperRim = box(platform, cyanLight, c * 3.95, 0.72, s * 3.95, EDGE_LEN * 0.7, 0.05, 0.08);
+    upperRim.rotation.y = tangent;
+    pulseStrips.push(upperRim);
+    // Vent grate panel flush on the vertical face
+    const grate = box(platform, carbon, c * 4.55, 0.22, s * 4.55, EDGE_LEN * 0.72, 0.3, 0.05);
+    grate.rotation.y = tangent;
     for (let g = -2; g <= 2; g++) {
-      box(platform, alloy, c * 4.38, 0.22, s * 4.38, 0.04, 0.28, 0.04)
-        .position.set(c * 4.38 + Math.cos(a + Math.PI / 2) * g * 0.18, 0.22, s * 4.38 + Math.sin(a + Math.PI / 2) * g * 0.18);
+      const bar = box(platform, alloy, c * 4.57, 0.22, s * 4.57, 0.04, 0.26, 0.04);
+      bar.position.set(
+        c * 4.57 + Math.cos(tangent) * g * 0.2,
+        0.22,
+        s * 4.57 + Math.sin(tangent) * g * 0.2,
+      );
     }
   }
-  pulseHalos.push(halo(platform, CYAN, 0, 0.9, 0, 7.5, 0.22));
-  pulseHalos.push(halo(platform, 0xffa648, 0, 0.45, 0, 6.2, 0.14));
+  pulseHalos.push(halo(platform, CYAN, 0, 0.85, 0, 6.5, 0.14));
   addSolid(0, ROOM2_CZ, 4.15, 4.15);
 
   // ── Tesla coil (stacked rings, column, polished sphere) ──
@@ -526,20 +536,21 @@ export function buildDefenceBay(parent, helpers) {
   });
   const ball = model(coil, new THREE.SphereGeometry(0.82, 28, 22), ballMat, 0, 4.55, 0);
   ball.castShadow = true;
-  const tipHalo = halo(coil, CYAN, 0, 4.55, 0, 6.4, 0.42);
-  const tipHalo2 = halo(coil, CYAN, 0, 4.55, 0, 3.2, 0.5);
-  // Arc stubs (subtle animated later)
+  // Soft tip glow only — keep the sphere/rings readable (no blown-out blob).
+  const tipHalo = halo(coil, CYAN, 0, 4.55, 0, 2.8, 0.22);
+  const tipHalo2 = halo(coil, CYAN, 0, 4.55, 0, 1.6, 0.28);
+  // Short arc stubs near the sphere
   const arcMats = [];
-  for (let i = 0; i < 5; i++) {
-    const a = (i / 5) * Math.PI * 2;
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2;
     const mat = new THREE.MeshBasicMaterial({
-      color: CYAN, transparent: true, opacity: 0.4, toneMapped: false, fog: false, depthWrite: false,
+      color: CYAN, transparent: true, opacity: 0.32, toneMapped: false, fog: false, depthWrite: false,
     });
     arcMats.push(mat);
-    const stub = model(coil, new THREE.CylinderGeometry(0.028, 0.01, 0.7, 6), mat,
-      Math.cos(a) * 0.6, 5.05, Math.sin(a) * 0.6);
-    stub.rotation.z = Math.cos(a) * 0.45;
-    stub.rotation.x = Math.sin(a) * 0.45;
+    const stub = model(coil, new THREE.CylinderGeometry(0.022, 0.008, 0.45, 6), mat,
+      Math.cos(a) * 0.55, 4.95, Math.sin(a) * 0.55);
+    stub.rotation.z = Math.cos(a) * 0.35;
+    stub.rotation.x = Math.sin(a) * 0.35;
   }
 
   // ── Cheap coloured light pools (no shadow casting) ──
@@ -552,8 +563,8 @@ export function buildDefenceBay(parent, helpers) {
     poolLights.push({ light: pl, base: intensity });
     return pl;
   }
-  poolLight(CYAN, 0, 3.8, ROOM2_CZ, 55, 22);
-  poolLight(0xffa648, 0, 1.4, ROOM2_CZ, 22, 12);
+  poolLight(CYAN, 0, 3.8, ROOM2_CZ, 38, 18);
+  poolLight(0xffa648, 0, 1.4, ROOM2_CZ, 16, 11);
   poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_SOUTH - 3.5, 28, 14);
   poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_NORTH + 3.5, 24, 14);
   poolLight(CYAN, pillarRx * 0.7, 2.0, ROOM2_CZ - pillarRz * 0.7, 18, 11);
@@ -565,7 +576,7 @@ export function buildDefenceBay(parent, helpers) {
     s.material.rotation = 0;
     pulseHalos.push(s);
   };
-  floorGlow(0, ROOM2_CZ, 9.5, 0.2);
+  floorGlow(0, ROOM2_CZ, 7.5, 0.14);
   floorGlow(BAY_DOOR_X, ROOM2_SOUTH - 1.5, 4.5, 0.18);
   floorGlow(BAY_DOOR_X, ROOM2_NORTH + 1.5, 4.5, 0.16);
 
@@ -602,18 +613,18 @@ export function buildDefenceBay(parent, helpers) {
       const ud = coil.userData;
       ud.t += dt;
       const t = ud.t;
-      const flicker = 0.95 + Math.sin(t * 7.3) * 0.18 + Math.sin(t * 19.1) * 0.1;
+      const flicker = 0.8 + Math.sin(t * 6.2) * 0.12 + Math.sin(t * 15.1) * 0.06;
       for (const m of ud.ringGlowMats) m.emissiveIntensity = flicker;
-      ud.ballMat.emissiveIntensity = 0.35 + Math.sin(t * 5.1) * 0.14;
+      ud.ballMat.emissiveIntensity = 0.22 + Math.sin(t * 4.4) * 0.08;
       if (ud.tipHalo?.material) {
-        ud.tipHalo.material.opacity = 0.36 + Math.sin(t * 4.2) * 0.12;
-        ud.tipHalo.scale.setScalar(6.4 * (0.92 + 0.08 * Math.sin(t * 3.3)));
+        ud.tipHalo.material.opacity = 0.18 + Math.sin(t * 3.6) * 0.06;
+        ud.tipHalo.scale.setScalar(2.8 * (0.95 + 0.05 * Math.sin(t * 2.8)));
       }
       if (ud.tipHalo2?.material) {
-        ud.tipHalo2.material.opacity = 0.42 + Math.sin(t * 6.1) * 0.15;
+        ud.tipHalo2.material.opacity = 0.22 + Math.sin(t * 5.2) * 0.08;
       }
       for (let i = 0; i < ud.arcMats.length; i++) {
-        ud.arcMats[i].opacity = 0.18 + (Math.sin(t * 13 + i * 1.7) * 0.5 + 0.5) * 0.5;
+        ud.arcMats[i].opacity = 0.12 + (Math.sin(t * 11 + i * 1.7) * 0.5 + 0.5) * 0.28;
       }
 
       // Gentle pulse across bay emissives / halos / light pools
