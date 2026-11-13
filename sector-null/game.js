@@ -49,11 +49,16 @@ import {
   writePlayerName,
 } from './scores.js';
 import {
+  BAY_DOOR_X,
   MAPVIEW_CAM,
+  ROOM2_SOUTH,
+  bayWalkWaypoints,
   buildExtendedFloor,
   buildRoom2Shell,
   pointInRoom2,
   room2CollisionBoxes,
+  room2PlayerClamp,
+  room2WallBoxes,
 } from './facility-exterior.js';
 import {
   PLAYER_WALL_INSET,
@@ -70,7 +75,9 @@ installWorldXzFog();
 // Preview-only badge + version.json reload (no-op on live builds).
 initPreviewStamp();
 
-const mapView = new URLSearchParams(location.search).get('dev') === 'mapview';
+const bootParams = new URLSearchParams(location.search);
+const mapView = bootParams.get('dev') === 'mapview';
+const bayDev = bootParams.get('dev') === 'bay';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -130,12 +137,22 @@ function gameplayCamOffset() {
  */
 function gameplayCamFocus() {
   _camFocus.copy(player.position);
-  if (!touchLandscapePlay()) return _camFocus;
+  // Same height/zoom as room 1 — during the bay walk / inside room 2, follow freely
+  // (no room-1 wall clamp that would freeze the look-at while the player leaves).
+  if (!touchLandscapePlay() || state.scripted || state.bayActive) return _camFocus;
   // Allow follow through most of the deck; pull inward near walls (zoom 0.82 → lim ~7.2).
   const lim = HALF * MOBILE_LANDSCAPE_ZOOM * 0.88;
   _camFocus.x = THREE.MathUtils.clamp(_camFocus.x, -lim, lim);
   _camFocus.z = THREE.MathUtils.clamp(_camFocus.z, -lim, lim);
   return _camFocus;
+}
+
+function updatePlayFog(dt) {
+  if (mapView || !scene.fog) return;
+  const want = (state.bayActive || state.scripted) ? 1 : 0;
+  fogBlend = THREE.MathUtils.damp(fogBlend, want, state.scripted ? 1.1 : 2.4, dt);
+  scene.fog.near = THREE.MathUtils.lerp(PLAY_FOG_NEAR, BAY_FOG_NEAR, fogBlend);
+  scene.fog.far = THREE.MathUtils.lerp(PLAY_FOG_FAR, BAY_FOG_FAR, fogBlend);
 }
 
 function pinViewport() {
@@ -310,6 +327,10 @@ const WALL_H = 2.4;
 const WALL_T = 0.7;
 const EDGE = HALF + WALL_T / 2;
 ({ near: PLAY_FOG_NEAR, far: PLAY_FOG_FAR } = playFogRange(HALF, 0.35, 11));
+// Once inside room 2, push fog out so the bay interior stays fully lit.
+const BAY_FOG_NEAR = 90;
+const BAY_FOG_FAR = 130;
+let fogBlend = 0; // 0 = room-1 play fog, 1 = bay-clear fog
 if (!mapView) scene.fog = new THREE.Fog(CLEAR, PLAY_FOG_NEAR, PLAY_FOG_FAR);
 const world = new THREE.Group();
 scene.add(world);
@@ -370,7 +391,8 @@ buildExtendedFloor(world, new THREE.MeshStandardMaterial({
   color: 0x1c2b37, metalness: 0.38, roughness: 0.62,
 }));
 // Stage 2: room-2 outer shell (mesh). Collision boxes registered after room-1 walls.
-buildRoom2Shell(world);
+const room2Shell = buildRoom2Shell(world);
+const room2SouthDoor = room2Shell.userData.southDoor;
 const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.13, 0);
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
@@ -545,8 +567,13 @@ buildWall('x', -HALF, [[-5.8, -4.2, 'door'], [4, 6, 'window']]);
 buildWall('z', -HALF, [[-1.5, 0.5, 'window']]);
 buildWall('z',  HALF, [[1.5, 3.5, 'window']]);
 
-// Room-2 footprint is solid for enemy nav/shots/spawns (player stays clamped in room 1).
+// Room-2 footprint is solid for enemy nav/shots/spawns (player stays clamped in room 1
+// until Stage 3 swaps these for wall segments after the bay slam).
+const room2SolidStart = wallBoxes.length;
 for (const box of room2CollisionBoxes()) wallBoxes.push(box);
+let room2CollideCount = wallBoxes.length - room2SolidStart;
+/** True after Stage-3 slam swapped the solid footprint for wall segments. */
+let bayCollisionActive = false;
 
 bakedMesh(wallB);
 const SOLIDS = [];
@@ -1456,6 +1483,10 @@ const state = {
   droneSpeed: 2.2,
   droneHp: 2,
   shake: 0,
+  /** Stage 3: Defence Bay reached (empty shell — no waves yet). */
+  bayActive: false,
+  /** Stage 3 scripted walk / slam (`null` when idle). */
+  scripted: null,
 };
 
 const bullets = [];
@@ -3581,6 +3612,137 @@ function finishWaveClear() {
   openPicker();
 }
 
+// ===================================================================
+// STAGE 3 — Defence Bay walk (after wave-10 picker)
+// ===================================================================
+function findRoom1NorthDoor() {
+  return openings.find(o => o.kind === 'door' && o.axis === 'x' && o.z < 0);
+}
+
+function swingDoorOpen(o) {
+  if (!o || o.kind !== 'door') return;
+  o.hp = 0;
+  if (o.leaf) o.leaf.rotation.y = -Math.PI * 0.92;
+  if (o.fall) { o.fall.rotation.x = 0; o.fall.position.set(0, 0, -0.02); }
+}
+
+function clearFieldDrones() {
+  for (let i = drones.length - 1; i >= 0; i--) {
+    scene.remove(drones[i]);
+    drones.splice(i, 1);
+  }
+  state.toSpawn = 0;
+  state.bossPending = false;
+  state.introHold = false;
+  state.introLeft = 0;
+  state.introType = null;
+  clearEnemyBolts();
+  clearEquipmentField();
+}
+
+/** Swap the solid room-2 footprint for wall segments so shots/LOS work inside the bay. */
+function activateBayPlayCollision() {
+  if (bayCollisionActive) return;
+  wallBoxes.splice(room2SolidStart, room2CollideCount);
+  const walls = room2WallBoxes({ southDoorOpen: false });
+  for (const b of walls) wallBoxes.push(b);
+  room2CollideCount = walls.length;
+  bayCollisionActive = true;
+  navGraphs.clear();
+}
+
+function restoreRoom2EnemySolid() {
+  if (!bayCollisionActive) return;
+  wallBoxes.splice(room2SolidStart, room2CollideCount);
+  for (const box of room2CollisionBoxes()) wallBoxes.push(box);
+  room2CollideCount = wallBoxes.length - room2SolidStart;
+  bayCollisionActive = false;
+  navGraphs.clear();
+}
+
+function beginBayTransition() {
+  resetGameplayInput();
+  clearFieldDrones();
+  state.intermission = 0;
+  waveAt = null;
+  state.choosing = false;
+  hidePicker();
+  room2SouthDoor?.open();
+  const north = findRoom1NorthDoor();
+  state.scripted = {
+    phase: 'walk',
+    t: 0,
+    north,
+    waypoints: bayWalkWaypoints(HALF),
+    wi: 0,
+    doorOpen: false,
+    slamT: 0,
+    slammed: false,
+  };
+}
+
+function finalizeBayArrival() {
+  state.bayActive = true;
+  activateBayPlayCollision();
+  room2SouthDoor?.shut();
+  // Snap clamp inside room 2.
+  const lim = room2PlayerClamp(PLAYER_WALL_INSET);
+  player.position.x = THREE.MathUtils.clamp(player.position.x, lim.minX, lim.maxX);
+  player.position.z = THREE.MathUtils.clamp(player.position.z, lim.minZ, lim.maxZ);
+  showBanner('DEFENCE BAY', 'Hold position · Waves coming online', 2.4);
+}
+
+function updateBayTransition(dt) {
+  const xfer = state.scripted;
+  if (!xfer) return;
+  xfer.t += dt;
+  const speed = state.speed * 0.88;
+
+  if (xfer.phase === 'walk') {
+    const wp = xfer.waypoints[xfer.wi];
+    if (!wp) {
+      xfer.phase = 'slam';
+      xfer.slamT = 0;
+      return;
+    }
+    // Open room-1 north door as we square up on it.
+    if (!xfer.doorOpen && xfer.wi >= 1 && xfer.north) {
+      swingDoorOpen(xfer.north);
+      xfer.doorOpen = true;
+      audio.bash(xfer.north, 0.65);
+    }
+    const dx = wp.x - player.position.x, dz = wp.z - player.position.z;
+    const dist = Math.hypot(dx, dz);
+    if (dist < 0.16) {
+      player.position.x = wp.x;
+      player.position.z = wp.z;
+      xfer.wi++;
+      if (xfer.wi >= xfer.waypoints.length) {
+        xfer.phase = 'slam';
+        xfer.slamT = 0;
+      }
+      return;
+    }
+    const step = Math.min(dist, speed * Math.min(dt, 0.05));
+    player.position.x += (dx / dist) * step;
+    player.position.z += (dz / dist) * step;
+    player.rotation.y = Math.atan2(dx, dz);
+    touchYaw = player.rotation.y;
+  } else if (xfer.phase === 'slam') {
+    xfer.slamT += dt;
+    if (xfer.slamT >= 0.12 && !xfer.slammed) {
+      xfer.slammed = true;
+      room2SouthDoor?.shut();
+      audio.doorSlam(room2SouthDoor || { x: BAY_DOOR_X, z: ROOM2_SOUTH });
+      state.shake = Math.max(state.shake, 0.5);
+      finalizeBayArrival();
+    }
+    if (xfer.slamT >= 0.4) {
+      state.scripted = null;
+    }
+  }
+}
+
 function killDrone(z, idx, allowShieldDrop = true) {
   const type = z.userData.type;
   z.userData.allowShieldDrop = allowShieldDrop;
@@ -4472,7 +4634,12 @@ function getUpgradeIconHost() {
 
 function openPicker() {
   offered = pickUpgradeOffers(3);
-  if (!offered.length) { queueWave(3.2); return; } // everything maxed out
+  if (!offered.length) {
+    // Everything maxed — still hand off to the bay after wave 10.
+    if (state.wave === 10 && !state.bayActive) { beginBayTransition(); return; }
+    queueWave(3.2);
+    return;
+  }
   state.choosing = true;
   hud.cards.dataset.input = lastPlayInput === 'gamepad' ? 'gamepad' : 'pointer';
   padPickerSel = 0;
@@ -4536,8 +4703,13 @@ function choose(i) {
   // brief beat so the pick registers visually before the picker closes
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
-  choose._t = setTimeout(hidePicker, 320);
-  queueWave(2.0);
+  const startBay = state.wave === 10 && !state.bayActive;
+  choose._t = setTimeout(() => {
+    hidePicker();
+    if (startBay) beginBayTransition();
+  }, 320);
+  // Wave 10 → Defence Bay walk instead of wave 11.
+  if (!startBay) queueWave(2.0);
   toastQueue.push({ text: u.id === 'bot' ? (state.upgrades.bot === 1 ? 'HELPER BOT DEPLOYED' : `HELPER BOT UPGRADED · RANK ${state.upgrades.bot}`) : u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
@@ -4929,7 +5101,11 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0, waveClearShieldDone: false,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
+    bayActive: false, scripted: null,
   });
+  fogBlend = 0;
+  room2SouthDoor?.open();
+  restoreRoom2EnemySolid();
   emeraldChain = 0;
   botMilestonesDone.clear();
   updateWeaponIcon();
@@ -6035,7 +6211,10 @@ function separateDrones() {
 function update(dt, lightFrame = false) {
   const px = player.position.x, pz = player.position.z;
   tickPlayInput(dt);
-  if (state.running && !state.choosing) {
+  updatePlayFog(dt);
+  if (state.running && state.scripted) {
+    updateBayTransition(dt);
+  } else if (state.running && !state.choosing) {
     // --- movement (always first, even on hitch frames) ---
     let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);
     let mz = keyboardAxis(['KeyW', 'ArrowUp'], ['KeyS', 'ArrowDown']);
@@ -6049,11 +6228,17 @@ function update(dt, lightFrame = false) {
       player.position.x += (mx / l) * state.speed * stepDt;
       player.position.z += (mz / l) * state.speed * stepDt;
     }
-    // Clamp clear of wall/opening collision slabs so the operator can't nestle
-    // into a door/window gap where drones used to deadlock.
-    const lim = HALF - PLAYER_WALL_INSET;
-    player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
-    player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
+    if (state.bayActive) {
+      const lim = room2PlayerClamp(PLAYER_WALL_INSET);
+      player.position.x = THREE.MathUtils.clamp(player.position.x, lim.minX, lim.maxX);
+      player.position.z = THREE.MathUtils.clamp(player.position.z, lim.minZ, lim.maxZ);
+    } else {
+      // Clamp clear of wall/opening collision slabs so the operator can't nestle
+      // into a door/window gap where drones used to deadlock.
+      const lim = HALF - PLAYER_WALL_INSET;
+      player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
+      player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
+    }
     // --- aim ---
     raycaster.setFromCamera(mouse, camera);
     // Right stick / pad steers aim when deflected; otherwise the gun follows the move stick
@@ -6089,7 +6274,7 @@ function update(dt, lightFrame = false) {
   if (state.running) {
     // --- weapon ---
     state.fireCd -= dt;
-    if (firing && !state.choosing) fire();
+    if (firing && !state.choosing && !state.scripted && !state.bayActive) fire();
     if (state.reloading) {
       state.reloadT += dt;
       if (state.reloadT >= state.reloadTime) finishReload();
@@ -6105,8 +6290,9 @@ function update(dt, lightFrame = false) {
     }
 
     // --- waves ---
-    if (state.choosing) {
-      // wave cleared — waiting on the upgrade pick
+    if (state.choosing || state.scripted || state.bayActive) {
+      // wave cleared / bay walk / empty Defence Bay shell — no spawns
+      if (state.bayActive) { state.intermission = 0; waveAt = null; }
     } else if (state.intermission > 0) {
       const scoreTime = audio.scoreTime();
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
@@ -6298,7 +6484,6 @@ function whenViewportSettled(done) {
 whenViewportSettled(() => {
   document.body.classList.remove('viewport-pending');
   onResize();
-  const bootParams = new URLSearchParams(location.search);
   // ?demo=boss-death — auto-plays the finale for capture / QA.
   if (bootParams.get('demo') === 'boss-death') {
     setTimeout(() => {
@@ -6320,6 +6505,27 @@ whenViewportSettled(() => {
       player.position.set(0, 0, 0);
       player.rotation.y = 0;
       beginBossDeath(z);
+    }, 350);
+  } else if (bayDev) {
+    // ?dev=bay — jump to the wave-10 cleared picker in room 1 (test the walk).
+    setTimeout(() => {
+      startGame(false);
+      state.intermission = 0;
+      waveAt = null;
+      state.toSpawn = 0;
+      state.bossPending = false;
+      state.wave = 10;
+      clearFieldDrones();
+      clearEmeralds();
+      clearEquipmentField();
+      player.position.set(BAY_DOOR_X, 0, -2);
+      player.rotation.y = Math.PI; // face north (toward the bay)
+      touchYaw = Math.PI;
+      followPos.copy(player.position).add(gameplayCamOffset());
+      camera.position.copy(followPos);
+      camMix = 1;
+      audio.waveClear();
+      openPicker();
     }, 350);
   } else if (mapView) {
     // Start a normal wave-1 run under the overview camera so the map is visible.

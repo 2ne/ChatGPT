@@ -311,6 +311,14 @@ export function createAudio(settings, listener) {
     bash(pos, strength = 1) { const out = spatial(pos, 0.35); voice(106, 50, 0.18, 0.29 * strength, { out, type: 'triangle' }); grain(1600, 0.12, 0.24 * strength, out); },
     crack(pos) { grain(4300, 0.14, 0.3, spatial(pos, 0.3)); },
     doorBreak(pos) { const out = spatial(pos, 0.6); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
+    /** Heavy blast-door slam — denser than a breach. */
+    doorSlam(pos) {
+      const out = spatial(pos, 0.85);
+      grain(520, 0.55, 0.55, out);
+      grain(140, 0.7, 0.48, out);
+      voice(90, 28, 0.5, 0.42, { out, type: 'triangle' });
+      voice(48, 16, 0.62, 0.38, { out, type: 'sine' });
+    },
     shatter(pos) { const out = spatial(pos, 0.5); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
     waveClear() { score?.clearWave(); },
     /** Soft restorative chime for wave-clear / announced shield refill. */

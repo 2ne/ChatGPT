@@ -41,6 +41,11 @@ export function pointInRoom2(x, z, margin = 0.6) {
 
 /** Room-1 north door span (game.js buildWall) — room-2 south door matches this. */
 export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
+/** Door centre on X (walk path stays on this line — clears the reactor at x≈5.3). */
+export const BAY_DOOR_X = (ROOM1_NORTH_DOOR.u0 + ROOM1_NORTH_DOOR.u1) / 2;
+
+/** How far inside room 2 the Stage-3 walk stops (a few deck tiles past the south door). */
+export const BAY_STOP_INSET = 5.2;
 
 /** Exterior pad so a player hugging future room-2 walls still sees floor, not void. */
 export const EXTERIOR_MARGIN = 22;
@@ -198,7 +203,98 @@ export function buildRoom2Shell(parent) {
   // Lintel fill above the door opening
   wallRunX(group, panelMat, southZ, door.u0, door.u1, (doorTop + SHELL_H) / 2 + 0.05, SHELL_H - doorTop - 0.05, SHELL_T);
 
+  // Stage 3: slam leaf (starts open so the gap reads; slamDoorShut closes it).
+  const leafW = dw - 2 * jamb - 0.02;
+  const leafH = 1.92;
+  const leaf = new THREE.Mesh(
+    new THREE.BoxGeometry(leafW, leafH, 0.16),
+    shellMat(SHELL_POST),
+  );
+  leaf.castShadow = true;
+  leaf.receiveShadow = true;
+  const hinge = new THREE.Group();
+  hinge.name = 'room2SouthDoor';
+  hinge.position.set(door.u0 + jamb + 0.01, 0.02, southZ);
+  leaf.position.set(leafW / 2, leafH / 2, 0);
+  hinge.add(leaf);
+  // Open into the bay (swung clear of the walk path).
+  hinge.rotation.y = -Math.PI * 0.92;
+  group.add(hinge);
+  group.userData.southDoor = {
+    hinge,
+    open() { hinge.rotation.y = -Math.PI * 0.92; },
+    shut() { hinge.rotation.y = 0; },
+    x: BAY_DOOR_X,
+    z: southZ,
+  };
+
   return group;
+}
+
+/**
+ * Room-2 wall AABBs for player/shot collision once inside the bay.
+ * South door gap stays open when `southDoorOpen` is true (walk-in); closed after slam.
+ */
+export function room2WallBoxes({ southDoorOpen = false } = {}) {
+  const pad = ROOM2_COLLIDE_PAD;
+  const t = SHELL_T / 2 + pad;
+  const door = ROOM1_NORTH_DOOR;
+  const boxes = [
+    // North
+    {
+      minX: -ROOM2_HX - pad, maxX: ROOM2_HX + pad,
+      minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
+    },
+    // West / east
+    {
+      minX: -ROOM2_HX - t, maxX: -ROOM2_HX + t,
+      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_SOUTH + pad,
+    },
+    {
+      minX: ROOM2_HX - t, maxX: ROOM2_HX + t,
+      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_SOUTH + pad,
+    },
+  ];
+  if (southDoorOpen) {
+    boxes.push(
+      {
+        minX: -ROOM2_HX - pad, maxX: door.u0,
+        minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
+      },
+      {
+        minX: door.u1, maxX: ROOM2_HX + pad,
+        minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
+      },
+    );
+  } else {
+    boxes.push({
+      minX: -ROOM2_HX - pad, maxX: ROOM2_HX + pad,
+      minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
+    });
+  }
+  return boxes;
+}
+
+/** Player clamp limits inside room 2 (south door shut). */
+export function room2PlayerClamp(inset = 1.05) {
+  return {
+    minX: -ROOM2_HX + inset,
+    maxX: ROOM2_HX - inset,
+    minZ: ROOM2_NORTH + inset,
+    maxZ: ROOM2_SOUTH - inset,
+  };
+}
+
+/** Stage-3 auto-walk waypoints: room-1 north door → gap (past reactor) → room-2 stop. */
+export function bayWalkWaypoints(room1Half = ROOM1_HALF) {
+  const x = BAY_DOOR_X;
+  return [
+    { x, z: -room1Half + 2.4 },           // approach room-1 north door
+    { x, z: -room1Half - 0.45 },          // through the frame
+    { x, z: -18.2 },                      // gap strip west of reactor (reactor ≈ x 5.3)
+    { x, z: ROOM2_SOUTH + 0.9 },          // square up on room-2 south door
+    { x, z: ROOM2_SOUTH - BAY_STOP_INSET }, // a few tiles inside
+  ];
 }
 
 /** Map-view framing: both rooms + the open strip between them (no fog in mapview). */

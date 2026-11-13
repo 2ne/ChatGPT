@@ -12,7 +12,8 @@
     "check:helper": "node check-helper.mjs",
     "check:shield": "node check-shield-clear.mjs",
     "check:door-gap": "node check-door-gap.mjs",
-    "check:corner-melee": "node check-corner-melee.mjs"
+    "check:corner-melee": "node check-corner-melee.mjs",
+    "check:bay-walk": "node check-bay-walk.mjs"
   },
   "dependencies": {
     "@fontsource/oxanium": "^5.3.0",
