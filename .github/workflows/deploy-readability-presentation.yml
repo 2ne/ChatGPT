@@ -11,6 +11,7 @@ on:
       - "primary-learn/**"
       - "prototype-to-pilot/**"
       - "sector-null/**"
+      - "sector-null-preview/**"
       - ".github/workflows/deploy-readability-presentation.yml"
   workflow_dispatch:
 
@@ -60,7 +61,7 @@ jobs:
           npm run build --prefix sector-null
       - name: Package projects at their own URLs
         run: |
-          mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach pages/research-agent-orbs pages/primary-learn pages/prototype-to-pilot pages/sector-null
+          mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach pages/research-agent-orbs pages/primary-learn pages/prototype-to-pilot pages/sector-null pages/sector-null-preview
           cp -R readability-presentation/dist/. pages/readability-presentation/
           cp -R snip/dist/. pages/snip/
           cp -R treadmill-coach/dist/. pages/treadmill-coach/
@@ -68,6 +69,8 @@ jobs:
           cp -R primary-learn/dist/. pages/primary-learn/
           cp -R prototype-to-pilot/dist/. pages/prototype-to-pilot/
           cp -R sector-null/dist/. pages/sector-null/
+          # Static preview build of the Defence Bay rework (committed assets; does not replace live sector-null).
+          if [ -d sector-null-preview ]; then cp -R sector-null-preview/. pages/sector-null-preview/; fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

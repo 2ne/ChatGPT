@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Sector Null</title>
+<meta name="theme-color" content="#080e16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script type="module" crossorigin src="./assets/main-BibGHQfx.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/upgrade-card-inDfKVui.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-D8oaXBfi.css">
+</head>
+<body class="viewport-pending">
+<canvas id="game" tabindex="-1" aria-label="Reactor defence arena"></canvas>
+<div id="bootError" class="overlay hidden" role="alert">Sector Null needs a browser with WebGL enabled.</div>
+<div id="touchControls" class="hidden">
+  <button type="button" id="touchReload">Recharge</button>
+  <div class="stick" id="moveStick" aria-hidden="true"></div>
+  <div class="stick" id="aimStick" aria-hidden="true"></div>
+</div>
+
+<div id="hud">
+  <div id="topbar">
+    <div class="run-stats">
+      <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
+      <div id="health" role="img" aria-label="Shields">
+        <span id="shieldPips" aria-hidden="true"></span>
+        <span id="shieldCount" aria-hidden="true"></span>
+      </div>
+      <div id="powerups"></div>
+    </div>
+    <div class="enemy-stats">
+      <div class="score-copy">
+        <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
+        <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
+      </div>
+      <button type="button" id="touchPause" aria-label="Pause">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="bossPanel" hidden>
+    <span id="bossName"></span>
+    <progress id="bossHealth" max="1" value="1" aria-label="Boss health"></progress>
+  </div>
+  <div id="ammoWrap">
+    <svg id="weaponIcon" viewBox="0 0 176 60" role="img" aria-label="Pulse rifle">
+      <g stroke="#a4e4fa" stroke-width="1.2" stroke-linejoin="round">
+        <path fill="#4388ab" d="M23 28h25l8-4h28l6-3h41l6 5h13l5-4h13v15l-5 5h-18l-6-6h-16l-5 13h-10l4-13h-9l-5 11H87l2-11H57l-7-4H23Z"/>
+        <path fill="#78c0dc" d="M24 26h12v8H24zM95 21v-6h27l4 6z"/>
+      </g>
+      <path fill="none" stroke="#c4f2ff" stroke-opacity=".65" d="M58 28h26m6 0h18m6 0h12m19 4h17"/>
+      <g id="weaponMods" fill="#83cbe6" stroke="#c4f2ff" stroke-width="1.2" stroke-linejoin="round"></g>
+    </svg>
+    <div id="cellStatus" role="status" aria-live="polite">CELL READY</div>
+    <div id="mag" role="img" aria-label="Energy cell"></div>
+    <div id="reloadBar"><div id="reloadFill"></div></div>
+  </div>
+
+  <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
+  <div id="toast" role="status">
+    <span id="toastLine">
+      <span id="toastIcon" aria-hidden="true"></span>
+      <span id="toastTitle"></span>
+    </span>
+    <span id="toastDetail"></span>
+  </div>
+</div>
+
+<div id="flash"></div>
+
+<div id="picker" class="hidden">
+  <div id="pickerTitle"></div>
+  <div id="pickerSub"></div>
+  <div id="cards"></div>
+</div>
+
+<div id="menu" class="splash">
+  <div id="menuShade" aria-hidden="true"></div>
+  <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div id="menuCol">
+    <h1 id="title" aria-label="Sector Null"><span id="titleTop">Sector</span><span id="titleMain"><span class="title-word" data-text="Null">Null</span><i class="title-dot" aria-hidden="true"></i></span></h1>
+    <button type="button" id="pressAny"><span>Press</span> <b>Start</b> <span>to begin</span></button>
+    <nav id="menuList" aria-label="Main menu">
+      <button type="button" data-act="play">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 4v16l13 -8l-13 -8" />
+        </svg>
+        <span>Play</span>
+      </button>
+      <button type="button" data-act="scores">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1 -10 0z" />
+          <path d="M17 8h2a2 2 0 0 1 0 4h-2" />
+          <path d="M7 8H5a2 2 0 0 0 0 4h2" />
+        </svg>
+        <span>Leaderboard</span>
+      </button>
+      <button type="button" data-act="how">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M2 8a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2l0 -8" />
+          <path d="M6 12h4m-2 -2v4" />
+          <path d="M15 11l0 .01" />
+          <path d="M18 13l0 .01" />
+        </svg>
+        <span>Controls</span>
+      </button>
+      <button type="button" data-act="settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
+          <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <section id="howPanel" class="mpanel">
+    <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h2>CONTROLS</h2>
+    <button type="button" class="close-panel" aria-label="Close controls">×</button>
+    <div class="how-group how-touch">
+      <h3>TOUCH</h3>
+      <div class="mrows">
+        <div class="crow"><span class="caps"><kbd class="wide">L THUMB</kbd></span><b>MOVE</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">R THUMB</kbd></span><b>AIM + FIRE</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">WEAPON</kbd></span><b>RECHARGE</b></div>
+      </div>
+    </div>
+    <div class="how-group how-kbm">
+      <h3>KEYBOARD &amp; MOUSE</h3>
+      <div class="mrows">
+        <div class="crow"><span class="caps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><b>MOVE</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">MOUSE</kbd></span><b>AIM</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">CLICK</kbd></span><b>SHOOT</b></div>
+        <div class="crow"><span class="caps"><kbd>R</kbd></span><b>RECHARGE</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">ESC</kbd></span><b>PAUSE</b></div>
+      </div>
+    </div>
+    <div class="how-group how-pad">
+      <h3>CONTROLLER</h3>
+      <div class="mrows">
+        <div class="crow"><span class="caps"><kbd class="wide">L STICK</kbd></span><b>MOVE</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">R STICK</kbd></span><b>AIM + FIRE</b></div>
+        <div class="crow"><span class="caps"><kbd>X</kbd><kbd>LB</kbd></span><b>RECHARGE</b></div>
+        <div class="crow"><span class="caps"><kbd class="wide">MENU</kbd></span><b>PAUSE</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scoresPanel" class="mpanel scores-panel">
+    <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h2>LEADERBOARD</h2>
+    <p class="scores-caption">Top 25 runs</p>
+    <button type="button" class="close-panel" aria-label="Close leaderboard">×</button>
+    <div id="scoresBody" class="scores-body">
+      <div class="scores-head" hidden aria-hidden="true">
+        <span>RANK</span><span>SCORE</span><span>WAVE</span><span>NAME</span>
+      </div>
+      <div id="scoresList" class="scores-list" role="list" aria-label="Top 25 scores. Scroll to see more rankings." tabindex="0" aria-live="polite"></div>
+      <p id="scoresStatus" class="scores-status loading" role="status">
+        <span class="scores-spinner" aria-hidden="true"></span>
+        <span class="scores-status-text">Loading board…</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="settingsPanel" class="mpanel">
+    <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h2>SETTINGS</h2>
+    <button type="button" class="close-panel" aria-label="Close settings">×</button>
+    <div class="mrows" id="settingRows">
+      <div class="srow" data-key="music"><b>MUSIC</b><span class="meter"></span><em></em></div>
+      <div class="srow" data-key="sfx"><b>SOUND FX</b><span class="meter"></span><em></em></div>
+    </div>
+  </section>
+
+</div>
+<div id="fadeIn"></div>
+
+<div id="pause" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+  <div id="pausePanel">
+    <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h2 id="pauseTitle"><span class="pause-word" data-text="PAUSED">PAUSED</span></h2>
+    <div id="pauseStat"></div>
+    <div id="pauseSettings" class="mrows">
+      <div class="srow" data-key="music" tabindex="0"><b>MUSIC</b><span class="meter"></span><em></em></div>
+      <div class="srow" data-key="sfx" tabindex="0"><b>SOUND FX</b><span class="meter"></span><em></em></div>
+    </div>
+    <div id="pauseMenu">
+      <button type="button" id="resumeBtn" class="death-action">Resume</button>
+      <button type="button" id="restartBtn" class="death-action">Restart run</button>
+      <button type="button" id="quitBtn" class="death-action">Main menu</button>
+    </div>
+  </div>
+</div>
+
+<div id="death" class="overlay hidden">
+  <div id="deathPanel">
+    <div class="station-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h1 id="deathTitle"><span class="death-word" data-text="GAME OVER">GAME OVER</span></h1>
+    <div id="deathStat"></div>
+    <div id="deathBest"></div>
+    <form id="deathNameForm" class="hidden" autocomplete="off">
+      <label for="deathName">Name</label>
+      <div class="death-name-row">
+        <input id="deathName" name="name" maxlength="3" spellcheck="false" inputmode="text" aria-describedby="deathSubmitStatus" autocapitalize="characters" enterkeyhint="send" />
+        <button type="submit" id="deathSubmit"><span class="death-submit-label">Submit score</span><span class="death-submit-spin" aria-hidden="true"></span></button>
+      </div>
+      <p id="deathSubmitStatus" role="status" aria-live="polite">Enter 3 letters</p>
+    </form>
+    <div id="deathArcade" class="hidden" aria-hidden="true">
+      <div class="death-callsign-band" aria-hidden="true">
+        <span class="death-callsign-rule"></span>
+        <span class="death-callsign-label">Callsign</span>
+        <span class="death-callsign-rule"></span>
+      </div>
+      <div id="deathReels" class="death-reels" role="group" aria-label="Callsign letters">
+        <button type="button" class="death-reel" data-reel="0" aria-label="Callsign character 1">
+          <span class="death-reel-chev up" aria-hidden="true"></span>
+          <span class="death-reel-stack"><span class="prev"></span><span class="cur"></span><span class="next"></span></span>
+          <span class="death-reel-chev down" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="death-reel" data-reel="1" aria-label="Callsign character 2">
+          <span class="death-reel-chev up" aria-hidden="true"></span>
+          <span class="death-reel-stack"><span class="prev"></span><span class="cur"></span><span class="next"></span></span>
+          <span class="death-reel-chev down" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="death-reel" data-reel="2" aria-label="Callsign character 3">
+          <span class="death-reel-chev up" aria-hidden="true"></span>
+          <span class="death-reel-stack"><span class="prev"></span><span class="cur"></span><span class="next"></span></span>
+          <span class="death-reel-chev down" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="death-actions">
+        <button type="button" id="deathArcadeSubmit" class="death-action death-action-primary">
+          <span class="death-submit-label">Submit score</span>
+          <span class="death-submit-spin" aria-hidden="true"></span>
+        </button>
+      </div>
+      <p id="deathArcadeStatus" role="status"></p>
+    </div>
+    <div id="deathSubmitted" class="hidden" aria-hidden="true">
+      <div class="submitted-table" role="table" aria-label="Leaderboard after your submission">
+        <div class="scores-head" role="row">
+          <span role="columnheader">RANK</span><span role="columnheader">SCORE</span>
+          <span role="columnheader">WAVE</span><span role="columnheader">NAME</span>
+        </div>
+        <div id="deathBoardList" class="scores-list" role="rowgroup" tabindex="0" aria-label="Top 25 runs. Scroll to see more rankings."></div>
+        <div id="deathBoardOutside" role="rowgroup" aria-label="Your submitted run" hidden></div>
+      </div>
+    </div>
+    <div id="deathMenu" class="death-actions">
+      <button type="button" id="retryBtn" class="death-action">Play again</button>
+      <button type="button" id="deathQuitBtn" class="death-action">Main menu</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

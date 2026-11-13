@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sector Null — 3D Upgrade Icons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100dvh;
+    font-family: "Rajdhani", "Arial Narrow", sans-serif;
+    font-weight: 600;
+    color: #d5e7ee;
+    background:
+      radial-gradient(ellipse at 50% -10%, #102838 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 60%, #0c1a14 0%, transparent 40%),
+      #060b12;
+    padding: 32px 20px 64px;
+  }
+  .page { width: min(1200px, 100%); margin: 0 auto; }
+  header { margin-bottom: 36px; }
+  header h1 {
+    font-family: "Oxanium", "Rajdhani", sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.09em;
+    color: #9af5ff;
+    text-shadow: 0 0 8px #45ecff99, 0 0 30px #45ecff55;
+  }
+  header p {
+    margin-top: 10px;
+    max-width: 64ch;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #9aaeb8;
+    letter-spacing: 0.04em;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0 8px;
+  }
+  .filters button {
+    appearance: none;
+    border: 1px solid #2c4858;
+    background: #0a141e;
+    color: #c3d2d9;
+    font: 700 13px/1 "Rajdhani", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .filters button[aria-pressed="true"] {
+    border-color: var(--cat, #45ecff);
+    color: #07111a;
+    background: var(--cat, #45ecff);
+  }
+  .section { margin-top: 40px; }
+  .section.hidden { display: none; }
+  .section h2 {
+    font-family: "Oxanium", "Rajdhani", sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cat, #9af5ff);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--cat, #45ecff) 35%, transparent);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 22px;
+  }
+  .upgrade-block { margin-bottom: 28px; }
+  .upgrade-block h3 {
+    font-family: "Oxanium", "Rajdhani", sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #7a909c;
+    margin: 0 0 12px;
+  }
+  .trio {
+    display: grid;
+    grid-template-columns: 1.06fr 1fr 1fr;
+    gap: 24px;
+    width: min(1120px, 100%);
+  }
+  .note {
+    margin-top: 10px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6a8490;
+  }
+  .req {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #7a909c;
+  }
+  @media (max-width: 720px) {
+    .trio { grid-template-columns: 1fr; }
+  }
+</style>
+  <script type="module" crossorigin src="./assets/upgradeCards3d-Dmnvi_UV.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/upgrade-card-inDfKVui.js">
+  <link rel="stylesheet" crossorigin href="./assets/upgradeCards3d-Bz8_YGiL.css">
+</head>
+<body class="upgrade-cards-page">
+  <div class="page">
+    <header>
+      <h1>3D UPGRADE ICONS</h1>
+      <p>
+        Every upgrade at every offer rank, rendered with the same card chrome and
+        <code>stat()</code> as the in-game wave-clear picker.
+      </p>
+      <div class="filters" id="filters" role="toolbar" aria-label="Filter by category"></div>
+    </header>
+
+    <section class="section" data-section="sample">
+      <h2 style="--cat:#9af5ff">Sample picker layout</h2>
+      <div class="trio" id="trio"></div>
+      <p class="note">Recommended · alternative · ability</p>
+    </section>
+
+    <div id="catalog"></div>
+  </div>
+
+</body>
+</html>

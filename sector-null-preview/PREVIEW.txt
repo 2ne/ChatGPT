@@ -1,0 +1,3 @@
+Sector Null Defence Bay rework preview.
+Built from cursor/defence-bay-rework-6fce — not the live game.
+Live (pre-bay): ../sector-null/
