@@ -1,7 +1,6 @@
-Sector Null Defence Bay — staged preview (Stage 1).
+Sector Null Defence Bay — staged preview (Stage 1 signed off).
 Branch: cursor/defence-bay-staged
-- Original deck + hole-cut plane; world-XZ fog (near 10.35 / far 21)
-- Mobile/touch landscape cam zoom 0.82 (~18% closer), follow clamp ~7.2; desktop unchanged
-- Door/window gap: plane-crossing nav + tighter player clamp
-- Mapview: no fog — ?dev=mapview
+- World-XZ fog; mobile landscape cam zoom 0.82; door-gap drone fix
+- Fix: boss clear-shield not respawned after early pickup (waveClearShieldDone)
 Live (pre-bay) game: ../sector-null/
+Map overview: ?dev=mapview
