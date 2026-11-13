@@ -1,6 +1,7 @@
 Sector Null Defence Bay — staged preview (Stage 2).
 Branch: cursor/defence-bay-staged
-- Stage 1: exterior plane, world-XZ fog (north eased), mobile cam zoom, door-gap + clear-shield fixes
-- Stage 2: room-2 outer shell only (walls + floor/outline + south door gap, door-to-door, no corridor, no collision)
+- Room 2 shell north of room 1 with ~5-tile exterior gap (south door X-aligned; reactor in the gap)
+- ROOM2_SOUTH=-18 / NORTH=-62; north fog ease 0.8 so only a hint of room 2 at screen top
+- Stage 1 fog/zoom/door-gap/clear-shield unchanged otherwise
 Live (pre-bay) game: ../sector-null/
 Map overview: ?dev=mapview
