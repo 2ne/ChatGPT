@@ -1,4 +1,4 @@
-Sector Null Defence Bay — staged preview (Stage 1: extended original deck floor).
+Sector Null Defence Bay — staged preview (Stage 1 + door-gap drone freeze fix).
 Branch: cursor/defence-bay-staged
 Live (pre-bay) game: ../sector-null/
 Map overview: ?dev=mapview
