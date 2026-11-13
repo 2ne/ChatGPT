@@ -1,9 +1,9 @@
-Sector Null Defence Bay — staged preview (Stage 3).
+Sector Null Defence Bay — staged preview (Stage 4).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b223 · 66fc701 · 14:27
-- Stage 3 walk: wave-10 picker → north door → gap (past reactor) → room 2 slam
-- Empty bay shell after slam; fog eases; ?dev=bay jumps to wave-10 picker
-- Room 2 south z=-25; enemy footprint solid until slam swaps wall segments
+Label: PREVIEW b224 · 6824295 · 14:51
+- Stage 4 look: concept bay (doors, pillars, channels, pads, octagon + coil)
+- Bars removed: elevated gantries z=-25/-31 + occluding wall panel stacks
+- Stage 3 walk + slam + ?dev=bay still work; fog clears inside bay
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
