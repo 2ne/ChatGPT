@@ -510,47 +510,6 @@ const builders = {
     g.userData.gemShadows = gemShadows;
     return g;
   },
-  coil(owned = 0) {
-    const g = new THREE.Group();
-    const rank = owned + 1;
-    const steel = std(0x4a6578, { metalness: 0.72, roughness: 0.32 });
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.62, 0.18, 8), steel);
-    base.position.y = -0.35;
-    g.add(base);
-    const socket = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.28, 0.34, 0.12, 16),
-      glow(0x62edff, 0.55 + rank * 0.25),
-    );
-    socket.position.y = -0.22;
-    g.add(socket);
-    const mast = addBox(g, steel, 0.14, 0.95 + rank * 0.06, 0.14, 0, 0.28, 0);
-    const ball = new THREE.Mesh(
-      new THREE.SphereGeometry(0.22 + rank * 0.015, 14, 12),
-      glow(rank >= 1 ? 0x9af5ff : 0x3a5568, rank >= 1 ? 1.4 + rank * 0.2 : 0.2),
-    );
-    ball.position.y = 0.85 + rank * 0.04;
-    g.add(ball);
-    if (rank >= 1) {
-      const arcs = new THREE.Group();
-      for (let i = 0; i < Math.min(3, rank); i++) {
-        const arc = new THREE.Mesh(
-          new THREE.TorusGeometry(0.38 + i * 0.1, 0.016, 6, 20, Math.PI * 1.15),
-          glow(0x9af5ff, 1.8),
-        );
-        arc.rotation.set(0.5 + i * 0.35, i * 1.2, i * 0.4);
-        arcs.add(arc);
-      }
-      arcs.position.y = 0.55;
-      g.add(arcs);
-      g.userData.arcs = arcs;
-    }
-    if (rank >= 3) {
-      addBox(g, glow(0xffa648, 0.9), 0.08, 0.08, 0.08, 0.32, -0.28, 0.28);
-    }
-    g.userData.coilBall = ball;
-    g.userData.mast = mast;
-    return g;
-  },
 };
 
 function disposeObject(root) {
@@ -644,10 +603,6 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   if (ud.rotor) ud.rotor.rotation.z += dt * (hot ? (ud.rotorSpeed || 5) * 1.8 : (ud.rotorSpeed || 5)) * idle;
   if (ud.ring) ud.ring.rotation.z += dt * 1.5 * idle;
   if (ud.arcs) ud.arcs.rotation.y += dt * 2.2 * idle;
-  if (ud.coilBall) {
-    const pulse = 0.92 + 0.08 * Math.sin(t * 5);
-    ud.coilBall.scale.setScalar(pulse);
-  }
   if (ud.waves) {
     ud.waves.forEach((w, i) => {
       const u = (t * 0.9 + i * 0.25) % 1;
