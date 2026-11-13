@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { installWorldXzFog, playFogRange } from './world-xz-fog.js';
 import '@fontsource/rajdhani/latin-600.css';
 import '@fontsource/rajdhani/latin-700.css';
 import '@fontsource/oxanium/latin-700.css';
@@ -48,6 +48,29 @@ import {
   submitScore,
   writePlayerName,
 } from './scores.js';
+import {
+  MAPVIEW_CAM,
+  buildExtendedFloor,
+  buildRoom2Shell,
+  pointInRoom2,
+  room2CollisionBoxes,
+} from './facility-exterior.js';
+import {
+  PLAYER_WALL_INSET,
+  sameSideOfOpening,
+  shutBlocksWallSample,
+} from './door-gap-nav.js';
+import { huntPointToward } from './drone-hunt.js';
+import { initPreviewStamp } from './preview-stamp.js';
+// Room-2 footprint constants live in facility-exterior.js for later stages.
+
+// Must run before any material compiles — swaps camera-depth fog for world-XZ falloff
+// so the extended exterior fades (classic “bigger map” trick on a top-down camera).
+installWorldXzFog();
+// Preview-only badge + version.json reload (no-op on live builds).
+initPreviewStamp();
+
+const mapView = new URLSearchParams(location.search).get('dev') === 'mapview';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -71,11 +94,49 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x080e16);
-scene.fog = new THREE.Fog(0x080e16, 26, 67);
+const CLEAR = 0x080e16;
+scene.background = new THREE.Color(CLEAR);
+// World-XZ fog (see world-xz-fog.js): fades the extended exterior so the map feels
+// bigger. near/far are Chebyshev distances from room centre — just outside the
+// walls → full black a short way into the outskirts. Mapview keeps fog off.
+// HALF is 10; fog range applied once HALF is declared below.
+let PLAY_FOG_NEAR = 10.35;
+let PLAY_FOG_FAR = 21;
+scene.fog = null;
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+/** Desktop / portrait follow offset — never change this for desktop. */
 const CAM_OFFSET = new THREE.Vector3(0, 24, 11);
+/** Mobile/touch landscape only: scale offset (~18% closer). */
+const MOBILE_LANDSCAPE_ZOOM = 0.82;
+const _camOff = new THREE.Vector3();
+const _camFocus = new THREE.Vector3();
+
+/** True on phone/tablet in landscape (Home Screen web app, Safari, etc.). */
+function touchLandscapePlay() {
+  const { w, h } = layoutSize();
+  return w > h && (runDevice === 'phone' || runDevice === 'tablet');
+}
+
+function gameplayCamOffset() {
+  _camOff.copy(CAM_OFFSET);
+  if (touchLandscapePlay()) _camOff.multiplyScalar(MOBILE_LANDSCAPE_ZOOM);
+  return _camOff;
+}
+
+/**
+ * Look-at / follow target. On the closer landscape cam, clamp inside the room so
+ * the frustum doesn’t peek past the walls more than the desktop centre view.
+ */
+function gameplayCamFocus() {
+  _camFocus.copy(player.position);
+  if (!touchLandscapePlay()) return _camFocus;
+  // Allow follow through most of the deck; pull inward near walls (zoom 0.82 → lim ~7.2).
+  const lim = HALF * MOBILE_LANDSCAPE_ZOOM * 0.88;
+  _camFocus.x = THREE.MathUtils.clamp(_camFocus.x, -lim, lim);
+  _camFocus.z = THREE.MathUtils.clamp(_camFocus.z, -lim, lim);
+  return _camFocus;
+}
 
 function pinViewport() {
   window.scrollTo(0, 0);
@@ -248,6 +309,8 @@ const HALF = 10;
 const WALL_H = 2.4;
 const WALL_T = 0.7;
 const EDGE = HALF + WALL_T / 2;
+({ near: PLAY_FOG_NEAR, far: PLAY_FOG_FAR } = playFogRange(HALF, 0.35, 11));
+if (!mapView) scene.fog = new THREE.Fog(CLEAR, PLAY_FOG_NEAR, PLAY_FOG_FAR);
 const world = new THREE.Group();
 scene.add(world);
 const worldMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.58, metalness: 0.38 });
@@ -265,8 +328,9 @@ const CYAN = 0x62edff;
 const AMBER = 0xffa648;
 const carbon = new THREE.MeshStandardMaterial({ color: 0x172733, metalness: 0.48, roughness: 0.42 });
 const alloy = new THREE.MeshStandardMaterial({ color: 0x506375, metalness: 0.55, roughness: 0.35 });
-const cyanLight = new THREE.MeshBasicMaterial({ color: CYAN, toneMapped: false });
-const amberLight = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false });
+// fog:false — emissive gate/reactor accents must not wash out under distance fog.
+const cyanLight = new THREE.MeshBasicMaterial({ color: CYAN, toneMapped: false, fog: false });
+const amberLight = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false, fog: false });
 function model(parent, geometry, material, x, y, z) {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
@@ -282,6 +346,8 @@ function box(parent, material, x, y, z, w, h, d) {
 const deck = new BlockBatch();
 const deckRandom = seeded(87);
 const panels = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
+// Exact main deck plate loop (−19…19). Do not enlarge this — a bigger BlockBatch
+// stalls iPhone frames and freezes drone AI near the walls.
 for (let z = -19; z <= 19; z++) {
   for (let x = -19; x <= 19; x++) {
     const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
@@ -299,6 +365,12 @@ for (const side of [-1, 1]) {
   }
 }
 bakedMesh(deck, false);
+// Cheap floor extension past the original deck (hole-cut plane, no overlap, no nav cost).
+buildExtendedFloor(world, new THREE.MeshStandardMaterial({
+  color: 0x1c2b37, metalness: 0.38, roughness: 0.62,
+}));
+// Stage 2: room-2 outer shell (mesh). Collision boxes registered after room-1 walls.
+buildRoom2Shell(world);
 const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.13, 0);
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
@@ -473,6 +545,9 @@ buildWall('x', -HALF, [[-5.8, -4.2, 'door'], [4, 6, 'window']]);
 buildWall('z', -HALF, [[-1.5, 0.5, 'window']]);
 buildWall('z',  HALF, [[1.5, 3.5, 'window']]);
 
+// Room-2 footprint is solid for enemy nav/shots/spawns (player stays clamped in room 1).
+for (const box of room2CollisionBoxes()) wallBoxes.push(box);
+
 bakedMesh(wallB);
 const SOLIDS = [];
 function addSolid(x, z, hx, hz, rotation = 0) {
@@ -585,6 +660,15 @@ for (const z of [-25, -31]) {
   perimeter.add([[68, 0.36, 1.2, 0, 7.6, z, 0x263947], [68, 0.21, 0.42, 0, 6.9, z, 0x3e5467]], perimeterRandom);
 }
 bakedMesh(perimeter, false);
+
+if (mapView) {
+  // Overview: no world-XZ fog so the full reserved floor stays readable.
+  scene.fog = null;
+  camera.near = MAPVIEW_CAM.near;
+  camera.far = MAPVIEW_CAM.far;
+  camera.fov = MAPVIEW_CAM.fov;
+  camera.updateProjectionMatrix();
+}
 
 const dustRandom = seeded(1027);
 const dustPoints = new Float32Array(510 * 3);
@@ -2827,18 +2911,30 @@ function offscreen(x, z) {
 function spawnPoint(out) {
   spawnCam.aspect = layoutSize().w / layoutSize().h;
   spawnCam.updateProjectionMatrix();
-  spawnCam.position.copy(player.position).add(CAM_OFFSET);
-  spawnCam.lookAt(player.position.x, 0, player.position.z);
+  const focus = gameplayCamFocus();
+  spawnCam.position.copy(focus).add(gameplayCamOffset());
+  spawnCam.lookAt(focus.x, 0, focus.z);
   spawnCam.updateMatrixWorld();
   const ang = Math.random() * Math.PI * 2, cx = Math.sin(ang), cz = Math.cos(ang);
   let r = 12;
   const along = r => [player.position.x + cx * r, player.position.z + cz * r];
-  // walk out along a random bearing until it's off screen and clear of the deck
-  for (; r < 70; r += 1) {
+  // Walk out until off-screen, clear of room 1, and outside room 2’s footprint/walls.
+  for (; r < 90; r += 1) {
     const [x, z] = along(r);
-    if (offscreen(x, z) && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)) break;
+    if (
+      offscreen(x, z)
+      && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)
+      && !pointInRoom2(x, z)
+    ) break;
   }
-  [out.x, out.z] = along(r + 1.5 + Math.random() * 3);
+  let [sx, sz] = along(r + 1.5 + Math.random() * 3);
+  // If the jittered point still lands in room 2, keep stepping out.
+  for (let guard = 0; pointInRoom2(sx, sz) && guard < 40; guard++) {
+    r += 1;
+    [sx, sz] = along(r + 1.5);
+  }
+  out.x = sx;
+  out.z = sz;
   out.y = 0;
   pushOutOfSolids(out);
   return out;
@@ -3308,7 +3404,10 @@ function navClear(ax, az, bx, bz, radius, entrances = false) {
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
   }
   if (entrances) for (const o of openings) {
-    if (o.kind === 'door' && o.hp <= 0) continue;
+    // Intact openings only block paths that CROSS the wall plane — same-side
+    // hunting along a door/window gap must not freeze drones outside melee.
+    if (o.hp <= 0) continue;
+    if (sameSideOfOpening(o, ax, az, bx, bz)) continue;
     const w = o.box, cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
     if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
@@ -5270,7 +5369,19 @@ const titlePos = new THREE.Vector3(), titleLook = new THREE.Vector3(), camLook =
 let camMix = 0; // 0 = title shot, 1 = follow cam
 const swoop = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in-out cubic
 function updateCamera(dt) {
-  tmp.copy(player.position).add(CAM_OFFSET);
+  // ?dev=mapview — far top-down overview of room 1 + reserved room-2 floor + exterior.
+  if (mapView && !title.active) {
+    camera.position.lerp(MAPVIEW_CAM.position, 1 - Math.pow(0.02, dt));
+    camLook.lerp(MAPVIEW_CAM.lookAt, 1 - Math.pow(0.02, dt));
+    camera.lookAt(camLook);
+    if (Math.abs(camera.fov - MAPVIEW_CAM.fov) > 1e-3) {
+      camera.fov = MAPVIEW_CAM.fov;
+      camera.updateProjectionMatrix();
+    }
+    return;
+  }
+  const focus = gameplayCamFocus();
+  tmp.copy(focus).add(gameplayCamOffset());
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
     const s = reducedMotion.matches ? 0 : state.shake;
@@ -5289,7 +5400,7 @@ function updateCamera(dt) {
 
   const e = swoop(camMix);
   camera.position.lerpVectors(titlePos, followPos, e);
-  camLook.lerpVectors(titleLook, player.position, e);
+  camLook.lerpVectors(titleLook, focus, e);
   camera.lookAt(camLook);
   const fov = THREE.MathUtils.lerp(TITLE_FOV, GAME_FOV, e);
   if (Math.abs(camera.fov - fov) > 1e-3) { camera.fov = fov; camera.updateProjectionMatrix(); }
@@ -5598,7 +5709,8 @@ function wallBetween(a, b) {
   for (let i = 1; i < 4; i++) {
     const x = a.x + (b.x - a.x) * i / 4, z = a.z + (b.z - a.z) * i / 4;
     for (const w of wallBoxes) if (x >= w.minX && x <= w.maxX && z >= w.minZ && z <= w.maxZ) return true;
-    if (shutAt(x, z)) return true;
+    const shut = shutAt(x, z);
+    if (shut && shutBlocksWallSample(shut, a.x, a.z, b.x, b.z)) return true;
   }
   return false;
 }
@@ -5658,26 +5770,16 @@ function hurtPlayer(damage = 1) {
   return true;
 }
 
-// Shared hunt point: same pursuit for every bot, with a soft inward pull near
-// corners so packs do not freeze when the operator stands in a pocket.
+// Shared hunt point: same pursuit for every bot. Must stay inside melee reach —
+// the old corner shrink parked packs ~2.8u short of a tucked operator.
 function huntPoint(z, px, pz) {
-  const radius = botRadius(z);
-  const margin = radius + 0.55;
-  let tx = THREE.MathUtils.clamp(px, -HALF + margin, HALF - margin);
-  let tz = THREE.MathUtils.clamp(pz, -HALF + margin, HALF - margin);
-  const corner = (HALF - margin) * 0.7;
-  if (Math.abs(tx) > corner && Math.abs(tz) > corner) {
-    tx *= 0.78;
-    tz *= 0.78;
-  }
-  // Chargers commit straight in; everyone else fans slightly so packs don't stack.
-  if (z.userData.type.style !== 'rusher') {
-    const side = Math.sin(z.userData.seed * 7.13);
-    const dx = px - z.position.x, dz = pz - z.position.z, d = Math.hypot(dx, dz) || 1;
-    tx += (-dz / d) * side * 0.65;
-    tz += (dx / d) * side * 0.65;
-  }
-  return { x: tx, z: tz };
+  return huntPointToward(px, pz, z.position.x, z.position.z, {
+    half: HALF,
+    radius: botRadius(z),
+    seed: z.userData.seed,
+    style: z.userData.type.style,
+    reach: Z_REACH,
+  });
 }
 
 function chaseDrone(z, dt) {
@@ -5947,8 +6049,9 @@ function update(dt, lightFrame = false) {
       player.position.x += (mx / l) * state.speed * stepDt;
       player.position.z += (mz / l) * state.speed * stepDt;
     }
-    // clamp inside deck
-    const lim = HALF - 0.7;
+    // Clamp clear of wall/opening collision slabs so the operator can't nestle
+    // into a door/window gap where drones used to deadlock.
+    const lim = HALF - PLAYER_WALL_INSET;
     player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
     player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
     // --- aim ---
@@ -6195,8 +6298,9 @@ function whenViewportSettled(done) {
 whenViewportSettled(() => {
   document.body.classList.remove('viewport-pending');
   onResize();
+  const bootParams = new URLSearchParams(location.search);
   // ?demo=boss-death — auto-plays the finale for capture / QA.
-  if (new URLSearchParams(location.search).get('demo') === 'boss-death') {
+  if (bootParams.get('demo') === 'boss-death') {
     setTimeout(() => {
       startGame(true);
       state.intermission = 0;
@@ -6217,5 +6321,13 @@ whenViewportSettled(() => {
       player.rotation.y = 0;
       beginBossDeath(z);
     }, 350);
+  } else if (mapView) {
+    // Start a normal wave-1 run under the overview camera so the map is visible.
+    setTimeout(() => {
+      startGame(false);
+      camera.position.copy(MAPVIEW_CAM.position);
+      camLook.copy(MAPVIEW_CAM.lookAt);
+      camera.lookAt(camLook);
+    }, 200);
   }
 });

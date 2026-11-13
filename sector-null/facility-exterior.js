@@ -1,0 +1,211 @@
+/**
+ * Defence Bay staged prep: footprint constants, exterior floor, room-2 outer shell,
+ * mapview framing.
+ */
+import * as THREE from 'three';
+
+/** Room 1 half-extent (matches game.js HALF). */
+export const ROOM1_HALF = 10;
+
+/** Room 2 (~2.3× room-1 floor). South door X-aligned with room-1 north door. */
+export const ROOM2_HX = 24;
+export const ROOM2_HZ = 22;
+/**
+ * Open exterior strip between room-1 north wall and room-2 south wall (~9–10
+ * deck tiles → south wall ≈ z=-25). Bigger gap so gameplay only sees a faint
+ * hint of room 2; reactor at z≈-13.6 stays in the strip outside room 2.
+ */
+export const ROOM2_THRESHOLD = 15;
+export const ROOM2_CZ = -(ROOM1_HALF + ROOM2_THRESHOLD + ROOM2_HZ);
+export const ROOM2_SOUTH = ROOM2_CZ + ROOM2_HZ;
+export const ROOM2_NORTH = ROOM2_CZ - ROOM2_HZ;
+
+/** Half-thickness pad for room-2 collision footprint (matches shell depth). */
+export const ROOM2_COLLIDE_PAD = 0.28;
+
+/** Axis-aligned footprint including walls — enemies must route around, never through. */
+export function room2CollisionBoxes() {
+  return [{
+    minX: -ROOM2_HX - ROOM2_COLLIDE_PAD,
+    maxX: ROOM2_HX + ROOM2_COLLIDE_PAD,
+    minZ: ROOM2_NORTH - ROOM2_COLLIDE_PAD,
+    maxZ: ROOM2_SOUTH + ROOM2_COLLIDE_PAD,
+  }];
+}
+
+/** True if (x,z) is inside room 2’s footprint (for spawn rejection). */
+export function pointInRoom2(x, z, margin = 0.6) {
+  return x >= -ROOM2_HX - margin && x <= ROOM2_HX + margin
+    && z <= ROOM2_SOUTH + margin && z >= ROOM2_NORTH - margin;
+}
+
+/** Room-1 north door span (game.js buildWall) — room-2 south door matches this. */
+export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
+
+/** Exterior pad so a player hugging future room-2 walls still sees floor, not void. */
+export const EXTERIOR_MARGIN = 22;
+
+/** Original main deck grid: indices -19…19 on a 1.6u step (must stay untouched). */
+export const DECK_STEP = 1.6;
+export const ORIGINAL_DECK_INDEX = 19;
+/** World half-extent of the original baked deck plates (centre of outer plate + half size). */
+export const ORIGINAL_DECK_HALF = ORIGINAL_DECK_INDEX * DECK_STEP + 1.565 / 2;
+
+/**
+ * One flat floor mesh covering room-2 footprint + margin, with a hole for the
+ * original deck AABB so it never coplanar-overlaps those plates.
+ * Same dark exterior colour as room-1’s outside plates (0x1c2b37).
+ */
+export function buildExtendedFloor(parent, material) {
+  const xMax = ROOM2_HX + EXTERIOR_MARGIN;
+  const zMin = ROOM2_NORTH - EXTERIOR_MARGIN;
+  const zMax = ROOM1_HALF + EXTERIOR_MARGIN;
+  const hole = ORIGINAL_DECK_HALF + 0.02;
+
+  const shape = new THREE.Shape();
+  shape.moveTo(-xMax, zMin);
+  shape.lineTo(xMax, zMin);
+  shape.lineTo(xMax, zMax);
+  shape.lineTo(-xMax, zMax);
+  shape.lineTo(-xMax, zMin);
+
+  // Opposite winding to the outer path (Three.js hole requirement).
+  const cut = new THREE.Path();
+  cut.moveTo(-hole, -hole);
+  cut.lineTo(hole, -hole);
+  cut.lineTo(hole, hole);
+  cut.lineTo(-hole, hole);
+  cut.lineTo(-hole, -hole);
+  shape.holes.push(cut);
+
+  const geo = new THREE.ShapeGeometry(shape);
+  geo.rotateX(-Math.PI / 2);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.position.y = -0.06;
+  mesh.receiveShadow = true;
+  mesh.castShadow = false;
+  parent.add(mesh);
+  return mesh;
+}
+
+const SHELL_H = 2.4;
+const SHELL_T = 0.55;
+const SHELL_PANELS = [0x425765, 0x364957, 0x3d5466, 0x344650];
+const SHELL_POST = 0x1c2d38;
+const SHELL_FRAME = 0x5b7182;
+const FLOOR_IN = 0x263543;
+const FLOOR_TRIM = 0x6f8a9e;
+
+function shellMat(color, extras = {}) {
+  return new THREE.MeshStandardMaterial({
+    color, metalness: 0.38, roughness: 0.55, ...extras,
+  });
+}
+
+function addBox(parent, mat, x, y, z, w, h, d) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  parent.add(m);
+  return m;
+}
+
+/** Horizontal wall run along X at fixed Z, optionally skipping [gap0, gap1]. */
+function wallRunX(parent, mat, z, x0, x1, y, h, d) {
+  const len = Math.abs(x1 - x0);
+  if (len < 0.05) return;
+  addBox(parent, mat, (x0 + x1) / 2, y, z, len, h, d);
+}
+
+/** Horizontal wall run along Z at fixed X. */
+function wallRunZ(parent, mat, x, z0, z1, y, h, d) {
+  const len = Math.abs(z1 - z0);
+  if (len < 0.05) return;
+  addBox(parent, mat, x, y, (z0 + z1) / 2, d, h, len);
+}
+
+/**
+ * Stage 2: room-2 outer shell only (walls + floor/outline + south door gap).
+ * Shell mesh is visual; collision boxes come from room2CollisionBoxes() (enemies
+ * only — room-1 player clamp unchanged). South door X-aligned with room-1 north door.
+ */
+export function buildRoom2Shell(parent) {
+  const group = new THREE.Group();
+  group.name = 'room2Shell';
+  parent.add(group);
+
+  // South wall on the room-2 boundary (clear exterior strip south of here to room 1).
+  const southZ = ROOM2_SOUTH;
+  const northZ = ROOM2_NORTH;
+  const westX = -ROOM2_HX;
+  const eastX = ROOM2_HX;
+  const door = ROOM1_NORTH_DOOR;
+  const panelMat = shellMat(SHELL_PANELS[1]);
+  const postMat = shellMat(SHELL_POST);
+  const frameMat = shellMat(SHELL_FRAME);
+  const floorMat = shellMat(FLOOR_IN, { metalness: 0.32, roughness: 0.62 });
+  const trimMat = shellMat(FLOOR_TRIM, { metalness: 0.45, roughness: 0.4 });
+
+  // Interior floor (above the exterior plane) + edge outline.
+  const floorW = ROOM2_HX * 2 - 0.15;
+  const floorD = Math.abs(northZ - southZ) - SHELL_T * 0.2;
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(floorW, 0.1, floorD), floorMat);
+  floor.position.set(0, -0.04, (southZ + northZ) / 2);
+  floor.receiveShadow = true;
+  floor.castShadow = false;
+  group.add(floor);
+
+  // Thin outline trim on the floor edge (reads as room footprint).
+  const inset = 0.35;
+  const fz0 = southZ + inset, fz1 = northZ - inset;
+  const fx0 = westX + inset, fx1 = eastX - inset;
+  const tw = 0.12, th = 0.04;
+  wallRunX(group, trimMat, fz0, fx0, fx1, 0.02, th, tw);
+  wallRunX(group, trimMat, fz1, fx0, fx1, 0.02, th, tw);
+  wallRunZ(group, trimMat, fx0, fz0, fz1, 0.02, th, tw);
+  wallRunZ(group, trimMat, fx1, fz0, fz1, 0.02, th, tw);
+
+  // Panel bands (visual match to room-1 bulkheads — no collision).
+  const bandH = 0.37;
+  const band0 = 0.21;
+  for (let k = 0; k < 6; k++) {
+    const y = band0 + k * 0.4;
+    const mat = shellMat(SHELL_PANELS[k % SHELL_PANELS.length]);
+    // South wall with door gap
+    wallRunX(group, mat, southZ, westX, door.u0 - 0.05, y, bandH, SHELL_T);
+    wallRunX(group, mat, southZ, door.u1 + 0.05, eastX, y, bandH, SHELL_T);
+    // North / west / east solid
+    wallRunX(group, mat, northZ, westX, eastX, y, bandH, SHELL_T);
+    wallRunZ(group, mat, westX, southZ, northZ, y, bandH, SHELL_T);
+    wallRunZ(group, mat, eastX, southZ, northZ, y, bandH, SHELL_T);
+  }
+
+  // Cap rail
+  wallRunX(group, frameMat, southZ, westX, door.u0 - 0.05, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunX(group, frameMat, southZ, door.u1 + 0.05, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunX(group, frameMat, northZ, westX, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunZ(group, frameMat, westX, southZ, northZ, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunZ(group, frameMat, eastX, southZ, northZ, SHELL_H, 0.06, SHELL_T + 0.08);
+
+  // South door frame (outline only — not in openings[], room-1 door stays shut).
+  const jamb = 0.14;
+  const doorTop = 2.03;
+  const dw = door.u1 - door.u0;
+  addBox(group, postMat, door.u0 + jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
+  addBox(group, postMat, door.u1 - jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
+  addBox(group, postMat, (door.u0 + door.u1) / 2, doorTop + 0.02, southZ, dw + 0.1, 0.14, SHELL_T + 0.12);
+  // Lintel fill above the door opening
+  wallRunX(group, panelMat, southZ, door.u0, door.u1, (doorTop + SHELL_H) / 2 + 0.05, SHELL_H - doorTop - 0.05, SHELL_T);
+
+  return group;
+}
+
+/** Map-view framing: both rooms + the open strip between them (no fog in mapview). */
+export const MAPVIEW_CAM = {
+  position: new THREE.Vector3(0, 145, -28),
+  lookAt: new THREE.Vector3(0, 0, -28),
+  fov: 48,
+  near: 14,
+  far: 360,
+};
