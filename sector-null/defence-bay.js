@@ -248,23 +248,25 @@ export function buildDefenceBay(parent, helpers) {
     if (!swingingLeaf) {
       for (const side of [-1, 1]) {
         const cx = side * (w / 4);
+        const leafW = w / 2 - 0.08;
         doorB.add([
-          [w / 2 - 0.08, h - 0.15, 0.38, cx, h / 2 - 0.02, 0.05, POST, 0, 0, 0, 0.06],
-          [w / 2 - 0.24, h - 0.4, 0.16, cx, h / 2, 0.2, FRAME, 0, 0, 0, 0.04],
-          [w / 2 - 0.36, 0.28, 0.12, cx, h * 0.58, 0.28, 0x2a3d4c, 0, 0, 0, 0.025],
+          [leafW, h - 0.15, 0.38, cx, h / 2 - 0.02, 0.05, POST, 0, 0, 0, 0.06],
+          [leafW - 0.16, h - 0.4, 0.16, cx, h / 2, 0.2, FRAME, 0, 0, 0, 0.04],
+          [leafW - 0.28, 0.28, 0.12, cx, h * 0.58, 0.28, 0x2a3d4c, 0, 0, 0, 0.025],
           // Big X emboss readable from above
-          [w * 0.32, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, side * 0.7, 0.015],
-          [w * 0.32, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, -side * 0.7, 0.015],
+          [leafW * 0.55, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, side * 0.7, 0.015],
+          [leafW * 0.55, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, -side * 0.7, 0.015],
         ], drng);
-      }
-      // Hazard chevron stripes — top + bottom bands (wide so they read top-down)
-      for (let i = 0; i < 14; i++) {
-        const hx = (i - 6.5) * 0.32;
-        if (Math.abs(hx) > w / 2 - 0.15) continue;
-        doorB.add([
-          [0.28, 0.16, 0.14, hx, 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-          [0.28, 0.16, 0.14, hx, h - 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-        ], drng);
+        // Hazard chevrons per leaf — span that leaf’s full width (top + bottom)
+        const stripeW = 0.26;
+        const nStripe = Math.max(6, Math.floor(leafW / (stripeW + 0.04)));
+        for (let i = 0; i < nStripe; i++) {
+          const hx = cx - leafW / 2 + stripeW / 2 + 0.04 + i * (leafW - 0.08) / nStripe;
+          doorB.add([
+            [stripeW, 0.16, 0.14, hx, 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+            [stripeW, 0.16, 0.14, hx, h - 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+          ], drng);
+        }
       }
     }
     const mesh = new THREE.Mesh(doorB.build(), worldMat);
@@ -298,49 +300,67 @@ export function buildDefenceBay(parent, helpers) {
   makeStaticDoor(-(ROOM2_HX - 0.08), ROOM2_CZ, Math.PI / 2, 'ew');
   makeStaticDoor(ROOM2_HX - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
 
-  // South slam door — same massive frame; leaf swings shut with weight
+  // South slam door — massive frame stays; leaves only cover the collision gap
+  // (DOOR_GAP), each on its own hinge. Previously both leaves sat under one left
+  // hinge at full visual width, so the open door looked like a wall chunk on the
+  // left that vanished after the slam.
   const southDoorRoot = new THREE.Group();
   southDoorRoot.position.set(BAY_DOOR_X, 0, ROOM2_SOUTH);
   group.add(southDoorRoot);
   const southDims = buildBlastDoor(southDoorRoot, 'ns', { swingingLeaf: true });
-  const jamb = 0.2;
-  const leafW = southDims.w / 2 - jamb - 0.06;
-  const leafH = southDims.h - 0.2;
-  const hinge = new THREE.Group();
-  hinge.position.set(-southDims.w / 2 + jamb + 0.04, 0.04, 0.05);
-  southDoorRoot.add(hinge);
-  const leafB = new BlockBatch();
+  const jamb = 0.12;
+  const leafClear = DOOR_GAP - 2 * jamb;
+  const leafW = leafClear / 2 - 0.03;
+  const leafH = southDims.h - 0.25;
   const leafRng = seeded(77);
-  // Two leaves parented under one hinge group for a solid slam silhouette
-  for (const side of [0, 1]) {
-    const cx = leafW * (side + 0.5);
+  function makeSlamLeaf(side) {
+    // side: -1 left leaf, +1 right leaf
+    const hinge = new THREE.Group();
+    const hingeX = side < 0 ? -DOOR_GAP / 2 + jamb : DOOR_GAP / 2 - jamb;
+    hinge.position.set(hingeX, 0.04, 0.05);
+    southDoorRoot.add(hinge);
+    const leafB = new BlockBatch();
+    // Geometry in hinge-local space: leaf extends inward toward centre
+    const cx = side < 0 ? leafW / 2 : -leafW / 2;
     leafB.add([
-      [leafW - 0.04, leafH, 0.4, cx, leafH / 2, 0, POST, 0, 0, 0, 0.06],
-      [leafW - 0.22, leafH - 0.35, 0.16, cx, leafH / 2, 0.18, FRAME, 0, 0, 0, 0.04],
-      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, 0.7, 0.015],
-      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, -0.7, 0.015],
+      [leafW, leafH, 0.38, cx, leafH / 2, 0, POST, 0, 0, 0, 0.06],
+      [leafW - 0.16, leafH - 0.35, 0.16, cx, leafH / 2, 0.18, FRAME, 0, 0, 0, 0.04],
+      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, side * 0.7, 0.015],
+      [leafW * 0.55, 0.14, 0.1, cx, leafH * 0.5, 0.28, 0x4a6070, 0, 0, -side * 0.7, 0.015],
     ], leafRng);
+    // Full-width hazard on this leaf
+    const stripeW = 0.22;
+    const nStripe = Math.max(4, Math.floor(leafW / (stripeW + 0.03)));
+    for (let i = 0; i < nStripe; i++) {
+      const hx = cx - leafW / 2 + stripeW / 2 + 0.03 + i * (leafW - 0.06) / nStripe;
+      leafB.add([
+        [stripeW, 0.15, 0.12, hx, 0.22, 0.26, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+        [stripeW, 0.15, 0.12, hx, leafH - 0.22, 0.26, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+      ], leafRng);
+    }
+    const leafMesh = new THREE.Mesh(leafB.build(), worldMat);
+    leafMesh.castShadow = true;
+    hinge.add(leafMesh);
+    return hinge;
   }
-  for (let i = 0; i < 16; i++) {
-    const hx = (i - 7.5) * 0.3;
-    if (Math.abs(hx) > southDims.w / 2 - 0.3) continue;
-    leafB.add([[
-      0.26, 0.15, 0.12, southDims.w / 4 + hx * 0.5, 0.22, 0.26,
-      i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012,
-    ]], leafRng);
-  }
-  const leafMesh = new THREE.Mesh(leafB.build(), worldMat);
-  leafMesh.castShadow = true;
-  hinge.add(leafMesh);
-  const OPEN_Y = -Math.PI * 0.92;
-  const SHUT_Y = 0;
-  hinge.rotation.y = OPEN_Y;
+  const hingeL = makeSlamLeaf(-1);
+  const hingeR = makeSlamLeaf(1);
+  // Open: fold each leaf out against its jamb (~90°), not a 166° flop that reads as a wall.
+  const OPEN_L = Math.PI * 0.92;
+  const OPEN_R = -Math.PI * 0.92;
+  const SHUT = 0;
+  hingeL.rotation.y = OPEN_L;
+  hingeR.rotation.y = OPEN_R;
   let slamming = false;
   let slamAnimT = 0;
   const SLAM_DUR = 0.42;
   const southDoor = {
-    hinge,
-    open() { slamming = false; slamAnimT = 0; hinge.rotation.y = OPEN_Y; },
+    hinge: hingeL, // compat for any code that peeks at .hinge
+    open() {
+      slamming = false; slamAnimT = 0;
+      hingeL.rotation.y = OPEN_L;
+      hingeR.rotation.y = OPEN_R;
+    },
     shut() { slamming = true; slamAnimT = 0; },
     get slammed() { return !slamming && slamAnimT >= SLAM_DUR; },
     x: BAY_DOOR_X,
@@ -450,38 +470,44 @@ export function buildDefenceBay(parent, helpers) {
   deckPlate.receiveShadow = true;
   platform.add(deckPlate);
 
-  // Edge trim flush along each octagon face (tangent-aligned, not radial spikes).
-  // Cylinder face i is centred at (i+0.5)*2π/8; long box axis needs +π/2 so it
-  // runs parallel to that face instead of sticking out along the normal.
-  const EDGE_LEN = 2 * 4.35 * Math.tan(Math.PI / 8) * 0.92; // ~face length, slightly inset
+  // Continuous octagonal light rings from the same 8-gon as the dais cylinders
+  // (RingGeometry radialSegments=8). Inset inside the top bevel so nothing pokes out.
+  const DAIS_R1 = 4.55; // tier1 top radius (matches CylinderGeometry above)
+  const DAIS_R2 = 3.95; // tier2 top radius
+  function octRing(inner, outer, y, mat) {
+    // RingGeometry(…, 8) and CylinderGeometry(…, 8) both place vertices at i·π/4,
+    // so the octagon outlines coincide with no extra Z rotation.
+    const ring = new THREE.Mesh(new THREE.RingGeometry(inner, outer, 8), mat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = y;
+    platform.add(ring);
+    return ring;
+  }
+  const hazardRing = octRing(DAIS_R1 - 0.22, DAIS_R1 - 0.06, 0.44, amberLight);
+  pulseStrips.push(hazardRing);
+  octRing(DAIS_R1 - 0.28, DAIS_R1 - 0.22, 0.435, carbon);
+  const upperRing = octRing(DAIS_R2 - 0.18, DAIS_R2 - 0.04, 0.73, cyanLight);
+  pulseStrips.push(upperRing);
+
+  // Cyan inset lights + vent grates on vertical faces (inset, tangent-aligned)
+  const FACE_CHORD = 2 * DAIS_R1 * Math.tan(Math.PI / 8);
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
     const c = Math.cos(a);
     const s = Math.sin(a);
     const tangent = a + Math.PI / 2;
-    // Orange hazard trim on the top bevel of the lower tier — parallel to the edge
-    const hazard = box(platform, amberLight, c * 4.48, 0.44, s * 4.48, EDGE_LEN, 0.07, 0.11);
-    hazard.rotation.y = tangent;
-    // Dark filler stripe next to hazard for chevron read
-    const hazardDk = box(platform, carbon, c * 4.42, 0.43, s * 4.42, EDGE_LEN * 0.92, 0.05, 0.08);
-    hazardDk.rotation.y = tangent;
-    // Small cyan inset lights centred on each vertical face (cardinal edges get a pulse)
-    const cyanInset = box(platform, cyanLight, c * 4.28, 0.28, s * 4.28, 0.55, 0.14, 0.08);
+    const rInset = DAIS_R1 - 0.12;
+    const cyanInset = box(platform, cyanLight, c * rInset, 0.28, s * rInset, 0.5, 0.14, 0.06);
     cyanInset.rotation.y = tangent;
     if (i % 2 === 0) pulseStrips.push(cyanInset);
-    // Cyan ticks on the upper-tier rim, flush to the edge
-    const upperRim = box(platform, cyanLight, c * 3.95, 0.72, s * 3.95, EDGE_LEN * 0.7, 0.05, 0.08);
-    upperRim.rotation.y = tangent;
-    pulseStrips.push(upperRim);
-    // Vent grate panel flush on the vertical face
-    const grate = box(platform, carbon, c * 4.55, 0.22, s * 4.55, EDGE_LEN * 0.72, 0.3, 0.05);
+    const grate = box(platform, carbon, c * (DAIS_R1 - 0.02), 0.22, s * (DAIS_R1 - 0.02), FACE_CHORD * 0.62, 0.3, 0.05);
     grate.rotation.y = tangent;
     for (let g = -2; g <= 2; g++) {
-      const bar = box(platform, alloy, c * 4.57, 0.22, s * 4.57, 0.04, 0.26, 0.04);
+      const bar = box(platform, alloy, 0, 0.22, 0, 0.04, 0.26, 0.04);
       bar.position.set(
-        c * 4.57 + Math.cos(tangent) * g * 0.2,
+        c * DAIS_R1 + Math.cos(tangent) * g * 0.18,
         0.22,
-        s * 4.57 + Math.sin(tangent) * g * 0.2,
+        s * DAIS_R1 + Math.sin(tangent) * g * 0.18,
       );
     }
   }
@@ -601,12 +627,13 @@ export function buildDefenceBay(parent, helpers) {
     solids,
     coil,
     update(dt) {
-      // Weighty slam: ease-in so the leaf accelerates into the frame
+      // Weighty slam: ease-in so both leaves accelerate into the frame
       if (slamming) {
         slamAnimT += dt;
         const k = Math.min(1, slamAnimT / SLAM_DUR);
         const e = k * k * k;
-        hinge.rotation.y = OPEN_Y + (SHUT_Y - OPEN_Y) * e;
+        hingeL.rotation.y = OPEN_L + (SHUT - OPEN_L) * e;
+        hingeR.rotation.y = OPEN_R + (SHUT - OPEN_R) * e;
         if (k >= 1) slamming = false;
       }
 
