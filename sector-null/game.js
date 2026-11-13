@@ -753,7 +753,7 @@ const room1Solids = SOLIDS.slice();
 const room1Gates = gates.slice();
 let bayActiveLive = false;
 const coilArcs = createCoilArcPool(scene);
-const _coilTip = new THREE.Vector3(0, 2.45, BAY_CZ);
+const _coilTip = new THREE.Vector3(0, 4.25, BAY_CZ);
 const _coilHit = new THREE.Vector3();
 
 function rebuildNavObstacles() {
@@ -769,8 +769,8 @@ function rebuildNavObstacles() {
 }
 
 const KEY_POS_REACTOR = new THREE.Vector3(-14, 28, 18);
-const KEY_POS_BAY = new THREE.Vector3(-18, 36, BAY_CZ + 14);
-const FOG_NEAR_BAY = 30, FOG_FAR_BAY = 88;
+const KEY_POS_BAY = new THREE.Vector3(-14, 30, BAY_CZ + 14);
+const FOG_NEAR_BAY = 26, FOG_FAR_BAY = 70;
 /** 0 = reactor framing, 1 = bay framing — eased in updateCamera (no snaps). */
 let camRoomBlend = 0;
 let camRoomBlendTarget = 0;
@@ -793,18 +793,18 @@ function setPlayRoom(id) {
 }
 
 function applyRoomFraming(blend) {
-  // Pull back a touch more than width ratio so the wide bay fills landscape without looking tall.
-  const s = THREE.MathUtils.lerp(1, bayCamScale(BAY_HX) * 1.08, blend);
+  // Slight pullback vs room 1; follow the player so the bay stays playable (not whole-room zoom-out).
+  const s = THREE.MathUtils.lerp(1, bayCamScale(), blend);
   CAM_OFFSET.copy(CAM_OFFSET0).multiplyScalar(s);
-  // Slightly flatter follow for the bay so width reads over depth on landscape screens.
-  CAM_OFFSET.y = THREE.MathUtils.lerp(CAM_OFFSET0.y * s, CAM_OFFSET0.y * s * 0.92, blend);
-  CAM_OFFSET.z = THREE.MathUtils.lerp(CAM_OFFSET0.z * s, CAM_OFFSET0.z * s * 1.12, blend);
   scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR0, FOG_NEAR_BAY, blend);
   scene.fog.far = THREE.MathUtils.lerp(FOG_FAR0, FOG_FAR_BAY, blend);
   key.position.lerpVectors(KEY_POS_REACTOR, KEY_POS_BAY, blend);
-  const shadowSpan = 30 * s;
+  // Match / slightly exceed room-1 key so the bay doesn't read flat.
+  key.intensity = THREE.MathUtils.lerp(2.2, 2.55, blend);
+  ambient.intensity = THREE.MathUtils.lerp(1.85, 2.15, blend);
+  const shadowSpan = 26 * s;
   Object.assign(key.shadow.camera, {
-    left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 84 * s,
+    left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 76 * s,
   });
   key.shadow.camera.updateProjectionMatrix();
 }
