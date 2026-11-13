@@ -70,6 +70,4 @@ export const MAPVIEW_CAM = {
   fov: 48,
   near: 12,
   far: 260,
-  fogNear: 70,
-  fogFar: 220,
 };

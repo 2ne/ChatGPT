@@ -1,4 +1,6 @@
-Sector Null Defence Bay — staged preview (Stage 1: original deck + cheap plane extension).
+Sector Null Defence Bay — staged preview (Stage 1).
 Branch: cursor/defence-bay-staged
+- Original deck + hole-cut plane floor; distance fog fades far plane (mapview: no fog)
+- Door/window gap: drones keep hunting (plane-crossing nav + tighter player clamp)
 Live (pre-bay) game: ../sector-null/
 Map overview: ?dev=mapview

@@ -52,6 +52,11 @@ import {
   MAPVIEW_CAM,
   buildExtendedFloor,
 } from './facility-exterior.js';
+import {
+  PLAYER_WALL_INSET,
+  sameSideOfOpening,
+  shutBlocksWallSample,
+} from './door-gap-nav.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
 const mapView = new URLSearchParams(location.search).get('dev') === 'mapview';
@@ -78,8 +83,14 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x080e16);
-scene.fog = new THREE.Fog(0x080e16, 26, 67);
+const CLEAR = 0x080e16;
+scene.background = new THREE.Color(CLEAR);
+// Distance fog matches the clear colour so far exterior floor fades into darkness.
+// Near stays past room-1 fight distances so the deck and reactor look as before;
+// far covers the Stage-1 plane join and beyond.
+const PLAY_FOG_NEAR = 28;
+const PLAY_FOG_FAR = 74;
+scene.fog = mapView ? null : new THREE.Fog(CLEAR, PLAY_FOG_NEAR, PLAY_FOG_FAR);
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 const CAM_OFFSET = new THREE.Vector3(0, 24, 11);
@@ -272,8 +283,9 @@ const CYAN = 0x62edff;
 const AMBER = 0xffa648;
 const carbon = new THREE.MeshStandardMaterial({ color: 0x172733, metalness: 0.48, roughness: 0.42 });
 const alloy = new THREE.MeshStandardMaterial({ color: 0x506375, metalness: 0.55, roughness: 0.35 });
-const cyanLight = new THREE.MeshBasicMaterial({ color: CYAN, toneMapped: false });
-const amberLight = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false });
+// fog:false — emissive gate/reactor accents must not wash out under distance fog.
+const cyanLight = new THREE.MeshBasicMaterial({ color: CYAN, toneMapped: false, fog: false });
+const amberLight = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false, fog: false });
 function model(parent, geometry, material, x, y, z) {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
@@ -600,8 +612,8 @@ for (const z of [-25, -31]) {
 bakedMesh(perimeter, false);
 
 if (mapView) {
-  scene.fog.near = MAPVIEW_CAM.fogNear;
-  scene.fog.far = MAPVIEW_CAM.fogFar;
+  // Overview: no distance fog so the full reserved floor stays readable.
+  scene.fog = null;
   camera.near = MAPVIEW_CAM.near;
   camera.far = MAPVIEW_CAM.far;
   camera.fov = MAPVIEW_CAM.fov;
@@ -3330,7 +3342,10 @@ function navClear(ax, az, bx, bz, radius, entrances = false) {
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
   }
   if (entrances) for (const o of openings) {
-    if (o.kind === 'door' && o.hp <= 0) continue;
+    // Intact openings only block paths that CROSS the wall plane — same-side
+    // hunting along a door/window gap must not freeze drones outside melee.
+    if (o.hp <= 0) continue;
+    if (sameSideOfOpening(o, ax, az, bx, bz)) continue;
     const w = o.box, cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
     if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
@@ -5627,7 +5642,8 @@ function wallBetween(a, b) {
   for (let i = 1; i < 4; i++) {
     const x = a.x + (b.x - a.x) * i / 4, z = a.z + (b.z - a.z) * i / 4;
     for (const w of wallBoxes) if (x >= w.minX && x <= w.maxX && z >= w.minZ && z <= w.maxZ) return true;
-    if (shutAt(x, z)) return true;
+    const shut = shutAt(x, z);
+    if (shut && shutBlocksWallSample(shut, a.x, a.z, b.x, b.z)) return true;
   }
   return false;
 }
@@ -5976,8 +5992,9 @@ function update(dt, lightFrame = false) {
       player.position.x += (mx / l) * state.speed * stepDt;
       player.position.z += (mz / l) * state.speed * stepDt;
     }
-    // clamp inside deck
-    const lim = HALF - 0.7;
+    // Clamp clear of wall/opening collision slabs so the operator can't nestle
+    // into a door/window gap where drones used to deadlock.
+    const lim = HALF - PLAYER_WALL_INSET;
     player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
     player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
     // --- aim ---
