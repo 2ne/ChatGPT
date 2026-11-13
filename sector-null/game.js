@@ -98,7 +98,38 @@ let PLAY_FOG_FAR = 21;
 scene.fog = null;
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+/** Desktop / portrait follow offset — never change this for desktop. */
 const CAM_OFFSET = new THREE.Vector3(0, 24, 11);
+/** Mobile/touch landscape only: scale offset (~18% closer). */
+const MOBILE_LANDSCAPE_ZOOM = 0.82;
+const _camOff = new THREE.Vector3();
+const _camFocus = new THREE.Vector3();
+
+/** True on phone/tablet in landscape (Home Screen web app, Safari, etc.). */
+function touchLandscapePlay() {
+  const { w, h } = layoutSize();
+  return w > h && (runDevice === 'phone' || runDevice === 'tablet');
+}
+
+function gameplayCamOffset() {
+  _camOff.copy(CAM_OFFSET);
+  if (touchLandscapePlay()) _camOff.multiplyScalar(MOBILE_LANDSCAPE_ZOOM);
+  return _camOff;
+}
+
+/**
+ * Look-at / follow target. On the closer landscape cam, clamp inside the room so
+ * the frustum doesn’t peek past the walls more than the desktop centre view.
+ */
+function gameplayCamFocus() {
+  _camFocus.copy(player.position);
+  if (!touchLandscapePlay()) return _camFocus;
+  // Allow follow through most of the deck; pull inward near walls (zoom 0.82 → lim ~7.2).
+  const lim = HALF * MOBILE_LANDSCAPE_ZOOM * 0.88;
+  _camFocus.x = THREE.MathUtils.clamp(_camFocus.x, -lim, lim);
+  _camFocus.z = THREE.MathUtils.clamp(_camFocus.z, -lim, lim);
+  return _camFocus;
+}
 
 function pinViewport() {
   window.scrollTo(0, 0);
@@ -2868,8 +2899,9 @@ function offscreen(x, z) {
 function spawnPoint(out) {
   spawnCam.aspect = layoutSize().w / layoutSize().h;
   spawnCam.updateProjectionMatrix();
-  spawnCam.position.copy(player.position).add(CAM_OFFSET);
-  spawnCam.lookAt(player.position.x, 0, player.position.z);
+  const focus = gameplayCamFocus();
+  spawnCam.position.copy(focus).add(gameplayCamOffset());
+  spawnCam.lookAt(focus.x, 0, focus.z);
   spawnCam.updateMatrixWorld();
   const ang = Math.random() * Math.PI * 2, cx = Math.sin(ang), cz = Math.cos(ang);
   let r = 12;
@@ -5321,7 +5353,8 @@ function updateCamera(dt) {
     }
     return;
   }
-  tmp.copy(player.position).add(CAM_OFFSET);
+  const focus = gameplayCamFocus();
+  tmp.copy(focus).add(gameplayCamOffset());
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
     const s = reducedMotion.matches ? 0 : state.shake;
@@ -5340,7 +5373,7 @@ function updateCamera(dt) {
 
   const e = swoop(camMix);
   camera.position.lerpVectors(titlePos, followPos, e);
-  camLook.lerpVectors(titleLook, player.position, e);
+  camLook.lerpVectors(titleLook, focus, e);
   camera.lookAt(camLook);
   const fov = THREE.MathUtils.lerp(TITLE_FOV, GAME_FOV, e);
   if (Math.abs(camera.fov - fov) > 1e-3) { camera.fov = fov; camera.updateProjectionMatrix(); }
