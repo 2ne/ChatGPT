@@ -1,9 +1,9 @@
 Sector Null Defence Bay — staged preview (Stage 4).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b235 · c6d7ad2 · 17:19
-- Star Trek split doors (slide into walls) on room-1 north + all room-2 doors
-- Room-2 doorways three tiles wide (4.8); south opens on approach, slams shut
-- Bay symmetric 38 × 44 about walk line
+Label: PREVIEW b236 · 334761a · 17:45
+- Matte walkable stepped octagon coil surround (concept match)
+- Collision only on coil base; floor vents + channel orange panels
+- Star Trek split doors; room-2 openings three tiles; bay 38×44
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
