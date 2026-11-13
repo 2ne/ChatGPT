@@ -1,8 +1,9 @@
-Sector Null Defence Bay — staged preview (Stage 4 polish).
+Sector Null Defence Bay — staged preview (Stage 4).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b229 · d2caad7 · 15:32
-- Flush dais edge lights; quieter coil halo
-- Massive blast doors (buttresses, header, hazard chevrons)
+Label: PREVIEW b230 · 8f67f8d · 15:53
+- Continuous inset octagon light rings
+- South slam leaf wall-pop fixed (two gap-width hinges)
+- Full-width hazard chevrons on all doors
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
