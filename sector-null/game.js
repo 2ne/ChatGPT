@@ -3474,7 +3474,8 @@ function finishWaveClear() {
   bankRemainingLoot();
   clearEquipmentField();
   // No auto-refill — if injured, leave one walk-over shield on the floor (boss may already have).
-  if (state.hp < state.maxHp && !hasWaveClearShield()) {
+  // Skip if a clear-shield was already spawned or collected during the boss-death hold.
+  if (state.hp < state.maxHp && !hasWaveClearShield() && !state.waveClearShieldDone) {
     spawnWaveClearShield(lastKillPos);
   }
   audio.waveClear();
@@ -3649,6 +3650,7 @@ function spawnDrop(type, pos, opts = {}) {
 /** One walk-over +1 SHIELD after a clear / boss kill. Survives the picker; expires after the next wave starts. */
 function spawnWaveClearShield(pos) {
   clearWaveClearShields();
+  state.waveClearShieldDone = true;
   const at = placeReachableDrop(pos);
   spawnDrop(DROP_TYPES.find(t => t.id === 'med'), at, {
     waveClearShield: true,
@@ -3714,6 +3716,7 @@ function updateDrops(dt) {
     const dist = Math.hypot(dx, dz);
     const pickR = ud.waveClearShield ? 1.15 : 0.9;
     if (canCollect && dist < pickR) {
+      if (ud.waveClearShield) state.waveClearShieldDone = true;
       collect(ud.type); scene.remove(d); drops.splice(i, 1); continue;
     }
     if (canCollect && dist < 2.5) {
@@ -4727,6 +4730,7 @@ function updateWaveTypeIntro(dt) {
 function startWave(n) {
   state.wave = n;
   state.shieldDropsThisWave = 0;
+  state.waveClearShieldDone = false;
   state.mortarsSpawned = 0;
   state.bossPending = true;
   state.waveTime = 0;
@@ -4824,7 +4828,7 @@ function resetGame(keep = false) {
     mag: BASE_STATS.magSize, reloading: false, reloadT: 0,
     fireCd: 0, dmgCd: 0, toSpawn: 0, spawnTimer: 0, bossPending: false,
     intermission: 0, choosing: false, shake: 0, upgrades: {},
-    pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0,
+    pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0, waveClearShieldDone: false,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
   });
   emeraldChain = 0;
