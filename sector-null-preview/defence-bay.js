@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { BAY_CX, BAY_DOOR_GAP, BAY_DOOR_X, ROOM2_CZ, ROOM2_HX, ROOM2_HZ,
   ROOM2_NORTH, ROOM2_SOUTH, ROOM2_WEST, ROOM2_EAST } from './facility-exterior.js';
 
-const C = { deck: 0x243744, panel: 0x304756, edge: 0x536b7c, dark: 0x111e29,
+const C = { panel: 0x304756, edge: 0x536b7c, dark: 0x111e29,
   shell: 0x293e4f, cyan: 0x62edff, amber: 0xe5a044 };
 const OCT_R = 5.35;
 const CHANNEL = 0.72;
@@ -25,7 +25,6 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   const glowMaterial = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
   const architecture = new BlockBatch();
   const lamps = new BlockBatch();
-  const rng = seeded(237);
   const fixedTint = () => 0.5;
   function block(batch, w, h, d, x, y, z, color, ry = 0, rz = 0, bevel = 0.035) {
     batch.add([[w, h, d, x, y, z, color, 0, ry, rz, bevel]], fixedTint);
@@ -49,23 +48,38 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     pool.rotation.x = -Math.PI / 2;
   }
 
-  // Trim plates against the cross instead of omitting whole tiles. The dais
-  // sits above continuous decking: no ragged holes or coplanar surfaces.
+  // Interior deck matches Room 1: same plate size, panel palette, bevel and
+  // worldMat. Plates trim against the service cross (no coplanar z-fight); the
+  // dais sits above continuous decking. Exterior pad stays the uniform dark.
+  const DECK_STEP = 1.6;
+  const DECK_TILE = 1.565;
+  const PANELS = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
+  const deckRng = seeded(401);
   const deck = new BlockBatch();
-  for (let z0 = ROOM2_NORTH + 0.35; z0 < ROOM2_SOUTH - 0.35; z0 += 1.6) {
-    for (let x0 = ROOM2_WEST + 0.35; x0 < ROOM2_EAST - 0.35; x0 += 1.6) {
-      const x1 = Math.min(x0 + 1.6, ROOM2_EAST - 0.35);
-      const z1 = Math.min(z0 + 1.6, ROOM2_SOUTH - 0.35);
-      const xs = [[x0, Math.min(x1, BAY_CX - CHANNEL - 0.08)], [Math.max(x0, BAY_CX + CHANNEL + 0.08), x1]];
-      const zs = [[z0, Math.min(z1, ROOM2_CZ - CHANNEL - 0.08)], [Math.max(z0, ROOM2_CZ + CHANNEL + 0.08), z1]];
-      const tint = new THREE.Color(C.deck).multiplyScalar(0.96 + rng() * 0.08).getHex();
+  const inset = 0.35;
+  const lip = CHANNEL + 0.08;
+  const ix0 = Math.ceil((ROOM2_WEST + inset) / DECK_STEP);
+  const ix1 = Math.floor((ROOM2_EAST - inset) / DECK_STEP);
+  const iz0 = Math.ceil((ROOM2_NORTH + inset) / DECK_STEP);
+  const iz1 = Math.floor((ROOM2_SOUTH - inset) / DECK_STEP);
+  for (let iz = iz0; iz <= iz1; iz++) {
+    for (let ix = ix0; ix <= ix1; ix++) {
+      const cx = ix * DECK_STEP;
+      const cz = iz * DECK_STEP;
+      const x0 = cx - DECK_TILE / 2;
+      const x1 = cx + DECK_TILE / 2;
+      const z0 = cz - DECK_TILE / 2;
+      const z1 = cz + DECK_TILE / 2;
+      const xs = [[x0, Math.min(x1, BAY_CX - lip)], [Math.max(x0, BAY_CX + lip), x1]];
+      const zs = [[z0, Math.min(z1, ROOM2_CZ - lip)], [Math.max(z0, ROOM2_CZ + lip), z1]];
+      const tint = PANELS[Math.floor(deckRng() * PANELS.length)];
       for (const [a, b] of xs) for (const [c, d] of zs) {
         if (b - a < 0.07 || d - c < 0.07) continue;
-        block(deck, b - a - 0.025, 0.1, d - c - 0.025, (a + b) / 2, -0.055, (c + d) / 2, tint, 0, 0, 0.014);
+        deck.add([[b - a, 0.11, d - c, (a + b) / 2, -0.06, (c + d) / 2, tint, 0, 0, 0, 0.024]], deckRng);
       }
     }
   }
-  bake(deck, group, material, false);
+  bake(deck, group, worldMat, false);
 
   // Recessed grilles: quiet rails lead to concentrated banks of light.
   for (const axis of ['x', 'z']) {

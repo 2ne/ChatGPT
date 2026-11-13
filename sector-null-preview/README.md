@@ -19,9 +19,11 @@ retains the facility overview. With no query string, the preview starts normally
 
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,
-continuous dark floor plates and restrained cyan/amber service channels. The
-existing shadow light follows the transition into Room 2. The reveal and coil
-pulse respect reduced motion. Room 1 keeps its existing visuals and follow view.
+Room 1-matched interior deck plates (same size, panel palette and material) and
+restrained cyan/amber service channels. Outside the bay walls the exterior pad
+stays a single darker colour so the room reads as enclosed. The existing shadow
+light follows the transition into Room 2. The reveal and coil pulse respect
+reduced motion. Room 1 keeps its existing visuals and follow view.
 
 Door shoulders stand clear of the posts, and crossed braces have separate depth
 layers on both faces, preventing overlapping trim from flickering on mobile.
