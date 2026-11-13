@@ -440,9 +440,7 @@ const OPENING_INSET = 1.5; // how far in/out the entry waypoints sit from the wa
 const SILL = { x: 0.83, z: 0.83 }, HEAD = { x: 1.61, z: 1.61 };
 const DOOR_TOP = 2.03, JAMB = 0.14;
 const DOOR_HP = 12, WINDOW_HP = 2; // blows it takes to break one in
-function buildWall(axis, fixed, gaps, batch = wallB) {
-  const prev = activeWallBatch;
-  activeWallBatch = batch;
+function buildWall(axis, fixed, gaps) {
   const min = -EDGE, max = EDGE, mine = [];
   const segs = [];
   let cursor = min;
@@ -468,11 +466,8 @@ function buildWall(axis, fixed, gaps, batch = wallB) {
     fitOpening(o);
     openings.push(o);
   }
-  activeWallBatch = prev;
 }
 
-/** Active wall batch — north wall uses a separate bake so it can hide after the bay walk. */
-let activeWallBatch = wallB;
 function panelRun(axis, fixed, a, b, layer0, keep) {
   for (let k = 0; k < 6; k++) {
     const y = layer0 + k * WALL_STEP;
@@ -481,9 +476,9 @@ function panelRun(axis, fixed, a, b, layer0, keep) {
     for (let i = 0; i < count; i++) {
       const left = a + (b - a) * i / count;
       const right = a + (b - a) * (i + 1) / count;
-      activeWallBatch.add([wallBlock(axis, fixed, left + 0.022, right - 0.022, y, PANEL_H, PANEL_D, PANELS[(i + k) % PANELS.length], 0.035)], wrng);
+      wallB.add([wallBlock(axis, fixed, left + 0.022, right - 0.022, y, PANEL_H, PANEL_D, PANELS[(i + k) % PANELS.length], 0.035)], wrng);
     }
-    if (k === 5) activeWallBatch.add([wallBlock(axis, fixed, a, b, WALL_H, 0.055, PANEL_D + 0.07, FRAME, 0.01)], wrng);
+    if (k === 5) wallB.add([wallBlock(axis, fixed, a, b, WALL_H, 0.055, PANEL_D + 0.07, FRAME, 0.01)], wrng);
   }
 }
 
@@ -513,9 +508,8 @@ function fitOpening(o) {
   const root = new THREE.Group();
   root.position.set(o.x, 0, o.z); root.rotation.y = o.rotY;
   world.add(root);
-  o.root = root;
   if (o.kind === 'door') {
-    activeWallBatch.add([
+    wallB.add([
       [JAMB, DOOR_TOP + 0.1, PANEL_D + 0.1, -hw + JAMB / 2, (DOOR_TOP + 0.1) / 2, 0, POST, 0, 0, 0, 0.03],  // posts
       [JAMB, DOOR_TOP + 0.1, PANEL_D + 0.1, hw - JAMB / 2, (DOOR_TOP + 0.1) / 2, 0, POST, 0, 0, 0, 0.03],
       [o.w + 0.1, 0.14, PANEL_D + 0.12, 0, DOOR_TOP + 0.02, 0, POST, 0, 0, 0, 0.03],                     // header
@@ -538,7 +532,7 @@ function fitOpening(o) {
     o.leaf.add(leafMesh);
   } else {
     const h = o.head - o.sill, mid = (o.sill + o.head) / 2, iw = o.w - 0.2;
-    activeWallBatch.add([
+    wallB.add([
       [0.1, h + 0.1, PANEL_D + 0.06, -hw + 0.05, mid, 0, POST, 0, 0, 0, 0.02],              // jambs
       [0.1, h + 0.1, PANEL_D + 0.06, hw - 0.05, mid, 0, POST, 0, 0, 0, 0.02],
       [o.w + 0.12, 0.08, PANEL_D + 0.08, 0, o.head, 0, POST, 0, 0, 0, 0.02],              // head
@@ -565,10 +559,8 @@ function fitOpening(o) {
 
 // south wall (+Z, nearest the camera): the back door
 buildWall('x',  HALF, [[-0.8, 0.8, 'door']]);
-// north wall (-Z): separate bake — hide after the bay walk so its panel bands
-// don't sit between the follow camera (+Z offset) and the player.
-const northWallB = new BlockBatch();
-buildWall('x', -HALF, [[-5.8, -4.2, 'door'], [4, 6, 'window']], northWallB);
+// north wall (-Z): the front door on the left, a window on the right
+buildWall('x', -HALF, [[-5.8, -4.2, 'door'], [4, 6, 'window']]);
 // west and east walls: a window each
 buildWall('z', -HALF, [[-1.5, 0.5, 'window']]);
 buildWall('z',  HALF, [[1.5, 3.5, 'window']]);
@@ -582,7 +574,6 @@ let room2CollideCount = wallBoxes.length - room2SolidStart;
 let bayCollisionActive = false;
 
 bakedMesh(wallB);
-const room1NorthWallMesh = bakedMesh(northWallB);
 const SOLIDS = [];
 function addSolid(x, z, hx, hz, rotation = 0) {
   SOLIDS.push({ x, z, hx, hz, c: Math.cos(rotation), s: Math.sin(rotation) });
@@ -700,8 +691,6 @@ const defenceBay = buildDefenceBay(world, {
   box, model, halo, alloy, carbon, cyanLight, amberLight,
 });
 const room2SouthDoor = defenceBay.southDoor;
-const baySouthWall = defenceBay.southWall;
-const baySolidsStart = SOLIDS.length;
 for (const s of defenceBay.solids) SOLIDS.push(s);
 
 if (mapView) {
@@ -3676,33 +3665,6 @@ function restoreRoom2EnemySolid() {
   navGraphs.clear();
 }
 
-/** Hide room-1 north wall panels/door once the player has walked through —
- * otherwise those panel bands sit between the follow cam and the operator. */
-function hideRoom1NorthWall() {
-  if (room1NorthWallMesh) room1NorthWallMesh.visible = false;
-  for (const o of openings) {
-    if (o.axis === 'x' && o.z < 0 && o.root) o.root.visible = false;
-  }
-}
-
-function showRoom1NorthWall() {
-  if (room1NorthWallMesh) room1NorthWallMesh.visible = true;
-  for (const o of openings) {
-    if (o.axis === 'x' && o.z < 0 && o.root) o.root.visible = true;
-  }
-}
-
-/** South bay wall occludes whenever the player is just north of it (cam +Z offset). */
-function updateBaySouthWallVisibility() {
-  if (!baySouthWall) return;
-  if (!state.bayActive && !state.scripted) {
-    baySouthWall.visible = true;
-    return;
-  }
-  // Hide once the player is north of the door plane (inside the bay / mid-crossing).
-  baySouthWall.visible = player.position.z > ROOM2_SOUTH - 0.3;
-}
-
 function beginBayTransition() {
   resetGameplayInput();
   clearFieldDrones();
@@ -3719,7 +3681,6 @@ function beginBayTransition() {
     waypoints: bayWalkWaypoints(HALF),
     wi: 0,
     doorOpen: false,
-    northHidden: false,
     slamT: 0,
     slammed: false,
   };
@@ -3755,12 +3716,6 @@ function updateBayTransition(dt) {
       xfer.doorOpen = true;
       audio.bash(xfer.north, 0.65);
     }
-    // Once through the north door plane, hide its panel stack (the mid-screen bars).
-    if (!xfer.northHidden && player.position.z < -HALF - 0.2) {
-      hideRoom1NorthWall();
-      xfer.northHidden = true;
-    }
-    updateBaySouthWallVisibility();
     const dx = wp.x - player.position.x, dz = wp.z - player.position.z;
     const dist = Math.hypot(dx, dz);
     if (dist < 0.16) {
@@ -3779,7 +3734,6 @@ function updateBayTransition(dt) {
     player.rotation.y = Math.atan2(dx, dz);
     touchYaw = player.rotation.y;
   } else if (xfer.phase === 'slam') {
-    updateBaySouthWallVisibility();
     xfer.slamT += dt;
     if (xfer.slamT >= 0.12 && !xfer.slammed) {
       xfer.slammed = true;
@@ -5156,8 +5110,6 @@ function resetGame(keep = false) {
   });
   fogBlend = 0;
   room2SouthDoor?.open();
-  showRoom1NorthWall();
-  if (baySouthWall) baySouthWall.visible = true;
   restoreRoom2EnemySolid();
   emeraldChain = 0;
   botMilestonesDone.clear();
@@ -6286,7 +6238,6 @@ function update(dt, lightFrame = false) {
       player.position.x = THREE.MathUtils.clamp(player.position.x, lim.minX, lim.maxX);
       player.position.z = THREE.MathUtils.clamp(player.position.z, lim.minZ, lim.maxZ);
       pushOutOfSolids(player.position, 0.45);
-      updateBaySouthWallVisibility();
     } else {
       // Clamp clear of wall/opening collision slabs so the operator can't nestle
       // into a door/window gap where drones used to deadlock.
