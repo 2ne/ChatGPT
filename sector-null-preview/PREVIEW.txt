@@ -1,8 +1,9 @@
-Sector Null Defence Bay — staged preview (Stage 2).
+Sector Null Defence Bay — staged preview (Stage 3).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b222 · ec966e1 · 14:05
-- Corner melee fix: hunt goals stay inside attack reach (grid headless test)
-- Room 2 south z=-25 / north z=-69; enemy footprint solid; north fog ease 0.52
-- Preview stamp + version.json cache bust (PREVIEW=1 only)
+Label: PREVIEW b223 · 66fc701 · 14:27
+- Stage 3 walk: wave-10 picker → north door → gap (past reactor) → room 2 slam
+- Empty bay shell after slam; fog eases; ?dev=bay jumps to wave-10 picker
+- Room 2 south z=-25; enemy footprint solid until slam swaps wall segments
 Live (pre-bay) game: ../sector-null/
+Bay test: ?dev=bay
 Map overview: ?dev=mapview
