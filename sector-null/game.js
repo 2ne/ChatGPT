@@ -60,6 +60,7 @@ import {
   sameSideOfOpening,
   shutBlocksWallSample,
 } from './door-gap-nav.js';
+import { huntPointToward } from './drone-hunt.js';
 import { initPreviewStamp } from './preview-stamp.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
@@ -5769,26 +5770,16 @@ function hurtPlayer(damage = 1) {
   return true;
 }
 
-// Shared hunt point: same pursuit for every bot, with a soft inward pull near
-// corners so packs do not freeze when the operator stands in a pocket.
+// Shared hunt point: same pursuit for every bot. Must stay inside melee reach —
+// the old corner shrink parked packs ~2.8u short of a tucked operator.
 function huntPoint(z, px, pz) {
-  const radius = botRadius(z);
-  const margin = radius + 0.55;
-  let tx = THREE.MathUtils.clamp(px, -HALF + margin, HALF - margin);
-  let tz = THREE.MathUtils.clamp(pz, -HALF + margin, HALF - margin);
-  const corner = (HALF - margin) * 0.7;
-  if (Math.abs(tx) > corner && Math.abs(tz) > corner) {
-    tx *= 0.78;
-    tz *= 0.78;
-  }
-  // Chargers commit straight in; everyone else fans slightly so packs don't stack.
-  if (z.userData.type.style !== 'rusher') {
-    const side = Math.sin(z.userData.seed * 7.13);
-    const dx = px - z.position.x, dz = pz - z.position.z, d = Math.hypot(dx, dz) || 1;
-    tx += (-dz / d) * side * 0.65;
-    tz += (dx / d) * side * 0.65;
-  }
-  return { x: tx, z: tz };
+  return huntPointToward(px, pz, z.position.x, z.position.z, {
+    half: HALF,
+    radius: botRadius(z),
+    seed: z.userData.seed,
+    style: z.userData.type.style,
+    reach: Z_REACH,
+  });
 }
 
 function chaseDrone(z, dt) {
