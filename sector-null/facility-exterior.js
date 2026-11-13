@@ -1,20 +1,23 @@
 /**
- * Stage 1 Defence Bay prep: footprint constants + mapview framing + exterior
- * floor extension (single flat mesh outside the original deck AABB).
+ * Defence Bay staged prep: footprint constants, exterior floor, room-2 outer shell,
+ * mapview framing.
  */
 import * as THREE from 'three';
 
 /** Room 1 half-extent (matches game.js HALF). */
 export const ROOM1_HALF = 10;
 
-/** Future room 2 (~2.3× room-1 floor). Door-to-door with room 1’s north wall. */
+/** Room 2 (~2.3× room-1 floor). Door-to-door with room 1’s north wall — no corridor. */
 export const ROOM2_HX = 24;
 export const ROOM2_HZ = 22;
-/** Short open gap between room-1 north wall and room-2 south wall (no corridor). */
-export const ROOM2_THRESHOLD = 2.2;
+/** Zero gap: south wall meets room-1 north wall (door aligns with room-1 top door). */
+export const ROOM2_THRESHOLD = 0;
 export const ROOM2_CZ = -(ROOM1_HALF + ROOM2_THRESHOLD + ROOM2_HZ);
 export const ROOM2_SOUTH = ROOM2_CZ + ROOM2_HZ;
 export const ROOM2_NORTH = ROOM2_CZ - ROOM2_HZ;
+
+/** Room-1 north door span (game.js buildWall) — room-2 south door matches this. */
+export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
 
 /** Exterior pad so a player hugging future room-2 walls still sees floor, not void. */
 export const EXTERIOR_MARGIN = 22;
@@ -53,7 +56,6 @@ export function buildExtendedFloor(parent, material) {
   shape.holes.push(cut);
 
   const geo = new THREE.ShapeGeometry(shape);
-  // Shape is in XY; rotate into XZ. Match deck plate centres (y = -0.06).
   geo.rotateX(-Math.PI / 2);
   const mesh = new THREE.Mesh(geo, material);
   mesh.position.y = -0.06;
@@ -63,11 +65,124 @@ export function buildExtendedFloor(parent, material) {
   return mesh;
 }
 
-/** Map-view framing so James can see room 1 + reserved room-2 floor + exterior. */
+const SHELL_H = 2.4;
+const SHELL_T = 0.55;
+const SHELL_PANELS = [0x425765, 0x364957, 0x3d5466, 0x344650];
+const SHELL_POST = 0x1c2d38;
+const SHELL_FRAME = 0x5b7182;
+const FLOOR_IN = 0x263543;
+const FLOOR_TRIM = 0x6f8a9e;
+
+function shellMat(color, extras = {}) {
+  return new THREE.MeshStandardMaterial({
+    color, metalness: 0.38, roughness: 0.55, ...extras,
+  });
+}
+
+function addBox(parent, mat, x, y, z, w, h, d) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  parent.add(m);
+  return m;
+}
+
+/** Horizontal wall run along X at fixed Z, optionally skipping [gap0, gap1]. */
+function wallRunX(parent, mat, z, x0, x1, y, h, d) {
+  const len = Math.abs(x1 - x0);
+  if (len < 0.05) return;
+  addBox(parent, mat, (x0 + x1) / 2, y, z, len, h, d);
+}
+
+/** Horizontal wall run along Z at fixed X. */
+function wallRunZ(parent, mat, x, z0, z1, y, h, d) {
+  const len = Math.abs(z1 - z0);
+  if (len < 0.05) return;
+  addBox(parent, mat, x, y, (z0 + z1) / 2, d, h, len);
+}
+
+/**
+ * Stage 2: room-2 outer shell only (walls + floor/outline + south door gap).
+ * Visual only — never added to wallBoxes / openings / nav / solids.
+ * South door lines up with room-1’s north door; no corridor.
+ */
+export function buildRoom2Shell(parent) {
+  const group = new THREE.Group();
+  group.name = 'room2Shell';
+  parent.add(group);
+
+  // Nudge south wall slightly north of room-1’s north bulkhead to avoid z-fighting.
+  const southZ = ROOM2_SOUTH - SHELL_T * 0.55;
+  const northZ = ROOM2_NORTH;
+  const westX = -ROOM2_HX;
+  const eastX = ROOM2_HX;
+  const door = ROOM1_NORTH_DOOR;
+  const panelMat = shellMat(SHELL_PANELS[1]);
+  const postMat = shellMat(SHELL_POST);
+  const frameMat = shellMat(SHELL_FRAME);
+  const floorMat = shellMat(FLOOR_IN, { metalness: 0.32, roughness: 0.62 });
+  const trimMat = shellMat(FLOOR_TRIM, { metalness: 0.45, roughness: 0.4 });
+
+  // Interior floor (above the exterior plane) + edge outline.
+  const floorW = ROOM2_HX * 2 - 0.15;
+  const floorD = Math.abs(northZ - southZ) - SHELL_T * 0.2;
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(floorW, 0.1, floorD), floorMat);
+  floor.position.set(0, -0.04, (southZ + northZ) / 2);
+  floor.receiveShadow = true;
+  floor.castShadow = false;
+  group.add(floor);
+
+  // Thin outline trim on the floor edge (reads as room footprint).
+  const inset = 0.35;
+  const fz0 = southZ + inset, fz1 = northZ - inset;
+  const fx0 = westX + inset, fx1 = eastX - inset;
+  const tw = 0.12, th = 0.04;
+  wallRunX(group, trimMat, fz0, fx0, fx1, 0.02, th, tw);
+  wallRunX(group, trimMat, fz1, fx0, fx1, 0.02, th, tw);
+  wallRunZ(group, trimMat, fx0, fz0, fz1, 0.02, th, tw);
+  wallRunZ(group, trimMat, fx1, fz0, fz1, 0.02, th, tw);
+
+  // Panel bands (visual match to room-1 bulkheads — no collision).
+  const bandH = 0.37;
+  const band0 = 0.21;
+  for (let k = 0; k < 6; k++) {
+    const y = band0 + k * 0.4;
+    const mat = shellMat(SHELL_PANELS[k % SHELL_PANELS.length]);
+    // South wall with door gap
+    wallRunX(group, mat, southZ, westX, door.u0 - 0.05, y, bandH, SHELL_T);
+    wallRunX(group, mat, southZ, door.u1 + 0.05, eastX, y, bandH, SHELL_T);
+    // North / west / east solid
+    wallRunX(group, mat, northZ, westX, eastX, y, bandH, SHELL_T);
+    wallRunZ(group, mat, westX, southZ, northZ, y, bandH, SHELL_T);
+    wallRunZ(group, mat, eastX, southZ, northZ, y, bandH, SHELL_T);
+  }
+
+  // Cap rail
+  wallRunX(group, frameMat, southZ, westX, door.u0 - 0.05, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunX(group, frameMat, southZ, door.u1 + 0.05, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunX(group, frameMat, northZ, westX, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunZ(group, frameMat, westX, southZ, northZ, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunZ(group, frameMat, eastX, southZ, northZ, SHELL_H, 0.06, SHELL_T + 0.08);
+
+  // South door frame (outline only — not in openings[], room-1 door stays shut).
+  const jamb = 0.14;
+  const doorTop = 2.03;
+  const dw = door.u1 - door.u0;
+  addBox(group, postMat, door.u0 + jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
+  addBox(group, postMat, door.u1 - jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
+  addBox(group, postMat, (door.u0 + door.u1) / 2, doorTop + 0.02, southZ, dw + 0.1, 0.14, SHELL_T + 0.12);
+  // Lintel fill above the door opening
+  wallRunX(group, panelMat, southZ, door.u0, door.u1, (doorTop + SHELL_H) / 2 + 0.05, SHELL_H - doorTop - 0.05, SHELL_T);
+
+  return group;
+}
+
+/** Map-view framing: both rooms + exterior (no fog in mapview). */
 export const MAPVIEW_CAM = {
-  position: new THREE.Vector3(0, 110, -14),
-  lookAt: new THREE.Vector3(0, 0, -14),
+  position: new THREE.Vector3(0, 130, -22),
+  lookAt: new THREE.Vector3(0, 0, -22),
   fov: 48,
-  near: 12,
-  far: 260,
+  near: 14,
+  far: 320,
 };

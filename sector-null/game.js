@@ -51,6 +51,7 @@ import {
 import {
   MAPVIEW_CAM,
   buildExtendedFloor,
+  buildRoom2Shell,
 } from './facility-exterior.js';
 import {
   PLAYER_WALL_INSET,
@@ -362,6 +363,8 @@ bakedMesh(deck, false);
 buildExtendedFloor(world, new THREE.MeshStandardMaterial({
   color: 0x1c2b37, metalness: 0.38, roughness: 0.62,
 }));
+// Stage 2: room-2 outer shell only (visual — not in wallBoxes / openings / nav).
+buildRoom2Shell(world);
 const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.13, 0);
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
