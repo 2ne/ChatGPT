@@ -1,9 +1,9 @@
-Sector Null Defence Bay — staged preview (Stage 4 redo).
+Sector Null Defence Bay — staged preview (Stage 4 glow step-up).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b226 · c24a8b8 · 15:02
-- Room-1 quality floor + walls; concept props; no dashed pads
-- Gantries still removed; walls always visible
-- Walk / slam / fog / camera unchanged
+Label: PREVIEW b227 · 50ebb38 · 15:07
+- Rich cyan glow, light pools, pulsing coil/halos
+- Heavy blast doors + weighty slam
+- Room-1 quality floor/walls; no dashed pads
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
