@@ -51,6 +51,8 @@ import {
 import {
   BAY_DOOR_X,
   MAPVIEW_CAM,
+  ROOM2_HX,
+  ROOM2_NORTH,
   ROOM2_SOUTH,
   bayWalkWaypoints,
   buildExtendedFloor,
@@ -369,10 +371,15 @@ const deckRandom = seeded(87);
 const panels = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
 // Exact main deck plate loop (−19…19). Do not enlarge this — a bigger BlockBatch
 // stalls iPhone frames and freezes drone AI near the walls.
+// Skip plates that fall inside room 2: those centres coincide with the bay's
+// own deck tiles (same 1.6 step / y=-0.06) and z-fight on iPhone (southern
+// ~3 rows near the entry door — see b227 flicker).
 for (let z = -19; z <= 19; z++) {
   for (let x = -19; x <= 19; x++) {
+    const wx = x * 1.6, wz = z * 1.6;
+    if (wz < ROOM2_SOUTH - 0.05 && Math.abs(wx) < ROOM2_HX + 0.9) continue;
     const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
-    deck.add([[1.565, 0.11, 1.565, x * 1.6, -0.06, z * 1.6,
+    deck.add([[1.565, 0.11, 1.565, wx, -0.06, wz,
       insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
   }
 }

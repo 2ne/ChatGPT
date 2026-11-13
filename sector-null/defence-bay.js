@@ -357,11 +357,22 @@ export function buildDefenceBay(parent, helpers) {
   const chB = new BlockBatch();
   const chRng = seeded(55);
   const trenchY = -0.08;
-  // Trench beds
+  // Trench beds — N–S continuous; E–W split around the cross so the two beds
+  // never share a coplanar face (same y would z-fight at the junction).
   chB.add([
     [CHANNEL_HALF * 2, 0.06, ROOM2_HZ * 1.85, 0, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
-    [ROOM2_HX * 1.85, 0.06, CHANNEL_HALF * 2, 0, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
   ], chRng);
+  {
+    const span = ROOM2_HX * 1.85;
+    const gap = CHANNEL_HALF * 2 + 0.04;
+    const arm = (span - gap) / 2;
+    if (arm > 0.2) {
+      chB.add([
+        [arm, 0.06, CHANNEL_HALF * 2, -(gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+        [arm, 0.06, CHANNEL_HALF * 2, (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+      ], chRng);
+    }
+  }
   // Grate bars N-S
   for (let z = ROOM2_NORTH + 1.2; z < ROOM2_SOUTH - 1.2; z += 0.38) {
     if (Math.hypot(0, z - ROOM2_CZ) < OCT_R - 0.2) continue;

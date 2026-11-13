@@ -61,8 +61,10 @@ export const ORIGINAL_DECK_INDEX = 19;
 export const ORIGINAL_DECK_HALF = ORIGINAL_DECK_INDEX * DECK_STEP + 1.565 / 2;
 
 /**
- * One flat floor mesh covering room-2 footprint + margin, with a hole for the
- * original deck AABB so it never coplanar-overlaps those plates.
+ * One flat floor mesh covering room-2 footprint + margin, with holes for:
+ *  - the original deck AABB (room-1 plates)
+ *  - the bay interior (bay deck tiles / channels / dais)
+ * so nothing coplanar-overlaps those surfaces at y = -0.06.
  * Same dark exterior colour as room-1’s outside plates (0x1c2b37).
  */
 export function buildExtendedFloor(parent, material) {
@@ -70,6 +72,11 @@ export function buildExtendedFloor(parent, material) {
   const zMin = ROOM2_NORTH - EXTERIOR_MARGIN;
   const zMax = ROOM1_HALF + EXTERIOR_MARGIN;
   const hole = ORIGINAL_DECK_HALF + 0.02;
+  // Bay hole: inset slightly past the wall inner face so door thresholds stay on exterior.
+  const bayPad = 0.35;
+  const bayX = ROOM2_HX - bayPad;
+  const bayZ0 = ROOM2_NORTH + bayPad;
+  const bayZ1 = ROOM2_SOUTH - bayPad;
 
   const shape = new THREE.Shape();
   shape.moveTo(-xMax, zMin);
@@ -79,13 +86,22 @@ export function buildExtendedFloor(parent, material) {
   shape.lineTo(-xMax, zMin);
 
   // Opposite winding to the outer path (Three.js hole requirement).
-  const cut = new THREE.Path();
-  cut.moveTo(-hole, -hole);
-  cut.lineTo(hole, -hole);
-  cut.lineTo(hole, hole);
-  cut.lineTo(-hole, hole);
-  cut.lineTo(-hole, -hole);
-  shape.holes.push(cut);
+  const cutDeck = new THREE.Path();
+  cutDeck.moveTo(-hole, -hole);
+  cutDeck.lineTo(hole, -hole);
+  cutDeck.lineTo(hole, hole);
+  cutDeck.lineTo(-hole, hole);
+  cutDeck.lineTo(-hole, -hole);
+  shape.holes.push(cutDeck);
+
+  // Hole out the bay interior so the plane never sits under bay deck tiles.
+  const cutBay = new THREE.Path();
+  cutBay.moveTo(-bayX, bayZ0);
+  cutBay.lineTo(-bayX, bayZ1);
+  cutBay.lineTo(bayX, bayZ1);
+  cutBay.lineTo(bayX, bayZ0);
+  cutBay.lineTo(-bayX, bayZ0);
+  shape.holes.push(cutBay);
 
   const geo = new THREE.ShapeGeometry(shape);
   geo.rotateX(-Math.PI / 2);
