@@ -1,9 +1,9 @@
 Sector Null Defence Bay — staged preview (Stage 4).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b230 · 8f67f8d · 15:53
-- Continuous inset octagon light rings
-- South slam leaf wall-pop fixed (two gap-width hinges)
-- Full-width hazard chevrons on all doors
+Label: PREVIEW b232 · 37fc9d6 · 16:06
+- Bay cross centred on N/S door X (walk line)
+- Channels, dais, coil, pillars share BAY_CX = BAY_DOOR_X
+- E–W trench arms reach both side walls from the shifted centre
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
