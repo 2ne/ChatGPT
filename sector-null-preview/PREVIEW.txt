@@ -1,6 +1,7 @@
 Sector Null Defence Bay — staged preview (Stage 1).
 Branch: cursor/defence-bay-staged
-- Original deck + hole-cut plane; world-XZ fog (near 10.35 / far 21) fades outskirts
-- Door/window gap: drones keep hunting (plane-crossing nav + tighter player clamp)
+- Original deck + hole-cut plane; world-XZ fog (near 10.35 / far 21)
+- Mobile/touch landscape cam zoom 0.82 (~18% closer), follow clamp ~7.2; desktop unchanged
+- Door/window gap: plane-crossing nav + tighter player clamp
 - Mapview: no fog — ?dev=mapview
 Live (pre-bay) game: ../sector-null/
