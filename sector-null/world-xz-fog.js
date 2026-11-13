@@ -15,10 +15,10 @@ import * as THREE from 'three';
 
 /**
  * North Z scale for Chebyshev fog (<1 → fog starts further north).
- * Tuned so room-2’s south wall (~z=-18) is only a muted hint at the top of the
+ * Tuned so room-2’s south wall (~z=-25) is only a faint hint at the top of the
  * gameplay view; east/south/west outskirts still fall off hard.
  */
-export const FOG_NORTH_EASE = 0.8;
+export const FOG_NORTH_EASE = 0.52;
 
 /**
  * @param {number} roomHalf  Room half-extent (matches game HALF).

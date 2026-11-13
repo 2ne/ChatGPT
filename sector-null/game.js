@@ -52,6 +52,8 @@ import {
   MAPVIEW_CAM,
   buildExtendedFloor,
   buildRoom2Shell,
+  pointInRoom2,
+  room2CollisionBoxes,
 } from './facility-exterior.js';
 import {
   PLAYER_WALL_INSET,
@@ -366,7 +368,7 @@ bakedMesh(deck, false);
 buildExtendedFloor(world, new THREE.MeshStandardMaterial({
   color: 0x1c2b37, metalness: 0.38, roughness: 0.62,
 }));
-// Stage 2: room-2 outer shell only (visual — not in wallBoxes / openings / nav).
+// Stage 2: room-2 outer shell (mesh). Collision boxes registered after room-1 walls.
 buildRoom2Shell(world);
 const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.13, 0);
 underdeck.rotation.x = -Math.PI / 2;
@@ -541,6 +543,9 @@ buildWall('x', -HALF, [[-5.8, -4.2, 'door'], [4, 6, 'window']]);
 // west and east walls: a window each
 buildWall('z', -HALF, [[-1.5, 0.5, 'window']]);
 buildWall('z',  HALF, [[1.5, 3.5, 'window']]);
+
+// Room-2 footprint is solid for enemy nav/shots/spawns (player stays clamped in room 1).
+for (const box of room2CollisionBoxes()) wallBoxes.push(box);
 
 bakedMesh(wallB);
 const SOLIDS = [];
@@ -2912,12 +2917,23 @@ function spawnPoint(out) {
   const ang = Math.random() * Math.PI * 2, cx = Math.sin(ang), cz = Math.cos(ang);
   let r = 12;
   const along = r => [player.position.x + cx * r, player.position.z + cz * r];
-  // walk out along a random bearing until it's off screen and clear of the deck
-  for (; r < 70; r += 1) {
+  // Walk out until off-screen, clear of room 1, and outside room 2’s footprint/walls.
+  for (; r < 90; r += 1) {
     const [x, z] = along(r);
-    if (offscreen(x, z) && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)) break;
+    if (
+      offscreen(x, z)
+      && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)
+      && !pointInRoom2(x, z)
+    ) break;
   }
-  [out.x, out.z] = along(r + 1.5 + Math.random() * 3);
+  let [sx, sz] = along(r + 1.5 + Math.random() * 3);
+  // If the jittered point still lands in room 2, keep stepping out.
+  for (let guard = 0; pointInRoom2(sx, sz) && guard < 40; guard++) {
+    r += 1;
+    [sx, sz] = along(r + 1.5);
+  }
+  out.x = sx;
+  out.z = sz;
   out.y = 0;
   pushOutOfSolids(out);
   return out;

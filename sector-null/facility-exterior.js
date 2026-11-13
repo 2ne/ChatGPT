@@ -11,13 +11,33 @@ export const ROOM1_HALF = 10;
 export const ROOM2_HX = 24;
 export const ROOM2_HZ = 22;
 /**
- * Open exterior strip between room-1 north wall and room-2 south wall (~5 deck
- * tiles). Keeps the rooms visually separate; reactor at z≈-13.6 sits in this gap.
+ * Open exterior strip between room-1 north wall and room-2 south wall (~9–10
+ * deck tiles → south wall ≈ z=-25). Bigger gap so gameplay only sees a faint
+ * hint of room 2; reactor at z≈-13.6 stays in the strip outside room 2.
  */
-export const ROOM2_THRESHOLD = 8;
+export const ROOM2_THRESHOLD = 15;
 export const ROOM2_CZ = -(ROOM1_HALF + ROOM2_THRESHOLD + ROOM2_HZ);
 export const ROOM2_SOUTH = ROOM2_CZ + ROOM2_HZ;
 export const ROOM2_NORTH = ROOM2_CZ - ROOM2_HZ;
+
+/** Half-thickness pad for room-2 collision footprint (matches shell depth). */
+export const ROOM2_COLLIDE_PAD = 0.28;
+
+/** Axis-aligned footprint including walls — enemies must route around, never through. */
+export function room2CollisionBoxes() {
+  return [{
+    minX: -ROOM2_HX - ROOM2_COLLIDE_PAD,
+    maxX: ROOM2_HX + ROOM2_COLLIDE_PAD,
+    minZ: ROOM2_NORTH - ROOM2_COLLIDE_PAD,
+    maxZ: ROOM2_SOUTH + ROOM2_COLLIDE_PAD,
+  }];
+}
+
+/** True if (x,z) is inside room 2’s footprint (for spawn rejection). */
+export function pointInRoom2(x, z, margin = 0.6) {
+  return x >= -ROOM2_HX - margin && x <= ROOM2_HX + margin
+    && z <= ROOM2_SOUTH + margin && z >= ROOM2_NORTH - margin;
+}
 
 /** Room-1 north door span (game.js buildWall) — room-2 south door matches this. */
 export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
@@ -107,8 +127,8 @@ function wallRunZ(parent, mat, x, z0, z1, y, h, d) {
 
 /**
  * Stage 2: room-2 outer shell only (walls + floor/outline + south door gap).
- * Visual only — never added to wallBoxes / openings / nav / solids.
- * South door lines up with room-1’s north door; no corridor.
+ * Shell mesh is visual; collision boxes come from room2CollisionBoxes() (enemies
+ * only — room-1 player clamp unchanged). South door X-aligned with room-1 north door.
  */
 export function buildRoom2Shell(parent) {
   const group = new THREE.Group();
@@ -183,9 +203,9 @@ export function buildRoom2Shell(parent) {
 
 /** Map-view framing: both rooms + the open strip between them (no fog in mapview). */
 export const MAPVIEW_CAM = {
-  position: new THREE.Vector3(0, 135, -26),
-  lookAt: new THREE.Vector3(0, 0, -26),
+  position: new THREE.Vector3(0, 145, -28),
+  lookAt: new THREE.Vector3(0, 0, -28),
   fov: 48,
   near: 14,
-  far: 340,
+  far: 360,
 };
