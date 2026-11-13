@@ -593,16 +593,22 @@ for (const z of [-25, -31]) {
 }
 bakedMesh(perimeter, false);
 
-// Stage 1: large reactor-facility exterior (merged, no lights). Room 1 unchanged.
+// Stage 1: flat exterior tiles only (outside existing deck AABB). Room 1 unchanged.
 {
   const exterior = new BlockBatch();
   buildFacilityExterior(exterior, seeded(41));
-  bakedMesh(exterior, false);
+  const exteriorMesh = bakedMesh(exterior, false);
+  // Own material + polygonOffset so mobile / mapview never z-fight underdeck or deck edges.
+  exteriorMesh.material = worldMat.clone();
+  exteriorMesh.material.polygonOffset = true;
+  exteriorMesh.material.polygonOffsetFactor = 1;
+  exteriorMesh.material.polygonOffsetUnits = 1;
 }
 if (mapView) {
   scene.fog.near = MAPVIEW_CAM.fogNear;
   scene.fog.far = MAPVIEW_CAM.fogFar;
-  camera.far = 320;
+  camera.near = MAPVIEW_CAM.near;
+  camera.far = MAPVIEW_CAM.far;
   camera.fov = MAPVIEW_CAM.fov;
   camera.updateProjectionMatrix();
 }
