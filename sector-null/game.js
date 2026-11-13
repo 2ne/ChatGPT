@@ -32,12 +32,25 @@ import {
 } from './helper-motion.js';
 import {
   BASE_STATS,
+  COIL_CHAIN,
+  COIL_DAMAGE,
+  COIL_INTERVAL,
+  COIL_RANGE,
   DROP_CHANCE,
   UPGRADES,
   UPGRADE_CATS,
   helperDamage,
   supplyDropScale,
 } from './upgrades.js';
+import {
+  BAY_CZ,
+  BAY_HALF,
+  CORRIDOR_LEN,
+  ROOM1_HALF,
+  bayCamScale,
+  buildBayDecor,
+  createCoilArcPool,
+} from './defence-bay.js';
 import {
   canSubmitScore,
   fetchScores,
@@ -73,9 +86,11 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x080e16);
 scene.fog = new THREE.Fog(0x080e16, 26, 67);
+const FOG_NEAR0 = 26, FOG_FAR0 = 67;
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
-const CAM_OFFSET = new THREE.Vector3(0, 24, 11);
+const CAM_OFFSET0 = new THREE.Vector3(0, 24, 11);
+const CAM_OFFSET = CAM_OFFSET0.clone();
 
 function pinViewport() {
   window.scrollTo(0, 0);
@@ -244,10 +259,12 @@ const settings = (() => {
 const audio = createAudio(settings, () => player.position);
 
 // Reactor deck. Collision footprints stay independent of the decorative geometry.
-const HALF = 10;
+const HALF = ROOM1_HALF;
 const WALL_H = 2.4;
 const WALL_T = 0.7;
 const EDGE = HALF + WALL_T / 2;
+/** Active play bounds — reactor deck or defence bay. */
+const play = { half: HALF, cx: 0, cz: 0, id: 'reactor' };
 const world = new THREE.Group();
 scene.add(world);
 const worldMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.58, metalness: 0.38 });
@@ -298,7 +315,7 @@ for (const side of [-1, 1]) {
     box(world, cyanLight, x, 0.007, side * 7.9, 0.035, 0.014, 0.8);
   }
 }
-bakedMesh(deck, false);
+const room1DeckMesh = bakedMesh(deck, false);
 const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.13, 0);
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
@@ -348,35 +365,47 @@ const OPENING_INSET = 1.5; // how far in/out the entry waypoints sit from the wa
 const SILL = { x: 0.83, z: 0.83 }, HEAD = { x: 1.61, z: 1.61 };
 const DOOR_TOP = 2.03, JAMB = 0.14;
 const DOOR_HP = 12, WINDOW_HP = 2; // blows it takes to break one in
-function buildWall(axis, fixed, gaps) {
-  const min = -EDGE, max = EDGE, mine = [];
+function buildWall(axis, fixed, gaps, opts = {}) {
+  const half = opts.half ?? HALF;
+  const edge = half + WALL_T / 2;
+  const spanMid = opts.spanMid ?? 0;
+  const min = spanMid - edge, max = spanMid + edge, mine = [];
+  const boxes = opts.boxes ?? wallBoxes;
+  const opens = opts.openings ?? openings;
+  const batch = opts.batch ?? wallB;
+  const parent = opts.parent ?? world;
+  const panelCols = opts.panels ?? PANELS;
+  const openOpts = {
+    ...opts,
+    roomCenter: axis === 'x' ? (opts.cz ?? 0) : (opts.cx ?? 0),
+  };
   const segs = [];
   let cursor = min;
   for (const [gs, ge, kind] of gaps.slice().sort((a, b) => a[0] - b[0])) {
     if (gs > cursor) segs.push([cursor, gs]);
     cursor = Math.max(cursor, ge);
-    mine.push(makeOpening(axis, fixed, gs, ge, kind));
+    mine.push(makeOpening(axis, fixed, gs, ge, kind, openOpts));
   }
   if (cursor < max) segs.push([cursor, max]);
   const layer0 = 0.21;
   for (const [a, b] of segs) {
     const hw = (axis === 'x' ? b - a : WALL_T) / 2, hd = (axis === 'x' ? WALL_T : b - a) / 2;
     const cx = axis === 'x' ? (a + b) / 2 : fixed, cz = axis === 'x' ? fixed : (a + b) / 2;
-    wallBoxes.push({ minX: cx - hw, maxX: cx + hw, minZ: cz - hd, maxZ: cz + hd });
-    panelRun(axis, fixed, a, b, layer0, () => true);
+    boxes.push({ minX: cx - hw, maxX: cx + hw, minZ: cz - hd, maxZ: cz + hd });
+    panelRun(axis, fixed, a, b, layer0, () => true, batch, panelCols);
   }
   // across each opening: a lintel over a door; logs under the sill and over the head of a window
   for (const o of mine) {
     const keep = o.kind === 'door'
       ? y => y - PANEL_H / 2 >= DOOR_TOP - 0.01
       : y => y + PANEL_H / 2 <= o.sill + 0.01 || y - PANEL_H / 2 >= o.head - 0.01;
-    panelRun(axis, fixed, o.u0, o.u1, layer0, keep);
-    fitOpening(o);
-    openings.push(o);
+    panelRun(axis, fixed, o.u0, o.u1, layer0, keep, batch, panelCols);
+    fitOpening(o, parent, batch);
+    opens.push(o);
   }
 }
 
-function panelRun(axis, fixed, a, b, layer0, keep) {
+function panelRun(axis, fixed, a, b, layer0, keep, batch = wallB, panelCols = PANELS) {
   for (let k = 0; k < 6; k++) {
     const y = layer0 + k * WALL_STEP;
     if (!keep(y)) continue;
@@ -384,17 +413,20 @@ function panelRun(axis, fixed, a, b, layer0, keep) {
     for (let i = 0; i < count; i++) {
       const left = a + (b - a) * i / count;
       const right = a + (b - a) * (i + 1) / count;
-      wallB.add([wallBlock(axis, fixed, left + 0.022, right - 0.022, y, PANEL_H, PANEL_D, PANELS[(i + k) % PANELS.length], 0.035)], wrng);
+      batch.add([wallBlock(axis, fixed, left + 0.022, right - 0.022, y, PANEL_H, PANEL_D, panelCols[(i + k) % panelCols.length], 0.035)], wrng);
     }
-    if (k === 5) wallB.add([wallBlock(axis, fixed, a, b, WALL_H, 0.055, PANEL_D + 0.07, FRAME, 0.01)], wrng);
+    if (k === 5) batch.add([wallBlock(axis, fixed, a, b, WALL_H, 0.055, PANEL_D + 0.07, FRAME, 0.01)], wrng);
   }
 }
 
 // An opening's geometry and waypoints. Drones come in via the OUTER waypoint, stand at
 // the FRONT to break it, then go through to the INNER one (or climb to the LANDING).
 // Its parts are modeled in a local frame: x along the wall, +z out of the deck.
-function makeOpening(axis, fixed, u0, u1, kind) {
-  const c = (u0 + u1) / 2, s = Math.sign(fixed), ht = WALL_T / 2;
+function makeOpening(axis, fixed, u0, u1, kind, opts = {}) {
+  const c = (u0 + u1) / 2, ht = WALL_T / 2;
+  // Outward is away from the room centre along the fixed axis (bay is offset on Z).
+  const roomC = opts.roomCenter ?? 0;
+  const s = opts.outSign ?? (Math.sign(fixed - roomC) || 1);
   const p = out => axis === 'x' ? [c, fixed + s * out] : [fixed + s * out, c]; // world x, z at `out` from the wall
   const [x, z] = p(0), [ox, oz] = p(OPENING_INSET), [ix, iz] = p(-OPENING_INSET), [fx, fz] = p(0.85), [lx, lz] = p(-0.95);
   return {
@@ -411,13 +443,14 @@ function makeOpening(axis, fixed, u0, u1, kind) {
 const glassMat = new THREE.MeshStandardMaterial({ color: 0x5fbed1, roughness: 0.08, metalness: 0.4, transparent: true, opacity: 0.3, depthWrite: false });
 const glassCracked = new THREE.MeshStandardMaterial({ color: 0x9de9f1, roughness: 0.45, metalness: 0.2, transparent: true, opacity: 0.55, depthWrite: false });
 // frame it in the baked walls, and build the parts that move or break
-function fitOpening(o) {
+function fitOpening(o, parent = world, batch = wallB) {
   const place = at(o.x, o.z, o.rotY), hw = o.w / 2, frng = seeded(Math.round(o.x * 7 + o.z * 13) + 99);
   const root = new THREE.Group();
   root.position.set(o.x, 0, o.z); root.rotation.y = o.rotY;
-  world.add(root);
+  parent.add(root);
+  o.root = root;
   if (o.kind === 'door') {
-    wallB.add([
+    batch.add([
       [JAMB, DOOR_TOP + 0.1, PANEL_D + 0.1, -hw + JAMB / 2, (DOOR_TOP + 0.1) / 2, 0, POST, 0, 0, 0, 0.03],  // posts
       [JAMB, DOOR_TOP + 0.1, PANEL_D + 0.1, hw - JAMB / 2, (DOOR_TOP + 0.1) / 2, 0, POST, 0, 0, 0, 0.03],
       [o.w + 0.1, 0.14, PANEL_D + 0.12, 0, DOOR_TOP + 0.02, 0, POST, 0, 0, 0, 0.03],                     // header
@@ -440,7 +473,7 @@ function fitOpening(o) {
     o.leaf.add(leafMesh);
   } else {
     const h = o.head - o.sill, mid = (o.sill + o.head) / 2, iw = o.w - 0.2;
-    wallB.add([
+    batch.add([
       [0.1, h + 0.1, PANEL_D + 0.06, -hw + 0.05, mid, 0, POST, 0, 0, 0, 0.02],              // jambs
       [0.1, h + 0.1, PANEL_D + 0.06, hw - 0.05, mid, 0, POST, 0, 0, 0, 0.02],
       [o.w + 0.12, 0.08, PANEL_D + 0.08, 0, o.head, 0, POST, 0, 0, 0, 0.02],              // head
@@ -467,13 +500,13 @@ function fitOpening(o) {
 
 // south wall (+Z, nearest the camera): the back door
 buildWall('x',  HALF, [[-0.8, 0.8, 'door']]);
-// north wall (-Z): the front door on the left, a window on the right
-buildWall('x', -HALF, [[-5.8, -4.2, 'door'], [4, 6, 'window']]);
+// north wall (-Z): centered door into the defence-bay corridor
+buildWall('x', -HALF, [[-1.0, 1.0, 'door']]);
 // west and east walls: a window each
 buildWall('z', -HALF, [[-1.5, 0.5, 'window']]);
 buildWall('z',  HALF, [[1.5, 3.5, 'window']]);
 
-bakedMesh(wallB);
+const room1WallMesh = bakedMesh(wallB);
 const SOLIDS = [];
 function addSolid(x, z, hx, hz, rotation = 0) {
   SOLIDS.push({ x, z, hx, hz, c: Math.cos(rotation), s: Math.sin(rotation) });
@@ -500,12 +533,13 @@ function halo(parent, color, x, y, z, size, opacity) {
   return sprite;
 }
 
-const gates = openings.map(o => {
+function makeGate(o, parent = world) {
   o.indicator = cyanLight.clone();
   const root = new THREE.Group();
   root.position.set(o.x, 0, o.z);
   root.rotation.y = o.rotY;
-  world.add(root);
+  parent.add(root);
+  o.gateRoot = root;
   for (const side of [-1, 1]) {
     box(root, alloy, side * (o.w / 2 + 0.13), 1.24, 0, 0.22, 2.48, 0.92);
     for (let i = 0; i < 4; i++) {
@@ -518,7 +552,8 @@ const gates = openings.map(o => {
   const glow = halo(root, CYAN, 0, 2.42, 0, 4.4, 0.3);
   box(root, o.indicator, 0, 2.43, 0, o.w * 0.62, 0.055, 0.72);
   return { o, glow };
-});
+}
+const gates = openings.map(o => makeGate(o));
 
 const reactor = new THREE.Group();
 reactor.position.set(5.3, 0, -13.6);
@@ -585,6 +620,208 @@ for (const z of [-25, -31]) {
   perimeter.add([[68, 0.36, 1.2, 0, 7.6, z, 0x263947], [68, 0.21, 0.42, 0, 6.9, z, 0x3e5467]], perimeterRandom);
 }
 bakedMesh(perimeter, false);
+
+// --- Defence Bay (hidden until wave-10 transition) ---
+const BAY_PANELS = [0x3a5568, 0x334d5e, 0x405f74, 0x2e4758];
+const bayGroup = new THREE.Group();
+bayGroup.visible = false;
+world.add(bayGroup);
+const bayOpenings = [];
+const bayWallBoxes = [];
+const bayWallB = new BlockBatch();
+const bayWallOpts = {
+  half: BAY_HALF, cx: 0, cz: BAY_CZ, batch: bayWallB, boxes: bayWallBoxes,
+  openings: bayOpenings, parent: bayGroup, panels: BAY_PANELS,
+};
+buildWall('x', BAY_CZ + BAY_HALF, [[-1.0, 1.0, 'door']], { ...bayWallOpts, spanMid: 0 });
+buildWall('x', BAY_CZ - BAY_HALF, [[-1.0, 1.0, 'door']], { ...bayWallOpts, spanMid: 0 });
+buildWall('z', -BAY_HALF, [[BAY_CZ - 1.0, BAY_CZ + 1.0, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
+buildWall('z',  BAY_HALF, [[BAY_CZ - 1.0, BAY_CZ + 1.0, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
+const bayWallMesh = new THREE.Mesh(bayWallB.build(), worldMat);
+bayWallMesh.castShadow = true;
+bayWallMesh.receiveShadow = true;
+bayGroup.add(bayWallMesh);
+const bayGates = bayOpenings.map(o => makeGate(o, bayGroup));
+for (const o of bayOpenings) {
+  o.hp = o.maxHp;
+  o.climber = null;
+  o.jolt = 0;
+  o.fallT = -1;
+}
+const bayDecor = buildBayDecor(bayGroup, { box, model, halo, alloy, carbon, cyanLight, amberLight });
+const baySolids = bayDecor.solids.slice();
+bayDecor.setCoilPower(0);
+
+// Corridor linking room1 north door → bay south door
+const corridorGroup = new THREE.Group();
+corridorGroup.visible = false;
+world.add(corridorGroup);
+{
+  const z0 = -HALF, z1 = BAY_CZ + BAY_HALF;
+  const midZ = (z0 + z1) / 2, len = Math.abs(z1 - z0);
+  const floor = new THREE.Mesh(
+    new THREE.BoxGeometry(2.6, 0.06, len + 0.4),
+    new THREE.MeshStandardMaterial({ color: 0x1c2c3a, metalness: 0.5, roughness: 0.5 }),
+  );
+  floor.position.set(0, -0.02, midZ);
+  floor.receiveShadow = true;
+  corridorGroup.add(floor);
+  for (const side of [-1, 1]) {
+    const wall = new THREE.Mesh(
+      new THREE.BoxGeometry(0.55, WALL_H, len + 0.2),
+      new THREE.MeshStandardMaterial({ color: 0x354858, metalness: 0.45, roughness: 0.42 }),
+    );
+    wall.position.set(side * 1.35, WALL_H / 2, midZ);
+    wall.castShadow = true;
+    wall.receiveShadow = true;
+    corridorGroup.add(wall);
+    box(corridorGroup, cyanLight, side * 1.08, 0.08, midZ, 0.04, 0.02, len * 0.85);
+    box(corridorGroup, amberLight, side * 1.08, 1.6, midZ, 0.05, 0.08, 0.25);
+  }
+  const ceil = new THREE.Mesh(
+    new THREE.BoxGeometry(2.8, 0.12, len + 0.3),
+    new THREE.MeshStandardMaterial({ color: 0x243440, metalness: 0.4, roughness: 0.55 }),
+  );
+  ceil.position.set(0, WALL_H + 0.05, midZ);
+  corridorGroup.add(ceil);
+}
+
+// Snapshots so reset can restore reactor collision / hide bay
+const room1Openings = openings.slice();
+const room1WallBoxes = wallBoxes.slice();
+const room1Solids = SOLIDS.slice();
+const room1Gates = gates.slice();
+let bayActiveLive = false;
+const coilArcs = createCoilArcPool(scene);
+const _coilTip = new THREE.Vector3(0, 2.25, BAY_CZ);
+const _coilHit = new THREE.Vector3();
+
+function rebuildNavObstacles() {
+  navGraphs.clear();
+  navObstacles.length = 0;
+  for (const b of SOLIDS) navObstacles.push(b);
+  for (const w of wallBoxes) {
+    navObstacles.push({
+      x: (w.minX + w.maxX) / 2, z: (w.minZ + w.maxZ) / 2,
+      hx: (w.maxX - w.minX) / 2, hz: (w.maxZ - w.minZ) / 2, c: 1, s: 0,
+    });
+  }
+}
+
+function setPlayRoom(id) {
+  if (id === 'bay') {
+    play.half = BAY_HALF; play.cx = 0; play.cz = BAY_CZ; play.id = 'bay';
+  } else {
+    play.half = HALF; play.cx = 0; play.cz = 0; play.id = 'reactor';
+  }
+  const s = bayCamScale(play.half);
+  CAM_OFFSET.copy(CAM_OFFSET0).multiplyScalar(s);
+  scene.fog.near = FOG_NEAR0 * s;
+  scene.fog.far = FOG_FAR0 * s;
+  const shadowSpan = 24 * s;
+  Object.assign(key.shadow.camera, {
+    left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 72 * s,
+  });
+  key.shadow.camera.updateProjectionMatrix();
+}
+
+function swapCollision(opens, boxes, solids, gateList) {
+  openings.length = 0; openings.push(...opens);
+  wallBoxes.length = 0; wallBoxes.push(...boxes);
+  SOLIDS.length = 0; SOLIDS.push(...solids);
+  gates.length = 0; gates.push(...gateList);
+  rebuildNavObstacles();
+}
+
+function activateBay() {
+  if (bayActiveLive) return;
+  bayActiveLive = true;
+  state.bayActive = true;
+  bayGroup.visible = true;
+  corridorGroup.visible = false;
+  room1WallMesh.visible = false;
+  room1DeckMesh.visible = false;
+  reactor.visible = false;
+  deckMark.visible = false;
+  for (const o of room1Openings) {
+    if (o.root) o.root.visible = false;
+    if (o.gateRoot) o.gateRoot.visible = false;
+  }
+  for (const o of bayOpenings) {
+    if (o.root) o.root.visible = true;
+    if (o.gateRoot) o.gateRoot.visible = true;
+  }
+  // Exterior perimeter solids stay; bay adds its own cover. Drop room1-only reactor solid footprint.
+  const solids = baySolids.concat(room1Solids.filter(s => Math.hypot(s.x - 5.3, s.z + 13.6) > 0.5));
+  swapCollision(bayOpenings, bayWallBoxes, solids, bayGates);
+  setPlayRoom('bay');
+  bayDecor.setCoilPower(state.upgrades.coil || 0);
+}
+
+function deactivateBay() {
+  bayActiveLive = false;
+  state.bayActive = false;
+  state.scripted = null;
+  state.coilCd = 0;
+  bayGroup.visible = false;
+  corridorGroup.visible = false;
+  room1WallMesh.visible = true;
+  room1DeckMesh.visible = true;
+  reactor.visible = true;
+  deckMark.visible = true;
+  for (const o of room1Openings) {
+    if (o.root) o.root.visible = true;
+    if (o.gateRoot) o.gateRoot.visible = true;
+  }
+  for (const o of bayOpenings) {
+    if (o.root) o.root.visible = true;
+    if (o.gateRoot) o.gateRoot.visible = true;
+  }
+  swapCollision(room1Openings, room1WallBoxes, room1Solids, room1Gates);
+  setPlayRoom('reactor');
+  bayDecor.setCoilPower(0);
+  coilArcs.clear();
+  // Reset bay doors to intact closed leaves for the next run.
+  for (const o of bayOpenings) {
+    Object.assign(o, { hp: o.maxHp, climber: null, jolt: 0, fallT: -1 });
+    if (o.kind === 'door') {
+      o.leaf.rotation.y = 0;
+      o.fall.rotation.x = 0;
+      o.fall.position.set(0, 0, -0.02);
+    }
+    if (o.indicator) o.indicator.color.setHex(CYAN);
+  }
+  for (const { glow } of bayGates) {
+    glow.material.color.setHex(CYAN);
+    glow.material.opacity = 0.3;
+    glow.scale.setScalar(4.4);
+  }
+}
+
+function findRoom1NorthDoor() {
+  return room1Openings.find(o => o.kind === 'door' && o.axis === 'x' && o.z < 0);
+}
+function findBaySouthDoor() {
+  return bayOpenings.find(o => o.kind === 'door' && o.axis === 'x' && Math.abs(o.z - (BAY_CZ + BAY_HALF)) < 0.2);
+}
+
+function swingDoorOpen(o, amount = 1) {
+  if (!o || o.kind !== 'door') return;
+  o.hp = 0;
+  o.leaf.rotation.y = -Math.PI * 0.92 * amount;
+  o.fall.rotation.x = 0;
+  o.fall.position.set(0, 0, -0.02);
+}
+function slamDoorShut(o) {
+  if (!o || o.kind !== 'door') return;
+  o.leaf.rotation.y = 0;
+  o.fall.rotation.x = 0;
+  o.fall.position.set(0, 0, -0.02);
+  o.hp = o.maxHp;
+  o.climber = null;
+  o.jolt = 1;
+  o.fallT = -1;
+}
 
 const dustRandom = seeded(1027);
 const dustPoints = new Float32Array(510 * 3);
@@ -1261,17 +1498,20 @@ function animatePlayer(dt, mx, mz) {
   head.rotation.set(0.1 + 0.4 * rl, -tw * 0.85 + 0.32 * rl, 0);
 
   // --- rifle: butt in the shoulder pocket; reload dips/rolls so the cell swap reads from above ---
+  // Scripted bay walk: gun lowered / idle (no aim pose).
+  rig.scriptLower = damp(rig.scriptLower || 0, state.scripted ? 1 : 0, 8, dt);
+  const sl = ease(rig.scriptLower || 0);
   _v.copy(POCKET).applyMatrix4(upper.matrix);
   const snap = ease(rig.cellSnap);
   gun.position.set(
-    _v.x + 0.2 * rl,
-    _v.y - 0.26 * rl + 0.012 * breathe + 0.05 * snap,
-    _v.z - 0.11 * rig.kick - 0.14 * rl,
+    _v.x + 0.2 * rl + 0.08 * sl,
+    _v.y - 0.26 * rl + 0.012 * breathe + 0.05 * snap - 0.22 * sl,
+    _v.z - 0.11 * rig.kick - 0.14 * rl + 0.06 * sl,
   );
   gun.rotation.set(
-    -0.16 * rig.kick - 0.62 * rl + 0.01 * Math.sin(rig.t * 1.3) + 0.08 * snap,
-    0.28 * rl,
-    1.05 * rl - 0.12 * snap,
+    -0.16 * rig.kick - 0.62 * rl + 0.01 * Math.sin(rig.t * 1.3) + 0.08 * snap + 0.55 * sl,
+    0.28 * rl - 0.15 * sl,
+    1.05 * rl - 0.12 * snap + 0.35 * sl,
   );
   gun.updateMatrix();
 
@@ -1372,6 +1612,9 @@ const state = {
   droneSpeed: 2.2,
   droneHp: 2,
   shake: 0,
+  bayActive: false,
+  scripted: null, // room-transfer state machine while walking into the bay
+  coilCd: 0,
 };
 
 const bullets = [];
@@ -2603,10 +2846,15 @@ const WAVE_TYPE_INTRO = {
 const WAVE_INTRO_HOLD = 4.5; // seconds after intro spawns before the full mix resumes (or sooner if they die)
 
 function waveBotType() {
+  // Defence Bay cool-down: waves 11–12 are mostly fast weak cyan runners, no mortars.
+  if (state.wave === 11 || state.wave === 12) {
+    return Math.random() < 0.78 ? BOT_TYPES.runner : BOT_TYPES.patrol;
+  }
   // Guaranteed introduction, then a few replacements rather than extra enemies.
   // Wave 10 opens with a two-tank intro; later waves still cap at three across the wave.
   const mortarLimit = state.wave === 10 ? 2 : 3;
-  if (state.wave >= 10 && state.mortarsSpawned < mortarLimit
+  if (state.wave >= 10 && state.wave !== 11 && state.wave !== 12
+      && state.mortarsSpawned < mortarLimit
       && !drones.some(z => z.userData.type.style === 'mortar')
       && !equipment.zones.some(r => r.userData.mortar)
       && (state.mortarsSpawned === 0 || Math.random() < 0.08)) {
@@ -2836,7 +3084,8 @@ function spawnPoint(out) {
   // walk out along a random bearing until it's off screen and clear of the deck
   for (; r < 70; r += 1) {
     const [x, z] = along(r);
-    if (offscreen(x, z) && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)) break;
+    const edge = play.half + WALL_T / 2;
+    if (offscreen(x, z) && (Math.abs(x - play.cx) > edge + 1.5 || Math.abs(z - play.cz) > edge + 1.5)) break;
   }
   [out.x, out.z] = along(r + 1.5 + Math.random() * 3);
   out.y = 0;
@@ -3097,7 +3346,7 @@ function nearestOpening(pos, skip, z = null) {
 }
 
 function inside(pos) {
-  return Math.abs(pos.x) < HALF - 0.3 && Math.abs(pos.z) < HALF - 0.3;
+  return Math.abs(pos.x - play.cx) < play.half - 0.3 && Math.abs(pos.z - play.cz) < play.half - 0.3;
 }
 
 // --- doors and windows: shut at the start of a run, and stay broken once broken ---
@@ -3295,10 +3544,8 @@ function clearPath(ax, az, bx, bz, radius = Z_RADIUS - SEE_SLOP) {
   return true;
 }
 const navGraphs = new Map();
-const navObstacles = [...SOLIDS, ...wallBoxes.map(w => ({
-  x: (w.minX + w.maxX) / 2, z: (w.minZ + w.maxZ) / 2,
-  hx: (w.maxX - w.minX) / 2, hz: (w.maxZ - w.minZ) / 2, c: 1, s: 0,
-}))];
+const navObstacles = [];
+rebuildNavObstacles();
 const botRadius = z => (z.userData.type.style === 'mortar' ? 0.74 : Z_RADIUS) * z.userData.type.size;
 function navClear(ax, az, bx, bz, radius, entrances = false) {
   if (!clearPath(ax, az, bx, bz, radius)) return false;
@@ -3335,8 +3582,8 @@ const _goal = { x: 0, z: 0 };
 function routeAround(z, tx, tz) {
   const ud = z.userData, radius = botRadius(z);
   if (inside(z.position) && !ud.opening) {
-    tx = THREE.MathUtils.clamp(tx, -HALF + radius + 0.2, HALF - radius - 0.2);
-    tz = THREE.MathUtils.clamp(tz, -HALF + radius + 0.2, HALF - radius - 0.2);
+    tx = THREE.MathUtils.clamp(tx, play.cx - play.half + radius + 0.2, play.cx + play.half - radius - 0.2);
+    tz = THREE.MathUtils.clamp(tz, play.cz - play.half + radius + 0.2, play.cz + play.half - radius - 0.2);
   }
   _goal.x = tx; _goal.z = tz;
   pushOutOfSolids(_goal, radius + 0.02); // player/flanking target may hug cover too closely
@@ -3435,9 +3682,9 @@ function clearWaveClearShields() {
 /** Keep the drop inside the arena and out of cover/walls. */
 function placeReachableDrop(pos) {
   const out = { x: pos.x ?? 0, y: 0, z: pos.z ?? 0 };
-  const lim = HALF - 0.9;
-  out.x = Math.max(-lim, Math.min(lim, out.x));
-  out.z = Math.max(-lim, Math.min(lim, out.z));
+  const lim = play.half - 0.9;
+  out.x = THREE.MathUtils.clamp(out.x, play.cx - lim, play.cx + lim);
+  out.z = THREE.MathUtils.clamp(out.z, play.cz - lim, play.cz + lim);
   for (let pass = 0; pass < 2; pass++) {
     pushOutOfSolids(out, 0.4);
     for (const w of wallBoxes) {
@@ -3449,8 +3696,8 @@ function placeReachableDrop(pos) {
       else out.z = cz + (Math.sign(dz) || 1) * (hz + 0.01);
     }
   }
-  out.x = Math.max(-lim, Math.min(lim, out.x));
-  out.z = Math.max(-lim, Math.min(lim, out.z));
+  out.x = THREE.MathUtils.clamp(out.x, play.cx - lim, play.cx + lim);
+  out.z = THREE.MathUtils.clamp(out.z, play.cz - lim, play.cz + lim);
   return out;
 }
 
@@ -3467,6 +3714,13 @@ function bankRemainingLoot() {
   clearEmeralds();
 }
 
+function clearAllFloorPickups() {
+  for (let i = drops.length - 1; i >= 0; i--) {
+    scene.remove(drops[i]);
+    drops.splice(i, 1);
+  }
+}
+
 function finishWaveClear() {
   clearBotsLeftToasts();
   clearEnemyBolts();
@@ -3478,7 +3732,99 @@ function finishWaveClear() {
     spawnWaveClearShield(lastKillPos);
   }
   audio.waveClear();
+  // After wave 10 boss, walk into the Defence Bay before the upgrade picker.
+  if (state.wave === 10 && !state.bayActive && !state.scripted) {
+    clearAllFloorPickups();
+    beginBayTransition();
+    return;
+  }
   openPicker();
+}
+
+function beginBayTransition() {
+  resetGameplayInput();
+  const north = findRoom1NorthDoor();
+  const south = findBaySouthDoor();
+  corridorGroup.visible = true;
+  // Hold bay south door open for entry (bay still hidden until we cross).
+  if (south) swingDoorOpen(south);
+  state.scripted = {
+    phase: 'walkDoor',
+    t: 0,
+    north,
+    south,
+    waypoints: [
+      { x: 0, z: -HALF + 2.2 },
+      { x: 0, z: -HALF - 0.4 },
+      { x: 0, z: -HALF - CORRIDOR_LEN * 0.55 },
+      { x: 0, z: BAY_CZ + BAY_HALF - 2.2 },
+      { x: 0, z: BAY_CZ + 3.5 },
+    ],
+    wi: 0,
+    doorOpen: false,
+    activated: false,
+    slamT: 0,
+  };
+}
+
+function updateBayTransition(dt) {
+  const xfer = state.scripted;
+  if (!xfer) return;
+  xfer.t += dt;
+  const speed = state.speed * 0.85;
+
+  if (xfer.phase === 'walkDoor' || xfer.phase === 'walkIn') {
+    const wp = xfer.waypoints[xfer.wi];
+    if (!wp) {
+      xfer.phase = 'slam';
+      xfer.slamT = 0;
+      return;
+    }
+    // Open the north door when close, before stepping through.
+    if (!xfer.doorOpen && xfer.wi >= 1 && xfer.north) {
+      swingDoorOpen(xfer.north);
+      xfer.doorOpen = true;
+      audio.bash(xfer.north, 0.6);
+    }
+    const dx = wp.x - player.position.x, dz = wp.z - player.position.z;
+    const dist = Math.hypot(dx, dz);
+    if (dist < 0.18) {
+      player.position.x = wp.x;
+      player.position.z = wp.z;
+      xfer.wi++;
+      // Entering the bay: swap collision / show bay / hide room1.
+      if (!xfer.activated && xfer.wi >= 4) {
+        activateBay();
+        xfer.activated = true;
+        // Keep south door open until slam.
+        if (xfer.south) swingDoorOpen(xfer.south);
+      }
+      if (xfer.wi >= xfer.waypoints.length) {
+        xfer.phase = 'slam';
+        xfer.slamT = 0;
+      }
+      return;
+    }
+    const step = Math.min(dist, speed * dt);
+    player.position.x += (dx / dist) * step;
+    player.position.z += (dz / dist) * step;
+    player.rotation.y = Math.atan2(dx, dz);
+    touchYaw = player.rotation.y;
+  } else if (xfer.phase === 'slam') {
+    xfer.slamT += dt;
+    if (xfer.slamT >= 0.15 && !xfer.slammed) {
+      xfer.slammed = true;
+      if (xfer.south) {
+        slamDoorShut(xfer.south);
+        audio.doorSlam(xfer.south);
+      }
+      state.shake = Math.max(state.shake, 0.85);
+    }
+    if (xfer.slamT >= 0.55) {
+      state.scripted = null;
+      openPicker();
+    }
+  }
 }
 
 function killDrone(z, idx, allowShieldDrop = true) {
@@ -3693,8 +4039,8 @@ function collect(type, opts = {}) {
 }
 
 function updateDrops(dt) {
-  const lim = HALF - 0.9;
-  const canCollect = !state.choosing;
+  const lim = play.half - 0.9;
+  const canCollect = !state.choosing && !state.scripted;
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i], ud = d.userData;
     ud.t += dt;
@@ -3721,7 +4067,8 @@ function updateDrops(dt) {
       p.x += (dx / dist) * 10 * dt; p.z += (dz / dist) * 10 * dt;
     } else if (!ud.waveClearShield) {
       // the player can't leave the deck, so drops that land outside slide in
-      const cx = Math.max(-lim, Math.min(lim, p.x)), cz = Math.max(-lim, Math.min(lim, p.z));
+      const cx = THREE.MathUtils.clamp(p.x, play.cx - lim, play.cx + lim);
+      const cz = THREE.MathUtils.clamp(p.z, play.cz - lim, play.cz + lim);
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
       if (od > 0.01) { const st = Math.min(od, 6 * dt); p.x += (ox / od) * st; p.z += (oz / od) * st; }
     }
@@ -4154,9 +4501,65 @@ function equipmentBlast(position, radius, damage, slow = false, allowShieldDrop 
     if (state.choosing) break;
   }
 }
+function updateCoil(dt) {
+  coilArcs.update(dt);
+  const rank = state.upgrades.coil || 0;
+  if (!state.bayActive || !rank || state.choosing || state.scripted || state.intermission > 0) return;
+  state.coilCd -= dt;
+  if (state.coilCd > 0) return;
+  const range = COIL_RANGE[rank] || COIL_RANGE[1];
+  const chain = COIL_CHAIN[rank] || 1;
+  const tip = _coilTip;
+  const candidates = drones
+    .filter(z => !z.userData.dying && inside(z.position))
+    .map(z => ({ z, d2: (z.position.x - tip.x) ** 2 + (z.position.z - tip.z) ** 2 }))
+    .filter(e => e.d2 <= range * range)
+    .sort((a, b) => a.d2 - b.d2);
+  if (!candidates.length) {
+    state.coilCd = 0.2;
+    return;
+  }
+  const targets = candidates.slice(0, chain);
+  let from = tip;
+  for (const { z } of targets) {
+    _coilHit.set(z.position.x, 1.1 * z.userData.type.size, z.position.z);
+    coilArcs.spawn(from, _coilHit, 0.16);
+    from = _coilHit.clone();
+    z.userData.hp -= COIL_DAMAGE * (z.userData.recovery > 0 ? 1.75 : 1);
+    const idx = drones.indexOf(z);
+    if (z.userData.hp <= 0 && idx >= 0) killDrone(z, idx);
+    else {
+      hitDrone(z);
+      audio.hit(z.position);
+      maybeSplitBoss(z);
+    }
+  }
+  audio.zap(tip);
+  state.coilCd = COIL_INTERVAL[rank] || 2;
+}
+
 function updateEquipment(dt) {
   helper.visible = !!state.upgrades.bot && state.running;
-  if (!state.running || state.choosing || state.intermission > 0) return;
+  if (!state.running || state.choosing || state.intermission > 0 || state.scripted) {
+    if (state.running && state.scripted && state.upgrades.bot) {
+      // Keep the helper orbiting during the bay walk.
+      syncHelperMesh(state.upgrades);
+      const orbitSpeed = reducedMotion.matches ? HELPER_ORBIT_SPEED * 0.45 : HELPER_ORBIT_SPEED;
+      const next = stepHelperOrbit({
+        px: player.position.x, pz: player.position.z,
+        x: helper.position.x, y: helper.position.y, z: helper.position.z,
+        orbit: helperOrbit,
+      }, dt, { orbitSpeed });
+      helperOrbit = next.orbit;
+      helper.position.set(next.x, next.y, next.z);
+      placeHelperClearOfPlayer(next.ang);
+      helperYaw = stepHelperYaw(helperYaw, player.rotation.y, dt, HELPER_AIM_RATE);
+      helper.rotation.set(0, helperYaw, 0);
+    }
+    coilArcs.update(dt);
+    return;
+  }
+  updateCoil(dt);
   const u = state.upgrades;
   equipment.safe += dt;
   if (u.regen && equipment.safe >= (u.regen === 2 ? 8 : 12) && state.hp < state.maxHp) {
@@ -4326,6 +4729,11 @@ function pickUpgradeOffers(count = 3) {
     return others.length ? others : pool.slice();
   };
 
+  // Defence Bay: always include the next Tesla Coil rank while under max.
+  if (state.bayActive) {
+    take(pool.find(u => u.id === 'coil'));
+  }
+
   // Keep an equipment path available, including follow-up modules once owned.
   const equipment = pool.filter(u => u.cat === 'engineer');
   if (equipment.length) take(pickWeighted(equipment));
@@ -4428,6 +4836,7 @@ function choose(i) {
   state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
   u.apply(state);
   if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
+  if (u.id === 'coil') bayDecor.setCoilPower(state.upgrades.coil || 0);
   state.choosing = false;
   resetGameplayInput();
   focusGame();
@@ -4738,7 +5147,9 @@ function startWave(n) {
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
   state.droneHp = 2 + (n - 1) * 0.4;
   // anything already up counts toward the wave (the yard's shamblers when you leave the title)
-  state.toSpawn = Math.max(0, 5 + n * 3 - drones.length);
+  // Waves 11–12 sawtooth cool-down: smaller packs than wave 10.
+  const waveCount = n === 11 ? 18 : n === 12 ? 22 : 5 + n * 3;
+  state.toSpawn = Math.max(0, waveCount - drones.length);
   for (const z of drones) {
     const u = z.userData;
     u.speed = Math.min(5.5, state.droneSpeed * u.pace);
@@ -4751,7 +5162,7 @@ function startWave(n) {
   // Leftover clear-shields / boss powerups sit through the picker; once live they start fading.
   armPersistFloorExpiry();
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
-  const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
+  const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 11: 'Defence Bay', 12: 'Reactor at critical load' };
   showBanner(
     'WAVE ' + n,
     n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected',
@@ -4814,7 +5225,7 @@ function clearRun() {
 function resetGame(keep = false) {
   resetGameplayInput();
   resetPlayInputStats();
-  if (!keep) { clearRun(); resetOpenings(); }
+  if (!keep) { clearRun(); deactivateBay(); resetOpenings(); }
   seenDrops.clear();
   healGlow = 0; powerGlowTime = 0;
   pressure.set(0);
@@ -4826,6 +5237,7 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
+    bayActive: false, scripted: null, coilCd: 0,
   });
   emeraldChain = 0;
   botMilestonesDone.clear();
@@ -5211,10 +5623,14 @@ function enterTitle(splash) {
   title.active = true;
   audio.setTitleMusic(true);
   clearRun();
+  deactivateBay();
   resetOpenings();
   pressure.set(0); // reset reactor load on the title screen
   state.running = false;
   state.dmgCd = 0;
+  state.bayActive = false;
+  state.scripted = null;
+  state.coilCd = 0;
   player.position.set(0, 0, 0); // in the middle of the deck, below the line of the walls
   player.rotation.y = 0;
   // the first crowd starts spread along the way, alternating directions
@@ -5659,12 +6075,12 @@ function hurtPlayer(damage = 1) {
 function huntPoint(z, px, pz) {
   const radius = botRadius(z);
   const margin = radius + 0.55;
-  let tx = THREE.MathUtils.clamp(px, -HALF + margin, HALF - margin);
-  let tz = THREE.MathUtils.clamp(pz, -HALF + margin, HALF - margin);
-  const corner = (HALF - margin) * 0.7;
-  if (Math.abs(tx) > corner && Math.abs(tz) > corner) {
-    tx *= 0.78;
-    tz *= 0.78;
+  let tx = THREE.MathUtils.clamp(px, play.cx - play.half + margin, play.cx + play.half - margin);
+  let tz = THREE.MathUtils.clamp(pz, play.cz - play.half + margin, play.cz + play.half - margin);
+  const corner = play.half - margin;
+  if (Math.abs(tx - play.cx) > corner * 0.7 && Math.abs(tz - play.cz) > corner * 0.7) {
+    tx = play.cx + (tx - play.cx) * 0.78;
+    tz = play.cz + (tz - play.cz) * 0.78;
   }
   // Chargers commit straight in; everyone else fans slightly so packs don't stack.
   if (z.userData.type.style !== 'rusher') {
@@ -5682,7 +6098,7 @@ function chaseDrone(z, dt) {
   ud.slow = Math.max(0, (ud.slow || 0) - dt);
   const clearance = WALL_T / 2 + botRadius(z) + 0.15;
   const bossEntering = ud.boss && (!inside(z.position) || (ud.opening && (
-    Math.abs(z.position.x) >= HALF - clearance || Math.abs(z.position.z) >= HALF - clearance
+    Math.abs(z.position.x - play.cx) >= play.half - clearance || Math.abs(z.position.z - play.cz) >= play.half - clearance
     || (ud.stage === 1 && Math.hypot(z.position.x - ud.opening.ix, z.position.z - ud.opening.iz) > 0.12))));
   const onDeck = inside(z.position) && !bossEntering;
   if (ud.boss && onDeck) { ud.opening = null; ud.stage = 0; }
@@ -5701,8 +6117,8 @@ function chaseDrone(z, dt) {
         const angle = i * Math.PI * 2 / count;
         const position = p.clone();
         if (i) { position.x += Math.cos(angle) * 3.8; position.z += Math.sin(angle) * 3.8; }
-        position.x = THREE.MathUtils.clamp(position.x, -HALF + 2, HALF - 2);
-        position.z = THREE.MathUtils.clamp(position.z, -HALF + 2, HALF - 2);
+        position.x = THREE.MathUtils.clamp(position.x, play.cx - play.half + 2, play.cx + play.half - 2);
+        position.z = THREE.MathUtils.clamp(position.z, play.cz - play.half + 2, play.cz + play.half - 2);
         groundRing(position, 2.1, 0xff708c, 1.4, equipment.zones);
       }
       ud.patternTimer = 3.6;
@@ -5730,8 +6146,8 @@ function chaseDrone(z, dt) {
       ud.mortarCd = 5;
     }
   }
-  const fullyOnDeck = Math.abs(z.position.x) < HALF - botRadius(z) - 0.2
-    && Math.abs(z.position.z) < HALF - botRadius(z) - 0.2;
+  const fullyOnDeck = Math.abs(z.position.x - play.cx) < play.half - botRadius(z) - 0.2
+    && Math.abs(z.position.z - play.cz) < play.half - botRadius(z) - 0.2;
   if (ud.type.style === 'mortar' && fullyOnDeck && ud.climb < 0 && ud.swing < 0) {
     let moving = false;
     if (pd >= 4.5 && pd <= 22) {
@@ -5929,7 +6345,9 @@ function separateDrones() {
 function update(dt, lightFrame = false) {
   const px = player.position.x, pz = player.position.z;
   tickPlayInput(dt);
-  if (state.running && !state.choosing) {
+  if (state.running && state.scripted) {
+    updateBayTransition(dt);
+  } else if (state.running && !state.choosing) {
     // --- movement (always first, even on hitch frames) ---
     let mx = keyboardAxis(['KeyA', 'ArrowLeft'], ['KeyD', 'ArrowRight']);
     let mz = keyboardAxis(['KeyW', 'ArrowUp'], ['KeyS', 'ArrowDown']);
@@ -5944,9 +6362,11 @@ function update(dt, lightFrame = false) {
       player.position.z += (mz / l) * state.speed * stepDt;
     }
     // clamp inside deck
-    const lim = HALF - 0.7;
-    player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
-    player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
+    {
+      const lim = play.half - 0.7;
+      player.position.x = THREE.MathUtils.clamp(player.position.x, play.cx - lim, play.cx + lim);
+      player.position.z = THREE.MathUtils.clamp(player.position.z, play.cz - lim, play.cz + lim);
+    }
     // --- aim ---
     raycaster.setFromCamera(mouse, camera);
     // Right stick / pad steers aim when deflected; otherwise the gun follows the move stick
@@ -5982,8 +6402,8 @@ function update(dt, lightFrame = false) {
   if (state.running) {
     // --- weapon ---
     state.fireCd -= dt;
-    if (firing && !state.choosing) fire();
-    if (state.reloading) {
+    if (firing && !state.choosing && !state.scripted) fire();
+    if (state.reloading && !state.scripted) {
       state.reloadT += dt;
       if (state.reloadT >= state.reloadTime) finishReload();
     }
@@ -5993,13 +6413,13 @@ function update(dt, lightFrame = false) {
     updateDrops(dt);
     // Seek gems keep flying in while the picker is open so boss payouts finish immediately.
     updateEmeralds(dt);
-    if (!state.choosing) {
+    if (!state.choosing && !state.scripted) {
       if (state.intermission <= 0) state.waveTime += dt;
     }
 
     // --- waves ---
-    if (state.choosing) {
-      // wave cleared — waiting on the upgrade pick
+    if (state.choosing || state.scripted) {
+      // wave cleared — waiting on the upgrade pick / bay walk
     } else if (state.intermission > 0) {
       const scoreTime = audio.scoreTime();
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
@@ -6192,7 +6612,9 @@ whenViewportSettled(() => {
   document.body.classList.remove('viewport-pending');
   onResize();
   // ?demo=boss-death — auto-plays the finale for capture / QA.
-  if (new URLSearchParams(location.search).get('demo') === 'boss-death') {
+  // ?dev=bay — jump to the post-wave-10 Defence Bay transition.
+  const bootParams = new URLSearchParams(location.search);
+  if (bootParams.get('demo') === 'boss-death') {
     setTimeout(() => {
       startGame(true);
       state.intermission = 0;
@@ -6212,6 +6634,29 @@ whenViewportSettled(() => {
       player.position.set(0, 0, 0);
       player.rotation.y = 0;
       beginBossDeath(z);
+    }, 350);
+  } else if (bootParams.get('dev') === 'bay') {
+    setTimeout(() => {
+      startGame(true);
+      state.intermission = 0;
+      waveAt = null;
+      state.toSpawn = 0;
+      state.bossPending = false;
+      state.wave = 10;
+      state.choosing = false;
+      for (let i = drones.length - 1; i >= 0; i--) {
+        scene.remove(drones[i]);
+        drones.splice(i, 1);
+      }
+      clearAllFloorPickups();
+      clearEmeralds();
+      clearEnemyBolts();
+      clearEquipmentField();
+      player.position.set(0, 0, -2);
+      player.rotation.y = Math.PI;
+      touchYaw = Math.PI;
+      audio.waveClear();
+      beginBayTransition();
     }, 350);
   }
 });
