@@ -51,9 +51,10 @@ import {
 import {
   BAY_DOOR_X,
   MAPVIEW_CAM,
-  ROOM2_HX,
+  ROOM2_EAST,
   ROOM2_NORTH,
   ROOM2_SOUTH,
+  ROOM2_WEST,
   bayWalkWaypoints,
   buildExtendedFloor,
   pointInRoom2,
@@ -377,7 +378,7 @@ const panels = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
 for (let z = -19; z <= 19; z++) {
   for (let x = -19; x <= 19; x++) {
     const wx = x * 1.6, wz = z * 1.6;
-    if (wz < ROOM2_SOUTH - 0.05 && Math.abs(wx) < ROOM2_HX + 0.9) continue;
+    if (wz < ROOM2_SOUTH - 0.05 && wx > ROOM2_WEST - 0.9 && wx < ROOM2_EAST + 0.9) continue;
     const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
     deck.add([[1.565, 0.11, 1.565, wx, -0.06, wz,
       insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);

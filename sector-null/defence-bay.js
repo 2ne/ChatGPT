@@ -8,13 +8,16 @@
  */
 import * as THREE from 'three';
 import {
+  BAY_CX,
   BAY_DOOR_X,
   ROOM1_NORTH_DOOR,
   ROOM2_CZ,
+  ROOM2_EAST,
   ROOM2_HX,
   ROOM2_HZ,
   ROOM2_NORTH,
   ROOM2_SOUTH,
+  ROOM2_WEST,
 } from './facility-exterior.js';
 
 const CYAN = 0x62edff;
@@ -32,11 +35,6 @@ const DECK_TILE = 1.565;
 const DOOR_GAP = Math.abs(ROOM1_NORTH_DOOR.u1 - ROOM1_NORTH_DOOR.u0);
 const CHANNEL_HALF = 0.72;
 const OCT_R = 4.35;
-/**
- * Bay layout centre X — same as N/S door X (walk line from room 1).
- * Channels, dais, coil and pillars are symmetric about this, not world x=0.
- */
-const BAY_CX = BAY_DOOR_X;
 
 /**
  * @param {THREE.Object3D} parent
@@ -68,8 +66,8 @@ export function buildDefenceBay(parent, helpers) {
   // ── Floor: same bevelled deck plates as room 1 (1.6 spacing, panel palette) ──
   const floorB = new BlockBatch();
   const floorRng = seeded(401);
-  const xMin = Math.ceil((-ROOM2_HX + 0.9) / DECK_STEP);
-  const xMax = Math.floor((ROOM2_HX - 0.9) / DECK_STEP);
+  const xMin = Math.ceil((ROOM2_WEST + 0.9) / DECK_STEP);
+  const xMax = Math.floor((ROOM2_EAST - 0.9) / DECK_STEP);
   const zMin = Math.ceil((ROOM2_NORTH + 0.9) / DECK_STEP);
   const zMax = Math.floor((ROOM2_SOUTH - 0.9) / DECK_STEP);
   for (let iz = zMin; iz <= zMax; iz++) {
@@ -95,7 +93,7 @@ export function buildDefenceBay(parent, helpers) {
       [0.11, 0.013, 0.28, BAY_CX - (CHANNEL_HALF + 0.2), 0.006, z, 0x6f8a9e, 0, 0, 0, 0],
     ], floorRng);
   }
-  for (let x = -ROOM2_HX + 2; x < ROOM2_HX - 2; x += 0.55) {
+  for (let x = ROOM2_WEST + 2; x < ROOM2_EAST - 2; x += 0.55) {
     if (Math.abs(x - BAY_CX) < OCT_R) continue;
     floorB.add([
       [0.28, 0.013, 0.11, x, 0.006, ROOM2_CZ + CHANNEL_HALF + 0.2, 0x6f8a9e, 0, 0, 0, 0],
@@ -108,8 +106,8 @@ export function buildDefenceBay(parent, helpers) {
   for (const [dx, dz] of [
     [BAY_DOOR_X - 1.4, ROOM2_SOUTH - 1.2], [BAY_DOOR_X + 1.4, ROOM2_SOUTH - 1.2],
     [BAY_DOOR_X - 1.4, ROOM2_NORTH + 1.2], [BAY_DOOR_X + 1.4, ROOM2_NORTH + 1.2],
-    [-(ROOM2_HX - 1.2), ROOM2_CZ - 1.4], [-(ROOM2_HX - 1.2), ROOM2_CZ + 1.4],
-    [ROOM2_HX - 1.2, ROOM2_CZ - 1.4], [ROOM2_HX - 1.2, ROOM2_CZ + 1.4],
+    [ROOM2_WEST + 1.2, ROOM2_CZ - 1.4], [ROOM2_WEST + 1.2, ROOM2_CZ + 1.4],
+    [ROOM2_EAST - 1.2, ROOM2_CZ - 1.4], [ROOM2_EAST - 1.2, ROOM2_CZ + 1.4],
   ]) {
     box(group, cyanLight, dx, 0.007, dz, 0.9, 0.014, 0.035);
     box(group, cyanLight, dx, 0.007, dz, 0.035, 0.014, 0.55);
@@ -148,8 +146,9 @@ export function buildDefenceBay(parent, helpers) {
   }
 
   function wallWithDoor(axis, fixed, doorU, doorHalf) {
-    const min = axis === 'x' ? -ROOM2_HX : -ROOM2_HZ;
-    const max = axis === 'x' ? ROOM2_HX : ROOM2_HZ;
+    // N/S walls span west→east; E/W walls span north→south (world Z).
+    const min = axis === 'x' ? ROOM2_WEST : ROOM2_NORTH;
+    const max = axis === 'x' ? ROOM2_EAST : ROOM2_SOUTH;
     const gaps = [[doorU - doorHalf, doorU + doorHalf]];
     let cursor = min;
     const segs = [];
@@ -185,12 +184,12 @@ export function buildDefenceBay(parent, helpers) {
   const doorHalf = DOOR_GAP / 2;
   wallWithDoor('x', ROOM2_SOUTH, BAY_DOOR_X, doorHalf);
   wallWithDoor('x', ROOM2_NORTH, BAY_DOOR_X, doorHalf);
-  wallWithDoor('z', -ROOM2_HX, ROOM2_CZ, doorHalf);
-  wallWithDoor('z', ROOM2_HX, ROOM2_CZ, doorHalf);
+  wallWithDoor('z', ROOM2_WEST, ROOM2_CZ, doorHalf);
+  wallWithDoor('z', ROOM2_EAST, ROOM2_CZ, doorHalf);
 
-  // Chunky corner blocks + cyan caps
+  // Chunky corner blocks + cyan caps (mirrored about BAY_CX / ROOM2_CZ)
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const x = sx * (ROOM2_HX - 0.45);
+    const x = BAY_CX + sx * (ROOM2_HX - 0.45);
     const z = ROOM2_CZ + sz * (ROOM2_HZ - 0.45);
     wallB.add([
       [1.35, SHELL_H + 0.12, 1.35, x, (SHELL_H + 0.12) / 2, z, 0x2a3d4c, 0, 0, 0, 0.05],
@@ -205,11 +204,11 @@ export function buildDefenceBay(parent, helpers) {
     if (len < 0.4) return;
     box(group, cyanLight, (a + b) / 2, SHELL_H - 0.04, z, len * 0.96, 0.05, 0.08);
   }
-  cyanCapX(ROOM2_SOUTH, -ROOM2_HX, BAY_DOOR_X - doorHalf);
-  cyanCapX(ROOM2_SOUTH, BAY_DOOR_X + doorHalf, ROOM2_HX);
-  cyanCapX(ROOM2_NORTH, -ROOM2_HX, BAY_DOOR_X - doorHalf);
-  cyanCapX(ROOM2_NORTH, BAY_DOOR_X + doorHalf, ROOM2_HX);
-  for (const x of [-ROOM2_HX, ROOM2_HX]) {
+  cyanCapX(ROOM2_SOUTH, ROOM2_WEST, BAY_DOOR_X - doorHalf);
+  cyanCapX(ROOM2_SOUTH, BAY_DOOR_X + doorHalf, ROOM2_EAST);
+  cyanCapX(ROOM2_NORTH, ROOM2_WEST, BAY_DOOR_X - doorHalf);
+  cyanCapX(ROOM2_NORTH, BAY_DOOR_X + doorHalf, ROOM2_EAST);
+  for (const x of [ROOM2_WEST, ROOM2_EAST]) {
     const z0 = ROOM2_NORTH + 0.3;
     const z1 = ROOM2_CZ - doorHalf - 0.05;
     const z2 = ROOM2_CZ + doorHalf + 0.05;
@@ -302,8 +301,8 @@ export function buildDefenceBay(parent, helpers) {
   }
 
   makeStaticDoor(BAY_DOOR_X, ROOM2_NORTH + 0.08, Math.PI, 'ns');
-  makeStaticDoor(-(ROOM2_HX - 0.08), ROOM2_CZ, Math.PI / 2, 'ew');
-  makeStaticDoor(ROOM2_HX - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
+  makeStaticDoor(ROOM2_WEST + 0.08, ROOM2_CZ, Math.PI / 2, 'ew');
+  makeStaticDoor(ROOM2_EAST - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
 
   // South slam door — massive frame stays; leaves only cover the collision gap
   // (DOOR_GAP), each on its own hinge. Previously both leaves sat under one left
@@ -376,36 +375,29 @@ export function buildDefenceBay(parent, helpers) {
   const chB = new BlockBatch();
   const chRng = seeded(55);
   const trenchY = -0.08;
-  // Trench beds — N–S on BAY_CX (door/coil line); E–W split around the cross.
+  // Trench beds — equal arms about BAY_CX / ROOM2_CZ (walls are now symmetric).
   chB.add([
     [CHANNEL_HALF * 2, 0.06, ROOM2_HZ * 1.85, BAY_CX, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
   ], chRng);
   {
-    // Asymmetric arms so the E–W trench still reaches both side walls from BAY_CX.
+    const span = ROOM2_HX * 1.85;
     const gap = CHANNEL_HALF * 2 + 0.04;
-    const westEnd = -ROOM2_HX * 0.925;
-    const eastEnd = ROOM2_HX * 0.925;
-    const westArm = (BAY_CX - gap / 2) - westEnd;
-    const eastArm = eastEnd - (BAY_CX + gap / 2);
-    if (westArm > 0.2) {
+    const arm = (span - gap) / 2;
+    if (arm > 0.2) {
       chB.add([
-        [westArm, 0.06, CHANNEL_HALF * 2, westEnd + westArm / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
-      ], chRng);
-    }
-    if (eastArm > 0.2) {
-      chB.add([
-        [eastArm, 0.06, CHANNEL_HALF * 2, eastEnd - eastArm / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+        [arm, 0.06, CHANNEL_HALF * 2, BAY_CX - (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+        [arm, 0.06, CHANNEL_HALF * 2, BAY_CX + (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
       ], chRng);
     }
   }
   // Grate bars N-S
   for (let z = ROOM2_NORTH + 1.2; z < ROOM2_SOUTH - 1.2; z += 0.38) {
-    if (Math.hypot(0, z - ROOM2_CZ) < OCT_R - 0.2) continue;
+    if (Math.abs(z - ROOM2_CZ) < OCT_R - 0.2) continue;
     chB.add([[CHANNEL_HALF * 1.85, 0.04, 0.07, BAY_CX, trenchY + 0.04, z, 0x3a5060, 0, 0, 0, 0.01]], chRng);
   }
   // Grate bars E-W
-  for (let x = -ROOM2_HX + 1.2; x < ROOM2_HX - 1.2; x += 0.38) {
-    if (Math.hypot(x - BAY_CX, 0) < OCT_R - 0.2) continue;
+  for (let x = ROOM2_WEST + 1.2; x < ROOM2_EAST - 1.2; x += 0.38) {
+    if (Math.abs(x - BAY_CX) < OCT_R - 0.2) continue;
     chB.add([[0.07, 0.04, CHANNEL_HALF * 1.85, x, trenchY + 0.04, ROOM2_CZ, 0x3a5060, 0, 0, 0, 0.01]], chRng);
   }
   bake(chB, false);
@@ -416,7 +408,7 @@ export function buildDefenceBay(parent, helpers) {
     channelTicks.push(box(group, cyanLight, BAY_CX + 0.42, 0.012, z, 0.1, 0.028, 0.22));
     channelTicks.push(box(group, cyanLight, BAY_CX - 0.42, 0.012, z, 0.1, 0.028, 0.22));
   }
-  for (let x = -ROOM2_HX + 2.2; x < ROOM2_HX - 2.2; x += 0.95) {
+  for (let x = ROOM2_WEST + 2.2; x < ROOM2_EAST - 2.2; x += 0.95) {
     if (Math.abs(x - BAY_CX) < OCT_R) continue;
     channelTicks.push(box(group, cyanLight, x, 0.012, ROOM2_CZ + 0.42, 0.22, 0.028, 0.1));
     channelTicks.push(box(group, cyanLight, x, 0.012, ROOM2_CZ - 0.42, 0.22, 0.028, 0.1));

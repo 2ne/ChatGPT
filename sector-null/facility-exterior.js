@@ -7,8 +7,20 @@ import * as THREE from 'three';
 /** Room 1 half-extent (matches game.js HALF). */
 export const ROOM1_HALF = 10;
 
-/** Room 2 (~2.3× room-1 floor). South door X-aligned with room-1 north door. */
-export const ROOM2_HX = 24;
+/** Room-1 north door span (game.js buildWall) — room-2 south door matches this. */
+export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
+/** Door centre on X (walk path stays on this line — clears the reactor at x≈5.3). */
+export const BAY_DOOR_X = (ROOM1_NORTH_DOOR.u0 + ROOM1_NORTH_DOOR.u1) / 2;
+/** Bay layout centre X — same as the walk / N–S door line. */
+export const BAY_CX = BAY_DOOR_X;
+
+/**
+ * Room 2 half-extents about the bay centre (BAY_CX, ROOM2_CZ).
+ * Width was previously ±24 about world x=0 (asymmetric about the walk line);
+ * now walls sit at BAY_CX ± ROOM2_HX so the cross is perfectly symmetric.
+ * 19 keeps the west wall (~−24) and narrows the east; still ~1.9× room-1 wide.
+ */
+export const ROOM2_HX = 19;
 export const ROOM2_HZ = 22;
 /**
  * Open exterior strip between room-1 north wall and room-2 south wall (~9–10
@@ -19,6 +31,8 @@ export const ROOM2_THRESHOLD = 15;
 export const ROOM2_CZ = -(ROOM1_HALF + ROOM2_THRESHOLD + ROOM2_HZ);
 export const ROOM2_SOUTH = ROOM2_CZ + ROOM2_HZ;
 export const ROOM2_NORTH = ROOM2_CZ - ROOM2_HZ;
+export const ROOM2_WEST = BAY_CX - ROOM2_HX;
+export const ROOM2_EAST = BAY_CX + ROOM2_HX;
 
 /** Half-thickness pad for room-2 collision footprint (matches shell depth). */
 export const ROOM2_COLLIDE_PAD = 0.28;
@@ -26,8 +40,8 @@ export const ROOM2_COLLIDE_PAD = 0.28;
 /** Axis-aligned footprint including walls — enemies must route around, never through. */
 export function room2CollisionBoxes() {
   return [{
-    minX: -ROOM2_HX - ROOM2_COLLIDE_PAD,
-    maxX: ROOM2_HX + ROOM2_COLLIDE_PAD,
+    minX: ROOM2_WEST - ROOM2_COLLIDE_PAD,
+    maxX: ROOM2_EAST + ROOM2_COLLIDE_PAD,
     minZ: ROOM2_NORTH - ROOM2_COLLIDE_PAD,
     maxZ: ROOM2_SOUTH + ROOM2_COLLIDE_PAD,
   }];
@@ -35,14 +49,9 @@ export function room2CollisionBoxes() {
 
 /** True if (x,z) is inside room 2’s footprint (for spawn rejection). */
 export function pointInRoom2(x, z, margin = 0.6) {
-  return x >= -ROOM2_HX - margin && x <= ROOM2_HX + margin
+  return x >= ROOM2_WEST - margin && x <= ROOM2_EAST + margin
     && z <= ROOM2_SOUTH + margin && z >= ROOM2_NORTH - margin;
 }
-
-/** Room-1 north door span (game.js buildWall) — room-2 south door matches this. */
-export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
-/** Door centre on X (walk path stays on this line — clears the reactor at x≈5.3). */
-export const BAY_DOOR_X = (ROOM1_NORTH_DOOR.u0 + ROOM1_NORTH_DOOR.u1) / 2;
 
 /**
  * How far inside room 2 the Stage-3 walk stops.
@@ -68,22 +77,26 @@ export const ORIGINAL_DECK_HALF = ORIGINAL_DECK_INDEX * DECK_STEP + 1.565 / 2;
  * Same dark exterior colour as room-1’s outside plates (0x1c2b37).
  */
 export function buildExtendedFloor(parent, material) {
-  const xMax = ROOM2_HX + EXTERIOR_MARGIN;
+  // Cover room 1 + bay + margin; bay is offset to BAY_CX so extents are not ±symmetric.
+  const roomPad = ROOM1_HALF + EXTERIOR_MARGIN;
+  const xMin = Math.min(-roomPad, ROOM2_WEST - EXTERIOR_MARGIN);
+  const xMax = Math.max(roomPad, ROOM2_EAST + EXTERIOR_MARGIN);
   const zMin = ROOM2_NORTH - EXTERIOR_MARGIN;
   const zMax = ROOM1_HALF + EXTERIOR_MARGIN;
   const hole = ORIGINAL_DECK_HALF + 0.02;
   // Bay hole: inset slightly past the wall inner face so door thresholds stay on exterior.
   const bayPad = 0.35;
-  const bayX = ROOM2_HX - bayPad;
+  const bayX0 = ROOM2_WEST + bayPad;
+  const bayX1 = ROOM2_EAST - bayPad;
   const bayZ0 = ROOM2_NORTH + bayPad;
   const bayZ1 = ROOM2_SOUTH - bayPad;
 
   const shape = new THREE.Shape();
-  shape.moveTo(-xMax, zMin);
+  shape.moveTo(xMin, zMin);
   shape.lineTo(xMax, zMin);
   shape.lineTo(xMax, zMax);
-  shape.lineTo(-xMax, zMax);
-  shape.lineTo(-xMax, zMin);
+  shape.lineTo(xMin, zMax);
+  shape.lineTo(xMin, zMin);
 
   // Opposite winding to the outer path (Three.js hole requirement).
   const cutDeck = new THREE.Path();
@@ -96,11 +109,11 @@ export function buildExtendedFloor(parent, material) {
 
   // Hole out the bay interior so the plane never sits under bay deck tiles.
   const cutBay = new THREE.Path();
-  cutBay.moveTo(-bayX, bayZ0);
-  cutBay.lineTo(-bayX, bayZ1);
-  cutBay.lineTo(bayX, bayZ1);
-  cutBay.lineTo(bayX, bayZ0);
-  cutBay.lineTo(-bayX, bayZ0);
+  cutBay.moveTo(bayX0, bayZ0);
+  cutBay.lineTo(bayX0, bayZ1);
+  cutBay.lineTo(bayX1, bayZ1);
+  cutBay.lineTo(bayX1, bayZ0);
+  cutBay.lineTo(bayX0, bayZ0);
   shape.holes.push(cutBay);
 
   const geo = new THREE.ShapeGeometry(shape);
@@ -163,8 +176,8 @@ export function buildRoom2Shell(parent) {
   // South wall on the room-2 boundary (clear exterior strip south of here to room 1).
   const southZ = ROOM2_SOUTH;
   const northZ = ROOM2_NORTH;
-  const westX = -ROOM2_HX;
-  const eastX = ROOM2_HX;
+  const westX = ROOM2_WEST;
+  const eastX = ROOM2_EAST;
   const door = ROOM1_NORTH_DOOR;
   const panelMat = shellMat(SHELL_PANELS[1]);
   const postMat = shellMat(SHELL_POST);
@@ -176,7 +189,7 @@ export function buildRoom2Shell(parent) {
   const floorW = ROOM2_HX * 2 - 0.15;
   const floorD = Math.abs(northZ - southZ) - SHELL_T * 0.2;
   const floor = new THREE.Mesh(new THREE.BoxGeometry(floorW, 0.1, floorD), floorMat);
-  floor.position.set(0, -0.04, (southZ + northZ) / 2);
+  floor.position.set(BAY_CX, -0.04, (southZ + northZ) / 2);
   floor.receiveShadow = true;
   floor.castShadow = false;
   group.add(floor);
@@ -266,47 +279,47 @@ export function room2WallBoxes({ southDoorOpen = false } = {}) {
   // North wall with centred door gap
   boxes.push(
     {
-      minX: -ROOM2_HX - pad, maxX: BAY_DOOR_X - gap,
+      minX: ROOM2_WEST - pad, maxX: BAY_DOOR_X - gap,
       minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
     },
     {
-      minX: BAY_DOOR_X + gap, maxX: ROOM2_HX + pad,
+      minX: BAY_DOOR_X + gap, maxX: ROOM2_EAST + pad,
       minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
     },
   );
-  // West / east with centred door gaps
+  // West / east with centred door gaps (doors on ROOM2_CZ / dais Z)
   boxes.push(
     {
-      minX: -ROOM2_HX - t, maxX: -ROOM2_HX + t,
+      minX: ROOM2_WEST - t, maxX: ROOM2_WEST + t,
       minZ: ROOM2_NORTH - pad, maxZ: ROOM2_CZ - gap,
     },
     {
-      minX: -ROOM2_HX - t, maxX: -ROOM2_HX + t,
+      minX: ROOM2_WEST - t, maxX: ROOM2_WEST + t,
       minZ: ROOM2_CZ + gap, maxZ: ROOM2_SOUTH + pad,
     },
     {
-      minX: ROOM2_HX - t, maxX: ROOM2_HX + t,
+      minX: ROOM2_EAST - t, maxX: ROOM2_EAST + t,
       minZ: ROOM2_NORTH - pad, maxZ: ROOM2_CZ - gap,
     },
     {
-      minX: ROOM2_HX - t, maxX: ROOM2_HX + t,
+      minX: ROOM2_EAST - t, maxX: ROOM2_EAST + t,
       minZ: ROOM2_CZ + gap, maxZ: ROOM2_SOUTH + pad,
     },
   );
   if (southDoorOpen) {
     boxes.push(
       {
-        minX: -ROOM2_HX - pad, maxX: door.u0,
+        minX: ROOM2_WEST - pad, maxX: door.u0,
         minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
       },
       {
-        minX: door.u1, maxX: ROOM2_HX + pad,
+        minX: door.u1, maxX: ROOM2_EAST + pad,
         minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
       },
     );
   } else {
     boxes.push({
-      minX: -ROOM2_HX - pad, maxX: ROOM2_HX + pad,
+      minX: ROOM2_WEST - pad, maxX: ROOM2_EAST + pad,
       minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
     });
   }
@@ -316,8 +329,8 @@ export function room2WallBoxes({ southDoorOpen = false } = {}) {
 /** Player clamp limits inside room 2 (south door shut). */
 export function room2PlayerClamp(inset = 1.05) {
   return {
-    minX: -ROOM2_HX + inset,
-    maxX: ROOM2_HX - inset,
+    minX: ROOM2_WEST + inset,
+    maxX: ROOM2_EAST - inset,
     minZ: ROOM2_NORTH + inset,
     maxZ: ROOM2_SOUTH - inset,
   };
@@ -337,8 +350,8 @@ export function bayWalkWaypoints(room1Half = ROOM1_HALF) {
 
 /** Map-view framing: both rooms + the open strip between them (no fog in mapview). */
 export const MAPVIEW_CAM = {
-  position: new THREE.Vector3(0, 145, -28),
-  lookAt: new THREE.Vector3(0, 0, -28),
+  position: new THREE.Vector3(BAY_CX * 0.45, 145, -28),
+  lookAt: new THREE.Vector3(BAY_CX * 0.45, 0, -28),
   fov: 48,
   near: 14,
   far: 360,
