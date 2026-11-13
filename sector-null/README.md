@@ -10,7 +10,7 @@ Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORI
 
 ### Defence Bay (staged, preview only)
 
-Stage 1 adds a large reactor-facility exterior around room 1 and reserves a plain open floor for a future room 2 (~2.3× room 1, north of the top door). Room 1 gameplay is unchanged. Use `?dev=mapview` for a far top-down overview of the whole map. Preview builds ship to `/sector-null-preview/`; live `/sector-null/` stays on main.
+Stage 1 adds a large flat tiled exterior floor around room 1 (same tile scale as the deck, slightly darker; no set dressing) and reserves the same plain floor for a future room 2 (~2.3× room 1, north of the top door). Room 1 gameplay is unchanged. Use `?dev=mapview` for a far top-down overview of the whole map. Preview builds ship to `/sector-null-preview/`; live `/sector-null/` stays on main.
 
 ## Drone roles and wave bosses
 
