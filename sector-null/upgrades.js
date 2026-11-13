@@ -30,9 +30,19 @@ export const UPGRADE_CATS = {
   survival: '#70dfb8',
   fortune: '#bdadfa',
   ability: '#7cff4a',
+  defence: '#62edff',
 };
 
-export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'ability'];
+export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'ability', 'defence'];
+
+/** Tesla coil zap interval (seconds) at ranks 1–5. */
+export const COIL_INTERVAL = [0, 2.0, 1.4, 1.4, 1.0, 1.0];
+/** Tesla coil range at ranks 1–5 (world units). */
+export const COIL_RANGE = [0, 8, 8, 11, 11, 11];
+/** Flat zap damage — one-shots cyan flankers at bay start (~5 hp). */
+export const COIL_DAMAGE = 5;
+/** Max chain targets at rank 5 (primary + extras). */
+export const COIL_CHAIN = [0, 1, 1, 1, 1, 3];
 
 /** Per-rank helper shot damage (index = owned bot rank). */
 export const HELPER_DAMAGE = [0, 1.5, 2.5, 3];
@@ -118,6 +128,15 @@ export const UPGRADES = [
   { id: 'heal', cat: 'survival', name: 'SHIELD RESET', desc: 'Restore all shield segments', max: Infinity, ok: (s) => s.hp < s.maxHp, stat: (s) => [s.hp, `${s.maxHp} hp`], apply: (s) => { s.hp = s.maxHp; } },
   // Score path: pick this instead of another gun / gear upgrade and vacuum every emerald.
   { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
+  // Defence Bay only — offered on wave 11+ clears (while in the bay), not on the wave-10 room-1 pick.
+  { id: 'coil', cat: 'defence', name: 'TESLA COIL', desc: 'Bay coil zaps nearby drones', max: 5, ok: (s) => !!s.bayActive && s.wave >= 11, stat: (s) => {
+    const owned = s.upgrades.coil || 0;
+    const next = owned + 1;
+    if (!owned) return [`Power on · ${secLabel(COIL_INTERVAL[1])}s`];
+    if (next === 3) return [`${Math.round(COIL_RANGE[owned])}u range`, `${Math.round(COIL_RANGE[next])}u range`];
+    if (next === 5) return ['Single zap', 'Chain ×3'];
+    return [`${secLabel(COIL_INTERVAL[owned])}s`, `${secLabel(COIL_INTERVAL[next])}s`];
+  }, apply: () => {} },
 ];
 
 export function upgradeById(id) {
@@ -141,6 +160,7 @@ export function previewStateFor(u, owned, opts = {}) {
   // Prerequisites so ok()-gated modules render with a valid baseline.
   if (u.id === 'botGun' || u.id === 'botBomb') s.upgrades.bot = 1;
   if (u.id === 'shock') s.upgrades.mine = 1;
+  if (u.id === 'coil') { s.bayActive = true; s.wave = Math.max(s.wave ?? 0, 11); }
   if (u.id === 'heal') {
     s.hp = opts.hp ?? 2;
     s.maxHp = opts.maxHp ?? BASE_STATS.maxHp;
