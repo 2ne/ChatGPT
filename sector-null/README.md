@@ -10,7 +10,7 @@ Scoring, emerald pickups, accuracy and high-score rules are documented in [SCORI
 
 ### Defence Bay (staged, preview only)
 
-Stage 1 extends the existing room-1 deck floor (same plates, material and 1.6u scale) to cover a reserved future room-2 footprint (~2.3×, north of the top door) plus exterior margin — one floor surface, no second layer. Room 1 gameplay is unchanged. Use `?dev=mapview` for a far top-down overview. Preview builds ship to `/sector-null-preview/`; live `/sector-null/` stays on main.
+Stage 1 keeps the original room-1 deck plate loop exactly as on main, and extends the floor past it with one cheap hole-cut plane (same dark exterior colour) covering the reserved room-2 footprint (~2.3×) plus margin. Room 1 gameplay is unchanged. Use `?dev=mapview` for a far top-down overview. Preview builds ship to `/sector-null-preview/`; live `/sector-null/` stays on main.
 
 ## Drone roles and wave bosses
 

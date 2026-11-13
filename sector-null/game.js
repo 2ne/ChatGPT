@@ -49,9 +49,8 @@ import {
   writePlayerName,
 } from './scores.js';
 import {
-  DECK_STEP,
   MAPVIEW_CAM,
-  deckGridExtents,
+  buildExtendedFloor,
 } from './facility-exterior.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
@@ -290,16 +289,13 @@ function box(parent, material, x, y, z, w, h, d) {
 const deck = new BlockBatch();
 const deckRandom = seeded(87);
 const panels = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
-// Same deck plates as main — extended to cover room-2 footprint + exterior margin.
-// One floor surface only (no second exterior layer). Room-1 interior plate range unchanged.
-{
-  const { i0, i1, j0, j1 } = deckGridExtents();
-  for (let z = j0; z <= j1; z++) {
-    for (let x = i0; x <= i1; x++) {
-      const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
-      deck.add([[1.565, 0.11, 1.565, x * DECK_STEP, -0.06, z * DECK_STEP,
-        insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
-    }
+// Exact main deck plate loop (−19…19). Do not enlarge this — a bigger BlockBatch
+// stalls iPhone frames and freezes drone AI near the walls.
+for (let z = -19; z <= 19; z++) {
+  for (let x = -19; x <= 19; x++) {
+    const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
+    deck.add([[1.565, 0.11, 1.565, x * 1.6, -0.06, z * 1.6,
+      insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
   }
 }
 for (const side of [-1, 1]) {
@@ -312,6 +308,10 @@ for (const side of [-1, 1]) {
   }
 }
 bakedMesh(deck, false);
+// Cheap floor extension past the original deck (hole-cut plane, no overlap, no nav cost).
+buildExtendedFloor(world, new THREE.MeshStandardMaterial({
+  color: 0x1c2b37, metalness: 0.38, roughness: 0.62,
+}));
 const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.13, 0);
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
@@ -3330,14 +3330,7 @@ function navClear(ax, az, bx, bz, radius, entrances = false) {
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
   }
   if (entrances) for (const o of openings) {
-    // Open gaps are walkable. Intact doors/windows only block paths that CROSS the wall
-    // plane — same-side moves (hunting along the inside face of a door/window) must not
-    // freeze against the opening box, or drones lock up just outside melee reach.
-    if (o.hp <= 0) continue;
-    const plane = o.axis === 'x' ? o.z : o.x;
-    const aCoord = o.axis === 'x' ? az : ax;
-    const bCoord = o.axis === 'x' ? bz : bx;
-    if ((aCoord - plane) * (bCoord - plane) > 0) continue;
+    if (o.kind === 'door' && o.hp <= 0) continue;
     const w = o.box, cx = (w.minX + w.maxX) / 2, cz = (w.minZ + w.maxZ) / 2;
     if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
@@ -5634,14 +5627,7 @@ function wallBetween(a, b) {
   for (let i = 1; i < 4; i++) {
     const x = a.x + (b.x - a.x) * i / 4, z = a.z + (b.z - a.z) * i / 4;
     for (const w of wallBoxes) if (x >= w.minX && x <= w.maxX && z >= w.minZ && z <= w.maxZ) return true;
-    const shut = shutAt(x, z);
-    if (!shut) continue;
-    // Intact openings only count when the segment actually crosses that wall plane;
-    // same-side samples that skim an opening box must not block melee along the wall.
-    const plane = shut.axis === 'x' ? shut.z : shut.x;
-    const aCoord = shut.axis === 'x' ? a.z : a.x;
-    const bCoord = shut.axis === 'x' ? b.z : b.x;
-    if ((aCoord - plane) * (bCoord - plane) <= 0) return true;
+    if (shutAt(x, z)) return true;
   }
   return false;
 }
@@ -5990,9 +5976,8 @@ function update(dt, lightFrame = false) {
       player.position.x += (mx / l) * state.speed * stepDt;
       player.position.z += (mz / l) * state.speed * stepDt;
     }
-    // Clamp inside the deck, clear of wall/opening collision slabs so the operator
-    // can't nestle into a door/window gap where drone nav used to freeze.
-    const lim = HALF - 1.05;
+    // clamp inside deck
+    const lim = HALF - 0.7;
     player.position.x = Math.max(-lim, Math.min(lim, player.position.x));
     player.position.z = Math.max(-lim, Math.min(lim, player.position.z));
     // --- aim ---
