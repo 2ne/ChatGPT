@@ -7,11 +7,14 @@ import * as THREE from 'three';
 /** Room 1 half-extent (matches game.js HALF). */
 export const ROOM1_HALF = 10;
 
-/** Room 2 (~2.3× room-1 floor). Door-to-door with room 1’s north wall — no corridor. */
+/** Room 2 (~2.3× room-1 floor). South door X-aligned with room-1 north door. */
 export const ROOM2_HX = 24;
 export const ROOM2_HZ = 22;
-/** Zero gap: south wall meets room-1 north wall (door aligns with room-1 top door). */
-export const ROOM2_THRESHOLD = 0;
+/**
+ * Open exterior strip between room-1 north wall and room-2 south wall (~5 deck
+ * tiles). Keeps the rooms visually separate; reactor at z≈-13.6 sits in this gap.
+ */
+export const ROOM2_THRESHOLD = 8;
 export const ROOM2_CZ = -(ROOM1_HALF + ROOM2_THRESHOLD + ROOM2_HZ);
 export const ROOM2_SOUTH = ROOM2_CZ + ROOM2_HZ;
 export const ROOM2_NORTH = ROOM2_CZ - ROOM2_HZ;
@@ -112,8 +115,8 @@ export function buildRoom2Shell(parent) {
   group.name = 'room2Shell';
   parent.add(group);
 
-  // Nudge south wall slightly north of room-1’s north bulkhead to avoid z-fighting.
-  const southZ = ROOM2_SOUTH - SHELL_T * 0.55;
+  // South wall on the room-2 boundary (clear exterior strip south of here to room 1).
+  const southZ = ROOM2_SOUTH;
   const northZ = ROOM2_NORTH;
   const westX = -ROOM2_HX;
   const eastX = ROOM2_HX;
@@ -178,11 +181,11 @@ export function buildRoom2Shell(parent) {
   return group;
 }
 
-/** Map-view framing: both rooms + exterior (no fog in mapview). */
+/** Map-view framing: both rooms + the open strip between them (no fog in mapview). */
 export const MAPVIEW_CAM = {
-  position: new THREE.Vector3(0, 130, -22),
-  lookAt: new THREE.Vector3(0, 0, -22),
+  position: new THREE.Vector3(0, 135, -26),
+  lookAt: new THREE.Vector3(0, 0, -26),
   fov: 48,
   near: 14,
-  far: 320,
+  far: 340,
 };
