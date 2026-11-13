@@ -1,9 +1,9 @@
-Sector Null Defence Bay — staged preview (Stage 4).
+Sector Null Defence Bay — staged preview (Stage 4 redo).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b225 · 7185a5d · 14:57
-- Walls always visible (occlusion hide reverted)
-- Elevated gantries at z=-25/-31 still removed
-- Stage 4 bay look + Stage 3 walk/slam/fog unchanged
+Label: PREVIEW b226 · c24a8b8 · 15:02
+- Room-1 quality floor + walls; concept props; no dashed pads
+- Gantries still removed; walls always visible
+- Walk / slam / fog / camera unchanged
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
