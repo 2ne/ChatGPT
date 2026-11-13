@@ -1,8 +1,8 @@
-Sector Null Defence Bay — staged preview (Stage 4).
+Sector Null Defence Bay — staged preview (Stage 4 polish).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b228 · 9efb86b · 15:14
-- Fix bay southern tile z-fight (deck plates + extended floor overlap)
-- Glow / heavy doors / room-1 quality floor unchanged
+Label: PREVIEW b229 · d2caad7 · 15:32
+- Flush dais edge lights; quieter coil halo
+- Massive blast doors (buttresses, header, hazard chevrons)
 Live (pre-bay) game: ../sector-null/
 Bay test: ?dev=bay
 Map overview: ?dev=mapview
