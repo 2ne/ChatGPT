@@ -152,7 +152,9 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     for (const side of [-1, 1]) {
       fb(1.25, 3.9, 1.65, side * 3.04, 1.95, 0, C.shell);
       fb(0.38, 3.65, 1.85, side * 3.68, 1.84, 0, C.edge);
-      fb(1.8, 0.62, 1.65, side * 2.85, 3.92, 0, C.edge, 0, side * -0.42);
+      // The shoulders overlap the posts in silhouette. Their front/back faces
+      // must sit proud of the posts, not at the same depth (mobile z-fighting).
+      fb(1.8, 0.62, 1.79, side * 2.85, 3.92, 0, C.edge, 0, side * -0.42);
       for (const face of [-1, 1]) {
         fb(0.4, 2.75, 0.13, side * 3.02, 1.65, face * 0.87, C.dark);
         fl(0.13, 2.35, 0.08, side * 3.02, 1.65, face * 0.95, C.cyan);
@@ -176,8 +178,11 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
       lb(leafW, 3.77, 0.44, 0, 1.92, 0, C.dark);
       for (const face of [-1, 1]) {
         lb(leafW - 0.18, 3.42, 0.12, 0, 1.93, face * 0.27, C.panel);
-        for (const slope of [-1, 1]) lb(2.05, 0.16, 0.09, 0, 1.94, face * 0.38, C.edge, 0, slope * 0.64);
-        lb(0.34, 0.48, 0.12, 0, 1.94, face * 0.42, C.shell);
+        // Layer the crossing braces, with the centre fastener above both.
+        // Mirror the depth ordering on the rear face too.
+        for (const slope of [-1, 1]) lb(2.05, 0.16, 0.09, 0, 1.94,
+          face * (slope < 0 ? 0.39 : 0.45), C.edge, 0, slope * 0.64);
+        lb(0.34, 0.48, 0.12, 0, 1.94, face * 0.55, C.shell);
         for (const y of [0.4, 3.45]) {
           lb(leafW - 0.24, 0.24, 0.09, 0, y, face * 0.36, C.dark);
           for (let i = 0; i < 7; i++) lb(0.14, 0.24, 0.025, -0.91 + i * 0.3, y, face * 0.42, C.amber, 0, -0.55, 0);

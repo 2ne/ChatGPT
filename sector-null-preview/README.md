@@ -23,6 +23,9 @@ continuous dark floor plates and restrained cyan/amber service channels. The
 existing shadow light follows the transition into Room 2. The reveal and coil
 pulse respect reduced motion. Room 1 keeps its existing visuals and follow view.
 
+Door shoulders stand clear of the posts, and crossed braces have separate depth
+layers on both faces, preventing overlapping trim from flickering on mobile.
+
 The four cover positions, small solid coil base, room dimensions, doorway widths
 and wave-10 handoff are preserved. Only the small coil base blocks movement;
 the surrounding platform remains walkable. Static detail and light strips use
