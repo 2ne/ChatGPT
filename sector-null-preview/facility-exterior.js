@@ -73,56 +73,79 @@ export const ORIGINAL_DECK_INDEX = 19;
 export const ORIGINAL_DECK_HALF = ORIGINAL_DECK_INDEX * DECK_STEP + 1.565 / 2;
 
 /**
- * One flat floor mesh covering room-2 footprint + margin, with holes for:
- *  - the original deck AABB (room-1 plates)
- *  - the bay interior (bay deck tiles / channels / dais)
- * so nothing coplanar-overlaps those surfaces at y = -0.06.
- * Same dark exterior colour as room-1’s outside plates (0x1c2b37).
+ * Continuous exterior tiles on the same world grid as Room 1. A single indexed
+ * mesh keeps the apron cheap on phones. Build directly in XZ: rotating a Shape
+ * with negative-Z coordinates mirrored the previous pad to the south of the bay.
  */
 export function buildExtendedFloor(parent, material) {
-  // Cover room 1 + bay + margin; bay is offset to BAY_CX so extents are not ±symmetric.
   const roomPad = ROOM1_HALF + EXTERIOR_MARGIN;
   const xMin = Math.min(-roomPad, ROOM2_WEST - EXTERIOR_MARGIN);
   const xMax = Math.max(roomPad, ROOM2_EAST + EXTERIOR_MARGIN);
   const zMin = ROOM2_NORTH - EXTERIOR_MARGIN;
   const zMax = ROOM1_HALF + EXTERIOR_MARGIN;
-  const hole = ORIGINAL_DECK_HALF + 0.02;
-  // Bay hole: inset slightly past the wall inner face so door thresholds stay on exterior.
-  const bayPad = 0.35;
-  const bayX0 = ROOM2_WEST + bayPad;
-  const bayX1 = ROOM2_EAST - bayPad;
-  const bayZ0 = ROOM2_NORTH + bayPad;
-  const bayZ1 = ROOM2_SOUTH - bayPad;
+  // Reserve the whole wall footprint too: edge plates in the interior can
+  // extend slightly beyond their centre bounds, especially on the south side.
+  const bay = [ROOM2_WEST - 0.35, ROOM2_EAST + 0.35,
+    ROOM2_NORTH - 0.35, ROOM2_SOUTH + 0.35];
+  const positions = [], colors = [], indices = [];
+  const halfTile = 1.565 / 2;
+  const topY = -0.005; // same height as Room 1's outdoor plates
+  const rimY = -0.04;
 
-  const shape = new THREE.Shape();
-  shape.moveTo(xMin, zMin);
-  shape.lineTo(xMax, zMin);
-  shape.lineTo(xMax, zMax);
-  shape.lineTo(xMin, zMax);
-  shape.lineTo(xMin, zMin);
-
-  // Opposite winding to the outer path (Three.js hole requirement).
-  const cutDeck = new THREE.Path();
-  cutDeck.moveTo(-hole, -hole);
-  cutDeck.lineTo(hole, -hole);
-  cutDeck.lineTo(hole, hole);
-  cutDeck.lineTo(-hole, hole);
-  cutDeck.lineTo(-hole, -hole);
-  shape.holes.push(cutDeck);
-
-  // Hole out the bay interior so the plane never sits under bay deck tiles.
-  const cutBay = new THREE.Path();
-  cutBay.moveTo(bayX0, bayZ0);
-  cutBay.lineTo(bayX0, bayZ1);
-  cutBay.lineTo(bayX1, bayZ1);
-  cutBay.lineTo(bayX1, bayZ0);
-  cutBay.lineTo(bayX0, bayZ0);
-  shape.holes.push(cutBay);
-
-  const geo = new THREE.ShapeGeometry(shape);
-  geo.rotateX(-Math.PI / 2);
-  const mesh = new THREE.Mesh(geo, material);
-  mesh.position.y = -0.06;
+  function quad(points, shades) {
+    const base = positions.length / 3;
+    for (let i = 0; i < 4; i++) {
+      positions.push(...points[i]);
+      colors.push(shades[i], shades[i], shades[i]);
+    }
+    indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
+  }
+  function tile(a, b, c, d, tint) {
+    if (b - a < 0.06 || d - c < 0.06) return;
+    const bevel = Math.min(0.018, (b - a) / 4, (d - c) / 4);
+    const outer = [[a, rimY, c], [a, rimY, d], [b, rimY, d], [b, rimY, c]];
+    const inner = [[a + bevel, topY, c + bevel], [a + bevel, topY, d - bevel],
+      [b - bevel, topY, d - bevel], [b - bevel, topY, c + bevel]];
+    quad(inner, [tint, tint, tint, tint]);
+    for (let i = 0; i < 4; i++) {
+      const next = (i + 1) % 4;
+      quad([outer[i], outer[next], inner[next], inner[i]],
+        [tint * 0.65, tint * 0.65, tint, tint]);
+    }
+  }
+  for (let iz = Math.ceil(zMin / DECK_STEP); iz <= Math.floor(zMax / DECK_STEP); iz++) {
+    for (let ix = Math.ceil(xMin / DECK_STEP); ix <= Math.floor(xMax / DECK_STEP); ix++) {
+      const x = ix * DECK_STEP, z = iz * DECK_STEP;
+      // Match the original deck's actual tile coverage, including the rows it
+      // skips beside the bay. Never put a second plate over an existing one.
+      const originalTile = Math.abs(ix) <= ORIGINAL_DECK_INDEX && Math.abs(iz) <= ORIGINAL_DECK_INDEX
+        && !(z < ROOM2_SOUTH - 0.05 && x > ROOM2_WEST - 0.9 && x < ROOM2_EAST + 0.9);
+      if (originalTile) continue;
+      const a = x - halfTile, b = x + halfTile, c = z - halfTile, d = z + halfTile;
+      const hash = Math.imul(ix, 73856093) ^ Math.imul(iz, 19349663);
+      const tint = 0.9 + ((hash >>> 0) % 1024) / 1023 * 0.2;
+      const left = Math.max(a, bay[0]), right = Math.min(b, bay[1]);
+      const north = Math.max(c, bay[2]), south = Math.min(d, bay[3]);
+      if (left >= right || north >= south) {
+        tile(a, b, c, d, tint);
+      } else {
+        // Subtract the interior rectangle without overlapping Shape holes.
+        // Cuts sit underneath the walls, preserving the room's deck/channels.
+        tile(a, left, c, d, tint);
+        tile(right, b, c, d, tint);
+        tile(left, right, c, north, tint);
+        tile(left, right, south, d, tint);
+      }
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  material.vertexColors = true;
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.name = 'bayExteriorTiles';
   mesh.receiveShadow = true;
   mesh.castShadow = false;
   parent.add(mesh);

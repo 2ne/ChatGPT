@@ -403,7 +403,7 @@ for (const side of [-1, 1]) {
   }
 }
 bakedMesh(deck, false);
-// Cheap floor extension past the original deck (hole-cut plane, no overlap, no nav cost).
+// One batched tiled apron beyond the original deck, with no overlapping plates.
 buildExtendedFloor(world, new THREE.MeshStandardMaterial({
   color: 0x1c2b37, metalness: 0.38, roughness: 0.62,
 }));

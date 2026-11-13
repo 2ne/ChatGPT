@@ -20,8 +20,11 @@ retains the facility overview. With no query string, the preview starts normally
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,
 Room 1-matched interior deck plates (same size, panel palette and material) and
-restrained cyan/amber service channels. Outside the bay walls the exterior pad
-stays a single darker colour so the room reads as enclosed. The existing shadow
+restrained cyan/amber service channels. A dark tiled apron extends 22 world units
+around the bay, aligned with Room 1's outdoor grid. It fills the former blank
+strip beside the walls and joins the existing exterior without overlapping tiles.
+The apron uses one indexed mesh with shallow tile bevels to keep it inexpensive
+on phones. The existing shadow
 light follows the transition into Room 2. The reveal and coil pulse respect
 reduced motion. Room 1 keeps its existing visuals and follow view.
 
