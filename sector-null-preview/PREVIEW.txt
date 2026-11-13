@@ -1,7 +1,7 @@
 Sector Null Defence Bay — staged preview (Stage 2).
 Branch: cursor/defence-bay-staged
-Label: PREVIEW b220 · edf21b2 · 13:29
-- Preview-only stamp + version.json cache bust (PREVIEW=1 build; never for live/Stage 7)
-- Room 2 shell with ~5-tile gap; north fog ease 0.8
+Label: PREVIEW b221 · 36b182b · 13:53
+- Room 2 south z=-25 / north z=-69 (~9.4-tile gap); enemy footprint solid; north fog ease 0.52
+- Preview stamp + version.json cache bust (PREVIEW=1 only)
 Live (pre-bay) game: ../sector-null/
 Map overview: ?dev=mapview
