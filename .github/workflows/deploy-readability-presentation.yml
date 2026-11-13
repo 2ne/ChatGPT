@@ -43,6 +43,7 @@ jobs:
             primary-learn/package-lock.json
             prototype-to-pilot/package-lock.json
             sector-null/package-lock.json
+            sector-null-preview/package-lock.json
       - name: Install dependencies
         run: |
           npm ci --prefix readability-presentation
@@ -51,6 +52,7 @@ jobs:
           npm ci --prefix primary-learn
           npm ci --prefix prototype-to-pilot
           npm ci --prefix sector-null
+          npm ci --prefix sector-null-preview
       - name: Build projects
         run: |
           npm run build --prefix readability-presentation
@@ -59,6 +61,7 @@ jobs:
           npm run build --prefix primary-learn
           npm run build --prefix prototype-to-pilot
           npm run build --prefix sector-null
+          npm run build --prefix sector-null-preview
       - name: Package projects at their own URLs
         run: |
           mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach pages/research-agent-orbs pages/primary-learn pages/prototype-to-pilot pages/sector-null pages/sector-null-preview
@@ -69,8 +72,8 @@ jobs:
           cp -R primary-learn/dist/. pages/primary-learn/
           cp -R prototype-to-pilot/dist/. pages/prototype-to-pilot/
           cp -R sector-null/dist/. pages/sector-null/
-          # Static preview build of the Defence Bay rework (committed assets; does not replace live sector-null).
-          if [ -d sector-null-preview ]; then cp -R sector-null-preview/. pages/sector-null-preview/; fi
+          # Independent preview source and output; live sector-null is unchanged.
+          cp -R sector-null-preview/dist/. pages/sector-null-preview/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

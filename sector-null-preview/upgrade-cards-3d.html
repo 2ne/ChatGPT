@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./upgrade-cards.css" />
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -115,13 +116,6 @@
     .trio { grid-template-columns: 1fr; }
   }
 </style>
-  <script type="module" crossorigin src="./assets/upgradeCards3d-BVQlUiuC.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/upgrade-card-1iorsyCa.js">
-  <link rel="stylesheet" crossorigin href="./assets/upgradeCards3d-Bz8_YGiL.css">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<meta name="sector-null-preview" content="b236-334761a-1745" />
 </head>
 <body class="upgrade-cards-page">
   <div class="page">
@@ -143,5 +137,92 @@
     <div id="catalog"></div>
   </div>
 
+<script type="module">
+import { createUpgradeIconHost } from './upgrade-icons.js';
+import { renderUpgradeCard } from './upgrade-card.js';
+import {
+  UPGRADES,
+  UPGRADE_CATS,
+  UPGRADE_CAT_ORDER,
+  previewStateFor,
+  upgradeById,
+} from './upgrades.js';
+
+const CATS = UPGRADE_CATS;
+const ORDER = UPGRADE_CAT_ORDER;
+
+/** Preview-only unlock / scaling notes (not shown in-game). */
+const PREVIEW_NOTES = {
+  botGun: 'Helper Bot owned · no Bomb Launcher',
+  botBomb: 'Helper Bot owned · no Twin Guns',
+  shock: 'Trail Mines owned',
+  heal: 'Injured (hp < max)',
+  luck: 'Scales down after wave 5',
+};
+
+function expandTiers(u) {
+  const count = u.max === Infinity ? 1 : u.max;
+  return Array.from({ length: count }, (_, owned) => ({ u, owned }));
+}
+
+function cardHtml({ u, owned }, { recommended = false, slot = null } = {}) {
+  const state = previewStateFor(u, owned);
+  const note = PREVIEW_NOTES[u.id];
+  const extra = note ? `<p class="req">${note}</p>` : '';
+  return renderUpgradeCard({
+    u,
+    state,
+    owned,
+    recommended,
+    slot: slot ?? owned + 1,
+    tag: 'article',
+    attrs: ` data-id="${u.id}" data-owned="${owned}"`,
+    extra,
+    iconLabel: true,
+  });
+}
+
+const filters = document.getElementById('filters');
+const catalog = document.getElementById('catalog');
+let active = 'all';
+
+filters.innerHTML = [
+  ['all', 'All', '#9af5ff'],
+  ...ORDER.map((c) => [c, c, CATS[c]]),
+].map(([id, label, color]) =>
+  `<button type="button" data-cat="${id}" style="--cat:${color}" aria-pressed="${id === 'all'}">${label}</button>`
+).join('');
+
+filters.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-cat]');
+  if (!btn) return;
+  active = btn.dataset.cat;
+  for (const b of filters.querySelectorAll('button')) {
+    b.setAttribute('aria-pressed', String(b.dataset.cat === active));
+  }
+  for (const section of catalog.querySelectorAll('.section')) {
+    section.classList.toggle('hidden', active !== 'all' && section.dataset.cat !== active);
+  }
+});
+
+catalog.innerHTML = ORDER.map((cat) => {
+  const defs = UPGRADES.filter((u) => u.cat === cat);
+  const blocks = defs.map((def) => {
+    const tiers = expandTiers(def);
+    const cards = tiers.map((t) => cardHtml(t)).join('');
+    const title = tiers[0].u.name;
+    return `<div class="upgrade-block"><h3>${title} · ${tiers.length} panel${tiers.length === 1 ? '' : 's'}</h3><div class="grid">${cards}</div></div>`;
+  }).join('');
+  return `<section class="section" data-cat="${cat}" style="--cat:${CATS[cat]}"><h2>${cat}</h2>${blocks}</section>`;
+}).join('');
+
+document.getElementById('trio').innerHTML = [
+  cardHtml({ u: upgradeById('spread'), owned: 0 }, { recommended: true, slot: 1 }),
+  cardHtml({ u: upgradeById('bot'), owned: 0 }, { slot: 2 }),
+  cardHtml({ u: upgradeById('magnet'), owned: 0 }, { slot: 3 }),
+].join('');
+
+createUpgradeIconHost({ allowDrag: false }).mount(document.body);
+</script>
 </body>
 </html>

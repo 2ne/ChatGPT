@@ -1,0 +1,763 @@
+/* The title screen and menu share the same diegetic frame. */
+#menu {
+  --ice: #e2fcff;
+  --cyan: #45ecff;
+  --pink: #ff368c;
+  --menu-x: clamp(34px, 7cqw, 145px);
+  --menu-width: min(32cqw, 570px);
+  --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  position: fixed;
+  top: var(--safe-top);
+  right: var(--safe-right);
+  bottom: var(--safe-bottom);
+  left: var(--safe-left);
+  z-index: 10;
+  container-type: size;
+  isolation: isolate;
+  overflow: hidden;
+  user-select: none;
+  color: var(--ice);
+}
+body.titling #game {
+  cursor: default;
+}
+#menu.gone {
+  pointer-events: none;
+}
+#menu.gone > :not(#menuShade) {
+  visibility: hidden;
+}
+#menuShade {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #050c18f2 0%, #050c18c9 24%, #06142540 44%, transparent 63%), linear-gradient(0deg, #030b15ad, transparent 19%),
+    radial-gradient(ellipse at 5% 89%, #9b0d471f, transparent 44%);
+}
+#menu.splash #menuShade {
+  background:
+    radial-gradient(ellipse at 50% 37%, #030d1bce 0%, #06142388 25%, transparent 61%), linear-gradient(0deg, #02091875, transparent 20%),
+    linear-gradient(90deg, #5e10343a, transparent 24%, transparent 92%, #07142530);
+}
+#menu.gone #menuShade {
+  background: #030811;
+  animation: leave-title 0.52s ease-out forwards;
+}
+@keyframes leave-title {
+  to {
+    opacity: 0;
+  }
+}
+
+.station-frame {
+  position: absolute;
+  inset: clamp(8px, 0.85cqw, 16px);
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #ff3d9760, #ff3d9735 18%, transparent 31%) top left / 100% 1px no-repeat,
+    linear-gradient(90deg, transparent 58%, #24e7f076) bottom left / 100% 1px no-repeat,
+    linear-gradient(#ff3d9790, #ff3d9745 84%, transparent) left / 1px 100% no-repeat,
+    linear-gradient(transparent 17%, #22e8fa1d 76%, #22e8fa7a) right / 1px 100% no-repeat;
+}
+.station-frame::before {
+  content: "";
+  position: absolute;
+  inset: 16px 3px;
+  background:
+    radial-gradient(circle at 1px 1px, #ff419d8f 1px, transparent 1.3px) 0 0 / 15px 16px,
+    repeating-linear-gradient(0deg, #f02e6a3b 0 1px, transparent 1px 6px);
+  mask-image: linear-gradient(90deg, #000 0, #0008 22px, transparent 44px);
+  opacity: 0.67;
+}
+.station-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--pink), var(--pink)) 22% 0 / 5% 3px no-repeat,
+    linear-gradient(var(--cyan), var(--cyan)) 63% 100% / 12% 2px no-repeat,
+    linear-gradient(90deg, #ff368c 33%, transparent 33% 50%, #ff368c85 50% 82%, transparent 82%) 2% 97% / 34px 5px no-repeat;
+  opacity: 0.9;
+}
+.station-frame i {
+  position: absolute;
+  width: clamp(18px, 4cqw, 55px);
+  height: clamp(18px, 4cqw, 48px);
+  border: 1px solid;
+}
+.station-frame i:nth-child(1) {
+  top: 0;
+  left: 0;
+  color: var(--pink);
+  border-right: 0;
+  border-bottom: 0;
+}
+.station-frame i:nth-child(2) {
+  top: 0;
+  right: 0;
+  color: var(--cyan);
+  border-left: 0;
+  border-bottom: 0;
+}
+.station-frame i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  color: var(--pink);
+  border-right: 0;
+  border-top: 0;
+}
+.station-frame i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  color: var(--cyan);
+  border-left: 0;
+  border-top: 0;
+}
+
+#menuCol {
+  position: absolute;
+  top: 12.2cqh;
+  left: var(--menu-x);
+  width: var(--menu-width);
+}
+#menu.splash #menuCol {
+  top: 20.5cqh;
+  left: 50%;
+  width: min(48cqw, 850px);
+  transform: translateX(-50%);
+  text-align: center;
+}
+#title {
+  position: relative;
+  isolation: isolate;
+  width: max-content;
+  max-width: 100%;
+  font:
+    700 clamp(62px, min(10.6cqw, 19cqh), 195px)/0.81 "Oxanium",
+    "Rajdhani",
+    sans-serif;
+  text-transform: uppercase;
+}
+#menu.splash #title {
+  margin-inline: auto;
+  font-size: clamp(75px, min(13.9cqw, 25cqh), 264px);
+}
+#title::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  inset: 20% -25% 0;
+  background: repeating-linear-gradient(0deg, transparent 0 7px, #13d9ff38 7px 8px, transparent 8px 13px), repeating-linear-gradient(90deg, #fa478f70 0 12px, transparent 13px 38px);
+  mask-image: radial-gradient(ellipse, #0008, transparent 67%);
+  opacity: 0.8;
+}
+#titleTop {
+  display: block;
+  font-size: 0.27em;
+  line-height: 1;
+  letter-spacing: 0.54em;
+  margin-inline-end: -0.54em;
+  margin-block-end: 0.12em;
+  padding-left: 0.08em;
+  color: #e7f9fd;
+  text-shadow:
+    0 0 0.42em #46c5eb4d,
+    0 0.07em 0.17em #041c2a;
+}
+#titleMain {
+  display: flex;
+  align-items: end;
+  gap: 0.066em;
+  letter-spacing: -0.026em;
+}
+.title-word {
+  position: relative;
+  display: block;
+  color: #8ef5ff;
+  background: linear-gradient(180deg, #eaffff 6%, #b6faff 31%, #66e8ff 63%, #53ddf3 94%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 0.065em #2cdefa54);
+}
+.title-word::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0 8px, #d1ffff 9px, transparent 10px 13px), repeating-linear-gradient(90deg, #74f9fc 0 2px, transparent 3px 11px);
+  background-clip: text;
+  mask: repeating-linear-gradient(2deg, #000 0 2px, transparent 3px 9px, #000 10px 12px, transparent 13px 29px);
+  opacity: 0.46;
+  pointer-events: none;
+}
+.title-word::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  text-shadow:
+    -0.045em 0 var(--pink),
+    0.045em 0 var(--cyan);
+}
+@media (prefers-reduced-motion: no-preference) {
+  #title {
+    animation: title-jitter 4.8s steps(1, end) -3s infinite;
+  }
+  .title-word::before {
+    animation: title-slices 4.8s steps(1, end) -3s infinite;
+  }
+}
+@keyframes title-jitter {
+  0%,
+  95%,
+  100% {
+    translate: 0;
+  }
+  90% {
+    translate: -0.012em 0;
+  }
+  92% {
+    translate: 0.018em 0;
+  }
+  94% {
+    translate: -0.008em 0;
+  }
+}
+@keyframes title-slices {
+  0%,
+  95%,
+  100% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0.95;
+    clip-path: inset(24% -0.12em 63%);
+    translate: 0.05em 0;
+  }
+  92% {
+    opacity: 0.85;
+    clip-path: inset(54% -0.12em 34%);
+    translate: -0.045em 0;
+  }
+  94% {
+    opacity: 0.7;
+    clip-path: inset(72% -0.12em 19%);
+    translate: 0.025em 0;
+  }
+}
+.title-dot {
+  flex: none;
+  width: 0.155em;
+  height: 0.155em;
+  margin-bottom: 0.113em;
+  background: var(--pink);
+  box-shadow: 0 0 0.1em #f3238266;
+}
+
+#pressAny {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.4cqw, 24px);
+  width: min(39cqw, 650px);
+  min-height: clamp(46px, 7.4cqh, 78px);
+  padding: 8px 12px;
+  margin-top: 7.5cqh;
+  border: 0;
+  background: none;
+  color: var(--ice);
+  font:
+    700 clamp(12px, 1.56cqw, 27px)/1 "Rajdhani",
+    sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  isolation: isolate;
+  filter: drop-shadow(0 0 11px #f8309863);
+}
+#pressAny::before,
+#pressAny::after,
+#menuList button::before,
+#menuList button::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  inset: 0;
+  clip-path: var(--cut);
+}
+#pressAny::before {
+  background: #ff66b2;
+}
+#pressAny::after {
+  inset: 2px;
+  background: linear-gradient(90deg, #30122b, #111324 56%, #201122);
+  box-shadow: inset 0 0 20px #d5377d54;
+}
+#pressAny b {
+  padding: 0.16em 0.65em 0.12em;
+  border: 1px solid #ffe2f2;
+  box-shadow:
+    0 0 0.6em #ff2e9d95,
+    inset 0 0 0.5em #ff2e9d6e;
+  color: #fff;
+  background: #6f164055;
+}
+@media (hover: hover) and (pointer: fine) {
+  #pressAny:hover {
+    filter: drop-shadow(0 0 15px #f830989e);
+  }
+  #pressAny:hover::after {
+    background: linear-gradient(90deg, #551d43, #20172d 56%, #3f1737);
+  }
+}
+
+#menu:not(.splash) #pressAny,
+#menu.splash #menuList {
+  display: none;
+}
+#menuList {
+  display: grid;
+  width: min(100%, 455px);
+  gap: clamp(5px, 1.1cqh, 11px);
+  margin-top: 6cqh;
+}
+#menuList button {
+  --edge: var(--pink);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: clamp(13px, 2.1cqw, 35px);
+  min-height: clamp(46px, 7.3cqh, 79px);
+  padding: 0 clamp(15px, 2.3cqw, 39px);
+  border: 0;
+  background: none;
+  color: #f2eff9;
+  font:
+    700 clamp(15px, 1.76cqw, 26px)/1 "Rajdhani",
+    sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    filter 0.17s,
+    color 0.17s;
+}
+#menuList button::before {
+  background: linear-gradient(90deg, var(--edge), #da45876b 57%, transparent 99%);
+}
+#menuList button::after {
+  inset: 1px 0 1px 3px;
+  background: linear-gradient(90deg, #211022f2, #111423bc 62%, #10162309);
+}
+#menuList button svg {
+  flex: none;
+  width: 1.15em;
+  aspect-ratio: 1;
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#menuList button.sel {
+  --edge: var(--cyan);
+  filter: drop-shadow(0 0 10px #19d9f579);
+  color: #fff;
+}
+#menuList button.sel::before {
+  background: var(--edge);
+}
+#menuList button.sel::after {
+  inset: 2px 2px 2px 4px;
+  background:
+    repeating-linear-gradient(134deg, #32e4f2a3 0 1px, transparent 1px 7px) right / clamp(18px, 3.5cqw, 56px) 100% no-repeat,
+    linear-gradient(90deg, #062538, #081825 70%, #0b3548);
+}
+@starting-style {
+  #menu:not(.splash) #menuList {
+    opacity: 0;
+  }
+}
+#menuList {
+  transition: opacity 0.3s;
+}
+
+#menu .mpanel {
+  left: calc(var(--menu-x) + var(--menu-width) + 20px);
+}
+#menu .mpanel.open {
+  z-index: 2;
+}
+
+@container (max-width: 760px) {
+  #menuCol {
+    top: 17cqh;
+    left: max(23px, 8cqw);
+    width: min(70cqw, 350px);
+  }
+  #menu.splash #menuCol {
+    top: 27cqh;
+    width: 84cqw;
+  }
+  #menu.splash #title {
+    font-size: clamp(60px, 18cqw, 116px);
+  }
+  #title {
+    font-size: clamp(52px, 15cqw, 105px);
+  }
+  #menuList {
+    margin-top: 5cqh;
+  }
+  #pressAny {
+    width: min(72cqw, 395px);
+    margin-top: 6cqh;
+  }
+}
+/* Full-width How/Settings overlay is for tall/narrow (portrait) only.
+   Landscape iPhone with safe-area insets shrinks the menu below 760px
+   and must not drop an invisible panel over Play / How / Settings. */
+@container (max-width: 760px) and (min-height: 501px) {
+  #menu .mpanel {
+    left: 22px;
+    width: calc(100% - 44px);
+  }
+}
+@container (max-height: 500px) and (min-width: 600px) {
+  #menuCol {
+    top: 17cqh;
+  }
+  #title {
+    font-size: 16cqh;
+  }
+  #menu.splash #menuCol {
+    top: 22cqh;
+  }
+  #menu.splash #title {
+    font-size: 23cqh;
+  }
+  #menuList {
+    margin-top: 3.8cqh;
+  }
+  #menuList button {
+    min-height: 41px;
+  }
+  #pressAny {
+    margin-top: 6cqh;
+  }
+  #menu .mpanel {
+    max-height: 88cqh;
+    overflow: auto;
+  }
+}
+
+/* Leaderboard */
+/* A lightweight scroll-area treatment for the game's existing vanilla UI. */
+html:has(body.titling),
+body.titling,
+body.titling #menu {
+  touch-action: pan-y pinch-zoom;
+}
+.game-scroll-area {
+  --fade-top: 0px;
+  --fade-bottom: 0px;
+  overscroll-behavior: contain;
+  touch-action: pan-y pinch-zoom;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyan) #102733;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent);
+}
+.game-scroll-area::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.game-scroll-area::-webkit-scrollbar-track {
+  background: #102733;
+  border-radius: 10px;
+}
+.game-scroll-area::-webkit-scrollbar-thumb {
+  background: var(--cyan);
+  border: 3px solid #102733;
+  border-radius: 10px;
+  min-height: 36px;
+}
+.game-scroll-area:hover,
+.game-scroll-area:focus-visible {
+  scrollbar-color: var(--pink) #102733;
+}
+.game-scroll-area::-webkit-scrollbar-thumb:hover,
+.game-scroll-area::-webkit-scrollbar-thumb:active {
+  background: var(--pink);
+}
+.game-scroll-area:focus-visible {
+  outline: 1px solid var(--cyan);
+  outline-offset: -1px;
+}
+@media (forced-colors: active) {
+  .game-scroll-area {
+    -webkit-mask-image: none;
+    mask-image: none;
+    scrollbar-color: auto;
+  }
+}
+#scoresPanel {
+  --edge: var(--pink);
+  width: min(480px, 78cqw);
+  border-color: #ff368c99;
+  box-shadow:
+    0 0 0 1px #45ecff33,
+    0 0 28px #ff368c33;
+}
+#scoresPanel h2 {
+  color: #fff;
+  letter-spacing: 0.22em;
+  margin-bottom: 8px;
+}
+.scores-caption {
+  margin-bottom: 20px;
+  color: #9eb8c6;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+#settingsPanel h2 {
+  margin-bottom: 22px;
+}
+.scores-head,
+.scores-row {
+  display: grid;
+  grid-template-columns: 72px 1fr 56px 72px;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+}
+.scores-head {
+  margin: 4px 0 8px;
+  color: #45ecff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+.scores-head span:nth-child(3),
+.scores-wave {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.scores-head span:last-child,
+.scores-name {
+  text-align: end;
+  letter-spacing: 0.28em;
+}
+.scores-body {
+  overflow: hidden;
+  transition: height 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.scores-list {
+  display: grid;
+  grid-auto-rows: minmax(48px, auto);
+  gap: 7px;
+  max-height: min(52cqh, 420px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding-block: 2px;
+  padding-right: 8px;
+}
+.scores-head {
+  padding-right: 28px;
+}
+.scores-row {
+  --cut: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  position: relative;
+  isolation: isolate;
+  min-height: 48px;
+  color: #f4fbff;
+  font:
+    700 19px/1 "Rajdhani",
+    sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.scores-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: var(--cut);
+  background: linear-gradient(90deg, #122231, #0b1622 70%, #101823);
+  border: 1px solid #3d6f8633;
+}
+.scores-row.top {
+  color: #fff;
+  text-shadow: 0 0 10px #ff368c88;
+}
+.scores-row.top::before {
+  background: linear-gradient(90deg, #ff368ccc, #b21f6eaa 42%, #1a1020ee);
+  box-shadow: 0 0 18px #ff368c55;
+}
+.scores-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2em;
+}
+.scores-row.top .scores-rank {
+  text-shadow:
+    0 0 8px #ff9ac8,
+    0 0 14px #ff368c88;
+}
+.scores-score {
+  font-variant-numeric: tabular-nums;
+}
+.scores-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  min-height: 48px;
+  color: #7f96a4;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.scores-status.loading {
+  justify-content: center;
+  color: #9eb8c6;
+}
+.scores-status:not(.loading) .scores-spinner {
+  display: none;
+}
+.scores-spinner {
+  width: 1.15em;
+  height: 1.15em;
+  border: 2px solid #45ecff44;
+  border-top-color: #45ecff;
+  border-radius: 50%;
+  animation: scores-spin 0.7s linear infinite;
+  flex: 0 0 auto;
+}
+@keyframes scores-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.scores-status[hidden],
+.scores-head[hidden] {
+  display: none;
+}
+
+/* The post-run board shares the title leaderboard's rows and columns. */
+html:has(#death:not(.hidden)),
+body:has(#death:not(.hidden)),
+#death { touch-action: pan-y pinch-zoom; }
+#deathPanel.is-submitted {
+  container-type: inline-size;
+  width: min(100%, 760px);
+  padding: clamp(22px, 4vw, 38px) clamp(14px, 4vw, 38px);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(#05131f, #04101b) padding-box,
+    linear-gradient(110deg, #ff368c, #153345 35%, #153345 65%, #45ecff) border-box;
+  box-shadow: -6px 0 24px #ff368c20, 6px 0 24px #45ecff22, inset 0 0 30px #45ecff08;
+}
+#deathPanel.is-submitted #deathTitle {
+  width: auto;
+  font-size: clamp(24px, 5.5vw, 48px);
+  letter-spacing: .12em;
+  line-height: 1.15;
+}
+#deathPanel.is-submitted #deathStat {
+  margin-top: 12px;
+  color: #a6c7d5;
+  font-size: clamp(12px, 2.4vw, 15px);
+  letter-spacing: .12em;
+}
+#deathSubmitted {
+  width: 100%;
+  margin-top: 28px;
+  text-align: start;
+}
+#deathBoardList { max-height: min(38svh, 268px); }
+#deathBoardList[hidden],
+#deathBoardOutside[hidden] { display: none; }
+#deathBoardOutside {
+  margin-top: 12px;
+  padding-top: 12px;
+  padding-right: 18px;
+  border-top: 1px dashed #3d6f8680;
+}
+.scores-row.is-current {
+  color: #efffff;
+  text-shadow: 0 0 10px #45ecff66;
+  filter: drop-shadow(0 0 5px #45ecff55);
+}
+.scores-row.is-current::before { background: #45ecff; }
+.scores-row.is-current::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 2px;
+  clip-path: var(--cut);
+  background: linear-gradient(90deg, #073440, #061a28 70%, #0a3540);
+}
+.scores-row.is-current .scores-rank { color: #45ecff; text-shadow: none; }
+#deathPanel.is-submitted #deathMenu {
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 30px;
+}
+#deathPanel.is-submitted #deathMenu button {
+  min-height: 56px;
+  padding-inline: 10px;
+  font-size: clamp(16px, 2.8vw, 23px);
+  letter-spacing: .15em;
+}
+#deathPanel.is-submitted #deathQuitBtn { --pink: #45ecff; }
+#deathPanel.is-submitted #deathQuitBtn::after {
+  background:
+    repeating-linear-gradient(134deg, #45ecff99 0 1px, transparent 1px 8px) right / 50px 100% no-repeat,
+    linear-gradient(105deg, #07303c, #041522);
+}
+@media (max-width: 400px) {
+  #deathPanel.is-submitted #deathMenu { grid-template-columns: 1fr; gap: 10px; }
+  #deathPanel.is-submitted #deathMenu button { min-height: 48px; }
+}
+@media (max-height: 500px) {
+  #deathPanel.is-submitted { padding-block: 16px; }
+  #deathSubmitted { margin-top: 16px; }
+  #deathBoardList { max-height: 28svh; }
+  #deathPanel.is-submitted #deathMenu { margin-top: 18px; }
+}
+
+@container (max-width: 520px) {
+  .scores-head,
+  .scores-row {
+    grid-template-columns: 36px minmax(0, 1fr) 42px 52px;
+    gap: 18px;
+    padding-inline: 8px;
+    letter-spacing: 0.08em;
+  }
+  .scores-head {
+    padding-right: 20px;
+    font-size: 12px;
+  }
+  .scores-row {
+    font-size: 16px;
+    min-height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scores-body {
+    transition: none;
+  }
+}
