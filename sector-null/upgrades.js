@@ -128,8 +128,8 @@ export const UPGRADES = [
   { id: 'heal', cat: 'survival', name: 'SHIELD RESET', desc: 'Restore all shield segments', max: Infinity, ok: (s) => s.hp < s.maxHp, stat: (s) => [s.hp, `${s.maxHp} hp`], apply: (s) => { s.hp = s.maxHp; } },
   // Score path: pick this instead of another gun / gear upgrade and vacuum every emerald.
   { id: 'magnet', cat: 'ability', name: 'MAGNETIC GEMS', desc: 'Gems surge toward you', max: 1, stat: () => ['Short pull', 'Through walls'], apply: () => {} },
-  // Defence Bay only — always offered as one of the three picks while under max.
-  { id: 'coil', cat: 'defence', name: 'TESLA COIL', desc: 'Bay coil zaps nearby drones', max: 5, ok: (s) => !!s.bayActive, stat: (s) => {
+  // Defence Bay only — offered on wave 11+ clears (while in the bay), not on the wave-10 room-1 pick.
+  { id: 'coil', cat: 'defence', name: 'TESLA COIL', desc: 'Bay coil zaps nearby drones', max: 5, ok: (s) => !!s.bayActive && s.wave >= 11, stat: (s) => {
     const owned = s.upgrades.coil || 0;
     const next = owned + 1;
     if (!owned) return [`Power on · ${secLabel(COIL_INTERVAL[1])}s`];
@@ -160,7 +160,7 @@ export function previewStateFor(u, owned, opts = {}) {
   // Prerequisites so ok()-gated modules render with a valid baseline.
   if (u.id === 'botGun' || u.id === 'botBomb') s.upgrades.bot = 1;
   if (u.id === 'shock') s.upgrades.mine = 1;
-  if (u.id === 'coil') s.bayActive = true;
+  if (u.id === 'coil') { s.bayActive = true; s.wave = Math.max(s.wave ?? 0, 11); }
   if (u.id === 'heal') {
     s.hp = opts.hp ?? 2;
     s.maxHp = opts.maxHp ?? BASE_STATS.maxHp;

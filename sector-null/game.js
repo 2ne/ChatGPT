@@ -738,26 +738,32 @@ function rebuildNavObstacles() {
 
 const KEY_POS_REACTOR = new THREE.Vector3(-14, 28, 18);
 const KEY_POS_BAY = new THREE.Vector3(-16, 34, BAY_CZ + 16);
+const FOG_NEAR_BAY = 28, FOG_FAR_BAY = 78;
+/** 0 = reactor framing, 1 = bay framing — eased in updateCamera (no snaps). */
+let camRoomBlend = 0;
+let camRoomBlendTarget = 0;
+let room1Culled = false;
+let bayNavWarmed = false;
+/** Prebuilt bay nav graphs restored on arrival so swapCollision doesn't rebuild mid-walk. */
+let bayNavGraphs = null;
 
 function setPlayRoom(id) {
   if (id === 'bay') {
     play.half = BAY_HALF; play.cx = 0; play.cz = BAY_CZ; play.id = 'bay';
+    camRoomBlendTarget = 1;
   } else {
     play.half = HALF; play.cx = 0; play.cz = 0; play.id = 'reactor';
+    camRoomBlendTarget = 0;
+    camRoomBlend = 0;
   }
-  // Same top-down pitch as room 1 — pull back with room size, don't change the angle.
-  const s = bayCamScale(play.half);
+}
+
+function applyRoomFraming(blend) {
+  const s = THREE.MathUtils.lerp(1, bayCamScale(BAY_HALF), blend);
   CAM_OFFSET.copy(CAM_OFFSET0).multiplyScalar(s);
-  if (id === 'bay') {
-    // Independent fog so bay walls stay readable (linear scale pushed fog to the player).
-    scene.fog.near = 28;
-    scene.fog.far = 78;
-    key.position.copy(KEY_POS_BAY);
-  } else {
-    scene.fog.near = FOG_NEAR0;
-    scene.fog.far = FOG_FAR0;
-    key.position.copy(KEY_POS_REACTOR);
-  }
+  scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR0, FOG_NEAR_BAY, blend);
+  scene.fog.far = THREE.MathUtils.lerp(FOG_FAR0, FOG_FAR_BAY, blend);
+  key.position.lerpVectors(KEY_POS_REACTOR, KEY_POS_BAY, blend);
   const shadowSpan = 24 * s;
   Object.assign(key.shadow.camera, {
     left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 72 * s,
@@ -773,6 +779,34 @@ function swapCollision(opens, boxes, solids, gateList) {
   rebuildNavObstacles();
 }
 
+/** Pre-build bay nav while the wave-10 picker is up so the walk doesn't hitch. */
+function warmBayNav() {
+  if (bayNavWarmed) return;
+  const snapOpen = openings.slice();
+  const snapBox = wallBoxes.slice();
+  const snapSol = SOLIDS.slice();
+  const snapGate = gates.slice();
+  swapCollision(bayOpenings, bayWallBoxes, baySolids.slice(), bayGates);
+  // Touch common radii so graphs exist before combat.
+  navigationGraph(Z_RADIUS);
+  navigationGraph(Z_RADIUS * 0.88);
+  navigationGraph(0.74 * 0.7);
+  bayNavGraphs = new Map(navGraphs);
+  swapCollision(snapOpen, snapBox, snapSol, snapGate);
+  bayNavWarmed = true;
+}
+
+function restoreBayNavGraphs() {
+  if (!bayNavGraphs) {
+    navigationGraph(Z_RADIUS);
+    navigationGraph(Z_RADIUS * 0.88);
+    navigationGraph(0.74 * 0.7);
+    return;
+  }
+  navGraphs.clear();
+  for (const [k, v] of bayNavGraphs) navGraphs.set(k, v);
+}
+
 function setRoom1YardVisible(on) {
   room1WallMesh.visible = on;
   room1DeckMesh.visible = on;
@@ -786,27 +820,46 @@ function setRoom1YardVisible(on) {
     if (o.root) o.root.visible = on;
     if (o.gateRoot) o.gateRoot.visible = on;
   }
+  room1Culled = !on;
 }
 
-function activateBay() {
-  if (bayActiveLive) return;
-  bayActiveLive = true;
-  state.bayActive = true;
+/** Cull room 1 only once the follow camera no longer sees the reactor deck. */
+function cullRoom1IfOffscreen() {
+  if (room1Culled || !bayActiveLive) return;
+  // Reactor deck centre / south edge — if both project off the bottom of the view, cull.
+  let visible = false;
+  for (const [x, z] of [[0, 0], [0, HALF], [0, -HALF], [HALF, 0], [-HALF, 0]]) {
+    _sp.set(x, 1.2, z).project(camera);
+    if (_sp.z < 1 && Math.abs(_sp.x) < 1.15 && Math.abs(_sp.y) < 1.15) {
+      visible = true;
+      break;
+    }
+  }
+  if (!visible) setRoom1YardVisible(false);
+}
+
+/** Show bay + corridor ahead of the walk (already compiled). No collision swap yet. */
+function revealBayWorld() {
   bayGroup.visible = true;
-  corridorGroup.visible = false;
-  setRoom1YardVisible(false);
+  corridorGroup.visible = true;
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
   }
-  // Bay cover only — drop reactor / yard collision footprints.
+}
+
+/** Gameplay handoff once the operator is inside — collision + bayActive, no camera snap. */
+function finalizeBayArrival() {
+  if (bayActiveLive) {
+    state.bayActive = true;
+    return;
+  }
+  bayActiveLive = true;
+  state.bayActive = true;
+  revealBayWorld();
   swapCollision(bayOpenings, bayWallBoxes, baySolids.slice(), bayGates);
+  restoreBayNavGraphs();
   setPlayRoom('bay');
-  // Snap follow cam so the bigger offset doesn't ease in from the reactor / title shot.
-  camMix = 1;
-  followPos.copy(player.position).add(CAM_OFFSET);
-  camera.position.copy(followPos);
-  camera.lookAt(player.position.x, 0, player.position.z);
   bayDecor.setCoilPower(state.upgrades.coil || 0);
 }
 
@@ -818,13 +871,18 @@ function deactivateBay() {
   bayGroup.visible = false;
   corridorGroup.visible = false;
   setRoom1YardVisible(true);
+  room1Culled = false;
+  bayNavWarmed = false;
+  bayNavGraphs = null;
+  camRoomBlend = 0;
+  camRoomBlendTarget = 0;
+  applyRoomFraming(0);
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
   }
   swapCollision(room1Openings, room1WallBoxes, room1Solids, room1Gates);
   setPlayRoom('reactor');
-  followPos.copy(player.position).add(CAM_OFFSET);
   bayDecor.setCoilPower(0);
   coilArcs.clear();
   // Reset bay doors to intact closed leaves for the next run.
@@ -842,6 +900,17 @@ function deactivateBay() {
     glow.material.opacity = 0.3;
     glow.scale.setScalar(4.4);
   }
+}
+
+/** Compile bay/corridor materials once so the walk doesn't hitch on first draw. */
+function prewarmBayRender() {
+  const prevBay = bayGroup.visible;
+  const prevCor = corridorGroup.visible;
+  bayGroup.visible = true;
+  corridorGroup.visible = true;
+  try { renderer.compile(scene, camera); } catch { /* WebGL may be unavailable in some boots */ }
+  bayGroup.visible = prevBay;
+  corridorGroup.visible = prevCor;
 }
 
 function findRoom1NorthDoor() {
@@ -3778,12 +3847,8 @@ function finishWaveClear() {
     spawnWaveClearShield(lastKillPos);
   }
   audio.waveClear();
-  // After wave 10 boss, walk into the Defence Bay before the upgrade picker.
-  if (state.wave === 10 && !state.bayActive && !state.scripted) {
-    clearAllFloorPickups();
-    beginBayTransition();
-    return;
-  }
+  // Wave 10: normal room-1 picker first (no coil). Walk to the bay starts after the pick.
+  if (state.wave === 10 && !state.bayActive) warmBayNav();
   openPicker();
 }
 
@@ -3791,13 +3856,12 @@ function beginBayTransition() {
   resetGameplayInput();
   const north = findRoom1NorthDoor();
   const south = findBaySouthDoor();
-  corridorGroup.visible = true;
-  // Leave the title swoop immediately — otherwise ?dev=bay keeps a low title camera.
+  // Continuous world: bay + corridor already ahead; room 1 stays until off-screen.
+  revealBayWorld();
+  warmBayNav();
   camMix = 1;
-  followPos.copy(player.position).add(CAM_OFFSET);
-  camera.position.copy(followPos);
-  camera.lookAt(player.position.x, 0, player.position.z);
-  // Hold bay south door open for entry (bay still hidden until we cross).
+  camRoomBlendTarget = 1; // ease framing out during the walk — no snap
+  // Hold bay south door open for entry.
   if (south) swingDoorOpen(south);
   state.scripted = {
     phase: 'walkDoor',
@@ -3813,7 +3877,7 @@ function beginBayTransition() {
     ],
     wi: 0,
     doorOpen: false,
-    activated: false,
+    finalized: false,
     slamT: 0,
   };
 }
@@ -3823,6 +3887,7 @@ function updateBayTransition(dt) {
   if (!xfer) return;
   xfer.t += dt;
   const speed = state.speed * 0.85;
+  cullRoom1IfOffscreen();
 
   if (xfer.phase === 'walkDoor' || xfer.phase === 'walkIn') {
     const wp = xfer.waypoints[xfer.wi];
@@ -3843,11 +3908,10 @@ function updateBayTransition(dt) {
       player.position.x = wp.x;
       player.position.z = wp.z;
       xfer.wi++;
-      // Entering the bay: swap collision / show bay / hide room1.
-      if (!xfer.activated && xfer.wi >= 4) {
-        activateBay();
-        xfer.activated = true;
-        // Keep south door open until slam.
+      // Inside the bay: hand off collision for wave 11 (camera already easing).
+      if (!xfer.finalized && xfer.wi >= 4) {
+        finalizeBayArrival();
+        xfer.finalized = true;
         if (xfer.south) swingDoorOpen(xfer.south);
       }
       if (xfer.wi >= xfer.waypoints.length) {
@@ -3869,11 +3933,17 @@ function updateBayTransition(dt) {
         slamDoorShut(xfer.south);
         audio.doorSlam(xfer.south);
       }
-      state.shake = Math.max(state.shake, 0.85);
+      state.shake = Math.max(state.shake, 0.55);
+      if (!xfer.finalized) {
+        finalizeBayArrival();
+        xfer.finalized = true;
+      }
     }
-    if (xfer.slamT >= 0.55) {
+    if (xfer.slamT >= 0.45) {
       state.scripted = null;
-      openPicker();
+      cullRoom1IfOffscreen();
+      // No second picker — wave 11 starts in the bay.
+      queueWave(0.85);
     }
   }
 }
@@ -4780,8 +4850,9 @@ function pickUpgradeOffers(count = 3) {
     return others.length ? others : pool.slice();
   };
 
-  // Defence Bay: always include the next Tesla Coil rank while under max.
-  if (state.bayActive) {
+  // Defence Bay (wave 11+ clears): always include the next Tesla Coil rank while under max.
+  // Wave 10's room-1 picker must not offer it (bayActive is still false then).
+  if (state.bayActive && state.wave >= 11) {
     take(pool.find(u => u.id === 'coil'));
   }
 
@@ -4830,6 +4901,11 @@ function getUpgradeIconHost() {
 function openPicker() {
   offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
+  // Warm bay nav/shaders during the wave-10 pick so the walk stays smooth.
+  if (state.wave === 10 && !state.bayActive) {
+    warmBayNav();
+    prewarmBayRender();
+  }
   state.choosing = true;
   hud.cards.dataset.input = lastPlayInput === 'gamepad' ? 'gamepad' : 'pointer';
   padPickerSel = 0;
@@ -4894,8 +4970,16 @@ function choose(i) {
   // brief beat so the pick registers visually before the picker closes
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
-  choose._t = setTimeout(hidePicker, 320);
-  queueWave(2.0);
+  // Wave 10: after the normal room-1 pick, walk into the bay then start wave 11 (no second picker).
+  const walkToBay = state.wave === 10 && !state.bayActive && !bayActiveLive;
+  choose._t = setTimeout(() => {
+    hidePicker();
+    if (walkToBay) {
+      clearAllFloorPickups();
+      beginBayTransition();
+    }
+  }, 320);
+  if (!walkToBay) queueWave(2.0);
   toastQueue.push({ text: u.id === 'bot' ? (state.upgrades.bot === 1 ? 'HELPER BOT DEPLOYED' : `HELPER BOT UPGRADED · RANK ${state.upgrades.bot}`) : u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
@@ -5186,6 +5270,11 @@ function updateWaveTypeIntro(dt) {
 
 function startWave(n) {
   state.wave = n;
+  // Pre-warm bay draw/nav before the wave-10 clear so the walk never compiles mid-frame.
+  if (n === 10) {
+    prewarmBayRender();
+    warmBayNav();
+  }
   state.shieldDropsThisWave = 0;
   state.mortarsSpawned = 0;
   state.bossPending = true;
@@ -5733,6 +5822,12 @@ const titlePos = new THREE.Vector3(), titleLook = new THREE.Vector3(), camLook =
 let camMix = 0; // 0 = title shot, 1 = follow cam
 const swoop = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in-out cubic
 function updateCamera(dt) {
+  // Ease reactor ↔ bay framing (offset / fog / key) — never snap mid-walk.
+  if (Math.abs(camRoomBlend - camRoomBlendTarget) > 1e-4) {
+    camRoomBlend += (camRoomBlendTarget - camRoomBlend) * (1 - Math.pow(0.04, dt));
+    if (Math.abs(camRoomBlend - camRoomBlendTarget) < 0.001) camRoomBlend = camRoomBlendTarget;
+    applyRoomFraming(camRoomBlend);
+  }
   tmp.copy(player.position).add(CAM_OFFSET);
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
@@ -5756,6 +5851,7 @@ function updateCamera(dt) {
   camera.lookAt(camLook);
   const fov = THREE.MathUtils.lerp(TITLE_FOV, GAME_FOV, e);
   if (Math.abs(camera.fov - fov) > 1e-3) { camera.fov = fov; camera.updateProjectionMatrix(); }
+  if (bayActiveLive) cullRoom1IfOffscreen();
 }
 
 // --- the menu itself: keyboard (arrows/WASD, enter, esc) and mouse both drive it ---
@@ -6614,6 +6710,8 @@ function update(dt, lightFrame = false) {
 // ===================================================================
 let last = performance.now();
 let hitchCool = 0;
+/** Optional QA sink for ?dev=bay headless smoothness checks (set by the boot probe). */
+let bayProbe = null;
 function loop(now) {
   const raw = (now - last) / 1000;
   last = now;
@@ -6628,6 +6726,26 @@ function loop(now) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
   } else {
     renderer.render(scene, camera);
+  }
+  if (bayProbe) {
+    const xfer = state.scripted;
+    bayProbe.samples.push({
+      t: now,
+      raw,
+      light: lightFrame ? 1 : 0,
+      px: player.position.x,
+      pz: player.position.z,
+      cx: camera.position.x,
+      cy: camera.position.y,
+      cz: camera.position.z,
+      blend: camRoomBlend,
+      phase: xfer ? xfer.phase : (state.bayActive ? 'bay' : 'none'),
+      wave: state.wave,
+      choosing: state.choosing ? 1 : 0,
+      room1: room1Culled ? 0 : 1,
+      bay: bayGroup.visible ? 1 : 0,
+      corridor: corridorGroup.visible ? 1 : 0,
+    });
   }
   requestAnimationFrame(loop);
 }
@@ -6687,6 +6805,9 @@ whenViewportSettled(() => {
       beginBossDeath(z);
     }, 350);
   } else if (bootParams.get('dev') === 'bay') {
+    // Simulate post–wave-10 pick: room-1 picker is skipped; walk → slam → wave 11 (no arrival picker).
+    bayProbe = { samples: [] };
+    window.__snBayProbe = bayProbe;
     setTimeout(() => {
       startGame(false);
       state.intermission = 0;
@@ -6696,6 +6817,9 @@ whenViewportSettled(() => {
       state.wave = 10;
       state.choosing = false;
       camMix = 1;
+      camRoomBlend = 0;
+      camRoomBlendTarget = 0;
+      applyRoomFraming(0);
       clearAllFloorPickups();
       clearEmeralds();
       clearEnemyBolts();
@@ -6705,8 +6829,13 @@ whenViewportSettled(() => {
       touchYaw = Math.PI;
       followPos.copy(player.position).add(CAM_OFFSET);
       camera.position.copy(followPos);
+      prewarmBayRender();
+      warmBayNav();
       audio.waveClear();
       beginBayTransition();
+      bayProbe.startedAt = performance.now();
     }, 350);
   }
+  // Compile bay/corridor once the first frame has a real GL context.
+  requestAnimationFrame(() => requestAnimationFrame(() => prewarmBayRender()));
 });
