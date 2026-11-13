@@ -25,6 +25,12 @@ pulse respect reduced motion. Room 1 keeps its existing visuals and follow view.
 
 Door shoulders stand clear of the posts, and crossed braces have separate depth
 layers on both faces, preventing overlapping trim from flickering on mobile.
+The bay doors slide into hollow side cassettes sized for the entire panels, with
+front/back skins, enclosed tops and guide tracks. Walls stop outside those
+cassettes. Panels stay present throughout opening and closing; the housing hides
+them naturally. Opening accelerates and brakes smoothly, and reversing direction
+continues from the current position. The smaller Room 1 exit also keeps its
+panels present behind the wall during the handoff, without overshoot or a hide pop.
 
 The four cover positions, small solid coil base, room dimensions, doorway widths
 and wave-10 handoff are preserved. Only the small coil base blocks movement;

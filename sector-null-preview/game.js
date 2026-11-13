@@ -560,7 +560,7 @@ function fitOpening(o) {
     o.leaf.add(o.panelL, o.panelR);
     o.slideShutL = o.panelL.position.x;
     o.slideShutR = o.panelR.position.x;
-    o.slideTravel = pw + JAMB + 0.45; // fully into the wall pocket beside the jamb
+    o.slideTravel = pw + JAMB + 0.08; // clear the jamb without unnecessary overtravel
   } else {
     const h = o.head - o.sill, mid = (o.sill + o.head) / 2, iw = o.w - 0.2;
     wallB.add([
@@ -3676,6 +3676,8 @@ function findRoom1NorthDoor() {
 function beginDoorSlide(o) {
   if (!o || o.kind !== 'door' || !o.panelL || !o.panelR) return;
   o.hp = 0; // clear collision so the walk can pass
+  o.fallT = -1;
+  o.jolt = 0;
   o.leaf.rotation.y = 0;
   if (o.fall) { o.fall.rotation.x = 0; o.fall.position.set(0, 0, -0.02); }
   o.panelL.visible = true;
@@ -3689,18 +3691,12 @@ function tickDoorSlide(o, dt) {
   if (!o?.slide || !o.panelL || !o.panelR) return false;
   o.slide.t += dt;
   const k = Math.min(1, o.slide.t / o.slide.dur);
-  const c1 = 1.70158, c3 = c1 + 1;
-  const e = Math.min(1 + c3 * (k - 1) ** 3 + c1 * (k - 1) ** 2, 1.04);
+  const e = k * k * (3 - 2 * k);
   const travel = o.slideTravel;
   o.panelL.position.x = o.slideShutL - travel * e;
   o.panelR.position.x = o.slideShutR + travel * e;
-  // Hide once recessed into the wall — no poke-through / z-fight
-  const show = e < 0.92;
-  o.panelL.visible = show;
-  o.panelR.visible = show;
+  // Panels stay present behind the opaque wall throughout the handoff.
   if (k >= 1) {
-    o.panelL.visible = false;
-    o.panelR.visible = false;
     o.slide = null;
     return true;
   }

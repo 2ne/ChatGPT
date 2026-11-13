@@ -8,6 +8,10 @@ const C = { deck: 0x243744, panel: 0x304756, edge: 0x536b7c, dark: 0x111e29,
   shell: 0x293e4f, cyan: 0x62edff, amber: 0xe5a044 };
 const OCT_R = 5.35;
 const CHANNEL = 0.72;
+// Each pocket holds an entire leaf, including its raised braces on both faces.
+const DOOR_HALF = BAY_DOOR_GAP / 2;
+const POCKET_WIDTH = 2.8;
+const PORTAL_HALF = DOOR_HALF + POCKET_WIDTH;
 
 export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   BlockBatch, seeded, worldMat, reducedMotion }) {
@@ -107,13 +111,13 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   }
   for (const z of [ROOM2_NORTH, ROOM2_SOUTH]) {
     const inward = z === ROOM2_NORTH ? 1 : -1;
-    wall('x', z, ROOM2_WEST, BAY_CX - 3.8, inward);
-    wall('x', z, BAY_CX + 3.8, ROOM2_EAST, inward);
+    wall('x', z, ROOM2_WEST, BAY_CX - PORTAL_HALF, inward);
+    wall('x', z, BAY_CX + PORTAL_HALF, ROOM2_EAST, inward);
   }
   for (const x of [ROOM2_WEST, ROOM2_EAST]) {
     const inward = x === ROOM2_WEST ? 1 : -1;
-    wall('z', x, ROOM2_NORTH, ROOM2_CZ - 3.8, inward);
-    wall('z', x, ROOM2_CZ + 3.8, ROOM2_SOUTH, inward);
+    wall('z', x, ROOM2_NORTH, ROOM2_CZ - PORTAL_HALF, inward);
+    wall('z', x, ROOM2_CZ + PORTAL_HALF, ROOM2_SOUTH, inward);
   }
   for (const x of [ROOM2_WEST, ROOM2_EAST]) for (const z of [ROOM2_NORTH, ROOM2_SOUTH]) {
     metal(1.35, 3.15, 1.35, x, 1.575, z, C.shell);
@@ -150,19 +154,35 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     const fb = (...args) => block(frame, ...args);
     const fl = (...args) => block(lit, ...args, 0, 0, 0.008);
     for (const side of [-1, 1]) {
-      fb(1.25, 3.9, 1.65, side * 3.04, 1.95, 0, C.shell);
-      fb(0.38, 3.65, 1.85, side * 3.68, 1.84, 0, C.edge);
-      // The shoulders overlap the posts in silhouette. Their front/back faces
-      // must sit proud of the posts, not at the same depth (mobile z-fighting).
-      fb(1.8, 0.62, 1.79, side * 2.85, 3.92, 0, C.edge, 0, side * -0.42);
+      const pocketX = side * (DOOR_HALF + POCKET_WIDTH / 2);
+      // Hollow cassette: front/back skins, a roof and an outer end cap.
+      // The mouth at the jamb is open; walls begin beyond the cassette.
+      // Moving leaves are naturally occluded, including from the overhead view.
       for (const face of [-1, 1]) {
+        fb(POCKET_WIDTH, 3.9, 0.18, pocketX, 1.95, face * 0.76, C.shell);
+        fb(1.25, 2.65, 0.08, side * 4.35, 1.62, face * 0.89, C.dark);
+        for (let i = 0; i < 3; i++) {
+          fb(0.85, 0.055, 0.055, side * 4.35, 0.75 + i * 0.2, face * 0.96, C.panel);
+        }
+      }
+      fb(POCKET_WIDTH, 0.22, 1.79, pocketX, 4.01, 0, C.edge);
+      fb(0.22, 3.9, 1.79, side * (PORTAL_HALF - 0.11), 1.95, 0, C.shell);
+      fb(0.22, 3.65, 1.85, side * (PORTAL_HALF - 0.12), 1.84, 0, C.edge);
+      // Sloped shoulder skins stay outside the cavity too; a solid crosspiece
+      // here would intersect the upper corners of a retracting leaf.
+      for (const face of [-1, 1]) {
+        fb(1.8, 0.62, 0.12, side * 2.85, 3.92, face * 0.87, C.edge, 0, side * -0.42);
         fb(0.4, 2.75, 0.13, side * 3.02, 1.65, face * 0.87, C.dark);
         fl(0.13, 2.35, 0.08, side * 3.02, 1.65, face * 0.95, C.cyan);
       }
     }
     fb(4.8, 0.65, 1.6, 0, 4.12, 0, C.shell);
     fb(4.5, 0.17, 1.7, 0, 4.53, 0, C.edge);
-    fb(BAY_DOOR_GAP, 0.08, 1.7, 0, 0.035, 0, C.dark);
+    fb(BAY_DOOR_GAP, 0.04, 1.7, 0, 0.015, 0, C.dark);
+    // Continuous inset guide tracks connect the opening to both cassettes.
+    for (const railZ of [-0.6, 0.6]) {
+      fb(PORTAL_HALF * 2 - 0.3, 0.025, 0.055, 0, 0.038, railZ, C.edge);
+    }
     for (const face of [-1, 1]) {
       fl(2.9, 0.1, 0.07, 0, 4.08, face * 0.84, C.cyan);
       fl(2.9, 0.08, 0.07, 0, 4.34, face * 0.84, C.cyan);
@@ -175,7 +195,7 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     for (const side of [-1, 1]) {
       const leaf = new THREE.Group(), batch = new BlockBatch();
       const lb = (...args) => block(batch, ...args);
-      lb(leafW, 3.77, 0.44, 0, 1.92, 0, C.dark);
+      lb(leafW, 3.72, 0.44, 0, 1.91, 0, C.dark);
       for (const face of [-1, 1]) {
         lb(leafW - 0.18, 3.42, 0.12, 0, 1.93, face * 0.27, C.panel);
         // Layer the crossing braces, with the centre fastener above both.
@@ -192,18 +212,20 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
       root.add(leaf);
       leaves.push({ leaf, side });
     }
-    let phase = 'shut', t = 0;
+    // Travel only far enough to clear the mouth, with room inside the end cap.
+    const travel = DOOR_HALF + 0.12;
+    let phase = 'shut', t = 0, openness = 0, startAmount = 0;
     function amount(k) {
+      openness = k;
       for (const { leaf, side } of leaves) {
-        leaf.position.x = side * (BAY_DOOR_GAP / 4 + k * 2.7);
-        leaf.visible = k < 0.94;
+        leaf.position.x = side * (BAY_DOOR_GAP / 4 + k * travel);
       }
     }
     amount(0);
     const ctrl = {
       root, x, z,
-      open() { if (animated && phase !== 'open' && phase !== 'opening') { phase = 'opening'; t = 0; } },
-      shut() { if (animated && phase !== 'shut' && phase !== 'slamming') { phase = 'slamming'; t = 0; } },
+      open() { if (animated && phase !== 'open' && phase !== 'opening') { startAmount = openness; phase = 'opening'; t = 0; } },
+      shut() { if (animated && phase !== 'shut' && phase !== 'slamming') { startAmount = openness; phase = 'slamming'; t = 0; } },
       snapShut() { phase = 'shut'; t = 0; amount(0); },
       get slammed() { return phase === 'shut'; },
       get isOpen() { return phase === 'open'; },
@@ -213,8 +235,10 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
         if (phase !== 'opening' && phase !== 'slamming') return;
         t += dt;
         const opening = phase === 'opening';
-        const k = Math.min(1, t / (opening ? 0.9 : 0.4));
-        amount(opening ? 1 - (1 - k) ** 3 : 1 - k ** 3);
+        const k = Math.min(1, t / (opening ? 1.05 : 0.4));
+        // Smooth acceleration and braking when opening; a heavier closing stroke.
+        const eased = opening ? k * k * (3 - 2 * k) : k ** 3;
+        amount(THREE.MathUtils.lerp(startAmount, opening ? 1 : 0, eased));
         if (k === 1) phase = opening ? 'open' : 'shut';
       },
     };
