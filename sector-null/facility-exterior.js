@@ -44,8 +44,12 @@ export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
 /** Door centre on X (walk path stays on this line — clears the reactor at x≈5.3). */
 export const BAY_DOOR_X = (ROOM1_NORTH_DOOR.u0 + ROOM1_NORTH_DOOR.u1) / 2;
 
-/** How far inside room 2 the Stage-3 walk stops (a few deck tiles past the south door). */
-export const BAY_STOP_INSET = 5.2;
+/**
+ * How far inside room 2 the Stage-3 walk stops.
+ * ≥ camera Z-offset (11) so the south wall sits behind the follow cam at rest
+ * and no longer draws as mid-screen bars over the player.
+ */
+export const BAY_STOP_INSET = 14;
 
 /** Exterior pad so a player hugging future room-2 walls still sees floor, not void. */
 export const EXTERIOR_MARGIN = 22;
@@ -233,28 +237,46 @@ export function buildRoom2Shell(parent) {
 
 /**
  * Room-2 wall AABBs for player/shot collision once inside the bay.
+ * Four door gaps match the concept doors (N/S on BAY_DOOR_X, E/W on ROOM2_CZ).
  * South door gap stays open when `southDoorOpen` is true (walk-in); closed after slam.
  */
 export function room2WallBoxes({ southDoorOpen = false } = {}) {
   const pad = ROOM2_COLLIDE_PAD;
   const t = SHELL_T / 2 + pad;
   const door = ROOM1_NORTH_DOOR;
-  const boxes = [
-    // North
+  const gap = Math.abs(door.u1 - door.u0) / 2;
+  const boxes = [];
+
+  // North wall with centred door gap
+  boxes.push(
     {
-      minX: -ROOM2_HX - pad, maxX: ROOM2_HX + pad,
+      minX: -ROOM2_HX - pad, maxX: BAY_DOOR_X - gap,
       minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
     },
-    // West / east
+    {
+      minX: BAY_DOOR_X + gap, maxX: ROOM2_HX + pad,
+      minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
+    },
+  );
+  // West / east with centred door gaps
+  boxes.push(
     {
       minX: -ROOM2_HX - t, maxX: -ROOM2_HX + t,
-      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_SOUTH + pad,
+      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_CZ - gap,
+    },
+    {
+      minX: -ROOM2_HX - t, maxX: -ROOM2_HX + t,
+      minZ: ROOM2_CZ + gap, maxZ: ROOM2_SOUTH + pad,
     },
     {
       minX: ROOM2_HX - t, maxX: ROOM2_HX + t,
-      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_SOUTH + pad,
+      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_CZ - gap,
     },
-  ];
+    {
+      minX: ROOM2_HX - t, maxX: ROOM2_HX + t,
+      minZ: ROOM2_CZ + gap, maxZ: ROOM2_SOUTH + pad,
+    },
+  );
   if (southDoorOpen) {
     boxes.push(
       {

@@ -33,6 +33,7 @@ for (const wp of wps) {
 const stop = wps[wps.length - 1];
 assert.ok(stop.z < ROOM2_SOUTH, 'stop must be north of room-2 south wall');
 assert.ok(Math.abs(stop.z - (ROOM2_SOUTH - BAY_STOP_INSET)) < 0.05, 'stop inset mismatch');
+assert.ok(BAY_STOP_INSET >= 11, 'stop must clear camera Z-offset so south wall is behind cam');
 
 const lim = room2PlayerClamp(1.05);
 assert.ok(stop.x >= lim.minX && stop.x <= lim.maxX);
