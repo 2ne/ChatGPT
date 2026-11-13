@@ -1,9 +1,7 @@
 /**
- * Stage 1 Defence Bay prep: flat exterior floor tiles around room 1 only.
- * Room 2 footprint is reserved as the same flat tiles (no walls / no dressing).
- *
- * Must not coplanar-overlap room 1’s deck plates or the underdeck plane
- * (z-fighting is severe on mobile / mapview).
+ * Stage 1 Defence Bay prep: footprint constants + mapview framing.
+ * The exterior floor is the existing room-1 deck mesh, extended in game.js —
+ * there is no second floor layer.
  */
 import * as THREE from 'three';
 
@@ -22,49 +20,20 @@ export const ROOM2_NORTH = ROOM2_CZ - ROOM2_HZ;
 /** Exterior pad so a player hugging future room-2 walls still sees floor, not void. */
 export const EXTERIOR_MARGIN = 22;
 
-/**
- * Existing room-1 deck in game.js places plates at i,j ∈ [-19, 19] on a 1.6 grid
- * (centres out to ±30.4, plate half-size 0.7825 → edge ≈ 31.18).
- * Exterior tiles must stay outside that AABB so they never share the deck’s y.
- */
-export const EXISTING_DECK_HALF = 19 * 1.6 + 1.565 / 2 + 0.08; // ~31.26
+/** Deck plate grid step used by room 1 (world units). */
+export const DECK_STEP = 1.6;
 
-/**
- * Flat tiled floor only — same 1.6u grid as room 1, slightly darker.
- * Clear vertical separation from the underdeck plane (y=-0.13).
- */
-export function buildFacilityExterior(batch, rng) {
-  const step = 1.6;
-  const size = 1.565;
-  // Deck plates: centre -0.06, height 0.11 → top ≈ -0.005.
-  // Sit exterior slightly lower so tops don’t fight deck edges, but bottoms
-  // stay well clear of underdeck (-0.13): centre -0.045, h 0.09 → bottom -0.09.
-  const y = -0.045;
-  const h = 0.09;
-  const shadeA = 0x152028;
-  const shadeB = 0x1a2834;
-
-  const xMin = -(ROOM2_HX + EXTERIOR_MARGIN);
+/** Inclusive grid index range that covers room 2 + margin + room-1 margin. */
+export function deckGridExtents() {
   const xMax = ROOM2_HX + EXTERIOR_MARGIN;
   const zMin = ROOM2_NORTH - EXTERIOR_MARGIN;
   const zMax = ROOM1_HALF + EXTERIOR_MARGIN;
-
-  const i0 = Math.ceil(xMin / step);
-  const i1 = Math.floor(xMax / step);
-  const j0 = Math.ceil(zMin / step);
-  const j1 = Math.floor(zMax / step);
-  const deckCut = EXISTING_DECK_HALF;
-
-  for (let j = j0; j <= j1; j++) {
-    for (let i = i0; i <= i1; i++) {
-      const x = i * step;
-      const z = j * step;
-      // No overlap with the existing baked deck (same grid, was coplanar at y=-0.06).
-      if (Math.abs(x) <= deckCut && Math.abs(z) <= deckCut) continue;
-      const shade = (i + j) & 1 ? shadeA : shadeB;
-      batch.add([[size, h, size, x, y, z, shade, 0, 0, 0, 0.024]], rng);
-    }
-  }
+  return {
+    i0: Math.ceil((-xMax) / DECK_STEP),
+    i1: Math.floor(xMax / DECK_STEP),
+    j0: Math.ceil(zMin / DECK_STEP),
+    j1: Math.floor(zMax / DECK_STEP),
+  };
 }
 
 /** Map-view framing so James can see room 1 + reserved room-2 floor + exterior. */
@@ -72,7 +41,6 @@ export const MAPVIEW_CAM = {
   position: new THREE.Vector3(0, 110, -14),
   lookAt: new THREE.Vector3(0, 0, -14),
   fov: 48,
-  // Tight near/far for mobile depth precision (default 0.1…320 z-fights badly).
   near: 12,
   far: 260,
   fogNear: 70,

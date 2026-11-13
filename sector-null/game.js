@@ -49,8 +49,9 @@ import {
   writePlayerName,
 } from './scores.js';
 import {
-  buildFacilityExterior,
+  DECK_STEP,
   MAPVIEW_CAM,
+  deckGridExtents,
 } from './facility-exterior.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
@@ -289,11 +290,16 @@ function box(parent, material, x, y, z, w, h, d) {
 const deck = new BlockBatch();
 const deckRandom = seeded(87);
 const panels = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
-for (let z = -19; z <= 19; z++) {
-  for (let x = -19; x <= 19; x++) {
-    const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
-    deck.add([[1.565, 0.11, 1.565, x * 1.6, -0.06, z * 1.6,
-      insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
+// Same deck plates as main — extended to cover room-2 footprint + exterior margin.
+// One floor surface only (no second exterior layer). Room-1 interior plate range unchanged.
+{
+  const { i0, i1, j0, j1 } = deckGridExtents();
+  for (let z = j0; z <= j1; z++) {
+    for (let x = i0; x <= i1; x++) {
+      const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
+      deck.add([[1.565, 0.11, 1.565, x * DECK_STEP, -0.06, z * DECK_STEP,
+        insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
+    }
   }
 }
 for (const side of [-1, 1]) {
@@ -593,17 +599,6 @@ for (const z of [-25, -31]) {
 }
 bakedMesh(perimeter, false);
 
-// Stage 1: flat exterior tiles only (outside existing deck AABB). Room 1 unchanged.
-{
-  const exterior = new BlockBatch();
-  buildFacilityExterior(exterior, seeded(41));
-  const exteriorMesh = bakedMesh(exterior, false);
-  // Own material + polygonOffset so mobile / mapview never z-fight underdeck or deck edges.
-  exteriorMesh.material = worldMat.clone();
-  exteriorMesh.material.polygonOffset = true;
-  exteriorMesh.material.polygonOffsetFactor = 1;
-  exteriorMesh.material.polygonOffsetUnits = 1;
-}
 if (mapView) {
   scene.fog.near = MAPVIEW_CAM.fogNear;
   scene.fog.far = MAPVIEW_CAM.fogFar;
