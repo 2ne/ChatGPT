@@ -9,8 +9,9 @@
 import * as THREE from 'three';
 import {
   BAY_CX,
+  BAY_DOOR_GAP,
+  BAY_DOOR_HALF,
   BAY_DOOR_X,
-  ROOM1_NORTH_DOOR,
   ROOM2_CZ,
   ROOM2_EAST,
   ROOM2_HX,
@@ -32,7 +33,8 @@ const FRAME = 0x5b7182;
 const DECK_PANELS = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
 const DECK_STEP = 1.6;
 const DECK_TILE = 1.565;
-const DOOR_GAP = Math.abs(ROOM1_NORTH_DOOR.u1 - ROOM1_NORTH_DOOR.u0);
+/** Room-2 clear opening — three floor tiles (not room-1’s single-tile gap). */
+const DOOR_GAP = BAY_DOOR_GAP;
 const CHANNEL_HALF = 0.72;
 const OCT_R = 4.35;
 
@@ -103,11 +105,12 @@ export function buildDefenceBay(parent, helpers) {
   bake(floorB, false);
 
   // Bright cyan corner ticks near doors (match room-1 floor light lines)
+  const doorTick = BAY_DOOR_HALF + 0.55;
   for (const [dx, dz] of [
-    [BAY_DOOR_X - 1.4, ROOM2_SOUTH - 1.2], [BAY_DOOR_X + 1.4, ROOM2_SOUTH - 1.2],
-    [BAY_DOOR_X - 1.4, ROOM2_NORTH + 1.2], [BAY_DOOR_X + 1.4, ROOM2_NORTH + 1.2],
-    [ROOM2_WEST + 1.2, ROOM2_CZ - 1.4], [ROOM2_WEST + 1.2, ROOM2_CZ + 1.4],
-    [ROOM2_EAST - 1.2, ROOM2_CZ - 1.4], [ROOM2_EAST - 1.2, ROOM2_CZ + 1.4],
+    [BAY_DOOR_X - doorTick, ROOM2_SOUTH - 1.2], [BAY_DOOR_X + doorTick, ROOM2_SOUTH - 1.2],
+    [BAY_DOOR_X - doorTick, ROOM2_NORTH + 1.2], [BAY_DOOR_X + doorTick, ROOM2_NORTH + 1.2],
+    [ROOM2_WEST + 1.2, ROOM2_CZ - doorTick], [ROOM2_WEST + 1.2, ROOM2_CZ + doorTick],
+    [ROOM2_EAST - 1.2, ROOM2_CZ - doorTick], [ROOM2_EAST - 1.2, ROOM2_CZ + doorTick],
   ]) {
     box(group, cyanLight, dx, 0.007, dz, 0.9, 0.014, 0.035);
     box(group, cyanLight, dx, 0.007, dz, 0.035, 0.014, 0.55);
@@ -217,167 +220,186 @@ export function buildDefenceBay(parent, helpers) {
     if (z3 > z2) box(group, cyanLight, x, SHELL_H - 0.04, (z2 + z3) / 2, 0.08, 0.05, (z3 - z2) * 0.96);
   }
 
-  // ── Massive blast doors (concept: rise above walls, projecting frames) ──
-  // Visual clear width is wider than the collision gap so the door reads huge
-  // from the top-down camera; collision still uses DOOR_GAP / room2WallBoxes.
+  // ── Massive blast doors — three-tile clear, Star Trek split panels ──
+  // Frame is wider than the clear gap so doors read huge from above;
+  // collision / wall gaps use DOOR_GAP (= BAY_DOOR_GAP = 3 tiles).
   const DOOR_H = 3.55; // well above SHELL_H (2.4)
-  const DOOR_W_NS = Math.max(DOOR_GAP + 2.4, 5.2);
-  const DOOR_W_EW = Math.max(DOOR_GAP + 1.8, 4.4);
+  const DOOR_W_NS = DOOR_GAP + 2.8;
+  const DOOR_W_EW = DOOR_GAP + 2.4;
   const pulseHalos = [];
   const pulseStrips = [];
+  const slideDoors = []; // tick open/shut each frame
 
-  /** Build a concept-scale armoured door into `root`. Optional `leafParent` gets the swinging slabs. */
-  function buildBlastDoor(root, kind, { swingingLeaf = false } = {}) {
-    const w = kind === 'ns' ? DOOR_W_NS : DOOR_W_EW;
-    const h = DOOR_H;
-    const doorB = new BlockBatch();
-    const drng = seeded(Math.round(root.position.x * 11 + root.position.z * 17) + 41);
-    // Wide angled side buttresses (project out in +Z local) + tall posts
-    const buttW = 0.85;
-    const buttD = 1.15;
-    const postX = w / 2 + buttW * 0.35;
-    doorB.add([
-      // Left / right buttress blocks (angled via extra bevelled wedges)
-      [buttW, h + 0.55, buttD, -postX, (h + 0.55) / 2, 0.35, 0x1a2a36, 0, 0, 0, 0.06],
-      [buttW, h + 0.55, buttD, postX, (h + 0.55) / 2, 0.35, 0x1a2a36, 0, 0, 0, 0.06],
-      [buttW * 0.7, h + 0.35, buttD * 0.55, -postX - 0.25, (h + 0.35) / 2, 0.55, 0x152430, 0, 0.18, 0, 0.05],
-      [buttW * 0.7, h + 0.35, buttD * 0.55, postX + 0.25, (h + 0.35) / 2, 0.55, 0x152430, 0, -0.18, 0, 0.05],
-      // Thick header block rising above the wall line
-      [w + buttW * 2.2, 0.72, 0.95, 0, h + 0.28, 0.25, 0x243440, 0, 0, 0, 0.06],
-      [w + buttW * 1.6, 0.22, 0.7, 0, h + 0.58, 0.35, 0x2c4050, 0, 0, 0, 0.04],
-      // Threshold plinth
-      [w + 0.6, 0.14, 0.7, 0, 0.06, 0.45, POST, 0, 0, 0, 0.025],
-    ], drng);
-    // Static double slabs (or leave empty if swingingLeaf — leaf mesh added separately)
-    if (!swingingLeaf) {
-      for (const side of [-1, 1]) {
-        const cx = side * (w / 4);
-        const leafW = w / 2 - 0.08;
-        doorB.add([
-          [leafW, h - 0.15, 0.38, cx, h / 2 - 0.02, 0.05, POST, 0, 0, 0, 0.06],
-          [leafW - 0.16, h - 0.4, 0.16, cx, h / 2, 0.2, FRAME, 0, 0, 0, 0.04],
-          [leafW - 0.28, 0.28, 0.12, cx, h * 0.58, 0.28, 0x2a3d4c, 0, 0, 0, 0.025],
-          // Big X emboss readable from above
-          [leafW * 0.55, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, side * 0.7, 0.015],
-          [leafW * 0.55, 0.14, 0.1, cx, h * 0.5, 0.3, 0x4a6070, 0, 0, -side * 0.7, 0.015],
-        ], drng);
-        // Hazard chevrons per leaf — span that leaf’s full width (top + bottom)
-        const stripeW = 0.26;
-        const nStripe = Math.max(6, Math.floor(leafW / (stripeW + 0.04)));
-        for (let i = 0; i < nStripe; i++) {
-          const hx = cx - leafW / 2 + stripeW / 2 + 0.04 + i * (leafW - 0.08) / nStripe;
-          doorB.add([
-            [stripeW, 0.16, 0.14, hx, 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-            [stripeW, 0.16, 0.14, hx, h - 0.22, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-          ], drng);
-        }
-      }
-    }
-    const mesh = new THREE.Mesh(doorB.build(), worldMat);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    root.add(mesh);
-
-    // Tall cyan pylons on buttresses + bright header bar
-    const pylonL = box(root, cyanLight, -postX, h / 2 + 0.1, 0.75, 0.22, h * 0.95, 0.22);
-    const pylonR = box(root, cyanLight, postX, h / 2 + 0.1, 0.75, 0.22, h * 0.95, 0.22);
-    const header = box(root, cyanLight, 0, h + 0.42, 0.55, w * 0.85, 0.16, 0.2);
-    pulseStrips.push(pylonL, pylonR, header);
-    // Lit threshold strip (orange)
-    box(root, amberLight, 0, 0.09, 0.72, w * 0.7, 0.04, 0.1);
-    pulseHalos.push(halo(root, CYAN, 0, h * 0.6, 0.7, 4.8, 0.26));
-    halo(root, CYAN, -postX, h / 2, 0.8, 2.8, 0.2);
-    halo(root, CYAN, postX, h / 2, 0.8, 2.8, 0.2);
-    return { w, h, postX };
-  }
-
-  function makeStaticDoor(x, z, rotY, kind) {
-    const root = new THREE.Group();
-    root.position.set(x, 0, z);
-    root.rotation.y = rotY;
-    group.add(root);
-    buildBlastDoor(root, kind);
-    return root;
-  }
-
-  makeStaticDoor(BAY_DOOR_X, ROOM2_NORTH + 0.08, Math.PI, 'ns');
-  makeStaticDoor(ROOM2_WEST + 0.08, ROOM2_CZ, Math.PI / 2, 'ew');
-  makeStaticDoor(ROOM2_EAST - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
-
-  // South blast door — massive frame stays; one thick slab raises/slams vertically
-  // so the entry reads as a heavy guillotine (bigger / weightier than swing leaves).
-  const southDoorRoot = new THREE.Group();
-  southDoorRoot.position.set(BAY_DOOR_X, 0, ROOM2_SOUTH);
-  group.add(southDoorRoot);
-  const southDims = buildBlastDoor(southDoorRoot, 'ns', { swingingLeaf: true });
-  const jamb = 0.12;
-  const leafW = DOOR_GAP - 2 * jamb - 0.04;
-  const leafH = southDims.h - 0.2;
-  const leafRng = seeded(77);
-  const raiseGroup = new THREE.Group();
-  raiseGroup.position.set(0, 0.04, 0.05);
-  southDoorRoot.add(raiseGroup);
-  {
-    const leafB = new BlockBatch();
-    leafB.add([
-      [leafW, leafH, 0.42, 0, leafH / 2, 0, POST, 0, 0, 0, 0.06],
-      [leafW - 0.18, leafH - 0.38, 0.18, 0, leafH / 2, 0.2, FRAME, 0, 0, 0, 0.04],
-      [leafW * 0.55, 0.16, 0.1, 0, leafH * 0.5, 0.3, 0x4a6070, 0, 0, 0.7, 0.015],
-      [leafW * 0.55, 0.16, 0.1, 0, leafH * 0.5, 0.3, 0x4a6070, 0, 0, -0.7, 0.015],
-      // Centre lock bar for mass
-      [0.28, leafH - 0.5, 0.14, 0, leafH / 2, 0.32, 0x2a3d4c, 0, 0, 0, 0.02],
-    ], leafRng);
-    const stripeW = 0.24;
-    const nStripe = Math.max(8, Math.floor(leafW / (stripeW + 0.03)));
-    for (let i = 0; i < nStripe; i++) {
-      const hx = -leafW / 2 + stripeW / 2 + 0.04 + i * (leafW - 0.08) / nStripe;
-      leafB.add([
-        [stripeW, 0.16, 0.13, hx, 0.24, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-        [stripeW, 0.16, 0.13, hx, leafH - 0.24, 0.28, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
-      ], leafRng);
-    }
-    const leafMesh = new THREE.Mesh(leafB.build(), worldMat);
-    leafMesh.castShadow = true;
-    raiseGroup.add(leafMesh);
-  }
-  const Y_SHUT = 0;
-  const Y_OPEN = leafH + 0.35;
-  // Start shut; walk sequence raises then slams.
-  raiseGroup.position.y = Y_SHUT;
-  let doorPhase = 'shut'; // shut | raising | open | slamming
-  let doorAnimT = 0;
-  const RAISE_DUR = 0.95;
-  const SLAM_DUR = 0.48;
   function easeOutBack(t) {
     const c1 = 1.70158, c3 = c1 + 1;
     return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2;
   }
   function easeInCubic(t) { return t * t * t; }
-  const southDoor = {
-    hinge: raiseGroup, // compat
-    open() {
-      if (doorPhase === 'open' || doorPhase === 'raising') return;
-      doorPhase = 'raising';
-      doorAnimT = 0;
-    },
-    shut() {
-      if (doorPhase === 'shut' || doorPhase === 'slamming') return;
-      doorPhase = 'slamming';
-      doorAnimT = 0;
-    },
-    /** Snap shut without anim (reset / finalize). */
-    snapShut() {
-      doorPhase = 'shut';
-      doorAnimT = 0;
-      raiseGroup.position.y = Y_SHUT;
-    },
-    get slammed() { return doorPhase === 'shut'; },
-    get isOpen() { return doorPhase === 'open'; },
-    get raising() { return doorPhase === 'raising'; },
-    get slamming() { return doorPhase === 'slamming'; },
-    x: BAY_DOOR_X,
-    z: ROOM2_SOUTH,
-  };
+
+  /** Frame + buttresses + header light (no baked slabs — panels are separate). */
+  function buildBlastFrame(root, kind) {
+    const w = kind === 'ns' ? DOOR_W_NS : DOOR_W_EW;
+    const h = DOOR_H;
+    const doorB = new BlockBatch();
+    const drng = seeded(Math.round(root.position.x * 11 + root.position.z * 17) + 41);
+    const buttW = 1.05;
+    const buttD = 1.25;
+    const postX = w / 2 + buttW * 0.32;
+    doorB.add([
+      [buttW, h + 0.55, buttD, -postX, (h + 0.55) / 2, 0.35, 0x1a2a36, 0, 0, 0, 0.06],
+      [buttW, h + 0.55, buttD, postX, (h + 0.55) / 2, 0.35, 0x1a2a36, 0, 0, 0, 0.06],
+      [buttW * 0.7, h + 0.35, buttD * 0.55, -postX - 0.28, (h + 0.35) / 2, 0.55, 0x152430, 0, 0.18, 0, 0.05],
+      [buttW * 0.7, h + 0.35, buttD * 0.55, postX + 0.28, (h + 0.35) / 2, 0.55, 0x152430, 0, -0.18, 0, 0.05],
+      [w + buttW * 2.2, 0.72, 0.95, 0, h + 0.28, 0.25, 0x243440, 0, 0, 0, 0.06],
+      [w + buttW * 1.6, 0.22, 0.7, 0, h + 0.58, 0.35, 0x2c4050, 0, 0, 0, 0.04],
+      [w + 0.6, 0.14, 0.7, 0, 0.06, 0.45, POST, 0, 0, 0, 0.025],
+    ], drng);
+    const mesh = new THREE.Mesh(doorB.build(), worldMat);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    root.add(mesh);
+
+    const pylonL = box(root, cyanLight, -postX, h / 2 + 0.1, 0.75, 0.22, h * 0.95, 0.22);
+    const pylonR = box(root, cyanLight, postX, h / 2 + 0.1, 0.75, 0.22, h * 0.95, 0.22);
+    const header = box(root, cyanLight, 0, h + 0.42, 0.55, w * 0.88, 0.16, 0.2);
+    pulseStrips.push(pylonL, pylonR, header);
+    box(root, amberLight, 0, 0.09, 0.72, w * 0.72, 0.04, 0.1);
+    pulseHalos.push(halo(root, CYAN, 0, h * 0.6, 0.7, 5.2, 0.26));
+    halo(root, CYAN, -postX, h / 2, 0.8, 2.8, 0.2);
+    halo(root, CYAN, postX, h / 2, 0.8, 2.8, 0.2);
+    return { w, h, postX, buttW, buttD };
+  }
+
+  /** One sliding half-panel (geometry local, centred on group origin). */
+  function buildSlidePanel(side, leafW, leafH, rng) {
+    const g = new THREE.Group();
+    const leafB = new BlockBatch();
+    leafB.add([
+      [leafW, leafH, 0.4, 0, leafH / 2, 0, POST, 0, 0, 0, 0.06],
+      [leafW - 0.16, leafH - 0.36, 0.16, 0, leafH / 2, 0.18, FRAME, 0, 0, 0, 0.04],
+      [leafW * 0.55, 0.14, 0.1, 0, leafH * 0.5, 0.28, 0x4a6070, 0, 0, side * 0.7, 0.015],
+      [leafW * 0.55, 0.14, 0.1, 0, leafH * 0.5, 0.28, 0x4a6070, 0, 0, -side * 0.7, 0.015],
+      [0.2, leafH - 0.55, 0.12, side * (leafW * 0.28), leafH / 2, 0.3, 0x2a3d4c, 0, 0, 0, 0.02],
+    ], rng);
+    const stripeW = 0.24;
+    const nStripe = Math.max(4, Math.floor(leafW / (stripeW + 0.03)));
+    for (let i = 0; i < nStripe; i++) {
+      const hx = -leafW / 2 + stripeW / 2 + 0.03 + i * (leafW - 0.06) / nStripe;
+      leafB.add([
+        [stripeW, 0.15, 0.12, hx, 0.22, 0.26, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+        [stripeW, 0.15, 0.12, hx, leafH - 0.22, 0.26, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.012],
+      ], rng);
+    }
+    const mesh = new THREE.Mesh(leafB.build(), worldMat);
+    mesh.castShadow = true;
+    g.add(mesh);
+    return g;
+  }
+
+  /**
+   * Star Trek split door: two panels slide sideways into the buttresses.
+   * When fully open, panels are hidden (no poke-through / z-fight).
+   */
+  function makeSlideDoor(x, z, rotY, kind, { animated = false } = {}) {
+    const root = new THREE.Group();
+    root.position.set(x, 0, z);
+    root.rotation.y = rotY;
+    group.add(root);
+    const dims = buildBlastFrame(root, kind);
+    const jamb = 0.14;
+    const clear = DOOR_GAP - 2 * jamb;
+    const leafW = clear / 2 - 0.04;
+    const leafH = dims.h - 0.22;
+    const rng = seeded(Math.round(x * 13 + z * 19) + 90);
+    const panelL = buildSlidePanel(-1, leafW, leafH, rng);
+    const panelR = buildSlidePanel(1, leafW, leafH, rng);
+    // Closed centres: meet at the middle of the clear opening
+    const xShutL = -leafW / 2 - 0.02;
+    const xShutR = leafW / 2 + 0.02;
+    // Open: fully past the jamb into the buttress pocket, then hidden
+    const travel = leafW + jamb + dims.buttW * 0.55;
+    const xOpenL = xShutL - travel;
+    const xOpenR = xShutR + travel;
+    panelL.position.set(xShutL, 0.04, 0.04);
+    panelR.position.set(xShutR, 0.04, 0.04);
+    root.add(panelL, panelR);
+
+    let phase = 'shut'; // shut | opening | open | slamming
+    let animT = 0;
+    const OPEN_DUR = 0.9;
+    const SLAM_DUR = 0.48;
+
+    function applyOpenAmount(u) {
+      // u=0 shut, u=1 fully open
+      const k = Math.max(0, Math.min(1, u));
+      panelL.position.x = xShutL + (xOpenL - xShutL) * k;
+      panelR.position.x = xShutR + (xOpenR - xShutR) * k;
+      // Hide once recessed into the wall pocket — no poking / z-fight
+      const show = k < 0.92;
+      panelL.visible = show;
+      panelR.visible = show;
+    }
+
+    const ctrl = {
+      root,
+      open() {
+        if (!animated) return;
+        if (phase === 'open' || phase === 'opening') return;
+        phase = 'opening';
+        animT = 0;
+        panelL.visible = true;
+        panelR.visible = true;
+      },
+      shut() {
+        if (!animated) return;
+        if (phase === 'shut' || phase === 'slamming') return;
+        phase = 'slamming';
+        animT = 0;
+        panelL.visible = true;
+        panelR.visible = true;
+      },
+      snapShut() {
+        phase = 'shut';
+        animT = 0;
+        applyOpenAmount(0);
+      },
+      get slammed() { return phase === 'shut'; },
+      get isOpen() { return phase === 'open'; },
+      get raising() { return phase === 'opening'; }, // compat with walk wait
+      get slamming() { return phase === 'slamming'; },
+      x, z,
+      update(dt) {
+        if (!animated) return;
+        if (phase === 'opening') {
+          animT += dt;
+          const k = Math.min(1, animT / OPEN_DUR);
+          applyOpenAmount(Math.min(easeOutBack(k), 1.04));
+          if (k >= 1) { applyOpenAmount(1); phase = 'open'; }
+        } else if (phase === 'slamming') {
+          animT += dt;
+          const k = Math.min(1, animT / SLAM_DUR);
+          // Ease-in meet + tiny settle overshoot
+          let u;
+          if (k < 0.82) u = 1 - easeInCubic(k / 0.82);
+          else {
+            const s = (k - 0.82) / 0.18;
+            u = -0.04 * Math.sin(s * Math.PI) * (1 - s);
+          }
+          applyOpenAmount(Math.max(0, u));
+          if (k >= 1) { applyOpenAmount(0); phase = 'shut'; }
+        }
+      },
+    };
+    if (animated) slideDoors.push(ctrl);
+    return ctrl;
+  }
+
+  // N / E / W — split panels, permanently shut (same look as the entry door)
+  makeSlideDoor(BAY_DOOR_X, ROOM2_NORTH + 0.08, Math.PI, 'ns');
+  makeSlideDoor(ROOM2_WEST + 0.08, ROOM2_CZ, Math.PI / 2, 'ew');
+  makeSlideDoor(ROOM2_EAST - 0.08, ROOM2_CZ, -Math.PI / 2, 'ew');
+  // South — animated open on approach / slam after entry
+  const southDoor = makeSlideDoor(BAY_DOOR_X, ROOM2_SOUTH, 0, 'ns', { animated: true });
 
   // ── Cross channels: recessed grated trenches + cyan ticks ──
   const chB = new BlockBatch();
@@ -639,34 +661,7 @@ export function buildDefenceBay(parent, helpers) {
     solids,
     coil,
     update(dt) {
-      // Vertical raise / slam with slight overshoot so the slab feels heavy.
-      if (doorPhase === 'raising') {
-        doorAnimT += dt;
-        const k = Math.min(1, doorAnimT / RAISE_DUR);
-        const e = easeOutBack(k);
-        raiseGroup.position.y = Y_SHUT + (Y_OPEN - Y_SHUT) * Math.min(e, 1.06);
-        if (k >= 1) {
-          raiseGroup.position.y = Y_OPEN;
-          doorPhase = 'open';
-        }
-      } else if (doorPhase === 'slamming') {
-        doorAnimT += dt;
-        const k = Math.min(1, doorAnimT / SLAM_DUR);
-        // Ease-in drop, then a tiny settle bounce past the sill.
-        let y;
-        if (k < 0.82) {
-          const u = k / 0.82;
-          y = Y_OPEN + (Y_SHUT - Y_OPEN) * easeInCubic(u);
-        } else {
-          const u = (k - 0.82) / 0.18;
-          y = Y_SHUT - 0.08 * Math.sin(u * Math.PI) * (1 - u);
-        }
-        raiseGroup.position.y = y;
-        if (k >= 1) {
-          raiseGroup.position.y = Y_SHUT;
-          doorPhase = 'shut';
-        }
-      }
+      for (let i = 0; i < slideDoors.length; i++) slideDoors[i].update(dt);
 
       const ud = coil.userData;
       ud.t += dt;

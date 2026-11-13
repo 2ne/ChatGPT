@@ -13,6 +13,9 @@ export const ROOM1_NORTH_DOOR = { u0: -5.8, u1: -4.2 };
 export const BAY_DOOR_X = (ROOM1_NORTH_DOOR.u0 + ROOM1_NORTH_DOOR.u1) / 2;
 /** Bay layout centre X — same as the walk / N–S door line. */
 export const BAY_CX = BAY_DOOR_X;
+/** Room-2 doorway clear width — three floor tiles (deck step 1.6). */
+export const BAY_DOOR_GAP = 4.8;
+export const BAY_DOOR_HALF = BAY_DOOR_GAP / 2;
 
 /**
  * Room 2 half-extents about the bay centre (BAY_CX, ROOM2_CZ).
@@ -178,7 +181,8 @@ export function buildRoom2Shell(parent) {
   const northZ = ROOM2_NORTH;
   const westX = ROOM2_WEST;
   const eastX = ROOM2_EAST;
-  const door = ROOM1_NORTH_DOOR;
+  const doorU0 = BAY_DOOR_X - BAY_DOOR_HALF;
+  const doorU1 = BAY_DOOR_X + BAY_DOOR_HALF;
   const panelMat = shellMat(SHELL_PANELS[1]);
   const postMat = shellMat(SHELL_POST);
   const frameMat = shellMat(SHELL_FRAME);
@@ -210,9 +214,9 @@ export function buildRoom2Shell(parent) {
   for (let k = 0; k < 6; k++) {
     const y = band0 + k * 0.4;
     const mat = shellMat(SHELL_PANELS[k % SHELL_PANELS.length]);
-    // South wall with door gap
-    wallRunX(group, mat, southZ, westX, door.u0 - 0.05, y, bandH, SHELL_T);
-    wallRunX(group, mat, southZ, door.u1 + 0.05, eastX, y, bandH, SHELL_T);
+    // South wall with three-tile door gap
+    wallRunX(group, mat, southZ, westX, doorU0 - 0.05, y, bandH, SHELL_T);
+    wallRunX(group, mat, southZ, doorU1 + 0.05, eastX, y, bandH, SHELL_T);
     // North / west / east solid
     wallRunX(group, mat, northZ, westX, eastX, y, bandH, SHELL_T);
     wallRunZ(group, mat, westX, southZ, northZ, y, bandH, SHELL_T);
@@ -220,23 +224,22 @@ export function buildRoom2Shell(parent) {
   }
 
   // Cap rail
-  wallRunX(group, frameMat, southZ, westX, door.u0 - 0.05, SHELL_H, 0.06, SHELL_T + 0.08);
-  wallRunX(group, frameMat, southZ, door.u1 + 0.05, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunX(group, frameMat, southZ, westX, doorU0 - 0.05, SHELL_H, 0.06, SHELL_T + 0.08);
+  wallRunX(group, frameMat, southZ, doorU1 + 0.05, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
   wallRunX(group, frameMat, northZ, westX, eastX, SHELL_H, 0.06, SHELL_T + 0.08);
   wallRunZ(group, frameMat, westX, southZ, northZ, SHELL_H, 0.06, SHELL_T + 0.08);
   wallRunZ(group, frameMat, eastX, southZ, northZ, SHELL_H, 0.06, SHELL_T + 0.08);
 
-  // South door frame (outline only — not in openings[], room-1 door stays shut).
+  // South door frame (outline only — Stage 4 defence-bay owns the real doors).
   const jamb = 0.14;
   const doorTop = 2.03;
-  const dw = door.u1 - door.u0;
-  addBox(group, postMat, door.u0 + jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
-  addBox(group, postMat, door.u1 - jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
-  addBox(group, postMat, (door.u0 + door.u1) / 2, doorTop + 0.02, southZ, dw + 0.1, 0.14, SHELL_T + 0.12);
-  // Lintel fill above the door opening
-  wallRunX(group, panelMat, southZ, door.u0, door.u1, (doorTop + SHELL_H) / 2 + 0.05, SHELL_H - doorTop - 0.05, SHELL_T);
+  const dw = BAY_DOOR_GAP;
+  addBox(group, postMat, doorU0 + jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
+  addBox(group, postMat, doorU1 - jamb / 2, (doorTop + 0.1) / 2, southZ, jamb, doorTop + 0.1, SHELL_T + 0.1);
+  addBox(group, postMat, BAY_DOOR_X, doorTop + 0.02, southZ, dw + 0.1, 0.14, SHELL_T + 0.12);
+  wallRunX(group, panelMat, southZ, doorU0, doorU1, (doorTop + SHELL_H) / 2 + 0.05, SHELL_H - doorTop - 0.05, SHELL_T);
 
-  // Stage 3: slam leaf (starts open so the gap reads; slamDoorShut closes it).
+  // Placeholder leaf (shell-only path); Stage 4 uses defence-bay slide doors.
   const leafW = dw - 2 * jamb - 0.02;
   const leafH = 1.92;
   const leaf = new THREE.Mesh(
@@ -247,10 +250,9 @@ export function buildRoom2Shell(parent) {
   leaf.receiveShadow = true;
   const hinge = new THREE.Group();
   hinge.name = 'room2SouthDoor';
-  hinge.position.set(door.u0 + jamb + 0.01, 0.02, southZ);
+  hinge.position.set(doorU0 + jamb + 0.01, 0.02, southZ);
   leaf.position.set(leafW / 2, leafH / 2, 0);
   hinge.add(leaf);
-  // Open into the bay (swung clear of the walk path).
   hinge.rotation.y = -Math.PI * 0.92;
   group.add(hinge);
   group.userData.southDoor = {
@@ -272,11 +274,10 @@ export function buildRoom2Shell(parent) {
 export function room2WallBoxes({ southDoorOpen = false } = {}) {
   const pad = ROOM2_COLLIDE_PAD;
   const t = SHELL_T / 2 + pad;
-  const door = ROOM1_NORTH_DOOR;
-  const gap = Math.abs(door.u1 - door.u0) / 2;
+  const gap = BAY_DOOR_HALF;
   const boxes = [];
 
-  // North wall with centred door gap
+  // North wall with centred door gap (three-tile clear)
   boxes.push(
     {
       minX: ROOM2_WEST - pad, maxX: BAY_DOOR_X - gap,
@@ -309,11 +310,11 @@ export function room2WallBoxes({ southDoorOpen = false } = {}) {
   if (southDoorOpen) {
     boxes.push(
       {
-        minX: ROOM2_WEST - pad, maxX: door.u0,
+        minX: ROOM2_WEST - pad, maxX: BAY_DOOR_X - gap,
         minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
       },
       {
-        minX: door.u1, maxX: ROOM2_EAST + pad,
+        minX: BAY_DOOR_X + gap, maxX: ROOM2_EAST + pad,
         minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
       },
     );

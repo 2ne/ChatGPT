@@ -523,21 +523,35 @@ function fitOpening(o) {
       [o.w + 0.1, 0.14, PANEL_D + 0.12, 0, DOOR_TOP + 0.02, 0, POST, 0, 0, 0, 0.03],                     // header
       [o.w - 0.1, 0.05, PANEL_D, 0, 0.0, 0, POST, 0, 0, 0, 0.02],                                       // threshold
     ], wrng, place);
+    // Star Trek split panels — slide into the wall pockets on the bay walk;
+    // combat still topples the whole leaf group when broken.
     const lw = o.w - 2 * JAMB - 0.02, lh = 1.92;
-    const blocks = [
-      [lw, lh, 0.16, lw / 2, lh / 2, 0, POST, 0, 0, 0, 0.06],
-      [lw - 0.17, lh - 0.2, 0.08, lw / 2, lh / 2, 0.09, FRAME, 0, 0, 0, 0.04],
-      [lw - 0.24, 0.23, 0.09, lw / 2, 1.17, 0.138, POST, 0, 0, 0, 0.012],
-      [0.19, 0.08, 0.07, lw / 2, 1.17, 0.19, 0xffab5b, 0, 0, 0, 0.01],
-    ];
-    for (let i = 0; i < 4; i++) {
-      blocks.push([0.08, 0.25, 0.065, lw / 2 + (i - 1.5) * 0.12, 0.45, 0.15, POST, 0, 0, -0.45, 0.008]);
+    const pw = lw / 2 - 0.015;
+    function makeHalfPanel(side) {
+      const blocks = [
+        [pw, lh, 0.16, 0, lh / 2, 0, POST, 0, 0, 0, 0.06],
+        [pw - 0.14, lh - 0.2, 0.08, 0, lh / 2, 0.09, FRAME, 0, 0, 0, 0.04],
+        [pw - 0.2, 0.2, 0.08, 0, 1.17, 0.138, POST, 0, 0, 0, 0.012],
+        [0.14, 0.07, 0.06, 0, 1.17, 0.19, 0xffab5b, 0, 0, 0, 0.01],
+      ];
+      for (let i = 0; i < 2; i++) {
+        blocks.push([0.07, 0.22, 0.06, (i - 0.5) * 0.14, 0.45, 0.15, POST, 0, 0, -0.45, 0.008]);
+      }
+      const mesh = new THREE.Mesh(bakeBlocks(blocks, frng), worldMat);
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      const g = new THREE.Group();
+      g.add(mesh);
+      g.position.x = side * (pw / 2 + 0.01);
+      return g;
     }
-    const leafMesh = new THREE.Mesh(bakeBlocks(blocks, frng), worldMat);
-    leafMesh.castShadow = true; leafMesh.receiveShadow = true;
-    o.fall = new THREE.Group(); o.fall.position.z = -0.02; root.add(o.fall);                   // pivot it falls in about
-    o.leaf = new THREE.Group(); o.leaf.position.set(-hw + JAMB + 0.01, 0.02, 0); o.fall.add(o.leaf); // hinge line
-    o.leaf.add(leafMesh);
+    o.fall = new THREE.Group(); o.fall.position.z = -0.02; root.add(o.fall);
+    o.leaf = new THREE.Group(); o.leaf.position.set(0, 0.02, 0); o.fall.add(o.leaf);
+    o.panelL = makeHalfPanel(-1);
+    o.panelR = makeHalfPanel(1);
+    o.leaf.add(o.panelL, o.panelR);
+    o.slideShutL = o.panelL.position.x;
+    o.slideShutR = o.panelR.position.x;
+    o.slideTravel = pw + JAMB + 0.45; // fully into the wall pocket beside the jamb
   } else {
     const h = o.head - o.sill, mid = (o.sill + o.head) / 2, iw = o.w - 0.2;
     wallB.add([
@@ -3251,7 +3265,13 @@ function resetOpenings() {
     if (o.kind === 'door') {
       o.leaf.rotation.y = 0;
       o.leaf.position.y = 0.02;
-      o.raise = null;
+      o.slide = null;
+      if (o.panelL && o.panelR) {
+        o.panelL.position.x = o.slideShutL;
+        o.panelR.position.x = o.slideShutR;
+        o.panelL.visible = true;
+        o.panelR.visible = true;
+      }
       o.fall.rotation.x = 0; o.fall.position.set(0, 0, -0.02);
     } else {
       o.glass.visible = true; o.glass.material = glassMat;
@@ -3636,31 +3656,36 @@ function findRoom1NorthDoor() {
   return openings.find(o => o.kind === 'door' && o.axis === 'x' && o.z < 0);
 }
 
-/** Start a vertical raise on a room-1 door leaf (bay walk — not a break). */
-function beginDoorRaise(o) {
-  if (!o || o.kind !== 'door' || !o.leaf) return;
+/** Start Star Trek split-slide on a room-1 door (bay walk — not a break). */
+function beginDoorSlide(o) {
+  if (!o || o.kind !== 'door' || !o.panelL || !o.panelR) return;
   o.hp = 0; // clear collision so the walk can pass
   o.leaf.rotation.y = 0;
   if (o.fall) { o.fall.rotation.x = 0; o.fall.position.set(0, 0, -0.02); }
-  o.raise = {
-    t: 0,
-    dur: 0.9,
-    y0: o.leaf.position.y,
-    y1: 2.15,
-  };
+  o.panelL.visible = true;
+  o.panelR.visible = true;
+  o.panelL.position.x = o.slideShutL;
+  o.panelR.position.x = o.slideShutR;
+  o.slide = { t: 0, dur: 0.85 };
 }
 
-function tickDoorRaise(o, dt) {
-  if (!o?.raise || !o.leaf) return false;
-  o.raise.t += dt;
-  const k = Math.min(1, o.raise.t / o.raise.dur);
-  // Ease-out with a touch of overshoot so it feels hydraulic.
+function tickDoorSlide(o, dt) {
+  if (!o?.slide || !o.panelL || !o.panelR) return false;
+  o.slide.t += dt;
+  const k = Math.min(1, o.slide.t / o.slide.dur);
   const c1 = 1.70158, c3 = c1 + 1;
-  const e = 1 + c3 * (k - 1) ** 3 + c1 * (k - 1) ** 2;
-  o.leaf.position.y = o.raise.y0 + (o.raise.y1 - o.raise.y0) * Math.min(e, 1.05);
+  const e = Math.min(1 + c3 * (k - 1) ** 3 + c1 * (k - 1) ** 2, 1.04);
+  const travel = o.slideTravel;
+  o.panelL.position.x = o.slideShutL - travel * e;
+  o.panelR.position.x = o.slideShutR + travel * e;
+  // Hide once recessed into the wall — no poke-through / z-fight
+  const show = e < 0.92;
+  o.panelL.visible = show;
+  o.panelR.visible = show;
   if (k >= 1) {
-    o.leaf.position.y = o.raise.y1;
-    o.raise = null;
+    o.panelL.visible = false;
+    o.panelR.visible = false;
+    o.slide = null;
     return true;
   }
   return false;
@@ -3707,7 +3732,7 @@ function beginBayTransition() {
   waveAt = null;
   state.choosing = false;
   hidePicker();
-  // Room-2 slab starts shut; it raises as the player approaches.
+  // Room-2 south panels start shut; they slide open as the player approaches.
   if (room2SouthDoor?.snapShut) room2SouthDoor.snapShut();
   else room2SouthDoor?.shut?.();
   const north = findRoom1NorthDoor();
@@ -3722,9 +3747,9 @@ function beginBayTransition() {
     slamT: 0,
     slammed: false,
   };
-  // Raise room-1 north door as the walk begins — heavy hydraulic open.
+  // Slide room-1 north door open as the walk begins — heavy hydraulic.
   if (north) {
-    beginDoorRaise(north);
+    beginDoorSlide(north);
     audio.doorRaise(north);
     state.scripted.doorOpen = true;
   }
@@ -3746,8 +3771,8 @@ function updateBayTransition(dt) {
   xfer.t += dt;
   const speed = state.speed * 0.88;
 
-  // Keep room-1 raise ticking for the whole walk.
-  if (xfer.north?.raise) tickDoorRaise(xfer.north, dt);
+  // Keep room-1 slide ticking for the whole walk.
+  if (xfer.north?.slide) tickDoorSlide(xfer.north, dt);
 
   if (xfer.phase === 'walk') {
     const wp = xfer.waypoints[xfer.wi];
@@ -3756,13 +3781,13 @@ function updateBayTransition(dt) {
       xfer.slamT = 0;
       return;
     }
-    // Raise room-2 south slab as we square up on the door (waypoint ~south sill).
+    // Slide room-2 south panels open as we square up on the door.
     if (!xfer.bayDoorRaising && xfer.wi >= 3) {
       xfer.bayDoorRaising = true;
       room2SouthDoor?.open();
       audio.doorRaise(room2SouthDoor || { x: BAY_DOOR_X, z: ROOM2_SOUTH });
     }
-    // Don't walk through the bay door until it's mostly clear.
+    // Don't walk through until the panels are clear of the opening.
     if (xfer.wi >= 4 && room2SouthDoor && !room2SouthDoor.isOpen && room2SouthDoor.raising) {
       return;
     }
@@ -3785,12 +3810,12 @@ function updateBayTransition(dt) {
     touchYaw = player.rotation.y;
   } else if (xfer.phase === 'slam') {
     xfer.slamT += dt;
-    // Drop the heavy slab immediately once the player is inside.
+    // Slam the split panels shut once the player is inside.
     if (!xfer.slamStarted) {
       xfer.slamStarted = true;
       room2SouthDoor?.shut();
     }
-    // Impact ~0.4s into the ease-in drop (matches defence-bay slam curve).
+    // Impact ~0.4s into the ease-in slam (panels meet in the middle).
     if (xfer.slamT >= 0.4 && !xfer.slammed) {
       xfer.slammed = true;
       audio.doorSlam(room2SouthDoor || { x: BAY_DOOR_X, z: ROOM2_SOUTH });
