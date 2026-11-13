@@ -48,6 +48,13 @@ import {
   submitScore,
   writePlayerName,
 } from './scores.js';
+import {
+  buildFacilityExterior,
+  MAPVIEW_CAM,
+} from './facility-exterior.js';
+// Room-2 footprint constants live in facility-exterior.js for later stages.
+
+const mapView = new URLSearchParams(location.search).get('dev') === 'mapview';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -585,6 +592,20 @@ for (const z of [-25, -31]) {
   perimeter.add([[68, 0.36, 1.2, 0, 7.6, z, 0x263947], [68, 0.21, 0.42, 0, 6.9, z, 0x3e5467]], perimeterRandom);
 }
 bakedMesh(perimeter, false);
+
+// Stage 1: large reactor-facility exterior (merged, no lights). Room 1 unchanged.
+{
+  const exterior = new BlockBatch();
+  buildFacilityExterior(exterior, seeded(41));
+  bakedMesh(exterior, false);
+}
+if (mapView) {
+  scene.fog.near = MAPVIEW_CAM.fogNear;
+  scene.fog.far = MAPVIEW_CAM.fogFar;
+  camera.far = 320;
+  camera.fov = MAPVIEW_CAM.fov;
+  camera.updateProjectionMatrix();
+}
 
 const dustRandom = seeded(1027);
 const dustPoints = new Float32Array(510 * 3);
@@ -5266,6 +5287,17 @@ const titlePos = new THREE.Vector3(), titleLook = new THREE.Vector3(), camLook =
 let camMix = 0; // 0 = title shot, 1 = follow cam
 const swoop = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in-out cubic
 function updateCamera(dt) {
+  // ?dev=mapview — far top-down overview of room 1 + reserved room-2 floor + exterior.
+  if (mapView && !title.active) {
+    camera.position.lerp(MAPVIEW_CAM.position, 1 - Math.pow(0.02, dt));
+    camLook.lerp(MAPVIEW_CAM.lookAt, 1 - Math.pow(0.02, dt));
+    camera.lookAt(camLook);
+    if (Math.abs(camera.fov - MAPVIEW_CAM.fov) > 1e-3) {
+      camera.fov = MAPVIEW_CAM.fov;
+      camera.updateProjectionMatrix();
+    }
+    return;
+  }
   tmp.copy(player.position).add(CAM_OFFSET);
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
@@ -6191,8 +6223,9 @@ function whenViewportSettled(done) {
 whenViewportSettled(() => {
   document.body.classList.remove('viewport-pending');
   onResize();
+  const bootParams = new URLSearchParams(location.search);
   // ?demo=boss-death — auto-plays the finale for capture / QA.
-  if (new URLSearchParams(location.search).get('demo') === 'boss-death') {
+  if (bootParams.get('demo') === 'boss-death') {
     setTimeout(() => {
       startGame(true);
       state.intermission = 0;
@@ -6213,5 +6246,13 @@ whenViewportSettled(() => {
       player.rotation.y = 0;
       beginBossDeath(z);
     }, 350);
+  } else if (mapView) {
+    // Start a normal wave-1 run under the overview camera so the map is visible.
+    setTimeout(() => {
+      startGame(false);
+      camera.position.copy(MAPVIEW_CAM.position);
+      camLook.copy(MAPVIEW_CAM.lookAt);
+      camera.lookAt(camLook);
+    }, 200);
   }
 });
