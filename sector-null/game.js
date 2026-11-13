@@ -306,13 +306,15 @@ for (let z = -19; z <= 19; z++) {
       insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
   }
 }
+const room1FloorDecor = [];
+const yardExtras = [];
 for (const side of [-1, 1]) {
   for (let n = -8; n <= 8; n += 0.45) {
     deck.add([[0.11, 0.013, 0.34, side * 8.8, 0.006, n, 0x6f8a9e, 0, 0, 0, 0]], deckRandom);
   }
   for (const x of [-6.4, 6.4]) {
-    box(world, cyanLight, x, 0.007, side * 8.3, 2.8, 0.014, 0.035);
-    box(world, cyanLight, x, 0.007, side * 7.9, 0.035, 0.014, 0.8);
+    room1FloorDecor.push(box(world, cyanLight, x, 0.007, side * 8.3, 2.8, 0.014, 0.035));
+    room1FloorDecor.push(box(world, cyanLight, x, 0.007, side * 7.9, 0.035, 0.014, 0.8));
   }
 }
 const room1DeckMesh = bakedMesh(deck, false);
@@ -320,13 +322,16 @@ const underdeck = model(world, new THREE.PlaneGeometry(180, 180), carbon, 0, -0.
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
 for (const radius of [2.85, 3.02, 5.8]) {
-  model(world, new THREE.RingGeometry(radius, radius + 0.027, 96), alloy, 0, 0.009, 0).rotation.x = -Math.PI / 2;
+  const ring = model(world, new THREE.RingGeometry(radius, radius + 0.027, 96), alloy, 0, 0.009, 0);
+  ring.rotation.x = -Math.PI / 2;
+  room1FloorDecor.push(ring);
 }
 for (let i = 0; i < 24; i++) {
   const a = i * Math.PI / 12;
   const marker = box(world, i % 6 === 0 ? cyanLight : alloy, Math.sin(a) * 3.16, 0.012, Math.cos(a) * 3.16,
     0.035, 0.015, i % 6 === 0 ? 0.38 : 0.16);
   marker.rotation.y = a;
+  room1FloorDecor.push(marker);
 }
 const stencil = document.createElement('canvas');
 stencil.width = 256;
@@ -600,26 +605,27 @@ for (const [x, z, rotation] of [[-6.5, 14, 0.26], [12.8, -6.5, -0.18]]) {
   addSolid(x, z, 0.95, 0.57, rotation);
 }
 for (const x of [-24, -16, -12.6, 12.6, 16, 24]) {
-  for (const z of [-21, -13, 9, 18]) {
+  for (const z of [-13, 9, 18, 24]) {  // was -21: that cell sits inside the Defence Bay
     const h = 4.3 + perimeterRandom() * 3;
     perimeter.add([
       [1.7, 0.3, 1.45, x, 0.13, z, 0x304453],
       [0.85, h, 0.9, x, h / 2, z, 0x233542],
       [1.1, 0.35, 1.15, x, h + 0.05, z, 0x4b6174],
     ], perimeterRandom);
-    box(world, x < 0 ? amberLight : cyanLight, x, h - 0.46, z + 0.46, 0.42, 0.09, 0.04);
-    if (z !== 9 && z !== 18) box(world, alloy, x, h + 0.23, z, 0.7, 0.12, 6.5);
+    yardExtras.push(box(world, x < 0 ? amberLight : cyanLight, x, h - 0.46, z + 0.46, 0.42, 0.09, 0.04));
+    if (z !== 9 && z !== 18) yardExtras.push(box(world, alloy, x, h + 0.23, z, 0.7, 0.12, 6.5));
   }
 }
 for (const x of [-14.5, 14.5]) {
   for (let z = -17; z <= 20; z += 2.3) {
-    box(world, amberLight, x, 0.01, z, 0.095, 0.022, 0.54);
+    yardExtras.push(box(world, amberLight, x, 0.01, z, 0.095, 0.022, 0.54));
   }
 }
-for (const z of [-25, -31]) {
+// Keep yard beams clear of the Defence Bay AABB (z ≈ -43.5…-15.5).
+for (const z of [-48, -54]) {
   perimeter.add([[68, 0.36, 1.2, 0, 7.6, z, 0x263947], [68, 0.21, 0.42, 0, 6.9, z, 0x3e5467]], perimeterRandom);
 }
-bakedMesh(perimeter, false);
+const perimeterMesh = bakedMesh(perimeter, false);
 
 // --- Defence Bay (hidden until wave-10 transition) ---
 const BAY_PANELS = [0x3a5568, 0x334d5e, 0x405f74, 0x2e4758];
@@ -633,10 +639,11 @@ const bayWallOpts = {
   half: BAY_HALF, cx: 0, cz: BAY_CZ, batch: bayWallB, boxes: bayWallBoxes,
   openings: bayOpenings, parent: bayGroup, panels: BAY_PANELS,
 };
-buildWall('x', BAY_CZ + BAY_HALF, [[-1.0, 1.0, 'door']], { ...bayWallOpts, spanMid: 0 });
-buildWall('x', BAY_CZ - BAY_HALF, [[-1.0, 1.0, 'door']], { ...bayWallOpts, spanMid: 0 });
-buildWall('z', -BAY_HALF, [[BAY_CZ - 1.0, BAY_CZ + 1.0, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
-buildWall('z',  BAY_HALF, [[BAY_CZ - 1.0, BAY_CZ + 1.0, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
+// Wider centred blast doors (~2.8u) to match the concept art.
+buildWall('x', BAY_CZ + BAY_HALF, [[-1.4, 1.4, 'door']], { ...bayWallOpts, spanMid: 0 });
+buildWall('x', BAY_CZ - BAY_HALF, [[-1.4, 1.4, 'door']], { ...bayWallOpts, spanMid: 0 });
+buildWall('z', -BAY_HALF, [[BAY_CZ - 1.4, BAY_CZ + 1.4, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
+buildWall('z',  BAY_HALF, [[BAY_CZ - 1.4, BAY_CZ + 1.4, 'door']], { ...bayWallOpts, spanMid: BAY_CZ });
 const bayWallMesh = new THREE.Mesh(bayWallB.build(), worldMat);
 bayWallMesh.castShadow = true;
 bayWallMesh.receiveShadow = true;
@@ -647,6 +654,27 @@ for (const o of bayOpenings) {
   o.climber = null;
   o.jolt = 0;
   o.fallT = -1;
+  // Concept: X-brace + hazard lip on bay blast doors
+  if (o.kind === 'door' && o.leaf) {
+    const lw = o.w - 2 * JAMB - 0.02;
+    const braceMat = new THREE.MeshStandardMaterial({ color: 0x3a5060, metalness: 0.55, roughness: 0.35 });
+    for (const dir of [-1, 1]) {
+      const brace = new THREE.Mesh(new THREE.BoxGeometry(lw * 0.92, 0.1, 0.06), braceMat);
+      brace.position.set(lw / 2, 1.0, 0.14);
+      brace.rotation.z = dir * 0.55;
+      o.leaf.add(brace);
+    }
+    for (const y of [0.12, 1.78]) {
+      for (let i = 0; i < 6; i++) {
+        const stripe = new THREE.Mesh(
+          new THREE.BoxGeometry(0.16, 0.07, 0.04),
+          i % 2 ? amberLight : carbon,
+        );
+        stripe.position.set(0.2 + i * 0.22, y, 0.17);
+        o.leaf.add(stripe);
+      }
+    }
+  }
 }
 const bayDecor = buildBayDecor(bayGroup, { box, model, halo, alloy, carbon, cyanLight, amberLight });
 const baySolids = bayDecor.solids.slice();
@@ -693,7 +721,7 @@ const room1Solids = SOLIDS.slice();
 const room1Gates = gates.slice();
 let bayActiveLive = false;
 const coilArcs = createCoilArcPool(scene);
-const _coilTip = new THREE.Vector3(0, 2.25, BAY_CZ);
+const _coilTip = new THREE.Vector3(0, 2.35, BAY_CZ);
 const _coilHit = new THREE.Vector3();
 
 function rebuildNavObstacles() {
@@ -708,16 +736,34 @@ function rebuildNavObstacles() {
   }
 }
 
+const KEY_POS_REACTOR = new THREE.Vector3(-14, 28, 18);
+const KEY_POS_BAY = new THREE.Vector3(-16, 34, BAY_CZ + 16);
+const FOG_NEAR_BAY = 28, FOG_FAR_BAY = 78;
+/** 0 = reactor framing, 1 = bay framing — eased in updateCamera (no snaps). */
+let camRoomBlend = 0;
+let camRoomBlendTarget = 0;
+let room1Culled = false;
+let bayNavWarmed = false;
+/** Prebuilt bay nav graphs restored on arrival so swapCollision doesn't rebuild mid-walk. */
+let bayNavGraphs = null;
+
 function setPlayRoom(id) {
   if (id === 'bay') {
     play.half = BAY_HALF; play.cx = 0; play.cz = BAY_CZ; play.id = 'bay';
+    camRoomBlendTarget = 1;
   } else {
     play.half = HALF; play.cx = 0; play.cz = 0; play.id = 'reactor';
+    camRoomBlendTarget = 0;
+    camRoomBlend = 0;
   }
-  const s = bayCamScale(play.half);
+}
+
+function applyRoomFraming(blend) {
+  const s = THREE.MathUtils.lerp(1, bayCamScale(BAY_HALF), blend);
   CAM_OFFSET.copy(CAM_OFFSET0).multiplyScalar(s);
-  scene.fog.near = FOG_NEAR0 * s;
-  scene.fog.far = FOG_FAR0 * s;
+  scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR0, FOG_NEAR_BAY, blend);
+  scene.fog.far = THREE.MathUtils.lerp(FOG_FAR0, FOG_FAR_BAY, blend);
+  key.position.lerpVectors(KEY_POS_REACTOR, KEY_POS_BAY, blend);
   const shadowSpan = 24 * s;
   Object.assign(key.shadow.camera, {
     left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 72 * s,
@@ -733,27 +779,86 @@ function swapCollision(opens, boxes, solids, gateList) {
   rebuildNavObstacles();
 }
 
-function activateBay() {
-  if (bayActiveLive) return;
-  bayActiveLive = true;
-  state.bayActive = true;
-  bayGroup.visible = true;
-  corridorGroup.visible = false;
-  room1WallMesh.visible = false;
-  room1DeckMesh.visible = false;
-  reactor.visible = false;
-  deckMark.visible = false;
-  for (const o of room1Openings) {
-    if (o.root) o.root.visible = false;
-    if (o.gateRoot) o.gateRoot.visible = false;
+/** Pre-build bay nav while the wave-10 picker is up so the walk doesn't hitch. */
+function warmBayNav() {
+  if (bayNavWarmed) return;
+  const snapOpen = openings.slice();
+  const snapBox = wallBoxes.slice();
+  const snapSol = SOLIDS.slice();
+  const snapGate = gates.slice();
+  swapCollision(bayOpenings, bayWallBoxes, baySolids.slice(), bayGates);
+  // Touch common radii so graphs exist before combat.
+  navigationGraph(Z_RADIUS);
+  navigationGraph(Z_RADIUS * 0.88);
+  navigationGraph(0.74 * 0.7);
+  bayNavGraphs = new Map(navGraphs);
+  swapCollision(snapOpen, snapBox, snapSol, snapGate);
+  bayNavWarmed = true;
+}
+
+function restoreBayNavGraphs() {
+  if (!bayNavGraphs) {
+    navigationGraph(Z_RADIUS);
+    navigationGraph(Z_RADIUS * 0.88);
+    navigationGraph(0.74 * 0.7);
+    return;
   }
+  navGraphs.clear();
+  for (const [k, v] of bayNavGraphs) navGraphs.set(k, v);
+}
+
+function setRoom1YardVisible(on) {
+  room1WallMesh.visible = on;
+  room1DeckMesh.visible = on;
+  reactor.visible = on;
+  deckMark.visible = on;
+  perimeterMesh.visible = on;
+  dust.visible = on;
+  for (const m of room1FloorDecor) m.visible = on;
+  for (const m of yardExtras) m.visible = on;
+  for (const o of room1Openings) {
+    if (o.root) o.root.visible = on;
+    if (o.gateRoot) o.gateRoot.visible = on;
+  }
+  room1Culled = !on;
+}
+
+/** Cull room 1 only once the follow camera no longer sees the reactor deck. */
+function cullRoom1IfOffscreen() {
+  if (room1Culled || !bayActiveLive) return;
+  // Reactor deck centre / south edge — if both project off the bottom of the view, cull.
+  let visible = false;
+  for (const [x, z] of [[0, 0], [0, HALF], [0, -HALF], [HALF, 0], [-HALF, 0]]) {
+    _sp.set(x, 1.2, z).project(camera);
+    if (_sp.z < 1 && Math.abs(_sp.x) < 1.15 && Math.abs(_sp.y) < 1.15) {
+      visible = true;
+      break;
+    }
+  }
+  if (!visible) setRoom1YardVisible(false);
+}
+
+/** Show bay + corridor ahead of the walk (already compiled). No collision swap yet. */
+function revealBayWorld() {
+  bayGroup.visible = true;
+  corridorGroup.visible = true;
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
   }
-  // Exterior perimeter solids stay; bay adds its own cover. Drop room1-only reactor solid footprint.
-  const solids = baySolids.concat(room1Solids.filter(s => Math.hypot(s.x - 5.3, s.z + 13.6) > 0.5));
-  swapCollision(bayOpenings, bayWallBoxes, solids, bayGates);
+}
+
+/** Gameplay handoff once the operator is inside — collision + bayActive, no camera snap. */
+function finalizeBayArrival() {
+  if (bayActiveLive) {
+    state.bayActive = true;
+    return;
+  }
+  bayActiveLive = true;
+  state.bayActive = true;
+  revealBayWorld();
+  swapCollision(bayOpenings, bayWallBoxes, baySolids.slice(), bayGates);
+  restoreBayNavGraphs();
   setPlayRoom('bay');
   bayDecor.setCoilPower(state.upgrades.coil || 0);
 }
@@ -765,14 +870,13 @@ function deactivateBay() {
   state.coilCd = 0;
   bayGroup.visible = false;
   corridorGroup.visible = false;
-  room1WallMesh.visible = true;
-  room1DeckMesh.visible = true;
-  reactor.visible = true;
-  deckMark.visible = true;
-  for (const o of room1Openings) {
-    if (o.root) o.root.visible = true;
-    if (o.gateRoot) o.gateRoot.visible = true;
-  }
+  setRoom1YardVisible(true);
+  room1Culled = false;
+  bayNavWarmed = false;
+  bayNavGraphs = null;
+  camRoomBlend = 0;
+  camRoomBlendTarget = 0;
+  applyRoomFraming(0);
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
@@ -796,6 +900,17 @@ function deactivateBay() {
     glow.material.opacity = 0.3;
     glow.scale.setScalar(4.4);
   }
+}
+
+/** Compile bay/corridor materials once so the walk doesn't hitch on first draw. */
+function prewarmBayRender() {
+  const prevBay = bayGroup.visible;
+  const prevCor = corridorGroup.visible;
+  bayGroup.visible = true;
+  corridorGroup.visible = true;
+  try { renderer.compile(scene, camera); } catch { /* WebGL may be unavailable in some boots */ }
+  bayGroup.visible = prevBay;
+  corridorGroup.visible = prevCor;
 }
 
 function findRoom1NorthDoor() {
@@ -3732,12 +3847,8 @@ function finishWaveClear() {
     spawnWaveClearShield(lastKillPos);
   }
   audio.waveClear();
-  // After wave 10 boss, walk into the Defence Bay before the upgrade picker.
-  if (state.wave === 10 && !state.bayActive && !state.scripted) {
-    clearAllFloorPickups();
-    beginBayTransition();
-    return;
-  }
+  // Wave 10: normal room-1 picker first (no coil). Walk to the bay starts after the pick.
+  if (state.wave === 10 && !state.bayActive) warmBayNav();
   openPicker();
 }
 
@@ -3745,8 +3856,12 @@ function beginBayTransition() {
   resetGameplayInput();
   const north = findRoom1NorthDoor();
   const south = findBaySouthDoor();
-  corridorGroup.visible = true;
-  // Hold bay south door open for entry (bay still hidden until we cross).
+  // Continuous world: bay + corridor already ahead; room 1 stays until off-screen.
+  revealBayWorld();
+  warmBayNav();
+  camMix = 1;
+  camRoomBlendTarget = 1; // ease framing out during the walk — no snap
+  // Hold bay south door open for entry.
   if (south) swingDoorOpen(south);
   state.scripted = {
     phase: 'walkDoor',
@@ -3762,7 +3877,7 @@ function beginBayTransition() {
     ],
     wi: 0,
     doorOpen: false,
-    activated: false,
+    finalized: false,
     slamT: 0,
   };
 }
@@ -3772,6 +3887,7 @@ function updateBayTransition(dt) {
   if (!xfer) return;
   xfer.t += dt;
   const speed = state.speed * 0.85;
+  cullRoom1IfOffscreen();
 
   if (xfer.phase === 'walkDoor' || xfer.phase === 'walkIn') {
     const wp = xfer.waypoints[xfer.wi];
@@ -3792,11 +3908,10 @@ function updateBayTransition(dt) {
       player.position.x = wp.x;
       player.position.z = wp.z;
       xfer.wi++;
-      // Entering the bay: swap collision / show bay / hide room1.
-      if (!xfer.activated && xfer.wi >= 4) {
-        activateBay();
-        xfer.activated = true;
-        // Keep south door open until slam.
+      // Inside the bay: hand off collision for wave 11 (camera already easing).
+      if (!xfer.finalized && xfer.wi >= 4) {
+        finalizeBayArrival();
+        xfer.finalized = true;
         if (xfer.south) swingDoorOpen(xfer.south);
       }
       if (xfer.wi >= xfer.waypoints.length) {
@@ -3818,11 +3933,17 @@ function updateBayTransition(dt) {
         slamDoorShut(xfer.south);
         audio.doorSlam(xfer.south);
       }
-      state.shake = Math.max(state.shake, 0.85);
+      state.shake = Math.max(state.shake, 0.55);
+      if (!xfer.finalized) {
+        finalizeBayArrival();
+        xfer.finalized = true;
+      }
     }
-    if (xfer.slamT >= 0.55) {
+    if (xfer.slamT >= 0.45) {
       state.scripted = null;
-      openPicker();
+      cullRoom1IfOffscreen();
+      // No second picker — wave 11 starts in the bay.
+      queueWave(0.85);
     }
   }
 }
@@ -4729,8 +4850,9 @@ function pickUpgradeOffers(count = 3) {
     return others.length ? others : pool.slice();
   };
 
-  // Defence Bay: always include the next Tesla Coil rank while under max.
-  if (state.bayActive) {
+  // Defence Bay (wave 11+ clears): always include the next Tesla Coil rank while under max.
+  // Wave 10's room-1 picker must not offer it (bayActive is still false then).
+  if (state.bayActive && state.wave >= 11) {
     take(pool.find(u => u.id === 'coil'));
   }
 
@@ -4779,6 +4901,11 @@ function getUpgradeIconHost() {
 function openPicker() {
   offered = pickUpgradeOffers(3);
   if (!offered.length) { queueWave(3.2); return; } // everything maxed out
+  // Warm bay nav/shaders during the wave-10 pick so the walk stays smooth.
+  if (state.wave === 10 && !state.bayActive) {
+    warmBayNav();
+    prewarmBayRender();
+  }
   state.choosing = true;
   hud.cards.dataset.input = lastPlayInput === 'gamepad' ? 'gamepad' : 'pointer';
   padPickerSel = 0;
@@ -4843,8 +4970,16 @@ function choose(i) {
   // brief beat so the pick registers visually before the picker closes
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
-  choose._t = setTimeout(hidePicker, 320);
-  queueWave(2.0);
+  // Wave 10: after the normal room-1 pick, walk into the bay then start wave 11 (no second picker).
+  const walkToBay = state.wave === 10 && !state.bayActive && !bayActiveLive;
+  choose._t = setTimeout(() => {
+    hidePicker();
+    if (walkToBay) {
+      clearAllFloorPickups();
+      beginBayTransition();
+    }
+  }, 320);
+  if (!walkToBay) queueWave(2.0);
   toastQueue.push({ text: u.id === 'bot' ? (state.upgrades.bot === 1 ? 'HELPER BOT DEPLOYED' : `HELPER BOT UPGRADED · RANK ${state.upgrades.bot}`) : u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
@@ -5135,6 +5270,11 @@ function updateWaveTypeIntro(dt) {
 
 function startWave(n) {
   state.wave = n;
+  // Pre-warm bay draw/nav before the wave-10 clear so the walk never compiles mid-frame.
+  if (n === 10) {
+    prewarmBayRender();
+    warmBayNav();
+  }
   state.shieldDropsThisWave = 0;
   state.mortarsSpawned = 0;
   state.bossPending = true;
@@ -5682,6 +5822,12 @@ const titlePos = new THREE.Vector3(), titleLook = new THREE.Vector3(), camLook =
 let camMix = 0; // 0 = title shot, 1 = follow cam
 const swoop = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in-out cubic
 function updateCamera(dt) {
+  // Ease reactor ↔ bay framing (offset / fog / key) — never snap mid-walk.
+  if (Math.abs(camRoomBlend - camRoomBlendTarget) > 1e-4) {
+    camRoomBlend += (camRoomBlendTarget - camRoomBlend) * (1 - Math.pow(0.04, dt));
+    if (Math.abs(camRoomBlend - camRoomBlendTarget) < 0.001) camRoomBlend = camRoomBlendTarget;
+    applyRoomFraming(camRoomBlend);
+  }
   tmp.copy(player.position).add(CAM_OFFSET);
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
@@ -5705,6 +5851,7 @@ function updateCamera(dt) {
   camera.lookAt(camLook);
   const fov = THREE.MathUtils.lerp(TITLE_FOV, GAME_FOV, e);
   if (Math.abs(camera.fov - fov) > 1e-3) { camera.fov = fov; camera.updateProjectionMatrix(); }
+  if (bayActiveLive) cullRoom1IfOffscreen();
 }
 
 // --- the menu itself: keyboard (arrows/WASD, enter, esc) and mouse both drive it ---
@@ -6563,6 +6710,8 @@ function update(dt, lightFrame = false) {
 // ===================================================================
 let last = performance.now();
 let hitchCool = 0;
+/** Optional QA sink for ?dev=bay headless smoothness checks (set by the boot probe). */
+let bayProbe = null;
 function loop(now) {
   const raw = (now - last) / 1000;
   last = now;
@@ -6577,6 +6726,26 @@ function loop(now) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
   } else {
     renderer.render(scene, camera);
+  }
+  if (bayProbe) {
+    const xfer = state.scripted;
+    bayProbe.samples.push({
+      t: now,
+      raw,
+      light: lightFrame ? 1 : 0,
+      px: player.position.x,
+      pz: player.position.z,
+      cx: camera.position.x,
+      cy: camera.position.y,
+      cz: camera.position.z,
+      blend: camRoomBlend,
+      phase: xfer ? xfer.phase : (state.bayActive ? 'bay' : 'none'),
+      wave: state.wave,
+      choosing: state.choosing ? 1 : 0,
+      room1: room1Culled ? 0 : 1,
+      bay: bayGroup.visible ? 1 : 0,
+      corridor: corridorGroup.visible ? 1 : 0,
+    });
   }
   requestAnimationFrame(loop);
 }
@@ -6636,18 +6805,21 @@ whenViewportSettled(() => {
       beginBossDeath(z);
     }, 350);
   } else if (bootParams.get('dev') === 'bay') {
+    // Simulate post–wave-10 pick: room-1 picker is skipped; walk → slam → wave 11 (no arrival picker).
+    bayProbe = { samples: [] };
+    window.__snBayProbe = bayProbe;
     setTimeout(() => {
-      startGame(true);
+      startGame(false);
       state.intermission = 0;
       waveAt = null;
       state.toSpawn = 0;
       state.bossPending = false;
       state.wave = 10;
       state.choosing = false;
-      for (let i = drones.length - 1; i >= 0; i--) {
-        scene.remove(drones[i]);
-        drones.splice(i, 1);
-      }
+      camMix = 1;
+      camRoomBlend = 0;
+      camRoomBlendTarget = 0;
+      applyRoomFraming(0);
       clearAllFloorPickups();
       clearEmeralds();
       clearEnemyBolts();
@@ -6655,8 +6827,15 @@ whenViewportSettled(() => {
       player.position.set(0, 0, -2);
       player.rotation.y = Math.PI;
       touchYaw = Math.PI;
+      followPos.copy(player.position).add(CAM_OFFSET);
+      camera.position.copy(followPos);
+      prewarmBayRender();
+      warmBayNav();
       audio.waveClear();
       beginBayTransition();
+      bayProbe.startedAt = performance.now();
     }, 350);
   }
+  // Compile bay/corridor once the first frame has a real GL context.
+  requestAnimationFrame(() => requestAnimationFrame(() => prewarmBayRender()));
 });
