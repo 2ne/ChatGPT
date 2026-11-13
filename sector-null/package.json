@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --base=./",
+    "build:preview": "PREVIEW=1 vite build --base=./",
     "preview": "vite preview",
     "check:shots": "node check-shots.mjs",
     "check:helper": "node check-helper.mjs",

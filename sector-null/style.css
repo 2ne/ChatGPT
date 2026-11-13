@@ -2257,3 +2257,36 @@ body.pad-aiming #game {
   #cards .card, .card-frame { transition: none; }
   #picker #cards .card:is(:hover, :focus-visible, .pad-sel, :active, .picked, .dropped) { transform: none; }
 }
+
+/* Preview build stamp — PREVIEW=1 builds only. Keep clear of HUD + twin sticks. */
+#previewStamp {
+  position: fixed;
+  z-index: 45;
+  left: calc(var(--safe-left) + 8px);
+  bottom: calc(var(--safe-bottom) + 8px);
+  max-width: min(70vw, 280px);
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: rgba(4, 10, 16, 0.55);
+  color: rgba(170, 200, 214, 0.72);
+  font: 600 10px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+@media (pointer: coarse) {
+  /* Sit above the left move stick on phone landscape / Home Screen. */
+  #previewStamp {
+    bottom: calc(var(--safe-bottom) + 128px);
+    font-size: 9px;
+    opacity: 0.9;
+  }
+}
+@media (orientation: landscape) and (pointer: coarse) {
+  #previewStamp {
+    bottom: calc(var(--safe-bottom) + 96px);
+    left: calc(var(--safe-left) + 10px);
+  }
+}

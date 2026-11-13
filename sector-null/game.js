@@ -58,11 +58,14 @@ import {
   sameSideOfOpening,
   shutBlocksWallSample,
 } from './door-gap-nav.js';
+import { initPreviewStamp } from './preview-stamp.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
 // Must run before any material compiles — swaps camera-depth fog for world-XZ falloff
 // so the extended exterior fades (classic “bigger map” trick on a top-down camera).
 installWorldXzFog();
+// Preview-only badge + version.json reload (no-op on live builds).
+initPreviewStamp();
 
 const mapView = new URLSearchParams(location.search).get('dev') === 'mapview';
 
