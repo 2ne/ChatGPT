@@ -5,11 +5,16 @@
 import * as THREE from 'three';
 
 export const ROOM1_HALF = 10;
-export const BAY_HALF = 14;
-export const CORRIDOR_LEN = 5.5;
-export const BAY_CZ = -(ROOM1_HALF + CORRIDOR_LEN + BAY_HALF);
-/** Camera / fog scale vs reactor deck — same pitch, pulled back for the larger room. */
-export const bayCamScale = (half) => half / ROOM1_HALF;
+/** Half-extents — wider than deep so landscape framing matches the concept. */
+export const BAY_HX = 21;
+export const BAY_HZ = 11;
+/** @deprecated use BAY_HX / BAY_HZ — kept as max half for cam/fog helpers. */
+export const BAY_HALF = BAY_HX;
+/** Longer link so room 1 and the bay read as separate spaces with a clear corridor. */
+export const CORRIDOR_LEN = 9;
+export const BAY_CZ = -(ROOM1_HALF + CORRIDOR_LEN + BAY_HZ);
+/** Camera / fog scale vs reactor deck — pull back for the wider bay. */
+export const bayCamScale = (hx = BAY_HX) => hx / ROOM1_HALF;
 
 const STEEL = 0x3d5568;
 const STEEL_DK = 0x1a2a38;
@@ -27,22 +32,26 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
     solids.push({ x, z, hx, hz, c: Math.cos(rotation), s: Math.sin(rotation) });
   };
 
-  // Dark tiled floor (concept: charcoal steel plates)
+  // Dark tiled floor — clipped inside the wall shell (no exterior bleed).
   const tileMat = new THREE.MeshStandardMaterial({ color: STEEL_DK, metalness: 0.55, roughness: 0.48 });
   const tileAlt = new THREE.MeshStandardMaterial({ color: 0x203040, metalness: 0.52, roughness: 0.5 });
-  const tileSpan = BAY_HALF * 2 - 1.2;
-  const tileN = 10;
-  const tileSize = tileSpan / tileN;
-  for (let iz = 0; iz < tileN; iz++) {
-    for (let ix = 0; ix < tileN; ix++) {
+  const inset = 0.85;
+  const tileSpanX = BAY_HX * 2 - inset;
+  const tileSpanZ = BAY_HZ * 2 - inset;
+  const tileNx = 12;
+  const tileNz = 9;
+  const tileWx = tileSpanX / tileNx;
+  const tileWz = tileSpanZ / tileNz;
+  for (let iz = 0; iz < tileNz; iz++) {
+    for (let ix = 0; ix < tileNx; ix++) {
       const tile = new THREE.Mesh(
-        new THREE.BoxGeometry(tileSize - 0.06, 0.07, tileSize - 0.06),
+        new THREE.BoxGeometry(tileWx - 0.06, 0.07, tileWz - 0.06),
         (ix + iz) % 2 ? tileAlt : tileMat,
       );
       tile.position.set(
-        -tileSpan / 2 + tileSize * (ix + 0.5),
+        -tileSpanX / 2 + tileWx * (ix + 0.5),
         -0.02,
-        BAY_CZ - tileSpan / 2 + tileSize * (iz + 0.5),
+        BAY_CZ - tileSpanZ / 2 + tileWz * (iz + 0.5),
       );
       tile.receiveShadow = true;
       group.add(tile);
@@ -51,12 +60,16 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
 
   // Solid inner wall shell so the bay reads as chunky from above (panel bake alone can silhouette).
   const shellMat = new THREE.MeshStandardMaterial({ color: 0x2a4052, metalness: 0.48, roughness: 0.42 });
-  const shellH = 2.35;
-  const shellT = 0.55;
-  const doorGap = 2.95; // match wider bay blast doors
-  const half = BAY_HALF - 0.15;
-  for (const [axis, fixed] of [['x', BAY_CZ + half], ['x', BAY_CZ - half], ['z', -half], ['z', half]]) {
-    // Two runs either side of the centred door
+  const shellH = 2.45;
+  const shellT = 0.62;
+  const doorGap = 2.95; // match wider bay blast doors (all four sides)
+  const walls = [
+    ['x', BAY_CZ + BAY_HZ - 0.15, BAY_HX - 0.15],
+    ['x', BAY_CZ - BAY_HZ + 0.15, BAY_HX - 0.15],
+    ['z', -(BAY_HX - 0.15), BAY_HZ - 0.15],
+    ['z', BAY_HX - 0.15, BAY_HZ - 0.15],
+  ];
+  for (const [axis, fixed, half] of walls) {
     for (const [a, b] of [[-half, -doorGap / 2], [doorGap / 2, half]]) {
       const len = b - a;
       if (len < 0.2) continue;
@@ -67,80 +80,83 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
         shellMat,
       );
       if (axis === 'x') mesh.position.set((a + b) / 2, shellH / 2, fixed);
-      else mesh.position.set(fixed, shellH / 2, (a + b) / 2);
+      else mesh.position.set(fixed, shellH / 2, BAY_CZ + (a + b) / 2);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       group.add(mesh);
     }
-    // Lintel over the door
     const lintel = new THREE.Mesh(
       axis === 'x'
-        ? new THREE.BoxGeometry(doorGap + 0.3, 0.35, shellT + 0.08)
-        : new THREE.BoxGeometry(shellT + 0.08, 0.35, doorGap + 0.3),
+        ? new THREE.BoxGeometry(doorGap + 0.35, 0.38, shellT + 0.1)
+        : new THREE.BoxGeometry(shellT + 0.1, 0.38, doorGap + 0.35),
       shellMat,
     );
-    if (axis === 'x') lintel.position.set(0, shellH - 0.15, fixed);
-    else lintel.position.set(fixed, shellH - 0.15, BAY_CZ);
+    if (axis === 'x') lintel.position.set(0, shellH - 0.16, fixed);
+    else lintel.position.set(fixed, shellH - 0.16, BAY_CZ);
     lintel.castShadow = true;
     group.add(lintel);
   }
 
-  // Cross channels from centre toward each door
+  // Cross channels from centre toward each door (pads stay off these in the quadrants)
   const channelMat = new THREE.MeshStandardMaterial({ color: 0x243848, metalness: 0.4, roughness: 0.55 });
-  for (const [w, d] of [[1.15, BAY_HALF * 1.65], [BAY_HALF * 1.65, 1.15]]) {
-    const ch = new THREE.Mesh(new THREE.BoxGeometry(w, 0.045, d), channelMat);
-    ch.position.set(0, 0.015, BAY_CZ);
-    ch.receiveShadow = true;
-    group.add(ch);
-  }
+  const chX = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.045, BAY_HZ * 1.7), channelMat);
+  chX.position.set(0, 0.015, BAY_CZ);
+  chX.receiveShadow = true;
+  group.add(chX);
+  const chZ = new THREE.Mesh(new THREE.BoxGeometry(BAY_HX * 1.7, 0.045, 1.2), channelMat);
+  chZ.position.set(0, 0.015, BAY_CZ);
+  chZ.receiveShadow = true;
+  group.add(chZ);
   for (const side of [-1, 1]) {
-    box(group, cyanLight, side * 0.42, 0.03, BAY_CZ, 0.04, 0.012, BAY_HALF * 1.5);
-    box(group, cyanLight, 0, 0.03, BAY_CZ + side * 0.42, BAY_HALF * 1.5, 0.012, 0.04);
+    box(group, cyanLight, side * 0.44, 0.03, BAY_CZ, 0.04, 0.012, BAY_HZ * 1.55);
+    box(group, cyanLight, 0, 0.03, BAY_CZ + side * 0.44, BAY_HX * 1.55, 0.012, 0.04);
   }
 
-  // Four cover pillars in a square around centre (concept: cyan bands)
-  const pillarR = 5.4;
+  // Cover pillars toward the four corners (concept: well outside centre, inside the pads)
+  const pillarRx = BAY_HX * 0.60;
+  const pillarRz = BAY_HZ * 0.60;
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const x = sx * pillarR;
-    const z = BAY_CZ + sz * pillarR;
+    const x = sx * pillarRx;
+    const z = BAY_CZ + sz * pillarRz;
     const pillar = new THREE.Group();
     pillar.position.set(x, 0, z);
     group.add(pillar);
-    model(pillar, new THREE.BoxGeometry(1.45, 2.45, 1.45), carbon, 0, 1.2, 0).castShadow = true;
-    model(pillar, new THREE.BoxGeometry(1.6, 0.2, 1.6), alloy, 0, 2.45, 0);
-    box(pillar, cyanLight, 0, 2.15, 0.74, 1.0, 0.06, 0.05);
-    box(pillar, cyanLight, 0, 0.35, 0.74, 1.0, 0.06, 0.05);
-    box(pillar, amberLight, 0.58, 0.28, 0.58, 0.12, 0.08, 0.12);
-    addSolid(x, z, 0.82, 0.82);
+    model(pillar, new THREE.BoxGeometry(1.5, 2.55, 1.5), carbon, 0, 1.25, 0).castShadow = true;
+    model(pillar, new THREE.BoxGeometry(1.68, 0.22, 1.68), alloy, 0, 2.55, 0);
+    box(pillar, cyanLight, 0, 2.25, 0.78, 1.05, 0.06, 0.05);
+    box(pillar, cyanLight, 0, 0.38, 0.78, 1.05, 0.06, 0.05);
+    box(pillar, amberLight, 0.6, 0.3, 0.6, 0.12, 0.08, 0.12);
+    addSolid(x, z, 0.85, 0.85);
   }
 
-  // Four dashed square pads with centre + (decorative)
+  // Dashed pads in the four quadrants (between pillars and walls — not on the cross channels)
   const dashMat = new THREE.MeshBasicMaterial({
     color: 0xc5d6e4, transparent: true, opacity: 0.55, depthWrite: false, toneMapped: false,
   });
-  for (const [sx, sz] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) {
-    const x = sx * 9.0;
-    const z = BAY_CZ + sz * 9.0;
+  // Pads in the four quadrants — further out than pillars, clear of the cross channels
+  const padRx = BAY_HX * 0.82;
+  const padRz = BAY_HZ * 0.82;
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+    const x = sx * padRx;
+    const z = BAY_CZ + sz * padRz;
     const pad = new THREE.Group();
     pad.position.set(x, 0.04, z);
     group.add(pad);
     const plate = new THREE.Mesh(
-      new THREE.BoxGeometry(2.6, 0.05, 2.6),
+      new THREE.BoxGeometry(2.7, 0.05, 2.7),
       new THREE.MeshStandardMaterial({ color: STEEL, metalness: 0.58, roughness: 0.4 }),
     );
     plate.receiveShadow = true;
     pad.add(plate);
-    const halfPad = 1.15;
+    const halfPad = 1.2;
     const dashLen = 0.42;
     const gap = 0.22;
     for (const side of [-1, 1]) {
       for (let t = -halfPad; t < halfPad - 0.01; t += dashLen + gap) {
         const len = Math.min(dashLen, halfPad - t);
-        // Horizontal edges (const z)
         const hDash = new THREE.Mesh(new THREE.BoxGeometry(len, 0.02, 0.06), dashMat);
         hDash.position.set(t + len / 2, 0.04, side * halfPad);
         pad.add(hDash);
-        // Vertical edges (const x)
         const vDash = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.02, len), dashMat);
         vDash.position.set(side * halfPad, 0.04, t + len / 2);
         pad.add(vDash);
@@ -150,39 +166,38 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
     box(pad, dashMat, 0, 0.05, 0, 0.07, 0.02, 0.55);
   }
 
-  // Raised octagonal central platform + Tesla coil
+  // Larger raised octagonal central platform + Tesla coil
   const platform = new THREE.Group();
   platform.position.set(0, 0, BAY_CZ);
   group.add(platform);
   const oct = new THREE.Mesh(
-    new THREE.CylinderGeometry(2.55, 2.7, 0.32, 8),
+    new THREE.CylinderGeometry(4.05, 4.3, 0.48, 8),
     new THREE.MeshStandardMaterial({ color: 0x2a3f52, metalness: 0.62, roughness: 0.38 }),
   );
-  oct.position.y = 0.16;
+  oct.position.y = 0.24;
   oct.receiveShadow = true;
   oct.castShadow = true;
   platform.add(oct);
-  model(platform, new THREE.CylinderGeometry(2.25, 2.25, 0.06, 8), alloy, 0, 0.34, 0);
+  model(platform, new THREE.CylinderGeometry(3.65, 3.65, 0.08, 8), alloy, 0, 0.5, 0);
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
-    box(platform, i % 2 ? amberLight : cyanLight, Math.cos(a) * 2.25, 0.36, Math.sin(a) * 2.25, 0.2, 0.04, 0.09)
+    box(platform, i % 2 ? amberLight : cyanLight, Math.cos(a) * 3.6, 0.52, Math.sin(a) * 3.6, 0.24, 0.04, 0.11)
       .rotation.y = a;
   }
-  addSolid(0, BAY_CZ, 2.45, 2.45);
+  addSolid(0, BAY_CZ, 3.85, 3.85);
 
   const coil = new THREE.Group();
-  coil.position.set(0, 0.34, BAY_CZ);
+  coil.position.set(0, 0.5, BAY_CZ);
   group.add(coil);
-  const socket = model(coil, new THREE.CylinderGeometry(0.6, 0.78, 0.26, 16), carbon, 0, 0.14, 0);
+  const socket = model(coil, new THREE.CylinderGeometry(0.65, 0.85, 0.28, 16), carbon, 0, 0.14, 0);
   const socketGlow = model(
     coil,
-    new THREE.CylinderGeometry(0.45, 0.52, 0.1, 16),
+    new THREE.CylinderGeometry(0.48, 0.55, 0.1, 16),
     new THREE.MeshStandardMaterial({
       color: CYAN, emissive: CYAN, emissiveIntensity: 0.45, metalness: 0.2, roughness: 0.4,
     }),
     0, 0.28, 0,
   );
-  // Ribbed coil neck
   for (let i = 0; i < 7; i++) {
     const ring = model(
       coil,
@@ -206,12 +221,12 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
 
   coil.userData = { socket, socketGlow, mast, ball, tipHalo, powered: false };
 
-  // Door hazard stripes (concept orange accents) on the floor just inside each door
+  // Door hazard stripes just inside each blast door (all four sides)
   for (const [x, z, rot] of [
-    [0, BAY_CZ + BAY_HALF - 0.85, 0],
-    [0, BAY_CZ - BAY_HALF + 0.85, 0],
-    [-BAY_HALF + 0.85, BAY_CZ, Math.PI / 2],
-    [BAY_HALF - 0.85, BAY_CZ, Math.PI / 2],
+    [0, BAY_CZ + BAY_HZ - 0.9, 0],
+    [0, BAY_CZ - BAY_HZ + 0.9, 0],
+    [-BAY_HX + 0.9, BAY_CZ, Math.PI / 2],
+    [BAY_HX - 0.9, BAY_CZ, Math.PI / 2],
   ]) {
     const stripe = new THREE.Group();
     stripe.position.set(x, 0.03, z);
@@ -225,7 +240,7 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
   return {
     solids,
     coil,
-    tip: new THREE.Vector3(0, 2.35, BAY_CZ),
+    tip: new THREE.Vector3(0, 2.45, BAY_CZ),
     setCoilPower(rank) {
       const on = rank > 0;
       coil.userData.powered = on;
