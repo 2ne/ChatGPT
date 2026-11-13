@@ -1,7 +1,7 @@
 Sector Null Defence Bay — staged preview (Stage 2).
 Branch: cursor/defence-bay-staged
-- Room 2 shell north of room 1 with ~5-tile exterior gap (south door X-aligned; reactor in the gap)
-- ROOM2_SOUTH=-18 / NORTH=-62; north fog ease 0.8 so only a hint of room 2 at screen top
-- Stage 1 fog/zoom/door-gap/clear-shield unchanged otherwise
+Label: PREVIEW b220 · edf21b2 · 13:29
+- Preview-only stamp + version.json cache bust (PREVIEW=1 build; never for live/Stage 7)
+- Room 2 shell with ~5-tile gap; north fog ease 0.8
 Live (pre-bay) game: ../sector-null/
 Map overview: ?dev=mapview
