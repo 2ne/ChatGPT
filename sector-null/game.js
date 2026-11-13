@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { installWorldXzFog, playFogRange } from './world-xz-fog.js';
 import '@fontsource/rajdhani/latin-600.css';
 import '@fontsource/rajdhani/latin-700.css';
 import '@fontsource/oxanium/latin-700.css';
@@ -59,6 +59,10 @@ import {
 } from './door-gap-nav.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
+// Must run before any material compiles — swaps camera-depth fog for world-XZ falloff
+// so the extended exterior fades (classic “bigger map” trick on a top-down camera).
+installWorldXzFog();
+
 const mapView = new URLSearchParams(location.search).get('dev') === 'mapview';
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
@@ -85,12 +89,13 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const scene = new THREE.Scene();
 const CLEAR = 0x080e16;
 scene.background = new THREE.Color(CLEAR);
-// Distance fog matches the clear colour so far exterior floor fades into darkness.
-// Near stays past room-1 fight distances so the deck and reactor look as before;
-// far covers the Stage-1 plane join and beyond.
-const PLAY_FOG_NEAR = 28;
-const PLAY_FOG_FAR = 74;
-scene.fog = mapView ? null : new THREE.Fog(CLEAR, PLAY_FOG_NEAR, PLAY_FOG_FAR);
+// World-XZ fog (see world-xz-fog.js): fades the extended exterior so the map feels
+// bigger. near/far are Chebyshev distances from room centre — just outside the
+// walls → full black a short way into the outskirts. Mapview keeps fog off.
+// HALF is 10; fog range applied once HALF is declared below.
+let PLAY_FOG_NEAR = 10.35;
+let PLAY_FOG_FAR = 21;
+scene.fog = null;
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 const CAM_OFFSET = new THREE.Vector3(0, 24, 11);
@@ -266,6 +271,8 @@ const HALF = 10;
 const WALL_H = 2.4;
 const WALL_T = 0.7;
 const EDGE = HALF + WALL_T / 2;
+({ near: PLAY_FOG_NEAR, far: PLAY_FOG_FAR } = playFogRange(HALF, 0.35, 11));
+if (!mapView) scene.fog = new THREE.Fog(CLEAR, PLAY_FOG_NEAR, PLAY_FOG_FAR);
 const world = new THREE.Group();
 scene.add(world);
 const worldMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.58, metalness: 0.38 });
@@ -612,7 +619,7 @@ for (const z of [-25, -31]) {
 bakedMesh(perimeter, false);
 
 if (mapView) {
-  // Overview: no distance fog so the full reserved floor stays readable.
+  // Overview: no world-XZ fog so the full reserved floor stays readable.
   scene.fog = null;
   camera.near = MAPVIEW_CAM.near;
   camera.far = MAPVIEW_CAM.far;
