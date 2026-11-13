@@ -3737,14 +3737,19 @@ function updateBayTransition(dt) {
     touchYaw = player.rotation.y;
   } else if (xfer.phase === 'slam') {
     xfer.slamT += dt;
-    if (xfer.slamT >= 0.12 && !xfer.slammed) {
-      xfer.slammed = true;
+    // Start the heavy leaf swinging shut immediately.
+    if (!xfer.slamStarted) {
+      xfer.slamStarted = true;
       room2SouthDoor?.shut();
+    }
+    // Impact lands ~0.42s in (matches the ease-in slam anim).
+    if (xfer.slamT >= 0.42 && !xfer.slammed) {
+      xfer.slammed = true;
       audio.doorSlam(room2SouthDoor || { x: BAY_DOOR_X, z: ROOM2_SOUTH });
-      state.shake = Math.max(state.shake, 0.5);
+      state.shake = Math.max(state.shake, 0.95);
       finalizeBayArrival();
     }
-    if (xfer.slamT >= 0.4) {
+    if (xfer.slamT >= 0.75) {
       state.scripted = null;
     }
   }

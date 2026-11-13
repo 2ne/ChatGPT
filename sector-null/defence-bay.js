@@ -213,40 +213,49 @@ export function buildDefenceBay(parent, helpers) {
     if (z3 > z2) box(group, cyanLight, x, SHELL_H - 0.04, (z2 + z3) / 2, 0.08, 0.05, (z3 - z2) * 0.96);
   }
 
-  // ── Doors (concept: N/S hazard doubles, E/W hazard panels) ──
-  function makeStaticDoor(x, z, rotY, kind) {
-    const root = new THREE.Group();
-    root.position.set(x, 0, z);
-    root.rotation.y = rotY;
-    group.add(root);
-    const w = DOOR_GAP - 0.12;
-    const h = 2.02;
+  // ── Powerful blast doors (tall frames, thick slabs, cyan pylons) ──
+  const DOOR_H = 2.45;
+  const DOOR_W = DOOR_GAP + 0.35;
+  const pulseHalos = [];
+  const pulseStrips = [];
+
+  function addDoorFrame(root, kind) {
+    const w = DOOR_W;
+    const h = DOOR_H;
     const doorB = new BlockBatch();
-    const drng = seeded(Math.round(x * 11 + z * 17) + 9);
+    const drng = seeded(Math.round(root.position.x * 11 + root.position.z * 17) + 9);
+    // Chunky outer frame + header
+    doorB.add([
+      [0.42, h + 0.25, 0.55, -w / 2 - 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
+      [0.42, h + 0.25, 0.55, w / 2 + 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
+      [w + 0.85, 0.38, 0.6, 0, h + 0.12, 0.05, 0x243440, 0, 0, 0, 0.05],
+      [w + 0.55, 0.12, 0.42, 0, 0.05, 0.08, POST, 0, 0, 0, 0.02],
+    ], drng);
+    // Armoured double slabs
     for (const side of [-1, 1]) {
       const cx = side * (w / 4);
       doorB.add([
-        [w / 2 - 0.05, h, 0.15, cx, h / 2, 0, POST, 0, 0, 0, 0.04],
-        [w / 2 - 0.16, h - 0.22, 0.08, cx, h / 2, 0.08, FRAME, 0, 0, 0, 0.03],
-        // X emboss bars
-        [w * 0.22, 0.07, 0.05, cx, h * 0.55, 0.12, 0x4a6070, 0, 0, side * 0.72, 0.01],
-        [w * 0.22, 0.07, 0.05, cx, h * 0.55, 0.12, 0x4a6070, 0, 0, -side * 0.72, 0.01],
+        [w / 2 - 0.06, h - 0.08, 0.28, cx, h / 2 - 0.02, 0, POST, 0, 0, 0, 0.055],
+        [w / 2 - 0.2, h - 0.32, 0.12, cx, h / 2, 0.14, FRAME, 0, 0, 0, 0.035],
+        [w / 2 - 0.28, 0.22, 0.1, cx, h * 0.62, 0.2, 0x2a3d4c, 0, 0, 0, 0.02],
+        [w * 0.26, 0.09, 0.07, cx, h * 0.52, 0.22, 0x4a6070, 0, 0, side * 0.72, 0.012],
+        [w * 0.26, 0.09, 0.07, cx, h * 0.52, 0.22, 0x4a6070, 0, 0, -side * 0.72, 0.012],
       ], drng);
     }
     if (kind === 'ns') {
-      for (let i = 0; i < 9; i++) {
-        const hx = (i - 4) * 0.2;
+      for (let i = 0; i < 11; i++) {
+        const hx = (i - 5) * 0.22;
         doorB.add([
-          [0.16, 0.06, 0.07, hx, 0.1, 0.1, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.008],
-          [0.16, 0.06, 0.07, hx, h - 0.1, 0.1, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.008],
+          [0.18, 0.09, 0.1, hx, 0.14, 0.18, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01],
+          [0.18, 0.09, 0.1, hx, h - 0.14, 0.18, i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01],
         ], drng);
       }
     } else {
       for (const side of [-1, 1]) {
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 7; i++) {
           doorB.add([[
-            0.09, 0.24, 0.06, side * (w / 2 - 0.1), 0.28 + i * 0.28, 0.1,
-            i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.008,
+            0.12, 0.26, 0.08, side * (w / 2 - 0.12), 0.32 + i * 0.28, 0.18,
+            i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01,
           ]], drng);
         }
       }
@@ -255,49 +264,91 @@ export function buildDefenceBay(parent, helpers) {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     root.add(mesh);
-    box(root, cyanLight, -w / 2 - 0.07, h / 2, 0.04, 0.07, h * 0.9, 0.07);
-    box(root, cyanLight, w / 2 + 0.07, h / 2, 0.04, 0.07, h * 0.9, 0.07);
+    // Glowing cyan side pylons + header bar
+    const pylonL = box(root, cyanLight, -w / 2 - 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
+    const pylonR = box(root, cyanLight, w / 2 + 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
+    const header = box(root, cyanLight, 0, h + 0.02, 0.28, w * 0.78, 0.1, 0.12);
+    pulseStrips.push(pylonL, pylonR, header);
+    const hl = halo(root, CYAN, 0, h * 0.55, 0.4, 3.6, 0.28);
+    pulseHalos.push(hl);
+    halo(root, CYAN, -w / 2 - 0.15, h / 2, 0.35, 2.2, 0.22);
+    halo(root, CYAN, w / 2 + 0.15, h / 2, 0.35, 2.2, 0.22);
     return root;
+  }
+
+  function makeStaticDoor(x, z, rotY, kind) {
+    const root = new THREE.Group();
+    root.position.set(x, 0, z);
+    root.rotation.y = rotY;
+    group.add(root);
+    return addDoorFrame(root, kind);
   }
 
   makeStaticDoor(BAY_DOOR_X, ROOM2_NORTH + 0.05, Math.PI, 'ns');
   makeStaticDoor(-(ROOM2_HX - 0.05), ROOM2_CZ, Math.PI / 2, 'ew');
   makeStaticDoor(ROOM2_HX - 0.05, ROOM2_CZ, -Math.PI / 2, 'ew');
 
-  // South slam door (starts open)
+  // South slam door — thick armoured leaf + frame; animates shut with weight
   const southDoorRoot = new THREE.Group();
   southDoorRoot.position.set(BAY_DOOR_X, 0, ROOM2_SOUTH);
   group.add(southDoorRoot);
-  const jamb = 0.14;
-  const leafW = DOOR_GAP - 2 * jamb - 0.04;
-  const leafH = 1.95;
+  // Static frame / pylons (leaf swings separately)
+  {
+    const frameB = new BlockBatch();
+    const frng = seeded(88);
+    const w = DOOR_W;
+    const h = DOOR_H;
+    frameB.add([
+      [0.42, h + 0.25, 0.55, -w / 2 - 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
+      [0.42, h + 0.25, 0.55, w / 2 + 0.15, (h + 0.25) / 2, 0.05, 0x1a2a36, 0, 0, 0, 0.05],
+      [w + 0.85, 0.38, 0.6, 0, h + 0.12, 0.05, 0x243440, 0, 0, 0, 0.05],
+      [w + 0.55, 0.12, 0.42, 0, 0.05, 0.08, POST, 0, 0, 0, 0.02],
+    ], frng);
+    const frameMesh = new THREE.Mesh(frameB.build(), worldMat);
+    frameMesh.castShadow = true;
+    southDoorRoot.add(frameMesh);
+    const pylonL = box(southDoorRoot, cyanLight, -w / 2 - 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
+    const pylonR = box(southDoorRoot, cyanLight, w / 2 + 0.15, h / 2, 0.32, 0.14, h * 0.92, 0.14);
+    const header = box(southDoorRoot, cyanLight, 0, h + 0.02, 0.28, w * 0.78, 0.1, 0.12);
+    pulseStrips.push(pylonL, pylonR, header);
+    pulseHalos.push(halo(southDoorRoot, CYAN, 0, h * 0.55, 0.4, 3.8, 0.3));
+  }
+  const jamb = 0.18;
+  const leafW = DOOR_GAP - 2 * jamb + 0.15;
+  const leafH = DOOR_H - 0.12;
   const hinge = new THREE.Group();
   hinge.position.set(-DOOR_GAP / 2 + jamb + 0.02, 0.02, 0);
   southDoorRoot.add(hinge);
   const leafB = new BlockBatch();
   const leafRng = seeded(77);
   leafB.add([
-    [leafW, leafH, 0.16, leafW / 2, leafH / 2, 0, POST, 0, 0, 0, 0.045],
-    [leafW - 0.18, leafH - 0.22, 0.08, leafW / 2, leafH / 2, 0.09, FRAME, 0, 0, 0, 0.03],
-    [leafW * 0.28, 0.07, 0.05, leafW / 2, leafH * 0.55, 0.13, 0x4a6070, 0, 0, 0.7, 0.01],
-    [leafW * 0.28, 0.07, 0.05, leafW / 2, leafH * 0.55, 0.13, 0x4a6070, 0, 0, -0.7, 0.01],
+    [leafW, leafH, 0.3, leafW / 2, leafH / 2, 0, POST, 0, 0, 0, 0.055],
+    [leafW - 0.2, leafH - 0.28, 0.12, leafW / 2, leafH / 2, 0.14, FRAME, 0, 0, 0, 0.035],
+    [leafW - 0.32, 0.24, 0.1, leafW / 2, leafH * 0.62, 0.2, 0x2a3d4c, 0, 0, 0, 0.02],
+    [leafW * 0.32, 0.09, 0.07, leafW / 2, leafH * 0.52, 0.22, 0x4a6070, 0, 0, 0.7, 0.012],
+    [leafW * 0.32, 0.09, 0.07, leafW / 2, leafH * 0.52, 0.22, 0x4a6070, 0, 0, -0.7, 0.012],
   ], leafRng);
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 9; i++) {
     leafB.add([[
-      0.15, 0.055, 0.06, leafW / 2 + (i - 3) * 0.18, 0.1, 0.11,
-      i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.008,
+      0.17, 0.08, 0.09, leafW / 2 + (i - 4) * 0.2, 0.14, 0.18,
+      i % 2 ? 0xffa648 : POST, 0, 0, 0, 0.01,
     ]], leafRng);
   }
   const leafMesh = new THREE.Mesh(leafB.build(), worldMat);
   leafMesh.castShadow = true;
   hinge.add(leafMesh);
-  box(southDoorRoot, cyanLight, -DOOR_GAP / 2 - 0.06, 1.1, 0.04, 0.07, 1.95, 0.07);
-  box(southDoorRoot, cyanLight, DOOR_GAP / 2 + 0.06, 1.1, 0.04, 0.07, 1.95, 0.07);
-  hinge.rotation.y = -Math.PI * 0.92;
+  const OPEN_Y = -Math.PI * 0.92;
+  const SHUT_Y = 0;
+  hinge.rotation.y = OPEN_Y;
+  let slamming = false;
+  let slamAnimT = 0;
+  const SLAM_DUR = 0.42;
   const southDoor = {
     hinge,
-    open() { hinge.rotation.y = -Math.PI * 0.92; },
-    shut() { hinge.rotation.y = 0; },
+    open() { slamming = false; slamAnimT = 0; hinge.rotation.y = OPEN_Y; },
+    shut() { slamming = true; slamAnimT = 0; },
+    /** True once the animated slam has hit the frame. */
+    get slammed() { return !slamming && slamAnimT >= SLAM_DUR; },
     x: BAY_DOOR_X,
     z: ROOM2_SOUTH,
   };
@@ -322,17 +373,19 @@ export function buildDefenceBay(parent, helpers) {
     chB.add([[0.07, 0.04, CHANNEL_HALF * 1.85, x, trenchY + 0.04, ROOM2_CZ, 0x3a5060, 0, 0, 0, 0.01]], chRng);
   }
   bake(chB, false);
-  // Cyan light ticks along channels
-  for (let z = ROOM2_NORTH + 2.5; z < ROOM2_SOUTH - 2.5; z += 1.15) {
+  // Cyan light ticks along channels (brighter + denser)
+  const channelTicks = [];
+  for (let z = ROOM2_NORTH + 2.2; z < ROOM2_SOUTH - 2.2; z += 0.95) {
     if (Math.abs(z - ROOM2_CZ) < OCT_R) continue;
-    box(group, cyanLight, 0.42, 0.01, z, 0.08, 0.02, 0.18);
-    box(group, cyanLight, -0.42, 0.01, z, 0.08, 0.02, 0.18);
+    channelTicks.push(box(group, cyanLight, 0.42, 0.012, z, 0.1, 0.028, 0.22));
+    channelTicks.push(box(group, cyanLight, -0.42, 0.012, z, 0.1, 0.028, 0.22));
   }
-  for (let x = -ROOM2_HX + 2.5; x < ROOM2_HX - 2.5; x += 1.15) {
+  for (let x = -ROOM2_HX + 2.2; x < ROOM2_HX - 2.2; x += 0.95) {
     if (Math.abs(x) < OCT_R) continue;
-    box(group, cyanLight, x, 0.01, ROOM2_CZ + 0.42, 0.18, 0.02, 0.08);
-    box(group, cyanLight, x, 0.01, ROOM2_CZ - 0.42, 0.18, 0.02, 0.08);
+    channelTicks.push(box(group, cyanLight, x, 0.012, ROOM2_CZ + 0.42, 0.22, 0.028, 0.1));
+    channelTicks.push(box(group, cyanLight, x, 0.012, ROOM2_CZ - 0.42, 0.22, 0.028, 0.1));
   }
+  pulseStrips.push(...channelTicks);
 
   // ── Four pillars (chamfered, cyan base/top bands) ──
   const pillarRx = ROOM2_HX * 0.52;
@@ -354,12 +407,15 @@ export function buildDefenceBay(parent, helpers) {
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
     const x = sx * pillarRx;
     const z = ROOM2_CZ + sz * pillarRz;
-    box(group, cyanLight, x, 0.38, z, 1.55, 0.07, 1.55);
-    box(group, cyanLight, x, 3.18, z, 1.35, 0.06, 1.35);
+    const baseBand = box(group, cyanLight, x, 0.38, z, 1.55, 0.09, 1.55);
+    const topBand = box(group, cyanLight, x, 3.18, z, 1.35, 0.08, 1.35);
+    pulseStrips.push(baseBand, topBand);
     for (const face of [[0, 0.98], [0, -0.98], [0.98, 0], [-0.98, 0]]) {
       box(group, cyanLight, x + face[0], 2.55, z + face[1], face[0] ? 0.07 : 1.35, 0.08, face[0] ? 1.35 : 0.07);
       box(group, cyanLight, x + face[0], 0.55, z + face[1], face[0] ? 0.07 : 1.35, 0.08, face[0] ? 1.35 : 0.07);
     }
+    pulseHalos.push(halo(group, CYAN, x, 1.6, z, 4.2, 0.26));
+    pulseHalos.push(halo(group, CYAN, x, 3.2, z, 2.8, 0.22));
   }
 
   // ── Raised octagon dais (multi-tier, hazard edge, vent grates) ──
@@ -396,8 +452,9 @@ export function buildDefenceBay(parent, helpers) {
     const s = Math.sin(a);
     box(platform, i % 2 ? amberLight : carbon, c * 4.45, 0.42, s * 4.45, 1.05, 0.07, 0.14)
       .rotation.y = a;
-    box(platform, i % 2 ? cyanLight : amberLight, c * 3.85, 0.74, s * 3.85, 0.32, 0.05, 0.12)
-      .rotation.y = a;
+    const rim = box(platform, i % 2 ? cyanLight : amberLight, c * 3.85, 0.74, s * 3.85, 0.38, 0.06, 0.14);
+    rim.rotation.y = a;
+    pulseStrips.push(rim);
     // Vent grate panels on vertical faces
     const grate = box(platform, carbon, c * 4.35, 0.22, s * 4.35, 1.15, 0.32, 0.06);
     grate.rotation.y = a;
@@ -406,6 +463,8 @@ export function buildDefenceBay(parent, helpers) {
         .position.set(c * 4.38 + Math.cos(a + Math.PI / 2) * g * 0.18, 0.22, s * 4.38 + Math.sin(a + Math.PI / 2) * g * 0.18);
     }
   }
+  pulseHalos.push(halo(platform, CYAN, 0, 0.9, 0, 7.5, 0.22));
+  pulseHalos.push(halo(platform, 0xffa648, 0, 0.45, 0, 6.2, 0.14));
   addSolid(0, ROOM2_CZ, 4.15, 4.15);
 
   // ── Tesla coil (stacked rings, column, polished sphere) ──
@@ -456,25 +515,60 @@ export function buildDefenceBay(parent, helpers) {
   });
   const ball = model(coil, new THREE.SphereGeometry(0.82, 28, 22), ballMat, 0, 4.55, 0);
   ball.castShadow = true;
-  const tipHalo = halo(coil, CYAN, 0, 4.55, 0, 5.2, 0.32);
+  const tipHalo = halo(coil, CYAN, 0, 4.55, 0, 6.4, 0.42);
+  const tipHalo2 = halo(coil, CYAN, 0, 4.55, 0, 3.2, 0.5);
   // Arc stubs (subtle animated later)
   const arcMats = [];
-  for (let i = 0; i < 3; i++) {
-    const a = (i / 3) * Math.PI * 2;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
     const mat = new THREE.MeshBasicMaterial({
-      color: CYAN, transparent: true, opacity: 0.35, toneMapped: false, fog: false, depthWrite: false,
+      color: CYAN, transparent: true, opacity: 0.4, toneMapped: false, fog: false, depthWrite: false,
     });
     arcMats.push(mat);
-    const stub = model(coil, new THREE.CylinderGeometry(0.025, 0.01, 0.55, 6), mat,
-      Math.cos(a) * 0.55, 4.95, Math.sin(a) * 0.55);
-    stub.rotation.z = Math.cos(a) * 0.4;
-    stub.rotation.x = Math.sin(a) * 0.4;
+    const stub = model(coil, new THREE.CylinderGeometry(0.028, 0.01, 0.7, 6), mat,
+      Math.cos(a) * 0.6, 5.05, Math.sin(a) * 0.6);
+    stub.rotation.z = Math.cos(a) * 0.45;
+    stub.rotation.x = Math.sin(a) * 0.45;
+  }
+
+  // ── Cheap coloured light pools (no shadow casting) ──
+  const poolLights = [];
+  function poolLight(color, x, y, z, intensity, distance) {
+    const pl = new THREE.PointLight(color, intensity, distance, 2);
+    pl.castShadow = false;
+    pl.position.set(x, y, z);
+    group.add(pl);
+    poolLights.push({ light: pl, base: intensity });
+    return pl;
+  }
+  poolLight(CYAN, 0, 3.8, ROOM2_CZ, 55, 22);
+  poolLight(0xffa648, 0, 1.4, ROOM2_CZ, 22, 12);
+  poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_SOUTH - 3.5, 28, 14);
+  poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_NORTH + 3.5, 24, 14);
+  poolLight(CYAN, pillarRx * 0.7, 2.0, ROOM2_CZ - pillarRz * 0.7, 18, 11);
+  poolLight(CYAN, -pillarRx * 0.7, 2.0, ROOM2_CZ + pillarRz * 0.7, 18, 11);
+
+  // Soft additive floor glow discs under coil + doors
+  const floorGlow = (x, z, size, opacity, color = CYAN) => {
+    const s = halo(group, color, x, 0.08, z, size, opacity);
+    s.material.rotation = 0;
+    pulseHalos.push(s);
+  };
+  floorGlow(0, ROOM2_CZ, 9.5, 0.2);
+  floorGlow(BAY_DOOR_X, ROOM2_SOUTH - 1.5, 4.5, 0.18);
+  floorGlow(BAY_DOOR_X, ROOM2_NORTH + 1.5, 4.5, 0.16);
+
+  // Wall-top glow along cyan caps
+  for (const z of [ROOM2_SOUTH, ROOM2_NORTH]) {
+    pulseHalos.push(halo(group, CYAN, BAY_DOOR_X - 8, SHELL_H, z, 3.5, 0.16));
+    pulseHalos.push(halo(group, CYAN, BAY_DOOR_X + 8, SHELL_H, z, 3.5, 0.16));
   }
 
   coil.userData = {
     ballMat,
     ringGlowMats,
     tipHalo,
+    tipHalo2,
     arcMats,
     t: 0,
   };
@@ -485,16 +579,40 @@ export function buildDefenceBay(parent, helpers) {
     solids,
     coil,
     update(dt) {
+      // Weighty slam: ease-in so the leaf accelerates into the frame
+      if (slamming) {
+        slamAnimT += dt;
+        const k = Math.min(1, slamAnimT / SLAM_DUR);
+        const e = k * k * k;
+        hinge.rotation.y = OPEN_Y + (SHUT_Y - OPEN_Y) * e;
+        if (k >= 1) slamming = false;
+      }
+
       const ud = coil.userData;
       ud.t += dt;
-      const flicker = 0.75 + Math.sin(ud.t * 7.3) * 0.12 + Math.sin(ud.t * 19.1) * 0.06;
+      const t = ud.t;
+      const flicker = 0.95 + Math.sin(t * 7.3) * 0.18 + Math.sin(t * 19.1) * 0.1;
       for (const m of ud.ringGlowMats) m.emissiveIntensity = flicker;
-      ud.ballMat.emissiveIntensity = 0.22 + Math.sin(ud.t * 5.1) * 0.1;
+      ud.ballMat.emissiveIntensity = 0.35 + Math.sin(t * 5.1) * 0.14;
       if (ud.tipHalo?.material) {
-        ud.tipHalo.material.opacity = 0.28 + Math.sin(ud.t * 4.2) * 0.08;
+        ud.tipHalo.material.opacity = 0.36 + Math.sin(t * 4.2) * 0.12;
+        ud.tipHalo.scale.setScalar(6.4 * (0.92 + 0.08 * Math.sin(t * 3.3)));
+      }
+      if (ud.tipHalo2?.material) {
+        ud.tipHalo2.material.opacity = 0.42 + Math.sin(t * 6.1) * 0.15;
       }
       for (let i = 0; i < ud.arcMats.length; i++) {
-        ud.arcMats[i].opacity = 0.15 + (Math.sin(ud.t * 11 + i * 2.1) * 0.5 + 0.5) * 0.4;
+        ud.arcMats[i].opacity = 0.18 + (Math.sin(t * 13 + i * 1.7) * 0.5 + 0.5) * 0.5;
+      }
+
+      // Gentle pulse across bay emissives / halos / light pools
+      const pulse = 0.85 + Math.sin(t * 2.4) * 0.15;
+      for (const h of pulseHalos) {
+        if (h?.material) h.material.opacity = (h.userData.baseOp ?? (h.userData.baseOp = h.material.opacity)) * pulse;
+      }
+      for (let i = 0; i < poolLights.length; i++) {
+        const { light, base } = poolLights[i];
+        light.intensity = base * (0.88 + Math.sin(t * 2.1 + i) * 0.12);
       }
     },
   };
