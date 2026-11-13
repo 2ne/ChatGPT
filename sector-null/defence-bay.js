@@ -381,13 +381,20 @@ export function buildDefenceBay(parent, helpers) {
     [CHANNEL_HALF * 2, 0.06, ROOM2_HZ * 1.85, BAY_CX, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
   ], chRng);
   {
-    const span = ROOM2_HX * 1.85;
+    // Asymmetric arms so the E–W trench still reaches both side walls from BAY_CX.
     const gap = CHANNEL_HALF * 2 + 0.04;
-    const arm = (span - gap) / 2;
-    if (arm > 0.2) {
+    const westEnd = -ROOM2_HX * 0.925;
+    const eastEnd = ROOM2_HX * 0.925;
+    const westArm = (BAY_CX - gap / 2) - westEnd;
+    const eastArm = eastEnd - (BAY_CX + gap / 2);
+    if (westArm > 0.2) {
       chB.add([
-        [arm, 0.06, CHANNEL_HALF * 2, BAY_CX - (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
-        [arm, 0.06, CHANNEL_HALF * 2, BAY_CX + (gap + arm) / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+        [westArm, 0.06, CHANNEL_HALF * 2, westEnd + westArm / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
+      ], chRng);
+    }
+    if (eastArm > 0.2) {
+      chB.add([
+        [eastArm, 0.06, CHANNEL_HALF * 2, eastEnd - eastArm / 2, trenchY, ROOM2_CZ, 0x1a2834, 0, 0, 0, 0.015],
       ], chRng);
     }
   }
