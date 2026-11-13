@@ -44,13 +44,12 @@ import {
 } from './upgrades.js';
 import {
   BAY_CZ,
-  BAY_HALF,
   BAY_HX,
   BAY_HZ,
-  CORRIDOR_LEN,
+  BAY_SOUTH,
   ROOM1_HALF,
-  bayCamScale,
   buildBayDecor,
+  buildFacilityFiller,
   createCoilArcPool,
 } from './defence-bay.js';
 import {
@@ -301,9 +300,9 @@ function box(parent, material, x, y, z, w, h, d) {
 const deck = new BlockBatch();
 const deckRandom = seeded(87);
 const panels = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
-// Room-1 yard only — do not extend tiles into the Defence Bay AABB (grey exterior bleed).
-for (let z = -7; z <= 12; z++) {
-  for (let x = -12; x <= 12; x++) {
+// Room-1 interior deck plates (pre-#124 look). Exterior filler covers beyond the walls.
+for (let z = -8; z <= 8; z++) {
+  for (let x = -8; x <= 8; x++) {
     const insideDeck = x >= -6 && x <= 6 && z >= -6 && z <= 6;
     deck.add([[1.565, 0.11, 1.565, x * 1.6, -0.06, z * 1.6,
       insideDeck ? panels[Math.floor(deckRandom() * panels.length)] : 0x1c2b37, 0, 0, 0, 0.024]], deckRandom, undefined, !insideDeck);
@@ -321,8 +320,8 @@ for (const side of [-1, 1]) {
   }
 }
 const room1DeckMesh = bakedMesh(deck, false);
-// Underdeck under room 1 only (shifted south). Must not reach the bay AABB or it reads as grey exterior.
-const underdeck = model(world, new THREE.PlaneGeometry(30, 28), carbon, 0, -0.13, 2.5);
+// Continuous underdeck so room-1 camera never shows black void past the walls.
+const underdeck = model(world, new THREE.PlaneGeometry(200, 200), carbon, 0, -0.14, -8);
 underdeck.rotation.x = -Math.PI / 2;
 underdeck.receiveShadow = true;
 for (const radius of [2.85, 3.02, 5.8]) {
@@ -564,42 +563,12 @@ function makeGate(o, parent = world) {
 }
 const gates = openings.map(o => makeGate(o));
 
-const reactor = new THREE.Group();
-// East of room 1, south of the corridor mouth — never overlaps the bay south wall.
-reactor.position.set(9.2, 0, -7.2);
-world.add(reactor);
-addSolid(9.2, -7.2, 2.8, 2.5);
-model(reactor, new THREE.CylinderGeometry(3.25, 3.6, 0.75, 12), carbon, 0, 0.34, 0);
-model(reactor, new THREE.CylinderGeometry(2.65, 2.85, 0.36, 12), alloy, 0, 0.86, 0);
-const core = model(reactor, new THREE.IcosahedronGeometry(1.25, 1), cyanLight, 0, 4.05, 0);
-core.scale.y = 1.28;
-const chamber = new THREE.MeshPhysicalMaterial({
-  color: 0x19495d, transparent: true, opacity: 0.24, metalness: 0.26, roughness: 0.19,
-  side: THREE.DoubleSide, depthWrite: false,
-});
-model(reactor, new THREE.CylinderGeometry(2.11, 2.11, 5.65, 12, 1, true), chamber, 0, 3.95, 0);
-const rings = [3.5, 4.05, 4.6].map((y, i) => {
-  const ring = model(reactor, new THREE.TorusGeometry(1.74 + 0.16 * i, 0.055, 8, 80), i === 1 ? amberLight : cyanLight, 0, y, 0);
-  return ring;
-});
-for (const y of [1.18, 6.75, 7.13]) {
-  model(reactor, new THREE.CylinderGeometry(2.37, 2.37, 0.27, 12), carbon, 0, y, 0);
-  model(reactor, new THREE.TorusGeometry(2.27, 0.035, 6, 72), cyanLight, 0, y + 0.14, 0).rotation.x = Math.PI / 2;
-}
-for (let i = 0; i < 6; i++) {
-  const a = i * Math.PI / 3;
-  const x = Math.cos(a) * 2.38, z = Math.sin(a) * 2.38;
-  box(reactor, alloy, x, 3.97, z, 0.19, 5.65, 0.22);
-  box(reactor, amberLight, x * 1.02, 6.1, z * 1.02, 0.1, 0.42, 0.11);
-}
-const coreHalo = halo(reactor, CYAN, 0, 4.05, 0, 11.5, 0.57);
-const coreLight = new THREE.PointLight(CYAN, 150, 26, 2);
-coreLight.position.set(0, 4.3, 1.2);
-reactor.add(coreLight);
+/* Fusion reactor removed — not part of room 1 (James). */
 
 const perimeter = new BlockBatch();
 const perimeterRandom = seeded(17);
-for (const [x, z, rotation] of [[-6.5, 14, 0.26], [12.8, -6.5, -0.18]]) {
+// Pre-#124 style cover crates south of room 1 (keep clear of bay north).
+for (const [x, z, rotation] of [[-6.5, 14, 0.26], [12.8, 8.5, -0.18]]) {
   perimeter.add([
     [1.9, 0.78, 1.1, 0, 0.4, 0, 0x354b5b, 0, 0, 0, 0.075],
     [1.82, 0.13, 1.13, 0, 0.74, 0, 0x53697b],
@@ -609,34 +578,21 @@ for (const [x, z, rotation] of [[-6.5, 14, 0.26], [12.8, -6.5, -0.18]]) {
   ], perimeterRandom, at(x, z, rotation));
   addSolid(x, z, 0.95, 0.57, rotation);
 }
-for (const x of [-24, -16, -12.6, 12.6, 16, 24]) {
-  // Stay south of the corridor mouth (bay south ≈ -(ROOM1_HALF+CORRIDOR_LEN)).
-  for (const z of [-11, 9, 18, 24]) {
-    const h = 4.3 + perimeterRandom() * 3;
-    perimeter.add([
-      [1.7, 0.3, 1.45, x, 0.13, z, 0x304453],
-      [0.85, h, 0.9, x, h / 2, z, 0x233542],
-      [1.1, 0.35, 1.15, x, h + 0.05, z, 0x4b6174],
-    ], perimeterRandom);
-    yardExtras.push(box(world, x < 0 ? amberLight : cyanLight, x, h - 0.46, z + 0.46, 0.42, 0.09, 0.04));
-    if (z !== 9 && z !== 18) yardExtras.push(box(world, alloy, x, h + 0.23, z, 0.7, 0.12, 6.5));
-  }
-}
+// Continuous facility filler outside both rooms (no black void at room-1 camera).
+buildFacilityFiller(perimeter, perimeterRandom);
+const perimeterMesh = bakedMesh(perimeter, false);
+// Dim amber path lights around room 1 only (cheap MeshBasic — no lights).
 for (const x of [-14.5, 14.5]) {
-  for (let z = -11; z <= 20; z += 2.3) {
+  for (let z = -HALF - 2; z <= HALF + 6; z += 2.3) {
+    if (z < BAY_SOUTH + 1) continue;
     yardExtras.push(box(world, amberLight, x, 0.01, z, 0.095, 0.022, 0.54));
   }
 }
-// Yard beams north of the bay only (bay north ≈ BAY_CZ - BAY_HZ).
-for (const z of [BAY_CZ - BAY_HZ - 6, BAY_CZ - BAY_HZ - 12]) {
-  perimeter.add([[68, 0.36, 1.2, 0, 7.6, z, 0x263947], [68, 0.21, 0.42, 0, 6.9, z, 0x3e5467]], perimeterRandom);
-}
-const perimeterMesh = bakedMesh(perimeter, false);
 
 // --- Defence Bay (hidden until wave-10 transition) ---
 const BAY_PANELS = [0x3a5568, 0x334d5e, 0x405f74, 0x2e4758];
 const bayGroup = new THREE.Group();
-bayGroup.visible = false;
+bayGroup.visible = true; // teaser from room 1; collision still room-1 until arrival
 world.add(bayGroup);
 const bayOpenings = [];
 const bayWallBoxes = [];
@@ -712,41 +668,7 @@ const bayDecor = buildBayDecor(bayGroup, { box, model, halo, alloy, carbon, cyan
 const baySolids = bayDecor.solids.slice();
 bayDecor.setCoilPower(0);
 
-// Corridor linking room1 north door → bay south door
-const corridorGroup = new THREE.Group();
-corridorGroup.visible = false;
-world.add(corridorGroup);
-{
-  const z0 = -HALF, z1 = BAY_CZ + BAY_HZ;
-  const midZ = (z0 + z1) / 2, len = Math.abs(z1 - z0);
-  const floor = new THREE.Mesh(
-    new THREE.BoxGeometry(2.8, 0.06, len + 0.4),
-    new THREE.MeshStandardMaterial({ color: 0x1c2c3a, metalness: 0.5, roughness: 0.5 }),
-  );
-  floor.position.set(0, -0.02, midZ);
-  floor.receiveShadow = true;
-  corridorGroup.add(floor);
-  for (const side of [-1, 1]) {
-    const wall = new THREE.Mesh(
-      new THREE.BoxGeometry(0.55, WALL_H, len + 0.2),
-      new THREE.MeshStandardMaterial({ color: 0x354858, metalness: 0.45, roughness: 0.42 }),
-    );
-    wall.position.set(side * 1.45, WALL_H / 2, midZ);
-    wall.castShadow = true;
-    wall.receiveShadow = true;
-    corridorGroup.add(wall);
-    box(corridorGroup, cyanLight, side * 1.15, 0.08, midZ, 0.04, 0.02, len * 0.85);
-    box(corridorGroup, amberLight, side * 1.15, 1.6, midZ, 0.05, 0.08, 0.25);
-  }
-  const ceil = new THREE.Mesh(
-    new THREE.BoxGeometry(3.0, 0.12, len + 0.3),
-    new THREE.MeshStandardMaterial({ color: 0x243440, metalness: 0.4, roughness: 0.55 }),
-  );
-  ceil.position.set(0, WALL_H + 0.05, midZ);
-  corridorGroup.add(ceil);
-}
-
-// Snapshots so reset can restore reactor collision / hide bay
+// Snapshots so reset can restore room-1 collision / bay state
 const room1Openings = openings.slice();
 const room1WallBoxes = wallBoxes.slice();
 const room1Solids = SOLIDS.slice();
@@ -768,12 +690,6 @@ function rebuildNavObstacles() {
   }
 }
 
-const KEY_POS_REACTOR = new THREE.Vector3(-14, 28, 18);
-const KEY_POS_BAY = new THREE.Vector3(-14, 30, BAY_CZ + 14);
-const FOG_NEAR_BAY = 26, FOG_FAR_BAY = 70;
-/** 0 = reactor framing, 1 = bay framing — eased in updateCamera (no snaps). */
-let camRoomBlend = 0;
-let camRoomBlendTarget = 0;
 let room1Culled = false;
 let bayNavWarmed = false;
 /** Prebuilt bay nav graphs restored on arrival so swapCollision doesn't rebuild mid-walk. */
@@ -781,32 +697,16 @@ let bayNavGraphs = null;
 
 function setPlayRoom(id) {
   if (id === 'bay') {
-    play.hx = BAY_HX; play.hz = BAY_HZ; play.half = Math.min(BAY_HX, BAY_HZ);
+    // Slight inset so the player can't clip bay wall panels.
+    play.hx = BAY_HX - 1.2; play.hz = BAY_HZ - 1.2;
+    play.half = Math.min(play.hx, play.hz);
     play.cx = 0; play.cz = BAY_CZ; play.id = 'bay';
-    camRoomBlendTarget = 1;
   } else {
     play.hx = play.hz = play.half = HALF;
     play.cx = 0; play.cz = 0; play.id = 'reactor';
-    camRoomBlendTarget = 0;
-    camRoomBlend = 0;
   }
-}
-
-function applyRoomFraming(blend) {
-  // Slight pullback vs room 1; follow the player so the bay stays playable (not whole-room zoom-out).
-  const s = THREE.MathUtils.lerp(1, bayCamScale(), blend);
-  CAM_OFFSET.copy(CAM_OFFSET0).multiplyScalar(s);
-  scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR0, FOG_NEAR_BAY, blend);
-  scene.fog.far = THREE.MathUtils.lerp(FOG_FAR0, FOG_FAR_BAY, blend);
-  key.position.lerpVectors(KEY_POS_REACTOR, KEY_POS_BAY, blend);
-  // Match / slightly exceed room-1 key so the bay doesn't read flat.
-  key.intensity = THREE.MathUtils.lerp(2.2, 2.55, blend);
-  ambient.intensity = THREE.MathUtils.lerp(1.85, 2.15, blend);
-  const shadowSpan = 26 * s;
-  Object.assign(key.shadow.camera, {
-    left: -shadowSpan, right: shadowSpan, top: shadowSpan, bottom: -shadowSpan, far: 76 * s,
-  });
-  key.shadow.camera.updateProjectionMatrix();
+  // Camera is always room-1 framing — never remapped for the bay.
+  CAM_OFFSET.copy(CAM_OFFSET0);
 }
 
 function swapCollision(opens, boxes, solids, gateList) {
@@ -848,10 +748,7 @@ function restoreBayNavGraphs() {
 function setRoom1YardVisible(on) {
   room1WallMesh.visible = on;
   room1DeckMesh.visible = on;
-  underdeck.visible = on;
-  reactor.visible = on;
   deckMark.visible = on;
-  perimeterMesh.visible = on;
   dust.visible = on;
   for (const m of room1FloorDecor) m.visible = on;
   for (const m of yardExtras) m.visible = on;
@@ -859,33 +756,26 @@ function setRoom1YardVisible(on) {
     if (o.root) o.root.visible = on;
     if (o.gateRoot) o.gateRoot.visible = on;
   }
+  // Keep underdeck + facility filler always on so bay corners never show void.
+  underdeck.visible = true;
+  perimeterMesh.visible = true;
   room1Culled = !on;
 }
 
-/** After the bay door slams, room 1 + corridor are behind a closed door — hide entirely. */
+/** After the bay door slams, room 1 is behind a closed door — hide it (filler stays). */
 function sealBayFromApproach() {
   setRoom1YardVisible(false);
-  corridorGroup.visible = false;
 }
 
-/** During the walk only: cull room 1 once the follow camera no longer sees the reactor deck. */
+/** Cull room 1 once the player is well past the bay south door (no visible pop). */
 function cullRoom1IfOffscreen() {
-  if (room1Culled || !bayActiveLive || !state.scripted) return;
-  let visible = false;
-  for (const [x, z] of [[0, 0], [0, HALF], [0, -HALF], [HALF, 0], [-HALF, 0]]) {
-    _sp.set(x, 1.2, z).project(camera);
-    if (_sp.z < 1 && Math.abs(_sp.x) < 1.15 && Math.abs(_sp.y) < 1.15) {
-      visible = true;
-      break;
-    }
-  }
-  if (!visible) setRoom1YardVisible(false);
+  if (room1Culled || !state.scripted) return;
+  if (player.position.z <= BAY_SOUTH - 1.5) setRoom1YardVisible(false);
 }
 
-/** Show bay + corridor ahead of the walk (already compiled). No collision swap yet. */
+/** Ensure bay mesh is drawn (already visible as teaser). */
 function revealBayWorld() {
   bayGroup.visible = true;
-  corridorGroup.visible = true;
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
@@ -912,15 +802,12 @@ function deactivateBay() {
   state.bayActive = false;
   state.scripted = null;
   state.coilCd = 0;
-  bayGroup.visible = false;
-  corridorGroup.visible = false;
+  bayGroup.visible = true; // stay visible as teaser for the next run
   setRoom1YardVisible(true);
   room1Culled = false;
   bayNavWarmed = false;
   bayNavGraphs = null;
-  camRoomBlend = 0;
-  camRoomBlendTarget = 0;
-  applyRoomFraming(0);
+  CAM_OFFSET.copy(CAM_OFFSET0);
   for (const o of bayOpenings) {
     if (o.root) o.root.visible = true;
     if (o.gateRoot) o.gateRoot.visible = true;
@@ -946,15 +833,12 @@ function deactivateBay() {
   }
 }
 
-/** Compile bay/corridor materials once so the walk doesn't hitch on first draw. */
+/** Compile bay materials once so the walk doesn't hitch on first draw. */
 function prewarmBayRender() {
   const prevBay = bayGroup.visible;
-  const prevCor = corridorGroup.visible;
   bayGroup.visible = true;
-  corridorGroup.visible = true;
   try { renderer.compile(scene, camera); } catch { /* WebGL may be unavailable in some boots */ }
   bayGroup.visible = prevBay;
-  corridorGroup.visible = prevCor;
 }
 
 function findRoom1NorthDoor() {
@@ -1003,7 +887,6 @@ const pressure = {
 function updateWorld(dt) {
   const milestone = state.running && drones.some(z => z.userData.type.milestone);
   const tint = new THREE.Color(milestone ? (Math.floor(state.wave / 5) % 2 ? 0xffb183 : 0xc4a0ff) : CYAN);
-  coreLight.color.lerp(tint, Math.min(1, dt * 1.5));
   cyanLight.color.lerp(tint, Math.min(1, dt * 1.5));
   pressure.time += dt;
   pressure.level = THREE.MathUtils.damp(pressure.level, pressure.target, 0.42, dt);
@@ -1013,12 +896,6 @@ function updateWorld(dt) {
     audio.alarm(warning);
     pressure.nextAlarm = 14 - warning * 6;
   }
-  core.rotation.set(t * 0.24, t * 0.49, t * 0.13);
-  rings.forEach((ring, i) => {
-    ring.rotation.set(t * (i % 2 ? -0.42 : 0.38) + i, t * 0.16 + i * 0.8, i * 0.7);
-  });
-  coreHalo.material.opacity = 0.48 + 0.06 * Math.sin(t * 2.8) + warning * 0.1;
-  coreLight.intensity = 135 + 12 * Math.sin(t * 2.8) + warning * 35;
   dust.position.y = Math.sin(t * 0.18) * 0.7;
   dust.rotation.y = t * 0.01;
   for (const { o, glow } of gates) {
@@ -3899,11 +3776,10 @@ function beginBayTransition() {
   resetGameplayInput();
   const north = findRoom1NorthDoor();
   const south = findBaySouthDoor();
-  // Continuous world: bay + corridor already ahead; room 1 stays until off-screen.
+  // Continuous world: bay already visible past the short threshold; room 1 stays until culled.
   revealBayWorld();
   warmBayNav();
   camMix = 1;
-  camRoomBlendTarget = 1; // ease framing out during the walk — no snap
   // Hold bay south door open for entry.
   if (south) swingDoorOpen(south);
   state.scripted = {
@@ -3913,10 +3789,10 @@ function beginBayTransition() {
     south,
     waypoints: [
       { x: 0, z: -HALF + 2.2 },
-      { x: 0, z: -HALF - 0.4 },
-      { x: 0, z: -HALF - CORRIDOR_LEN * 0.55 },
-      { x: 0, z: BAY_CZ + BAY_HZ - 2.2 },
-      { x: 0, z: BAY_CZ + 3.5 },
+      { x: 0, z: -HALF - 0.2 },
+      { x: 0, z: BAY_SOUTH + 0.1 },
+      { x: 0, z: BAY_SOUTH - 4 },
+      { x: 0, z: BAY_CZ + 2.5 },
     ],
     wi: 0,
     doorOpen: false,
@@ -3951,7 +3827,7 @@ function updateBayTransition(dt) {
       player.position.x = wp.x;
       player.position.z = wp.z;
       xfer.wi++;
-      // Inside the bay: hand off collision for wave 11 (camera already easing).
+      // Past bay south door: hand off collision for wave 11 (camera unchanged).
       if (!xfer.finalized && xfer.wi >= 4) {
         finalizeBayArrival();
         xfer.finalized = true;
@@ -3981,7 +3857,7 @@ function updateBayTransition(dt) {
         finalizeBayArrival();
         xfer.finalized = true;
       }
-      // Closed door — room 1 and corridor must not show in the bay view.
+      // Closed door — cull room 1 once it can no longer pop into view.
       sealBayFromApproach();
     }
     if (xfer.slamT >= 0.45) {
@@ -5867,12 +5743,7 @@ const titlePos = new THREE.Vector3(), titleLook = new THREE.Vector3(), camLook =
 let camMix = 0; // 0 = title shot, 1 = follow cam
 const swoop = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in-out cubic
 function updateCamera(dt) {
-  // Ease reactor ↔ bay framing (offset / fog / key) — never snap mid-walk.
-  if (Math.abs(camRoomBlend - camRoomBlendTarget) > 1e-4) {
-    camRoomBlend += (camRoomBlendTarget - camRoomBlend) * (1 - Math.pow(0.04, dt));
-    if (Math.abs(camRoomBlend - camRoomBlendTarget) < 0.001) camRoomBlend = camRoomBlendTarget;
-    applyRoomFraming(camRoomBlend);
-  }
+  // Follow cam is always the room-1 offset — identical in room 1, walk, and bay.
   tmp.copy(player.position).add(CAM_OFFSET);
   if (state.shake > 0) {
     state.shake = Math.max(0, state.shake - dt * 2.2);
@@ -5896,7 +5767,7 @@ function updateCamera(dt) {
   camera.lookAt(camLook);
   const fov = THREE.MathUtils.lerp(TITLE_FOV, GAME_FOV, e);
   if (Math.abs(camera.fov - fov) > 1e-3) { camera.fov = fov; camera.updateProjectionMatrix(); }
-  if (bayActiveLive && state.scripted) cullRoom1IfOffscreen();
+  if (state.scripted) cullRoom1IfOffscreen();
 }
 
 // --- the menu itself: keyboard (arrows/WASD, enter, esc) and mouse both drive it ---
@@ -6781,13 +6652,11 @@ function loop(now) {
       cx: camera.position.x,
       cy: camera.position.y,
       cz: camera.position.z,
-      blend: camRoomBlend,
       phase: xfer ? xfer.phase : (state.bayActive ? 'bay' : 'none'),
       wave: state.wave,
       choosing: state.choosing ? 1 : 0,
       room1: room1Culled ? 0 : 1,
       bay: bayGroup.visible ? 1 : 0,
-      corridor: corridorGroup.visible ? 1 : 0,
     });
   }
   requestAnimationFrame(loop);
@@ -6851,6 +6720,16 @@ whenViewportSettled(() => {
     // Simulate post–wave-10 pick: room-1 picker is skipped; walk → slam → wave 11 (no arrival picker).
     bayProbe = { samples: [] };
     window.__snBayProbe = bayProbe;
+    // QA helpers for headless capture (?dev=bay only).
+    window.__snDev = {
+      pos: () => ({ x: player.position.x, z: player.position.z, bay: !!state.bayActive }),
+      setPos(x, z) {
+        player.position.set(x, 0, z);
+        followPos.copy(player.position).add(CAM_OFFSET);
+        camera.position.copy(followPos);
+        updateCamera(0.016);
+      },
+    };
     setTimeout(() => {
       startGame(false);
       state.intermission = 0;
@@ -6860,9 +6739,7 @@ whenViewportSettled(() => {
       state.wave = 10;
       state.choosing = false;
       camMix = 1;
-      camRoomBlend = 0;
-      camRoomBlendTarget = 0;
-      applyRoomFraming(0);
+      CAM_OFFSET.copy(CAM_OFFSET0);
       clearAllFloorPickups();
       clearEmeralds();
       clearEnemyBolts();
@@ -6879,6 +6756,6 @@ whenViewportSettled(() => {
       bayProbe.startedAt = performance.now();
     }, 350);
   }
-  // Compile bay/corridor once the first frame has a real GL context.
+  // Compile bay once the first frame has a real GL context.
   requestAnimationFrame(() => requestAnimationFrame(() => prewarmBayRender()));
 });

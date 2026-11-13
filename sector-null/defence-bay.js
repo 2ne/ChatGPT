@@ -5,29 +5,29 @@
 import * as THREE from 'three';
 
 export const ROOM1_HALF = 10;
-/**
- * Half-extents — wider than deep like the concept, but close to room-1 scale so
- * the follow-cam can put walls near the screen edges at a playable size.
- */
-export const BAY_HX = 13;
-export const BAY_HZ = 10.5;
-/** @deprecated use BAY_HX / BAY_HZ — kept as max half for cam/fog helpers. */
+/** ~2.3× room-1 floor — at room-1 camera you only see part of the bay. */
+export const BAY_HX = 24;
+export const BAY_HZ = 22;
 export const BAY_HALF = BAY_HX;
-/** Longer link so room 1 and the bay read as separate spaces with a clear corridor. */
-export const CORRIDOR_LEN = 9;
-export const BAY_CZ = -(ROOM1_HALF + CORRIDOR_LEN + BAY_HZ);
-/** Near room-1 framing — walls near edges, operators stay readable. */
-export const bayCamScale = () => 1.06;
+/** Short open threshold between room-1 north door and bay south door (no corridor). */
+export const THRESHOLD = 2.2;
+export const CORRIDOR_LEN = THRESHOLD; // compat alias
+export const BAY_CZ = -(ROOM1_HALF + THRESHOLD + BAY_HZ);
+/** Bay south wall Z (faces room 1). */
+export const BAY_SOUTH = BAY_CZ + BAY_HZ;
+/** Bay north wall Z. */
+export const BAY_NORTH = BAY_CZ - BAY_HZ;
+/** Camera is identical to room 1 — no bay zoom. */
+export const bayCamScale = () => 1;
 
 const STEEL = 0x3d5568;
 const STEEL_DK = 0x1a2a38;
-const STEEL_LT = 0x5a7388;
 const CYAN = 0x62edff;
 const HAZARD = 0xffa648;
 
 /**
- * Build bay floor, solid inner wall shell, pillars, channels, pads, and Tesla coil.
- * Returns { solids, coil, tip } for collision + combat hooks.
+ * Build bay floor, walls shell, pillars, channels, pads, Tesla coil.
+ * Cheap emissive accents only — no extra shadow-casting lights.
  */
 export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLight, amberLight }) {
   const solids = [];
@@ -35,20 +35,19 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
     solids.push({ x, z, hx, hz, c: Math.cos(rotation), s: Math.sin(rotation) });
   };
 
-  // Floor tiles — room-1 contrast (lighter charcoal steel plates).
   const tileMat = new THREE.MeshStandardMaterial({ color: 0x2c4254, metalness: 0.48, roughness: 0.42 });
   const tileAlt = new THREE.MeshStandardMaterial({ color: 0x355064, metalness: 0.46, roughness: 0.44 });
-  const inset = 0.85;
+  const inset = 1.0;
   const tileSpanX = BAY_HX * 2 - inset;
   const tileSpanZ = BAY_HZ * 2 - inset;
-  const tileNx = 11;
-  const tileNz = 8;
+  const tileNx = 14;
+  const tileNz = 13;
   const tileWx = tileSpanX / tileNx;
   const tileWz = tileSpanZ / tileNz;
   for (let iz = 0; iz < tileNz; iz++) {
     for (let ix = 0; ix < tileNx; ix++) {
       const tile = new THREE.Mesh(
-        new THREE.BoxGeometry(tileWx - 0.06, 0.07, tileWz - 0.06),
+        new THREE.BoxGeometry(tileWx - 0.08, 0.07, tileWz - 0.08),
         (ix + iz) % 2 ? tileAlt : tileMat,
       );
       tile.position.set(
@@ -61,14 +60,13 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
     }
   }
 
-  // Solid inner wall shell + cyan crown strip (room-1 style accents).
   const shellMat = new THREE.MeshStandardMaterial({ color: 0x3d586c, metalness: 0.45, roughness: 0.38 });
   const shellH = 2.45;
-  const shellT = 0.62;
-  const doorGap = 2.95;
+  const shellT = 0.7;
+  const doorGap = 3.1;
   const walls = [
-    ['x', BAY_CZ + BAY_HZ - 0.15, BAY_HX - 0.15],
-    ['x', BAY_CZ - BAY_HZ + 0.15, BAY_HX - 0.15],
+    ['x', BAY_SOUTH - 0.15, BAY_HX - 0.15],
+    ['x', BAY_NORTH + 0.15, BAY_HX - 0.15],
     ['z', -(BAY_HX - 0.15), BAY_HZ - 0.15],
     ['z', BAY_HX - 0.15, BAY_HZ - 0.15],
   ];
@@ -77,9 +75,7 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
       const len = b - a;
       if (len < 0.2) continue;
       const mesh = new THREE.Mesh(
-        axis === 'x'
-          ? new THREE.BoxGeometry(len, shellH, shellT)
-          : new THREE.BoxGeometry(shellT, shellH, len),
+        axis === 'x' ? new THREE.BoxGeometry(len, shellH, shellT) : new THREE.BoxGeometry(shellT, shellH, len),
         shellMat,
       );
       if (axis === 'x') mesh.position.set((a + b) / 2, shellH / 2, fixed);
@@ -87,190 +83,283 @@ export function buildBayDecor(group, { box, model, halo, alloy, carbon, cyanLigh
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       group.add(mesh);
-      // Cyan crown along the wall top
       if (axis === 'x') box(group, cyanLight, (a + b) / 2, shellH - 0.06, fixed, len * 0.96, 0.05, 0.08);
       else box(group, cyanLight, fixed, shellH - 0.06, BAY_CZ + (a + b) / 2, 0.08, 0.05, len * 0.96);
     }
     const lintel = new THREE.Mesh(
       axis === 'x'
-        ? new THREE.BoxGeometry(doorGap + 0.35, 0.38, shellT + 0.1)
-        : new THREE.BoxGeometry(shellT + 0.1, 0.38, doorGap + 0.35),
+        ? new THREE.BoxGeometry(doorGap + 0.4, 0.4, shellT + 0.12)
+        : new THREE.BoxGeometry(shellT + 0.12, 0.4, doorGap + 0.4),
       shellMat,
     );
     if (axis === 'x') lintel.position.set(0, shellH - 0.16, fixed);
     else lintel.position.set(fixed, shellH - 0.16, BAY_CZ);
     lintel.castShadow = true;
     group.add(lintel);
-    // Cyan bar over each door
     if (axis === 'x') box(group, cyanLight, 0, shellH - 0.05, fixed, doorGap * 0.85, 0.06, 0.1);
     else box(group, cyanLight, fixed, shellH - 0.05, BAY_CZ, 0.1, 0.06, doorGap * 0.85);
   }
 
-  // Cross channels from centre toward each door
+  // Cross channels
   const channelMat = new THREE.MeshStandardMaterial({ color: 0x2a4052, metalness: 0.4, roughness: 0.52 });
-  const chX = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.045, BAY_HZ * 1.65), channelMat);
+  const chX = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.05, BAY_HZ * 1.7), channelMat);
   chX.position.set(0, 0.015, BAY_CZ);
   chX.receiveShadow = true;
   group.add(chX);
-  const chZ = new THREE.Mesh(new THREE.BoxGeometry(BAY_HX * 1.65, 0.045, 1.15), channelMat);
+  const chZ = new THREE.Mesh(new THREE.BoxGeometry(BAY_HX * 1.7, 0.05, 1.4), channelMat);
   chZ.position.set(0, 0.015, BAY_CZ);
   chZ.receiveShadow = true;
   group.add(chZ);
   for (const side of [-1, 1]) {
-    box(group, cyanLight, side * 0.42, 0.03, BAY_CZ, 0.05, 0.014, BAY_HZ * 1.5);
-    box(group, cyanLight, 0, 0.03, BAY_CZ + side * 0.42, BAY_HX * 1.5, 0.014, 0.05);
+    box(group, cyanLight, side * 0.5, 0.03, BAY_CZ, 0.06, 0.014, BAY_HZ * 1.55);
+    box(group, cyanLight, 0, 0.03, BAY_CZ + side * 0.5, BAY_HX * 1.55, 0.014, 0.06);
   }
 
-  // Pillars further out toward corners; cyan bands on all four faces
-  const pillarRx = BAY_HX * 0.58;
-  const pillarRz = BAY_HZ * 0.58;
+  // Pillars toward corners (scaled with room)
+  const pillarRx = BAY_HX * 0.55;
+  const pillarRz = BAY_HZ * 0.55;
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
     const x = sx * pillarRx;
     const z = BAY_CZ + sz * pillarRz;
     const pillar = new THREE.Group();
     pillar.position.set(x, 0, z);
     group.add(pillar);
-    model(pillar, new THREE.BoxGeometry(1.55, 2.7, 1.55), carbon, 0, 1.35, 0).castShadow = true;
-    // Cap stays dark so top-down doesn't read as a floating white cube.
-    model(pillar, new THREE.BoxGeometry(1.72, 0.24, 1.72), carbon, 0, 2.7, 0);
-    box(pillar, cyanLight, 0, 2.82, 0, 1.2, 0.05, 1.2);
-    for (const face of [
-      [0, 0.82], [0, -0.82], [0.82, 0], [-0.82, 0],
-    ]) {
-      box(pillar, cyanLight, face[0], 2.35, face[1], face[0] ? 0.06 : 1.1, 0.07, face[0] ? 1.1 : 0.06);
-      box(pillar, cyanLight, face[0], 0.4, face[1], face[0] ? 0.06 : 1.1, 0.07, face[0] ? 1.1 : 0.06);
+    model(pillar, new THREE.BoxGeometry(1.85, 2.9, 1.85), carbon, 0, 1.45, 0).castShadow = true;
+    model(pillar, new THREE.BoxGeometry(2.05, 0.26, 2.05), carbon, 0, 2.9, 0);
+    box(pillar, cyanLight, 0, 3.02, 0, 1.4, 0.05, 1.4);
+    for (const face of [[0, 0.96], [0, -0.96], [0.96, 0], [-0.96, 0]]) {
+      box(pillar, cyanLight, face[0], 2.5, face[1], face[0] ? 0.07 : 1.3, 0.08, face[0] ? 1.3 : 0.07);
+      box(pillar, cyanLight, face[0], 0.42, face[1], face[0] ? 0.07 : 1.3, 0.08, face[0] ? 1.3 : 0.07);
     }
-    box(pillar, amberLight, 0.55, 0.32, 0.55, 0.14, 0.09, 0.14);
-    addSolid(x, z, 0.88, 0.88);
+    box(pillar, amberLight, 0.65, 0.35, 0.65, 0.15, 0.1, 0.15);
+    addSolid(x, z, 1.05, 1.05);
   }
 
-  // Dashed pads in the four quadrants BETWEEN centre and pillars (no solid plate — concept is outline only).
+  // Dashed pads in quadrants between centre and pillars
   const dashMat = new THREE.MeshBasicMaterial({
-    color: 0xd0e4f2, transparent: true, opacity: 0.7, depthWrite: false, toneMapped: false,
+    color: 0xd0e4f2, transparent: true, opacity: 0.72, depthWrite: false, toneMapped: false,
   });
-  const padRx = BAY_HX * 0.38;
-  const padRz = BAY_HZ * 0.38;
+  const padRx = BAY_HX * 0.36;
+  const padRz = BAY_HZ * 0.36;
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
     const x = sx * padRx;
     const z = BAY_CZ + sz * padRz;
     const pad = new THREE.Group();
     pad.position.set(x, 0.05, z);
     group.add(pad);
-    const halfPad = 1.25;
-    const dashLen = 0.4;
-    const gap = 0.2;
+    const halfPad = 1.55;
+    const dashLen = 0.45;
+    const gap = 0.22;
     for (const side of [-1, 1]) {
       for (let t = -halfPad; t < halfPad - 0.01; t += dashLen + gap) {
         const len = Math.min(dashLen, halfPad - t);
-        const hDash = new THREE.Mesh(new THREE.BoxGeometry(len, 0.025, 0.07), dashMat);
+        const hDash = new THREE.Mesh(new THREE.BoxGeometry(len, 0.025, 0.08), dashMat);
         hDash.position.set(t + len / 2, 0.02, side * halfPad);
         pad.add(hDash);
-        const vDash = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.025, len), dashMat);
+        const vDash = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.025, len), dashMat);
         vDash.position.set(side * halfPad, 0.02, t + len / 2);
         pad.add(vDash);
       }
     }
-    // Centre +
-    box(pad, dashMat, 0, 0.03, 0, 0.6, 0.025, 0.08);
-    box(pad, dashMat, 0, 0.03, 0, 0.08, 0.025, 0.6);
+    box(pad, dashMat, 0, 0.03, 0, 0.7, 0.025, 0.09);
+    box(pad, dashMat, 0, 0.03, 0, 0.09, 0.025, 0.7);
   }
 
-  // Raised octagon + tall readable Tesla coil (dormant but clear from follow-cam)
+  // Raised octagon + tall Tesla coil
   const platform = new THREE.Group();
   platform.position.set(0, 0, BAY_CZ);
   group.add(platform);
   const oct = new THREE.Mesh(
-    new THREE.CylinderGeometry(3.5, 3.75, 0.5, 8),
+    new THREE.CylinderGeometry(4.2, 4.5, 0.55, 8),
     new THREE.MeshStandardMaterial({ color: 0x31485c, metalness: 0.58, roughness: 0.36 }),
   );
-  oct.position.y = 0.25;
+  oct.position.y = 0.28;
   oct.receiveShadow = true;
   oct.castShadow = true;
   platform.add(oct);
-  model(platform, new THREE.CylinderGeometry(3.15, 3.15, 0.08, 8), alloy, 0, 0.52, 0);
+  model(platform, new THREE.CylinderGeometry(3.8, 3.8, 0.09, 8), alloy, 0, 0.58, 0);
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
-    box(platform, i % 2 ? amberLight : cyanLight, Math.cos(a) * 3.15, 0.54, Math.sin(a) * 3.15, 0.26, 0.05, 0.12)
+    box(platform, i % 2 ? amberLight : cyanLight, Math.cos(a) * 3.75, 0.6, Math.sin(a) * 3.75, 0.28, 0.05, 0.13)
       .rotation.y = a;
   }
-  addSolid(0, BAY_CZ, 3.4, 3.4);
+  addSolid(0, BAY_CZ, 4.1, 4.1);
 
   const coil = new THREE.Group();
-  coil.position.set(0, 0.52, BAY_CZ);
+  coil.position.set(0, 0.58, BAY_CZ);
   group.add(coil);
-  const socket = model(coil, new THREE.CylinderGeometry(0.85, 1.05, 0.36, 16), carbon, 0, 0.18, 0);
+  const socket = model(coil, new THREE.CylinderGeometry(0.95, 1.15, 0.4, 16), carbon, 0, 0.2, 0);
   const socketGlow = model(
     coil,
-    new THREE.CylinderGeometry(0.62, 0.72, 0.12, 16),
+    new THREE.CylinderGeometry(0.7, 0.8, 0.14, 16),
     new THREE.MeshStandardMaterial({
-      color: CYAN, emissive: CYAN, emissiveIntensity: 0.7, metalness: 0.15, roughness: 0.35,
+      color: CYAN, emissive: CYAN, emissiveIntensity: 0.75, metalness: 0.15, roughness: 0.35,
     }),
-    0, 0.36, 0,
+    0, 0.4, 0,
   );
-  // Ribbed coil column — taller than cover pillars so it reads as a tower from follow-cam
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < 12; i++) {
     const ring = model(
       coil,
-      new THREE.TorusGeometry(0.42 + (i % 2) * 0.07, 0.06, 6, 18),
+      new THREE.TorusGeometry(0.48 + (i % 2) * 0.08, 0.065, 6, 18),
       alloy,
-      0, 0.65 + i * 0.24, 0,
+      0, 0.75 + i * 0.26, 0,
     );
     ring.rotation.x = Math.PI / 2;
   }
-  const mast = model(coil, new THREE.CylinderGeometry(0.2, 0.32, 3.0, 12), alloy, 0, 2.0, 0);
+  const mast = model(coil, new THREE.CylinderGeometry(0.22, 0.35, 3.4, 12), alloy, 0, 2.3, 0);
   mast.castShadow = true;
   const ball = model(
     coil,
-    new THREE.SphereGeometry(0.72, 20, 16),
+    new THREE.SphereGeometry(0.85, 20, 16),
     new THREE.MeshStandardMaterial({
-      color: 0x4a6a7e, emissive: CYAN, emissiveIntensity: 0.42, metalness: 0.28, roughness: 0.22,
+      color: 0x4a6a7e, emissive: CYAN, emissiveIntensity: 0.45, metalness: 0.28, roughness: 0.22,
     }),
-    0, 3.85, 0,
+    0, 4.35, 0,
   );
   ball.castShadow = true;
-  const tipHalo = halo(coil, CYAN, 0, 3.85, 0, 4.2, 0.32);
-  box(coil, amberLight, 0.75, 0.22, 0.75, 0.14, 0.08, 0.14);
-  box(coil, cyanLight, 0, 0.7, 0, 0.1, 1.2, 0.1);
-
+  const tipHalo = halo(coil, CYAN, 0, 4.35, 0, 4.8, 0.34);
+  box(coil, amberLight, 0.85, 0.25, 0.85, 0.15, 0.09, 0.15);
+  box(coil, cyanLight, 0, 0.85, 0, 0.12, 1.4, 0.12);
   coil.userData = { socket, socketGlow, mast, ball, tipHalo, powered: false };
 
-  // Door hazard stripes just inside each blast door
   for (const [x, z, rot] of [
-    [0, BAY_CZ + BAY_HZ - 0.9, 0],
-    [0, BAY_CZ - BAY_HZ + 0.9, 0],
-    [-BAY_HX + 0.9, BAY_CZ, Math.PI / 2],
-    [BAY_HX - 0.9, BAY_CZ, Math.PI / 2],
+    [0, BAY_SOUTH - 1.1, 0],
+    [0, BAY_NORTH + 1.1, 0],
+    [-BAY_HX + 1.1, BAY_CZ, Math.PI / 2],
+    [BAY_HX - 1.1, BAY_CZ, Math.PI / 2],
   ]) {
     const stripe = new THREE.Group();
     stripe.position.set(x, 0.03, z);
     stripe.rotation.y = rot;
     group.add(stripe);
-    for (let i = 0; i < 5; i++) {
-      box(stripe, i % 2 ? amberLight : carbon, (i - 2) * 0.28, 0, 0, 0.22, 0.02, 0.55);
+    for (let i = 0; i < 6; i++) {
+      box(stripe, i % 2 ? amberLight : carbon, (i - 2.5) * 0.3, 0, 0, 0.24, 0.02, 0.6);
     }
   }
 
-  // Local fill so the bay matches room-1 brightness (follows bayGroup visibility).
-  const fill = new THREE.PointLight(0xb8e6ff, 140, 40, 2);
-  fill.position.set(0, 8.5, BAY_CZ);
-  group.add(fill);
-  const rim = new THREE.PointLight(CYAN, 55, 24, 2);
-  rim.position.set(0, 4.2, BAY_CZ);
-  group.add(rim);
+  // Threshold floor strip (room1 north → bay south)
+  const gapMid = ( -ROOM1_HALF + BAY_SOUTH) / 2;
+  const gapLen = Math.abs(BAY_SOUTH - (-ROOM1_HALF));
+  const thresh = new THREE.Mesh(
+    new THREE.BoxGeometry(3.2, 0.06, gapLen + 0.3),
+    new THREE.MeshStandardMaterial({ color: 0x1e2e3c, metalness: 0.5, roughness: 0.5 }),
+  );
+  thresh.position.set(0, -0.02, gapMid);
+  thresh.receiveShadow = true;
+  group.add(thresh);
+  box(group, cyanLight, 0, 0.02, gapMid, 0.06, 0.02, gapLen * 0.7);
 
   return {
     solids,
     coil,
-    tip: new THREE.Vector3(0, 4.25, BAY_CZ),
+    tip: new THREE.Vector3(0, 4.8, BAY_CZ),
     setCoilPower(rank) {
       const on = rank > 0;
       coil.userData.powered = on;
-      ball.material.emissiveIntensity = on ? 0.7 + rank * 0.2 : 0.35;
+      ball.material.emissiveIntensity = on ? 0.75 + rank * 0.18 : 0.45;
       ball.material.color.setHex(on ? 0x9af5ff : 0x4a6a7e);
-      socketGlow.material.emissiveIntensity = on ? 1.1 + rank * 0.15 : 0.7;
-      tipHalo.material.opacity = on ? 0.38 + rank * 0.05 : 0.28;
+      socketGlow.material.emissiveIntensity = on ? 1.1 + rank * 0.15 : 0.75;
+      tipHalo.material.opacity = on ? 0.4 + rank * 0.05 : 0.3;
     },
   };
+}
+
+/**
+ * Cheap continuous exterior filler so room-1 camera never shows black void.
+ * Merged into one BlockBatch mesh — no lights, no shadows.
+ */
+export function buildFacilityFiller(batch, rng, { room1Half = ROOM1_HALF, bayCz = BAY_CZ, bayHx = BAY_HX, bayHz = BAY_HZ } = {}) {
+  const baySouth = bayCz + bayHz;
+  const bayNorth = bayCz - bayHz;
+  const dark = 0x152028;
+  const mid = 0x1c2a36;
+  const lit = 0x243440;
+
+  // Extended floor plates around both rooms (skip interiors)
+  const step = 2.4;
+  for (let z = -70; z <= 40; z += step) {
+    for (let x = -55; x <= 55; x += step) {
+      const inRoom1 = Math.abs(x) < room1Half + 0.8 && Math.abs(z) < room1Half + 0.8;
+      const inBay = Math.abs(x) < bayHx + 0.8 && z < baySouth + 0.8 && z > bayNorth - 0.8;
+      const inThreshold = Math.abs(x) < 2.2 && z < -room1Half + 0.5 && z > baySouth - 0.5;
+      if (inRoom1 || inBay || inThreshold) continue;
+      const shade = ((Math.abs(x) + Math.abs(z)) / 8 | 0) % 2 ? dark : mid;
+      batch.add([[step - 0.12, 0.08, step - 0.12, x, -0.05, z, shade, 0, 0, 0, 0.02]], rng);
+    }
+  }
+
+  // Machinery blocks hugging both room perimeters (reads as reactor exterior from room-1 cam)
+  const rings = [
+    { r: room1Half + 3.2, n: 14, h: 2.4 },
+    { r: room1Half + 7.5, n: 16, h: 3.6 },
+    { r: Math.max(bayHx, bayHz) + 3.5, n: 22, h: 3.8 },
+    { r: Math.max(bayHx, bayHz) + 8, n: 26, h: 4.6 },
+    { r: Math.max(bayHx, bayHz) + 14, n: 24, h: 5.2 },
+  ];
+  for (const { r, n, h } of rings) {
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + rng() * 0.15;
+      // Ellipse biased around bay + room1
+      const x = Math.cos(a) * r * (0.85 + 0.25 * Math.abs(Math.cos(a)));
+      const z = Math.sin(a) * r * 0.9 + bayCz * 0.35;
+      if (Math.abs(x) < room1Half + 1.4 && Math.abs(z) < room1Half + 1.4) continue;
+      if (Math.abs(x) < bayHx + 1.4 && z < baySouth + 1.4 && z > bayNorth - 1.4) continue;
+      if (Math.abs(x) < 2.4 && z < -room1Half + 0.6 && z > baySouth - 0.6) continue;
+      const hh = h * (0.5 + rng() * 0.6);
+      const w = 1.0 + rng() * 1.6;
+      const d = 1.0 + rng() * 1.4;
+      batch.add([
+        [w, 0.22, d, x, 0.11, z, mid],
+        [w * 0.55, hh, d * 0.55, x, hh / 2, z, dark],
+        [w * 0.72, 0.26, d * 0.72, x, hh + 0.04, z, lit],
+      ], rng);
+      if (rng() > 0.45) {
+        batch.add([[0.2, 0.2, 3.2 + rng() * 5, x, 1.1 + rng(), z, 0x1a2834]], rng);
+      }
+    }
+  }
+  // Dense belt just outside bay walls so corners never read as void
+  for (const side of [-1, 1]) {
+    for (let t = -bayHx + 2; t <= bayHx - 2; t += 3.1) {
+      const zS = baySouth + 2.8 + rng();
+      const zN = bayNorth - 2.8 - rng();
+      for (const z of [zS, zN]) {
+        const x = t + (rng() - 0.5);
+        const hh = 2.2 + rng() * 2.4;
+        batch.add([
+          [1.3, 0.2, 1.1, x, 0.1, z, mid],
+          [0.7, hh, 0.7, x, hh / 2, z, dark],
+          [1.0, 0.25, 0.9, x, hh + 0.05, z, lit],
+        ], rng);
+      }
+    }
+    for (let t = bayNorth + 2; t <= baySouth - 2; t += 3.1) {
+      const x = side * (bayHx + 2.8 + rng());
+      const z = t + (rng() - 0.5);
+      const hh = 2.4 + rng() * 2.6;
+      batch.add([
+        [1.2, 0.2, 1.3, x, 0.1, z, mid],
+        [0.75, hh, 0.75, x, hh / 2, z, dark],
+        [1.05, 0.25, 1.0, x, hh + 0.05, z, lit],
+      ], rng);
+    }
+  }
+
+  // Low grate / conduit strips along cardinal axes outside rooms
+  for (const x of [-room1Half - 3, room1Half + 3, -bayHx - 3, bayHx + 3]) {
+    for (let z = -65; z <= 35; z += 3.2) {
+      if (Math.abs(z) < room1Half + 1 && Math.abs(x) < room1Half + 4) continue;
+      if (z < baySouth + 1 && z > bayNorth - 1 && Math.abs(x) < bayHx + 4) continue;
+      batch.add([[0.55, 0.06, 2.6, x, 0.02, z, 0x1a2834]], rng);
+    }
+  }
+  for (const z of [-room1Half - 3, room1Half + 3, baySouth + 3, bayNorth - 3]) {
+    for (let x = -50; x <= 50; x += 3.2) {
+      if (Math.abs(x) < room1Half + 1 && Math.abs(z) < room1Half + 4) continue;
+      if (Math.abs(x) < bayHx + 1 && z < baySouth + 4 && z > bayNorth - 4) continue;
+      batch.add([[2.6, 0.06, 0.55, x, 0.02, z, 0x1a2834]], rng);
+    }
+  }
 }
 
 /** Cheap pooled lightning arcs (line segments). */
@@ -344,4 +433,4 @@ export function createCoilArcPool(scene, max = 8) {
   };
 }
 
-export { STEEL, STEEL_LT, CYAN as BAY_CYAN, HAZARD };
+export { STEEL, CYAN as BAY_CYAN, HAZARD };
