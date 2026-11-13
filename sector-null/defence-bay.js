@@ -36,7 +36,8 @@ const DECK_TILE = 1.565;
 /** Room-2 clear opening — three floor tiles (not room-1’s single-tile gap). */
 const DOOR_GAP = BAY_DOOR_GAP;
 const CHANNEL_HALF = 0.72;
-const OCT_R = 4.35;
+/** Outer octagon footprint radius — large enough to read as walkable surround. */
+const OCT_R = 5.35;
 
 /**
  * @param {THREE.Object3D} parent
@@ -76,10 +77,12 @@ export function buildDefenceBay(parent, helpers) {
     for (let ix = xMin; ix <= xMax; ix++) {
       const x = ix * DECK_STEP;
       const z = iz * DECK_STEP;
-      // Leave trenches + dais footprint clear for recessed channels / platform.
+      // Leave trenches + dais footprint + side vents clear (no coplanar z-fight).
       if (Math.abs(x - BAY_CX) < CHANNEL_HALF + 0.35) continue;
       if (Math.abs(z - ROOM2_CZ) < CHANNEL_HALF + 0.35) continue;
       if (Math.hypot(x - BAY_CX, z - ROOM2_CZ) < OCT_R + 0.35) continue;
+      // Flush E/W vent pads sit just outside the outer octagon
+      if (Math.abs(z - ROOM2_CZ) < 1.35 && Math.abs(Math.abs(x - BAY_CX) - (OCT_R + 1.15)) < 0.95) continue;
       floorB.add([[
         DECK_TILE, 0.11, DECK_TILE, x, -0.06, z,
         DECK_PANELS[Math.floor(floorRng() * DECK_PANELS.length)],
@@ -445,6 +448,18 @@ export function buildDefenceBay(parent, helpers) {
   }
   pulseStrips.push(...channelTicks);
 
+  // Orange striped light panels mid N–S channel (concept: between doors and platform)
+  for (const side of [-1, 1]) {
+    const z = ROOM2_CZ + side * (OCT_R + 3.2);
+    if (z <= ROOM2_NORTH + 2 || z >= ROOM2_SOUTH - 2) continue;
+    box(group, carbon, BAY_CX, 0.02, z, CHANNEL_HALF * 1.6, 0.05, 1.15);
+    for (let i = 0; i < 6; i++) {
+      const stripe = box(group, i % 2 ? amberLight : carbon,
+        BAY_CX, 0.05, z - 0.45 + i * 0.18, CHANNEL_HALF * 1.35, 0.03, 0.12);
+      if (i % 2) pulseStrips.push(stripe);
+    }
+  }
+
   // ── Four pillars (chamfered, cyan base/top bands) ──
   // Pillars symmetric about BAY_CX (not world 0) so the cross stays centred on the doors.
   const pillarRx = ROOM2_HX * 0.52;
@@ -477,140 +492,161 @@ export function buildDefenceBay(parent, helpers) {
     pulseHalos.push(halo(group, CYAN, x, 3.2, z, 2.8, 0.22));
   }
 
-  // ── Raised octagon dais (multi-tier, hazard edge, vent grates) ──
+  // ── Coil surround: large nearly-floor matte stepped octagons (concept match) ──
+  // Outer tiers are walkable (no solid). Only the coil’s small base blocks.
   const platform = new THREE.Group();
   platform.position.set(BAY_CX, 0, ROOM2_CZ);
   group.add(platform);
 
-  const metalA = new THREE.MeshStandardMaterial({ color: 0x31485c, metalness: 0.62, roughness: 0.34 });
-  const metalB = new THREE.MeshStandardMaterial({ color: 0x243848, metalness: 0.58, roughness: 0.38 });
-  const metalTop = new THREE.MeshStandardMaterial({ color: 0x3a5568, metalness: 0.55, roughness: 0.32 });
+  // Same dark blue-grey panelled look as bay deck — low metalness, high roughness.
+  const matteOuter = new THREE.MeshStandardMaterial({ color: 0x263543, metalness: 0.14, roughness: 0.82 });
+  const matteMid = new THREE.MeshStandardMaterial({ color: 0x2b3e4b, metalness: 0.16, roughness: 0.8 });
+  const matteInner = new THREE.MeshStandardMaterial({ color: 0x223340, metalness: 0.18, roughness: 0.78 });
+  const matteBase = new THREE.MeshStandardMaterial({ color: 0x1c2b37, metalness: 0.22, roughness: 0.74 });
+  const mattePanel = new THREE.MeshStandardMaterial({ color: 0x314452, metalness: 0.12, roughness: 0.84 });
 
-  // Lower tier
-  const tier1 = new THREE.Mesh(new THREE.CylinderGeometry(4.55, 4.75, 0.42, 8), metalA);
-  tier1.position.y = 0.22;
-  tier1.castShadow = true;
-  tier1.receiveShadow = true;
-  platform.add(tier1);
-  // Upper tier
-  const tier2 = new THREE.Mesh(new THREE.CylinderGeometry(3.95, 4.15, 0.32, 8), metalB);
-  tier2.position.y = 0.55;
-  tier2.castShadow = true;
-  tier2.receiveShadow = true;
-  platform.add(tier2);
-  // Top deck plate
-  const deckPlate = new THREE.Mesh(new THREE.CylinderGeometry(3.7, 3.7, 0.1, 8), metalTop);
-  deckPlate.position.y = 0.72;
-  deckPlate.receiveShadow = true;
-  platform.add(deckPlate);
+  // Shallow stepped tiers (read as walkable floor, not a shiny podium).
+  const R_OUTER = 5.35;
+  const R_MID = 4.15;
+  const R_INNER = 3.05;
+  const R_COIL = 1.15;
+  const H_OUTER = 0.07;
+  const H_MID = 0.07;
+  const H_INNER = 0.08;
+  const H_COIL = 0.28;
 
-  // Continuous octagonal light rings from the same 8-gon as the dais cylinders
-  // (RingGeometry radialSegments=8). Inset inside the top bevel so nothing pokes out.
-  const DAIS_R1 = 4.55; // tier1 top radius (matches CylinderGeometry above)
-  const DAIS_R2 = 3.95; // tier2 top radius
-  function octRing(inner, outer, y, mat) {
-    // RingGeometry(…, 8) and CylinderGeometry(…, 8) both place vertices at i·π/4,
-    // so the octagon outlines coincide with no extra Z rotation.
-    const ring = new THREE.Mesh(new THREE.RingGeometry(inner, outer, 8), mat);
-    ring.rotation.x = -Math.PI / 2;
-    ring.position.y = y;
-    platform.add(ring);
-    return ring;
+  function octTier(rTop, rBot, h, y, mat) {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBot, h, 8), mat);
+    m.position.y = y;
+    m.castShadow = false;
+    m.receiveShadow = true;
+    platform.add(m);
+    return m;
   }
-  const hazardRing = octRing(DAIS_R1 - 0.22, DAIS_R1 - 0.06, 0.44, amberLight);
-  pulseStrips.push(hazardRing);
-  octRing(DAIS_R1 - 0.28, DAIS_R1 - 0.22, 0.435, carbon);
-  const upperRing = octRing(DAIS_R2 - 0.18, DAIS_R2 - 0.04, 0.73, cyanLight);
-  pulseStrips.push(upperRing);
-
-  // Cyan inset lights + vent grates on vertical faces (inset, tangent-aligned)
-  const FACE_CHORD = 2 * DAIS_R1 * Math.tan(Math.PI / 8);
+  octTier(R_OUTER - 0.08, R_OUTER, H_OUTER, H_OUTER / 2, matteOuter);
+  octTier(R_MID - 0.06, R_MID, H_MID, H_OUTER + H_MID / 2, matteMid);
+  octTier(R_INNER - 0.05, R_INNER, H_INNER, H_OUTER + H_MID + H_INNER / 2, matteInner);
+  // Thin panel seams on the outer deck (matte, not reflective)
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
-    const c = Math.cos(a);
-    const s = Math.sin(a);
-    const tangent = a + Math.PI / 2;
-    const rInset = DAIS_R1 - 0.12;
-    const cyanInset = box(platform, cyanLight, c * rInset, 0.28, s * rInset, 0.5, 0.14, 0.06);
-    cyanInset.rotation.y = tangent;
-    if (i % 2 === 0) pulseStrips.push(cyanInset);
-    const grate = box(platform, carbon, c * (DAIS_R1 - 0.02), 0.22, s * (DAIS_R1 - 0.02), FACE_CHORD * 0.62, 0.3, 0.05);
-    grate.rotation.y = tangent;
-    for (let g = -2; g <= 2; g++) {
-      const bar = box(platform, alloy, 0, 0.22, 0, 0.04, 0.26, 0.04);
-      bar.position.set(
-        c * DAIS_R1 + Math.cos(tangent) * g * 0.18,
-        0.22,
-        s * DAIS_R1 + Math.sin(tangent) * g * 0.18,
-      );
+    const chord = 2 * (R_OUTER - 0.35) * Math.tan(Math.PI / 8);
+    const seam = box(platform, mattePanel,
+      Math.cos(a) * (R_OUTER * 0.55), H_OUTER + 0.01, Math.sin(a) * (R_OUTER * 0.55),
+      chord * 0.9, 0.012, 0.04);
+    seam.rotation.y = a + Math.PI / 2;
+  }
+
+  // Outer rim: thin dashed orange hazard outline (not a continuous shiny ring)
+  const rimY = H_OUTER + 0.015;
+  const rimR = R_OUTER - 0.12;
+  for (let i = 0; i < 8; i++) {
+    const a0 = (i / 8) * Math.PI * 2 + Math.PI / 8 - Math.PI / 16;
+    const a1 = (i / 8) * Math.PI * 2 + Math.PI / 8 + Math.PI / 16;
+    // 3 dashes per face
+    for (let d = 0; d < 3; d++) {
+      const t = (d + 0.5) / 3;
+      const a = a0 + (a1 - a0) * t;
+      const dash = box(platform, d % 2 === 0 ? amberLight : carbon,
+        Math.cos(a) * rimR, rimY, Math.sin(a) * rimR,
+        0.38, 0.02, 0.07);
+      dash.rotation.y = a + Math.PI / 2;
+      if (d % 2 === 0) pulseStrips.push(dash);
     }
   }
-  pulseHalos.push(halo(platform, CYAN, 0, 0.85, 0, 6.5, 0.14));
-  addSolid(BAY_CX, ROOM2_CZ, 4.15, 4.15);
 
-  // ── Tesla coil (stacked rings, column, polished sphere) ──
+  // South-facing cyan bar on the inner tier edge (concept accent; +Z = bay south)
+  {
+    const bar = box(platform, cyanLight, 0, H_OUTER + H_MID + H_INNER * 0.55, R_INNER - 0.04, 1.35, 0.08, 0.05);
+    pulseStrips.push(bar);
+  }
+
+  // Floor vents flush E/W of the platform + cyan strip between vent and octagon
+  for (const side of [-1, 1]) {
+    const vx = side * (R_OUTER + 1.15);
+    box(platform, carbon, vx, 0.02, 0, 1.4, 0.05, 2.2);
+    for (let g = -3; g <= 3; g++) {
+      box(platform, mattePanel, vx, 0.045, g * 0.28, 1.15, 0.02, 0.08);
+    }
+    const strip = box(platform, cyanLight, side * (R_OUTER + 0.28), 0.03, 0, 0.08, 0.04, 2.0);
+    pulseStrips.push(strip);
+  }
+
+  // ── Tesla coil on its own small octagonal base ──
   const coil = new THREE.Group();
-  coil.position.set(BAY_CX, 0.78, ROOM2_CZ);
+  coil.position.set(BAY_CX, 0, ROOM2_CZ);
   group.add(coil);
 
-  // Base housing
-  const baseB = new BlockBatch();
-  const baseRng = seeded(33);
-  baseB.add([
-    [1.55, 0.35, 1.55, 0, 0.18, 0, 0x1a2834, 0, 0, 0, 0.05],
-    [1.25, 0.22, 1.25, 0, 0.42, 0, 0x243440, 0, 0, 0, 0.04],
-    [0.95, 0.16, 0.95, 0, 0.58, 0, FRAME, 0, 0, 0, 0.025],
-  ], baseRng);
-  const baseMesh = new THREE.Mesh(baseB.build(), worldMat);
-  baseMesh.castShadow = true;
-  coil.add(baseMesh);
-  box(coil, cyanLight, 0, 0.52, 0, 1.05, 0.06, 1.05);
-
-  // Ribbed column with alternating metal + cyan glow rings
-  const ringGlowMats = [];
-  for (let i = 0; i < 14; i++) {
-    const y = 0.78 + i * 0.22;
-    const r = 0.42 + (i % 2) * 0.07;
-    if (i % 2 === 0) {
-      const mat = new THREE.MeshStandardMaterial({
-        color: CYAN, emissive: CYAN, emissiveIntensity: 0.85,
-        metalness: 0.2, roughness: 0.3, toneMapped: false,
-      });
-      ringGlowMats.push(mat);
-      const ring = model(coil, new THREE.TorusGeometry(r, 0.055, 8, 24), mat, 0, y, 0);
-      ring.rotation.x = Math.PI / 2;
-    } else {
-      const ring = model(coil, new THREE.TorusGeometry(r, 0.07, 8, 24), alloy, 0, y, 0);
-      ring.rotation.x = Math.PI / 2;
-      ring.castShadow = true;
-    }
+  const coilBaseY = H_OUTER + H_MID + H_INNER;
+  const coilBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(R_COIL - 0.04, R_COIL, H_COIL, 8),
+    matteBase,
+  );
+  coilBase.position.y = coilBaseY + H_COIL / 2;
+  coilBase.castShadow = true;
+  coilBase.receiveShadow = true;
+  coil.add(coilBase);
+  // Face accent lights on the coil base (orange on south, cyan on the rest)
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
+    // South face ≈ +Z (a near π/2) gets orange; others cyan
+    const southish = Math.sin(a) > 0.6;
+    const face = box(coil, southish ? amberLight : cyanLight,
+      Math.cos(a) * (R_COIL - 0.06), coilBaseY + H_COIL * 0.55, Math.sin(a) * (R_COIL - 0.06),
+      0.42, 0.1, 0.05);
+    face.rotation.y = a + Math.PI / 2;
+    pulseStrips.push(face);
   }
-  const mast = model(coil, new THREE.CylinderGeometry(0.2, 0.32, 3.55, 16), alloy, 0, 2.35, 0);
+  // Collision only on the coil base — outer tiers are walkable
+  addSolid(BAY_CX, ROOM2_CZ, R_COIL + 0.15, R_COIL + 0.15);
+
+  // Three cyan rings + mast + sphere (concept: not a tall shiny stack of 14)
+  const ringGlowMats = [];
+  const coilMat = new THREE.MeshStandardMaterial({
+    color: 0x6a7a88, metalness: 0.45, roughness: 0.42,
+  });
+  const mastY0 = coilBaseY + H_COIL;
+  // Three thin support legs
+  for (let i = 0; i < 3; i++) {
+    const a = (i / 3) * Math.PI * 2 + 0.4;
+    const leg = model(coil, new THREE.CylinderGeometry(0.04, 0.055, 1.35, 6), coilMat,
+      Math.cos(a) * 0.55, mastY0 + 0.7, Math.sin(a) * 0.55);
+    leg.castShadow = true;
+  }
+  const mast = model(coil, new THREE.CylinderGeometry(0.16, 0.28, 2.4, 12), coilMat, 0, mastY0 + 1.35, 0);
   mast.castShadow = true;
-  // Collar under sphere
-  model(coil, new THREE.CylinderGeometry(0.38, 0.28, 0.18, 16), carbon, 0, 4.05, 0);
+  const ringYs = [mastY0 + 0.55, mastY0 + 1.05, mastY0 + 1.55];
+  const ringRs = [0.62, 0.52, 0.42];
+  for (let i = 0; i < 3; i++) {
+    const mat = new THREE.MeshStandardMaterial({
+      color: CYAN, emissive: CYAN, emissiveIntensity: 0.75,
+      metalness: 0.15, roughness: 0.45, toneMapped: false,
+    });
+    ringGlowMats.push(mat);
+    const ring = model(coil, new THREE.TorusGeometry(ringRs[i], 0.06, 8, 28), mat, 0, ringYs[i], 0);
+    ring.rotation.x = Math.PI / 2;
+  }
+  model(coil, new THREE.CylinderGeometry(0.32, 0.24, 0.14, 12), carbon, 0, mastY0 + 2.55, 0);
 
   const ballMat = new THREE.MeshStandardMaterial({
-    color: 0xd4e0e8, emissive: CYAN, emissiveIntensity: 0.28,
-    metalness: 0.85, roughness: 0.12,
+    color: 0xb8c4ce, emissive: CYAN, emissiveIntensity: 0.16,
+    metalness: 0.55, roughness: 0.28,
   });
-  const ball = model(coil, new THREE.SphereGeometry(0.82, 28, 22), ballMat, 0, 4.55, 0);
+  const ball = model(coil, new THREE.SphereGeometry(0.72, 24, 18), ballMat, 0, mastY0 + 3.05, 0);
   ball.castShadow = true;
-  // Soft tip glow only — keep the sphere/rings readable (no blown-out blob).
-  const tipHalo = halo(coil, CYAN, 0, 4.55, 0, 2.8, 0.22);
-  const tipHalo2 = halo(coil, CYAN, 0, 4.55, 0, 1.6, 0.28);
-  // Short arc stubs near the sphere
+  const tipHalo = halo(coil, CYAN, 0, mastY0 + 3.05, 0, 2.2, 0.16);
+  const tipHalo2 = halo(coil, CYAN, 0, mastY0 + 3.05, 0, 1.3, 0.2);
+  // Small lightning arcs off the sphere
   const arcMats = [];
-  for (let i = 0; i < 4; i++) {
-    const a = (i / 4) * Math.PI * 2;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 + 0.2;
     const mat = new THREE.MeshBasicMaterial({
-      color: CYAN, transparent: true, opacity: 0.32, toneMapped: false, fog: false, depthWrite: false,
+      color: CYAN, transparent: true, opacity: 0.28, toneMapped: false, fog: false, depthWrite: false,
     });
     arcMats.push(mat);
-    const stub = model(coil, new THREE.CylinderGeometry(0.022, 0.008, 0.45, 6), mat,
-      Math.cos(a) * 0.55, 4.95, Math.sin(a) * 0.55);
-    stub.rotation.z = Math.cos(a) * 0.35;
-    stub.rotation.x = Math.sin(a) * 0.35;
+    const stub = model(coil, new THREE.CylinderGeometry(0.018, 0.006, 0.38, 5), mat,
+      Math.cos(a) * 0.48, mastY0 + 3.35, Math.sin(a) * 0.48);
+    stub.rotation.z = Math.cos(a) * 0.4;
+    stub.rotation.x = Math.sin(a) * 0.4;
   }
 
   // ── Cheap coloured light pools (no shadow casting) ──
@@ -623,20 +659,19 @@ export function buildDefenceBay(parent, helpers) {
     poolLights.push({ light: pl, base: intensity });
     return pl;
   }
-  poolLight(CYAN, BAY_CX, 3.8, ROOM2_CZ, 38, 18);
-  poolLight(0xffa648, BAY_CX, 1.4, ROOM2_CZ, 16, 11);
+  poolLight(CYAN, BAY_CX, 3.4, ROOM2_CZ, 28, 16);
+  poolLight(0xffa648, BAY_CX, 1.2, ROOM2_CZ, 10, 9);
   poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_SOUTH - 3.5, 28, 14);
   poolLight(CYAN, BAY_DOOR_X, 2.2, ROOM2_NORTH + 3.5, 24, 14);
   poolLight(CYAN, BAY_CX + pillarRx * 0.7, 2.0, ROOM2_CZ - pillarRz * 0.7, 18, 11);
   poolLight(CYAN, BAY_CX - pillarRx * 0.7, 2.0, ROOM2_CZ + pillarRz * 0.7, 18, 11);
 
-  // Soft additive floor glow discs under coil + doors
+  // Soft door glow only — no big shiny disc under the walkable dais
   const floorGlow = (x, z, size, opacity, color = CYAN) => {
     const s = halo(group, color, x, 0.08, z, size, opacity);
     s.material.rotation = 0;
     pulseHalos.push(s);
   };
-  floorGlow(BAY_CX, ROOM2_CZ, 7.5, 0.14);
   floorGlow(BAY_DOOR_X, ROOM2_SOUTH - 1.5, 4.5, 0.18);
   floorGlow(BAY_DOOR_X, ROOM2_NORTH + 1.5, 4.5, 0.16);
 
