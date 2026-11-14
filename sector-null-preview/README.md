@@ -27,12 +27,15 @@ Permanent preview-only tool for balance checks at wave 20 / 30 / 50+:
 | `?dev=bay&wave=30` | Wave 30 in the bay |
 | `&build=<seed>` | Repeat a loadout (works with any of the above) |
 | `&upgrades=0` | Bare start — skip the simulated picks |
+| `&coil=<0-3>` | Override Tesla Coil rank (0 base … 3 max) |
 
 - Picks applied = clears before that wave (`N − 1`), through the real offer pool +
   `apply()`, weighted toward common choices, respecting rank caps / prerequisites.
+- Coil ranks are simulated as real picks on clears 11→1, 12→2, 13→3 (so
+  `?dev=wave=20` starts at coil rank 3). Rank combat numbers live in
+  `coilStatsForRank()`; Stage 6 only needs to expose `COIL_UPGRADE` in the picker.
 - Room routing: waves ≤10 → room 1; waves ≥11 → bay. Extend `roomForWave()` when
-  later stages add rooms; new upgrade cards (including Stage 6 Tesla Coil `coil`)
-  enter automatically via the shared `UPGRADES` catalog.
+  later stages add rooms; new upgrade cards enter via the shared `UPGRADES` catalog.
 - Build summary logs to the console and a second line on the preview stamp.
 
 Waves 11–12 stay calmer in count (14 / 18) but mix in gunners and heavies

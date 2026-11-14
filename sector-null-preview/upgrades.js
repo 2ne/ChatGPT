@@ -124,6 +124,61 @@ export function upgradeById(id) {
   return UPGRADES.find((u) => u.id === id);
 }
 
+// ---------------------------------------------------------------------------
+// Tesla Coil ranks (Stage 5 combat uses these; Stage 6 exposes the picker card)
+// ---------------------------------------------------------------------------
+export const COIL_MAX_RANK = 3;
+
+/**
+ * Combat + VFX numbers per coil rank (0 = base bay coil, 3 = max).
+ * Stage 6's upgrade card only increments `state.upgrades.coil` → these stats.
+ */
+export function coilStatsForRank(rank) {
+  const r = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
+  // Explicit steps (not a linear formula) so balance stays readable.
+  // Rank 3 damage is ~+70% of cyan HP so wave-~20 bay gunners one-shot and
+  // heavies take two (float ceil on gunner HP makes a strict +60% fall short).
+  const table = [
+    { interval: 2.0, range: 8, targets: 2, damageScale: 1.0, boltScale: 1.0 },
+    { interval: 1.6, range: 8, targets: 3, damageScale: 1.0, boltScale: 1.12 },
+    { interval: 1.3, range: 9.5, targets: 3, damageScale: 1.3, boltScale: 1.28 },
+    { interval: 1.0, range: 11, targets: 4, damageScale: 1.7, boltScale: 1.5 },
+  ];
+  return { ...table[r], rank: r };
+}
+
+/**
+ * Catalog entry for Stage 6 — NOT in UPGRADES yet.
+ * Stage 6 should `UPGRADES.push(COIL_UPGRADE)` (or splice into the ability slot).
+ */
+export const COIL_UPGRADE = {
+  id: 'coil',
+  cat: 'ability',
+  name: 'TESLA COIL',
+  desc: 'Empower the Defence Bay coil',
+  max: COIL_MAX_RANK,
+  // Only offered once the bay is the active arena (Stage 6 picker gate).
+  ok: (s) => !!s.bayActive || s.wave >= 11,
+  stat: (s) => {
+    const owned = s.upgrades.coil || 0;
+    const now = coilStatsForRank(owned);
+    const next = coilStatsForRank(owned + 1);
+    if (!owned) return [`${now.targets} targets · ${now.interval.toFixed(1)}s`];
+    return [
+      `${now.targets} · ${now.interval.toFixed(1)}s`,
+      `${next.targets} targets · ${next.interval.toFixed(1)}s`,
+    ];
+  },
+  apply: () => {},
+};
+
+/** QA schedule: clear wave → coil rank a typical player would hold afterward. */
+export const QA_COIL_RANK_AFTER_CLEAR = {
+  11: 1, // rank 1 by the start of wave 12
+  12: 2, // rank 2 by wave 13
+  13: 3, // rank 3 by wave 14
+};
+
 /**
  * Simulated run state for previewing a card at a given owned rank.
  * Applies real apply() for prior ranks so stat() matches the in-game picker.

@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { BAY_CX, BAY_DOOR_GAP, BAY_DOOR_X, ROOM2_CZ, ROOM2_HX, ROOM2_HZ,
   ROOM2_NORTH, ROOM2_SOUTH, ROOM2_WEST, ROOM2_EAST } from './facility-exterior.js';
+import { COIL_MAX_RANK, coilStatsForRank } from './upgrades.js';
 
 const C = { panel: 0x304756, edge: 0x536b7c, dark: 0x111e29,
   shell: 0x293e4f, cyan: 0x62edff, amber: 0xe5a044 };
@@ -427,22 +428,17 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   entryLight.position.set(BAY_CX, 2, ROOM2_SOUTH - 1.4);
   group.add(coreLight, entryLight);
   let time = 0;
-  /** Base combat stats; Stage 6 ranks will shorten interval, grow range, add chains. */
+  /** Ranked combat stats live in upgrades.js (Stage 6 card only increments rank). */
   const coilWeapon = {
     rank: 0,
     cd: 0,
     tip: coilTip,
     charging: false,
     stats() {
-      // Stage 6 ranks raise rate / range / target cap / damage scale.
-      const r = this.rank | 0;
-      return {
-        interval: Math.max(0.7, 2.0 - r * 0.35),
-        range: 8 + r * 2.5,
-        targets: 2 + r, // base hits 2; ranks add more forks
-        // 1× bay-cyan HP at rank 0 so one bolt still deletes flankers after 1.5× bay HP.
-        damageScale: 1 + r * 0.25,
-      };
+      return coilStatsForRank(this.rank);
+    },
+    setRank(rank) {
+      this.rank = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
     },
     /** 0–1 charge tell before the bolt. */
     setCharge(level) {
@@ -467,18 +463,21 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
       const charge = chargeLevel;
       const flash = dischargeT > 0 ? (dischargeT / 0.28) : 0;
       const flashEase = flash * flash;
-      winding.emissiveIntensity = 0.65 + pulse * 0.12 + charge * 1.35 + flashEase * 1.8;
-      coilGlow.material.opacity = 0.13 + pulse * 0.025 + charge * 0.28 + flashEase * 0.35;
-      coilGlow.scale.setScalar(3 + charge * 1.4 + flashEase * 2.2);
-      tipGlow.visible = charge > 0.05 || flash > 0.05;
-      tipGlow.material.opacity = charge * 0.55 + flashEase * 0.9;
-      tipGlow.scale.setScalar(1.4 + charge * 2.4 + flashEase * 3.2);
+      const rank = coilWeapon.rank | 0;
+      // Idle look scales with rank so a maxed coil reads hotter even between shots.
+      const rankIdle = rank * 0.22;
+      winding.emissiveIntensity = 0.65 + rankIdle + pulse * 0.12 + charge * 1.35 + flashEase * 1.8;
+      coilGlow.material.opacity = 0.13 + rank * 0.045 + pulse * 0.025 + charge * 0.28 + flashEase * 0.35;
+      coilGlow.scale.setScalar(3 + rank * 0.18 + charge * 1.4 + flashEase * 2.2);
+      tipGlow.visible = charge > 0.05 || flash > 0.05 || rank >= 2;
+      tipGlow.material.opacity = (rank >= 2 ? 0.12 : 0) + charge * 0.55 + flashEase * 0.9;
+      tipGlow.scale.setScalar(1.4 + rank * 0.12 + charge * 2.4 + flashEase * 3.2);
       tipGlow.material.color.setHex(flash > 0.4 ? 0xd8fbff : C.cyan);
-      floorPulse.material.opacity = charge * 0.12 + flashEase * 0.55;
-      floorPulse.scale.setScalar(0.55 + charge * 0.35 + flashEase * 0.7);
-      ballMat.emissiveIntensity = charge * 0.85 + flashEase * 1.6;
-      ballMat.color.copy(ballBaseColor).lerp(ballFlashColor, Math.min(1, charge * 0.55 + flashEase));
-      coreLight.intensity = 30 + pulse * 3 + charge * 22 + flashEase * 40;
+      floorPulse.material.opacity = charge * 0.12 + flashEase * 0.55 + rank * 0.02;
+      floorPulse.scale.setScalar(0.55 + charge * 0.35 + flashEase * 0.7 + rank * 0.04);
+      ballMat.emissiveIntensity = charge * 0.85 + flashEase * 1.6 + rank * 0.12;
+      ballMat.color.copy(ballBaseColor).lerp(ballFlashColor, Math.min(1, charge * 0.55 + flashEase + rank * 0.06));
+      coreLight.intensity = 30 + rank * 9 + pulse * 3 + charge * 22 + flashEase * 40;
     },
   };
 }

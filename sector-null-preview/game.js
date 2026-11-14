@@ -33,9 +33,13 @@ import {
 } from './helper-motion.js';
 import {
   BASE_STATS,
+  COIL_MAX_RANK,
+  COIL_UPGRADE,
   DROP_CHANCE,
+  QA_COIL_RANK_AFTER_CLEAR,
   UPGRADES,
   UPGRADE_CATS,
+  coilStatsForRank,
   helperDamage,
   supplyDropScale,
 } from './upgrades.js';
@@ -97,6 +101,16 @@ const mapView = bootParams.get('dev') === 'mapview';
 const qaWaveTarget = parseQaWaveTarget(bootParams);
 const qaDevBare = qaWaveTarget != null && bootParams.get('upgrades') === '0';
 const qaBuildParam = bootParams.get('build');
+/** ?dev=wave=20&coil=3 — override simulated coil rank (0–3). */
+const qaCoilOverride = parseQaCoilOverride(bootParams);
+
+function parseQaCoilOverride(params) {
+  const raw = params.get('coil');
+  if (raw == null || raw === '') return null;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n)) return null;
+  return Math.max(0, Math.min(COIL_MAX_RANK, n));
+}
 
 /** @returns {number|null} wave to boot into, or null when not a QA wave jump. */
 function parseQaWaveTarget(params) {
@@ -5101,9 +5115,34 @@ function qaChoiceWeight(u) {
   if (owned && ['spread', 'damage', 'rate', 'reload', 'mag', 'pierce'].includes(u.id)) w *= 1.55;
   // Soft-cap deep stacks so the build still mixes survival / engineer.
   if (owned >= 2 && ['spread', 'damage', 'rate'].includes(u.id)) w *= 0.72;
-  // Coil card gets more interesting once the bay handoff is near / past.
+  // Coil card (Stage 6) gets more interesting once the bay handoff is near / past.
   if (u.id === 'coil' && state.wave >= 8) w *= 1.35;
   return Math.max(0.05, w);
+}
+
+/** Apply one Tesla Coil rank as a real pick (counts against the clear's slot). */
+function applyQaCoilPick(history, wave) {
+  const next = (state.upgrades.coil || 0) + 1;
+  if (next > COIL_MAX_RANK) return false;
+  state.upgrades.coil = next;
+  history.push({
+    wave,
+    id: COIL_UPGRADE.id,
+    name: COIL_UPGRADE.name,
+    rank: next,
+    offers: [COIL_UPGRADE.id],
+  });
+  return true;
+}
+
+function setQaCoilRank(rank) {
+  const r = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
+  if (r > 0) state.upgrades.coil = r;
+  else delete state.upgrades.coil;
+  if (defenceBay.coilWeapon) {
+    defenceBay.coilWeapon.setRank?.(r);
+    defenceBay.coilWeapon.rank = r;
+  }
 }
 
 function pickQaChoice(offers) {
@@ -5159,16 +5198,16 @@ function formatQaBuildSummary(history) {
 function syncQaLoadoutSideEffects() {
   updateWeaponIcon();
   if (state.upgrades.bot) syncHelperMesh(state.upgrades);
-  // Stage 6: when the Tesla Coil card exists, its ranks drive the bay coil.
-  if (defenceBay.coilWeapon) {
-    defenceBay.coilWeapon.rank = state.upgrades.coil | 0;
-  }
+  // Coil ranks drive the bay weapon now; Stage 6 picker will write the same field.
+  setQaCoilRank(state.upgrades.coil || 0);
   updateHUD();
 }
 
 /**
  * Apply the real offer pool + apply() for every clear before `startWave`.
- * Catalog-driven: new UPGRADES cards (coil, etc.) appear automatically.
+ * Coil ranks 1–3 are forced on clears 11–13 (typical post–wave-11 first-slot pick)
+ * and count against the pick total. Catalog-driven otherwise — Stage 6's coil card
+ * will join UPGRADES and the same path keeps working.
  */
 function applyQaWaveLoadout(seed, startWave) {
   const cleared = picksBeforeWave(startWave);
@@ -5177,6 +5216,12 @@ function applyQaWaveLoadout(seed, startWave) {
     for (let wave = 1; wave <= cleared; wave++) {
       state.wave = wave;
       state.hp = state.maxHp; // healthy clears — heal rarely offered
+      // Typical player: coil is the recommended first pick after wave 11 until maxed.
+      const wantCoil = QA_COIL_RANK_AFTER_CLEAR[wave] || 0;
+      if (wantCoil && (state.upgrades.coil || 0) < wantCoil) {
+        applyQaCoilPick(history, wave);
+        continue;
+      }
       const offers = pickUpgradeOffers(3);
       const pick = pickQaChoice(offers);
       if (!pick) break;
@@ -5192,6 +5237,8 @@ function applyQaWaveLoadout(seed, startWave) {
     }
   });
 
+  if (qaCoilOverride != null) setQaCoilRank(qaCoilOverride);
+
   const progress = estimateQaProgress(seed, cleared);
   state.score = progress.score;
   state.kills = progress.kills;
@@ -5203,16 +5250,20 @@ function applyQaWaveLoadout(seed, startWave) {
 
   const room = roomForWave(startWave);
   const summary = formatQaBuildSummary(history);
-  const repeat = `?dev=wave=${startWave}&build=${seed}`;
+  const coilRank = state.upgrades.coil || 0;
+  const coilInfo = coilStatsForRank(coilRank);
+  const repeat = `?dev=wave=${startWave}&build=${seed}`
+    + (qaCoilOverride != null ? `&coil=${qaCoilOverride}` : '');
   console.info(
     `[dev=wave] start=${startWave} room=${room} seed=${seed} picks=${history.length} (clears 1–${cleared || 0})`,
     '\n build:', summary || '(none)',
     '\n path:', history.map((h) => `w${h.wave}:${h.id}→${h.rank}`).join(' · ') || '(none)',
     '\n ranks:', { ...state.upgrades },
+    `\n coil rank ${coilRank}: ${coilInfo.targets} targets · ${coilInfo.interval}s · range ${coilInfo.range} · dmg×${coilInfo.damageScale}`,
     `\n score=${state.score} kills=${state.kills}`,
     `\n repeat: ${repeat}`,
   );
-  setPreviewStampNote(`w${startWave} · seed ${seed} · ${summary || 'bare'}`);
+  setPreviewStampNote(`w${startWave} · seed ${seed} · coil×${coilRank} · ${summary || 'bare'}`);
   return { seed, history, summary, startWave, room };
 }
 
@@ -5413,20 +5464,21 @@ function writeTeslaRibbon(slot, width) {
 }
 
 const teslaBolts = [];
-function spawnTeslaBolt(from, to, { main = true } = {}) {
+function spawnTeslaBolt(from, to, { main = true, scale = 1 } = {}) {
   const soft = reducedMotion.matches;
   const jitter = soft ? 0.12 : 0.95;
   const life = soft ? 0.22 : TESLA_BOLT_LIFE;
+  const s = Math.max(0.8, scale);
   const layers = [];
   const push = (color, opacity, width, pathJitter) => {
-    const slot = acquireTeslaRibbon(color, opacity);
+    const slot = acquireTeslaRibbon(color, Math.min(1, opacity * (0.92 + s * 0.08)));
     jitterTeslaPath(slot.path, from, to, pathJitter);
-    writeTeslaRibbon(slot, width);
+    writeTeslaRibbon(slot, width * s);
     scene.add(slot.mesh);
-    layers.push({ slot, width, baseOpacity: opacity });
+    layers.push({ slot, width: width * s, baseOpacity: Math.min(1, opacity * (0.92 + s * 0.08)) });
   };
   if (main) {
-    // Outer soft glow, mid glow, bright core.
+    // Outer soft glow, mid glow, bright core — widths grow with coil rank.
     push(0x1a8cff, soft ? 0.35 : 0.55, soft ? 0.22 : 0.55, jitter * 0.7);
     push(0x62edff, soft ? 0.55 : 0.85, soft ? 0.12 : 0.28, jitter);
     push(0xe8fbff, soft ? 0.7 : 0.95, soft ? 0.05 : 0.1, jitter * 0.55);
@@ -5441,21 +5493,21 @@ function spawnTeslaBolt(from, to, { main = true } = {}) {
   });
 }
 
-function spawnTeslaDischarge(from, to) {
-  spawnTeslaBolt(from, to, { main: true });
+function spawnTeslaDischarge(from, to, scale = 1) {
+  spawnTeslaBolt(from, to, { main: true, scale });
   if (reducedMotion.matches) return;
-  // 2–3 thinner forks peel off mid-bolt.
-  const forks = 2 + ((Math.random() * 2) | 0);
+  // 2–3 thinner forks peel off mid-bolt (more forks at high rank).
+  const forks = 2 + ((Math.random() * 2) | 0) + (scale >= 1.4 ? 1 : 0);
   for (let i = 0; i < forks; i++) {
     const t0 = 0.25 + Math.random() * 0.35;
     const t1 = Math.min(0.95, t0 + 0.25 + Math.random() * 0.3);
     _teslaFrom.lerpVectors(from, to, t0);
     _teslaTo.lerpVectors(from, to, t1);
     _teslaMid.subVectors(to, from);
-    _teslaSide.set(-_teslaMid.z, 0, _teslaMid.x).normalize().multiplyScalar((Math.random() - 0.5) * 2.4);
+    _teslaSide.set(-_teslaMid.z, 0, _teslaMid.x).normalize().multiplyScalar((Math.random() - 0.5) * 2.4 * scale);
     _teslaTo.add(_teslaSide);
     _teslaTo.y += (Math.random() - 0.5) * 1.2;
-    spawnTeslaBolt(_teslaFrom, _teslaTo, { main: false });
+    spawnTeslaBolt(_teslaFrom, _teslaTo, { main: false, scale });
   }
 }
 
@@ -5536,7 +5588,7 @@ function applyTeslaHitFlash(z) {
   for (const m of u.body || []) m.material = droneTeslaHit;
 }
 
-function fireTeslaAt(weapon, primary, targetsCap, damageScale) {
+function fireTeslaAt(weapon, primary, targetsCap, damageScale, boltScale = 1) {
   const tip = weapon.tip;
   const { range } = weapon.stats();
   const rangeSq = range * range;
@@ -5551,15 +5603,15 @@ function fireTeslaAt(weapon, primary, targetsCap, damageScale) {
   // Fork a bolt from the coil to every target; thin chain between sequential hits.
   for (let i = 0; i < hitList.length; i++) {
     droneAimPoint(hitList[i], _teslaTo);
-    spawnTeslaDischarge(tip, _teslaTo);
+    spawnTeslaDischarge(tip, _teslaTo, boltScale);
     if (i > 0) {
       droneAimPoint(hitList[i - 1], _teslaFrom);
-      spawnTeslaBolt(_teslaFrom, _teslaTo, { main: false });
+      spawnTeslaBolt(_teslaFrom, _teslaTo, { main: false, scale: boltScale });
     }
   }
   audio.teslaZap?.(hitList[0].position);
   weapon.dischargeFlash?.();
-  bumpShake(0.22);
+  bumpShake(0.18 + 0.06 * Math.min(3, weapon.rank | 0));
 
   const dmg = teslaDamage(damageScale);
   for (const z of hitList) {
@@ -5575,12 +5627,12 @@ function updateTeslaCoil(dt) {
   updateTeslaBolts(dt);
   updateTeslaDeaths(dt);
   weapon.cd -= dt;
-  const { interval, range, targets, damageScale } = weapon.stats();
+  const { interval, range, targets, damageScale, boltScale } = weapon.stats();
   const tip = weapon.tip;
   const rangeSq = range * range;
 
   // Last TESLA_CHARGE seconds of the cooldown: charge tell, then fire at 0.
-  // Keeps the 2s interval between shots while giving a loaded wind-up.
+  // Charge window stays fixed so short intervals still read as a loaded wind-up.
   if (weapon.cd > TESLA_CHARGE) {
     weapon.setCharge?.(0);
     weapon._lock = null;
@@ -5635,7 +5687,7 @@ function updateTeslaCoil(dt) {
     return;
   }
   weapon.cd = interval;
-  fireTeslaAt(weapon, target, targets, damageScale);
+  fireTeslaAt(weapon, target, targets, damageScale, boltScale ?? 1);
 }
 
 const TESLA_DEATH_TIME = 0.35;
@@ -6072,6 +6124,7 @@ function resetGame(keep = false) {
   bayRevealTime = 0;
   bayRevealMix = 0;
   if (defenceBay.coilWeapon) {
+    defenceBay.coilWeapon.setRank?.(0);
     defenceBay.coilWeapon.rank = 0;
     defenceBay.coilWeapon.cd = 0;
   }
@@ -7549,7 +7602,12 @@ whenViewportSettled(() => {
       startGame(false);
       if (qaDevBare) {
         console.info(`[dev=wave] bare start (upgrades=0) → wave ${qaWaveTarget} · room ${roomForWave(qaWaveTarget)}`);
-        setPreviewStampNote(`w${qaWaveTarget} · bare`);
+        if (qaCoilOverride != null) {
+          setQaCoilRank(qaCoilOverride);
+          setPreviewStampNote(`w${qaWaveTarget} · bare · coil×${qaCoilOverride}`);
+        } else {
+          setPreviewStampNote(`w${qaWaveTarget} · bare`);
+        }
       } else {
         applyQaWaveLoadout(resolveQaSeed(), qaWaveTarget);
       }
