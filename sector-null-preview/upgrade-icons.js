@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { bevelBox } from './bevel-box.js';
 import { addRifleShell } from './rifle-mesh.js';
 import { UPGRADE_CATS } from './upgrades.js';
 import { createHelperBotMesh } from './helper-bot-mesh.js';
@@ -7,7 +7,8 @@ import { createHelperBotMesh } from './helper-bot-mesh.js';
 const CAT_COLORS = UPGRADE_CATS;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
-const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
+const RIFLE_IDS = new Set(['damage', 'rate', 'spread']);
+const SWAY_IDS = new Set(['damage', 'rate', 'spread', 'bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
 const SWAY_ANGLE = 20 * Math.PI / 180;
 
 // Same basis as game.js tracers: lookAt aims local -Z forward.
@@ -128,28 +129,29 @@ function rifleBase() {
   const g = new THREE.Group();
   const rifle = new THREE.Group();
   const M = {
-    gunBody: std(0x26333c), metal: std(0x334957, { roughness: 0.38, metalness: 0.62 }),
+    gunBody: std(0x26333c, { roughness: 0.47, metalness: 0.3 }), metal: std(0x334957, { roughness: 0.38, metalness: 0.62 }),
     rubber: std(0x151f27), plating: std(0x243341),
     suit: std(0xe4e9ed, { roughness: 0.65, metalness: 0.12 }),
     trim: std(0xf59a25, { roughness: 0.65, metalness: 0.3 }),
-    status: glow(0x36dcff, 1.2),
+    status: glow(0x36dcff, 0.8),
   };
   const box = (mat, w, h, d, x, y, z, parent, r = 0.03) => {
-    const radius = Math.min(r, w * 0.225, h * 0.225, d * 0.225);
-    const mesh = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 1, radius), mat);
+    // Cards own their geometry copies; disposal cannot invalidate the game rig.
+    const mesh = new THREE.Mesh(bevelBox(w, h, d, r).clone(), mat);
     mesh.position.set(x, y, z);
     parent.add(mesh);
     return mesh;
   };
   addRifleShell(rifle, M, box);
   const cell = box(std(0x1a4558, {
-    roughness: 0.3, metalness: 0.55, emissive: 0x36dcff, emissiveIntensity: 1.2,
+    roughness: 0.3, metalness: 0.55, emissive: 0x36dcff, emissiveIntensity: 0.55,
   }), 0.11, 0.28, 0.15, 0, -0.14, 0.52, rifle, 0.02);
   cell.rotation.x = -0.12;
-  // Slightly thicken miniature details; keep muzzle at the existing effect anchor.
-  rifle.scale.set(1.4, 1.4, 1.1);
+  // Preserve the in-game proportions and keep the effect anchor at the muzzle.
+  rifle.scale.setScalar(1.1);
   rifle.position.set(0, 0.008, -0.437);
   g.add(rifle);
+  g.userData.rifle = rifle;
   return g;
 }
 
@@ -221,15 +223,22 @@ const builders = {
   damage(owned = 0) {
     const g = rifleBase();
     const next = owned + 1;
-    const amp = new THREE.Mesh(new THREE.SphereGeometry(0.18 + next * 0.035, 16, 12), glow(0xffad61, 1.4 + next * 0.2));
-    amp.position.set(0, 0.08, 1.15);
-    g.add(amp);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.26 + next * 0.03, 0.035, 8, 24), glow(0xffad61, 1.2));
-    ring.position.copy(amp.position);
-    ring.rotation.y = Math.PI / 2;
-    g.add(ring);
-    g.userData.pulse = amp;
-    g.userData.ring = ring;
+    // A fixed amplifier sleeve belongs to the gun, leaving its silhouette visible.
+    const rifle = g.userData.rifle;
+    const housing = new THREE.Mesh(bevelBox(0.22, 0.18, 0.24, 0.025).clone(), std(0x35434d));
+    housing.position.set(0, 0.025, 1.13);
+    rifle.add(housing);
+    const indicators = [];
+    for (const side of [-1, 1]) {
+      for (let i = 0; i < 6; i++) {
+        const lit = i < next;
+        const material = lit ? glow(0xf59a25, 0.65) : std(0x172530);
+        const strip = addBox(rifle, material, 0.012, 0.09, 0.022,
+          side * 0.116, 0.025, 1.035 + i * 0.035);
+        if (lit) indicators.push(strip);
+      }
+    }
+    g.userData.amplifierIndicators = indicators;
     return g;
   },
   rate(owned = 0) {
@@ -692,7 +701,12 @@ function makeScene(upgrade) {
     subject.position.y = -0.17;
   }
   // Mag cells sit on +Z — keep them facing the camera (sway only; no full spin).
-  if (upgrade.id === 'mag') subject.rotation.y = -0.28;
+  if (RIFLE_IDS.has(upgrade.id)) {
+    subject.rotation.set(-0.1, -1.12, -0.08);
+    subject.scale.setScalar(0.96);
+    key.position.set(-3, 4, 4);
+    rim.intensity = 0.7;
+  } else if (upgrade.id === 'mag') subject.rotation.y = -0.28;
   else if (upgrade.cat === 'firepower' || upgrade.cat === 'handling') subject.rotation.y = -0.55;
   enableCast(subject);
   // Magnet uses painted blob shadows under each gem; skip map casts so they don't double.
@@ -731,7 +745,7 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
 
   if (!entry.dragging && id !== 'coil') {
     if (SWAY_IDS.has(id) && idle) {
-      entry.yaw = entry.baseYaw + Math.sin(t * 1.15 + entry.phase) * SWAY_ANGLE;
+      entry.yaw = entry.baseYaw + Math.sin(t * 1.15 + entry.phase) * (RIFLE_IDS.has(id) ? 0.1 : SWAY_ANGLE);
     } else if (!SWAY_IDS.has(id)) {
       entry.yaw += spin * dt;
     }
@@ -741,7 +755,10 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   subject.position.y = id === 'coil' ? -0.17 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
 
   const ud = subject.userData;
-  if (ud.pulse) ud.pulse.scale.setScalar(1 + 0.12 * Math.sin(t * 6));
+  if (ud.amplifierIndicators) {
+    const intensity = idle ? 0.6 + 0.12 * Math.sin(t * 2.4) : 0.65;
+    ud.amplifierIndicators.forEach(strip => { strip.material.emissiveIntensity = intensity; });
+  }
   if (ud.rotor) ud.rotor.rotation.z += dt * (hot ? (ud.rotorSpeed || 5) * 1.8 : (ud.rotorSpeed || 5)) * idle;
   if (ud.ring) ud.ring.rotation.z += dt * 1.5 * idle;
   if (ud.arcs) ud.arcs.rotation.y += dt * 2.2 * idle;

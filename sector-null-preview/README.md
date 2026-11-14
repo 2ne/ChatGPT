@@ -134,3 +134,8 @@ the staged source; this project does not deploy or modify the leaderboard servic
 
 Tesla card previews use a stationary six-winding tower, centered framing, and branching electrical bolts. Reduced-motion mode disables the bolts.
 Tesla card models are scaled down with extra title clearance and a soft contact shadow beneath the base.
+
+Weapon card presentation preserves the in-game rifle proportions and chamfered
+geometry, with a larger side/three-quarter view and gentle sway. Pulse Amplifier
+uses a fitted dark sleeve with one amber indicator per rank, replacing the
+floating muzzle orb and spinning ring. Indicator glow is steady with reduced motion.
