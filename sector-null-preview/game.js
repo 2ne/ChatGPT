@@ -2270,6 +2270,7 @@ canvas.addEventListener('pointerdown', e => {
 canvas.addEventListener('pointermove', e => {
   const stick = [moveStick, aimStick].find(item => item.id === e.pointerId);
   if (!stick) return;
+  if (e.cancelable) e.preventDefault();
   updateStick(stick, e.clientX, e.clientY);
   if (stick === aimStick) {
     if (stick.delta.lengthSq() > AIM_DEAD * AIM_DEAD) {
@@ -2280,7 +2281,7 @@ canvas.addEventListener('pointermove', e => {
     syncFiring();
     stick.dot.classList.add('firing');
   }
-});
+}, { passive: false });
 function releaseStick(e) {
   if (e.pointerId === moveStick.id) resetStick(moveStick);
   if (e.pointerId === aimStick.id) resetStick(aimStick);
@@ -2391,11 +2392,25 @@ window.addEventListener('gamepaddisconnected', () => {
     padPrevButtons = [];
   }
 });
-window.addEventListener('contextmenu', e => e.preventDefault());
-window.addEventListener('selectstart', e => e.preventDefault());
+function isEditableTarget(t) {
+  return !!t?.closest?.('input, textarea, [contenteditable="true"]');
+}
+window.addEventListener('contextmenu', e => {
+  if (isEditableTarget(e.target)) return;
+  e.preventDefault();
+});
+window.addEventListener('selectstart', e => {
+  if (isEditableTarget(e.target)) return;
+  e.preventDefault();
+});
 window.addEventListener('gesturestart', e => e.preventDefault());
 window.addEventListener('gesturechange', e => e.preventDefault());
 window.addEventListener('gestureend', e => e.preventDefault());
+// Block iOS scroll/zoom gestures on the play surface without cancelling pointer
+// stick capture (preventDefault on touchstart would suppress pointer events).
+canvas.addEventListener('touchmove', e => {
+  if (e.cancelable) e.preventDefault();
+}, { passive: false });
 
 function pendingDeathCallsign() {
   if (deathPadEntry && !deathArcade.classList.contains('hidden')) return arcadeCallsign();
