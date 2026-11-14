@@ -858,7 +858,7 @@ function updateWorld(dt) {
 }
 
 // ===================================================================
-// PLAYER — a blocky operator rig. Arms and legs are two-bone IK chains:
+// PLAYER — white ceramic expedition armour with orange identification stripes. Arms and legs are two-bone IK chains:
 // both hands stay locked onto the rifle (so recoil and the reload carry
 // the arms with them) and the feet follow a procedural run cycle that
 // plants each boot while it's on the ground.
@@ -876,21 +876,21 @@ function blk(mat, w, h, d, x, y, z, parent, r) {
 
 const mat = (color, options) => new THREE.MeshStandardMaterial({ color, roughness: 0.47, metalness: 0.3, ...options });
 const M = {
-  suit: mat(0x536d80),
+  suit: mat(0xe4e9ed, { roughness: 0.65, metalness: 0.12 }),
   lining: mat(0x192835),
-  vest: mat(0x293e4e),
+  vest: mat(0xcbd5de),
   vestDk: mat(0x172530),
-  pants: mat(0x43576b),
+  pants: mat(0xd7dfe7),
   plating: mat(0x243341),
   sole: mat(0x101820),
   glove: mat(0x253849),
-  helmet: mat(0x668393),
-  visor: mat(0x102c3d, { roughness: 0.14, metalness: 0.65 }),
+  helmet: mat(0xf0f1f3, { roughness: 0.55, metalness: 0.12 }),
+  visor: mat(0x063b50, { roughness: 0.22, metalness: 0.5, emissive: 0x087f99, emissiveIntensity: 0.35 }),
   status: cyanLight,
-  module: mat(0x547384),
-  trim: mat(0x9d7d4e),
+  module: mat(0xbccbd5),
+  trim: mat(0xf59a25, { roughness: 0.65 }),
   metal: mat(0x334957, { roughness: 0.38, metalness: 0.62 }),
-  gunBody: mat(0x536d7e),
+  gunBody: mat(0x26333c),
   rubber: mat(0x151f27),
   lens: mat(0x2c8399, { emissive: 0x36dcff, emissiveIntensity: 0.9 }),
 };
@@ -930,17 +930,19 @@ const UPPER_ARM = 0.42, FOREARM = 0.42;
 // --- lower body: `lower` turns with the legs, `pelvis` bobs/rolls/twists with the stride ---
 const lower = new THREE.Group(); player.add(lower);
 const pelvis = new THREE.Group(); lower.add(pelvis);
-blk(M.pants, 0.62, 0.3, 0.4, 0, 0.02, 0, pelvis);              // hips
+blk(M.lining, 0.62, 0.3, 0.4, 0, 0.02, 0, pelvis);              // hips
 blk(M.plating, 0.66, 0.08, 0.43, 0, 0.12, 0, pelvis, 0.02);    // belt
 blk(M.trim, 0.1, 0.07, 0.03, 0, 0.12, 0.22, pelvis, 0.01);    // buckle
-blk(M.vestDk, 0.12, 0.17, 0.17, 0.36, 0.02, 0.04, pelvis);     // hip pouch (left)
+blk(M.trim, 0.12, 0.27, 0.24, 0.36, -0.02, 0.04, pelvis, 0.025);     // hip pouch (left)
 blk(M.plating, 0.07, 0.28, 0.1, -0.35, -0.04, -0.03, pelvis);  // knife sheath (right)
 
 // +X is the operator's left (they face +Z)
 const legs = [1, -1].map((side, i) => {
-  const thigh = blk(M.pants, 0.26, THIGH + 0.08, 0.29, 0, 0, 0, lower);
-  const shin = blk(M.pants, 0.24, SHIN + 0.06, 0.27, 0, 0, 0, lower);
-  blk(M.vestDk, 0.2, 0.17, 0.07, 0, SHIN / 2 - 0.03, 0.15, shin);  // knee pad
+  const thigh = blk(M.pants, 0.29, THIGH + 0.08, 0.32, 0, 0, 0, lower);
+  const shin = blk(M.pants, 0.28, SHIN + 0.06, 0.31, 0, 0, 0, lower);
+  blk(M.suit, 0.29, 0.2, 0.1, 0, SHIN / 2 - 0.03, 0.17, shin, 0.04);
+  blk(M.trim, 0.095, 0.17, 0.025, side * 0.065, SHIN / 2 - 0.03, 0.23, shin, 0.012);
+  blk(M.helmet, 0.2, 0.26, 0.04, 0, -0.07, 0.165, shin, 0.025);
   const boot = new THREE.Group(); lower.add(boot);                  // origin at the ankle
   blk(M.plating, 0.27, 0.17, 0.29, 0, 0, -0.01, boot);              // shaft
   blk(M.plating, 0.27, 0.1, 0.42, 0, -0.08, 0.06, boot);            // foot
@@ -954,32 +956,53 @@ const legs = [1, -1].map((side, i) => {
 
 // --- upper body (origin at the waist) ---
 const upper = new THREE.Group(); upper.rotation.order = 'YXZ'; player.add(upper);
-blk(M.suit, 0.74, 0.6, 0.42, 0, 0.36, 0, upper);             // jacket
-blk(M.suit, 0.84, 0.26, 0.46, 0, 0.62, 0, upper);            // shoulder yoke
-blk(M.lining, 0.5, 0.1, 0.4, 0, 0.78, -0.02, upper);            // suit collar
-blk(M.vest, 0.6, 0.4, 0.07, 0, 0.38, 0.22, upper);              // chest rig
-for (const x of [-0.17, 0, 0.17]) blk(M.vestDk, 0.15, 0.17, 0.08, x, 0.33, 0.28, upper); // mag pouches
-blk(M.vest, 0.6, 0.48, 0.06, 0, 0.42, -0.23, upper);            // rig back panel
-for (const x of [-0.21, 0.21]) blk(M.vest, 0.12, 0.05, 0.5, x, 0.77, 0, upper); // shoulder straps
-blk(M.module, 0.48, 0.42, 0.18, 0, 0.36, -0.33, upper);         // pack
-blk(M.vestDk, 0.3, 0.14, 0.06, 0, 0.27, -0.44, upper);          // pack pocket
-blk(M.trim, 0.68, 0.17, 0.17, 0, 0.66, -0.36, upper);        // power pack
-for (const x of [-0.2, 0.2]) blk(M.plating, 0.05, 0.19, 0.19, x, 0.66, -0.36, upper, 0.01); // module clamps
+blk(M.lining, 0.68, 0.6, 0.41, 0, 0.36, 0, upper, 0.08);
+blk(M.suit, 0.76, 0.46, 0.46, 0, 0.46, 0, upper, 0.09);
+blk(M.vest, 0.58, 0.22, 0.09, 0, 0.22, 0.23, upper, 0.035);
+blk(M.helmet, 0.59, 0.22, 0.09, 0, 0.56, 0.25, upper, 0.035);
+blk(M.lining, 0.52, 0.1, 0.43, 0, 0.77, 0, upper, 0.035);
+blk(M.suit, 0.6, 0.08, 0.49, 0, 0.72, 0, upper, 0.035);
+for (const x of [-0.25, 0.25]) blk(M.plating, 0.09, 0.49, 0.07, x, 0.43, 0.265, upper, 0.02);
+blk(M.trim, 0.13, 0.07, 0.025, 0.08, 0.59, 0.306, upper, 0.008);
+// Tall life-support pack with white rails and cyan power cells.
+blk(M.plating, 0.58, 0.65, 0.24, 0, 0.44, -0.34, upper, 0.05);
+blk(M.module, 0.36, 0.51, 0.07, 0, 0.48, -0.495, upper, 0.035);
+for (const side of [-1, 1]) {
+  blk(M.suit, 0.09, 0.58, 0.26, side * 0.25, 0.48, -0.35, upper, 0.025);
+  blk(M.status, 0.045, 0.31, 0.025, side * 0.22, 0.51, -0.49, upper, 0.008);
+}
+blk(M.lining, 0.27, 0.12, 0.04, 0, 0.27, -0.54, upper, 0.015);
 
 const head = new THREE.Group();
 head.position.set(0, 0.8, 0.02);
 head.rotation.order = 'YXZ';
 upper.add(head);
 blk(M.lining, 0.24, 0.18, 0.25, 0, 0.05, 0, head);
-blk(M.helmet, 0.59, 0.53, 0.56, 0, 0.34, 0, head, 0.11);
-blk(M.visor, 0.49, 0.25, 0.11, 0, 0.32, 0.246, head, 0.045);
-blk(M.status, 0.41, 0.047, 0.023, 0, 0.365, 0.306, head, 0.012);
-blk(M.plating, 0.39, 0.1, 0.1, 0, 0.15, 0.221, head, 0.028);
-for (const side of [-1, 1]) {
-  blk(M.plating, 0.1, 0.27, 0.28, side * 0.293, 0.34, -0.02, head, 0.035);
-  blk(M.status, 0.024, 0.16, 0.028, side * 0.28, 0.32, -0.284, head, 0.005);
+// Curved shell and wraparound glass use modest segment counts for mobile.
+function helmetPatch(material, radius, phi, sweep, theta, height) {
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 24, 12, phi, sweep, theta, height), material);
+  mesh.scale.set(1, 0.94, 1);
+  mesh.position.y = 0.35;
+  mesh.castShadow = true;
+  head.add(mesh);
 }
-blk(M.status, 0.29, 0.047, 0.04, 0, 0.49, -0.46, upper, 0.009);
+helmetPatch(M.helmet, 0.365, 0, Math.PI * 2, 0, Math.PI);
+helmetPatch(M.visor, 0.374, 0.12, Math.PI - 0.24, 1.17, 0.77);
+for (const phi of [Math.PI / 2, Math.PI * 1.5]) {
+  helmetPatch(M.trim, 0.37, phi - 0.19, 0.38, 0.01, 1.12);
+}
+blk(M.suit, 0.43, 0.1, 0.14, 0, 0.12, 0.23, head, 0.04);
+for (const side of [-1, 1]) {
+  const socket = new THREE.Mesh(new THREE.CylinderGeometry(0.122, 0.122, 0.075, 16), M.suit);
+  socket.rotation.z = Math.PI / 2;
+  socket.position.set(side * 0.352, 0.3, 0.04);
+  socket.castShadow = true;
+  head.add(socket);
+  const inset = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.08, 16), M.plating);
+  inset.rotation.z = Math.PI / 2;
+  inset.position.copy(socket.position); inset.position.x += side * 0.025;
+  head.add(inset);
+}
 
 // --- rifle: origin at the butt plate, barrel along +Z ---
 const gun = new THREE.Group(); gun.rotation.order = 'YXZ'; player.add(gun);
@@ -1008,13 +1031,13 @@ blk(M.gunBody, 0.13, 0.13, 0.36, 0, 0.01, 0.8, gun);               // handguard
 blk(M.metal, 0.06, 0.06, 0.46, 0, 0.03, 1.18, gun, 0.015);      // barrel
 blk(M.metal, 0.085, 0.085, 0.08, 0, 0.03, 1.42, gun, 0.015);    // muzzle brake
 blk(M.metal, 0.03, 0.07, 0.03, 0, 0.09, 1.34, gun, 0.008);      // front sight
-blk(M.rubber, 0.075, 0.075, 0.4, 0, 0.17, 0.46, gun, 0.02);     // scope tube
-blk(M.rubber, 0.1, 0.1, 0.08, 0, 0.17, 0.28, gun, 0.02);        // eyepiece
-blk(M.rubber, 0.11, 0.11, 0.09, 0, 0.17, 0.66, gun, 0.02);      // objective bell
-blk(M.lens, 0.08, 0.08, 0.01, 0, 0.17, 0.706, gun, 0.004);      // lens glint
-for (const z of [0.38, 0.56]) blk(M.metal, 0.04, 0.07, 0.04, 0, 0.11, z, gun, 0.01); // scope rings
-for (const x of [-0.071, 0.071]) {
-  blk(M.status, 0.022, 0.035, 0.46, x, 0.052, 0.86, gun, 0.006);
+// White barrel shroud, orange muzzle collar and cyan top energy rail.
+blk(M.suit, 0.18, 0.075, 0.45, 0, 0.11, 0.99, gun, 0.018);
+blk(M.trim, 0.19, 0.18, 0.07, 0, 0.025, 1.23, gun, 0.018);
+blk(M.rubber, 0.13, 0.065, 0.42, 0, 0.14, 0.57, gun, 0.012);
+blk(M.status, 0.075, 0.025, 0.31, 0, 0.185, 0.59, gun, 0.006);
+for (const x of [-0.094, 0.094]) {
+  blk(M.plating, 0.02, 0.11, 0.3, x, 0.005, 0.94, gun, 0.006);
 }
 const GRIP_R = new THREE.Vector3(0, -0.1, 0.3);    // firing hand on the pistol grip
 const GRIP_L = new THREE.Vector3(0, -0.07, 0.74);  // support hand under the handguard
@@ -1032,8 +1055,10 @@ const muzzle = new THREE.Object3D(); muzzle.position.set(0, 0.03, 1.47); gun.add
 // --- arms: built along local Y, laid between the joints every frame ---
 const arms = [1, -1].map(side => {
   const up = blk(M.suit, 0.2, UPPER_ARM + 0.1, 0.21, 0, 0, 0, player);
-  blk(M.suit, 0.25, 0.24, 0.25, 0, UPPER_ARM / 2, 0, up);         // shoulder
-  const fore = blk(M.suit, 0.18, FOREARM + 0.08, 0.19, 0, 0, 0, player);
+  blk(M.helmet, 0.31, 0.28, 0.3, 0, UPPER_ARM / 2, 0, up, 0.065);
+  blk(M.trim, 0.095, 0.25, 0.025, side * 0.035, UPPER_ARM / 2, 0.157, up, 0.008);
+  blk(M.trim, 0.095, 0.025, 0.22, side * 0.035, UPPER_ARM / 2 + 0.145, 0, up, 0.008);         // shoulder
+  const fore = blk(M.suit, 0.23, FOREARM + 0.08, 0.24, 0, 0, 0, player);
   blk(M.module, 0.21, 0.08, 0.22, 0, -FOREARM / 2 + 0.05, 0, fore);  // rolled cuff
   const hand = blk(M.glove, 0.14, 0.15, 0.17, 0, 0, 0, player);
   return {

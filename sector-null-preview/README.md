@@ -8,6 +8,16 @@ The public game remains in `../sector-null/` at its existing URL. Changes here
 build and deploy only to `/sector-null-preview/`; do not copy them into the public
 game unless James asks to release them.
 
+## Player model
+
+The preview operator now wears white ceramic armour over a charcoal undersuit,
+an orange-striped round helmet with a curved teal visor and circular ear housings,
+orange shoulder/knee markings, heavy boots, and a cyan-lit life-support backpack.
+The dark rifle has a white shroud, orange collar and cyan energy rail. This is a
+procedural 3D interpretation of the supplied reference, without its cyan selection
+ring. Existing movement, aiming, reload animations and combat dimensions remain
+in place. This model change is exclusive to the preview.
+
 ## Status and controls
 
 After wave 10 the scripted walk enters the bay; the south door slams shut and
