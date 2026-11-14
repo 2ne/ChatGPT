@@ -3572,9 +3572,9 @@ function burst(o, n, mat, size, speed) {
   }
 }
 // a drone's blow (or the operator's bullet, for glass) lands on a door or window
-function hitOpening(o) {
+function hitOpening(o, damage = 1) {
   if (o.hp <= 0) return;
-  o.hp--;
+  o.hp = Math.max(0, o.hp - Math.max(1, damage | 0));
   o.jolt = 1;
   if (o.kind === 'door') {
     audio.bash(o);
@@ -7262,7 +7262,8 @@ function chaseDrone(z, dt) {
     if (ud.swing < Z_STRIKE) faceToward(z, o ? o.x - z.position.x : pdx, o ? o.z - z.position.z : pdz, Z_TRACK, dt);
     if (!ud.struck && ud.swing >= Z_STRIKE) {
       ud.struck = true;
-      if (o) hitOpening(o);
+      // Bosses smash a closed door in one blow (~1s contact); regular bots stay at 1 dmg.
+      if (o) hitOpening(o, ud.boss ? o.maxHp || DOOR_HP : 1);
       else if (!(pd < hitRange && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer(1))) {
         audio.swipe(z.position);
       } else if (slammer) {
@@ -7312,20 +7313,33 @@ function chaseDrone(z, dt) {
       const o = ud.opening;
       if (ud.stage === 0) {
         tx = o.ox; tz = o.oz;
-        const alignment = ud.boss ? 0.1 ** 2 : 1.4;
+        // Bosses used to need a 0.1u bullseye on the outer waypoint and often never
+        // advanced to bashing — use a reachable approach pad instead.
+        const alignment = ud.boss ? 1.15 ** 2 : 1.4;
         if ((o.ox - z.position.x) ** 2 + (o.oz - z.position.z) ** 2 < alignment) ud.stage = 1;
       }
       if (ud.stage === 1) {
         if (o.kind === 'door' && o.hp <= 0) { tx = o.ix; tz = o.iz; } // broken down: straight through
-        else if ((o.x - z.position.x) ** 2 + (o.z - z.position.z) ** 2 > (o.bay ? 1.85 : 1.45) ** 2) {
-          tx = o.fx; tz = o.fz;
-        } else {
-          // at it: batter it in, or take a turn climbing through the broken window
-          tx = null;
-          const off = faceToward(z, o.x - z.position.x, o.z - z.position.z, Z_TRACK, dt);
-          ud.swingCd -= dt;
-          if (o.hp > 0) { if (ud.swingCd <= 0 && off < 0.5) { ud.swing = 0; ud.struck = false; ud.swingAt = o; } }
-          else if (!o.climber) startClimb(z, o);
+        else {
+          // Large bosses stand farther from the leaf; give them a wider bash reach.
+          const bashR = o.bay
+            ? (ud.boss ? 2.55 : 1.85)
+            : (ud.boss ? 2.15 : 1.45);
+          if ((o.x - z.position.x) ** 2 + (o.z - z.position.z) ** 2 > bashR ** 2) {
+            tx = o.fx; tz = o.fz;
+          } else {
+            // at it: batter it in, or take a turn climbing through the broken window
+            tx = null;
+            const faceLimit = ud.boss ? 0.95 : 0.5;
+            const off = faceToward(z, o.x - z.position.x, o.z - z.position.z, Z_TRACK * (ud.boss ? 1.6 : 1), dt);
+            if (ud.boss) ud.swingCd = Math.min(ud.swingCd, 0.05);
+            ud.swingCd -= dt * (ud.boss ? 2.2 : 1);
+            if (o.hp > 0) {
+              if (ud.swingCd <= 0 && off < faceLimit) {
+                ud.swing = 0; ud.struck = false; ud.swingAt = o;
+              }
+            } else if (!o.climber) startClimb(z, o);
+          }
         }
       }
       // Cannon keeps moving in; warning bolts spray through the entry, not aimed at you.
