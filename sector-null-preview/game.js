@@ -5177,7 +5177,9 @@ function resetGame(keep = false) {
   });
   bayRevealTime = 0;
   bayRevealMix = 0;
-  room2SouthDoor?.open();
+  // Keep the next room sealed throughout waves 1–10, including on restart.
+  // Only the scripted wave-10 handoff opens this entrance as we approach.
+  room2SouthDoor?.snapShut();
   restoreRoom2EnemySolid();
   emeraldChain = 0;
   botMilestonesDone.clear();
