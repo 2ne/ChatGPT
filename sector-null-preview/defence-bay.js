@@ -421,12 +421,6 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
 
   bake(architecture);
   bake(lamps, group, glowMaterial, false);
-  // Two local lights instead of the previous six; no added shadow maps.
-  const coreLight = new THREE.PointLight(C.cyan, 30, 10, 2);
-  coreLight.position.set(BAY_CX, 2.4, ROOM2_CZ);
-  const entryLight = new THREE.PointLight(C.cyan, 22, 10, 2);
-  entryLight.position.set(BAY_CX, 2, ROOM2_SOUTH - 1.4);
-  group.add(coreLight, entryLight);
   let time = 0;
   /** Ranked combat stats live in upgrades.js (Stage 6 card only increments rank). */
   const coilWeapon = {
@@ -477,7 +471,6 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
       floorPulse.scale.setScalar(0.55 + charge * 0.35 + flashEase * 0.7 + rank * 0.04);
       ballMat.emissiveIntensity = charge * 0.85 + flashEase * 1.6 + rank * 0.12;
       ballMat.color.copy(ballBaseColor).lerp(ballFlashColor, Math.min(1, charge * 0.55 + flashEase + rank * 0.06));
-      coreLight.intensity = 30 + rank * 9 + pulse * 3 + charge * 22 + flashEase * 40;
     },
   };
 }
