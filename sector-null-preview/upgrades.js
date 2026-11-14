@@ -158,7 +158,7 @@ export const COIL_UPGRADE = {
   id: 'coil',
   cat: 'defence',
   name: 'TESLA COIL',
-  desc: 'Empower the Defence Bay coil',
+  desc: 'Upgrade defences',
   max: COIL_MAX_RANK,
   // First offered on the wave-11 clear (bay live / wave ≥ 11).
   ok: (s) => !!s.bayActive || s.wave >= 11,
