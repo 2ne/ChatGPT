@@ -28,7 +28,7 @@ export const ROOM2_HZ = 22;
 /**
  * Open exterior strip between room-1 north wall and room-2 south wall (~9–10
  * deck tiles → south wall ≈ z=-25). Bigger gap so gameplay only sees a faint
- * hint of room 2; reactor at z≈-13.6 stays in the strip outside room 2.
+ * hint of room 2; the reactor sits midway along the strip outside room 2.
  */
 export const ROOM2_THRESHOLD = 15;
 export const ROOM2_CZ = -(ROOM1_HALF + ROOM2_THRESHOLD + ROOM2_HZ);

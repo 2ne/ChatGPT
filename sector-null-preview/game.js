@@ -410,7 +410,7 @@ const ink = stencil.getContext('2d');
 ink.textAlign = 'center';
 ink.fillStyle = '#99bed3';
 ink.font = 'bold 49px monospace';
-ink.fillText('07', 128, 56);
+ink.fillText('01', 128, 56);
 ink.font = 'bold 13px monospace';
 ink.fillText('REACTOR ACCESS', 128, 81);
 const stencilMap = new THREE.CanvasTexture(stencil);
@@ -635,9 +635,11 @@ const gates = openings.map(o => {
 });
 
 const reactor = new THREE.Group();
-reactor.position.set(5.3, 0, -13.6);
+// Centre in the open gap, keeping the direct door-to-door route clear.
+const reactorZ = (-HALF + ROOM2_SOUTH) / 2;
+reactor.position.set(5.3, 0, reactorZ);
 world.add(reactor);
-addSolid(5.3, -13.6, 2.8, 2.5);
+addSolid(5.3, reactorZ, 2.8, 2.5);
 model(reactor, new THREE.CylinderGeometry(3.25, 3.6, 0.75, 12), carbon, 0, 0.34, 0);
 model(reactor, new THREE.CylinderGeometry(2.65, 2.85, 0.36, 12), alloy, 0, 0.86, 0);
 const core = model(reactor, new THREE.IcosahedronGeometry(1.25, 1), cyanLight, 0, 4.05, 0);

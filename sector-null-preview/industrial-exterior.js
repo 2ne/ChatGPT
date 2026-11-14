@@ -71,6 +71,35 @@ export function buildIndustrialExterior(world) {
   for (const [x, z] of [[-18, 8], [8, 15], [-19, -18], [13, -18], [-30, -35],
     [20, -58], [-17, -75]]) { crate(x, z); crate(x + 0.75, z - 0.12); }
   crate(-17.25, 7.88, 0.61);
+  // Outer service islands extend the factory beyond the immediate wall apron.
+  // Hand-placed, broken-up clusters leave broad empty lanes between them.
+  // Reuse the same three batches: no new lights, colliders or draw calls.
+  for (const [x, z, direction] of [
+    [-20, -5, -1], [-21, 13, -1], [20, -5, 1], [21, 13, 1],
+    [-12, 24, -1], [6, 23, 1], [-24, -20, -1], [22, -21, 1],
+    [-34, -33, -1], [-34, -57, -1], [24, -34, 1], [24, -59, 1],
+    [-24, -78, -1], [-3, -79, 1], [16, -77, 1],
+  ]) {
+    // Low ventilation/service skid, with a dark inset and narrow steel ribs.
+    add(x, 0.07, z, 2.8, 0.12, 1.65, dark);
+    add(x, 0.36, z, 2.25, 0.48, 1.18, steel);
+    add(x, 0.61, z, 2.35, 0.06, 1.25, edge);
+    add(x, 0.648, z, 1.92, 0.015, 0.93, dark);
+    for (let i = 0; i < 9; i++) add(x - 0.8 + i * 0.2, 0.67, z, 0.055, 0.035, 0.88, steel);
+    cabinet(x + direction * 2.1, z + 0.2);
+    const route = [[x, z - 0.9], [x, z - 2.3], [x + direction * 3.7, z - 2.3],
+      [x + direction * 3.7, z + 2.5]];
+    pipe(route); pipe(route, 0.28);
+    cover(x - direction * 0.7, z + 2.9, true);
+    cover(x + direction * 2.9, z + 4.2);
+    crate(x - direction * 2.5, z + 1.9);
+    crate(x - direction * 2.5, z + 2.65);
+    // Faded service-bay corner marks, not a continuous perimeter line.
+    for (const dx of [-1.6, 1.6]) {
+      add(x + dx, 0.018, z + 1.1, 0.5, 0.02, 0.055, 0x72522b);
+      add(x + dx, 0.018, z + 0.85, 0.055, 0.02, 0.5, 0x72522b);
+    }
+  }
   for (const [x, z, grate] of [[-17, -3, true], [-11.8, 16, false], [17, 4, true],
     [-11, -17, true], [1, -19, false], [-28, -44, true], [-29, -57, false],
     [18, -44, true], [20, -65, false], [-16, -73, true], [4, -74, false]]) cover(x, z, grate);

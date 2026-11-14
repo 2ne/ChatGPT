@@ -55,6 +55,11 @@ and merged six-sided pipes use three draw calls and no additional lights.
 Door approaches stay open; existing walls, reactors, orange floor strips and
 outskirts fog are preserved. Changes remain exclusive to this preview.
 
+The external reactor sits halfway between the facing room walls (z = -17.5),
+with its existing collision footprint moved with it and the door route clear.
+Room 1's floor stencil reads `01`. Low ventilation/service islands extend the
+factory detail into the outer floor areas, using the same three drawing batches.
+
 Use Node.js 22 or later in this folder:
 
 ```sh
