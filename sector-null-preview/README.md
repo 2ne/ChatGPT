@@ -16,15 +16,18 @@ wave 11 starts. Waves continue past 20 with no ending. Restart returns to room 1
 `?dev=mapview` retains the facility overview. With no query string, the preview
 starts normally.
 
-Waves 11–12 are lighter (mostly cyan flankers) and spawn only from the north and
-side doors across the full 3-tile mouth. From wave 13 the south door joins and
-mortars return. Bay doors bash and break like room 1 (amber lights when broken,
-panels stay open). The Tesla coil is live from wave 11: ~2s interval, range 8, up to 2 targets,
-damage `ceil(droneHp × 0.85)` (one-shots cyan and mortars; patrols may keep a
-sliver). Hits tint enemies electric blue for ~1s; coil kills freeze, glow and
-burst into blue sparks with charred scraps. Bay wall collision always leaves the
-four door gaps clear (room-1 style); intact doors block via opening HP so bots
-can bash and enter N/W/E (and S from wave 13) across the full 3-tile mouth.
+Waves 11–12 stay calmer in count (14 / 18) but mix in gunners and heavies
+(~3+1 / ~4+2) so upgraded guns from wave 10 still feel pressure; spawn only from
+the north and side doors across the full 3-tile mouth. Wave 13 soft-lands at ~29
+(south door + mortars), then ramps toward room 1’s curve. Every bay enemy
+(wave 11+) gets a 1.5× health multiplier on top of normal wave scaling. Bay doors
+bash and break like room 1 (amber lights when broken, panels stay open). The
+Tesla coil is live from wave 11: ~2s interval, range 8, up to 2 targets, damage
+keyed to bay cyan HP (one-shots cyan and mortars; gunners/heavies survive). Hits
+tint enemies electric blue for ~1s; coil kills freeze, glow and burst into blue
+sparks with charred scraps. Bay wall collision always leaves the four door gaps
+clear (room-1 style); intact doors block via opening HP so bots can bash and
+enter N/W/E (and S from wave 13) across the full 3-tile mouth.
 
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,

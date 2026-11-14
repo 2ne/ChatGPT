@@ -2783,14 +2783,52 @@ const WAVE_TYPE_INTRO = {
 };
 const WAVE_INTRO_HOLD = 4.5; // seconds after intro spawns before the full mix resumes (or sooner if they die)
 
-function waveBotType() {
-  // Waves 11–12: mostly cyan flankers so the new room reads clearly; no mortars.
-  if (state.wave === 11 || state.wave === 12) {
-    const r = Math.random();
-    if (r < 0.72) return BOT_TYPES.runner;
-    if (r < 0.88) return BOT_TYPES.patrol;
+/** Bay opener quotas — calmer counts, but gunners/heavies so upgraded guns still feel it. */
+const BAY_OPENER_MIX = {
+  11: { gunner: 3, heavy: 1 },
+  12: { gunner: 4, heavy: 2 },
+};
+
+/** Extra toughness once combat moves into the Defence Bay (wave 11+). */
+const BAY_HP_MULT = 1.5;
+
+function bayHpMult() {
+  return state.bayActive ? BAY_HP_MULT : 1;
+}
+
+function droneMaxHp(type) {
+  return Math.ceil(state.droneHp * type.health * bayHpMult());
+}
+
+/** Waves 11–12: fill gunner/heavy quotas, rest mostly cyan (no mortars). */
+function bayOpenerBotType() {
+  const want = BAY_OPENER_MIX[state.wave];
+  const needH = want.heavy - state.heaviesSpawned;
+  const needG = want.gunner - state.gunnersSpawned;
+  // toSpawn still includes the slot we're filling — force remaining quotas late.
+  const left = state.toSpawn;
+  if (needH > 0 && needH >= left) {
+    state.heaviesSpawned++;
+    return BOT_TYPES.heavy;
+  }
+  if (needG > 0 && needG + Math.max(0, needH) >= left) {
+    state.gunnersSpawned++;
     return BOT_TYPES.gunner;
   }
+  if (needH > 0 && Math.random() < 0.22) {
+    state.heaviesSpawned++;
+    return BOT_TYPES.heavy;
+  }
+  if (needG > 0 && Math.random() < 0.3) {
+    state.gunnersSpawned++;
+    return BOT_TYPES.gunner;
+  }
+  // Filler: cyan-leaning, a few grey patrols — no mortars until wave 13.
+  return Math.random() < 0.78 ? BOT_TYPES.runner : BOT_TYPES.patrol;
+}
+
+function waveBotType() {
+  if (state.wave === 11 || state.wave === 12) return bayOpenerBotType();
   // Guaranteed introduction, then a few replacements rather than extra enemies.
   // Wave 10 opens with a two-tank intro; bay mortars return from wave 13 (cap 3).
   const mortarLimit = state.wave === 10 ? 2 : 3;
@@ -2809,10 +2847,16 @@ function waveBotType() {
   return BOT_TYPES.patrol;
 }
 
-/** Regular spawn count per wave (before the boss). Bay opener waves are lighter. */
+/**
+ * Regular spawn count per wave (before the boss).
+ * Bay 11–12 stay calm; 13 soft-lands then ramps toward room 1's `5 + n*3` curve.
+ */
 function waveSpawnCount(n) {
-  if (n === 11) return 16;
-  if (n === 12) return 22;
+  if (n === 11) return 14;
+  if (n === 12) return 18;
+  if (n === 13) return 29;
+  if (n === 14) return 38;
+  if (n === 15) return 46;
   return Math.max(0, 5 + n * 3);
 }
 
@@ -3160,8 +3204,8 @@ function spawnDrone(pos, type = BOT_TYPES.patrol) {
   const limp = type.boss ? 0 : (Math.random() < 0.25 ? 0.2 + Math.random() * 0.55 : 0);
   const pace = type.speed;
   z.userData = {
-    hp: Math.ceil(state.droneHp * type.health),
-    maxHp: Math.ceil(state.droneHp * type.health),
+    hp: droneMaxHp(type),
+    maxHp: droneMaxHp(type),
     type, boss: !!type.boss, chargeRing, shotCd: 1.5, chargeT: 0, shotTarget: null,
     splitsDone: 0, mortarCd: 1.5, mortarRecoil: 0, mortarShots: 0,
     reformT: type.fragment ? 5.5 : 0,
@@ -5207,9 +5251,14 @@ function updateTeslaBolts(dt) {
   }
 }
 
-/** Base damage (~0.85×): lethal to cyan + mortars; Stage 6 scales via damageScale. */
+/**
+ * Coil damage is keyed to bay cyan HP so one bolt still deletes flankers (and
+ * mortars) after the 1.5× bay toughness; gunners/heavies keep a chunk. Stage 6
+ * multiplies via damageScale (base 1).
+ */
 function teslaDamage(scale = 1) {
-  return Math.ceil(state.droneHp * scale);
+  const cyanHp = Math.ceil(state.droneHp * BOT_TYPES.runner.health * bayHpMult());
+  return Math.ceil(cyanHp * scale);
 }
 
 function pickTeslaTarget(tip, rangeSq, skip = null) {
@@ -5674,6 +5723,8 @@ function startWave(n) {
   state.shieldDropsThisWave = 0;
   state.waveClearShieldDone = false;
   state.mortarsSpawned = 0;
+  state.gunnersSpawned = 0;
+  state.heaviesSpawned = 0;
   state.bossPending = true;
   state.waveTime = 0;
   state.shotsFired = 0;
@@ -5688,7 +5739,7 @@ function startWave(n) {
   for (const z of drones) {
     const u = z.userData;
     u.speed = Math.min(5.5, state.droneSpeed * u.pace);
-    u.hp = u.maxHp = Math.ceil(state.droneHp * u.type.health);
+    u.hp = u.maxHp = droneMaxHp(u.type);
     u.waveIntro = false;
   }
   state.spawnTimer = 0;
@@ -5703,8 +5754,8 @@ function startWave(n) {
     3: 'Purple gunners · Dodge charged shots',
     4: 'Gold bulwarks · Slow, armoured, heavy strikes',
     7: 'Containment warning',
-    11: 'Defence Bay · North and side doors only',
-    12: 'Hold the bay · Coil is live',
+    11: 'Defence Bay · Gunners and a bulwark',
+    12: 'Hold the bay · Heavier mix',
     13: 'South door opens · Mortars return',
   };
   showBanner(
