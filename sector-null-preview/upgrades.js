@@ -125,13 +125,13 @@ export function upgradeById(id) {
 }
 
 // ---------------------------------------------------------------------------
-// Tesla Coil ranks (Stage 5 combat uses these; Stage 6 exposes the picker card)
+// Tesla Coil ranks — combat numbers + Stage 6 picker card
 // ---------------------------------------------------------------------------
 export const COIL_MAX_RANK = 3;
 
 /**
  * Combat + VFX numbers per coil rank (0 = base bay coil, 3 = max).
- * Stage 6's upgrade card only increments `state.upgrades.coil` → these stats.
+ * The upgrade card only increments `state.upgrades.coil` → these stats.
  */
 export function coilStatsForRank(rank) {
   const r = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
@@ -147,17 +147,14 @@ export function coilStatsForRank(rank) {
   return { ...table[r], rank: r };
 }
 
-/**
- * Catalog entry for Stage 6 — NOT in UPGRADES yet.
- * Stage 6 should `UPGRADES.push(COIL_UPGRADE)` (or splice into the ability slot).
- */
+/** Stage 6 picker card — pinned to slot 1 after wave 11 until rank 3. */
 export const COIL_UPGRADE = {
   id: 'coil',
   cat: 'ability',
   name: 'TESLA COIL',
   desc: 'Empower the Defence Bay coil',
   max: COIL_MAX_RANK,
-  // Only offered once the bay is the active arena (Stage 6 picker gate).
+  // First offered on the wave-11 clear (bay live / wave ≥ 11).
   ok: (s) => !!s.bayActive || s.wave >= 11,
   stat: (s) => {
     const owned = s.upgrades.coil || 0;
@@ -172,12 +169,8 @@ export const COIL_UPGRADE = {
   apply: () => {},
 };
 
-/** QA schedule: clear wave → coil rank a typical player would hold afterward. */
-export const QA_COIL_RANK_AFTER_CLEAR = {
-  11: 1, // rank 1 by the start of wave 12
-  12: 2, // rank 2 by wave 13
-  13: 3, // rank 3 by wave 14
-};
+// Register in the live catalog (Stage 6).
+UPGRADES.push(COIL_UPGRADE);
 
 /**
  * Simulated run state for previewing a card at a given owned rank.

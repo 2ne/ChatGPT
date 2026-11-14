@@ -31,25 +31,22 @@ Permanent preview-only tool for balance checks at wave 20 / 30 / 50+:
 
 - Picks applied = clears before that wave (`N − 1`), through the real offer pool +
   `apply()`, weighted toward common choices, respecting rank caps / prerequisites.
-- Coil ranks are simulated as real picks on clears 11→1, 12→2, 13→3 (so
-  `?dev=wave=20` starts at coil rank 3). Rank combat numbers live in
-  `coilStatsForRank()`; Stage 6 only needs to expose `COIL_UPGRADE` in the picker.
+- Tesla Coil is in the live picker (slot 1 after wave 11 until rank 3). The QA sim
+  takes it with seeded realistic probability when offered — never forced. `&coil=`
+  still overrides the final rank. Combat numbers: `coilStatsForRank()`.
 - Room routing: waves ≤10 → room 1; waves ≥11 → bay. Extend `roomForWave()` when
   later stages add rooms; new upgrade cards enter via the shared `UPGRADES` catalog.
 - Build summary logs to the console and a second line on the preview stamp.
 
 Waves 11–12 stay calmer in count (14 / 18) but mix in gunners and heavies
-(~3+1 / ~4+2) so upgraded guns from wave 10 still feel pressure; spawn only from
-the north and side doors across the full 3-tile mouth. Wave 13 soft-lands at ~29
-(south door + mortars), then ramps toward room 1’s curve. Every bay enemy
-(wave 11+) gets a 1.5× health multiplier on top of normal wave scaling. Bay doors
-bash and break like room 1 (amber lights when broken, panels stay open). The
-Tesla coil is live from wave 11: ~2s interval, range 8, up to 2 targets, damage
-keyed to bay cyan HP (one-shots cyan and mortars; gunners/heavies survive). Hits
-tint enemies electric blue for ~1s; coil kills freeze, glow and burst into blue
-sparks with charred scraps. Bay wall collision always leaves the four door gaps
-clear (room-1 style); intact doors block via opening HP so bots can bash and
-enter N/W/E (and S from wave 13) across the full 3-tile mouth.
+(~3+1 / ~4+2). Bay door spawns stagger so only one or two mouths press at a time
+(south joins from wave 13 after a short delay). Wave 13 soft-lands (~22) so its
+regular-drone HP stays ≤ ~1.5× wave 12, then ramps (28 / 36) toward room 1’s
+curve. Every bay enemy (wave 11+) gets a 1.5× health multiplier. Boss HP is
+quadratic through wave 10, then linear from the wave-11 value. Bay doors bash
+like room 1. The Tesla coil is live from wave 11 (ranked stats); the upgrade
+card appears after wave 11 is cleared. Timed power-ups pause while the picker is
+open. Bay wall collision always leaves the four door gaps clear (room-1 style).
 
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,

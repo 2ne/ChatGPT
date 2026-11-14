@@ -20,20 +20,23 @@ Preview-only balance tool — do not remove or break these params:
 
 Implementation lives in `game.js` (`parseQaWaveTarget`, `roomForWave`,
 `applyQaWaveLoadout`, `bootQaWaveStart`). Picks = `N − 1` clears through the live
-`pickUpgradeOffers` / `apply()` path. Coil ranks 1/2/3 are forced on clears
-11/12/13 (count as picks). When adding rooms, extend `roomForWave` and the boot
-placement. Stage 6: push `COIL_UPGRADE` from `upgrades.js` into `UPGRADES` — do
-not re-implement rank math (`coilStatsForRank`).
+`pickUpgradeOffers` / `apply()` path. The Tesla Coil card is offered in slot 1
+from the wave-11 clear; the sim takes it with seeded realistic probability (never
+forced). `&coil=` overrides the final rank. When adding rooms, extend
+`roomForWave` and the boot placement. Coil combat numbers stay in
+`coilStatsForRank` / `COIL_UPGRADE` in `upgrades.js`.
 
 ## Bay combat
 
 Room 2 runs waves from 11 onward after the wave-10 handoff. Bay enemies take a
-1.5× HP multiplier. Waves 11–12 are calmer counts with gunner/heavy mix; 13
-soft-ramps then joins room 1’s curve. The Tesla coil is live from wave 11 with
-ranked stats (`coilStatsForRank`: rank 0 base → rank 3 max). The upgrade card
-itself is Stage 6 and must not join the in-game picker until that stage. Bay
-wallBoxes always leave the four door gaps clear (room-1 style); intact doors
-block via opening HP, not sealed slabs. Follow James's conventions: matte
-materials, merged/instanced static geometry, no extra shadow lights, separate
-depth layers for overlapping trim, smooth motion, reduced motion respected,
-cheap on phones.
+1.5× HP multiplier. Waves 11–12 are calmer counts with gunner/heavy mix; door
+spawns stagger so only one or two mouths are hot at a time. Wave 13 soft-ramps
+(south door + mortars) with total regular HP ≤ ~1.5× wave 12, then continues
+toward room 1’s curve. Boss HP is quadratic through wave 10, then linear from
+the wave-11 value (+20% of that baseline per wave). The Tesla coil is live from
+wave 11; the Stage 6 upgrade card (`COIL_UPGRADE`) appears in the picker after
+wave 11 is cleared, pinned to slot 1 until rank 3. Bay wallBoxes always leave
+the four door gaps clear (room-1 style); intact doors block via opening HP, not
+sealed slabs. Follow James's conventions: matte materials, merged/instanced
+static geometry, no extra shadow lights, separate depth layers for overlapping
+trim, smooth motion, reduced motion respected, cheap on phones.

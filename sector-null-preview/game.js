@@ -36,7 +36,6 @@ import {
   COIL_MAX_RANK,
   COIL_UPGRADE,
   DROP_CHANCE,
-  QA_COIL_RANK_AFTER_CLEAR,
   UPGRADES,
   UPGRADE_CATS,
   coilStatsForRank,
@@ -2893,18 +2892,18 @@ function waveBotType() {
 
 /**
  * Regular spawn count per wave (before the boss).
- * Bay 11–12 stay calm; 13 soft-lands then ramps toward room 1's `5 + n*3` curve.
+ * Bay 11–12 stay calm; 13 soft-lands (≤1.5× wave-12 total HP) then ramps.
  */
 function waveSpawnCount(n) {
   if (n === 11) return 14;
   if (n === 12) return 18;
-  if (n === 13) return 29;
-  if (n === 14) return 38;
-  if (n === 15) return 46;
+  if (n === 13) return 22;
+  if (n === 14) return 28;
+  if (n === 15) return 36;
   return Math.max(0, 5 + n * 3);
 }
 
-/** Which bay doors may spawn for this wave (spread across the full 3-tile mouth). */
+/** Doors that exist for this wave (south opens from 13). */
 function baySpawnDoors(n) {
   if (n <= 12) {
     return bayOpenings.filter(o => o.bayId === 'north' || o.bayId === 'west' || o.bayId === 'east');
@@ -2912,11 +2911,39 @@ function baySpawnDoors(n) {
   return bayOpenings.slice();
 }
 
+/**
+ * Within a wave, only one or two doors are "hot" at a time so pressure comes
+ * from a direction rather than every mouth at once. Spawn rate stays high.
+ */
+function bayActiveSpawnDoors() {
+  const available = baySpawnDoors(state.wave);
+  if (available.length <= 2) return available;
+  const byId = (id) => available.find(o => o.bayId === id);
+  const north = byId('north'), west = byId('west'), east = byId('east'), south = byId('south');
+  const t = state.waveTime;
+  const pick = (...ids) => ids.map(byId).filter(Boolean);
+
+  if (state.wave <= 12) {
+    // Rotate N+W ↔ N+E about every 6s.
+    return (Math.floor(t / 6) % 2 === 0) ? pick('north', 'west') : pick('north', 'east');
+  }
+  // Wave 13+: north/sides first; south joins after a few seconds, then rotate pairs.
+  if (t < 5) {
+    return t < 2.5 ? pick('north', 'west') : pick('north', 'east');
+  }
+  const cycle = Math.floor((t - 5) / 5) % 4;
+  if (cycle === 0) return pick('north', 'south');
+  if (cycle === 1) return pick('west', 'east');
+  if (cycle === 2) return pick('south', 'east');
+  return pick('north', 'west');
+}
+
 function baySpawnPoint(out, preferred = null) {
-  const doors = baySpawnDoors(state.wave);
-  const o = preferred && doors.includes(preferred)
+  const doors = bayActiveSpawnDoors();
+  const pool = doors.length ? doors : baySpawnDoors(state.wave);
+  const o = preferred && pool.includes(preferred)
     ? preferred
-    : doors[Math.floor(Math.random() * doors.length)];
+    : pool[Math.floor(Math.random() * pool.length)];
   const outX = o.ox - o.x, outZ = o.oz - o.z;
   const len = Math.hypot(outX, outZ) || 1;
   const nx = outX / len, nz = outZ / len;
@@ -2932,9 +2959,15 @@ function baySpawnPoint(out, preferred = null) {
   out._bayOpening = o;
   return out;
 }
+
 function bossHealthMult() {
-  // Patterns carry the challenge; avoid increasingly long health-only encounters.
-  return 6 + state.wave * 1.3 + state.wave * state.wave * 0.1;
+  const w = state.wave;
+  // Waves 1–10 keep the original quadratic curve.
+  if (w <= 10) return 6 + w * 1.3 + w * w * 0.1;
+  // Wave 11+ : continuous with the wave-11 quadratic value, then +20% of that
+  // baseline per wave (no drop from wave 10 → 11).
+  const at11 = 6 + 11 * 1.3 + 11 * 11 * 0.1;
+  return at11 * (1 + 0.2 * (w - 11));
 }
 
 function spawnWaveBoss() {
@@ -4917,6 +4950,11 @@ function pickWeighted(candidates) {
   return candidates[candidates.length - 1];
 }
 
+function coilOfferEligible() {
+  return (state.upgrades.coil || 0) < COIL_MAX_RANK
+    && (state.bayActive || state.wave >= 11);
+}
+
 function pickUpgradeOffers(count = 3) {
   const pool = UPGRADES.filter(u => (state.upgrades[u.id] || 0) < u.max && (!u.ok || u.ok(state)));
   const picks = [];
@@ -4933,6 +4971,9 @@ function pickUpgradeOffers(count = 3) {
     // Fall back to more helper cards only when nothing else can fill a slot.
     return others.length ? others : pool.slice();
   };
+
+  // Tesla Coil: always in the offer after wave 11 until maxed (pinned to slot 1 below).
+  if (coilOfferEligible()) take(pool.find(u => u.id === 'coil'));
 
   // Keep an equipment path available, including follow-up modules once owned.
   const equipment = pool.filter(u => u.cat === 'engineer');
@@ -4953,7 +4994,13 @@ function pickUpgradeOffers(count = 3) {
     [picks[i], picks[j]] = [picks[j], picks[i]];
   }
   picks.sort((a, b) => recommendationScore(b) - recommendationScore(a));
-  const magnetIndex = picks.findIndex(u => u.id === 'magnet');
+  // Pin coil to first slot as the recommended pick until rank 3.
+  const coilIndex = picks.findIndex(u => u?.id === 'coil');
+  if (coilIndex > 0) {
+    const [coil] = picks.splice(coilIndex, 1);
+    picks.unshift(coil);
+  }
+  const magnetIndex = picks.findIndex(u => u?.id === 'magnet');
   if (magnetIndex >= 0) {
     const [magnet] = picks.splice(magnetIndex, 1);
     // Preserve slot 3 and its keyboard shortcut even near the end of the pool.
@@ -4965,6 +5012,8 @@ function pickUpgradeOffers(count = 3) {
 
 function recommendationScore(u) {
   if (u.id === 'magnet') return -Infinity;
+  // Coil is the recommended first slot after wave 11 until maxed.
+  if (u.id === 'coil' && coilOfferEligible()) return 1000;
   if (state.hp <= 1 && (u.id === 'heal' || u.id === 'hp')) return 100;
   if (u.id === 'spread' && !state.spread) return 20;
   return (state.upgrades[u.id] ? 10 : 0) + upgradeWeight(u);
@@ -5041,6 +5090,7 @@ function choose(i) {
   state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
   u.apply(state);
   if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
+  if (u.id === 'coil') syncCoilWeaponFromUpgrades();
   state.choosing = false;
   resetGameplayInput();
   focusGame();
@@ -5086,7 +5136,7 @@ const DEV_CHOICE_LEAN = {
   bot: 2.2, botGun: 1.8, botBomb: 1.5, mine: 1.6, shock: 1.3,
   pulse: 1.6, regen: 1.5, luck: 1.1, magnet: 1.4, heal: 0.5,
   // Stage 6 Tesla Coil upgrade card — weight ready when the card lands in UPGRADES.
-  coil: 2.4,
+  coil: 2.6,
 };
 
 function mulberry32(seed) {
@@ -5115,34 +5165,31 @@ function qaChoiceWeight(u) {
   if (owned && ['spread', 'damage', 'rate', 'reload', 'mag', 'pierce'].includes(u.id)) w *= 1.55;
   // Soft-cap deep stacks so the build still mixes survival / engineer.
   if (owned >= 2 && ['spread', 'damage', 'rate'].includes(u.id)) w *= 0.72;
-  // Coil card (Stage 6) gets more interesting once the bay handoff is near / past.
-  if (u.id === 'coil' && state.wave >= 8) w *= 1.35;
+  // Coil is slot-1 recommended after wave 11 — often taken, not always (seeded).
+  if (u.id === 'coil') {
+    if (owned === 0) w *= 3.8;
+    else if (owned === 1) w *= 2.8;
+    else w *= 2.2;
+  }
   return Math.max(0.05, w);
 }
 
-/** Apply one Tesla Coil rank as a real pick (counts against the clear's slot). */
-function applyQaCoilPick(history, wave) {
-  const next = (state.upgrades.coil || 0) + 1;
-  if (next > COIL_MAX_RANK) return false;
-  state.upgrades.coil = next;
-  history.push({
-    wave,
-    id: COIL_UPGRADE.id,
-    name: COIL_UPGRADE.name,
-    rank: next,
-    offers: [COIL_UPGRADE.id],
-  });
-  return true;
-}
-
-function setQaCoilRank(rank) {
-  const r = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
+function syncCoilWeaponFromUpgrades() {
+  const r = Math.max(0, Math.min(COIL_MAX_RANK, state.upgrades.coil | 0));
   if (r > 0) state.upgrades.coil = r;
   else delete state.upgrades.coil;
   if (defenceBay.coilWeapon) {
     defenceBay.coilWeapon.setRank?.(r);
     defenceBay.coilWeapon.rank = r;
   }
+}
+
+/** QA/manual override of coil rank (keeps &coil=0-3 working). */
+function setQaCoilRank(rank) {
+  const r = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
+  if (r > 0) state.upgrades.coil = r;
+  else delete state.upgrades.coil;
+  syncCoilWeaponFromUpgrades();
 }
 
 function pickQaChoice(offers) {
@@ -5205,9 +5252,9 @@ function syncQaLoadoutSideEffects() {
 
 /**
  * Apply the real offer pool + apply() for every clear before `startWave`.
- * Coil ranks 1–3 are forced on clears 11–13 (typical post–wave-11 first-slot pick)
- * and count against the pick total. Catalog-driven otherwise — Stage 6's coil card
- * will join UPGRADES and the same path keeps working.
+ * Coil is offered in slot 1 from the wave-11 clear; the sim takes it with a
+ * realistic (seeded) probability via qaChoiceWeight — never forced. &coil=
+ * still overrides the final rank.
  */
 function applyQaWaveLoadout(seed, startWave) {
   const cleared = picksBeforeWave(startWave);
@@ -5215,18 +5262,15 @@ function applyQaWaveLoadout(seed, startWave) {
   withSeededRandom(seed, () => {
     for (let wave = 1; wave <= cleared; wave++) {
       state.wave = wave;
+      // Bay is live for wave-11+ clears so coil ok() / offer pinning match real runs.
+      if (wave >= 11) state.bayActive = true;
       state.hp = state.maxHp; // healthy clears — heal rarely offered
-      // Typical player: coil is the recommended first pick after wave 11 until maxed.
-      const wantCoil = QA_COIL_RANK_AFTER_CLEAR[wave] || 0;
-      if (wantCoil && (state.upgrades.coil || 0) < wantCoil) {
-        applyQaCoilPick(history, wave);
-        continue;
-      }
       const offers = pickUpgradeOffers(3);
       const pick = pickQaChoice(offers);
       if (!pick) break;
       state.upgrades[pick.id] = (state.upgrades[pick.id] || 0) + 1;
       pick.apply(state);
+      if (pick.id === 'coil') syncCoilWeaponFromUpgrades();
       history.push({
         wave,
         id: pick.id,
@@ -7352,8 +7396,11 @@ function update(dt, lightFrame = false) {
       state.reloadT += dt;
       if (state.reloadT >= state.reloadTime) finishReload();
     }
-    state.pDamage = Math.max(0, state.pDamage - dt);
-    state.pAmmo = Math.max(0, state.pAmmo - dt);
+    // Timed power-ups pause while the upgrade picker is open.
+    if (!state.choosing) {
+      state.pDamage = Math.max(0, state.pDamage - dt);
+      state.pAmmo = Math.max(0, state.pAmmo - dt);
+    }
     // Drops keep bobbing under the picker (wave-clear shields persist); collection waits for play.
     updateDrops(dt);
     // Seek gems keep flying in while the picker is open so boss payouts finish immediately.

@@ -16,7 +16,7 @@ const DEV_CHOICE_LEAN = {
   mag: 2.4, pierce: 2.2, speed: 2.0, hp: 2.0,
   bot: 2.2, botGun: 1.8, botBomb: 1.5, mine: 1.6, shock: 1.3,
   pulse: 1.6, regen: 1.5, luck: 1.1, magnet: 1.4, heal: 0.5,
-  coil: 2.4,
+  coil: 2.6,
 };
 
 function mulberry32(seed) {
@@ -72,6 +72,10 @@ function pickUpgradeOffers(state, rng, count = 3) {
     const others = pool.filter((u) => !HELPER_FAMILY.has(u.id));
     return others.length ? others : pool.slice();
   };
+  // Mirror live picker: pin coil into the offer after wave 11 until maxed.
+  if ((state.upgrades.coil || 0) < 3 && (state.bayActive || state.wave >= 11)) {
+    take(pool.find(u => u.id === 'coil'));
+  }
   const equipment = pool.filter(u => u.cat === 'engineer');
   if (equipment.length) take(pickWeighted(equipment, state, rng));
   if ((state.upgrades.spread || 0) === 0 && state.wave <= 2) {
@@ -82,6 +86,11 @@ function pickUpgradeOffers(state, rng, count = 3) {
     if (!u) break;
     take(u);
   }
+  const coilIndex = picks.findIndex(u => u?.id === 'coil');
+  if (coilIndex > 0) {
+    const [coil] = picks.splice(coilIndex, 1);
+    picks.unshift(coil);
+  }
   return picks;
 }
 
@@ -90,7 +99,11 @@ function choiceWeight(u, state) {
   let w = (DEV_CHOICE_LEAN[u.id] ?? 1) * (1 + upgradeWeight(u, state) * 0.15);
   if (owned && ['spread', 'damage', 'rate', 'reload', 'mag', 'pierce'].includes(u.id)) w *= 1.55;
   if (owned >= 2 && ['spread', 'damage', 'rate'].includes(u.id)) w *= 0.72;
-  if (u.id === 'coil' && state.wave >= 8) w *= 1.35;
+  if (u.id === 'coil') {
+    if (owned === 0) w *= 3.8;
+    else if (owned === 1) w *= 2.8;
+    else w *= 2.2;
+  }
   return Math.max(0.05, w);
 }
 
@@ -118,6 +131,7 @@ function simulate(seed, startWave) {
   const history = [];
   for (let wave = 1; wave <= cleared; wave++) {
     state.wave = wave;
+    if (wave >= 11) state.bayActive = true;
     state.hp = state.maxHp;
     const offers = pickUpgradeOffers(state, rng);
     if (!offers.length) break;
@@ -192,9 +206,23 @@ if (a50.upgrades.botGun) assert(!!a50.upgrades.bot, 'botGun requires bot');
 if (a50.upgrades.shock) assert(!!a50.upgrades.mine, 'shock requires mine');
 assert(!(a50.upgrades.botGun && a50.upgrades.botBomb), 'botGun xor botBomb');
 
-// Future coil card: lean table already knows it; catalog pickup is automatic.
-assert(DEV_CHOICE_LEAN.coil > 1, 'coil lean ready for Stage 6');
-assert(!upgradeById('coil'), 'coil card not in catalog yet (Stage 6)');
+assert(DEV_CHOICE_LEAN.coil > 1, 'coil lean present');
+assert(!!upgradeById('coil'), 'coil card in catalog');
+
+// Coil is offered after wave 11 but not forced — ranks vary by seed early on.
+let maxBy14 = 0;
+let anyBy14 = 0;
+let rankSum14 = 0;
+for (let seed = 1; seed <= 40; seed++) {
+  const s14 = simulate(seed, 14);
+  const r = s14.upgrades.coil || 0;
+  if (r >= 3) maxBy14++;
+  if (r > 0) anyBy14++;
+  rankSum14 += r;
+}
+assert(maxBy14 < 40, `not every seed maxes coil by wave 14 (${maxBy14}/40)`);
+assert(anyBy14 >= 20, `many seeds take coil by wave 14 (${anyBy14}/40)`);
+assert(rankSum14 / 40 < 2.8, `avg coil rank at wave 14 < 2.8 (${(rankSum14 / 40).toFixed(2)})`);
 
 console.log('\nexample seed=42 wave=11:', a11.upgrades);
 console.log('example seed=42 wave=20 ranks:', a20.upgrades);
