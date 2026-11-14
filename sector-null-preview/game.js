@@ -5008,12 +5008,13 @@ function explodeDrone(drone, opts = {}) {
   const origin = drone.userData.upper.getWorldPosition(new THREE.Vector3());
   origin.y += 0.35;
   if (opts.electric) {
-    audio.teslaZap?.(origin);
+    // Zap crack already played on fire — impact is a bright burst + cyan sparks.
     if (!reducedMotion.matches && (fxPressure() < 0.9 || droneBlasts.length < 12)) {
-      spawnBlastFlare(origin, 0.85, 0x62edff);
+      spawnBlastFlare(origin, 1.35, 0xd8fbff);
+      spawnBlastFlare(origin, 0.7, 0x62edff);
     }
-    spawnBlastSparks(origin, 22, 1.15, 0.9, sparkMatCyan);
-    // Tint sparks cyan by swapping the last few debris materials — keep cheap.
+    spawnBlastSparks(origin, 28, 1.35, 1.1, sparkMatCyan);
+    spawnShockwave(origin, 3.2, 0x62edff);
   } else {
     audio.explode(origin);
     // Skip the flash when the field is already saturated with FX.
@@ -5030,60 +5031,164 @@ function explodeDrone(drone, opts = {}) {
 }
 
 // --- Tesla coil (Stage 5 base; Stage 6 ranks shorten interval / grow range / chain) ---
-const TESLA_ARC_POOL = [];
-const TESLA_ARC_LIFE = 0.18;
-function acquireTeslaArc() {
-  let arc = TESLA_ARC_POOL.pop();
-  if (!arc) {
-    const positions = new Float32Array(8 * 3);
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const mat = new THREE.LineBasicMaterial({
-      color: 0x62edff, transparent: true, opacity: 0.95,
-      depthWrite: false, toneMapped: false,
+// Visuals only here — interval 2s / range 8 / damage formula stay fixed.
+const TESLA_CHARGE = 0.3;
+const TESLA_BOLT_LIFE = 0.32;
+const TESLA_SEGS = 10;
+const TESLA_RIBBON_POOL = [];
+const _teslaAlong = new THREE.Vector3();
+const _teslaSide = new THREE.Vector3();
+const _teslaCam = new THREE.Vector3();
+const _teslaMid = new THREE.Vector3();
+const _teslaFrom = new THREE.Vector3();
+const _teslaTo = new THREE.Vector3();
+
+function makeTeslaRibbonGeo(segs) {
+  const vCount = (segs + 1) * 2;
+  const positions = new Float32Array(vCount * 3);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const idx = [];
+  for (let i = 0; i < segs; i++) {
+    const a = i * 2, b = a + 1, c = a + 2, d = a + 3;
+    idx.push(a, b, c, b, d, c);
+  }
+  geo.setIndex(idx);
+  return { geo, positions, segs };
+}
+
+function acquireTeslaRibbon(color, opacity) {
+  let slot = TESLA_RIBBON_POOL.pop();
+  if (!slot) {
+    const { geo, positions, segs } = makeTeslaRibbonGeo(TESLA_SEGS);
+    const mat = new THREE.MeshBasicMaterial({
+      color, transparent: true, opacity, depthWrite: false,
+      blending: THREE.AdditiveBlending, toneMapped: false, side: THREE.DoubleSide,
     });
-    arc = new THREE.Line(geo, mat);
-    arc.frustumCulled = false;
-    arc.userData.positions = positions;
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.frustumCulled = false;
+    slot = { mesh, positions, segs, path: new Array(segs + 1) };
+    for (let i = 0; i <= segs; i++) slot.path[i] = new THREE.Vector3();
+  } else {
+    slot.mesh.material.color.setHex(color);
+    slot.mesh.material.opacity = opacity;
   }
-  return arc;
+  return slot;
 }
-function releaseTeslaArc(arc) {
-  scene.remove(arc);
-  TESLA_ARC_POOL.push(arc);
+function releaseTeslaRibbon(slot) {
+  scene.remove(slot.mesh);
+  TESLA_RIBBON_POOL.push(slot);
 }
-const teslaArcs = [];
-function spawnTeslaArc(from, to) {
-  if (reducedMotion.matches) {
-    // Still a brief tip flicker via coil pulse — no jagged bolt.
-    return;
-  }
-  const arc = acquireTeslaArc();
-  const pos = arc.userData.positions;
-  const segs = 7;
+
+function jitterTeslaPath(path, from, to, amount) {
+  const segs = path.length - 1;
   for (let i = 0; i <= segs; i++) {
     const t = i / segs;
-    const jx = (i === 0 || i === segs) ? 0 : (Math.random() - 0.5) * 0.85;
-    const jy = (i === 0 || i === segs) ? 0 : (Math.random() - 0.5) * 0.55;
-    const jz = (i === 0 || i === segs) ? 0 : (Math.random() - 0.5) * 0.85;
-    pos[i * 3] = from.x + (to.x - from.x) * t + jx;
-    pos[i * 3 + 1] = from.y + (to.y - from.y) * t + jy;
-    pos[i * 3 + 2] = from.z + (to.z - from.z) * t + jz;
+    const j = (i === 0 || i === segs || amount <= 0) ? 0 : amount;
+    path[i].set(
+      from.x + (to.x - from.x) * t + (Math.random() - 0.5) * j,
+      from.y + (to.y - from.y) * t + (Math.random() - 0.5) * j * 0.65,
+      from.z + (to.z - from.z) * t + (Math.random() - 0.5) * j,
+    );
   }
-  arc.geometry.attributes.position.needsUpdate = true;
-  arc.geometry.setDrawRange(0, segs + 1);
-  arc.material.opacity = 0.95;
-  scene.add(arc);
-  teslaArcs.push({ arc, life: TESLA_ARC_LIFE });
 }
-function updateTeslaArcs(dt) {
-  for (let i = teslaArcs.length - 1; i >= 0; i--) {
-    const slot = teslaArcs[i];
-    slot.life -= dt;
-    slot.arc.material.opacity = Math.max(0, slot.life / TESLA_ARC_LIFE);
-    if (slot.life <= 0) {
-      releaseTeslaArc(slot.arc);
-      teslaArcs.splice(i, 1);
+
+function writeTeslaRibbon(slot, width) {
+  const { positions, path, segs, mesh } = slot;
+  for (let i = 0; i <= segs; i++) {
+    const p = path[i];
+    const prev = path[Math.max(0, i - 1)];
+    const next = path[Math.min(segs, i + 1)];
+    _teslaAlong.subVectors(next, prev);
+    if (_teslaAlong.lengthSq() < 1e-8) _teslaAlong.set(0, 1, 0);
+    else _teslaAlong.normalize();
+    camera.getWorldPosition(_teslaCam);
+    _teslaCam.sub(p);
+    _teslaSide.crossVectors(_teslaAlong, _teslaCam);
+    if (_teslaSide.lengthSq() < 1e-6) {
+      _teslaMid.set(Math.abs(_teslaAlong.y) < 0.9 ? 0 : 1, Math.abs(_teslaAlong.y) < 0.9 ? 1 : 0, 0);
+      _teslaSide.crossVectors(_teslaAlong, _teslaMid);
+    }
+    _teslaSide.normalize();
+    const hx = _teslaSide.x * width, hy = _teslaSide.y * width, hz = _teslaSide.z * width;
+    const o = i * 6;
+    positions[o] = p.x - hx; positions[o + 1] = p.y - hy; positions[o + 2] = p.z - hz;
+    positions[o + 3] = p.x + hx; positions[o + 4] = p.y + hy; positions[o + 5] = p.z + hz;
+  }
+  mesh.geometry.attributes.position.needsUpdate = true;
+  mesh.geometry.computeBoundingSphere();
+}
+
+const teslaBolts = [];
+function spawnTeslaBolt(from, to, { main = true } = {}) {
+  const soft = reducedMotion.matches;
+  const jitter = soft ? 0.12 : 0.95;
+  const life = soft ? 0.22 : TESLA_BOLT_LIFE;
+  const layers = [];
+  const push = (color, opacity, width, pathJitter) => {
+    const slot = acquireTeslaRibbon(color, opacity);
+    jitterTeslaPath(slot.path, from, to, pathJitter);
+    writeTeslaRibbon(slot, width);
+    scene.add(slot.mesh);
+    layers.push({ slot, width, baseOpacity: opacity });
+  };
+  if (main) {
+    // Outer soft glow, mid glow, bright core.
+    push(0x1a8cff, soft ? 0.35 : 0.55, soft ? 0.22 : 0.55, jitter * 0.7);
+    push(0x62edff, soft ? 0.55 : 0.85, soft ? 0.12 : 0.28, jitter);
+    push(0xe8fbff, soft ? 0.7 : 0.95, soft ? 0.05 : 0.1, jitter * 0.55);
+  } else {
+    push(0x62edff, soft ? 0.35 : 0.55, soft ? 0.06 : 0.12, jitter * 1.2);
+    push(0xd8fbff, soft ? 0.45 : 0.75, soft ? 0.03 : 0.05, jitter);
+  }
+  teslaBolts.push({
+    layers, life, maxLife: life, from: from.clone(), to: to.clone(),
+    nextJitter: soft ? 99 : 0.08 + Math.random() * 0.04,
+    jittersLeft: soft ? 0 : 2 + ((Math.random() * 2) | 0),
+  });
+}
+
+function spawnTeslaDischarge(from, to) {
+  spawnTeslaBolt(from, to, { main: true });
+  if (reducedMotion.matches) return;
+  // 2–3 thinner forks peel off mid-bolt.
+  const forks = 2 + ((Math.random() * 2) | 0);
+  for (let i = 0; i < forks; i++) {
+    const t0 = 0.25 + Math.random() * 0.35;
+    const t1 = Math.min(0.95, t0 + 0.25 + Math.random() * 0.3);
+    _teslaFrom.lerpVectors(from, to, t0);
+    _teslaTo.lerpVectors(from, to, t1);
+    _teslaMid.subVectors(to, from);
+    _teslaSide.set(-_teslaMid.z, 0, _teslaMid.x).normalize().multiplyScalar((Math.random() - 0.5) * 2.4);
+    _teslaTo.add(_teslaSide);
+    _teslaTo.y += (Math.random() - 0.5) * 1.2;
+    spawnTeslaBolt(_teslaFrom, _teslaTo, { main: false });
+  }
+}
+
+function updateTeslaBolts(dt) {
+  for (let i = teslaBolts.length - 1; i >= 0; i--) {
+    const bolt = teslaBolts[i];
+    bolt.life -= dt;
+    const fade = Math.max(0, bolt.life / bolt.maxLife);
+    const head = fade > 0.55 ? 1 : fade / 0.55; // hold bright, then snap fade
+    if (!reducedMotion.matches && bolt.jittersLeft > 0) {
+      bolt.nextJitter -= dt;
+      if (bolt.nextJitter <= 0) {
+        bolt.jittersLeft--;
+        bolt.nextJitter = 0.07 + Math.random() * 0.05;
+        for (const layer of bolt.layers) {
+          jitterTeslaPath(layer.slot.path, bolt.from, bolt.to, 0.7 + Math.random() * 0.5);
+          writeTeslaRibbon(layer.slot, layer.width);
+        }
+      }
+    }
+    for (const layer of bolt.layers) {
+      layer.slot.mesh.material.opacity = layer.baseOpacity * head;
+    }
+    if (bolt.life <= 0) {
+      for (const layer of bolt.layers) releaseTeslaRibbon(layer.slot);
+      teslaBolts.splice(i, 1);
     }
   }
 }
@@ -5093,35 +5198,29 @@ function teslaDamage() {
   return Math.ceil(state.droneHp * BOT_TYPES.runner.health);
 }
 
-function updateTeslaCoil(dt) {
-  const weapon = defenceBay.coilWeapon;
-  if (!weapon || !state.bayActive) return;
-  updateTeslaArcs(dt);
-  weapon.cd -= dt;
-  if (weapon.cd > 0) return;
-  const { interval, range, chains } = weapon.stats();
-  const tip = weapon.tip;
-  const rangeSq = range * range;
+function pickTeslaTarget(tip, rangeSq) {
   let best = null, bestD = Infinity;
   for (const z of drones) {
-    if (z.userData.dying || z.userData.boss && bossDeath.active) continue;
+    if (z.userData.dying || (z.userData.boss && bossDeath.active)) continue;
     const d = tip.distanceToSquared(z.position);
     if (d > rangeSq || d >= bestD) continue;
     if (!inside(z.position)) continue;
     best = z; bestD = d;
   }
-  if (!best) {
-    weapon.cd = 0.25;
-    return;
-  }
-  weapon.cd = interval;
-  const targetPos = best.userData.upper?.getWorldPosition(new THREE.Vector3()) || best.position.clone();
+  return best;
+}
+
+function fireTeslaAt(weapon, target, chains) {
+  const tip = weapon.tip;
+  const targetPos = target.userData.upper?.getWorldPosition(new THREE.Vector3()) || target.position.clone();
   targetPos.y += 0.4;
-  spawnTeslaArc(tip, targetPos);
-  audio.teslaZap?.(best.position);
+  spawnTeslaDischarge(tip, targetPos);
+  audio.teslaZap?.(target.position);
+  weapon.dischargeFlash?.();
+  bumpShake(0.22);
 
   const dmg = teslaDamage();
-  const hitList = [best];
+  const hitList = [target];
   // Stage 6 will raise `chains`; base rank 0 stays single-target.
   for (let c = 0; c < chains; c++) {
     const prev = hitList[hitList.length - 1];
@@ -5136,10 +5235,9 @@ function updateTeslaCoil(dt) {
     hitList.push(next);
     const to = next.userData.upper?.getWorldPosition(new THREE.Vector3()) || next.position.clone();
     to.y += 0.4;
-    spawnTeslaArc(
-      prev.userData.upper?.getWorldPosition(new THREE.Vector3()) || prev.position,
-      to,
-    );
+    const from = prev.userData.upper?.getWorldPosition(new THREE.Vector3()) || prev.position.clone();
+    from.y += 0.4;
+    spawnTeslaDischarge(from, to);
   }
 
   for (const z of hitList) {
@@ -5150,6 +5248,74 @@ function updateTeslaCoil(dt) {
       if (idx >= 0) killDroneElectric(z, idx);
     }
   }
+}
+
+function updateTeslaCoil(dt) {
+  const weapon = defenceBay.coilWeapon;
+  if (!weapon || !state.bayActive) return;
+  updateTeslaBolts(dt);
+  weapon.cd -= dt;
+  const { interval, range, chains } = weapon.stats();
+  const tip = weapon.tip;
+  const rangeSq = range * range;
+
+  // Last TESLA_CHARGE seconds of the cooldown: charge tell, then fire at 0.
+  // Keeps the 2s interval between shots while giving a loaded wind-up.
+  if (weapon.cd > TESLA_CHARGE) {
+    weapon.setCharge?.(0);
+    weapon._lock = null;
+    weapon._chargeSfx = false;
+    return;
+  }
+  if (weapon.cd > 0) {
+    let target = weapon._lock && drones.includes(weapon._lock) && !weapon._lock.userData.dying
+      ? weapon._lock
+      : pickTeslaTarget(tip, rangeSq);
+    if (!target) {
+      weapon.setCharge?.(0);
+      weapon._lock = null;
+      weapon._chargeSfx = false;
+      // Hold at the charge threshold until something enters range.
+      weapon.cd = Math.max(weapon.cd, TESLA_CHARGE);
+      return;
+    }
+    weapon._lock = target;
+    const charge = 1 - weapon.cd / TESLA_CHARGE;
+    weapon.setCharge?.(charge);
+    if (!weapon._chargeSfx) {
+      weapon._chargeSfx = true;
+      audio.teslaCharge?.(tip);
+    }
+    // Tip crackle sparks while charging (skip under reduced motion).
+    if (!reducedMotion.matches && Math.random() < dt * 18 * charge) {
+      const spark = acquireSpark();
+      spark.material = sparkMatCyan;
+      spark.scale.set(0.03, 0.03, rnd(0.12, 0.28));
+      spark.position.set(
+        tip.x + rnd(-0.35, 0.35),
+        tip.y + rnd(-0.2, 0.45),
+        tip.z + rnd(-0.35, 0.35),
+      );
+      const velocity = _tracerDir.set(rnd(-2, 2), rnd(1, 5), rnd(-2, 2));
+      spark.quaternion.setFromUnitVectors(sparkForward, _sparkDir.copy(velocity).normalize());
+      spawnDebris(spark, velocity, { life: rnd(0.12, 0.28), bounce: 0.01 });
+    }
+    return;
+  }
+
+  // Fire.
+  const target = weapon._lock && drones.includes(weapon._lock) && !weapon._lock.userData.dying
+    ? weapon._lock
+    : pickTeslaTarget(tip, rangeSq);
+  weapon._lock = null;
+  weapon._chargeSfx = false;
+  weapon.setCharge?.(0);
+  if (!target) {
+    weapon.cd = 0.2;
+    return;
+  }
+  weapon.cd = interval;
+  fireTeslaAt(weapon, target, chains);
 }
 
 function killDroneElectric(z, idx) {

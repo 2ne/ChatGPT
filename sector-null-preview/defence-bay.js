@@ -389,9 +389,22 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   }
   solids.push({ x: BAY_CX, z: ROOM2_CZ, hx: 1.3, hz: 1.3, c: 1, s: 0 });
   const coilGlow = halo(coil, C.cyan, 0, 2.4, 0, 3, 0.13);
+  const tipGlow = halo(coil, C.cyan, 0, 4.08, 0, 1.6, 0);
+  tipGlow.visible = false;
+  const floorPulse = model(platform, new THREE.CircleGeometry(4.2, 24), new THREE.MeshBasicMaterial({
+    color: C.cyan, transparent: true, opacity: 0, depthWrite: false,
+    blending: THREE.AdditiveBlending, toneMapped: false,
+  }), 0, 0.02, 0);
+  floorPulse.rotation.x = -Math.PI / 2;
   model(platform, new THREE.RingGeometry(0.23, 0.29, 32), cyanLight, 0, 0.29, 1.75).rotation.x = -Math.PI / 2;
   /** World tip of the terminal sphere — lightning arcs originate here. */
   const coilTip = new THREE.Vector3(BAY_CX, 4.08, ROOM2_CZ);
+  let chargeLevel = 0;
+  let dischargeT = 0;
+  const ballBaseColor = ballMat.color.clone();
+  const ballFlashColor = new THREE.Color(0xd8fbff);
+  ballMat.emissive = new THREE.Color(0x29d6e9);
+  ballMat.emissiveIntensity = 0;
 
   const stencil = document.createElement('canvas');
   stencil.width = 1024; stencil.height = 256;
@@ -419,6 +432,7 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     rank: 0,
     cd: 0,
     tip: coilTip,
+    charging: false,
     stats() {
       const r = this.rank | 0;
       return {
@@ -427,6 +441,17 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
         chains: r,
       };
     },
+    /** 0–1 charge tell before the bolt. */
+    setCharge(level) {
+      chargeLevel = Math.max(0, Math.min(1, level));
+      this.charging = chargeLevel > 0.02;
+    },
+    /** Brief white-blue flash on the tip / platform after the bolt fires. */
+    dischargeFlash() {
+      dischargeT = 0.28;
+      chargeLevel = 0;
+      this.charging = false;
+    },
   };
   return {
     group, solids, coil, coilTip, coilWeapon,
@@ -434,10 +459,23 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     update(dt) {
       for (const d of doors) d.update(dt);
       time += dt;
+      if (dischargeT > 0) dischargeT = Math.max(0, dischargeT - dt);
       const pulse = reducedMotion?.matches ? 0 : Math.sin(time * 1.8);
-      winding.emissiveIntensity = 0.65 + pulse * 0.12;
-      coilGlow.material.opacity = 0.13 + pulse * 0.025;
-      coreLight.intensity = 30 + pulse * 3;
+      const charge = chargeLevel;
+      const flash = dischargeT > 0 ? (dischargeT / 0.28) : 0;
+      const flashEase = flash * flash;
+      winding.emissiveIntensity = 0.65 + pulse * 0.12 + charge * 1.35 + flashEase * 1.8;
+      coilGlow.material.opacity = 0.13 + pulse * 0.025 + charge * 0.28 + flashEase * 0.35;
+      coilGlow.scale.setScalar(3 + charge * 1.4 + flashEase * 2.2);
+      tipGlow.visible = charge > 0.05 || flash > 0.05;
+      tipGlow.material.opacity = charge * 0.55 + flashEase * 0.9;
+      tipGlow.scale.setScalar(1.4 + charge * 2.4 + flashEase * 3.2);
+      tipGlow.material.color.setHex(flash > 0.4 ? 0xd8fbff : C.cyan);
+      floorPulse.material.opacity = charge * 0.12 + flashEase * 0.55;
+      floorPulse.scale.setScalar(0.55 + charge * 0.35 + flashEase * 0.7);
+      ballMat.emissiveIntensity = charge * 0.85 + flashEase * 1.6;
+      ballMat.color.copy(ballBaseColor).lerp(ballFlashColor, Math.min(1, charge * 0.55 + flashEase));
+      coreLight.intensity = 30 + pulse * 3 + charge * 22 + flashEase * 40;
     },
   };
 }

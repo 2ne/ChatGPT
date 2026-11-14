@@ -295,14 +295,33 @@ export function createAudio(settings, listener) {
       grain(520, 0.28, 0.2, out);
       voice(155, 42, 0.24, 0.28, { out, type: 'triangle', echo: true });
     },
-    /** Electric crackle for Tesla coil kills — distinct from the normal boom. */
+    /** Rising charge whine before a Tesla discharge. */
+    teslaCharge(pos) {
+      if (!ctx) return;
+      const out = spatial(pos, 0.7);
+      // Soft rising whine into the snap window.
+      voice(180, 720, 0.28, 0.14, { out, type: 'sawtooth', attack: 0.02 });
+      voice(90, 340, 0.28, 0.1, { out, type: 'triangle', attack: 0.02 });
+      grain(2400, 0.22, 0.12, out);
+    },
+    /**
+     * Punchy Tesla discharge — charge already played; this is the crack/thump/sizzle.
+     * Louder and heavier than a normal explode so coil kills read as electrical.
+     */
     teslaZap(pos) {
-      const out = spatial(pos, 0.55);
-      grain(5200, 0.08, 0.28, out);
-      grain(2800, 0.14, 0.32, out);
-      grain(900, 0.2, 0.18, out);
-      voice(880, 220, 0.12, 0.16, { out, type: 'square', attack: 0.002 });
-      voice(180, 70, 0.22, 0.2, { out, type: 'triangle' });
+      const out = spatial(pos, 0.95);
+      // Loud crack / snap
+      grain(6400, 0.07, 0.55, out);
+      grain(3200, 0.12, 0.48, out);
+      grain(1100, 0.2, 0.32, out);
+      voice(1200, 180, 0.1, 0.28, { out, type: 'square', attack: 0.001 });
+      // Low thump
+      grain(90, 0.35, 0.55, out);
+      voice(55, 22, 0.4, 0.48, { out, type: 'sine' });
+      voice(110, 40, 0.28, 0.32, { out, type: 'triangle' });
+      // Sizzle tail
+      grain(4800, 0.35, 0.22, out);
+      voice(880, 220, 0.28, 0.1, { out, type: 'square', attack: 0.002, t: (ctx?.currentTime ?? 0) + 0.05 });
     },
     // Layered boom for the boss finale — heavier bass and a longer tail.
     bossExplode(pos) {

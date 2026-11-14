@@ -20,7 +20,9 @@ Waves 11–12 are lighter (mostly cyan flankers) and spawn only from the north a
 side doors across the full 3-tile mouth. From wave 13 the south door joins and
 mortars return. Bay doors bash and break like room 1 (amber lights when broken,
 panels stay open). The Tesla coil is live from wave 11: ~2s interval, range 8,
-damage lethal to cyan flankers, with a jagged blue arc and electric kill FX.
+damage lethal to cyan flankers. Each shot has a charge tell, a thick flickering
+ribbon bolt with forks, impact flash/shock ring, coil recoil flash, light screen
+shake, and a punchy crack/thump (softened under reduced motion).
 
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,
