@@ -3890,12 +3890,24 @@ function vacuumWaveClearShieldThen(done) {
   ud.onSeekHome = done;
 }
 
+/** Playable drop bounds — room 1 square, or room 2 when the bay is live. */
+function dropArenaBounds(inset = 0.9) {
+  if (state.bayActive) return room2PlayerClamp(inset);
+  const lim = HALF - inset;
+  return { minX: -lim, maxX: lim, minZ: -lim, maxZ: lim };
+}
+
+function clampToDropArena(out, inset = 0.9) {
+  const b = dropArenaBounds(inset);
+  out.x = Math.max(b.minX, Math.min(b.maxX, out.x));
+  out.z = Math.max(b.minZ, Math.min(b.maxZ, out.z));
+  return out;
+}
+
 /** Keep the drop inside the arena and out of cover/walls. */
 function placeReachableDrop(pos) {
   const out = { x: pos.x ?? 0, y: 0, z: pos.z ?? 0 };
-  const lim = HALF - 0.9;
-  out.x = Math.max(-lim, Math.min(lim, out.x));
-  out.z = Math.max(-lim, Math.min(lim, out.z));
+  clampToDropArena(out);
   for (let pass = 0; pass < 2; pass++) {
     pushOutOfSolids(out, 0.4);
     for (const w of wallBoxes) {
@@ -3907,8 +3919,7 @@ function placeReachableDrop(pos) {
       else out.z = cz + (Math.sign(dz) || 1) * (hz + 0.01);
     }
   }
-  out.x = Math.max(-lim, Math.min(lim, out.x));
-  out.z = Math.max(-lim, Math.min(lim, out.z));
+  clampToDropArena(out);
   return out;
 }
 
@@ -4355,7 +4366,7 @@ function collect(type, opts = {}) {
 }
 
 function updateDrops(dt) {
-  const lim = HALF - 0.9;
+  const arena = dropArenaBounds(0.9);
   const canCollect = !state.choosing;
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i], ud = d.userData;
@@ -4405,8 +4416,9 @@ function updateDrops(dt) {
       // magnet: close drops fly to the player
       p.x += (dx / dist) * 10 * dt; p.z += (dz / dist) * 10 * dt;
     } else if (!ud.waveClearShield && !ud.seekHome) {
-      // the player can't leave the deck, so drops that land outside slide in
-      const cx = Math.max(-lim, Math.min(lim, p.x)), cz = Math.max(-lim, Math.min(lim, p.z));
+      // Keep drops on the active deck (room 1 or bay) so they stay reachable.
+      const cx = Math.max(arena.minX, Math.min(arena.maxX, p.x));
+      const cz = Math.max(arena.minZ, Math.min(arena.maxZ, p.z));
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
       if (od > 0.01) { const st = Math.min(od, 6 * dt); p.x += (ox / od) * st; p.z += (oz / od) * st; }
     }
