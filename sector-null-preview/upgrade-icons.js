@@ -5,7 +5,7 @@ import { createHelperBotMesh } from './helper-bot-mesh.js';
 const CAT_COLORS = UPGRADE_CATS;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
-const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag']);
+const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
 const SWAY_ANGLE = 20 * Math.PI / 180;
 
 // Same basis as game.js tracers: lookAt aims local -Z forward.
@@ -510,6 +510,106 @@ const builders = {
     g.userData.gemShadows = gemShadows;
     return g;
   },
+  /** Defence Bay Tesla coil — silhouette matches room-2 (defence-bay.js), simplified for card size. */
+  coil(owned = 0) {
+    const g = new THREE.Group();
+    const next = Math.min(3, (owned | 0) + 1);
+    const dark = std(0x111e29, { metalness: 0.55, roughness: 0.55 });
+    const metal = std(0x718b9c, { metalness: 0.7, roughness: 0.32 });
+    const windingMat = new THREE.MeshStandardMaterial({
+      color: 0x135968,
+      emissive: 0x29d6e9,
+      emissiveIntensity: 0.65 + next * 0.22,
+      roughness: 0.4,
+      metalness: 0.35,
+    });
+
+    // Octagonal-ish foot + metal collar (real coil base / first band).
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.58, 0.16, 8), dark);
+    base.position.y = -0.42;
+    base.rotation.y = Math.PI / 8;
+    g.add(base);
+    const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.44, 0.11, 12), metal);
+    foot.position.y = -0.28;
+    g.add(foot);
+    // Cyan accent pips around the base — simplified from the bay’s eight strips.
+    for (let i = 0; i < 4; i++) {
+      const a = i * Math.PI / 2 + Math.PI / 4;
+      addBox(g, glow(0x62edff, 1.1), 0.2, 0.045, 0.04,
+        Math.cos(a) * 0.5, -0.4, Math.sin(a) * 0.5);
+    }
+
+    // Insulated mast.
+    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.19, 1.05, 14), dark);
+    mast.position.y = 0.32;
+    g.add(mast);
+
+    // Winding stack (5 rings — reads clearly at icon size; bay uses six).
+    const rings = new THREE.Group();
+    const ringCount = 4 + (next >= 3 ? 1 : 0);
+    for (let i = 0; i < ringCount; i++) {
+      const y = -0.08 + i * (0.9 / Math.max(1, ringCount - 1));
+      const collar = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.032, 8, 24), metal);
+      collar.rotation.x = Math.PI / 2;
+      collar.position.y = y - 0.025;
+      rings.add(collar);
+      const glowRing = new THREE.Mesh(new THREE.TorusGeometry(0.27, 0.018, 6, 24), windingMat);
+      glowRing.rotation.x = Math.PI / 2;
+      glowRing.position.y = y;
+      rings.add(glowRing);
+    }
+    g.add(rings);
+
+    // Terminal collar + steel ball.
+    const topCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.22, 0.09, 12), metal);
+    topCollar.position.y = 0.98;
+    g.add(topCollar);
+    const ballMat = std(0x9eb6c7, {
+      metalness: 0.65, roughness: 0.25,
+      emissive: 0x29d6e9, emissiveIntensity: 0.12 + next * 0.1,
+    });
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 20, 16), ballMat);
+    ball.position.y = 1.22;
+    g.add(ball);
+
+    // Soft cyan bloom around the windings (matches bay coilGlow).
+    const halo = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5, 16, 12),
+      new THREE.MeshBasicMaterial({
+        color: 0x62edff,
+        transparent: true,
+        opacity: 0.11 + next * 0.03,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      }),
+    );
+    halo.position.y = 0.35;
+    g.add(halo);
+
+    // Tip spark — flickers in animateIcon when motion is allowed.
+    const spark = new THREE.Mesh(
+      new THREE.SphereGeometry(0.055, 8, 6),
+      new THREE.MeshBasicMaterial({
+        color: 0xd8fbff,
+        transparent: true,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      }),
+    );
+    spark.position.y = 1.42;
+    g.add(spark);
+
+    g.userData.coilRings = rings;
+    g.userData.coilHalo = halo;
+    g.userData.coilBall = ball;
+    g.userData.coilSpark = spark;
+    g.userData.coilOwned = next;
+    g.userData.coilWinding = windingMat;
+    return g;
+  },
 };
 
 function disposeObject(root) {
@@ -667,6 +767,24 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
       shadow.scale.setScalar(0.94 + shrink * 0.14);
       shadow.material.opacity = 0.72 + shrink * 0.2;
     });
+  }
+  if (ud.coilHalo) {
+    const base = 0.1 + (ud.coilOwned || 1) * 0.03;
+    ud.coilHalo.material.opacity = base * (0.7 + 0.3 * Math.sin(t * 2.8 + entry.phase) * idle);
+  }
+  if (ud.coilWinding) {
+    ud.coilWinding.emissiveIntensity = (0.55 + (ud.coilOwned || 1) * 0.2)
+      * (0.85 + 0.15 * Math.sin(t * 3.4 + entry.phase) * idle);
+  }
+  if (ud.coilBall?.material) {
+    ud.coilBall.material.emissiveIntensity = (0.1 + (ud.coilOwned || 1) * 0.08)
+      * (0.75 + 0.25 * Math.sin(t * 4.2 + entry.phase) * idle);
+  }
+  if (ud.coilSpark) {
+    // Brief tip flickers — same spirit as shock arcs / damage pulse; off under reduced motion.
+    const flick = idle && Math.sin(t * 9.5 + entry.phase * 2) > 0.72;
+    ud.coilSpark.material.opacity = flick ? 0.9 : 0;
+    ud.coilSpark.scale.setScalar(flick ? 0.85 + 0.35 * Math.abs(Math.sin(t * 17)) : 1);
   }
   if (ud.swap) {
     const u = (Math.sin(t * 1.5) + 1) * 0.5;

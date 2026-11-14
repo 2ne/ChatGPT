@@ -29,10 +29,11 @@ export const UPGRADE_CATS = {
   handling: '#76bcf0',
   survival: '#70dfb8',
   fortune: '#bdadfa',
+  defence: '#29d6e9',
   ability: '#7cff4a',
 };
 
-export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'ability'];
+export const UPGRADE_CAT_ORDER = ['engineer', 'firepower', 'handling', 'survival', 'fortune', 'defence', 'ability'];
 
 /** Per-rank helper shot damage (index = owned bot rank). */
 export const HELPER_DAMAGE = [0, 1.5, 2.5, 3];
@@ -150,7 +151,7 @@ export function coilStatsForRank(rank) {
 /** Stage 6 picker card — pinned to slot 1 after wave 11 until rank 3. */
 export const COIL_UPGRADE = {
   id: 'coil',
-  cat: 'ability',
+  cat: 'defence',
   name: 'TESLA COIL',
   desc: 'Empower the Defence Bay coil',
   max: COIL_MAX_RANK,
