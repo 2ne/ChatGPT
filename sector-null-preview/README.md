@@ -116,3 +116,5 @@ The worker does not delete caches belonging to other projects. Optional build
 overrides: `SECTOR_NULL_BUILD`, `PREVIEW_COMMIT`, `PREVIEW_TIME`, and
 `SECTOR_NULL_SCORES_API`. Existing leaderboard integration is inherited from
 the staged source; this project does not deploy or modify the leaderboard service.
+
+Tesla card previews use a stationary six-winding tower, centered framing, and branching electrical bolts. Reduced-motion mode disables the bolts.

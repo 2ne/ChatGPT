@@ -546,7 +546,7 @@ const builders = {
 
     // Winding stack (5 rings — reads clearly at icon size; bay uses six).
     const rings = new THREE.Group();
-    const ringCount = 4 + (next >= 3 ? 1 : 0);
+    const ringCount = 6;
     for (let i = 0; i < ringCount; i++) {
       const y = -0.08 + i * (0.9 / Math.max(1, ringCount - 1));
       const collar = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.032, 8, 24), metal);
@@ -568,7 +568,7 @@ const builders = {
       metalness: 0.65, roughness: 0.25,
       emissive: 0x29d6e9, emissiveIntensity: 0.12 + next * 0.1,
     });
-    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 20, 16), ballMat);
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.36, 28, 20), ballMat);
     ball.position.y = 1.22;
     g.add(ball);
 
@@ -602,6 +602,17 @@ const builders = {
     spark.position.y = 1.42;
     g.add(spark);
 
+    const bolts = Array.from({ length: next + 1 }, () => {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(48), 3));
+      const bolt = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({
+        color: 0xb9f6ff, transparent: true, opacity: 0,
+        blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+      }));
+      g.add(bolt);
+      return bolt;
+    });
+    g.userData.coilBolts = bolts;
     g.userData.coilRings = rings;
     g.userData.coilHalo = halo;
     g.userData.coilBall = ball;
@@ -687,7 +698,7 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   const idle = reducedMotion.matches ? 0 : 1;
   const spin = entry.dragging ? 0 : (0.35 + (hot ? 0.55 : 0)) * idle;
 
-  if (!entry.dragging) {
+  if (!entry.dragging && id !== 'coil') {
     if (SWAY_IDS.has(id) && idle) {
       entry.yaw = entry.baseYaw + Math.sin(t * 1.15 + entry.phase) * SWAY_ANGLE;
     } else if (!SWAY_IDS.has(id)) {
@@ -696,7 +707,7 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   }
 
   root.rotation.y = entry.yaw;
-  subject.position.y = idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0;
+  subject.position.y = id === 'coil' ? -0.36 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
 
   const ud = subject.userData;
   if (ud.pulse) ud.pulse.scale.setScalar(1 + 0.12 * Math.sin(t * 6));
@@ -779,6 +790,34 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   if (ud.coilBall?.material) {
     ud.coilBall.material.emissiveIntensity = (0.1 + (ud.coilOwned || 1) * 0.08)
       * (0.75 + 0.25 * Math.sin(t * 4.2 + entry.phase) * idle);
+  }
+  if (ud.coilBolts) {
+    const tick = Math.floor(t * 12);
+    ud.coilBolts.forEach((bolt, i) => {
+      bolt.material.opacity = idle && (t * 0.85 + entry.phase + i * 0.27) % 1 < 0.32 ? 0.9 : 0;
+      if (!idle || bolt.userData.tick === tick) return;
+      bolt.userData.tick = tick;
+      const a = i * 2.4 + tick * 0.67;
+      const points = Array.from({ length: 7 }, (_, j) => {
+        const u = j / 6;
+        return new THREE.Vector3(
+          Math.cos(a) * (0.28 + u * 0.8) + (j % 6 ? Math.sin(tick * 13 + j * 7) * 0.12 : 0),
+          1.32 - u * 0.85 + (j % 6 ? Math.cos(tick * 9 + j * 4) * 0.12 : 0),
+          Math.sin(a) * (0.22 + u * 0.3));
+      });
+      const attr = bolt.geometry.attributes.position;
+      for (let j = 0; j < 6; j++) {
+        attr.setXYZ(j * 2, ...points[j].toArray());
+        attr.setXYZ(j * 2 + 1, ...points[j + 1].toArray());
+      }
+      for (let j = 0; j < 2; j++) {
+        const point = points[j + 2];
+        attr.setXYZ(12 + j * 2, ...point.toArray());
+        attr.setXYZ(13 + j * 2, point.x + Math.cos(a + j) * 0.25, point.y + 0.19, point.z);
+      }
+      attr.needsUpdate = true;
+      bolt.geometry.computeBoundingSphere();
+    });
   }
   if (ud.coilSpark) {
     // Brief tip flickers — same spirit as shock arcs / damage pulse; off under reduced motion.
