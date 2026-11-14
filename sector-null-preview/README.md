@@ -12,12 +12,28 @@ game unless James asks to release them.
 
 After wave 10 the scripted walk enters the bay; the south door slams shut and
 wave 11 starts. Waves continue past 20 with no ending. Restart returns to room 1.
-`?dev=bay` lands inside the bay at wave 11 with a simulated typical waves 1–10
-upgrade path (10 real picks through the offer/apply system — one per wave clear).
-`?dev=bay&build=<seed>` repeats a build; `?dev=bay&upgrades=0` is the old bare
-start. The chosen build logs to the console and a short line on the preview stamp.
 `?dev=mapview` retains the facility overview. With no query string, the preview
 starts normally.
+
+### Preview QA wave jump (maintain this)
+
+Permanent preview-only tool for balance checks at wave 20 / 30 / 50+:
+
+| URL | Behaviour |
+|-----|-----------|
+| `?dev=wave=20` | Start wave 20 in the correct room with a simulated build |
+| `?dev=wave&wave=20` | Same |
+| `?dev=bay` | Shorthand for wave 11 in the Defence Bay |
+| `?dev=bay&wave=30` | Wave 30 in the bay |
+| `&build=<seed>` | Repeat a loadout (works with any of the above) |
+| `&upgrades=0` | Bare start — skip the simulated picks |
+
+- Picks applied = clears before that wave (`N − 1`), through the real offer pool +
+  `apply()`, weighted toward common choices, respecting rank caps / prerequisites.
+- Room routing: waves ≤10 → room 1; waves ≥11 → bay. Extend `roomForWave()` when
+  later stages add rooms; new upgrade cards (including Stage 6 Tesla Coil `coil`)
+  enter automatically via the shared `UPGRADES` catalog.
+- Build summary logs to the console and a second line on the preview stamp.
 
 Waves 11–12 stay calmer in count (14 / 18) but mix in gunners and heavies
 (~3+1 / ~4+2) so upgraded guns from wave 10 still feel pressure; spawn only from

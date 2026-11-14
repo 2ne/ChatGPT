@@ -3,9 +3,28 @@
 This is the independent Room 2 preview. Implement preview changes here, build
 with `npm run build`, and deploy through the existing Pages workflow to
 `/sector-null-preview/`. The public game source is `../sector-null/` and must not
-be changed or replaced as part of preview work. Keep `?dev=bay` working (it
-should land inside the bay ready for wave 11, with a simulated typical
-waves 1–10 upgrade loadout unless `upgrades=0`; `build=<seed>` repeats a build).
+be changed or replaced as part of preview work.
+
+## QA wave jump (keep working)
+
+Preview-only balance tool — do not remove or break these params:
+
+| Param | Meaning |
+|-------|---------|
+| `?dev=wave=<N>` | Start at wave N in the correct room with a realistic simulated build |
+| `?dev=bay` | Shorthand for wave 11 in the Defence Bay |
+| `?dev=bay&wave=<N>` | Wave N in the bay (N ≥ 11) |
+| `&build=<seed>` | Repeatable loadout |
+| `&upgrades=0` | Bare start (no simulated picks) |
+
+Implementation lives in `game.js` (`parseQaWaveTarget`, `roomForWave`,
+`applyQaWaveLoadout`, `bootQaWaveStart`). Picks = `N − 1` clears through the live
+`pickUpgradeOffers` / `apply()` path. When adding rooms, extend `roomForWave` and
+the boot placement. When adding upgrade cards (Stage 6 Tesla Coil id `coil`,
+etc.), add them to `UPGRADES` — the sim picks them up automatically; optional lean
+weights go in `DEV_CHOICE_LEAN`.
+
+## Bay combat
 
 Room 2 runs waves from 11 onward after the wave-10 handoff. Bay enemies take a
 1.5× HP multiplier. Waves 11–12 are calmer counts with gunner/heavy mix; 13

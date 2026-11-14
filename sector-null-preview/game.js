@@ -85,11 +85,37 @@ initPreviewStamp();
 
 const bootParams = new URLSearchParams(location.search);
 const mapView = bootParams.get('dev') === 'mapview';
-const bayDev = bootParams.get('dev') === 'bay';
-/** ?dev=bay&upgrades=0 — bare start (no simulated waves 1–10 build). */
-const bayDevBare = bayDev && bootParams.get('upgrades') === '0';
-/** ?dev=bay&build=<seed> — repeatable loadout; omit for a fresh random seed each load. */
-const bayDevBuildParam = bootParams.get('build');
+/**
+ * Preview QA wave jump.
+ * Scheme:
+ *   ?dev=wave=20          → start wave 20 in the correct room
+ *   ?dev=wave&wave=20     → same
+ *   ?dev=bay              → wave 11 in the Defence Bay (shorthand)
+ *   ?dev=bay&wave=30      → wave 30 in the bay
+ * Shared: &build=<seed> repeats a loadout; &upgrades=0 skips the sim (bare).
+ */
+const qaWaveTarget = parseQaWaveTarget(bootParams);
+const qaDevBare = qaWaveTarget != null && bootParams.get('upgrades') === '0';
+const qaBuildParam = bootParams.get('build');
+
+/** @returns {number|null} wave to boot into, or null when not a QA wave jump. */
+function parseQaWaveTarget(params) {
+  const dev = params.get('dev');
+  if (!dev) return null;
+  const clamp = (n) => Math.max(1, Math.min(999, n));
+  if (dev === 'bay') {
+    const override = Number.parseInt(params.get('wave') || '', 10);
+    return clamp(Number.isFinite(override) ? override : 11);
+  }
+  if (dev === 'wave') {
+    const n = Number.parseInt(params.get('wave') || '', 10);
+    return Number.isFinite(n) ? clamp(n) : null;
+  }
+  // ?dev=wave=20  →  URLSearchParams gives get('dev') === 'wave=20'
+  const m = /^wave[=:_-]?(\d+)$/i.exec(dev);
+  if (m) return clamp(Number.parseInt(m[1], 10));
+  return null;
+}
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -5019,17 +5045,34 @@ function choose(i) {
 }
 
 // ===================================================================
-// ?dev=bay — simulate a typical waves 1–10 upgrade path (preview only)
+// Preview QA — jump to any wave with a realistic simulated build
 // ===================================================================
-/** One pick per cleared wave; the game does not grant boss/bonus picks. */
-const BAY_DEV_PICKS = 10;
+/**
+ * Combat room for wave N. Extend when later stages add rooms (e.g. wave 21+).
+ * New rooms only need a branch here + a boot placement below.
+ */
+function roomForWave(n) {
+  if (n >= 11) return 'bay';
+  return 'room1';
+}
 
-/** Player-lean weights on top of the real offer pool (common gun path first). */
-const BAY_DEV_CHOICE_LEAN = {
+/** Clears before starting wave N → one pick each. No boss/bonus picks exist. */
+function picksBeforeWave(n) {
+  return Math.max(0, n - 1);
+}
+
+/**
+ * Player-lean weights on top of the live offer pool.
+ * Unknown / future catalog ids (e.g. Stage 6 `coil`) fall back to 1 and still
+ * enter via pickUpgradeOffers → UPGRADES, so new cards slot in automatically.
+ */
+const DEV_CHOICE_LEAN = {
   spread: 5.0, damage: 4.0, rate: 3.6, reload: 3.4,
   mag: 2.4, pierce: 2.2, speed: 2.0, hp: 2.0,
   bot: 2.2, botGun: 1.8, botBomb: 1.5, mine: 1.6, shock: 1.3,
   pulse: 1.6, regen: 1.5, luck: 1.1, magnet: 1.4, heal: 0.5,
+  // Stage 6 Tesla Coil upgrade card — weight ready when the card lands in UPGRADES.
+  coil: 2.4,
 };
 
 function mulberry32(seed) {
@@ -5051,35 +5094,37 @@ function withSeededRandom(seed, fn) {
   finally { Math.random = prev; }
 }
 
-function bayDevChoiceWeight(u) {
+function qaChoiceWeight(u) {
   const owned = state.upgrades[u.id] || 0;
-  let w = (BAY_DEV_CHOICE_LEAN[u.id] ?? 1) * (1 + upgradeWeight(u) * 0.15);
+  let w = (DEV_CHOICE_LEAN[u.id] ?? 1) * (1 + upgradeWeight(u) * 0.15);
   // Players usually stack the gun cards they already started.
   if (owned && ['spread', 'damage', 'rate', 'reload', 'mag', 'pierce'].includes(u.id)) w *= 1.55;
   // Soft-cap deep stacks so the build still mixes survival / engineer.
   if (owned >= 2 && ['spread', 'damage', 'rate'].includes(u.id)) w *= 0.72;
+  // Coil card gets more interesting once the bay handoff is near / past.
+  if (u.id === 'coil' && state.wave >= 8) w *= 1.35;
   return Math.max(0.05, w);
 }
 
-function pickBayDevChoice(offers) {
+function pickQaChoice(offers) {
   const pool = offers.filter(Boolean);
   if (!pool.length) return null;
-  const total = pool.reduce((sum, u) => sum + bayDevChoiceWeight(u), 0);
+  const total = pool.reduce((sum, u) => sum + qaChoiceWeight(u), 0);
   let roll = Math.random() * total;
   for (const u of pool) {
-    roll -= bayDevChoiceWeight(u);
+    roll -= qaChoiceWeight(u);
     if (roll <= 0) return u;
   }
   return pool[pool.length - 1];
 }
 
-/** Rough post–wave-10 score/kills so the HUD doesn't look brand-new. */
-function estimateBayDevProgress(seed) {
+/** Rough score/kills through clears 1..cleared so the HUD doesn't look brand-new. */
+function estimateQaProgress(seed, cleared) {
   const rng = mulberry32((seed ^ 0xa5a5a5a5) >>> 0);
   let score = 0;
   let kills = 0;
-  for (let w = 1; w <= BAY_DEV_PICKS; w++) {
-    const regs = 5 + w * 3;
+  for (let w = 1; w <= cleared; w++) {
+    const regs = waveSpawnCount(w);
     kills += regs + 1;
     score += regs * (115 + Math.floor(rng() * 45));
     score += 800 + 150 * w;
@@ -5089,14 +5134,13 @@ function estimateBayDevProgress(seed) {
   return { score: Math.round(score), kills };
 }
 
-function resolveBayDevSeed() {
-  if (bayDevBuildParam != null && bayDevBuildParam !== '') {
-    const n = Number.parseInt(bayDevBuildParam, 10);
+function resolveQaSeed() {
+  if (qaBuildParam != null && qaBuildParam !== '') {
+    const n = Number.parseInt(qaBuildParam, 10);
     if (Number.isFinite(n)) return n >>> 0;
-    // Non-numeric build strings still hash stably.
     let h = 2166136261;
-    for (let i = 0; i < bayDevBuildParam.length; i++) {
-      h ^= bayDevBuildParam.charCodeAt(i);
+    for (let i = 0; i < qaBuildParam.length; i++) {
+      h ^= qaBuildParam.charCodeAt(i);
       h = Math.imul(h, 16777619);
     }
     return h >>> 0;
@@ -5104,7 +5148,7 @@ function resolveBayDevSeed() {
   return (Math.random() * 0x100000000) >>> 0;
 }
 
-function formatBayDevBuildSummary(history) {
+function formatQaBuildSummary(history) {
   const ranks = {};
   for (const step of history) ranks[step.id] = step.rank;
   return Object.entries(ranks)
@@ -5112,18 +5156,29 @@ function formatBayDevBuildSummary(history) {
     .join(' ');
 }
 
+function syncQaLoadoutSideEffects() {
+  updateWeaponIcon();
+  if (state.upgrades.bot) syncHelperMesh(state.upgrades);
+  // Stage 6: when the Tesla Coil card exists, its ranks drive the bay coil.
+  if (defenceBay.coilWeapon) {
+    defenceBay.coilWeapon.rank = state.upgrades.coil | 0;
+  }
+  updateHUD();
+}
+
 /**
- * Run the real offer pool + apply() path for waves 1–10 so ?dev=bay lands with
- * a typical average build (stats, ranks, weapon panel, helper mesh, score).
+ * Apply the real offer pool + apply() for every clear before `startWave`.
+ * Catalog-driven: new UPGRADES cards (coil, etc.) appear automatically.
  */
-function applyBayDevAverageLoadout(seed) {
+function applyQaWaveLoadout(seed, startWave) {
+  const cleared = picksBeforeWave(startWave);
   const history = [];
   withSeededRandom(seed, () => {
-    for (let wave = 1; wave <= BAY_DEV_PICKS; wave++) {
+    for (let wave = 1; wave <= cleared; wave++) {
       state.wave = wave;
       state.hp = state.maxHp; // healthy clears — heal rarely offered
       const offers = pickUpgradeOffers(3);
-      const pick = pickBayDevChoice(offers);
+      const pick = pickQaChoice(offers);
       if (!pick) break;
       state.upgrades[pick.id] = (state.upgrades[pick.id] || 0) + 1;
       pick.apply(state);
@@ -5137,28 +5192,61 @@ function applyBayDevAverageLoadout(seed) {
     }
   });
 
-  const progress = estimateBayDevProgress(seed);
+  const progress = estimateQaProgress(seed, cleared);
   state.score = progress.score;
   state.kills = progress.kills;
   state.mag = state.magSize;
   state.hp = state.maxHp;
   state.reloading = false;
   state.reloadT = 0;
-  updateWeaponIcon();
-  if (state.upgrades.bot) syncHelperMesh(state.upgrades);
-  updateHUD();
+  syncQaLoadoutSideEffects();
 
-  const summary = formatBayDevBuildSummary(history);
+  const room = roomForWave(startWave);
+  const summary = formatQaBuildSummary(history);
+  const repeat = `?dev=wave=${startWave}&build=${seed}`;
   console.info(
-    `[dev=bay] seed=${seed} picks=${history.length} (one per wave clear 1–${BAY_DEV_PICKS})`,
+    `[dev=wave] start=${startWave} room=${room} seed=${seed} picks=${history.length} (clears 1–${cleared || 0})`,
     '\n build:', summary || '(none)',
-    '\n path:', history.map((h) => `w${h.wave}:${h.id}→${h.rank}`).join(' · '),
+    '\n path:', history.map((h) => `w${h.wave}:${h.id}→${h.rank}`).join(' · ') || '(none)',
     '\n ranks:', { ...state.upgrades },
     `\n score=${state.score} kills=${state.kills}`,
-    `\n repeat: ?dev=bay&build=${seed}`,
+    `\n repeat: ${repeat}`,
   );
-  setPreviewStampNote(`bay · seed ${seed} · ${summary || 'bare'}`);
-  return { seed, history, summary };
+  setPreviewStampNote(`w${startWave} · seed ${seed} · ${summary || 'bare'}`);
+  return { seed, history, summary, startWave, room };
+}
+
+/** Place the operator in the room that hosts `startWave` and queue that wave. */
+function bootQaWaveStart(startWave) {
+  const room = roomForWave(startWave);
+  state.intermission = 0;
+  waveAt = null;
+  clearFieldDrones();
+  clearEmeralds();
+  clearEquipmentField();
+  state.scripted = null;
+
+  if (room === 'bay') {
+    // finalizeBayArrival queues state.wave + 1 — land on startWave.
+    state.wave = startWave - 1;
+    player.position.set(BAY_CX, 0, ROOM2_CZ + 8);
+    player.rotation.y = Math.PI;
+    touchYaw = Math.PI;
+    finalizeBayArrival();
+  } else {
+    // room1 (and future early rooms): stand in the arena and queue startWave.
+    state.wave = startWave - 1;
+    player.position.set(0, 0, 0);
+    player.rotation.y = 0;
+    touchYaw = 0;
+    state.bayActive = false;
+    restoreRoom2EnemySolid();
+    queueWave(0.9);
+  }
+
+  followPos.copy(player.position).add(gameplayCamOffset());
+  camera.position.copy(followPos);
+  camMix = 1;
 }
 
 // ===================================================================
@@ -7455,32 +7543,17 @@ whenViewportSettled(() => {
       player.rotation.y = 0;
       beginBossDeath(z);
     }, 350);
-  } else if (bayDev) {
-    // ?dev=bay — land inside the Defence Bay ready for wave 11 combat.
-    // Default: simulate a typical waves 1–10 upgrade path. Bare: &upgrades=0.
-    // Repeatable: &build=<seed>.
+  } else if (qaWaveTarget != null) {
+    // ?dev=wave=<N> / ?dev=bay — jump to wave N with a realistic simulated build.
     setTimeout(() => {
       startGame(false);
-      state.intermission = 0;
-      waveAt = null;
-      clearFieldDrones();
-      clearEmeralds();
-      clearEquipmentField();
-      if (bayDevBare) {
-        console.info('[dev=bay] bare start (upgrades=0) — no simulated loadout');
-        setPreviewStampNote('bay · bare');
+      if (qaDevBare) {
+        console.info(`[dev=wave] bare start (upgrades=0) → wave ${qaWaveTarget} · room ${roomForWave(qaWaveTarget)}`);
+        setPreviewStampNote(`w${qaWaveTarget} · bare`);
       } else {
-        applyBayDevAverageLoadout(resolveBayDevSeed());
+        applyQaWaveLoadout(resolveQaSeed(), qaWaveTarget);
       }
-      state.wave = 10;
-      player.position.set(BAY_CX, 0, ROOM2_CZ + 8);
-      player.rotation.y = Math.PI;
-      touchYaw = Math.PI;
-      state.scripted = null;
-      finalizeBayArrival();
-      followPos.copy(player.position).add(gameplayCamOffset());
-      camera.position.copy(followPos);
-      camMix = 1;
+      bootQaWaveStart(qaWaveTarget);
     }, 350);
   } else if (mapView) {
     // Start a normal wave-1 run under the overview camera so the map is visible.
