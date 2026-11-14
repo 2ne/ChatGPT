@@ -7189,7 +7189,7 @@ function chaseDrone(z, dt) {
     if (!ud.struck && ud.swing >= Z_STRIKE) {
       ud.struck = true;
       if (o) hitOpening(o);
-      else if (!(pd < hitRange && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer((ud.type.style === 'heavy' && !ud.boss) || slammer ? 2 : 1))) {
+      else if (!(pd < hitRange && !wallBetween(z.position, p) && clearPath(z.position.x, z.position.z, p.x, p.z, 0.05) && hurtPlayer(1))) {
         audio.swipe(z.position);
       } else if (slammer) {
         state.shake = Math.max(state.shake, 0.55);
