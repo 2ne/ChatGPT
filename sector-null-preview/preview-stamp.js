@@ -14,6 +14,8 @@ function stampText() {
   return `PREVIEW b${PREVIEW_BUILD} · ${PREVIEW_COMMIT} · ${PREVIEW_TIME}`;
 }
 
+let stampNote = '';
+
 function mountStamp() {
   if (document.getElementById('previewStamp')) return;
   const el = document.createElement('div');
@@ -21,6 +23,22 @@ function mountStamp() {
   el.setAttribute('aria-hidden', 'true');
   el.textContent = stampText();
   document.body.appendChild(el);
+}
+
+function paintStamp() {
+  const el = document.getElementById('previewStamp');
+  if (!el) return;
+  el.textContent = stampNote ? `${stampText()}\n${stampNote}` : stampText();
+}
+
+/** Optional second line on the preview stamp (dev=bay build summary, etc.). */
+export function setPreviewStampNote(note = '') {
+  stampNote = String(note || '').trim();
+  if (document.getElementById('previewStamp')) paintStamp();
+  else if (IS_PREVIEW) {
+    mountStamp();
+    paintStamp();
+  }
 }
 
 async function fetchVersion() {
@@ -64,6 +82,7 @@ function registerPreviewWorker() {
 export function initPreviewStamp() {
   if (!IS_PREVIEW) return;
   mountStamp();
+  paintStamp();
   registerPreviewWorker();
   checkVersion();
   document.addEventListener('visibilitychange', () => {

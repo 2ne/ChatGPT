@@ -12,7 +12,10 @@ game unless James asks to release them.
 
 After wave 10 the scripted walk enters the bay; the south door slams shut and
 wave 11 starts. Waves continue past 20 with no ending. Restart returns to room 1.
-`?dev=bay` lands inside the bay and starts wave 11 for combat testing.
+`?dev=bay` lands inside the bay at wave 11 with a simulated typical waves 1–10
+upgrade path (10 real picks through the offer/apply system — one per wave clear).
+`?dev=bay&build=<seed>` repeats a build; `?dev=bay&upgrades=0` is the old bare
+start. The chosen build logs to the console and a short line on the preview stamp.
 `?dev=mapview` retains the facility overview. With no query string, the preview
 starts normally.
 

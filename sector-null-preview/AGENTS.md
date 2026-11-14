@@ -4,7 +4,8 @@ This is the independent Room 2 preview. Implement preview changes here, build
 with `npm run build`, and deploy through the existing Pages workflow to
 `/sector-null-preview/`. The public game source is `../sector-null/` and must not
 be changed or replaced as part of preview work. Keep `?dev=bay` working (it
-should land inside the bay ready for wave 11).
+should land inside the bay ready for wave 11, with a simulated typical
+waves 1–10 upgrade loadout unless `upgrades=0`; `build=<seed>` repeats a build).
 
 Room 2 runs waves from 11 onward after the wave-10 handoff. Bay enemies take a
 1.5× HP multiplier. Waves 11–12 are calmer counts with gunner/heavy mix; 13

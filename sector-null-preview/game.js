@@ -74,7 +74,7 @@ import {
   shutBlocksWallSample,
 } from './door-gap-nav.js';
 import { huntPointToward } from './drone-hunt.js';
-import { initPreviewStamp } from './preview-stamp.js';
+import { initPreviewStamp, setPreviewStampNote } from './preview-stamp.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
 // Must run before any material compiles — swaps camera-depth fog for world-XZ falloff
@@ -86,6 +86,10 @@ initPreviewStamp();
 const bootParams = new URLSearchParams(location.search);
 const mapView = bootParams.get('dev') === 'mapview';
 const bayDev = bootParams.get('dev') === 'bay';
+/** ?dev=bay&upgrades=0 — bare start (no simulated waves 1–10 build). */
+const bayDevBare = bayDev && bootParams.get('upgrades') === '0';
+/** ?dev=bay&build=<seed> — repeatable loadout; omit for a fresh random seed each load. */
+const bayDevBuildParam = bootParams.get('build');
 
 // Sector Null. Gameplay and animation adapted from Abandon All Hope by Josh Werner.
 const canvas = document.getElementById('game');
@@ -5015,6 +5019,149 @@ function choose(i) {
 }
 
 // ===================================================================
+// ?dev=bay — simulate a typical waves 1–10 upgrade path (preview only)
+// ===================================================================
+/** One pick per cleared wave; the game does not grant boss/bonus picks. */
+const BAY_DEV_PICKS = 10;
+
+/** Player-lean weights on top of the real offer pool (common gun path first). */
+const BAY_DEV_CHOICE_LEAN = {
+  spread: 5.0, damage: 4.0, rate: 3.6, reload: 3.4,
+  mag: 2.4, pierce: 2.2, speed: 2.0, hp: 2.0,
+  bot: 2.2, botGun: 1.8, botBomb: 1.5, mine: 1.6, shock: 1.3,
+  pulse: 1.6, regen: 1.5, luck: 1.1, magnet: 1.4, heal: 0.5,
+};
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function withSeededRandom(seed, fn) {
+  const rng = mulberry32(seed >>> 0);
+  const prev = Math.random;
+  Math.random = rng;
+  try { return fn(rng); }
+  finally { Math.random = prev; }
+}
+
+function bayDevChoiceWeight(u) {
+  const owned = state.upgrades[u.id] || 0;
+  let w = (BAY_DEV_CHOICE_LEAN[u.id] ?? 1) * (1 + upgradeWeight(u) * 0.15);
+  // Players usually stack the gun cards they already started.
+  if (owned && ['spread', 'damage', 'rate', 'reload', 'mag', 'pierce'].includes(u.id)) w *= 1.55;
+  // Soft-cap deep stacks so the build still mixes survival / engineer.
+  if (owned >= 2 && ['spread', 'damage', 'rate'].includes(u.id)) w *= 0.72;
+  return Math.max(0.05, w);
+}
+
+function pickBayDevChoice(offers) {
+  const pool = offers.filter(Boolean);
+  if (!pool.length) return null;
+  const total = pool.reduce((sum, u) => sum + bayDevChoiceWeight(u), 0);
+  let roll = Math.random() * total;
+  for (const u of pool) {
+    roll -= bayDevChoiceWeight(u);
+    if (roll <= 0) return u;
+  }
+  return pool[pool.length - 1];
+}
+
+/** Rough post–wave-10 score/kills so the HUD doesn't look brand-new. */
+function estimateBayDevProgress(seed) {
+  const rng = mulberry32((seed ^ 0xa5a5a5a5) >>> 0);
+  let score = 0;
+  let kills = 0;
+  for (let w = 1; w <= BAY_DEV_PICKS; w++) {
+    const regs = 5 + w * 3;
+    kills += regs + 1;
+    score += regs * (115 + Math.floor(rng() * 45));
+    score += 800 + 150 * w;
+    score += Math.round(280 + w * 85 + rng() * 220);
+    score += Math.round(regs * (0.22 + rng() * 0.22) * 40 * (1 + rng() * 1.2));
+  }
+  return { score: Math.round(score), kills };
+}
+
+function resolveBayDevSeed() {
+  if (bayDevBuildParam != null && bayDevBuildParam !== '') {
+    const n = Number.parseInt(bayDevBuildParam, 10);
+    if (Number.isFinite(n)) return n >>> 0;
+    // Non-numeric build strings still hash stably.
+    let h = 2166136261;
+    for (let i = 0; i < bayDevBuildParam.length; i++) {
+      h ^= bayDevBuildParam.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  return (Math.random() * 0x100000000) >>> 0;
+}
+
+function formatBayDevBuildSummary(history) {
+  const ranks = {};
+  for (const step of history) ranks[step.id] = step.rank;
+  return Object.entries(ranks)
+    .map(([id, rank]) => `${id}×${rank}`)
+    .join(' ');
+}
+
+/**
+ * Run the real offer pool + apply() path for waves 1–10 so ?dev=bay lands with
+ * a typical average build (stats, ranks, weapon panel, helper mesh, score).
+ */
+function applyBayDevAverageLoadout(seed) {
+  const history = [];
+  withSeededRandom(seed, () => {
+    for (let wave = 1; wave <= BAY_DEV_PICKS; wave++) {
+      state.wave = wave;
+      state.hp = state.maxHp; // healthy clears — heal rarely offered
+      const offers = pickUpgradeOffers(3);
+      const pick = pickBayDevChoice(offers);
+      if (!pick) break;
+      state.upgrades[pick.id] = (state.upgrades[pick.id] || 0) + 1;
+      pick.apply(state);
+      history.push({
+        wave,
+        id: pick.id,
+        name: pick.name,
+        rank: state.upgrades[pick.id],
+        offers: offers.filter(Boolean).map((u) => u.id),
+      });
+    }
+  });
+
+  const progress = estimateBayDevProgress(seed);
+  state.score = progress.score;
+  state.kills = progress.kills;
+  state.mag = state.magSize;
+  state.hp = state.maxHp;
+  state.reloading = false;
+  state.reloadT = 0;
+  updateWeaponIcon();
+  if (state.upgrades.bot) syncHelperMesh(state.upgrades);
+  updateHUD();
+
+  const summary = formatBayDevBuildSummary(history);
+  console.info(
+    `[dev=bay] seed=${seed} picks=${history.length} (one per wave clear 1–${BAY_DEV_PICKS})`,
+    '\n build:', summary || '(none)',
+    '\n path:', history.map((h) => `w${h.wave}:${h.id}→${h.rank}`).join(' · '),
+    '\n ranks:', { ...state.upgrades },
+    `\n score=${state.score} kills=${state.kills}`,
+    `\n repeat: ?dev=bay&build=${seed}`,
+  );
+  setPreviewStampNote(`bay · seed ${seed} · ${summary || 'bare'}`);
+  return { seed, history, summary };
+}
+
+// ===================================================================
 // DRONE EXPLOSIONS
 // ===================================================================
 const droneBlasts = [];
@@ -7310,6 +7457,8 @@ whenViewportSettled(() => {
     }, 350);
   } else if (bayDev) {
     // ?dev=bay — land inside the Defence Bay ready for wave 11 combat.
+    // Default: simulate a typical waves 1–10 upgrade path. Bare: &upgrades=0.
+    // Repeatable: &build=<seed>.
     setTimeout(() => {
       startGame(false);
       state.intermission = 0;
@@ -7317,6 +7466,12 @@ whenViewportSettled(() => {
       clearFieldDrones();
       clearEmeralds();
       clearEquipmentField();
+      if (bayDevBare) {
+        console.info('[dev=bay] bare start (upgrades=0) — no simulated loadout');
+        setPreviewStampNote('bay · bare');
+      } else {
+        applyBayDevAverageLoadout(resolveBayDevSeed());
+      }
       state.wave = 10;
       player.position.set(BAY_CX, 0, ROOM2_CZ + 8);
       player.rotation.y = Math.PI;
