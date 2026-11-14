@@ -3873,6 +3873,23 @@ function clearWaveClearShields() {
   }
 }
 
+/**
+ * Wave-10 handoff: if a clear-shield is still on the floor, fly it to the player
+ * (~0.5s), collect normally, then run `done`. Other waves never call this.
+ */
+function vacuumWaveClearShieldThen(done) {
+  const d = drops.find((x) => x.userData.waveClearShield);
+  if (!d) {
+    done();
+    return;
+  }
+  const ud = d.userData;
+  ud.seekHome = true;
+  ud.seekHomeT = 0;
+  ud.seekHomeDur = 0.5;
+  ud.onSeekHome = done;
+}
+
 /** Keep the drop inside the arena and out of cover/walls. */
 function placeReachableDrop(pos) {
   const out = { x: pos.x ?? 0, y: 0, z: pos.z ?? 0 };
@@ -4350,7 +4367,7 @@ function updateDrops(dt) {
         // One second shorter than a normal pickup; blink still uses DROP_WARNING.
         ud.life = DROP_LIFE - 1;
       }
-    } else {
+    } else if (!ud.seekHome) {
       ud.life -= dt;
       if (ud.life <= 0) { scene.remove(d); drops.splice(i, 1); continue; }
     }
@@ -4358,14 +4375,36 @@ function updateDrops(dt) {
     const dx = player.position.x - p.x, dz = player.position.z - p.z;
     const dist = Math.hypot(dx, dz);
     const pickR = ud.waveClearShield ? 1.15 : 0.9;
-    if (canCollect && dist < pickR) {
+    if (ud.seekHome) {
+      // Forced scoop (wave-10 bay handoff) — arrive in ~seekHomeDur then collect.
+      ud.seekHomeT = (ud.seekHomeT || 0) + dt;
+      const dur = ud.seekHomeDur || 0.5;
+      const done = ud.seekHomeT >= dur || dist < pickR;
+      if (!done && dist > 1e-4) {
+        const remain = Math.max(0.02, dur - ud.seekHomeT);
+        const step = Math.min(dist, (dist / remain) * dt);
+        p.x += (dx / dist) * step;
+        p.z += (dz / dist) * step;
+      }
+      if (done) {
+        if (ud.waveClearShield) state.waveClearShieldDone = true;
+        const cb = ud.onSeekHome;
+        ud.onSeekHome = null;
+        ud.seekHome = false;
+        collect(ud.type);
+        scene.remove(d);
+        drops.splice(i, 1);
+        cb?.();
+        continue;
+      }
+    } else if (canCollect && dist < pickR) {
       if (ud.waveClearShield) state.waveClearShieldDone = true;
       collect(ud.type); scene.remove(d); drops.splice(i, 1); continue;
     }
-    if (canCollect && dist < 2.5) {
+    if (!ud.seekHome && canCollect && dist < 2.5) {
       // magnet: close drops fly to the player
       p.x += (dx / dist) * 10 * dt; p.z += (dz / dist) * 10 * dt;
-    } else if (!ud.waveClearShield) {
+    } else if (!ud.waveClearShield && !ud.seekHome) {
       // the player can't leave the deck, so drops that land outside slide in
       const cx = Math.max(-lim, Math.min(lim, p.x)), cz = Math.max(-lim, Math.min(lim, p.z));
       const ox = cx - p.x, oz = cz - p.z, od = Math.hypot(ox, oz);
@@ -5034,7 +5073,10 @@ function openPicker() {
   offered = pickUpgradeOffers(3);
   if (!offered.length) {
     // Everything maxed — still hand off to the bay after wave 10.
-    if (state.wave === 10 && !state.bayActive) { beginBayTransition(); return; }
+    if (state.wave === 10 && !state.bayActive) {
+      vacuumWaveClearShieldThen(beginBayTransition);
+      return;
+    }
     queueWave(3.2);
     return;
   }
@@ -5105,7 +5147,7 @@ function choose(i) {
   const startBay = state.wave === 10 && !state.bayActive;
   choose._t = setTimeout(() => {
     hidePicker();
-    if (startBay) beginBayTransition();
+    if (startBay) vacuumWaveClearShieldThen(beginBayTransition);
   }, 320);
   // Wave 10 → Defence Bay walk instead of wave 11.
   if (!startBay) queueWave(2.0);
