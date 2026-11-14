@@ -118,3 +118,4 @@ overrides: `SECTOR_NULL_BUILD`, `PREVIEW_COMMIT`, `PREVIEW_TIME`, and
 the staged source; this project does not deploy or modify the leaderboard service.
 
 Tesla card previews use a stationary six-winding tower, centered framing, and branching electrical bolts. Reduced-motion mode disables the bolts.
+Tesla card models are scaled down with extra title clearance and a soft contact shadow beneath the base.

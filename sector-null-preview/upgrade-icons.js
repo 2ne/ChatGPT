@@ -672,7 +672,7 @@ function makeScene(upgrade) {
   // Give the tall coil the same breathing room as the other card subjects.
   if (upgrade.id === 'coil') {
     subject.scale.setScalar(0.49);
-    subject.position.y = -0.27;
+    subject.position.y = -0.17;
   }
   // Mag cells sit on +Z — keep them facing the camera (sway only; no full spin).
   if (upgrade.id === 'mag') subject.rotation.y = -0.28;
@@ -685,6 +685,15 @@ function makeScene(upgrade) {
       disc.castShadow = false;
       disc.receiveShadow = false;
     });
+  }
+  if (upgrade.id === 'coil') {
+    // A soft contact patch keeps the miniature grounded at its raised card position.
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 0.85),
+      new THREE.MeshBasicMaterial({ map: softShadowMap(), transparent: true,
+        depthWrite: false, toneMapped: false, opacity: 0.85 }));
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = -0.42;
+    root.add(shadow);
   }
   root.add(subject);
   root.userData.subject = subject;
@@ -712,7 +721,7 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   }
 
   root.rotation.y = entry.yaw;
-  subject.position.y = id === 'coil' ? -0.27 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
+  subject.position.y = id === 'coil' ? -0.17 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
 
   const ud = subject.userData;
   if (ud.pulse) ud.pulse.scale.setScalar(1 + 0.12 * Math.sin(t * 6));
