@@ -2707,8 +2707,23 @@ function finishReload() {
   audio.reloadIn();
 }
 
+/**
+ * Openings that block player/enemy projectiles.
+ * Room-1 shut doors/windows, plus intact closed bay doors (open or broken
+ * bay mouths stay clear — same contract as room 1's broken gaps).
+ */
+function projectileOpenings() {
+  const out = openings.slice();
+  for (const o of bayOpenings) {
+    if (o.hp <= 0) continue;
+    if (o.ctrl?.isOpen) continue;
+    out.push(o);
+  }
+  return out;
+}
+
 function shotWorld() {
-  return { wallBoxes, solids: SOLIDS, openings };
+  return { wallBoxes, solids: SOLIDS, openings: projectileOpenings() };
 }
 
 function wallSpark(x, y, z, dir) {
@@ -3597,7 +3612,7 @@ function breakOpening(o) {
 }
 // does an unbroken door or window stand at (x, z)? (they stop bullets and blows)
 function shutAt(x, z) {
-  for (const o of combatOpenings()) {
+  for (const o of projectileOpenings()) {
     if (o.hp > 0 && x >= o.box.minX && x <= o.box.maxX && z >= o.box.minZ && z <= o.box.maxZ) return o;
   }
   return null;
@@ -7524,7 +7539,7 @@ function update(dt, lightFrame = false) {
     b.position.addScaledVector(b.userData.dir, 38 * dt);
     b.userData.life -= dt;
     let hit = false;
-    const block = firstBlocker(px, pz, b.position.x, b.position.z, wallBoxes, SOLIDS, openings);
+    const block = firstBlocker(px, pz, b.position.x, b.position.z, wallBoxes, SOLIDS, projectileOpenings());
     if (block) {
       if (strikeShotBlock(block, b.userData.dir, b.position.y)) {
         b.position.x = block.x;
