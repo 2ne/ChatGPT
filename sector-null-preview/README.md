@@ -18,6 +18,11 @@ procedural 3D interpretation of the supplied reference, without its cyan selecti
 ring. Existing movement, aiming, reload animations and combat dimensions remain
 in place. This model change is exclusive to the preview.
 
+Weapon upgrade cards (damage, fire rate and split beam) use the same rifle shell
+builder as the player, including its white shroud, orange collar, cyan top rail
+and energy cell. Their rank effects and animations remain visible around the new
+model; the card gallery uses the same updated icons.
+
 ## Status and controls
 
 After wave 10 the scripted walk enters the bay; the south door slams shut and

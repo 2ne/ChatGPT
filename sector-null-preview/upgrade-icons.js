@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { addRifleShell } from './rifle-mesh.js';
 import { UPGRADE_CATS } from './upgrades.js';
 import { createHelperBotMesh } from './helper-bot-mesh.js';
 
@@ -124,15 +126,30 @@ function mineBody(shock = false, owned = 0) {
 
 function rifleBase() {
   const g = new THREE.Group();
-  // Card-only mesh (not the in-game rifle) — lifted steel so it reads on dark card backs.
-  const body = std(0x8aa4b6, { emissive: 0x243848, emissiveIntensity: 0.22 });
-  const metal = std(0xc2d4e0, { metalness: 0.62, roughness: 0.34, emissive: 0x2a4050, emissiveIntensity: 0.12 });
-  addBox(g, body, 0.22, 0.28, 0.55, 0, 0, -0.15);
-  addBox(g, metal, 0.16, 0.18, 0.7, 0, 0.04, 0.35);
-  addBox(g, metal, 0.1, 0.1, 0.55, 0, 0.05, 0.9);
-  addBox(g, body, 0.18, 0.16, 0.32, 0, -0.05, 0.55);
-  const grip = addBox(g, body, 0.14, 0.32, 0.16, 0, -0.22, 0.05);
-  grip.rotation.x = 0.35;
+  const rifle = new THREE.Group();
+  const M = {
+    gunBody: std(0x26333c), metal: std(0x334957, { roughness: 0.38, metalness: 0.62 }),
+    rubber: std(0x151f27), plating: std(0x243341),
+    suit: std(0xe4e9ed, { roughness: 0.65, metalness: 0.12 }),
+    trim: std(0xf59a25, { roughness: 0.65, metalness: 0.3 }),
+    status: glow(0x36dcff, 1.2),
+  };
+  const box = (mat, w, h, d, x, y, z, parent, r = 0.03) => {
+    const radius = Math.min(r, w * 0.225, h * 0.225, d * 0.225);
+    const mesh = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 1, radius), mat);
+    mesh.position.set(x, y, z);
+    parent.add(mesh);
+    return mesh;
+  };
+  addRifleShell(rifle, M, box);
+  const cell = box(std(0x1a4558, {
+    roughness: 0.3, metalness: 0.55, emissive: 0x36dcff, emissiveIntensity: 1.2,
+  }), 0.11, 0.28, 0.15, 0, -0.14, 0.52, rifle, 0.02);
+  cell.rotation.x = -0.12;
+  // Slightly thicken miniature details; keep muzzle at the existing effect anchor.
+  rifle.scale.set(1.4, 1.4, 1.1);
+  rifle.position.set(0, 0.008, -0.437);
+  g.add(rifle);
   return g;
 }
 
