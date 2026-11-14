@@ -3181,6 +3181,34 @@ function offscreen(x, z) {
   }
   return true;
 }
+/** Room-1 only: park a spawn beside the bay / in the inter-room strip (never behind it). */
+function spawnBesideBay(px, pz, preferEast) {
+  const flank = 2.4 + Math.random() * 2.2;
+  const x = preferEast ? ROOM2_EAST + flank : ROOM2_WEST - flank;
+  // Prefer the open strip between rooms; fall back along the bay flanks.
+  const gapLo = ROOM2_SOUTH + 1.8;
+  const gapHi = -EDGE - 1.8;
+  let z;
+  if (gapLo < gapHi) {
+    z = THREE.MathUtils.clamp(pz - (6 + Math.random() * 6), gapLo, gapHi);
+  } else {
+    z = ROOM2_SOUTH + 2.5 + Math.random() * 4;
+  }
+  // Keep roughly 16–24u from the player when possible.
+  const dx = x - px, dz = z - pz;
+  const dist = Math.hypot(dx, dz) || 1;
+  if (dist > 24) {
+    const s = 22 / dist;
+    return { x: px + dx * s, z: pz + dz * s };
+  }
+  if (dist < 16) {
+    // Nudge farther along the flank without crossing into room 2.
+    const awayZ = z <= ROOM2_SOUTH + 3 ? z + (16 - dist) * 0.35 : z;
+    return { x, z: awayZ };
+  }
+  return { x, z };
+}
+
 function spawnPoint(out) {
   spawnCam.aspect = layoutSize().w / layoutSize().h;
   spawnCam.updateProjectionMatrix();
@@ -3188,23 +3216,42 @@ function spawnPoint(out) {
   spawnCam.position.copy(focus).add(gameplayCamOffset());
   spawnCam.lookAt(focus.x, 0, focus.z);
   spawnCam.updateMatrixWorld();
+  const px = player.position.x, pz = player.position.z;
   const ang = Math.random() * Math.PI * 2, cx = Math.sin(ang), cz = Math.cos(ang);
+  // Cap how far room-1 spawns walk out — never past ~22–24u (avoids the old
+  // 40–75u trek behind the bay when the ray hit pointInRoom2).
+  const MAX_R = 22;
+  const along = r => [px + cx * r, pz + cz * r];
   let r = 12;
-  const along = r => [player.position.x + cx * r, player.position.z + cz * r];
-  // Walk out until off-screen, clear of room 1, and outside room 2’s footprint/walls.
-  for (; r < 90; r += 1) {
+  let hitBay = false;
+  let found = false;
+  for (; r <= MAX_R; r += 1) {
     const [x, z] = along(r);
-    if (
-      offscreen(x, z)
-      && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)
-      && !pointInRoom2(x, z)
-    ) break;
+    if (pointInRoom2(x, z)) { hitBay = true; break; }
+    if (offscreen(x, z) && (Math.abs(x) > EDGE + 1.5 || Math.abs(z) > EDGE + 1.5)) {
+      found = true;
+      break;
+    }
   }
-  let [sx, sz] = along(r + 1.5 + Math.random() * 3);
-  // If the jittered point still lands in room 2, keep stepping out.
-  for (let guard = 0; pointInRoom2(sx, sz) && guard < 40; guard++) {
-    r += 1;
-    [sx, sz] = along(r + 1.5);
+  let sx, sz;
+  if (hitBay || !found) {
+    // Ray hits the bay (or never clears the frustum in range) — slide E/W beside it.
+    const preferEast = cx > 0.15 ? true : cx < -0.15 ? false : Math.random() < 0.5;
+    ({ x: sx, z: sz } = spawnBesideBay(px, pz, preferEast));
+  } else {
+    const jr = Math.min(MAX_R, r + 1.2 + Math.random() * 2.5);
+    [sx, sz] = along(jr);
+  }
+  // Final safety: never leave a room-1 spawn inside the bay footprint.
+  if (pointInRoom2(sx, sz)) {
+    ({ x: sx, z: sz } = spawnBesideBay(px, pz, sx >= BAY_CX));
+  }
+  const dist = Math.hypot(sx - px, sz - pz);
+  if (dist > 24) {
+    const s = 23 / dist;
+    sx = px + (sx - px) * s;
+    sz = pz + (sz - pz) * s;
+    if (pointInRoom2(sx, sz)) ({ x: sx, z: sz } = spawnBesideBay(px, pz, sx >= BAY_CX));
   }
   out.x = sx;
   out.z = sz;
@@ -3306,6 +3353,7 @@ function spawnDrone(pos, type = BOT_TYPES.patrol) {
     climb: -1,     // 0..1 through clambering in a window; -1 = not climbing
     via: -1,       // which prop corner it's heading round (see routeAround)
     stuckT: 0, stuckX: pos.x, stuckZ: pos.z, // progress check (see chaseDrone)
+    outsideT: 0, // seconds continuously outside the current room (catch-up timer)
     opening: bayEntry, // bay spawns commit to their door; room 1 re-picks outside
     stage: 0,      // 0 = heading to outer waypoint, 1 = heading through the gap
     heading: bayEntry
@@ -7336,9 +7384,13 @@ function chaseDrone(z, dt) {
       const g = routeAround(z, tx, tz);
       // turn harder up close so the last few steps home in on you
       const rush = rusher && onDeck ? 1.2 : 1;
-      // Bosses close the outside gap fast — they were lingering too long past the walls.
-      const approach = ud.boss && !onDeck ? 2.8 : rush;
-      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * approach, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1) * (ud.boss && !onDeck ? 1.35 : 1), dt, bossEntering && ud.opening?.kind === 'door');
+      // Outside catch-up: bosses always 2.8×; regulars ramp after ~9s outside.
+      if (inside(z.position)) ud.outsideT = 0;
+      else ud.outsideT = (ud.outsideT || 0) + dt;
+      const lateOutside = !ud.boss && ud.outsideT > 9;
+      const approach = ud.boss && !onDeck ? 2.8 : lateOutside ? 2.2 : rush;
+      const turnBoost = (ud.boss && !onDeck) || lateOutside ? 1.35 : 1;
+      walking = walkToward(z, g.x - z.position.x, g.z - z.position.z, ud.speed * approach, ud.turn * (pd < 4 ? 2.5 : 1) * (rusher ? 1.4 : 1) * turnBoost, dt, bossEntering && ud.opening?.kind === 'door');
     }
   }
   // progress check: jammed bots (corner packs, window frames, doors) forget their plan
