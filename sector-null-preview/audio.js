@@ -323,6 +323,14 @@ export function createAudio(settings, listener) {
       grain(4800, 0.35, 0.22, out);
       voice(880, 220, 0.28, 0.1, { out, type: 'square', attack: 0.002, t: (ctx?.currentTime ?? 0) + 0.05 });
     },
+    /** Short crackle-pop when a coil-killed bot finally bursts. */
+    teslaPop(pos) {
+      const out = spatial(pos, 0.6);
+      grain(5400, 0.06, 0.38, out);
+      grain(1600, 0.14, 0.28, out);
+      voice(720, 160, 0.1, 0.18, { out, type: 'square', attack: 0.001 });
+      voice(90, 35, 0.2, 0.22, { out, type: 'triangle' });
+    },
     // Layered boom for the boss finale — heavier bass and a longer tail.
     bossExplode(pos) {
       const out = spatial(pos, 0.75);

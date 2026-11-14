@@ -434,11 +434,13 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     tip: coilTip,
     charging: false,
     stats() {
+      // Stage 6 ranks raise rate / range / target cap / damage scale.
       const r = this.rank | 0;
       return {
         interval: Math.max(0.7, 2.0 - r * 0.35),
         range: 8 + r * 2.5,
-        chains: r,
+        targets: 3 + r, // base hits 3; ranks add more forks
+        damageScale: 1 + r * 0.25,
       };
     },
     /** 0–1 charge tell before the bolt. */

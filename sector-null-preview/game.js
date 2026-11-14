@@ -2971,6 +2971,16 @@ const tankTurretGeo = bakeBlocks([
 ], seeded(209));
 const droneShell = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32 });
 const droneHurt = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.48, metalness: 0.32, emissive: 0xffb64b, emissiveIntensity: 0.85 });
+/** Shared coil-hit tint — one material for every shocked drone (no per-hit alloc). */
+const droneTeslaHit = new THREE.MeshStandardMaterial({
+  vertexColors: true, roughness: 0.35, metalness: 0.45,
+  emissive: 0x62edff, emissiveIntensity: 1.35, color: 0xb8f4ff,
+});
+const droneTeslaDeath = new THREE.MeshStandardMaterial({
+  vertexColors: true, roughness: 0.3, metalness: 0.5,
+  emissive: 0xd8fbff, emissiveIntensity: 2.1, color: 0xe8fbff,
+});
+const teslaCharMat = new THREE.MeshStandardMaterial({ color: 0x1a2228, roughness: 0.92, metalness: 0.15 });
 const enemyCannonGeo = new THREE.BoxGeometry(0.25, 0.25, 0.95);
 const enemyCannonMat = new THREE.MeshStandardMaterial({ color: 0x252c42, metalness: 0.7, roughness: 0.3 });
 const enemyMuzzleGeo = new THREE.BoxGeometry(0.18, 0.18, 0.06);
@@ -3193,6 +3203,8 @@ function hitDrone(z) {
   const u = z.userData;
   u.hurt = 0.12;
   u.flinch = 1;
+  // Coil tint / death glow win over the orange hit flash.
+  if (u.teslaDeath || u.teslaFlash > 0) return;
   for (const m of u.body) m.material = droneHurt;
 }
 
@@ -5193,14 +5205,15 @@ function updateTeslaBolts(dt) {
   }
 }
 
-/** Damage lethal to cyan flankers at the current wave HP; chips heavier kits. */
-function teslaDamage() {
-  return Math.ceil(state.droneHp * BOT_TYPES.runner.health);
+/** Base damage: lethal to cyan, mortars and patrols; Stage 6 scales via damageScale. */
+function teslaDamage(scale = 1) {
+  return Math.ceil(state.droneHp * 1.0 * scale);
 }
 
-function pickTeslaTarget(tip, rangeSq) {
+function pickTeslaTarget(tip, rangeSq, skip = null) {
   let best = null, bestD = Infinity;
   for (const z of drones) {
+    if (z === skip || (skip && skip.has?.(z))) continue;
     if (z.userData.dying || (z.userData.boss && bossDeath.active)) continue;
     const d = tip.distanceToSquared(z.position);
     if (d > rangeSq || d >= bestD) continue;
@@ -5210,43 +5223,63 @@ function pickTeslaTarget(tip, rangeSq) {
   return best;
 }
 
-function fireTeslaAt(weapon, target, chains) {
+/** Up to `cap` enemies inside coil range, nearest-first then next-nearest. */
+function pickTeslaTargets(tip, rangeSq, cap) {
+  const hit = [];
+  const used = new Set();
+  for (let i = 0; i < cap; i++) {
+    const next = pickTeslaTarget(tip, rangeSq, used);
+    if (!next) break;
+    hit.push(next);
+    used.add(next);
+  }
+  return hit;
+}
+
+function droneAimPoint(z, out = new THREE.Vector3()) {
+  if (z.userData.upper) z.userData.upper.getWorldPosition(out);
+  else out.copy(z.position);
+  out.y += 0.4;
+  return out;
+}
+
+function applyTeslaHitFlash(z) {
+  const u = z.userData;
+  u.teslaFlash = 1;
+  u.hurt = 0; // coil tint wins over the orange bullet flash
+  for (const m of u.body || []) m.material = droneTeslaHit;
+}
+
+function fireTeslaAt(weapon, primary, targetsCap, damageScale) {
   const tip = weapon.tip;
-  const targetPos = target.userData.upper?.getWorldPosition(new THREE.Vector3()) || target.position.clone();
-  targetPos.y += 0.4;
-  spawnTeslaDischarge(tip, targetPos);
-  audio.teslaZap?.(target.position);
+  const { range } = weapon.stats();
+  const rangeSq = range * range;
+  const hitList = pickTeslaTargets(tip, rangeSq, targetsCap);
+  if (!hitList.length) {
+    // Primary may have moved out — still try it alone if in range.
+    if (primary && !primary.userData.dying && tip.distanceToSquared(primary.position) <= rangeSq) {
+      hitList.push(primary);
+    } else return;
+  }
+
+  // Fork a bolt from the coil to every target; thin chain between sequential hits.
+  for (let i = 0; i < hitList.length; i++) {
+    droneAimPoint(hitList[i], _teslaTo);
+    spawnTeslaDischarge(tip, _teslaTo);
+    if (i > 0) {
+      droneAimPoint(hitList[i - 1], _teslaFrom);
+      spawnTeslaBolt(_teslaFrom, _teslaTo, { main: false });
+    }
+  }
+  audio.teslaZap?.(hitList[0].position);
   weapon.dischargeFlash?.();
   bumpShake(0.22);
 
-  const dmg = teslaDamage();
-  const hitList = [target];
-  // Stage 6 will raise `chains`; base rank 0 stays single-target.
-  for (let c = 0; c < chains; c++) {
-    const prev = hitList[hitList.length - 1];
-    let next = null, nd = Infinity;
-    for (const z of drones) {
-      if (hitList.includes(z) || z.userData.dying) continue;
-      if (!inside(z.position)) continue;
-      const d = prev.position.distanceToSquared(z.position);
-      if (d < 4.5 * 4.5 && d < nd) { next = z; nd = d; }
-    }
-    if (!next) break;
-    hitList.push(next);
-    const to = next.userData.upper?.getWorldPosition(new THREE.Vector3()) || next.position.clone();
-    to.y += 0.4;
-    const from = prev.userData.upper?.getWorldPosition(new THREE.Vector3()) || prev.position.clone();
-    from.y += 0.4;
-    spawnTeslaDischarge(from, to);
-  }
-
+  const dmg = teslaDamage(damageScale);
   for (const z of hitList) {
     z.userData.hp -= dmg;
-    hitDrone(z);
-    if (z.userData.hp <= 0) {
-      const idx = drones.indexOf(z);
-      if (idx >= 0) killDroneElectric(z, idx);
-    }
+    applyTeslaHitFlash(z);
+    if (z.userData.hp <= 0) beginTeslaDeath(z);
   }
 }
 
@@ -5254,8 +5287,9 @@ function updateTeslaCoil(dt) {
   const weapon = defenceBay.coilWeapon;
   if (!weapon || !state.bayActive) return;
   updateTeslaBolts(dt);
+  updateTeslaDeaths(dt);
   weapon.cd -= dt;
-  const { interval, range, chains } = weapon.stats();
+  const { interval, range, targets, damageScale } = weapon.stats();
   const tip = weapon.tip;
   const rangeSq = range * range;
 
@@ -5315,18 +5349,60 @@ function updateTeslaCoil(dt) {
     return;
   }
   weapon.cd = interval;
-  fireTeslaAt(weapon, target, chains);
+  fireTeslaAt(weapon, target, targets, damageScale);
 }
 
-function killDroneElectric(z, idx) {
+const TESLA_DEATH_TIME = 0.35;
+
+function beginTeslaDeath(z) {
   const type = z.userData.type;
   if (type.boss && state.running && !bossDeath.active && !z.userData.dying) {
     beginBossDeath(z);
     return;
   }
+  if (z.userData.dying) return;
+  const u = z.userData;
+  u.dying = true;
+  u.teslaDeath = true;
+  u.teslaDeathT = 0;
+  u.teslaFlash = 1;
+  u.gait = 0;
+  u.swing = -1;
+  u.opening = null;
+  for (const m of u.body || []) m.material = droneTeslaDeath;
+  if (u.climb >= 0) endClimb(z, true);
+}
+
+function finishTeslaDeath(z) {
+  const idx = drones.indexOf(z);
+  if (idx < 0) return;
+  const type = z.userData.type;
   lastKillPos.set(z.position.x, 0, z.position.z);
-  explodeDrone(z, { electric: true });
-  if (z.userData.climb >= 0) endClimb(z, true);
+  const origin = droneAimPoint(z);
+  audio.teslaPop?.(origin);
+  if (!reducedMotion.matches && (fxPressure() < 0.9 || droneBlasts.length < 12)) {
+    spawnBlastFlare(origin, 1.45, 0xd8fbff);
+    spawnBlastFlare(origin, 0.75, 0x62edff);
+  }
+  spawnBlastSparks(origin, 32, 1.4, 1.15, sparkMatCyan);
+  spawnShockwave(origin, 3.4, 0x62edff);
+  // Dark charred scraps — distinct from the normal amber debris.
+  const scraps = reducedMotion.matches ? 3 : 7;
+  for (let i = 0; i < scraps; i++) {
+    const chip = acquireChip(teslaCharMat);
+    chip.scale.set(rnd(0.08, 0.18), rnd(0.04, 0.1), rnd(0.1, 0.22));
+    chip.position.copy(origin);
+    chip.position.y = Math.max(0.2, origin.y + rnd(-0.2, 0.3));
+    const velocity = _tracerDir.set(rnd(-3.5, 3.5), rnd(1.5, 4.5), rnd(-3.5, 3.5));
+    spawnDebris(chip, velocity, {
+      life: rnd(1.4, 2.4), bounce: 0.08,
+      spin: _sparkDir.set(rnd(-10, 10), rnd(-10, 10), rnd(-10, 10)),
+    });
+  }
+  if (state.running) {
+    const count = Math.round(3 + type.size * 2);
+    spawnEmeralds(origin, count);
+  }
   maybeDrop(z.position, true);
   scene.remove(z);
   drones.splice(idx, 1);
@@ -5335,6 +5411,38 @@ function killDroneElectric(z, idx) {
   if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
     if (state.bossPending) { spawnWaveBoss(); return; }
     finishWaveClear();
+  }
+}
+
+function updateTeslaDeaths(dt) {
+  let sparkBudget = reducedMotion.matches ? 0 : 6;
+  for (let i = drones.length - 1; i >= 0; i--) {
+    const z = drones[i];
+    const u = z.userData;
+    if (!u.teslaDeath) continue;
+    u.teslaDeathT += dt;
+    const k = Math.min(1, u.teslaDeathT / TESLA_DEATH_TIME);
+    // Freeze in place, glow hard; jitter unless reduced motion.
+    if (!reducedMotion.matches) {
+      const jig = (1 - k) * 0.08;
+      z.position.x += Math.sin(u.teslaDeathT * 55 + u.seed) * jig;
+      z.position.z += Math.cos(u.teslaDeathT * 47 + u.seed) * jig;
+      z.rotation.y += Math.sin(u.teslaDeathT * 40) * 0.04;
+      // Occasional crawling arc spark on the body (budgeted for packed waves).
+      if (sparkBudget > 0 && Math.random() < dt * 18) {
+        sparkBudget--;
+        const spark = acquireSpark();
+        spark.material = sparkMatCyan;
+        spark.scale.set(0.025, 0.025, rnd(0.1, 0.22));
+        const p = droneAimPoint(z);
+        spark.position.set(p.x + rnd(-0.4, 0.4), p.y + rnd(-0.5, 0.4), p.z + rnd(-0.4, 0.4));
+        const velocity = _tracerDir.set(rnd(-1.5, 1.5), rnd(0.5, 3), rnd(-1.5, 1.5));
+        spark.quaternion.setFromUnitVectors(sparkForward, _sparkDir.copy(velocity).normalize());
+        spawnDebris(spark, velocity, { life: rnd(0.08, 0.18), bounce: 0.01 });
+      }
+    }
+    droneTeslaDeath.emissiveIntensity = 1.6 + Math.sin(u.teslaDeathT * 30) * 0.5;
+    if (u.teslaDeathT >= TESLA_DEATH_TIME) finishTeslaDeath(z);
   }
 }
 
@@ -7007,6 +7115,7 @@ function update(dt, lightFrame = false) {
   if (state.running && !state.choosing && !bossDeath.active) updateEnemyBolts(dt);
 
   // --- drones ---
+  let teslaSparkBudget = reducedMotion.matches ? 0 : 5;
   for (let j = drones.length - 1; j >= 0; j--) {
     const z = drones[j];
     const ud = z.userData;
@@ -7015,10 +7124,26 @@ function update(dt, lightFrame = false) {
       drones.splice(j, 1);
       continue;
     }
-    // hurt flash recover
-    if (ud.hurt > 0) {
+    // Coil tint (~1s) outranks the orange bullet flash; shared material stays cheap.
+    if (ud.teslaFlash > 0 && !ud.teslaDeath) {
+      ud.teslaFlash = Math.max(0, ud.teslaFlash - dt);
+      if (teslaSparkBudget > 0 && ud.teslaFlash > 0.2 && Math.random() < dt * 8) {
+        teslaSparkBudget--;
+        const spark = acquireSpark();
+        spark.material = sparkMatCyan;
+        spark.scale.set(0.02, 0.02, rnd(0.08, 0.16));
+        const p = z.position;
+        spark.position.set(p.x + rnd(-0.35, 0.35), rnd(0.4, 1.4), p.z + rnd(-0.35, 0.35));
+        const velocity = _tracerDir.set(rnd(-1.2, 1.2), rnd(0.4, 2.5), rnd(-1.2, 1.2));
+        spark.quaternion.setFromUnitVectors(sparkForward, _sparkDir.copy(velocity).normalize());
+        spawnDebris(spark, velocity, { life: rnd(0.08, 0.16), bounce: 0.01 });
+      }
+      if (ud.teslaFlash <= 0) {
+        for (const m of ud.body || []) m.material = droneShell;
+      }
+    } else if (ud.hurt > 0) {
       ud.hurt -= dt;
-      if (ud.hurt <= 0) for (const m of ud.body) m.material = droneShell;
+      if (ud.hurt <= 0 && !(ud.teslaFlash > 0)) for (const m of ud.body || []) m.material = droneShell;
     }
     if (state.running) chaseDrone(z, dt);
     else if (title.active) wanderDrone(z, dt);
