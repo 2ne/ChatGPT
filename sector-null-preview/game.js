@@ -5477,8 +5477,8 @@ function explodeDrone(drone, opts = {}) {
   }
 }
 
-// --- Tesla coil (Stage 5 base; Stage 6 ranks shorten interval / grow range / chain) ---
-// Visuals only here — interval 2s / range 8 / damage formula stay fixed.
+// --- Tesla coil (Stage 5 base; Stage 6 ranks via coilStatsForRank) ---
+// Visuals only here — interval / range / targets / damage come from weapon.stats().
 const TESLA_CHARGE = 0.3;
 const TESLA_BOLT_LIFE = 0.32;
 const TESLA_SEGS = 10;

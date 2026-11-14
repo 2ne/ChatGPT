@@ -140,12 +140,17 @@ export function coilStatsForRank(rank) {
   // Rank 3 damage is ~+70% of cyan HP so wave-~20 bay gunners one-shot and
   // heavies take two (float ceil on gunner HP makes a strict +60% fall short).
   const table = [
-    { interval: 2.0, range: 8, targets: 2, damageScale: 1.0, boltScale: 1.0 },
-    { interval: 1.6, range: 8, targets: 3, damageScale: 1.0, boltScale: 1.12 },
-    { interval: 1.3, range: 9.5, targets: 3, damageScale: 1.3, boltScale: 1.28 },
-    { interval: 1.0, range: 11, targets: 4, damageScale: 1.7, boltScale: 1.5 },
+    { interval: 2.5, range: 8, targets: 1, damageScale: 1.0, boltScale: 1.0 },
+    { interval: 2.5, range: 8, targets: 2, damageScale: 1.0, boltScale: 1.12 },
+    { interval: 2.0, range: 9.5, targets: 3, damageScale: 1.3, boltScale: 1.28 },
+    { interval: 1.5, range: 11, targets: 4, damageScale: 1.7, boltScale: 1.5 },
   ];
   return { ...table[r], rank: r };
+}
+
+function coilStatLine(st) {
+  const t = st.targets === 1 ? '1 target' : `${st.targets} targets`;
+  return `${t} · ${Number(st.interval).toFixed(1)}s`;
 }
 
 /** Stage 6 picker card — pinned to slot 1 after wave 11 until rank 3. */
@@ -161,11 +166,13 @@ export const COIL_UPGRADE = {
     const owned = s.upgrades.coil || 0;
     const now = coilStatsForRank(owned);
     const next = coilStatsForRank(owned + 1);
-    if (!owned) return [`${now.targets} targets · ${now.interval.toFixed(1)}s`];
-    return [
-      `${now.targets} · ${now.interval.toFixed(1)}s`,
-      `${next.targets} targets · ${next.interval.toFixed(1)}s`,
-    ];
+    const notes = [];
+    if (next.range > now.range) notes.push('+range');
+    if (next.damageScale > now.damageScale) notes.push('+damage');
+    const nextLine = notes.length
+      ? `${coilStatLine(next)} · ${notes.join(' · ')}`
+      : coilStatLine(next);
+    return [coilStatLine(now), nextLine];
   },
   apply: () => {},
 };

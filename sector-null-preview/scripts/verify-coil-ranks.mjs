@@ -33,10 +33,10 @@ assert(UPGRADES.includes(COIL_UPGRADE), 'coil card in UPGRADES picker catalog');
 assert(COIL_UPGRADE.max === 3, 'COIL_UPGRADE max 3');
 
 const expected = [
-  { interval: 2.0, range: 8, targets: 2, damageScale: 1.0 },
-  { interval: 1.6, range: 8, targets: 3, damageScale: 1.0 },
-  { interval: 1.3, range: 9.5, targets: 3, damageScale: 1.3 },
-  { interval: 1.0, range: 11, targets: 4, damageScale: 1.7 },
+  { interval: 2.5, range: 8, targets: 1, damageScale: 1.0 },
+  { interval: 2.5, range: 8, targets: 2, damageScale: 1.0 },
+  { interval: 2.0, range: 9.5, targets: 3, damageScale: 1.3 },
+  { interval: 1.5, range: 11, targets: 4, damageScale: 1.7 },
 ];
 for (let r = 0; r <= 3; r++) {
   const s = coilStatsForRank(r);

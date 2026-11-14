@@ -86,8 +86,8 @@ assert(upgradeById('coil') === COIL_UPGRADE, 'upgradeById(coil)');
 assert(COIL_MAX_RANK === 3, 'max rank 3');
 const r0 = coilStatsForRank(0);
 const r3 = coilStatsForRank(3);
-assert(r0.interval === 2 && r0.targets === 2 && r0.range === 8 && r0.damageScale === 1, 'rank 0 stats');
-assert(r3.interval === 1 && r3.targets === 4 && r3.range === 11 && r3.damageScale === 1.7, 'rank 3 stats');
+assert(r0.interval === 2.5 && r0.targets === 1 && r0.range === 8 && r0.damageScale === 1, 'rank 0 stats');
+assert(r3.interval === 1.5 && r3.targets === 4 && r3.range === 11 && r3.damageScale === 1.7, 'rank 3 stats');
 
 console.log('\n--- regular-drone total HP (approx mix) ---');
 const hp = {};
