@@ -24,9 +24,13 @@ restrained cyan/amber service channels. A dark tiled apron extends 22 world unit
 around the bay, aligned with Room 1's outdoor grid. It fills the former blank
 strip beside the walls and joins the existing exterior without overlapping tiles.
 The apron uses one indexed mesh with shallow tile bevels to keep it inexpensive
-on phones. The existing shadow
+on phones. Exterior fog leaves the first 3 world units outside Room 2 clear,
+then gradually fades to the background by 20 units. Room 1's fade is softened
+to 1.5–15 units beyond its walls. Both interiors and the connecting walk remain
+clear, with no fog switch on arrival; the map overview remains unfogged.
+The existing shadow
 light follows the transition into Room 2. The reveal and coil pulse respect
-reduced motion. Room 1 keeps its existing visuals and follow view.
+reduced motion. Room 1's architecture and follow view are unchanged.
 
 Door shoulders stand clear of the posts, and crossed braces have separate depth
 layers on both faces, preventing overlapping trim from flickering on mobile.

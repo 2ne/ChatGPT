@@ -1,42 +1,39 @@
 /**
- * Replace Three.js camera-depth fog with world-XZ falloff from the room centre.
+ * Replace Three.js camera-depth fog with world-XZ falloff around both rooms.
  * A top-down camera has nearly equal depth across the screen, so linear depth fog
  * is invisible — XZ distance makes the exterior fade like a classic “bigger world” trick.
  *
- * Uses Chebyshev distance max(|x|,|z|) so fog starts just outside the axis-aligned
- * room walls (not past the corners first, as pure radial would).
+ * Uses distance beyond each room's rectangular walls. Both interiors stay
+ * clear, with a wider, gentler falloff across the exterior apron.
  *
- * North (negative Z) is eased so Stage-2 room-2’s south edge stays readable while
- * east/south/west outskirts still fall off hard.
+ * Room 1's northward falloff is stretched to keep the connecting walk readable.
  *
  * Call installWorldXzFog() once before any material compiles a shader.
  */
 import * as THREE from 'three';
+import { BAY_CX, ROOM1_HALF, ROOM2_CZ, ROOM2_HX, ROOM2_HZ } from './facility-exterior.js';
 
 /**
  * North Z scale for Chebyshev fog (<1 → fog starts further north).
- * Tuned so room-2’s south wall (~z=-25) is only a faint hint at the top of the
- * gameplay view; east/south/west outskirts still fall off hard.
+ * Preserve the longer clear approach from Room 1 toward the bay entrance.
  */
 export const FOG_NORTH_EASE = 0.52;
 
-/**
- * @param {number} roomHalf  Room half-extent (matches game HALF).
- * @param {number} nearPad   World units past the wall before fog begins.
- * @param {number} farPad    World units past the wall where fog hits full (black).
- */
-export function playFogRange(roomHalf, nearPad = 0.35, farPad = 11) {
-  return { near: roomHalf + nearPad, far: roomHalf + farPad };
-}
+// Clear apron / fully faded distance beyond the wall, in world units.
+// Room 1 previously faded from 0.35 to 11; retain more of its nearby exterior.
+const ROOM1_FADE = { near: 1.5, far: 15 };
+const BAY_FADE = { near: 3, far: 20 };
 
 export function installWorldXzFog() {
   THREE.ShaderChunk.fog_pars_vertex = /* glsl */`
 #ifdef USE_FOG
   varying float vFogDepth;
+  varying vec2 vFogWorldXZ;
 #endif
 `;
 
-  // Linear gameplay fog: world-XZ Chebyshev from room centre (top-down “bigger map”).
+  // Send world coordinates, not a precomputed distance. Computing the falloff
+  // per fragment avoids fog smearing across large floor triangles and corners.
   // FogExp2 (title scene) keeps stock camera-depth so the menu is unchanged.
   // North ease: compress |z| when z < 0 so room-2’s near edge shows through.
   THREE.ShaderChunk.fog_vertex = /* glsl */`
@@ -49,11 +46,7 @@ export function installWorldXzFog() {
   fogWorldPos = instanceMatrix * fogWorldPos;
   #endif
   fogWorldPos = modelMatrix * fogWorldPos;
-  float fogAx = abs(fogWorldPos.x);
-  float fogAz = fogWorldPos.z < 0.0
-    ? (-fogWorldPos.z) * ${FOG_NORTH_EASE.toFixed(3)}
-    : fogWorldPos.z;
-  vFogDepth = max(fogAx, fogAz);
+  vFogWorldXZ = fogWorldPos.xz;
   #endif
 #endif
 `;
@@ -62,6 +55,7 @@ export function installWorldXzFog() {
 #ifdef USE_FOG
   uniform vec3 fogColor;
   varying float vFogDepth;
+  varying vec2 vFogWorldXZ;
   #ifdef FOG_EXP2
   uniform float fogDensity;
   #else
@@ -76,7 +70,18 @@ export function installWorldXzFog() {
   #ifdef FOG_EXP2
   float fogFactor = 1.0 - exp( - fogDensity * fogDensity * vFogDepth * vFogDepth );
   #else
-  float fogFactor = smoothstep( fogNear, fogFar, vFogDepth );
+  float room1Z = vFogWorldXZ.y < 0.0
+    ? -vFogWorldXZ.y * ${FOG_NORTH_EASE.toFixed(3)} : vFogWorldXZ.y;
+  float room1Outside = max(abs(vFogWorldXZ.x), room1Z) - ${ROOM1_HALF.toFixed(3)};
+  vec2 bayOutside = abs(vFogWorldXZ - vec2(${BAY_CX.toFixed(3)}, ${ROOM2_CZ.toFixed(3)}))
+    - vec2(${ROOM2_HX.toFixed(3)}, ${ROOM2_HZ.toFixed(3)});
+  float room1Fade = (room1Outside - ${ROOM1_FADE.near.toFixed(3)})
+    / ${(ROOM1_FADE.far - ROOM1_FADE.near).toFixed(3)};
+  float bayFade = (max(bayOutside.x, bayOutside.y) - ${BAY_FADE.near.toFixed(3)})
+    / ${(BAY_FADE.far - BAY_FADE.near).toFixed(3)};
+  // The nearer clear room wins, keeping the connecting walk readable without
+  // disabling fog or shifting the fade when the player changes rooms.
+  float fogFactor = smoothstep(fogNear, fogFar, min(room1Fade, bayFade));
   #endif
   gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, fogFactor );
 #endif

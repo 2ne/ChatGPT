@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { installWorldXzFog, playFogRange } from './world-xz-fog.js';
+import { installWorldXzFog } from './world-xz-fog.js';
 import '@fontsource/rajdhani/latin-600.css';
 import '@fontsource/rajdhani/latin-700.css';
 import '@fontsource/oxanium/latin-700.css';
@@ -108,13 +108,9 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const scene = new THREE.Scene();
 const CLEAR = 0x080e16;
 scene.background = new THREE.Color(CLEAR);
-// World-XZ fog (see world-xz-fog.js): fades the extended exterior so the map feels
-// bigger. near/far are Chebyshev distances from room centre — just outside the
-// walls → full black a short way into the outskirts. Mapview keeps fog off.
-// HALF is 10; fog range applied once HALF is declared below.
-let PLAY_FOG_NEAR = 10.35;
-let PLAY_FOG_FAR = 21;
-scene.fog = null;
+// The shader normalizes distance beyond each room's walls to 0..1. Both rooms
+// stay clear while their outskirts fade gently; mapview keeps fog disabled.
+scene.fog = mapView ? null : new THREE.Fog(CLEAR, 0, 1);
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 /** Desktop / portrait follow offset — never change this for desktop. */
@@ -157,14 +153,6 @@ function gameplayCamFocus() {
   _camFocus.x = THREE.MathUtils.clamp(_camFocus.x, -lim, lim);
   _camFocus.z = THREE.MathUtils.clamp(_camFocus.z, -lim, lim);
   return _camFocus;
-}
-
-function updatePlayFog(dt) {
-  if (mapView || !scene.fog) return;
-  const want = (state.bayActive || state.scripted) ? 1 : 0;
-  fogBlend = THREE.MathUtils.damp(fogBlend, want, state.scripted ? 1.1 : 2.4, dt);
-  scene.fog.near = THREE.MathUtils.lerp(PLAY_FOG_NEAR, BAY_FOG_NEAR, fogBlend);
-  scene.fog.far = THREE.MathUtils.lerp(PLAY_FOG_FAR, BAY_FOG_FAR, fogBlend);
 }
 
 function pinViewport() {
@@ -338,12 +326,6 @@ const HALF = 10;
 const WALL_H = 2.4;
 const WALL_T = 0.7;
 const EDGE = HALF + WALL_T / 2;
-({ near: PLAY_FOG_NEAR, far: PLAY_FOG_FAR } = playFogRange(HALF, 0.35, 11));
-// Once inside room 2, push fog out so the bay interior stays fully lit.
-const BAY_FOG_NEAR = 90;
-const BAY_FOG_FAR = 130;
-let fogBlend = 0; // 0 = room-1 play fog, 1 = bay-clear fog
-if (!mapView) scene.fog = new THREE.Fog(CLEAR, PLAY_FOG_NEAR, PLAY_FOG_FAR);
 const world = new THREE.Group();
 scene.add(world);
 const worldMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.58, metalness: 0.38 });
@@ -5201,7 +5183,6 @@ function resetGame(keep = false) {
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
     bayActive: false, scripted: null,
   });
-  fogBlend = 0;
   bayRevealTime = 0;
   bayRevealMix = 0;
   room2SouthDoor?.open();
@@ -6316,7 +6297,6 @@ function separateDrones() {
 function update(dt, lightFrame = false) {
   const px = player.position.x, pz = player.position.z;
   tickPlayInput(dt);
-  updatePlayFog(dt);
   if (state.running && state.scripted) {
     updateBayTransition(dt);
   } else if (state.running && !state.choosing) {
