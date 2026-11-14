@@ -3849,12 +3849,14 @@ function clearFieldDrones() {
   clearEquipmentField();
 }
 
-function bayDoorsOpenFlags() {
-  const flags = { north: false, south: false, west: false, east: false };
-  for (const o of bayOpenings) {
-    if (o.hp <= 0 && o.bayId) flags[o.bayId] = true;
-  }
-  return flags;
+/**
+ * Room-1 style: wallBoxes always leave the 3-tile door gaps clear.
+ * Intact doors block crossing via bayOpenings (shutAt / navClear entrances),
+ * not by filling the gap with solid wall — sealing the gap parked bots outside
+ * bash range on the east door (front waypoint overlapped the sealed slab).
+ */
+function bayWallDoorGaps() {
+  return { north: true, south: true, west: true, east: true };
 }
 
 /** Swap the solid room-2 footprint for wall segments so shots/LOS work inside the bay. */
@@ -3864,8 +3866,7 @@ function activateBayPlayCollision() {
     return;
   }
   wallBoxes.splice(room2SolidStart, room2CollideCount);
-  // Start with every bay door sealed; gaps open as bots break them.
-  const walls = room2WallBoxes({ doorsOpen: bayDoorsOpenFlags() });
+  const walls = room2WallBoxes({ doorsOpen: bayWallDoorGaps() });
   for (const b of walls) wallBoxes.push(b);
   room2CollideCount = walls.length;
   bayCollisionActive = true;
@@ -3874,8 +3875,9 @@ function activateBayPlayCollision() {
 
 function refreshBayPlayCollision() {
   if (!bayCollisionActive) return;
+  // Gaps stay open; broken doors only clear the opening.hp / visual panels.
   wallBoxes.splice(room2SolidStart, room2CollideCount);
-  const walls = room2WallBoxes({ doorsOpen: bayDoorsOpenFlags() });
+  const walls = room2WallBoxes({ doorsOpen: bayWallDoorGaps() });
   for (const b of walls) wallBoxes.push(b);
   room2CollideCount = walls.length;
   rebuildNavObstacles();
@@ -5205,9 +5207,9 @@ function updateTeslaBolts(dt) {
   }
 }
 
-/** Base damage: lethal to cyan, mortars and patrols; Stage 6 scales via damageScale. */
+/** Base damage (~0.85×): lethal to cyan + mortars; Stage 6 scales via damageScale. */
 function teslaDamage(scale = 1) {
-  return Math.ceil(state.droneHp * 1.0 * scale);
+  return Math.ceil(state.droneHp * scale);
 }
 
 function pickTeslaTarget(tip, rangeSq, skip = null) {
@@ -6858,8 +6860,9 @@ function chaseDrone(z, dt) {
       }
       if (ud.stage === 1) {
         if (o.kind === 'door' && o.hp <= 0) { tx = o.ix; tz = o.iz; } // broken down: straight through
-        else if ((o.x - z.position.x) ** 2 + (o.z - z.position.z) ** 2 > 1.45 ** 2) { tx = o.fx; tz = o.fz; }
-        else {
+        else if ((o.x - z.position.x) ** 2 + (o.z - z.position.z) ** 2 > (o.bay ? 1.85 : 1.45) ** 2) {
+          tx = o.fx; tz = o.fz;
+        } else {
           // at it: batter it in, or take a turn climbing through the broken window
           tx = null;
           const off = faceToward(z, o.x - z.position.x, o.z - z.position.z, Z_TRACK, dt);

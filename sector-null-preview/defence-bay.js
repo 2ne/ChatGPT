@@ -439,8 +439,8 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
       return {
         interval: Math.max(0.7, 2.0 - r * 0.35),
         range: 8 + r * 2.5,
-        targets: 3 + r, // base hits 3; ranks add more forks
-        damageScale: 1 + r * 0.25,
+        targets: 2 + r, // base hits 2; ranks add more forks
+        damageScale: 0.85 + r * 0.25,
       };
     },
     /** 0–1 charge tell before the bolt. */
