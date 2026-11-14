@@ -139,3 +139,7 @@ Weapon card presentation preserves the in-game rifle proportions and chamfered
 geometry, with a larger side/three-quarter view and gentle sway. Pulse Amplifier
 uses a fitted dark sleeve with one amber indicator per rank, replacing the
 floating muzzle orb and spinning ring. Indicator glow is steady with reduced motion.
+
+Split Beam cards retain full rotation to reveal the two-, three- and four-beam
+fans at each rank; the other rifle cards keep their gentle sway. Reduced-motion
+settings continue to suppress card rotation.

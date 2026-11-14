@@ -8,7 +8,8 @@ const CAT_COLORS = UPGRADE_CATS;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
 const RIFLE_IDS = new Set(['damage', 'rate', 'spread']);
-const SWAY_IDS = new Set(['damage', 'rate', 'spread', 'bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
+// Split Beam keeps a full orbit so its 2 / 3 / 4-shot fan is readable from every angle.
+const SWAY_IDS = new Set(['damage', 'rate', 'bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
 const SWAY_ANGLE = 20 * Math.PI / 180;
 
 // Same basis as game.js tracers: lookAt aims local -Z forward.
