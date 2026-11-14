@@ -52,6 +52,8 @@ import {
 import {
   BAY_DOOR_X,
   BAY_CX,
+  BAY_DOOR_GAP,
+  BAY_DOOR_HALF,
   ROOM2_CZ,
   MAPVIEW_CAM,
   ROOM2_EAST,
@@ -691,13 +693,53 @@ for (const x of [-14.5, 14.5]) {
 bakedMesh(perimeter, false);
 buildIndustrialExterior(world);
 
-// Stage 4 Defence Bay interior (concept, room-1 material quality).
+// Defence Bay interior (Stage 4 visuals + Stage 5 combat doors / coil).
 const defenceBay = buildDefenceBay(world, {
   box, model, halo, alloy, carbon, cyanLight, amberLight,
   BlockBatch, seeded, worldMat, reducedMotion,
 });
 const room2SouthDoor = defenceBay.southDoor;
+const bayDoorById = {
+  north: defenceBay.northDoor,
+  west: defenceBay.westDoor,
+  east: defenceBay.eastDoor,
+  south: defenceBay.southDoor,
+};
 for (const s of defenceBay.solids) SOLIDS.push(s);
+
+/** Room-2 combat openings — same bash/break contract as room 1 doors. */
+const bayOpenings = [];
+function makeBayOpening(ctrl, axis, fixed, outwardSign) {
+  const u0 = (axis === 'x' ? BAY_DOOR_X : ROOM2_CZ) - BAY_DOOR_HALF;
+  const u1 = u0 + BAY_DOOR_GAP;
+  const c = (u0 + u1) / 2;
+  const s = outwardSign;
+  const ht = 0.4;
+  const p = out => axis === 'x' ? [c, fixed + s * out] : [fixed + s * out, c];
+  const [x, z] = p(0);
+  const [ox, oz] = p(OPENING_INSET);
+  const [ix, iz] = p(-OPENING_INSET);
+  const [fx, fz] = p(0.85);
+  const [lx, lz] = p(-0.95);
+  const o = {
+    kind: 'door', bay: true, bayId: ctrl.id, ctrl,
+    axis, u0, u1, w: BAY_DOOR_GAP, x, z, ox, oz, ix, iz, fx, fz, lx, lz,
+    sill: 0, head: 3.5,
+    rotY: ctrl.rotation,
+    box: axis === 'x'
+      ? { minX: u0, maxX: u1, minZ: fixed - ht, maxZ: fixed + ht }
+      : { minX: fixed - ht, maxX: fixed + ht, minZ: u0, maxZ: u1 },
+    maxHp: DOOR_HP, hp: DOOR_HP,
+    climber: null, jolt: 0, fallT: -1,
+    indicator: ctrl.indicator,
+  };
+  bayOpenings.push(o);
+  return o;
+}
+makeBayOpening(bayDoorById.north, 'x', ROOM2_NORTH, -1);
+makeBayOpening(bayDoorById.south, 'x', ROOM2_SOUTH, 1);
+makeBayOpening(bayDoorById.west, 'z', ROOM2_WEST, -1);
+makeBayOpening(bayDoorById.east, 'z', ROOM2_EAST, 1);
 
 if (mapView) {
   // Overview: no world-XZ fog so the full reserved floor stays readable.
@@ -765,7 +807,11 @@ function updateWorld(dt) {
     glow.scale.setScalar(4.4 * (0.9 + 0.1 * intensity));
     o.indicator.color.setHex(colour);
   }
+  for (const o of bayOpenings) o.ctrl?.setLight(o.hp <= 0, t);
   defenceBay.update?.(dt);
+  if (state.bayActive && state.running && !state.choosing && !state.scripted) {
+    updateTeslaCoil(dt);
+  }
 }
 
 // ===================================================================
@@ -1037,6 +1083,7 @@ const smokePool = [];
 const sparkPool = [];
 const chipPool = [];
 const sparkMat = new THREE.MeshBasicMaterial({ color: AMBER, toneMapped: false });
+const sparkMatCyan = new THREE.MeshBasicMaterial({ color: CYAN, toneMapped: false });
 const sparkForward = new THREE.Vector3(0, 0, 1);
 const _sparkDir = new THREE.Vector3();
 const _cellEject = new THREE.Vector3();
@@ -1502,9 +1549,9 @@ const state = {
   droneSpeed: 2.2,
   droneHp: 2,
   shake: 0,
-  /** Stage 3: Defence Bay reached (empty shell — no waves yet). */
+  /** Defence Bay reached — waves 11+ run here. */
   bayActive: false,
-  /** Stage 3 scripted walk / slam (`null` when idle). */
+  /** Scripted walk / slam (`null` when idle). */
   scripted: null,
 };
 
@@ -2737,10 +2784,18 @@ const WAVE_TYPE_INTRO = {
 const WAVE_INTRO_HOLD = 4.5; // seconds after intro spawns before the full mix resumes (or sooner if they die)
 
 function waveBotType() {
+  // Waves 11–12: mostly cyan flankers so the new room reads clearly; no mortars.
+  if (state.wave === 11 || state.wave === 12) {
+    const r = Math.random();
+    if (r < 0.72) return BOT_TYPES.runner;
+    if (r < 0.88) return BOT_TYPES.patrol;
+    return BOT_TYPES.gunner;
+  }
   // Guaranteed introduction, then a few replacements rather than extra enemies.
-  // Wave 10 opens with a two-tank intro; later waves still cap at three across the wave.
+  // Wave 10 opens with a two-tank intro; bay mortars return from wave 13 (cap 3).
   const mortarLimit = state.wave === 10 ? 2 : 3;
-  if (state.wave >= 10 && state.mortarsSpawned < mortarLimit
+  const mortarWave = state.wave === 10 || state.wave >= 13;
+  if (mortarWave && state.mortarsSpawned < mortarLimit
       && !drones.some(z => z.userData.type.style === 'mortar')
       && !equipment.zones.some(r => r.userData.mortar)
       && (state.mortarsSpawned === 0 || Math.random() < 0.08)) {
@@ -2752,6 +2807,42 @@ function waveBotType() {
   if (state.wave >= 3 && r >= 0.25 && r < 0.45) return BOT_TYPES.gunner;
   if (state.wave >= 4 && r >= 0.45 && r < 0.6) return BOT_TYPES.heavy;
   return BOT_TYPES.patrol;
+}
+
+/** Regular spawn count per wave (before the boss). Bay opener waves are lighter. */
+function waveSpawnCount(n) {
+  if (n === 11) return 16;
+  if (n === 12) return 22;
+  return Math.max(0, 5 + n * 3);
+}
+
+/** Which bay doors may spawn for this wave (spread across the full 3-tile mouth). */
+function baySpawnDoors(n) {
+  if (n <= 12) {
+    return bayOpenings.filter(o => o.bayId === 'north' || o.bayId === 'west' || o.bayId === 'east');
+  }
+  return bayOpenings.slice();
+}
+
+function baySpawnPoint(out, preferred = null) {
+  const doors = baySpawnDoors(state.wave);
+  const o = preferred && doors.includes(preferred)
+    ? preferred
+    : doors[Math.floor(Math.random() * doors.length)];
+  const outX = o.ox - o.x, outZ = o.oz - o.z;
+  const len = Math.hypot(outX, outZ) || 1;
+  const nx = outX / len, nz = outZ / len;
+  const tx = o.axis === 'x' ? 1 : 0;
+  const tz = o.axis === 'z' ? 1 : 0;
+  // Spread across the full clear width — not a single file down the centre.
+  const spread = (Math.random() - 0.5) * (BAY_DOOR_GAP - 0.7);
+  const dist = OPENING_INSET + 1.4 + Math.random() * 2.8;
+  out.x = o.x + nx * dist + tx * spread;
+  out.z = o.z + nz * dist + tz * spread;
+  out.y = 0;
+  pushOutOfSolids(out);
+  out._bayOpening = o;
+  return out;
 }
 function bossHealthMult() {
   // Patterns carry the challenge; avoid increasingly long health-only encounters.
@@ -2990,7 +3081,11 @@ function spawnPoint(out) {
   return out;
 }
 
-function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patrol) {
+function spawnDrone(pos, type = BOT_TYPES.patrol) {
+  if (!pos) {
+    pos = state.bayActive ? baySpawnPoint(new THREE.Vector3()) : spawnPoint(new THREE.Vector3());
+  }
+  const bayEntry = pos._bayOpening || null;
   const kit = DRONE_KITS[type.kit];
   const z = new THREE.Group();
   z.rotation.order = 'YXZ';
@@ -3079,9 +3174,11 @@ function spawnDrone(pos = spawnPoint(new THREE.Vector3()), type = BOT_TYPES.patr
     climb: -1,     // 0..1 through clambering in a window; -1 = not climbing
     via: -1,       // which prop corner it's heading round (see routeAround)
     stuckT: 0, stuckX: pos.x, stuckZ: pos.z, // progress check (see chaseDrone)
-    opening: null, // committed entry opening; null = re-pick on next outside frame
+    opening: bayEntry, // bay spawns commit to their door; room 1 re-picks outside
     stage: 0,      // 0 = heading to outer waypoint, 1 = heading through the gap
-    heading: Math.atan2(-z.position.x, -z.position.z), // current facing, starts toward deck
+    heading: bayEntry
+      ? Math.atan2(bayEntry.x - z.position.x, bayEntry.z - z.position.z)
+      : Math.atan2(-z.position.x, -z.position.z),
     turn: 3.0 + Math.random() * 2.0,                   // max turn rate (rad/s), varied per drone
   };
   z.rotation.y = z.userData.heading;
@@ -3231,7 +3328,7 @@ function nearestOpening(pos, skip, z = null) {
   // Large / boss bots jam in window frames — prefer doors when available.
   const preferDoor = z && (z.userData.boss || z.userData.type.size >= 1.25);
   let best = null, bd = Infinity;
-  for (const o of openings) {
+  for (const o of combatOpenings()) {
     if (o === skip) continue;
     if ((preferDoor || z?.userData.type.style === 'mortar') && o.kind !== 'door') continue;
     let d = (o.x - pos.x) ** 2 + (o.z - pos.z) ** 2;
@@ -3243,7 +3340,33 @@ function nearestOpening(pos, skip, z = null) {
 }
 
 function inside(pos) {
+  if (state.bayActive) {
+    return pos.x > ROOM2_WEST + 0.3 && pos.x < ROOM2_EAST - 0.3
+      && pos.z < ROOM2_SOUTH - 0.3 && pos.z > ROOM2_NORTH + 0.3;
+  }
   return Math.abs(pos.x) < HALF - 0.3 && Math.abs(pos.z) < HALF - 0.3;
+}
+
+/** Active combat openings: room 1 before the handoff, bay doors after. */
+function combatOpenings() {
+  return state.bayActive ? bayOpenings : openings;
+}
+
+function deckClamp(radius = 0.4) {
+  if (state.bayActive) {
+    return {
+      minX: ROOM2_WEST + radius + 0.2,
+      maxX: ROOM2_EAST - radius - 0.2,
+      minZ: ROOM2_NORTH + radius + 0.2,
+      maxZ: ROOM2_SOUTH - radius - 0.2,
+    };
+  }
+  return {
+    minX: -HALF + radius + 0.2,
+    maxX: HALF - radius - 0.2,
+    minZ: -HALF + radius + 0.2,
+    maxZ: HALF - radius - 0.2,
+  };
 }
 
 // --- doors and windows: shut at the start of a run, and stay broken once broken ---
@@ -3276,6 +3399,10 @@ function resetOpenings() {
     glow.material.opacity = 0.3;
     glow.scale.setScalar(4.4);
   }
+  for (const o of bayOpenings) {
+    Object.assign(o, { hp: o.maxHp, climber: null, jolt: 0, fallT: -1 });
+    o.ctrl?.reset();
+  }
 }
 // bits flying off a door or window, into the deck
 function burst(o, n, mat, size, speed) {
@@ -3299,6 +3426,7 @@ function hitOpening(o) {
   if (o.kind === 'door') {
     audio.bash(o);
     burst(o, 2, metalChip, 0.12, 2);
+    if (o.bay) o.ctrl?.bashJolt();
   } else if (o.hp > 0) {
     audio.crack(o);
     o.glass.material = glassCracked;
@@ -3307,6 +3435,14 @@ function hitOpening(o) {
 }
 function breakOpening(o) {
   o.hp = 0;
+  if (o.bay) {
+    // Sliding bay doors retract into their housings and stay open for the run.
+    o.ctrl?.breakOpen();
+    audio.doorBreak(o);
+    burst(o, 9, metalChip, 0.16, 3.5);
+    refreshBayPlayCollision();
+    return;
+  }
   if (o.kind === 'door') {
     // off its hinges and down onto the floor
     o.fallT = 0;
@@ -3323,7 +3459,7 @@ function breakOpening(o) {
 }
 // does an unbroken door or window stand at (x, z)? (they stop bullets and blows)
 function shutAt(x, z) {
-  for (const o of openings) {
+  for (const o of combatOpenings()) {
     if (o.hp > 0 && x >= o.box.minX && x <= o.box.maxX && z >= o.box.minZ && z <= o.box.maxZ) return o;
   }
   return null;
@@ -3449,10 +3585,19 @@ function clearPath(ax, az, bx, bz, radius = Z_RADIUS - SEE_SLOP) {
   return true;
 }
 const navGraphs = new Map();
-const navObstacles = [...SOLIDS, ...wallBoxes.map(w => ({
-  x: (w.minX + w.maxX) / 2, z: (w.minZ + w.maxZ) / 2,
-  hx: (w.maxX - w.minX) / 2, hz: (w.maxZ - w.minZ) / 2, c: 1, s: 0,
-}))];
+const navObstacles = [];
+function rebuildNavObstacles() {
+  navObstacles.length = 0;
+  for (const s of SOLIDS) navObstacles.push(s);
+  for (const w of wallBoxes) {
+    navObstacles.push({
+      x: (w.minX + w.maxX) / 2, z: (w.minZ + w.maxZ) / 2,
+      hx: (w.maxX - w.minX) / 2, hz: (w.maxZ - w.minZ) / 2, c: 1, s: 0,
+    });
+  }
+  navGraphs.clear();
+}
+rebuildNavObstacles();
 const botRadius = z => (z.userData.type.style === 'mortar' ? 0.74 : Z_RADIUS) * z.userData.type.size;
 function navClear(ax, az, bx, bz, radius, entrances = false) {
   if (!clearPath(ax, az, bx, bz, radius)) return false;
@@ -3461,7 +3606,7 @@ function navClear(ax, az, bx, bz, radius, entrances = false) {
     if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz,
       (w.maxX - w.minX) / 2 + radius, (w.maxZ - w.minZ) / 2 + radius)) return false;
   }
-  if (entrances) for (const o of openings) {
+  if (entrances) for (const o of combatOpenings()) {
     // Intact openings only block paths that CROSS the wall plane — same-side
     // hunting along a door/window gap must not freeze drones outside melee.
     if (o.hp <= 0) continue;
@@ -3492,8 +3637,9 @@ const _goal = { x: 0, z: 0 };
 function routeAround(z, tx, tz) {
   const ud = z.userData, radius = botRadius(z);
   if (inside(z.position) && !ud.opening) {
-    tx = THREE.MathUtils.clamp(tx, -HALF + radius + 0.2, HALF - radius - 0.2);
-    tz = THREE.MathUtils.clamp(tz, -HALF + radius + 0.2, HALF - radius - 0.2);
+    const lim = deckClamp(radius);
+    tx = THREE.MathUtils.clamp(tx, lim.minX, lim.maxX);
+    tz = THREE.MathUtils.clamp(tz, lim.minZ, lim.maxZ);
   }
   _goal.x = tx; _goal.z = tz;
   pushOutOfSolids(_goal, radius + 0.02); // player/flanking target may hug cover too closely
@@ -3691,15 +3837,36 @@ function clearFieldDrones() {
   clearEquipmentField();
 }
 
+function bayDoorsOpenFlags() {
+  const flags = { north: false, south: false, west: false, east: false };
+  for (const o of bayOpenings) {
+    if (o.hp <= 0 && o.bayId) flags[o.bayId] = true;
+  }
+  return flags;
+}
+
 /** Swap the solid room-2 footprint for wall segments so shots/LOS work inside the bay. */
 function activateBayPlayCollision() {
-  if (bayCollisionActive) return;
+  if (bayCollisionActive) {
+    refreshBayPlayCollision();
+    return;
+  }
   wallBoxes.splice(room2SolidStart, room2CollideCount);
-  const walls = room2WallBoxes({ southDoorOpen: false });
+  // Start with every bay door sealed; gaps open as bots break them.
+  const walls = room2WallBoxes({ doorsOpen: bayDoorsOpenFlags() });
   for (const b of walls) wallBoxes.push(b);
   room2CollideCount = walls.length;
   bayCollisionActive = true;
-  navGraphs.clear();
+  rebuildNavObstacles();
+}
+
+function refreshBayPlayCollision() {
+  if (!bayCollisionActive) return;
+  wallBoxes.splice(room2SolidStart, room2CollideCount);
+  const walls = room2WallBoxes({ doorsOpen: bayDoorsOpenFlags() });
+  for (const b of walls) wallBoxes.push(b);
+  room2CollideCount = walls.length;
+  rebuildNavObstacles();
 }
 
 function restoreRoom2EnemySolid() {
@@ -3708,7 +3875,7 @@ function restoreRoom2EnemySolid() {
   for (const box of room2CollisionBoxes()) wallBoxes.push(box);
   room2CollideCount = wallBoxes.length - room2SolidStart;
   bayCollisionActive = false;
-  navGraphs.clear();
+  rebuildNavObstacles();
 }
 
 function beginBayTransition() {
@@ -3750,6 +3917,9 @@ function finalizeBayArrival() {
   player.position.x = THREE.MathUtils.clamp(player.position.x, lim.minX, lim.maxX);
   player.position.z = THREE.MathUtils.clamp(player.position.z, lim.minZ, lim.maxZ);
   showBanner('DEFENCE BAY', 'SECTOR 02 · CONTAINMENT DECK', 3.2);
+  // Wave 11 after the slam — coil is live as soon as drones start spawning.
+  if (defenceBay.coilWeapon) defenceBay.coilWeapon.cd = 0.6;
+  queueWave(1.4);
 }
 
 function updateBayTransition(dt) {
@@ -4807,11 +4977,12 @@ function spawnBlastFlare(origin, scale = 1, color = 0xff9b42) {
   droneBlasts.push({ flare, time: 0, life: BLAST_TIME * (0.85 + scale * 0.25), base: 1.8 * scale, grow: 2.8 * scale });
 }
 
-function spawnBlastSparks(origin, count, speedMul = 1, sizeMul = 1) {
+function spawnBlastSparks(origin, count, speedMul = 1, sizeMul = 1, mat = sparkMat) {
   const trimmed = Math.max(2, Math.round(count * (1 - fxPressure() * 0.7)));
   const n = reducedMotion.matches ? Math.max(2, (trimmed / 3) | 0) : trimmed;
   for (let i = 0; i < n; i++) {
     const spark = acquireSpark();
+    spark.material = mat;
     spark.scale.set(0.035 * sizeMul, 0.035 * sizeMul, rnd(0.2, 0.45) * sizeMul);
     spark.position.copy(origin);
     const angle = rnd(0, Math.PI * 2), speed = rnd(4, 9) * speedMul;
@@ -4833,19 +5004,171 @@ function spawnShockwave(origin, maxRadius = 4.5, color = 0xffc17b) {
   shockwaves.push({ ring, time: 0, life: 0.55, maxRadius });
 }
 
-function explodeDrone(drone) {
+function explodeDrone(drone, opts = {}) {
   const origin = drone.userData.upper.getWorldPosition(new THREE.Vector3());
   origin.y += 0.35;
-  audio.explode(origin);
-  // Skip the flash when the field is already saturated with FX.
-  if (fxPressure() < 0.85 || droneBlasts.length < 10) spawnBlastFlare(origin, 1);
-  spawnBlastSparks(origin, 16);
+  if (opts.electric) {
+    audio.teslaZap?.(origin);
+    if (!reducedMotion.matches && (fxPressure() < 0.9 || droneBlasts.length < 12)) {
+      spawnBlastFlare(origin, 0.85, 0x62edff);
+    }
+    spawnBlastSparks(origin, 22, 1.15, 0.9, sparkMatCyan);
+    // Tint sparks cyan by swapping the last few debris materials — keep cheap.
+  } else {
+    audio.explode(origin);
+    // Skip the flash when the field is already saturated with FX.
+    if (fxPressure() < 0.85 || droneBlasts.length < 10) spawnBlastFlare(origin, 1);
+    spawnBlastSparks(origin, 16);
+  }
 
   // Score gems replace lasting body-part debris (see SCORING.md).
   if (state.running) {
     const type = drone.userData.type;
     const count = type.boss ? (8 + ((Math.random() * 5) | 0)) : Math.round(3 + type.size * 2);
     spawnEmeralds(origin, count);
+  }
+}
+
+// --- Tesla coil (Stage 5 base; Stage 6 ranks shorten interval / grow range / chain) ---
+const TESLA_ARC_POOL = [];
+const TESLA_ARC_LIFE = 0.18;
+function acquireTeslaArc() {
+  let arc = TESLA_ARC_POOL.pop();
+  if (!arc) {
+    const positions = new Float32Array(8 * 3);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.LineBasicMaterial({
+      color: 0x62edff, transparent: true, opacity: 0.95,
+      depthWrite: false, toneMapped: false,
+    });
+    arc = new THREE.Line(geo, mat);
+    arc.frustumCulled = false;
+    arc.userData.positions = positions;
+  }
+  return arc;
+}
+function releaseTeslaArc(arc) {
+  scene.remove(arc);
+  TESLA_ARC_POOL.push(arc);
+}
+const teslaArcs = [];
+function spawnTeslaArc(from, to) {
+  if (reducedMotion.matches) {
+    // Still a brief tip flicker via coil pulse — no jagged bolt.
+    return;
+  }
+  const arc = acquireTeslaArc();
+  const pos = arc.userData.positions;
+  const segs = 7;
+  for (let i = 0; i <= segs; i++) {
+    const t = i / segs;
+    const jx = (i === 0 || i === segs) ? 0 : (Math.random() - 0.5) * 0.85;
+    const jy = (i === 0 || i === segs) ? 0 : (Math.random() - 0.5) * 0.55;
+    const jz = (i === 0 || i === segs) ? 0 : (Math.random() - 0.5) * 0.85;
+    pos[i * 3] = from.x + (to.x - from.x) * t + jx;
+    pos[i * 3 + 1] = from.y + (to.y - from.y) * t + jy;
+    pos[i * 3 + 2] = from.z + (to.z - from.z) * t + jz;
+  }
+  arc.geometry.attributes.position.needsUpdate = true;
+  arc.geometry.setDrawRange(0, segs + 1);
+  arc.material.opacity = 0.95;
+  scene.add(arc);
+  teslaArcs.push({ arc, life: TESLA_ARC_LIFE });
+}
+function updateTeslaArcs(dt) {
+  for (let i = teslaArcs.length - 1; i >= 0; i--) {
+    const slot = teslaArcs[i];
+    slot.life -= dt;
+    slot.arc.material.opacity = Math.max(0, slot.life / TESLA_ARC_LIFE);
+    if (slot.life <= 0) {
+      releaseTeslaArc(slot.arc);
+      teslaArcs.splice(i, 1);
+    }
+  }
+}
+
+/** Damage lethal to cyan flankers at the current wave HP; chips heavier kits. */
+function teslaDamage() {
+  return Math.ceil(state.droneHp * BOT_TYPES.runner.health);
+}
+
+function updateTeslaCoil(dt) {
+  const weapon = defenceBay.coilWeapon;
+  if (!weapon || !state.bayActive) return;
+  updateTeslaArcs(dt);
+  weapon.cd -= dt;
+  if (weapon.cd > 0) return;
+  const { interval, range, chains } = weapon.stats();
+  const tip = weapon.tip;
+  const rangeSq = range * range;
+  let best = null, bestD = Infinity;
+  for (const z of drones) {
+    if (z.userData.dying || z.userData.boss && bossDeath.active) continue;
+    const d = tip.distanceToSquared(z.position);
+    if (d > rangeSq || d >= bestD) continue;
+    if (!inside(z.position)) continue;
+    best = z; bestD = d;
+  }
+  if (!best) {
+    weapon.cd = 0.25;
+    return;
+  }
+  weapon.cd = interval;
+  const targetPos = best.userData.upper?.getWorldPosition(new THREE.Vector3()) || best.position.clone();
+  targetPos.y += 0.4;
+  spawnTeslaArc(tip, targetPos);
+  audio.teslaZap?.(best.position);
+
+  const dmg = teslaDamage();
+  const hitList = [best];
+  // Stage 6 will raise `chains`; base rank 0 stays single-target.
+  for (let c = 0; c < chains; c++) {
+    const prev = hitList[hitList.length - 1];
+    let next = null, nd = Infinity;
+    for (const z of drones) {
+      if (hitList.includes(z) || z.userData.dying) continue;
+      if (!inside(z.position)) continue;
+      const d = prev.position.distanceToSquared(z.position);
+      if (d < 4.5 * 4.5 && d < nd) { next = z; nd = d; }
+    }
+    if (!next) break;
+    hitList.push(next);
+    const to = next.userData.upper?.getWorldPosition(new THREE.Vector3()) || next.position.clone();
+    to.y += 0.4;
+    spawnTeslaArc(
+      prev.userData.upper?.getWorldPosition(new THREE.Vector3()) || prev.position,
+      to,
+    );
+  }
+
+  for (const z of hitList) {
+    z.userData.hp -= dmg;
+    hitDrone(z);
+    if (z.userData.hp <= 0) {
+      const idx = drones.indexOf(z);
+      if (idx >= 0) killDroneElectric(z, idx);
+    }
+  }
+}
+
+function killDroneElectric(z, idx) {
+  const type = z.userData.type;
+  if (type.boss && state.running && !bossDeath.active && !z.userData.dying) {
+    beginBossDeath(z);
+    return;
+  }
+  lastKillPos.set(z.position.x, 0, z.position.z);
+  explodeDrone(z, { electric: true });
+  if (z.userData.climb >= 0) endClimb(z, true);
+  maybeDrop(z.position, true);
+  scene.remove(z);
+  drones.splice(idx, 1);
+  state.kills++;
+  if (state.running) addScore(killPoints(type));
+  if (state.running && !state.choosing && state.intermission <= 0 && !state.toSpawn && !drones.length) {
+    if (state.bossPending) { spawnWaveBoss(); return; }
+    finishWaveClear();
   }
 }
 
@@ -5085,7 +5408,7 @@ function startWave(n) {
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
   state.droneHp = 2 + (n - 1) * 0.4;
   // anything already up counts toward the wave (the yard's shamblers when you leave the title)
-  state.toSpawn = Math.max(0, 5 + n * 3 - drones.length);
+  state.toSpawn = Math.max(0, waveSpawnCount(n) - drones.length);
   for (const z of drones) {
     const u = z.userData;
     u.speed = Math.min(5.5, state.droneSpeed * u.pace);
@@ -5098,7 +5421,16 @@ function startWave(n) {
   // Leftover clear-shields / boss powerups sit through the picker; once live they start fading.
   armPersistFloorExpiry();
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
-  const omens = { 1: 'Grey patrols · Defeat the red boss last', 2: 'Cyan flankers · Fast, lightly armoured', 3: 'Purple gunners · Dodge charged shots', 4: 'Gold bulwarks · Slow, armoured, heavy strikes', 7: 'Containment warning', 12: 'Reactor at critical load' };
+  const omens = {
+    1: 'Grey patrols · Defeat the red boss last',
+    2: 'Cyan flankers · Fast, lightly armoured',
+    3: 'Purple gunners · Dodge charged shots',
+    4: 'Gold bulwarks · Slow, armoured, heavy strikes',
+    7: 'Containment warning',
+    11: 'Defence Bay · North and side doors only',
+    12: 'Hold the bay · Coil is live',
+    13: 'South door opens · Mortars return',
+  };
   showBanner(
     'WAVE ' + n,
     n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected',
@@ -5177,8 +5509,13 @@ function resetGame(keep = false) {
   });
   bayRevealTime = 0;
   bayRevealMix = 0;
+  if (defenceBay.coilWeapon) {
+    defenceBay.coilWeapon.rank = 0;
+    defenceBay.coilWeapon.cd = 0;
+  }
   // Keep the next room sealed throughout waves 1–10, including on restart.
   // Only the scripted wave-10 handoff opens this entrance as we approach.
+  for (const d of defenceBay.doors || []) d.reset?.();
   room2SouthDoor?.snapShut();
   restoreRoom2EnemySolid();
   emeraldChain = 0;
@@ -6029,6 +6366,30 @@ function hurtPlayer(damage = 1) {
 // Shared hunt point: same pursuit for every bot. Must stay inside melee reach —
 // the old corner shrink parked packs ~2.8u short of a tucked operator.
 function huntPoint(z, px, pz) {
+  if (state.bayActive) {
+    const radius = botRadius(z);
+    const reach = Z_REACH;
+    const lim = deckClamp(radius + 0.35);
+    let tx = THREE.MathUtils.clamp(px, lim.minX, lim.maxX);
+    let tz = THREE.MathUtils.clamp(pz, lim.minZ, lim.maxZ);
+    if (z.userData.type.style !== 'rusher') {
+      const side = Math.sin(z.userData.seed * 7.13);
+      const dx = px - z.position.x, dz = pz - z.position.z, d = Math.hypot(dx, dz) || 1;
+      tx += (-dz / d) * side * 0.35;
+      tz += (dx / d) * side * 0.35;
+      tx = THREE.MathUtils.clamp(tx, lim.minX, lim.maxX);
+      tz = THREE.MathUtils.clamp(tz, lim.minZ, lim.maxZ);
+    }
+    const maxStand = reach * 0.85;
+    const ox = tx - px, oz = tz - pz, od = Math.hypot(ox, oz);
+    if (od > maxStand) {
+      tx = px + ox / od * maxStand;
+      tz = pz + oz / od * maxStand;
+      tx = THREE.MathUtils.clamp(tx, lim.minX, lim.maxX);
+      tz = THREE.MathUtils.clamp(tz, lim.minZ, lim.maxZ);
+    }
+    return { x: tx, z: tz };
+  }
   return huntPointToward(px, pz, z.position.x, z.position.z, {
     half: HALF,
     radius: botRadius(z),
@@ -6043,8 +6404,12 @@ function chaseDrone(z, dt) {
   if (ud.dying || bossDeath.active && ud.boss) return;
   ud.slow = Math.max(0, (ud.slow || 0) - dt);
   const clearance = WALL_T / 2 + botRadius(z) + 0.15;
+  const nearWall = state.bayActive
+    ? (z.position.x <= ROOM2_WEST + clearance || z.position.x >= ROOM2_EAST - clearance
+      || z.position.z >= ROOM2_SOUTH - clearance || z.position.z <= ROOM2_NORTH + clearance)
+    : (Math.abs(z.position.x) >= HALF - clearance || Math.abs(z.position.z) >= HALF - clearance);
   const bossEntering = ud.boss && (!inside(z.position) || (ud.opening && (
-    Math.abs(z.position.x) >= HALF - clearance || Math.abs(z.position.z) >= HALF - clearance
+    nearWall
     || (ud.stage === 1 && Math.hypot(z.position.x - ud.opening.ix, z.position.z - ud.opening.iz) > 0.12))));
   const onDeck = inside(z.position) && !bossEntering;
   if (ud.boss && onDeck) { ud.opening = null; ud.stage = 0; }
@@ -6063,8 +6428,14 @@ function chaseDrone(z, dt) {
         const angle = i * Math.PI * 2 / count;
         const position = p.clone();
         if (i) { position.x += Math.cos(angle) * 3.8; position.z += Math.sin(angle) * 3.8; }
-        position.x = THREE.MathUtils.clamp(position.x, -HALF + 2, HALF - 2);
-        position.z = THREE.MathUtils.clamp(position.z, -HALF + 2, HALF - 2);
+        if (state.bayActive) {
+          const lim = deckClamp(2);
+          position.x = THREE.MathUtils.clamp(position.x, lim.minX, lim.maxX);
+          position.z = THREE.MathUtils.clamp(position.z, lim.minZ, lim.maxZ);
+        } else {
+          position.x = THREE.MathUtils.clamp(position.x, -HALF + 2, HALF - 2);
+          position.z = THREE.MathUtils.clamp(position.z, -HALF + 2, HALF - 2);
+        }
         groundRing(position, 2.1, 0xff708c, 1.4, equipment.zones);
       }
       ud.patternTimer = 3.6;
@@ -6092,8 +6463,14 @@ function chaseDrone(z, dt) {
       ud.mortarCd = 5;
     }
   }
-  const fullyOnDeck = Math.abs(z.position.x) < HALF - botRadius(z) - 0.2
-    && Math.abs(z.position.z) < HALF - botRadius(z) - 0.2;
+  const fullyOnDeck = (() => {
+    const r = botRadius(z) + 0.2;
+    if (state.bayActive) {
+      return z.position.x > ROOM2_WEST + r && z.position.x < ROOM2_EAST - r
+        && z.position.z < ROOM2_SOUTH - r && z.position.z > ROOM2_NORTH + r;
+    }
+    return Math.abs(z.position.x) < HALF - r && Math.abs(z.position.z) < HALF - r;
+  })();
   if (ud.type.style === 'mortar' && fullyOnDeck && ud.climb < 0 && ud.swing < 0) {
     let moving = false;
     if (pd >= 4.5 && pd <= 22) {
@@ -6354,7 +6731,7 @@ function update(dt, lightFrame = false) {
   if (state.running) {
     // --- weapon ---
     state.fireCd -= dt;
-    if (firing && !state.choosing && !state.scripted && !state.bayActive) fire();
+    if (firing && !state.choosing && !state.scripted) fire();
     if (state.reloading) {
       state.reloadT += dt;
       if (state.reloadT >= state.reloadTime) finishReload();
@@ -6370,9 +6747,9 @@ function update(dt, lightFrame = false) {
     }
 
     // --- waves ---
-    if (state.choosing || state.scripted || state.bayActive) {
-      // wave cleared / bay walk / empty Defence Bay shell — no spawns
-      if (state.bayActive) { state.intermission = 0; waveAt = null; }
+    // Scripted bay walk / upgrade picker pause combat; bayActive itself does not.
+    if (state.choosing || state.scripted) {
+      // hold — no spawns during picker or the walk-in
     } else if (state.intermission > 0) {
       const scoreTime = audio.scoreTime();
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
@@ -6587,25 +6964,23 @@ whenViewportSettled(() => {
       beginBossDeath(z);
     }, 350);
   } else if (bayDev) {
-    // ?dev=bay — jump to the wave-10 cleared picker in room 1 (test the walk).
+    // ?dev=bay — land inside the Defence Bay ready for wave 11 combat.
     setTimeout(() => {
       startGame(false);
       state.intermission = 0;
       waveAt = null;
-      state.toSpawn = 0;
-      state.bossPending = false;
-      state.wave = 10;
       clearFieldDrones();
       clearEmeralds();
       clearEquipmentField();
-      player.position.set(BAY_DOOR_X, 0, -2);
-      player.rotation.y = Math.PI; // face north (toward the bay)
+      state.wave = 10;
+      player.position.set(BAY_CX, 0, ROOM2_CZ + 8);
+      player.rotation.y = Math.PI;
       touchYaw = Math.PI;
+      state.scripted = null;
+      finalizeBayArrival();
       followPos.copy(player.position).add(gameplayCamOffset());
       camera.position.copy(followPos);
       camMix = 1;
-      audio.waveClear();
-      openPicker();
     }, 350);
   } else if (mapView) {
     // Start a normal wave-1 run under the overview camera so the map is visible.

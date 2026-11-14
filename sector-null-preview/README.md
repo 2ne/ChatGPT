@@ -10,12 +10,17 @@ game unless James asks to release them.
 
 ## Status and controls
 
-The `?dev=bay` shortcut starts at the wave-10 upgrade picker. Choose an upgrade
-to take the existing automatic walk through the doors. On arrival, a brief wider
-camera view introduces the bay, then returns to the normal follow camera. WASD,
-touch and controller movement work in the room. The room is still an exploration
-preview: wave-11 combat and the coil's gameplay are not implemented. `?dev=mapview`
-retains the facility overview. With no query string, the preview starts normally.
+After wave 10 the scripted walk enters the bay; the south door slams shut and
+wave 11 starts. Waves continue past 20 with no ending. Restart returns to room 1.
+`?dev=bay` lands inside the bay and starts wave 11 for combat testing.
+`?dev=mapview` retains the facility overview. With no query string, the preview
+starts normally.
+
+Waves 11–12 are lighter (mostly cyan flankers) and spawn only from the north and
+side doors across the full 3-tile mouth. From wave 13 the south door joins and
+mortars return. Bay doors bash and break like room 1 (amber lights when broken,
+panels stay open). The Tesla coil is live from wave 11: ~2s interval, range 8,
+damage lethal to cyan flankers, with a jagged blue arc and electric kill FX.
 
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,

@@ -292,61 +292,52 @@ export function buildRoom2Shell(parent) {
 /**
  * Room-2 wall AABBs for player/shot collision once inside the bay.
  * Four door gaps match the concept doors (N/S on BAY_DOOR_X, E/W on ROOM2_CZ).
- * South door gap stays open when `southDoorOpen` is true (walk-in); closed after slam.
+ * Pass `doorsOpen: { north, south, west, east }` — true = gap clear (broken / walk-in).
+ * Legacy `southDoorOpen` still opens only the south gap.
  */
-export function room2WallBoxes({ southDoorOpen = false } = {}) {
+export function room2WallBoxes({
+  southDoorOpen = false,
+  doorsOpen = null,
+} = {}) {
   const pad = ROOM2_COLLIDE_PAD;
   const t = SHELL_T / 2 + pad;
   const gap = BAY_DOOR_HALF;
+  const open = doorsOpen || {
+    north: true,
+    south: southDoorOpen,
+    west: true,
+    east: true,
+  };
   const boxes = [];
 
-  // North wall with centred door gap (three-tile clear)
-  boxes.push(
-    {
-      minX: ROOM2_WEST - pad, maxX: BAY_DOOR_X - gap,
-      minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
-    },
-    {
-      minX: BAY_DOOR_X + gap, maxX: ROOM2_EAST + pad,
-      minZ: ROOM2_NORTH - t, maxZ: ROOM2_NORTH + t,
-    },
-  );
-  // West / east with centred door gaps (doors on ROOM2_CZ / dais Z)
-  boxes.push(
-    {
-      minX: ROOM2_WEST - t, maxX: ROOM2_WEST + t,
-      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_CZ - gap,
-    },
-    {
-      minX: ROOM2_WEST - t, maxX: ROOM2_WEST + t,
-      minZ: ROOM2_CZ + gap, maxZ: ROOM2_SOUTH + pad,
-    },
-    {
-      minX: ROOM2_EAST - t, maxX: ROOM2_EAST + t,
-      minZ: ROOM2_NORTH - pad, maxZ: ROOM2_CZ - gap,
-    },
-    {
-      minX: ROOM2_EAST - t, maxX: ROOM2_EAST + t,
-      minZ: ROOM2_CZ + gap, maxZ: ROOM2_SOUTH + pad,
-    },
-  );
-  if (southDoorOpen) {
-    boxes.push(
-      {
-        minX: ROOM2_WEST - pad, maxX: BAY_DOOR_X - gap,
-        minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
-      },
-      {
-        minX: BAY_DOOR_X + gap, maxX: ROOM2_EAST + pad,
-        minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
-      },
-    );
-  } else {
-    boxes.push({
-      minX: ROOM2_WEST - pad, maxX: ROOM2_EAST + pad,
-      minZ: ROOM2_SOUTH - t, maxZ: ROOM2_SOUTH + t,
-    });
+  function wallWithGap(axis, fixed, doorU, doorOpen) {
+    const min = axis === 'x' ? ROOM2_WEST - pad : ROOM2_NORTH - pad;
+    const max = axis === 'x' ? ROOM2_EAST + pad : ROOM2_SOUTH + pad;
+    if (!doorOpen) {
+      if (axis === 'x') {
+        boxes.push({ minX: min, maxX: max, minZ: fixed - t, maxZ: fixed + t });
+      } else {
+        boxes.push({ minX: fixed - t, maxX: fixed + t, minZ: min, maxZ: max });
+      }
+      return;
+    }
+    if (axis === 'x') {
+      boxes.push(
+        { minX: min, maxX: doorU - gap, minZ: fixed - t, maxZ: fixed + t },
+        { minX: doorU + gap, maxX: max, minZ: fixed - t, maxZ: fixed + t },
+      );
+    } else {
+      boxes.push(
+        { minX: fixed - t, maxX: fixed + t, minZ: min, maxZ: doorU - gap },
+        { minX: fixed - t, maxX: fixed + t, minZ: doorU + gap, maxZ: max },
+      );
+    }
   }
+
+  wallWithGap('x', ROOM2_NORTH, BAY_DOOR_X, open.north);
+  wallWithGap('x', ROOM2_SOUTH, BAY_DOOR_X, open.south);
+  wallWithGap('z', ROOM2_WEST, ROOM2_CZ, open.west);
+  wallWithGap('z', ROOM2_EAST, ROOM2_CZ, open.east);
   return boxes;
 }
 

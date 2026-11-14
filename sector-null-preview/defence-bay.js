@@ -158,15 +158,20 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   }
 
   // Armoured portals detailed on both faces for approach and arrival.
+  // All four can open for the handoff / combat break; lights recolour like room 1.
   const doors = [];
-  function door(x, z, rotation, animated = false) {
+  function door(x, z, rotation, id = 'door') {
     const root = new THREE.Group();
     root.position.set(x, 0, z);
     root.rotation.y = rotation;
     group.add(root);
-    const frame = new BlockBatch(), lit = new BlockBatch();
+    const frame = new BlockBatch(), lit = new BlockBatch(), amberTrim = new BlockBatch();
+    const indicator = new THREE.MeshBasicMaterial({
+      color: C.cyan, toneMapped: false, fog: false,
+    });
     const fb = (...args) => block(frame, ...args);
     const fl = (...args) => block(lit, ...args, 0, 0, 0.008);
+    const fa = (...args) => block(amberTrim, ...args, 0, 0, 0.008);
     for (const side of [-1, 1]) {
       const pocketX = side * (DOOR_HALF + POCKET_WIDTH / 2);
       // Hollow cassette: front/back skins, a roof and an outer end cap.
@@ -200,10 +205,11 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     for (const face of [-1, 1]) {
       fl(2.9, 0.1, 0.07, 0, 4.08, face * 0.84, C.cyan);
       fl(2.9, 0.08, 0.07, 0, 4.34, face * 0.84, C.cyan);
-      for (let i = -4; i <= 4; i++) fl(0.16, 0.025, 0.22, i * 0.31, 0.085, face * 0.68, C.amber);
+      for (let i = -4; i <= 4; i++) fa(0.16, 0.025, 0.22, i * 0.31, 0.085, face * 0.68, C.amber);
     }
     bake(frame, root);
-    bake(lit, root, glowMaterial, false);
+    bake(lit, root, indicator, false);
+    bake(amberTrim, root, glowMaterial, false);
     const leaves = [];
     const leafW = BAY_DOOR_GAP / 2 - 0.05;
     for (const side of [-1, 1]) {
@@ -228,7 +234,7 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     }
     // Travel only far enough to clear the mouth, with room inside the end cap.
     const travel = DOOR_HALF + 0.12;
-    let phase = 'shut', t = 0, openness = 0, startAmount = 0;
+    let phase = 'shut', t = 0, openness = 0, startAmount = 0, broken = false, jolt = 0;
     function amount(k) {
       openness = k;
       for (const { leaf, side } of leaves) {
@@ -236,16 +242,55 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
       }
     }
     amount(0);
+    const glow = halo(root, C.cyan, 0, 4.2, 0, 4.4, 0.28);
     const ctrl = {
-      root, x, z,
-      open() { if (animated && phase !== 'open' && phase !== 'opening') { startAmount = openness; phase = 'opening'; t = 0; } },
-      shut() { if (animated && phase !== 'shut' && phase !== 'slamming') { startAmount = openness; phase = 'slamming'; t = 0; } },
-      snapShut() { phase = 'shut'; t = 0; amount(0); },
+      id, root, x, z, rotation, indicator, glow, leaves,
+      open() {
+        if (broken) return;
+        if (phase !== 'open' && phase !== 'opening') { startAmount = openness; phase = 'opening'; t = 0; }
+      },
+      shut() {
+        if (broken) return;
+        if (phase !== 'shut' && phase !== 'slamming') { startAmount = openness; phase = 'slamming'; t = 0; }
+      },
+      snapShut() {
+        if (broken) return;
+        phase = 'shut'; t = 0; amount(0);
+      },
+      /** Combat break — panels retract into cassettes and stay open for the run. */
+      breakOpen() {
+        broken = true;
+        startAmount = openness;
+        phase = 'opening';
+        t = 0;
+        indicator.color.setHex(C.amber);
+        glow.material.color.setHex(C.amber);
+      },
+      reset() {
+        broken = false;
+        phase = 'shut';
+        t = 0;
+        jolt = 0;
+        amount(0);
+        indicator.color.setHex(C.cyan);
+        glow.material.color.setHex(C.cyan);
+        glow.material.opacity = 0.28;
+      },
+      bashJolt() { jolt = 1; },
+      get broken() { return broken; },
       get slammed() { return phase === 'shut'; },
-      get isOpen() { return phase === 'open'; },
+      get isOpen() { return phase === 'open' || broken; },
       get raising() { return phase === 'opening'; },
       get slamming() { return phase === 'slamming'; },
       update(dt) {
+        jolt *= Math.exp(-9 * dt);
+        if (jolt > 0.02) {
+          for (const { leaf, side } of leaves) {
+            leaf.position.z = side * 0.04 * jolt * Math.sin(performance.now() * 0.04);
+          }
+        } else {
+          for (const { leaf } of leaves) leaf.position.z = 0;
+        }
         if (phase !== 'opening' && phase !== 'slamming') return;
         t += dt;
         const opening = phase === 'opening';
@@ -255,14 +300,22 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
         amount(THREE.MathUtils.lerp(startAmount, opening ? 1 : 0, eased));
         if (k === 1) phase = opening ? 'open' : 'shut';
       },
+      setLight(brokenLit, time = 0) {
+        const colour = brokenLit ? C.amber : C.cyan;
+        const intensity = brokenLit ? 0.75 + 0.25 * Math.sin(time * 6 + x) : 1;
+        indicator.color.setHex(colour);
+        glow.material.color.setHex(colour);
+        glow.material.opacity = 0.28 * intensity;
+        glow.scale.setScalar(4.4 * (0.9 + 0.1 * intensity));
+      },
     };
     doors.push(ctrl);
     return ctrl;
   }
-  door(BAY_DOOR_X, ROOM2_NORTH, 0);
-  door(ROOM2_WEST, ROOM2_CZ, Math.PI / 2);
-  door(ROOM2_EAST, ROOM2_CZ, -Math.PI / 2);
-  const southDoor = door(BAY_DOOR_X, ROOM2_SOUTH, 0, true);
+  const northDoor = door(BAY_DOOR_X, ROOM2_NORTH, 0, 'north');
+  const westDoor = door(ROOM2_WEST, ROOM2_CZ, Math.PI / 2, 'west');
+  const eastDoor = door(ROOM2_EAST, ROOM2_CZ, -Math.PI / 2, 'east');
+  const southDoor = door(BAY_DOOR_X, ROOM2_SOUTH, 0, 'south');
   lightPool(BAY_CX, ROOM2_NORTH + 0.7, 5, 0.2);
   lightPool(BAY_CX, ROOM2_SOUTH - 0.7, 5, 0.2);
   lightPool(ROOM2_WEST + 0.7, ROOM2_CZ, 5, 0.2);
@@ -337,6 +390,8 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   solids.push({ x: BAY_CX, z: ROOM2_CZ, hx: 1.3, hz: 1.3, c: 1, s: 0 });
   const coilGlow = halo(coil, C.cyan, 0, 2.4, 0, 3, 0.13);
   model(platform, new THREE.RingGeometry(0.23, 0.29, 32), cyanLight, 0, 0.29, 1.75).rotation.x = -Math.PI / 2;
+  /** World tip of the terminal sphere — lightning arcs originate here. */
+  const coilTip = new THREE.Vector3(BAY_CX, 4.08, ROOM2_CZ);
 
   const stencil = document.createElement('canvas');
   stencil.width = 1024; stencil.height = 256;
@@ -359,7 +414,23 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
   entryLight.position.set(BAY_CX, 2, ROOM2_SOUTH - 1.4);
   group.add(coreLight, entryLight);
   let time = 0;
-  return { group, solids, coil, southDoor,
+  /** Base combat stats; Stage 6 ranks will shorten interval, grow range, add chains. */
+  const coilWeapon = {
+    rank: 0,
+    cd: 0,
+    tip: coilTip,
+    stats() {
+      const r = this.rank | 0;
+      return {
+        interval: Math.max(0.7, 2.0 - r * 0.35),
+        range: 8 + r * 2.5,
+        chains: r,
+      };
+    },
+  };
+  return {
+    group, solids, coil, coilTip, coilWeapon,
+    doors, northDoor, westDoor, eastDoor, southDoor,
     update(dt) {
       for (const d of doors) d.update(dt);
       time += dt;

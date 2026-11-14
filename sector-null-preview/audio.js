@@ -295,6 +295,15 @@ export function createAudio(settings, listener) {
       grain(520, 0.28, 0.2, out);
       voice(155, 42, 0.24, 0.28, { out, type: 'triangle', echo: true });
     },
+    /** Electric crackle for Tesla coil kills — distinct from the normal boom. */
+    teslaZap(pos) {
+      const out = spatial(pos, 0.55);
+      grain(5200, 0.08, 0.28, out);
+      grain(2800, 0.14, 0.32, out);
+      grain(900, 0.2, 0.18, out);
+      voice(880, 220, 0.12, 0.16, { out, type: 'square', attack: 0.002 });
+      voice(180, 70, 0.22, 0.2, { out, type: 'triangle' });
+    },
     // Layered boom for the boss finale — heavier bass and a longer tail.
     bossExplode(pos) {
       const out = spatial(pos, 0.75);
