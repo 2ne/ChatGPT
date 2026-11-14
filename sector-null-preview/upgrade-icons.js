@@ -669,6 +669,11 @@ function makeScene(upgrade) {
   const subject = (builders[upgrade.id] || builders.bot)(owned);
   subject.position.y = 0.08;
   subject.scale.multiplyScalar(0.64);
+  // Give the tall coil the same breathing room as the other card subjects.
+  if (upgrade.id === 'coil') {
+    subject.scale.setScalar(0.49);
+    subject.position.y = -0.27;
+  }
   // Mag cells sit on +Z — keep them facing the camera (sway only; no full spin).
   if (upgrade.id === 'mag') subject.rotation.y = -0.28;
   else if (upgrade.cat === 'firepower' || upgrade.cat === 'handling') subject.rotation.y = -0.55;
@@ -707,7 +712,7 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   }
 
   root.rotation.y = entry.yaw;
-  subject.position.y = id === 'coil' ? -0.36 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
+  subject.position.y = id === 'coil' ? -0.27 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
 
   const ud = subject.userData;
   if (ud.pulse) ud.pulse.scale.setScalar(1 + 0.12 * Math.sin(t * 6));
