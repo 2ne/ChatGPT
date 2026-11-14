@@ -29,14 +29,16 @@ forced). `&coil=` overrides the final rank. When adding rooms, extend
 ## Bay combat
 
 Room 2 runs waves from 11 onward after the wave-10 handoff. Bay enemies take a
-1.5× HP multiplier. Waves 11–12 are calmer counts with gunner/heavy mix; door
-spawns stagger so only one or two mouths are hot at a time. Wave 13 soft-ramps
-(south door + mortars) with total regular HP ≤ ~1.5× wave 12, then continues
-toward room 1’s curve. Boss HP is quadratic through wave 10, then linear from
-the wave-11 value (+20% of that baseline per wave). The Tesla coil is live from
+1.5× HP multiplier (bosses excluded — they use `bossHealthMult` only). Waves
+11–12 are calmer counts with gunner/heavy mix; door spawns rotate by spawn
+progress (fraction emitted), never more than two mouths hot, south from wave 13.
+Wave 13 soft-ramps (south door + mortars), then 14→18 = 28/36/44/50/56 so the
+old wave-16 jump is gone; 19+ rejoins `5 + n×3`. Boss HP is quadratic through
+wave 10, then +8% of the wave-11 baseline per wave. The Tesla coil is live from
 wave 11; the Stage 6 upgrade card (`COIL_UPGRADE`) appears in the picker after
-wave 11 is cleared, pinned to slot 1 until rank 3. Bay wallBoxes always leave
-the four door gaps clear (room-1 style); intact doors block via opening HP, not
+wave 11 is cleared, pinned to slot 1 until rank 3. Timed power-ups pause during
+picker, intermission, and scripted transitions. Bay wallBoxes always leave the
+four door gaps clear (room-1 style); intact doors block via opening HP, not
 sealed slabs. Follow James's conventions: matte materials, merged/instanced
 static geometry, no extra shadow lights, separate depth layers for overlapping
 trim, smooth motion, reduced motion respected, cheap on phones.

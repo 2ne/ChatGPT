@@ -39,14 +39,15 @@ Permanent preview-only tool for balance checks at wave 20 / 30 / 50+:
 - Build summary logs to the console and a second line on the preview stamp.
 
 Waves 11–12 stay calmer in count (14 / 18) but mix in gunners and heavies
-(~3+1 / ~4+2). Bay door spawns stagger so only one or two mouths press at a time
-(south joins from wave 13 after a short delay). Wave 13 soft-lands (~22) so its
-regular-drone HP stays ≤ ~1.5× wave 12, then ramps (28 / 36) toward room 1’s
-curve. Every bay enemy (wave 11+) gets a 1.5× health multiplier. Boss HP is
-quadratic through wave 10, then linear from the wave-11 value. Bay doors bash
-like room 1. The Tesla coil is live from wave 11 (ranked stats); the upgrade
-card appears after wave 11 is cleared. Timed power-ups pause while the picker is
-open. Bay wall collision always leaves the four door gaps clear (room-1 style).
+(~3+1 / ~4+2). Bay door spawns rotate by spawn progress (never more than two
+mouths; south from wave 13). Wave 13 soft-lands at 22, then 28 / 36 / 44 / 50 /
+56 through wave 18 before rejoining the `5 + n×3` curve. Bay regulars (not
+bosses) get a 1.5× health multiplier. Boss HP is quadratic through wave 10, then
++8%/wave from the wave-11 baseline. Bay doors bash like room 1. The Tesla coil
+is live from wave 11 (ranked stats); the upgrade card appears after wave 11 is
+cleared. Timed power-ups pause during the picker, intermissions, and scripted
+transitions. Bay wall collision always leaves the four door gaps clear
+(room-1 style).
 
 This visual pass adds reinforced vented walls, double-sided armoured doors,
 taller capacitor pylons, a six-winding coil, a layered walkable octagonal surround,

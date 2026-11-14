@@ -2894,7 +2894,7 @@ function waveBotType() {
 
 /**
  * Regular spawn count per wave (before the boss).
- * Bay 11–12 stay calm; 13 soft-lands (≤1.5× wave-12 total HP) then ramps.
+ * Bay 11–12 stay calm; 13 soft-lands then ramps; 15–18 smooth the old w16 jump.
  */
 function waveSpawnCount(n) {
   if (n === 11) return 14;
@@ -2902,6 +2902,9 @@ function waveSpawnCount(n) {
   if (n === 13) return 22;
   if (n === 14) return 28;
   if (n === 15) return 36;
+  if (n === 16) return 44;
+  if (n === 17) return 50;
+  if (n === 18) return 56;
   return Math.max(0, 5 + n * 3);
 }
 
@@ -2915,29 +2918,29 @@ function baySpawnDoors(n) {
 
 /**
  * Within a wave, only one or two doors are "hot" at a time so pressure comes
- * from a direction rather than every mouth at once. Spawn rate stays high.
+ * from a direction rather than every mouth at once. Rotation follows spawn
+ * progress (fraction emitted), not wall-clock time — so slow clears don't
+ * cycle every mouth while fast clears still rotate.
  */
 function bayActiveSpawnDoors() {
   const available = baySpawnDoors(state.wave);
   if (available.length <= 2) return available;
   const byId = (id) => available.find(o => o.bayId === id);
-  const north = byId('north'), west = byId('west'), east = byId('east'), south = byId('south');
-  const t = state.waveTime;
   const pick = (...ids) => ids.map(byId).filter(Boolean);
 
+  const total = Math.max(1, waveSpawnCount(state.wave));
+  const progress = Math.min(1, Math.max(0, (total - Math.max(0, state.toSpawn)) / total));
+
   if (state.wave <= 12) {
-    // Rotate N+W ↔ N+E about every 6s.
-    return (Math.floor(t / 6) % 2 === 0) ? pick('north', 'west') : pick('north', 'east');
+    // First half N+W, second half N+E.
+    return progress < 0.5 ? pick('north', 'west') : pick('north', 'east');
   }
-  // Wave 13+: north/sides first; south joins after a few seconds, then rotate pairs.
-  if (t < 5) {
-    return t < 2.5 ? pick('north', 'west') : pick('north', 'east');
-  }
-  const cycle = Math.floor((t - 5) / 5) % 4;
-  if (cycle === 0) return pick('north', 'south');
-  if (cycle === 1) return pick('west', 'east');
-  if (cycle === 2) return pick('south', 'east');
-  return pick('north', 'west');
+  // Wave 13+: south participates; never more than two. Four equal spawn-progress slices.
+  const cycle = Math.min(3, Math.floor(progress * 4));
+  if (cycle === 0) return pick('north', 'west');
+  if (cycle === 1) return pick('north', 'east');
+  if (cycle === 2) return pick('north', 'south');
+  return pick('south', 'east');
 }
 
 function baySpawnPoint(out, preferred = null) {
@@ -7398,8 +7401,10 @@ function update(dt, lightFrame = false) {
       state.reloadT += dt;
       if (state.reloadT >= state.reloadTime) finishReload();
     }
-    // Timed power-ups pause while the upgrade picker is open.
-    if (!state.choosing) {
+    // Timed power-ups only tick during live combat — pause for picker, intermission,
+    // and scripted transitions (bay walk, reveal cam, door sequences).
+    const powerupsTick = !state.choosing && !state.scripted && state.intermission <= 0;
+    if (powerupsTick) {
       state.pDamage = Math.max(0, state.pDamage - dt);
       state.pAmmo = Math.max(0, state.pAmmo - dt);
     }
