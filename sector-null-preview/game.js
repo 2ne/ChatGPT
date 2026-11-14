@@ -2840,7 +2840,9 @@ function bayHpMult() {
 }
 
 function droneMaxHp(type) {
-  return Math.ceil(state.droneHp * type.health * bayHpMult());
+  // Bay toughness is for regular drones only — bosses use their own curve.
+  const bay = type?.boss ? 1 : bayHpMult();
+  return Math.ceil(state.droneHp * type.health * bay);
 }
 
 /** Waves 11–12: fill gunner/heavy quotas, rest mostly cyan (no mortars). */
@@ -2964,10 +2966,10 @@ function bossHealthMult() {
   const w = state.wave;
   // Waves 1–10 keep the original quadratic curve.
   if (w <= 10) return 6 + w * 1.3 + w * w * 0.1;
-  // Wave 11+ : continuous with the wave-11 quadratic value, then +20% of that
-  // baseline per wave (no drop from wave 10 → 11).
+  // Wave 11+ : continuous with the wave-11 quadratic value, then +8% of that
+  // baseline per wave (no drop from wave 10 → 11). Bosses skip bayHpMult.
   const at11 = 6 + 11 * 1.3 + 11 * 11 * 0.1;
-  return at11 * (1 + 0.2 * (w - 11));
+  return at11 * (1 + 0.08 * (w - 11));
 }
 
 function spawnWaveBoss() {
