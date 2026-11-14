@@ -149,7 +149,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const finePointerUi = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
