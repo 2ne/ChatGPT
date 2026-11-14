@@ -48,6 +48,13 @@ merged geometry, with two local non-shadow lights instead of the previous six.
 
 ## Setup and commands
 
+Both room exteriors use sparse factory service runs, small cabinets/crates,
+grates and access covers instead of tall freestanding supports. Dressing is
+visual only, with no collision or gameplay registration. Shared instanced boxes
+and merged six-sided pipes use three draw calls and no additional lights.
+Door approaches stay open; existing walls, reactors, orange floor strips and
+outskirts fog are preserved. Changes remain exclusive to this preview.
+
 Use Node.js 22 or later in this folder:
 
 ```sh

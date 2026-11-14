@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { buildIndustrialExterior } from './industrial-exterior.js';
 import { installWorldXzFog } from './world-xz-fog.js';
 import '@fontsource/rajdhani/latin-600.css';
 import '@fontsource/rajdhani/latin-700.css';
@@ -677,18 +678,6 @@ for (const [x, z, rotation] of [[-6.5, 14, 0.26], [12.8, -6.5, -0.18]]) {
   ], perimeterRandom, at(x, z, rotation));
   addSolid(x, z, 0.95, 0.57, rotation);
 }
-for (const x of [-24, -16, -12.6, 12.6, 16, 24]) {
-  for (const z of [-21, -13, 9, 18]) {
-    const h = 4.3 + perimeterRandom() * 3;
-    perimeter.add([
-      [1.7, 0.3, 1.45, x, 0.13, z, 0x304453],
-      [0.85, h, 0.9, x, h / 2, z, 0x233542],
-      [1.1, 0.35, 1.15, x, h + 0.05, z, 0x4b6174],
-    ], perimeterRandom);
-    box(world, x < 0 ? amberLight : cyanLight, x, h - 0.46, z + 0.46, 0.42, 0.09, 0.04);
-    if (z !== 9 && z !== 18) box(world, alloy, x, h + 0.23, z, 0.7, 0.12, 6.5);
-  }
-}
 for (const x of [-14.5, 14.5]) {
   for (let z = -17; z <= 20; z += 2.3) {
     box(world, amberLight, x, 0.01, z, 0.095, 0.022, 0.54);
@@ -698,6 +687,7 @@ for (const x of [-14.5, 14.5]) {
 // z=-25 / z=-31 (y≈7). With the follow camera's +Z offset they drew as
 // horizontal bars across the bay walk and covered the player.
 bakedMesh(perimeter, false);
+buildIndustrialExterior(world);
 
 // Stage 4 Defence Bay interior (concept, room-1 material quality).
 const defenceBay = buildDefenceBay(world, {
