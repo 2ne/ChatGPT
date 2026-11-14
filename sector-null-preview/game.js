@@ -7043,7 +7043,7 @@ const Z_HIT_RANGE = 1.65; // the blow connects if you're still this close
 const Z_TRACK = 7;        // rad/s a drone turns to keep facing you while it stands and swings
 const Z_SHOT_MAX = 11;    // gunner engagement distance
 const Z_BOSS_SHOT_MAX = 18; // bosses reach across most of the deck
-const HURT_IFRAMES = 1.5; // after a hit, the operator can't be hit again for this long (and flickers)
+const HURT_IFRAMES = 2; // after a hit, the operator can't be hit again for this long (and flickers)
 
 // is there a wall (or a shut door or window) between two points? (samples the line)
 function wallBetween(a, b) {
