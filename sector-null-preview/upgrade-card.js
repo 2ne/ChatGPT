@@ -36,9 +36,20 @@ export function renderUpgradeCard({
   animationDelayMs = null,
   iconLabel = false,
 } = {}) {
-  const botUpgrade = u.id === 'bot' && owned > 0;
-  const name = botUpgrade ? 'UPGRADE BOT' : u.name;
-  const desc = botUpgrade ? 'Stronger companion shots' : u.desc;
+  let name = u.name;
+  let desc = u.desc;
+  if (owned > 0) {
+    if (u.id === 'bot') {
+      name = 'UPGRADE BOT';
+      desc = 'Stronger companion shots';
+    } else if (u.id === 'botGun') {
+      name = 'UPGRADE GUNS';
+      desc = 'Faster twin fire';
+    } else if (u.id === 'botBomb') {
+      name = 'UPGRADE BOMBS';
+      desc = 'Bigger blast radius';
+    }
+  }
   const parts = u.stat(state);
   // Rank-1 "Off → X" reads as a first unlock — show only the highlighted new value.
   // Owned ranks keep the before → after pill.
