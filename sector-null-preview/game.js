@@ -7443,7 +7443,6 @@ function update(dt, lightFrame = false) {
             }
             state.toSpawn--;
           }
-          if (state.wave === 4 && drones.length >= 8) audio.intensify();
           state.spawnTimer = Math.max(0.35, 1.4 - state.wave * 0.08);
         }
       }
@@ -7547,6 +7546,16 @@ function update(dt, lightFrame = false) {
   // Crowd separation is expensive with a full field — thin it out during hitch recovery.
   if (state.running || title.active) {
     if (!lightFrame || ((performance.now() / 90) | 0) % 2 === 0) separateDrones();
+  }
+  // Wave 4 music: crossfade once 4 bots are in the room-1 arena at once (no fallback).
+  if (state.running && state.wave === 4 && !state.choosing && !state.scripted) {
+    let insideN = 0;
+    for (const z of drones) {
+      if (inside(z.position) && ++insideN >= 4) {
+        audio.intensify();
+        break;
+      }
+    }
   }
   updateEquipment(dt);
 
