@@ -7403,7 +7403,7 @@ function update(dt, lightFrame = false) {
     }
     // Timed power-ups only tick during live combat — pause for picker, intermission,
     // and scripted transitions (bay walk, reveal cam, door sequences).
-    const powerupsTick = !state.choosing && !state.scripted && state.intermission <= 0;
+    const powerupsTick = !state.choosing && !state.scripted && state.intermission <= 0 && !bossDeath.active;
     if (powerupsTick) {
       state.pDamage = Math.max(0, state.pDamage - dt);
       state.pAmmo = Math.max(0, state.pAmmo - dt);
