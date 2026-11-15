@@ -218,6 +218,10 @@ function layoutSize() {
   return { w: Math.max(1, Math.round(w)), h: Math.max(1, Math.round(h)) };
 }
 
+// Mirrors state.choosing for the freeze-render path, but is declared before
+// onResize() runs at module load (state/title are TDZ until much later).
+let pickerFrozen = false;
+
 function onResize() {
   pinViewport();
   const { w, h } = layoutSize();
@@ -232,7 +236,7 @@ function onResize() {
   canvas.style.height = '100%';
   // Picker freezes the game loop render — redraw once so resize/orientation
   // doesn't leave a blank or wrongly sized frozen frame behind the overlay.
-  if (state.choosing && !title.active) renderer.render(scene, camera);
+  if (pickerFrozen) renderer.render(scene, camera);
 }
 
 function scheduleResize() {
@@ -4506,6 +4510,7 @@ function beginBayTransition() {
   state.intermission = 0;
   waveAt = null;
   state.choosing = false;
+  pickerFrozen = false;
   hidePicker();
   // Room-2 south panels start shut; they slide open as the player approaches.
   if (room2SouthDoor?.snapShut) room2SouthDoor.snapShut();
@@ -5574,6 +5579,7 @@ function openPicker() {
   // Freeze one final game frame behind the picker; loop() skips further
   // scene renders while state.choosing (Xbox Edge WebGL pressure).
   renderer.render(scene, camera);
+  pickerFrozen = true;
   hud.picker.classList.remove('shown');
   hud.picker.classList.remove('hidden');
   // Double rAF so the opacity transition starts from 0 after display flips on.
@@ -5593,6 +5599,7 @@ function openPicker() {
 }
 
 function hidePicker() {
+  pickerFrozen = false;
   upgradeIconHost?.clear();
   hud.picker.classList.remove('shown');
   hud.picker.classList.add('hidden');
@@ -5609,6 +5616,7 @@ function choose(i) {
   if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
   if (u.id === 'coil') syncCoilWeaponFromUpgrades();
   state.choosing = false;
+  pickerFrozen = false;
   resetGameplayInput();
   focusGame();
   // Brief flash + lift before the picker closes (~250ms).
@@ -6689,6 +6697,7 @@ function resetGame(keep = false) {
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
     bayActive: false, scripted: null,
   });
+  pickerFrozen = false;
   bayRevealTime = 0;
   bayRevealMix = 0;
   if (defenceBay.coilWeapon) {
