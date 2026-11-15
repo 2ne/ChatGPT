@@ -2491,24 +2491,58 @@ const puBarState = {
   y: NaN,
 };
 
+/** Treat near-zero timers as expired so bars don't leave a blinking sliver. */
+const PU_BAR_EPS = 0.05;
+
+function hidePuBar(kind) {
+  const el = kind === 'dmg' ? hud.puDmg : hud.puAmmo;
+  const fill = kind === 'dmg' ? hud.puDmgFill : hud.puAmmoFill;
+  if (!el) return;
+  el.hidden = true;
+  el.classList.remove('blink');
+  if (fill) fill.style.transform = 'scaleX(0)';
+  if (kind === 'dmg') {
+    puBarState.dmgOn = false;
+    puBarState.dmgFill = -1;
+    puBarState.dmgBlink = false;
+  } else {
+    puBarState.ammoOn = false;
+    puBarState.ammoFill = -1;
+    puBarState.ammoBlink = false;
+  }
+}
+
+function hidePuBarsRoot() {
+  const root = hud.puBars;
+  if (!root || !puBarState.shown) {
+    if (puBarState.dmgOn) hidePuBar('dmg');
+    if (puBarState.ammoOn) hidePuBar('ammo');
+    return;
+  }
+  root.hidden = true;
+  root.setAttribute('aria-hidden', 'true');
+  puBarState.shown = false;
+  puBarState.x = NaN;
+  puBarState.y = NaN;
+  hidePuBar('dmg');
+  hidePuBar('ammo');
+}
+
 function updatePuBars() {
   const root = hud.puBars;
   if (!root) return;
-  const dmgT = state.pDamage;
-  const ammoT = state.pAmmo;
+  // Expire slightly early so scaleX never sticks on a sub-pixel blink sliver.
+  const dmgT = state.pDamage > PU_BAR_EPS ? state.pDamage : 0;
+  const ammoT = state.pAmmo > PU_BAR_EPS ? state.pAmmo : 0;
+  const dmgOn = dmgT > 0;
+  const ammoOn = ammoT > 0;
   const show = state.running
     && !state.choosing
     && !state.paused
     && !title.active
-    && (dmgT > 0 || ammoT > 0);
+    && (dmgOn || ammoOn);
   if (!show) {
-    if (puBarState.shown) {
-      root.hidden = true;
-      root.setAttribute('aria-hidden', 'true');
-      puBarState.shown = false;
-      puBarState.x = NaN;
-      puBarState.y = NaN;
-    }
+    hidePuBarsRoot();
     return;
   }
   if (!puBarState.shown) {
@@ -2521,11 +2555,7 @@ function updatePuBars() {
   _puWorld.set(player.position.x, 0.02, player.position.z);
   _puWorld.project(camera);
   if (_puWorld.z > 1) {
-    if (puBarState.shown) {
-      root.hidden = true;
-      root.setAttribute('aria-hidden', 'true');
-      puBarState.shown = false;
-    }
+    hidePuBarsRoot();
     return;
   }
   const vv = window.visualViewport;
@@ -2541,17 +2571,18 @@ function updatePuBars() {
     puBarState.y = y;
   }
 
-  const dmgOn = dmgT > 0;
-  const ammoOn = ammoT > 0;
-  if (dmgOn !== puBarState.dmgOn) {
-    hud.puDmg.hidden = !dmgOn;
-    puBarState.dmgOn = dmgOn;
-    if (!dmgOn) puBarState.dmgFill = -1;
+  // Per-bar hide/show: expired bar (and its track) gone; remaining bar stays centred.
+  if (!dmgOn) {
+    if (puBarState.dmgOn) hidePuBar('dmg');
+  } else if (!puBarState.dmgOn) {
+    hud.puDmg.hidden = false;
+    puBarState.dmgOn = true;
   }
-  if (ammoOn !== puBarState.ammoOn) {
-    hud.puAmmo.hidden = !ammoOn;
-    puBarState.ammoOn = ammoOn;
-    if (!ammoOn) puBarState.ammoFill = -1;
+  if (!ammoOn) {
+    if (puBarState.ammoOn) hidePuBar('ammo');
+  } else if (!puBarState.ammoOn) {
+    hud.puAmmo.hidden = false;
+    puBarState.ammoOn = true;
   }
 
   if (dmgOn) {
