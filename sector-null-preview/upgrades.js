@@ -27,7 +27,7 @@ export const UPGRADE_CATS = {
   engineer: '#a7a1ff',
   firepower: '#ffad61',
   handling: '#76bcf0',
-  survival: '#70dfb8',
+  survival: '#ff78b5',
   fortune: '#bdadfa',
   defence: '#29d6e9',
   ability: '#7cff4a',
