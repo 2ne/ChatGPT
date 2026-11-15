@@ -314,27 +314,80 @@ body {
   pointer-events: none;
 }
 
-/* Shared WAVE notice — start banner + cleared picker header (DOM above canvas). */
+/* Shared WAVE notice — WAVE start (#banner.framed) + WAVE CLEARED picker header.
+   Boss / SPAWNER / REACTOR SURGE / DEFENCE BAY stay on the plain pre-b304 look. */
 .wave-notice {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   text-align: center;
   pointer-events: none;
 }
 #banner.wave-notice {
   position: fixed;
-  top: 34%;
+  top: 38%;
   left: 0;
   right: 0;
   z-index: 4;
-  padding: 0 max(16px, var(--safe-left), var(--safe-right));
+  gap: 0;
+  padding: 0;
   opacity: 0;
   transition: opacity 0.35s ease;
+  text-shadow:
+    0 0 18px #64dfee66,
+    0 0 4px #000;
 }
-.wave-notice-title {
+/* Plain centre banners (boss names, SPAWNER, DEFENCE BAY, etc.) */
+#banner:not(.framed) .wave-decoration {
+  display: none;
+}
+#banner:not(.framed) .wave-notice-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: clamp(32px, 7vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #64dfee;
+  text-shadow:
+    0 0 18px #64dfee66,
+    0 0 4px #000;
+}
+#banner:not(.framed) .wave-notice-sub {
+  display: block;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #d4e8f0;
+  margin-top: 10px;
+  max-width: none;
+  text-shadow:
+    0 0 10px #000c,
+    0 1px 2px #000;
+}
+#banner:not(.framed) .wave-notice-sub:empty {
+  display: none;
+}
+#banner.boss .wave-notice-title {
+  color: #ff708c;
+  text-shadow:
+    0 0 18px #ff368c66,
+    0 0 4px #000;
+}
+
+/* Framed WAVE start only */
+#banner.framed {
+  top: 34%;
+  gap: 12px;
+  padding: 0 max(16px, var(--safe-left), var(--safe-right));
+  text-shadow: none;
+}
+#banner.framed .wave-notice-title,
+.wave-notice-picker .wave-notice-title {
   font-family: "Oxanium", "Rajdhani", sans-serif;
   font-size: clamp(26px, 5.6vw, 56px);
   font-weight: 700;
@@ -344,7 +397,8 @@ body {
   color: #8befff;
   text-shadow: 0 0 10px #5de9ff55;
 }
-.wave-notice-sub {
+#banner.framed .wave-notice-sub,
+.wave-notice-picker .wave-notice-sub {
   font-family: "Rajdhani", sans-serif;
   font-size: clamp(11px, 2.2vw, 15px);
   font-weight: 700;
@@ -353,24 +407,26 @@ body {
   text-transform: uppercase;
   color: #e8f2f6;
   max-width: min(36rem, 92vw);
-  /* ~10–14px from title letterforms (flex gap 12px). */
+  margin-top: 0;
+  text-shadow: none;
 }
-.wave-notice-sub:empty {
+#banner.framed .wave-notice-sub:empty,
+.wave-notice-picker .wave-notice-sub:empty {
   display: none;
 }
 .wave-kw-reactor {
   color: #ffa64c;
 }
-/* Boss names still use #banner — keep red title, same frame. */
-#banner.boss .wave-notice-title {
-  color: #ff708c;
-  text-shadow: 0 0 10px #ff368c55;
-}
 
 .wave-decoration {
+  display: none;
   width: min(92vw, 520px);
   line-height: 0;
   flex: 0 0 auto;
+}
+#banner.framed .wave-decoration,
+.wave-notice-picker .wave-decoration {
+  display: block;
 }
 .wave-decoration svg {
   display: block;
@@ -390,17 +446,17 @@ body {
   filter: drop-shadow(0 0 3px #5de9ff66);
 }
 .wave-decoration-top svg {
-  /* Extra headroom above the title for the diagonal ticks. */
   aspect-ratio: 480 / 32;
 }
 .wave-decoration-bottom svg {
   aspect-ratio: 480 / 24;
 }
 
-/* Cleared screen: same notice; bottom deco closer to sub than to cards. */
+/* Cleared screen: same framed notice; bottom deco closer to sub than to cards. */
 .wave-notice-picker {
   width: min(1080px, 100%);
   flex: 0 0 auto;
+  gap: 12px;
   padding: 0 12px;
 }
 #picker .wave-notice-picker + #cards {
@@ -1393,21 +1449,39 @@ body.paused #flash {
     animation: card-pick-flash 0.22s ease-out forwards;
   }
 
-  #banner.wave-notice {
+  #banner.wave-notice:not(.framed) {
+    top: 36%;
+    --banner-gutter: max(168px, 21vw, calc(var(--safe-left) + 24px), calc(var(--safe-right) + 24px));
+    padding-left: var(--banner-gutter);
+    padding-right: var(--banner-gutter);
+  }
+  #banner:not(.framed) .wave-notice-title {
+    font-size: clamp(20px, 8dvh, 32px);
+    letter-spacing: 0.14em;
+    line-height: 1.05;
+  }
+  #banner:not(.framed) .wave-notice-sub {
+    font-size: clamp(11px, 3.6dvh, 14px);
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    margin-top: 6px;
+    max-width: min(36rem, 100%);
+  }
+  #banner.framed {
     top: 30%;
     gap: 8px;
     --banner-gutter: max(168px, 21vw, calc(var(--safe-left) + 24px), calc(var(--safe-right) + 24px));
     padding-left: var(--banner-gutter);
     padding-right: var(--banner-gutter);
   }
-  #banner .wave-notice-title {
+  #banner.framed .wave-notice-title {
     font-size: clamp(20px, 8dvh, 32px);
   }
-  #banner .wave-notice-sub {
+  #banner.framed .wave-notice-sub {
     font-size: clamp(11px, 3.6dvh, 14px);
     max-width: min(36rem, 100%);
   }
-  #banner .wave-decoration {
+  #banner.framed .wave-decoration {
     width: min(70vw, 420px);
   }
 }

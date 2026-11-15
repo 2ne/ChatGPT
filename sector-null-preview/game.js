@@ -3066,9 +3066,16 @@ function setWaveNoticeSub(el, sub) {
 }
 
 function showBanner(text, sub, dur = 1.6, kind = 'wave') {
+  // SVG frame + new typography only for WAVE start (kind === 'wave').
+  // Boss / SPAWNER / REACTOR SURGE / DEFENCE BAY keep the pre-b304 plain look.
   hud.banner.classList.toggle('boss', kind === 'boss');
+  hud.banner.classList.toggle('framed', kind === 'wave');
   hud.bannerText.textContent = text;
-  setWaveNoticeSub(hud.bannerSub, sub || '');
+  if (kind === 'wave') setWaveNoticeSub(hud.bannerSub, sub || '');
+  else {
+    hud.bannerSub.textContent = sub || '';
+    hud.bannerSub.style.removeProperty('color');
+  }
   hud.banner.style.opacity = 1;
   // Centre banner owns the middle — clear drones-left so they don't overlap.
   if (hud.botsLeft && hud.botsLeft.style.opacity === '1') hideBotsLeft(0.2);
@@ -4546,7 +4553,7 @@ function finalizeBayArrival() {
   const lim = room2PlayerClamp(PLAYER_WALL_INSET);
   player.position.x = THREE.MathUtils.clamp(player.position.x, lim.minX, lim.maxX);
   player.position.z = THREE.MathUtils.clamp(player.position.z, lim.minZ, lim.maxZ);
-  showBanner('DEFENCE BAY', 'SECTOR 02 · CONTAINMENT DECK', 3.2);
+  showBanner('DEFENCE BAY', 'SECTOR 02 · CONTAINMENT DECK', 3.2, 'bay');
   // Wave 11 after the slam — coil is live as soon as drones start spawning.
   if (defenceBay.coilWeapon) defenceBay.coilWeapon.cd = 0.6;
   queueWave(1.4);
