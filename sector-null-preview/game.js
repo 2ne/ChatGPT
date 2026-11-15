@@ -2700,9 +2700,14 @@ const NOTICE_READ_HOLD = 4.5;
 const TOAST_HOLD = 1.5;
 const TOAST_LESSON_HOLD = 4;
 const TOAST_RUSH_HOLD = 0.9;
+const TOAST_UPGRADE_HOLD = 2;
 const TOAST_IN = 0.32;
 const TOAST_OUT = 0.24;
 const TOAST_GAP = 0.06;
+const RANK_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+function rankRoman(n) {
+  return RANK_ROMAN[n] || String(n);
+}
 // No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
@@ -2787,6 +2792,7 @@ function presentToast(next) {
   toastIsBotsLeft = bots;
   // Hold length decided when the enter finishes (queue may grow during the slide-in).
   presentToast._first = firstPickup;
+  presentToast._hold = next.hold;
 }
 
 function updateToast(dt) {
@@ -2807,7 +2813,9 @@ function updateToast(dt) {
     const backlog = toastQueue.length >= 1;
     const first = !!presentToast._first;
     toastPhase = 'hold';
-    toastTime = first ? TOAST_LESSON_HOLD : (backlog ? TOAST_RUSH_HOLD : TOAST_HOLD);
+    toastTime = first
+      ? TOAST_LESSON_HOLD
+      : (presentToast._hold != null ? presentToast._hold : (backlog ? TOAST_RUSH_HOLD : TOAST_HOLD));
     return;
   }
   if (toastPhase === 'hold') {
@@ -2826,6 +2834,7 @@ function updateToast(dt) {
     toastPhase = 'idle';
     toastTime = TOAST_GAP;
     presentToast._first = false;
+    presentToast._hold = null;
   }
 }
 
@@ -5385,6 +5394,14 @@ function choose(i) {
   }, 320);
   // Wave 10 → Defence Bay walk instead of wave 11.
   if (!startBay) queueWave(2.0);
+  // Top-row toast after the picker closes (updateToast only runs once it's hidden).
+  const rank = state.upgrades[u.id] || 1;
+  const label = u.max <= 1 ? u.name : `${u.name} ${rankRoman(rank)}`;
+  toastQueue.push({
+    text: label,
+    color: UPGRADE_CATS[u.cat] || undefined,
+    hold: TOAST_UPGRADE_HOLD,
+  });
   audio.upgrade(u.cat);
 }
 
@@ -6420,6 +6437,7 @@ function clearRun() {
   toastPhase = 'idle';
   activePickupHint = null;
   presentToast._first = false;
+  presentToast._hold = null;
   hud.toastIcon.textContent = '';
   hud.toastTitle.textContent = '';
   hud.toastDetail.textContent = '';
