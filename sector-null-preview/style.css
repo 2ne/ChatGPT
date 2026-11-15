@@ -394,8 +394,9 @@ body {
   line-height: 1.05;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8befff;
-  text-shadow: 0 0 10px #5de9ff55;
+  /* Gradient + glow come from the shared .pause-word child (same as PAUSED). */
+  color: transparent;
+  text-shadow: none;
 }
 #banner.framed .wave-notice-sub,
 .wave-notice-picker .wave-notice-sub {
@@ -408,7 +409,10 @@ body {
   color: #e8f2f6;
   max-width: min(36rem, 92vw);
   margin-top: 0;
-  text-shadow: none;
+  /* Keep readable over the pale operator / bright floor. */
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.55);
 }
 #banner.framed .wave-notice-sub:empty,
 .wave-notice-picker .wave-notice-sub:empty {

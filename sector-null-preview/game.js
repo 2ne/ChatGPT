@@ -3045,6 +3045,16 @@ function updateFloatWords(dt) {
   }
 }
 
+/** WAVE start / CLEARED title — same .pause-word gradient + drop-shadow as PAUSED. */
+function setWaveNoticeTitle(el, text) {
+  if (!el) return;
+  el.textContent = '';
+  const span = document.createElement('span');
+  span.className = 'pause-word';
+  span.textContent = text || '';
+  el.appendChild(span);
+}
+
 /** Set a wave-notice subtitle; highlight REACTOR in restrained orange. */
 function setWaveNoticeSub(el, sub) {
   if (!el) return;
@@ -3070,9 +3080,11 @@ function showBanner(text, sub, dur = 1.6, kind = 'wave') {
   // Boss / SPAWNER / REACTOR SURGE / DEFENCE BAY keep the pre-b304 plain look.
   hud.banner.classList.toggle('boss', kind === 'boss');
   hud.banner.classList.toggle('framed', kind === 'wave');
-  hud.bannerText.textContent = text;
-  if (kind === 'wave') setWaveNoticeSub(hud.bannerSub, sub || '');
-  else {
+  if (kind === 'wave') {
+    setWaveNoticeTitle(hud.bannerText, text);
+    setWaveNoticeSub(hud.bannerSub, sub || '');
+  } else {
+    hud.bannerText.textContent = text;
     hud.bannerSub.textContent = sub || '';
     hud.bannerSub.style.removeProperty('color');
   }
@@ -5568,7 +5580,7 @@ function openPicker() {
   resetGameplayInput();
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
-  hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
+  setWaveNoticeTitle(hud.pickerTitle, 'WAVE ' + state.wave + ' CLEARED');
   setWaveNoticeSub(hud.pickerSub, 'CHOOSE YOUR NEXT UPGRADE');
   hud.cards.innerHTML = offered.map((u, i) => {
     if (!u) return '<div aria-hidden="true"></div>';
