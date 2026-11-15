@@ -143,3 +143,5 @@ floating muzzle orb and spinning ring. Indicator glow is steady with reduced mot
 Split Beam cards retain full rotation to reveal the two-, three- and four-beam
 fans at each rank; the other rifle cards keep their gentle sway. Reduced-motion
 settings continue to suppress card rotation.
+
+Survival card dioramas share the shield-pink category colour (#ff78b5), with pale pink highlights across Shield Regen, Emergency Pulse, Shield Array, Motion Servo and Shield Reset.

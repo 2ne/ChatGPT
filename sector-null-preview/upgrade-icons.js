@@ -5,6 +5,8 @@ import { UPGRADE_CATS } from './upgrades.js';
 import { createHelperBotMesh } from './helper-bot-mesh.js';
 
 const CAT_COLORS = UPGRADE_CATS;
+const SURVIVAL_COLOR = UPGRADE_CATS.survival;
+const SURVIVAL_HIGHLIGHT = 0xffb5d6;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
 const RIFLE_IDS = new Set(['damage', 'rate', 'spread']);
@@ -322,9 +324,9 @@ const builders = {
   },
   regen() {
     const g = new THREE.Group();
-    const shield = shieldPlate(0x70dfb8, 0.95);
+    const shield = shieldPlate(SURVIVAL_COLOR, 0.95);
     g.add(shield);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.04, 8, 40), glow(0x70dfb8, 1.4));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.04, 8, 40), glow(SURVIVAL_COLOR, 1.4));
     ring.rotation.x = Math.PI / 2;
     g.add(ring);
     g.userData.ring = ring;
@@ -333,12 +335,12 @@ const builders = {
   },
   pulse(owned = 0) {
     const g = new THREE.Group();
-    g.add(shieldPlate(0x70dfb8, 0.85));
+    g.add(shieldPlate(SURVIVAL_COLOR, 0.85));
     const count = owned + 1;
     const waves = Array.from({ length: count }, (_, i) => {
       const ring = new THREE.Mesh(
         new THREE.TorusGeometry(0.65 + i * 0.28, 0.03, 6, 40),
-        new THREE.MeshBasicMaterial({ color: 0x9af5ff, transparent: true, opacity: 0.55 - i * 0.12 })
+        new THREE.MeshBasicMaterial({ color: SURVIVAL_HIGHLIGHT, transparent: true, opacity: 0.55 - i * 0.12 })
       );
       ring.rotation.x = Math.PI / 2;
       g.add(ring);
@@ -351,7 +353,7 @@ const builders = {
     const g = new THREE.Group();
     const layers = Math.min(4, owned + 2);
     for (let i = 0; i < layers; i++) {
-      const p = shieldPlate(i === layers - 1 ? 0x9af5ff : 0x70dfb8, 0.8 - i * 0.04);
+      const p = shieldPlate(i === layers - 1 ? SURVIVAL_HIGHLIGHT : SURVIVAL_COLOR, 0.8 - i * 0.04);
       p.position.z = -0.22 + i * 0.18;
       p.position.x = i * 0.06;
       g.add(p);
@@ -364,13 +366,13 @@ const builders = {
     hub.rotation.z = Math.PI / 2;
     g.add(hub);
     const jets = [-0.28, 0.28].map(y => {
-      const jet = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.55, 10), glow(0x70dfb8, 1.6));
+      const jet = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.55, 10), glow(SURVIVAL_COLOR, 1.6));
       jet.rotation.z = Math.PI / 2;
       jet.position.set(-0.45, y, 0);
       g.add(jet);
       return jet;
     });
-    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.18 + owned * 0.04, 0.65 + owned * 0.12, 10), glow(0x9af5ff, 2));
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.18 + owned * 0.04, 0.65 + owned * 0.12, 10), glow(SURVIVAL_HIGHLIGHT, 2));
     flame.rotation.z = -Math.PI / 2;
     flame.position.set(0.55, 0, 0);
     g.add(flame);
@@ -380,11 +382,11 @@ const builders = {
   },
   heal() {
     const g = new THREE.Group();
-    const shield = shieldPlate(0xff708c, 0.9);
+    const shield = shieldPlate(SURVIVAL_COLOR, 0.9);
     g.add(shield);
     const plus = new THREE.Group();
-    addBox(plus, glow(0xffb0c4, 1.8), 0.16, 0.55, 0.12);
-    addBox(plus, glow(0xffb0c4, 1.8), 0.55, 0.16, 0.12);
+    addBox(plus, glow(SURVIVAL_HIGHLIGHT, 1.8), 0.16, 0.55, 0.12);
+    addBox(plus, glow(SURVIVAL_HIGHLIGHT, 1.8), 0.55, 0.16, 0.12);
     plus.position.z = 0.2;
     g.add(plus);
     g.userData.plus = plus;
