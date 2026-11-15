@@ -2932,7 +2932,7 @@ function retireFloatWord(f) {
   f.t = 0;
   f.stackY = 0;
   f.stackTarget = 0;
-  f.el.classList.remove('shown');
+  f.el.classList.remove('shown', 'upgrade');
   f.el.style.opacity = '0';
 }
 
@@ -2972,9 +2972,10 @@ function spawnFloatWord(title, color, opts = {}) {
   item.titleEl.textContent = title || '';
   item.detailEl.textContent = opts.detail || '';
   item.detailEl.hidden = !opts.detail;
+  item.el.classList.toggle('upgrade', !!opts.upgrade);
   item.el.style.color = color || '#e8f4ff';
   item.el.style.setProperty('--fw-glow', color || '#e8f4ff');
-  item.life = opts.lesson ? FLOAT_LESSON : FLOAT_LIFE;
+  item.life = (opts.lesson || opts.upgrade) ? FLOAT_LESSON : FLOAT_LIFE;
   item.t = item.life;
   item.lessonId = opts.lessonId || null;
   item.stackY = 0;
@@ -5609,12 +5610,15 @@ function choose(i) {
   clearTimeout(choose._t);
   const startBay = state.wave === 10 && !state.bayActive;
   const rank = state.upgrades[u.id] || 1;
-  const { line } = upgradeToastCopy(u, rank);
-  const tip = { text: line, color: UPGRADE_CATS[u.cat] || '#7ec8e8' };
+  const { catLabel, line } = upgradeToastCopy(u, rank);
+  const tipColor = UPGRADE_CATS[u.cat] || '#7ec8e8';
   choose._t = setTimeout(() => {
     hidePicker();
-    // Upgrade confirm is float-up only — never replace WAVE banner subtitles.
-    spawnFloatWord(tip.text, tip.color);
+    // Same two-line float as first-time pickups: small coloured category + name below.
+    spawnFloatWord(`${catLabel} UPGRADED`, tipColor, {
+      detail: line,
+      upgrade: true,
+    });
     if (startBay) vacuumWaveClearShieldThen(beginBayTransition);
   }, 250);
   // Wave 10 → Defence Bay walk instead of wave 11.

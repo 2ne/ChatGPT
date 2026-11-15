@@ -550,6 +550,18 @@ body {
 .float-word .fw-detail[hidden] {
   display: none !important;
 }
+/* Upgrade confirm: small category eyebrow + name (no description). */
+.float-word.upgrade .fw-title {
+  font-size: clamp(10px, 1.8vw, 12px);
+  letter-spacing: 0.14em;
+}
+.float-word.upgrade .fw-detail {
+  font-size: clamp(13px, 2.4vw, 17px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #e8f4ff;
+  opacity: 1;
+}
 
 /* Screen-space OVERCHARGE / INFINITE CELL bars under the operator.
    Continuous fill + shimmer (distinct from plain enemy HP bars). */
