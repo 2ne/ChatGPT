@@ -2918,10 +2918,38 @@ function checkBotMilestones(remaining) {
 // ===================================================================
 const FLOAT_LIFE = 0.9;
 const FLOAT_LESSON = 1.4;
+const FLOAT_LINE = 26; // px — one title line so stacked words stay readable
+const FLOAT_STACK_MAX = 3;
 const floatPool = [];
 const _floatProj = new THREE.Vector3();
 
+function retireFloatWord(f) {
+  if (f.lessonId) {
+    seenDrops.add(f.lessonId);
+    f.lessonId = null;
+  }
+  f.t = 0;
+  f.stackY = 0;
+  f.stackTarget = 0;
+  f.el.classList.remove('shown');
+  f.el.style.opacity = '0';
+}
+
 function spawnFloatWord(title, color, opts = {}) {
+  const active = floatPool.filter((f) => f.t > 0);
+  // Keep at most ~3 readable lines; drop the highest (oldest) stack slot.
+  if (active.length >= FLOAT_STACK_MAX) {
+    let oldest = active[0];
+    for (const f of active) {
+      if ((f.stackTarget || 0) > (oldest.stackTarget || 0)) oldest = f;
+    }
+    retireFloatWord(oldest);
+  }
+  // Push still-visible words up one line so the new one sits underneath.
+  for (const f of floatPool) {
+    if (f.t > 0) f.stackTarget = (f.stackTarget || 0) + FLOAT_LINE;
+  }
+
   let item = floatPool.find((f) => f.t <= 0);
   if (!item) {
     const el = document.createElement('div');
@@ -2935,6 +2963,8 @@ function spawnFloatWord(title, color, opts = {}) {
       t: 0,
       life: FLOAT_LIFE,
       lessonId: null,
+      stackY: 0,
+      stackTarget: 0,
     };
     floatPool.push(item);
   }
@@ -2946,17 +2976,13 @@ function spawnFloatWord(title, color, opts = {}) {
   item.life = opts.lesson ? FLOAT_LESSON : FLOAT_LIFE;
   item.t = item.life;
   item.lessonId = opts.lessonId || null;
+  item.stackY = 0;
+  item.stackTarget = 0;
   item.el.classList.add('shown');
 }
 
 function clearFloatWords() {
-  for (const f of floatPool) {
-    if (f.lessonId) seenDrops.add(f.lessonId);
-    f.t = 0;
-    f.lessonId = null;
-    f.el.classList.remove('shown');
-    f.el.style.opacity = '0';
-  }
+  for (const f of floatPool) retireFloatWord(f);
 }
 
 function updateFloatWords(dt) {
@@ -2967,6 +2993,7 @@ function updateFloatWords(dt) {
   _floatProj.project(camera);
   const sx = (_floatProj.x * 0.5 + 0.5) * window.innerWidth;
   const sy = (-_floatProj.y * 0.5 + 0.5) * window.innerHeight;
+  const ease = Math.min(1, dt * 14);
   for (const f of floatPool) {
     if (f.t <= 0) {
       if (f.el.classList.contains('shown')) f.el.classList.remove('shown');
@@ -2974,16 +3001,12 @@ function updateFloatWords(dt) {
     }
     f.t -= dt;
     if (f.t <= 0) {
-      if (f.lessonId) {
-        seenDrops.add(f.lessonId);
-        f.lessonId = null;
-      }
-      f.el.classList.remove('shown');
-      f.el.style.opacity = '0';
+      retireFloatWord(f);
       continue;
     }
+    f.stackY += ((f.stackTarget || 0) - f.stackY) * ease;
     const u = 1 - f.t / f.life;
-    const rise = u * 52;
+    const rise = u * 52 + f.stackY;
     const opacity = u < 0.12 ? u / 0.12 : u > 0.55 ? (1 - u) / 0.45 : 1;
     f.el.style.transform = `translate(-50%, -100%) translate(${sx}px, ${sy - rise}px)`;
     f.el.style.opacity = String(Math.max(0, Math.min(1, opacity)));
