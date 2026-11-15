@@ -103,12 +103,113 @@ body {
     0 0 8px #000,
     0 0 2px #000;
 }
-#topbar > div {
+#topbar > div:not(#toast) {
   min-height: 34px;
   min-width: 116px;
   padding: 8px clamp(9px, 1.3vw, 16px);
   border-top: 1px solid #6dd9ed99;
   background: linear-gradient(#0a1b26f2, #081623c9);
+}
+/* Pickup / drones-left notice — same panel language as WAVE and SCORE, centred in the row */
+#toast {
+  --toast-accent: #6dd9ed;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.42em;
+  min-width: 0;
+  min-height: 34px;
+  width: max-content;
+  max-width: min(220px, calc(100% - 252px));
+  padding: 8px clamp(9px, 1.3vw, 16px);
+  border-top: 1px solid #6dd9ed99;
+  background: linear-gradient(#0a1b26f2, #081623c9);
+  /* Accent via left edge bar only — no glow */
+  box-shadow: inset 3px 0 0 0 var(--toast-accent);
+  transform: translate(-50%, -120%);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* Exit defaults; .shown overrides for the slide-down */
+  transition:
+    transform 0.24s ease-in,
+    opacity 0.24s ease-in;
+}
+#toast.shown {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  transition:
+    transform 0.32s cubic-bezier(0.2, 0.9, 0.25, 1),
+    opacity 0.28s ease-out;
+}
+#toastIcon {
+  flex: 0 0 auto;
+  display: none;
+  margin-top: 0.05em;
+  font-size: 1.05em;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.15;
+  color: var(--toast-accent);
+}
+#toastIcon:not(:empty) {
+  display: inline-block;
+}
+.toast-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+#toastTitle {
+  font-size: clamp(13px, 1.6vw, 16px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #e2f8ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+#toastDetail {
+  display: none;
+  font-size: clamp(11px, 1.35vw, 13px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  color: #bdd1dc;
+  white-space: normal;
+  max-width: 100%;
+}
+#toastDetail:not(:empty) {
+  display: block;
+}
+/* Drones-left: text only, centred, cyan accent */
+#toast.bots {
+  justify-content: center;
+  text-align: center;
+}
+#toast.bots .toast-copy {
+  align-items: center;
+}
+#toast.bots #toastTitle {
+  color: #e2f8ff;
+}
+@media (prefers-reduced-motion: reduce) {
+  #toast {
+    transform: translate(-50%, 0) !important;
+    transition: opacity 0.18s ease !important;
+  }
+  #toast.shown {
+    transition: opacity 0.18s ease !important;
+  }
 }
 #touchPause {
   display: none;
@@ -350,101 +451,6 @@ body {
 }
 #bannerSub:empty {
   display: none;
-}
-
-/* Xbox-style pickup / drones-left toast — top centre, under the HUD row */
-#toast {
-  --toast-accent: #6dd9ed;
-  position: absolute;
-  top: calc(var(--safe-top) + var(--hud-gutter) + 54px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.22s ease;
-}
-#toast.shown {
-  opacity: 1;
-}
-#toast .toast-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  max-width: min(92vw, 420px);
-  padding: 7px 16px 7px 11px;
-  border-radius: 999px;
-  background: rgba(6, 12, 20, 0.78);
-  border: 1px solid color-mix(in srgb, var(--toast-accent) 55%, #ffffff22);
-  box-shadow:
-    0 6px 22px #00000088,
-    inset 0 0 0 1px #ffffff0a;
-  transform: translateY(-14px);
-  transition: transform 0.28s cubic-bezier(0.22, 0.9, 0.28, 1);
-}
-#toast.shown .toast-pill {
-  transform: translateY(0);
-}
-#toastIcon {
-  flex: 0 0 auto;
-  display: none;
-  width: 1.35em;
-  height: 1.35em;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1;
-  color: var(--toast-accent);
-  background: color-mix(in srgb, var(--toast-accent) 18%, #00000066);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--toast-accent) 40%, transparent);
-}
-#toastIcon:not(:empty) {
-  display: inline-flex;
-}
-.toast-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  min-width: 0;
-}
-#toastTitle {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #e8f7ff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: min(72vw, 340px);
-  text-shadow: 0 1px 2px #000a;
-}
-#toastDetail {
-  display: none;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #b7cdd8;
-  line-height: 1.25;
-  max-width: min(72vw, 340px);
-  text-shadow: 0 1px 2px #000a;
-}
-#toastDetail:not(:empty) {
-  display: block;
-}
-@media (prefers-reduced-motion: reduce) {
-  #toast {
-    transition: opacity 0.22s ease !important;
-  }
-  #toast .toast-pill {
-    transform: none !important;
-    transition: none !important;
-  }
 }
 
 /* Left HUD powerups slot (kept for layout; timed PUs use under-operator bars) */
@@ -1588,7 +1594,17 @@ body.pad-aiming #game {
     --hud-ammo-w: clamp(98px, 12.5vw, 128px);
   }
   #toast {
-    top: calc(var(--safe-top) + var(--hud-phone-margin) + 48px);
+    /* Fit between compact side panels on ~390px phones without overlap */
+    max-width: min(132px, calc(100% - 196px));
+    padding-left: 10px;
+    padding-right: 8px;
+  }
+  #toastTitle {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  #toastDetail {
+    font-size: 10px;
   }
   #ammoWrap {
     right: calc(var(--safe-right) + var(--hud-phone-margin));
@@ -1623,16 +1639,18 @@ body.pad-aiming #game {
 
 /* Phone landscape only: also pull the header stats flush to the edges. */
 @media (any-pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
-  #toast {
-    top: calc(var(--safe-top) + var(--hud-phone-margin) + 42px);
-  }
   #topbar {
     top: calc(var(--safe-top) + var(--hud-phone-margin));
     left: calc(var(--safe-left) + var(--hud-phone-margin));
     right: calc(var(--safe-right) + var(--hud-phone-margin));
     gap: 6px;
   }
-  #topbar > div {
+  #toast {
+    max-width: min(150px, calc(100% - 200px));
+    min-height: 26px;
+    padding: 5px 8px;
+  }
+  #topbar > div:not(#toast) {
     min-height: 26px;
     min-width: 90px;
     padding: 5px 8px;

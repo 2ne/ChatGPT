@@ -28,6 +28,13 @@
       </div>
       <div id="powerups"></div>
     </div>
+    <div id="toast" role="status" aria-live="polite" aria-atomic="true">
+      <span id="toastIcon" aria-hidden="true"></span>
+      <span class="toast-copy">
+        <span id="toastTitle"></span>
+        <span id="toastDetail"></span>
+      </span>
+    </div>
     <div class="enemy-stats">
       <div class="score-copy">
         <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
@@ -60,15 +67,6 @@
   </div>
 
   <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
-  <div id="toast" role="status" aria-live="polite" aria-atomic="true">
-    <div class="toast-pill">
-      <span id="toastIcon" aria-hidden="true"></span>
-      <span class="toast-copy">
-        <span id="toastTitle"></span>
-        <span id="toastDetail"></span>
-      </span>
-    </div>
-  </div>
 
   <!-- Screen-space power-up timers under the operator (projected each frame). -->
   <div id="puBars" hidden aria-hidden="true">

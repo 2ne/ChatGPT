@@ -2700,10 +2700,9 @@ const NOTICE_READ_HOLD = 4.5;
 const TOAST_HOLD = 1.5;
 const TOAST_LESSON_HOLD = 4;
 const TOAST_RUSH_HOLD = 0.9;
-const TOAST_IN = 0.28;
-const TOAST_OUT = 0.22;
+const TOAST_IN = 0.32;
+const TOAST_OUT = 0.24;
 const TOAST_GAP = 0.06;
-const TOAST_BOTS_ICON = '◈';
 // No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
@@ -2718,7 +2717,7 @@ function bossOnField() {
 
 function dismissToastVisual() {
   if (toastPhase === 'idle' && !hud.toast.classList.contains('shown')) return;
-  hud.toast.classList.remove('shown');
+  hud.toast.classList.remove('shown', 'bots');
   toastPhase = 'idle';
   toastTime = 0;
   toastIsBotsLeft = false;
@@ -2770,19 +2769,22 @@ function checkBotMilestones(remaining) {
 function presentToast(next) {
   const { text, color, pickup } = next;
   const firstPickup = !!(pickup && !seenDrops.has(pickup.id));
-  const accent = color || pickup?.tint || '#82eaf5';
-  const icon = pickup
-    ? (pickup.icon || (pickup.id === 'med' ? '+' : ''))
-    : (next.botsLeft ? TOAST_BOTS_ICON : '');
+  const bots = !!next.botsLeft;
+  const accent = bots ? '#82eaf5' : (color || pickup?.tint || '#6dd9ed');
+  // Pickups keep their glyph; drones-left is text-only.
+  const icon = pickup ? (pickup.icon || (pickup.id === 'med' ? '+' : '')) : '';
   hud.toast.style.setProperty('--toast-accent', accent);
+  hud.toast.classList.toggle('bots', bots);
   hud.toastIcon.textContent = icon;
   hud.toastTitle.textContent = text;
   hud.toastDetail.textContent = firstPickup ? (pickup.detail || '') : '';
+  // Force a layout so the slide-down always runs from -120% (not a content swap mid-flight).
+  void hud.toast.offsetWidth;
   hud.toast.classList.add('shown');
   toastPhase = 'in';
   toastTime = TOAST_IN;
   activePickupHint = firstPickup ? pickup.id : null;
-  toastIsBotsLeft = !!next.botsLeft;
+  toastIsBotsLeft = bots;
   // Hold length decided when the enter finishes (queue may grow during the slide-in).
   presentToast._first = firstPickup;
 }
@@ -6421,7 +6423,7 @@ function clearRun() {
   hud.toastIcon.textContent = '';
   hud.toastTitle.textContent = '';
   hud.toastDetail.textContent = '';
-  hud.toast.classList.remove('shown');
+  hud.toast.classList.remove('shown', 'bots');
   hud.toast.style.removeProperty('--toast-accent');
   toastIsBotsLeft = false;
   hidePicker();
