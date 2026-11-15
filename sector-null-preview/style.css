@@ -151,41 +151,6 @@ body {
 .stat[hidden] {
   display: none;
 }
-#bossPanel {
-  position: absolute;
-  bottom: calc(var(--safe-bottom) + var(--hud-gutter));
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(180px, 40vw);
-  padding: 5px 8px;
-  background: #170e18e8;
-  border: 1px solid #cf5267;
-  color: #ffb2bd;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-#bossPanel[hidden] {
-  display: none;
-}
-#bossHealth {
-  display: block;
-  width: 100%;
-  height: 5px;
-  margin-top: 4px;
-  border: 0;
-  appearance: none;
-  background: #40222b;
-}
-#bossHealth::-webkit-progress-bar {
-  background: #40222b;
-}
-#bossHealth::-webkit-progress-value {
-  background: #ff708c;
-}
-#bossHealth::-moz-progress-bar {
-  background: #ff708c;
-}
 .stat + .stat {
   margin-top: 3px;
 }
@@ -501,6 +466,49 @@ body {
 }
 @keyframes puBarBlink {
   50% { opacity: 0.18; }
+}
+
+/* World-anchored enemy / boss HP — same thin track language as #puBars */
+#enemyHpBars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+.enemy-hp {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  width: 52px;
+  height: 4px;
+  border-radius: 1px;
+  overflow: hidden;
+  background: rgba(6, 10, 16, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, 0);
+  will-change: transform;
+  pointer-events: none;
+}
+.enemy-hp.boss {
+  width: 68px;
+}
+.enemy-hp-fill {
+  width: 100%;
+  height: 100%;
+  transform: scaleX(1);
+  transform-origin: left center;
+  will-change: transform;
+  background: #ff708c;
+}
+@media (max-width: 420px) {
+  .enemy-hp {
+    width: 44px;
+  }
+  .enemy-hp.boss {
+    width: 56px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .pu-bar.blink {
@@ -1514,13 +1522,6 @@ body.pad-aiming #game {
     min-height: 44px;
     touch-action: manipulation;
   }
-  #bossPanel {
-    left: calc(var(--safe-left) + var(--hud-gutter));
-    right: calc(var(--safe-right) + clamp(136px, 17vw, 176px) + 28px);
-    width: min(180px, 100%);
-    transform: none;
-    margin: 0 auto;
-  }
   #touchPause {
     display: grid;
     place-items: center;
@@ -1638,12 +1639,6 @@ body.pad-aiming #game {
   #reloadBar {
     height: 4px;
     margin-top: 4px;
-  }
-  #bossPanel {
-    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
-    left: calc(var(--safe-left) + var(--hud-phone-margin));
-    right: calc(var(--safe-right) + var(--hud-ammo-w) + 16px);
-    pointer-events: none;
   }
 }
 

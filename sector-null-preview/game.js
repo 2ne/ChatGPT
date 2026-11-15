@@ -2457,9 +2457,6 @@ const hud = {
   weaponIcon: document.getElementById('weaponIcon'),
   weaponMods: document.getElementById('weaponMods'),
   mag: document.getElementById('mag'),
-  bossPanel: document.getElementById('bossPanel'),
-  bossName: document.getElementById('bossName'),
-  bossHealth: document.getElementById('bossHealth'),
   ammoWrap: document.getElementById('ammoWrap'),
   cellStatus: document.getElementById('cellStatus'),
   reloadBar: document.getElementById('reloadBar'),
@@ -2473,6 +2470,7 @@ const hud = {
   puAmmo: document.querySelector('#puBars .pu-ammo'),
   puDmgFill: document.querySelector('#puBars .pu-dmg .pu-fill'),
   puAmmoFill: document.querySelector('#puBars .pu-ammo .pu-fill'),
+  enemyHpBars: document.getElementById('enemyHpBars'),
 };
 
 /** Screen-space power-up bars under the operator — reused nodes, no per-frame allocs. */
@@ -2609,6 +2607,149 @@ function updatePuBars() {
   }
 }
 
+// ===================================================================
+// Enemy HP bars — pooled DOM, projected under the unit (same language as #puBars).
+// Bosses always; tough non-bosses only after they've taken damage.
+// ===================================================================
+const ENEMY_HP_POOL_MAX = 16;
+const ENEMY_HP_BOSS_COLOR = '#ff708c';
+const _ehpWorld = new THREE.Vector3();
+const enemyHpPool = [];
+
+function isToughEnemy(u) {
+  if (!u) return false;
+  if (u.boss) return true;
+  const t = u.type;
+  if (!t) return false;
+  // Gunners / bulwarks / boss fragments — skip one-hit glass (patrol, flanker, mortar).
+  return t.health >= 1.25 || t.style === 'heavy' || !!t.fragment;
+}
+
+function shouldShowEnemyHp(z) {
+  const u = z.userData;
+  if (!u || u.dying || u.hp <= 0 || u.maxHp <= 0) return false;
+  if (!isToughEnemy(u)) return false;
+  if (u.boss) return true;
+  return u.hp < u.maxHp;
+}
+
+function enemyHpFillColor(u) {
+  if (u.boss) return ENEMY_HP_BOSS_COLOR;
+  const kit = u.type?.kit | 0;
+  const optic = DRONE_PALETTES[kit]?.optic;
+  if (optic == null) return ENEMY_HP_BOSS_COLOR;
+  return `#${optic.toString(16).padStart(6, '0')}`;
+}
+
+function acquireEnemyHpSlot() {
+  let slot = enemyHpPool.find((s) => !s.inUse);
+  if (slot) return slot;
+  if (enemyHpPool.length >= ENEMY_HP_POOL_MAX || !hud.enemyHpBars) return null;
+  const el = document.createElement('div');
+  el.className = 'enemy-hp';
+  el.hidden = true;
+  el.innerHTML = '<div class="enemy-hp-fill"></div>';
+  hud.enemyHpBars.appendChild(el);
+  slot = {
+    el,
+    fill: el.firstElementChild,
+    inUse: false,
+    shown: false,
+    fillAmt: -1,
+    color: '',
+    boss: false,
+    x: NaN,
+    y: NaN,
+  };
+  enemyHpPool.push(slot);
+  return slot;
+}
+
+function releaseEnemyHpSlot(slot) {
+  if (!slot.inUse && !slot.shown) return;
+  slot.inUse = false;
+  slot.shown = false;
+  slot.fillAmt = -1;
+  slot.color = '';
+  slot.x = NaN;
+  slot.y = NaN;
+  slot.el.hidden = true;
+  slot.el.classList.remove('boss');
+}
+
+function hideAllEnemyHpBars() {
+  for (const slot of enemyHpPool) releaseEnemyHpSlot(slot);
+}
+
+function updateEnemyHpBars() {
+  if (!hud.enemyHpBars) return;
+  const show = state.running && !state.choosing && !state.paused && !title.active;
+  if (!show) {
+    hideAllEnemyHpBars();
+    return;
+  }
+
+  for (const slot of enemyHpPool) slot.inUse = false;
+
+  const vv = window.visualViewport;
+  const vw = vv?.width || layoutSize().w;
+  const vh = vv?.height || layoutSize().h;
+  const ox = vv?.offsetLeft || 0;
+  const oy = vv?.offsetTop || 0;
+
+  for (let i = 0; i < drones.length; i++) {
+    const z = drones[i];
+    if (!shouldShowEnemyHp(z)) continue;
+    const slot = acquireEnemyHpSlot();
+    if (!slot) break;
+    slot.inUse = true;
+    const u = z.userData;
+    const boss = !!u.boss;
+    if (slot.boss !== boss) {
+      slot.el.classList.toggle('boss', boss);
+      slot.boss = boss;
+    }
+    const color = enemyHpFillColor(u);
+    if (color !== slot.color) {
+      slot.fill.style.background = color;
+      slot.color = color;
+    }
+    const ratio = Math.max(0, Math.min(1, u.hp / u.maxHp));
+    if (ratio !== slot.fillAmt) {
+      slot.fill.style.transform = `scaleX(${ratio})`;
+      slot.fillAmt = ratio;
+    }
+
+    // Feet projection + small screen offset (matches under-operator puBars).
+    _ehpWorld.set(z.position.x, 0.02, z.position.z);
+    _ehpWorld.project(camera);
+    if (_ehpWorld.z > 1) {
+      if (slot.shown) {
+        slot.el.hidden = true;
+        slot.shown = false;
+        slot.x = NaN;
+        slot.y = NaN;
+      }
+      continue;
+    }
+    const x = (_ehpWorld.x * 0.5 + 0.5) * vw + ox;
+    const y = (-_ehpWorld.y * 0.5 + 0.5) * vh + oy + 14;
+    if (!slot.shown) {
+      slot.el.hidden = false;
+      slot.shown = true;
+    }
+    if (x !== slot.x || y !== slot.y) {
+      slot.el.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,0)`;
+      slot.x = x;
+      slot.y = y;
+    }
+  }
+
+  for (const slot of enemyHpPool) {
+    if (!slot.inUse) releaseEnemyHpSlot(slot);
+  }
+}
+
 const formatScore = n => Math.max(0, Math.round(n)).toLocaleString('en-US');
 function readHighScore() {
   return store.get('highscore', null) || { score: 0, wave: 0, kills: 0 };
@@ -2641,15 +2782,6 @@ function updateHUD() {
   hud.score.textContent = formatScore(state.score);
   hud.highScore.textContent = formatScore(readHighScore().score);
   const remaining = drones.length + state.toSpawn + (state.bossPending ? 1 : 0);
-  const boss = drones.find(z => z.userData.boss);
-  hud.bossPanel.hidden = !boss || !state.running;
-  if (boss) {
-    const u = boss.userData;
-    hud.bossName.textContent = u.type.name;
-    hud.bossHealth.max = u.maxHp;
-    hud.bossHealth.value = Math.max(0, u.hp);
-    hud.bossHealth.setAttribute('aria-label', `${u.type.name}: ${Math.ceil(u.hp)} of ${u.maxHp} health`);
-  }
   checkBotMilestones(remaining);
   if (hud.shieldPips.children.length !== state.maxHp) {
     hud.shieldPips.innerHTML = '<span class="shield-pip"></span>'.repeat(state.maxHp);
@@ -7919,6 +8051,7 @@ function update(dt, lightFrame = false) {
   updateBotsLeft(dt);
   updateHUD();
   updatePuBars();
+  updateEnemyHpBars();
 }
 
 // ===================================================================
