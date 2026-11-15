@@ -131,8 +131,10 @@ body {
   /* Use more of the gap between WAVE and SCORE; stay clear of both panels */
   max-width: min(340px, calc(100% - 268px));
   padding: 9px clamp(9px, 1.3vw, 16px) 7px;
-  border-top: 1px solid #6dd9ed99;
+  /* Top border tracks content accent (HUD blue / pickup / category) */
+  border-top: 1px solid color-mix(in srgb, var(--toast-accent) 60%, transparent);
   background: linear-gradient(#0a1b26f2, #081623c9);
+  box-shadow: 0 -4px 14px color-mix(in srgb, var(--toast-accent) 22%, transparent);
   transform: translate(-50%, var(--toast-off));
   opacity: 0;
   pointer-events: none;

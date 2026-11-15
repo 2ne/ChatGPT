@@ -2786,7 +2786,7 @@ function checkBotMilestones(remaining) {
   }
   if (hit === null) return;
   clearBotsLeftToasts();
-  toastQueue.push({ text: botsLeftLabel(hit), color: '#82eaf5', botsLeft: true });
+  toastQueue.push({ text: botsLeftLabel(hit), color: '#6dd9ed', botsLeft: true });
   yieldToastForLesson();
 }
 
@@ -2795,7 +2795,8 @@ function presentToast(next) {
   const firstPickup = !!(pickup && !seenDrops.has(pickup.id));
   const bots = !!next.botsLeft;
   const upgrade = !!next.upgrade;
-  const accent = bots ? '#82eaf5' : (color || pickup?.tint || '#6dd9ed');
+  // Top-border / label accent: HUD blue default, pickup tint, or upgrade category colour.
+  const accent = color || pickup?.tint || '#6dd9ed';
   // Pickups keep their glyph; drones-left / upgrades are text-only.
   const icon = pickup ? (pickup.icon || (pickup.id === 'med' ? '+' : '')) : '';
   const el = hud.toast;
