@@ -450,6 +450,11 @@ body {
   background: transparent;
   overflow: visible;
 }
+/* Author `display:flex` would otherwise beat the HTML [hidden] rule and leave
+   the last segment (or empty tracks) stuck on screen after the timer ends. */
+.pu-bar[hidden] {
+  display: none !important;
+}
 .pu-seg {
   flex: 1 1 0;
   min-width: 0;

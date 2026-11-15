@@ -2503,6 +2503,12 @@ function ensurePuSegments(el, count) {
   }
 }
 
+function puSegLit(t, maxSegs) {
+  // ceil only while time remains; ≤ eps is treated as expired by the caller.
+  if (!(t > 0)) return 0;
+  return Math.min(maxSegs, Math.ceil(t));
+}
+
 function setPuLit(el, lit, prevKey) {
   if (!el) return prevKey;
   if (lit === puBarState[prevKey]) return lit;
@@ -2515,11 +2521,18 @@ function setPuLit(el, lit, prevKey) {
   return lit;
 }
 
+function clearPuSegOn(el) {
+  if (!el) return;
+  const segs = el.children;
+  for (let i = 0; i < segs.length; i++) segs[i].classList.remove('on');
+}
+
 function hidePuBar(kind) {
   const el = kind === 'dmg' ? hud.puDmg : hud.puAmmo;
   if (!el) return;
   el.hidden = true;
   el.classList.remove('blink');
+  clearPuSegOn(el);
   if (kind === 'dmg') {
     puBarState.dmgOn = false;
     puBarState.dmgLit = -1;
@@ -2609,7 +2622,7 @@ function updatePuBars() {
 
   if (dmgOn) {
     // One segment per second; empty from the right as time runs out.
-    setPuLit(hud.puDmg, Math.min(PU_DMG_SEGS, Math.ceil(dmgT)), 'dmgLit');
+    setPuLit(hud.puDmg, puSegLit(dmgT, PU_DMG_SEGS), 'dmgLit');
     const blink = dmgT <= 2;
     if (blink !== puBarState.dmgBlink) {
       hud.puDmg.classList.toggle('blink', blink);
@@ -2617,7 +2630,7 @@ function updatePuBars() {
     }
   }
   if (ammoOn) {
-    setPuLit(hud.puAmmo, Math.min(PU_AMMO_SEGS, Math.ceil(ammoT)), 'ammoLit');
+    setPuLit(hud.puAmmo, puSegLit(ammoT, PU_AMMO_SEGS), 'ammoLit');
     const blink = ammoT <= 2;
     if (blink !== puBarState.ammoBlink) {
       hud.puAmmo.classList.toggle('blink', blink);
