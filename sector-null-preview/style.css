@@ -135,31 +135,6 @@ body {
   flex-direction: row;
   align-items: center;
 }
-/* Drones-left counter inside the WAVE panel */
-.wave-left {
-  margin-top: 2px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  line-height: 1.1;
-  text-transform: uppercase;
-  color: #6dd9ed;
-  opacity: 0.85;
-}
-.wave-left.pulse {
-  animation: wave-left-pulse 0.7s ease-out;
-}
-@keyframes wave-left-pulse {
-  0% { opacity: 1; filter: brightness(1.55); transform: scale(1.08); }
-  100% { opacity: 0.85; filter: brightness(1); transform: scale(1); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wave-left.pulse {
-    animation: none;
-    opacity: 1;
-    filter: brightness(1.35);
-  }
-}
 #touchPause {
   display: none;
 }
@@ -400,6 +375,27 @@ body {
 }
 #bannerSub:empty {
   display: none;
+}
+
+/* Centre-screen drones-left — above WAVE/boss banners (banner sits ~38%). */
+#botsLeft {
+  position: fixed;
+  top: 24%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  text-align: center;
+  font-size: clamp(18px, 4.2vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #82eaf5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  text-shadow:
+    0 0 12px currentColor,
+    0 0 3px #000;
 }
 
 /* Left HUD powerups slot (kept for layout; timed PUs use under-operator bars) */
@@ -1609,15 +1605,16 @@ body.pad-aiming #game {
     --hud-panel-w: 124px;
     --hud-panel-h: 52px;
   }
-  .wave-left {
-    font-size: 9px;
-    letter-spacing: 0.12em;
-  }
   .float-word .fw-title {
     font-size: 12px;
   }
   .float-word .fw-detail {
     font-size: 10px;
+  }
+  #botsLeft {
+    top: 22%;
+    font-size: clamp(15px, 3.8vw, 22px);
+    letter-spacing: 0.14em;
   }
   #ammoWrap {
     right: calc(var(--safe-right) + var(--hud-phone-margin));

@@ -2448,7 +2448,7 @@ const hud = {
   shieldPips: document.getElementById('shieldPips'),
   shieldCount: document.getElementById('shieldCount'),
   powerups: document.getElementById('powerups'),
-  waveLeft: document.getElementById('waveLeft'),
+  botsLeft: document.getElementById('botsLeft'),
   floatWords: document.getElementById('floatWords'),
   picker: document.getElementById('picker'),
   pickerTitle: document.getElementById('pickerTitle'),
@@ -2695,7 +2695,7 @@ function rankRoman(n) {
   return RANK_ROMAN[n] || String(n);
 }
 
-/** Card name + roman rank for WAVE banner hint / float fallback. */
+/** Card name + roman rank for float-up upgrade confirmation. */
 function upgradeToastCopy(u, newRank) {
   const ownedBefore = Math.max(0, (newRank | 0) - 1);
   let name = u.name;
@@ -2711,24 +2711,83 @@ function upgradeToastCopy(u, newRank) {
   };
 }
 
-// No "1 LEFT" — that fires as the boss dies / wave clears and fights the picker.
+// No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
+const BOTS_LEFT_HOLD = 1.4;
+const BOTS_LEFT_COLOR = '#82eaf5';
+let botsLeftTime = 0;
+
+function botsLeftLabel(n) {
+  return `${n} DRONES LEFT`;
+}
+
+function bannerShowing() {
+  return hud.banner.style.opacity === '1';
+}
 
 function bossOnField() {
   return drones.some(z => z.userData.boss);
 }
 
+function hideBotsLeft(gap = 0.15) {
+  if (!hud.botsLeft) return;
+  if (hud.botsLeft.style.opacity === '1') {
+    hud.botsLeft.style.opacity = '0';
+    botsLeftTime = gap;
+  }
+}
+
+function clearBotsLeftNotice() {
+  hideBotsLeft(0.15);
+}
+
+function presentBotsLeft(n) {
+  if (!hud.botsLeft) return;
+  hud.botsLeft.textContent = botsLeftLabel(n);
+  hud.botsLeft.style.color = BOTS_LEFT_COLOR;
+  hud.botsLeft.style.opacity = '1';
+  botsLeftTime = BOTS_LEFT_HOLD;
+}
+
+function updateBotsLeft(dt) {
+  botsLeftTime = Math.max(0, botsLeftTime - dt);
+  if (botsLeftTime > 0) return;
+  if (hud.botsLeft && hud.botsLeft.style.opacity === '1') {
+    hud.botsLeft.style.opacity = '0';
+    botsLeftTime = 0.25;
+  }
+}
+
+function checkBotMilestones(remaining) {
+  if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
+  if (bossDeath.active || remaining <= 0) {
+    if (remaining <= 0) clearBotsLeftNotice();
+    return;
+  }
+  // Skip while a centre banner owns the middle, or during boss fights.
+  if (bannerShowing() || bossOnField()) return;
+  // Mark every crossed threshold, but only announce the lowest new one so rapid
+  // multi-kills do not stack 10 / 5 / 3 notices back-to-back.
+  let hit = null;
+  for (const n of BOT_MILESTONES) {
+    if (remaining <= n && !botMilestonesDone.has(n)) {
+      botMilestonesDone.add(n);
+      hit = n;
+    }
+  }
+  if (hit === null) return;
+  presentBotsLeft(hit);
+}
+
 // ===================================================================
 // Float-up words — short labels projected above the operator (pickups +
-// upgrade fallback when no WAVE banner follows). Drones-left → WAVE panel.
+// upgrade confirmation). Drones-left uses centre-screen #botsLeft.
 // ===================================================================
 const FLOAT_LIFE = 0.9;
 const FLOAT_LESSON = 1.4;
 const floatPool = [];
 const _floatProj = new THREE.Vector3();
-/** @type {{ text: string, color: string } | null} */
-let pendingUpgradeBanner = null;
 
 function spawnFloatWord(title, color, opts = {}) {
   let item = floatPool.find((f) => f.t <= 0);
@@ -2799,54 +2858,16 @@ function updateFloatWords(dt) {
   }
 }
 
-function hideWaveLeft() {
-  if (!hud.waveLeft) return;
-  hud.waveLeft.hidden = true;
-  hud.waveLeft.textContent = '';
-  hud.waveLeft.classList.remove('pulse');
-}
-
-function showWaveLeft(n) {
-  if (!hud.waveLeft) return;
-  hud.waveLeft.hidden = false;
-  hud.waveLeft.textContent = `${n} LEFT`;
-  hud.waveLeft.classList.remove('pulse');
-  void hud.waveLeft.offsetWidth;
-  hud.waveLeft.classList.add('pulse');
-}
-
-function checkBotMilestones(remaining) {
-  if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
-  if (bossDeath.active || remaining <= 0) {
-    if (remaining <= 0) hideWaveLeft();
-    return;
-  }
-  // Skip during boss fights.
-  if (bossOnField()) return;
-  // Mark every crossed threshold, but only announce the lowest new one.
-  let hit = null;
-  for (const n of BOT_MILESTONES) {
-    if (remaining <= n && !botMilestonesDone.has(n)) {
-      botMilestonesDone.add(n);
-      hit = n;
-    }
-  }
-  if (hit === null) return;
-  showWaveLeft(hit);
-}
-
-function showBanner(text, sub, dur = 1.6, kind = 'wave', subColor = null) {
+function showBanner(text, sub, dur = 1.6, kind = 'wave') {
   hud.banner.classList.toggle('boss', kind === 'boss');
   hud.bannerText.textContent = text;
   hud.bannerSub.textContent = sub || '';
-  if (subColor) hud.bannerSub.style.color = subColor;
-  else hud.bannerSub.style.removeProperty('color');
+  hud.bannerSub.style.removeProperty('color');
   hud.banner.style.opacity = 1;
+  // Centre banner owns the middle — clear drones-left so they don't overlap.
+  if (hud.botsLeft && hud.botsLeft.style.opacity === '1') hideBotsLeft(0.2);
   clearTimeout(showBanner._t);
-  showBanner._t = setTimeout(() => {
-    hud.banner.style.opacity = 0;
-    hud.bannerSub.style.removeProperty('color');
-  }, dur * 1000);
+  showBanner._t = setTimeout(() => { hud.banner.style.opacity = 0; }, dur * 1000);
 }
 
 // ===================================================================
@@ -3203,7 +3224,7 @@ function spawnWaveBoss() {
     type = { name: Math.floor(state.wave / 5) % 2 ? 'REACTOR WARDEN' : 'NULL OVERSEER', kit: 4, health: hp * 1.2, speed: 0.72, size: 1.55, style: 'heavy', boss: true, milestone: true, loco: 'stomp' };
   }
   spawnDrone(undefined, type);
-  hideWaveLeft();
+  clearBotsLeftNotice();
   showBanner(type.name, '', 2.5, 'boss');
 }
 
@@ -4172,7 +4193,7 @@ function bankRemainingLoot() {
 }
 
 function finishWaveClear() {
-  hideWaveLeft();
+  clearBotsLeftNotice();
   clearEnemyBolts();
   awardWaveBonuses();
   bankRemainingLoot();
@@ -5398,17 +5419,12 @@ function choose(i) {
   const tip = { text: line, color: UPGRADE_CATS[u.cat] || '#7ec8e8' };
   choose._t = setTimeout(() => {
     hidePicker();
-    if (startBay) {
-      // No WAVE banner follows — float the pick above the operator.
-      spawnFloatWord(tip.text, tip.color);
-      vacuumWaveClearShieldThen(beginBayTransition);
-    }
+    // Upgrade confirm is float-up only — never replace WAVE banner subtitles.
+    spawnFloatWord(tip.text, tip.color);
+    if (startBay) vacuumWaveClearShieldThen(beginBayTransition);
   }, 250);
   // Wave 10 → Defence Bay walk instead of wave 11.
-  if (!startBay) {
-    pendingUpgradeBanner = tip;
-    queueWave(2.0);
-  }
+  if (!startBay) queueWave(2.0);
   audio.upgrade(u.cat);
 }
 
@@ -6200,7 +6216,7 @@ function beginBossDeath(z) {
   if (ud.chargeRing) ud.chargeRing.visible = false;
   if (ud.climb >= 0) endClimb(z, true);
   clearEnemyBolts();
-  hideWaveLeft();
+  clearBotsLeftNotice();
   bossDeath.active = true;
   bossDeath.t = 0;
   bossDeath.boss = z;
@@ -6365,7 +6381,7 @@ function startWave(n) {
   state.shotsFired = 0;
   state.shotsHit = 0;
   botMilestonesDone.clear();
-  hideWaveLeft();
+  clearBotsLeftNotice();
   // Drones toughen steadily but slower than upgrades let the player scale, so
   // runs can go long; speed caps below the player's so kiting always works.
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
@@ -6394,16 +6410,11 @@ function startWave(n) {
     12: 'Hold the bay · Heavier mix',
     13: 'South door opens · Mortars return',
   };
-  const omen = n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected';
-  // After an upgrade pick, show the card name/rank in category colour on this banner.
-  let sub = omen;
-  let subColor = null;
-  if (pendingUpgradeBanner) {
-    sub = pendingUpgradeBanner.text;
-    subColor = pendingUpgradeBanner.color;
-    pendingUpgradeBanner = null;
-  }
-  showBanner('WAVE ' + n, sub, NOTICE_READ_HOLD, 'wave', subColor);
+  showBanner(
+    'WAVE ' + n,
+    n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected',
+    NOTICE_READ_HOLD,
+  );
 }
 
 // ===================================================================
@@ -6446,8 +6457,12 @@ function clearRun() {
   shockwaves.length = 0;
   clearBossDeath();
   clearFloatWords();
-  pendingUpgradeBanner = null;
-  hideWaveLeft();
+  clearBotsLeftNotice();
+  if (hud.botsLeft) {
+    hud.botsLeft.textContent = '';
+    hud.botsLeft.style.opacity = '0';
+  }
+  botsLeftTime = 0;
   hidePicker();
 }
 
@@ -7901,6 +7916,7 @@ function update(dt, lightFrame = false) {
   updateCamera(dt);
 
   updateFloatWords(dt);
+  updateBotsLeft(dt);
   updateHUD();
   updatePuBars();
 }

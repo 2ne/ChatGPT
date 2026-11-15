@@ -28,7 +28,6 @@
       </button>
       <div class="run-copy">
         <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
-        <div id="waveLeft" class="wave-left" hidden aria-live="polite"></div>
         <div id="health" role="img" aria-label="Shields">
           <span id="shieldPips" aria-hidden="true"></span>
           <span id="shieldCount" aria-hidden="true"></span>
@@ -63,6 +62,8 @@
   </div>
 
   <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
+  <!-- Centre-screen drones-left (above WAVE/boss banners). -->
+  <div id="botsLeft" role="status" aria-live="polite"></div>
 
   <!-- Short float-up pickup / upgrade words, projected from the operator. -->
   <div id="floatWords" aria-hidden="true"></div>
