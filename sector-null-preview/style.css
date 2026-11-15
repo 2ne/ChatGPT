@@ -110,7 +110,7 @@ body {
   border-top: 1px solid #6dd9ed99;
   background: linear-gradient(#0a1b26f2, #081623c9);
 }
-/* Pickup / drones-left notice — same panel language as WAVE and SCORE, centred in the row */
+/* Pickup / drones-left / upgrade notice — same panel language as WAVE and SCORE */
 #toast {
   --toast-accent: #6dd9ed;
   position: absolute;
@@ -119,14 +119,15 @@ body {
   z-index: 1;
   box-sizing: border-box;
   display: flex;
-  align-items: flex-start;
+  /* Optical centre for uppercase (no descenders): slight extra top padding */
+  align-items: center;
   gap: 0.42em;
   min-width: 0;
   min-height: 34px;
   width: max-content;
   /* Use more of the gap between WAVE and SCORE; stay clear of both panels */
   max-width: min(340px, calc(100% - 268px));
-  padding: 8px clamp(9px, 1.3vw, 16px);
+  padding: 9px clamp(9px, 1.3vw, 16px) 7px;
   border-top: 1px solid #6dd9ed99;
   background: linear-gradient(#0a1b26f2, #081623c9);
   transform: translate(-50%, -120%);
@@ -148,11 +149,10 @@ body {
 #toastIcon {
   flex: 0 0 auto;
   display: none;
-  margin-top: 0.05em;
   font-size: 1.05em;
   font-weight: 700;
   letter-spacing: 0;
-  line-height: 1.15;
+  line-height: 1;
   color: var(--toast-accent);
 }
 #toastIcon:not(:empty) {
@@ -162,13 +162,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: 2px;
   min-width: 0;
 }
 #toastTitle {
   font-size: clamp(13px, 1.6vw, 16px);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #e2f8ff;
@@ -181,7 +182,7 @@ body {
   display: none;
   font-size: clamp(11px, 1.35vw, 13px);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.15;
   letter-spacing: 0.04em;
   color: #bdd1dc;
   white-space: nowrap;
@@ -201,6 +202,25 @@ body {
   align-items: center;
 }
 #toast.bots #toastTitle {
+  color: #e2f8ff;
+}
+/* Upgrade pick: category eyebrow + name/rank · card desc */
+#toast.upgrade {
+  align-items: center;
+}
+#toast.upgrade #toastTitle {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  line-height: 1.1;
+  color: var(--toast-accent);
+}
+#toast.upgrade #toastDetail {
+  display: block;
+  font-size: clamp(12px, 1.5vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  text-transform: uppercase;
   color: #e2f8ff;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1597,7 +1617,7 @@ body.pad-aiming #game {
   #toast {
     /* Wider single-line fit between panels on ~390px; slightly tighter type/padding */
     max-width: min(168px, calc(100% - 216px));
-    padding: 6px 8px;
+    padding: 7px 8px 5px;
   }
   #toastTitle {
     font-size: 11px;
@@ -1606,6 +1626,14 @@ body.pad-aiming #game {
   #toastDetail {
     font-size: 10px;
     letter-spacing: 0.03em;
+  }
+  #toast.upgrade #toastTitle {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+  #toast.upgrade #toastDetail {
+    font-size: 10px;
+    letter-spacing: 0.04em;
   }
   #ammoWrap {
     right: calc(var(--safe-right) + var(--hud-phone-margin));
@@ -1649,7 +1677,7 @@ body.pad-aiming #game {
   #toast {
     max-width: min(200px, calc(100% - 200px));
     min-height: 26px;
-    padding: 5px 8px;
+    padding: 6px 8px 4px;
   }
   #topbar > div:not(#toast) {
     min-height: 26px;

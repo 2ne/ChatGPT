@@ -2700,13 +2700,30 @@ const NOTICE_READ_HOLD = 4.5;
 const TOAST_HOLD = 1.5;
 const TOAST_LESSON_HOLD = 4;
 const TOAST_RUSH_HOLD = 0.9;
-const TOAST_UPGRADE_HOLD = 2;
+const TOAST_UPGRADE_HOLD = 2.5;
 const TOAST_IN = 0.32;
 const TOAST_OUT = 0.24;
 const TOAST_GAP = 0.06;
 const RANK_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 function rankRoman(n) {
   return RANK_ROMAN[n] || String(n);
+}
+
+/** Same name/desc the picker card showed for this pick (owned = rank before taking it). */
+function upgradeToastCopy(u, newRank) {
+  const ownedBefore = Math.max(0, (newRank | 0) - 1);
+  let name = u.name;
+  let desc = u.desc;
+  if (ownedBefore > 0) {
+    if (u.id === 'bot') { name = 'UPGRADE BOT'; desc = 'Stronger companion shots'; }
+    else if (u.id === 'botGun') { name = 'UPGRADE GUNS'; desc = 'Faster twin fire'; }
+    else if (u.id === 'botBomb') { name = 'UPGRADE BOMBS'; desc = 'Bigger blast radius'; }
+  }
+  const label = u.max <= 1 ? name : `${name} ${rankRoman(newRank)}`;
+  return {
+    catLabel: String(u.cat || '').toUpperCase(),
+    line: `${label} · ${desc}`,
+  };
 }
 // No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
@@ -2722,13 +2739,14 @@ function bossOnField() {
 
 function dismissToastVisual() {
   if (toastPhase === 'idle' && !hud.toast.classList.contains('shown')) return;
-  hud.toast.classList.remove('shown', 'bots');
+  hud.toast.classList.remove('shown', 'bots', 'upgrade');
   toastPhase = 'idle';
   toastTime = 0;
   toastIsBotsLeft = false;
   // Don't mark a cut-short lesson as seen.
   activePickupHint = null;
   presentToast._first = false;
+  presentToast._hold = null;
 }
 
 function clearBotsLeftToasts() {
@@ -2775,14 +2793,22 @@ function presentToast(next) {
   const { text, color, pickup } = next;
   const firstPickup = !!(pickup && !seenDrops.has(pickup.id));
   const bots = !!next.botsLeft;
+  const upgrade = !!next.upgrade;
   const accent = bots ? '#82eaf5' : (color || pickup?.tint || '#6dd9ed');
-  // Pickups keep their glyph; drones-left is text-only.
+  // Pickups keep their glyph; drones-left / upgrades are text-only.
   const icon = pickup ? (pickup.icon || (pickup.id === 'med' ? '+' : '')) : '';
   hud.toast.style.setProperty('--toast-accent', accent);
   hud.toast.classList.toggle('bots', bots);
+  hud.toast.classList.toggle('upgrade', upgrade);
   hud.toastIcon.textContent = icon;
-  hud.toastTitle.textContent = text;
-  hud.toastDetail.textContent = firstPickup ? (pickup.detail || '') : '';
+  if (upgrade) {
+    // Category eyebrow on top; name + rank · card desc underneath.
+    hud.toastTitle.textContent = next.catLabel || '';
+    hud.toastDetail.textContent = text || '';
+  } else {
+    hud.toastTitle.textContent = text;
+    hud.toastDetail.textContent = firstPickup ? (pickup.detail || '') : '';
+  }
   // Force a layout so the slide-down always runs from -120% (not a content swap mid-flight).
   void hud.toast.offsetWidth;
   hud.toast.classList.add('shown');
@@ -5396,11 +5422,13 @@ function choose(i) {
   if (!startBay) queueWave(2.0);
   // Top-row toast after the picker closes (updateToast only runs once it's hidden).
   const rank = state.upgrades[u.id] || 1;
-  const label = u.max <= 1 ? u.name : `${u.name} ${rankRoman(rank)}`;
+  const { catLabel, line } = upgradeToastCopy(u, rank);
   toastQueue.push({
-    text: label,
+    text: line,
+    catLabel,
     color: UPGRADE_CATS[u.cat] || undefined,
     hold: TOAST_UPGRADE_HOLD,
+    upgrade: true,
   });
   audio.upgrade(u.cat);
 }
@@ -6441,7 +6469,7 @@ function clearRun() {
   hud.toastIcon.textContent = '';
   hud.toastTitle.textContent = '';
   hud.toastDetail.textContent = '';
-  hud.toast.classList.remove('shown', 'bots');
+  hud.toast.classList.remove('shown', 'bots', 'upgrade');
   hud.toast.style.removeProperty('--toast-accent');
   toastIsBotsLeft = false;
   hidePicker();
