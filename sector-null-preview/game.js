@@ -230,6 +230,9 @@ function onResize() {
   renderer.setSize(w, h, false);
   canvas.style.width = '100%';
   canvas.style.height = '100%';
+  // Picker freezes the game loop render — redraw once so resize/orientation
+  // doesn't leave a blank or wrongly sized frozen frame behind the overlay.
+  if (state.choosing && !title.active) renderer.render(scene, camera);
 }
 
 function scheduleResize() {
@@ -5568,6 +5571,9 @@ function openPicker() {
     });
   }).join('');
   getUpgradeIconHost().mount(hud.cards);
+  // Freeze one final game frame behind the picker; loop() skips further
+  // scene renders while state.choosing (Xbox Edge WebGL pressure).
+  renderer.render(scene, camera);
   hud.picker.classList.remove('shown');
   hud.picker.classList.remove('hidden');
   // Double rAF so the opacity transition starts from 0 after display flips on.
@@ -8137,7 +8143,9 @@ function loop(now) {
   hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
-  } else {
+  } else if (!state.choosing) {
+    // Skip game renders while the upgrade picker is open — last frame stays
+    // on the canvas (openPicker draws one final frame; onResize redraws).
     renderer.render(scene, camera);
   }
   requestAnimationFrame(loop);
