@@ -2701,8 +2701,8 @@ const TOAST_HOLD = 1.5;
 const TOAST_LESSON_HOLD = 4;
 const TOAST_RUSH_HOLD = 0.9;
 const TOAST_UPGRADE_HOLD = 2.5;
-const TOAST_IN = 0.32;
-const TOAST_OUT = 0.24;
+const TOAST_IN = 0.35;
+const TOAST_OUT = 0.25;
 const TOAST_GAP = 0.06;
 const RANK_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 function rankRoman(n) {
@@ -2738,8 +2738,8 @@ function bossOnField() {
 }
 
 function dismissToastVisual() {
-  if (toastPhase === 'idle' && !hud.toast.classList.contains('shown')) return;
-  hud.toast.classList.remove('shown', 'bots', 'upgrade');
+  if (toastPhase === 'idle' && !hud.toast.classList.contains('shown') && !hud.toast.classList.contains('hiding')) return;
+  hud.toast.classList.remove('shown', 'hiding', 'bots', 'upgrade');
   toastPhase = 'idle';
   toastTime = 0;
   toastIsBotsLeft = false;
@@ -2763,8 +2763,9 @@ function yieldToastForLesson() {
   if (activePickupHint) return;
   if (toastPhase === 'hold' || toastPhase === 'in') {
     hud.toast.classList.remove('shown');
+    hud.toast.classList.add('hiding');
     toastPhase = 'out';
-    toastTime = Math.min(toastTime, 0.12);
+    toastTime = Math.min(toastTime, TOAST_OUT * 0.5);
     toastIsBotsLeft = false;
   }
 }
@@ -2797,9 +2798,14 @@ function presentToast(next) {
   const accent = bots ? '#82eaf5' : (color || pickup?.tint || '#6dd9ed');
   // Pickups keep their glyph; drones-left / upgrades are text-only.
   const icon = pickup ? (pickup.icon || (pickup.id === 'med' ? '+' : '')) : '';
-  hud.toast.style.setProperty('--toast-accent', accent);
-  hud.toast.classList.toggle('bots', bots);
-  hud.toast.classList.toggle('upgrade', upgrade);
+  const el = hud.toast;
+  const token = (presentToast._token = (presentToast._token || 0) + 1);
+  // Reset to the off-screen start state before content swaps (iOS skips transitions
+  // when .shown is applied in the same turn as a text mutate).
+  el.classList.remove('shown', 'hiding');
+  el.style.setProperty('--toast-accent', accent);
+  el.classList.toggle('bots', bots);
+  el.classList.toggle('upgrade', upgrade);
   hud.toastIcon.textContent = icon;
   if (upgrade) {
     // Category eyebrow on top; name + rank · card desc underneath.
@@ -2809,9 +2815,6 @@ function presentToast(next) {
     hud.toastTitle.textContent = text;
     hud.toastDetail.textContent = firstPickup ? (pickup.detail || '') : '';
   }
-  // Force a layout so the slide-down always runs from -120% (not a content swap mid-flight).
-  void hud.toast.offsetWidth;
-  hud.toast.classList.add('shown');
   toastPhase = 'in';
   toastTime = TOAST_IN;
   activePickupHint = firstPickup ? pickup.id : null;
@@ -2819,6 +2822,13 @@ function presentToast(next) {
   // Hold length decided when the enter finishes (queue may grow during the slide-in).
   presentToast._first = firstPickup;
   presentToast._hold = next.hold;
+  // Double rAF so Safari paints the off-screen frame, then runs the slide-in keyframes.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (presentToast._token !== token || toastPhase !== 'in') return;
+      el.classList.add('shown');
+    });
+  });
 }
 
 function updateToast(dt) {
@@ -2851,12 +2861,14 @@ function updateToast(dt) {
       activePickupHint = null;
     }
     hud.toast.classList.remove('shown');
+    hud.toast.classList.add('hiding');
     toastPhase = 'out';
     toastTime = TOAST_OUT;
     toastIsBotsLeft = false;
     return;
   }
   if (toastPhase === 'out') {
+    hud.toast.classList.remove('hiding');
     toastPhase = 'idle';
     toastTime = TOAST_GAP;
     presentToast._first = false;
@@ -6469,7 +6481,7 @@ function clearRun() {
   hud.toastIcon.textContent = '';
   hud.toastTitle.textContent = '';
   hud.toastDetail.textContent = '';
-  hud.toast.classList.remove('shown', 'bots', 'upgrade');
+  hud.toast.classList.remove('shown', 'hiding', 'bots', 'upgrade');
   hud.toast.style.removeProperty('--toast-accent');
   toastIsBotsLeft = false;
   hidePicker();
