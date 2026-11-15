@@ -2669,10 +2669,8 @@ function updateHUD() {
       }
     });
   }
-  // Timed power-ups use the under-operator bars; left HUD keeps the shield-restore flash only.
-  let pu = '';
-  if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
-  hud.powerups.innerHTML = pu;
+  // Timed power-ups use under-operator bars; pickup feedback is the top toast pill.
+  if (hud.powerups.innerHTML) hud.powerups.innerHTML = '';
   const infinite = state.pAmmo > 0;
   const lastCharge = !infinite && !state.reloading && state.mag === 1;
   const cellStatus = state.reloading ? 'RECHARGING…' : infinite ? 'INFINITE CELL' : lastCharge ? 'LAST CHARGE' : 'CELL READY';
@@ -2694,10 +2692,18 @@ function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; s
 
 const toastQueue = [];
 let toastTime = 0;
+let toastPhase = 'idle'; // idle | in | hold | out
 let activePickupHint = null;
 let toastIsBotsLeft = false;
-// Shared read time for first power-up lessons and wave title/subtitle banners.
+// Wave / boss centre banners keep this read hold; toast lessons use TOAST_LESSON_HOLD.
 const NOTICE_READ_HOLD = 4.5;
+const TOAST_HOLD = 1.5;
+const TOAST_LESSON_HOLD = 4;
+const TOAST_RUSH_HOLD = 0.9;
+const TOAST_IN = 0.28;
+const TOAST_OUT = 0.22;
+const TOAST_GAP = 0.06;
+const TOAST_BOTS_ICON = '◈';
 // No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
@@ -2706,21 +2712,37 @@ function botsLeftLabel(n) {
   return `${n} DRONES LEFT`;
 }
 
-function bannerShowing() {
-  return hud.banner.style.opacity === '1';
-}
-
 function bossOnField() {
   return drones.some(z => z.userData.boss);
+}
+
+function dismissToastVisual() {
+  if (toastPhase === 'idle' && !hud.toast.classList.contains('shown')) return;
+  hud.toast.classList.remove('shown');
+  toastPhase = 'idle';
+  toastTime = 0;
+  toastIsBotsLeft = false;
+  // Don't mark a cut-short lesson as seen.
+  activePickupHint = null;
+  presentToast._first = false;
 }
 
 function clearBotsLeftToasts() {
   for (let i = toastQueue.length - 1; i >= 0; i--) {
     if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
   }
-  if (toastIsBotsLeft) {
-    hud.toast.style.opacity = 0;
-    toastTime = 0.15;
+  if (toastIsBotsLeft && (toastPhase === 'in' || toastPhase === 'hold')) {
+    dismissToastVisual();
+  }
+}
+
+/** Nudge a routine toast out early so a first-time lesson can take the slot. */
+function yieldToastForLesson() {
+  if (activePickupHint) return;
+  if (toastPhase === 'hold' || toastPhase === 'in') {
+    hud.toast.classList.remove('shown');
+    toastPhase = 'out';
+    toastTime = Math.min(toastTime, 0.12);
     toastIsBotsLeft = false;
   }
 }
@@ -2728,7 +2750,8 @@ function clearBotsLeftToasts() {
 function checkBotMilestones(remaining) {
   if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
   if (bossDeath.active || remaining <= 0) return;
-  if (bannerShowing() || bossOnField()) return;
+  // Skip during boss fights; centre banners no longer suppress drones-left (top toast).
+  if (bossOnField()) return;
   // Mark every crossed threshold, but only announce the lowest new one so rapid
   // multi-kills do not stack 10 / 5 / 3 toasts back-to-back.
   let hit = null;
@@ -2741,43 +2764,67 @@ function checkBotMilestones(remaining) {
   if (hit === null) return;
   clearBotsLeftToasts();
   toastQueue.push({ text: botsLeftLabel(hit), color: '#82eaf5', botsLeft: true });
-  if (!activePickupHint) toastTime = Math.min(toastTime, 0.12);
+  yieldToastForLesson();
+}
+
+function presentToast(next) {
+  const { text, color, pickup } = next;
+  const firstPickup = !!(pickup && !seenDrops.has(pickup.id));
+  const accent = color || pickup?.tint || '#82eaf5';
+  const icon = pickup
+    ? (pickup.icon || (pickup.id === 'med' ? '+' : ''))
+    : (next.botsLeft ? TOAST_BOTS_ICON : '');
+  hud.toast.style.setProperty('--toast-accent', accent);
+  hud.toastIcon.textContent = icon;
+  hud.toastTitle.textContent = text;
+  hud.toastDetail.textContent = firstPickup ? (pickup.detail || '') : '';
+  hud.toast.classList.add('shown');
+  toastPhase = 'in';
+  toastTime = TOAST_IN;
+  activePickupHint = firstPickup ? pickup.id : null;
+  toastIsBotsLeft = !!next.botsLeft;
+  // Hold length decided when the enter finishes (queue may grow during the slide-in).
+  presentToast._first = firstPickup;
 }
 
 function updateToast(dt) {
+  if (toastPhase === 'idle' && toastTime <= 0) {
+    // Teach new pickups before routine / drones-left notices, in collection order.
+    const lessonIndex = toastQueue.findIndex(notice => notice.pickup && !seenDrops.has(notice.pickup.id));
+    const next = toastQueue.splice(lessonIndex < 0 ? 0 : lessonIndex, 1)[0];
+    if (!next) return;
+    if (next.botsLeft && bossOnField()) return; // drop — boss fight owns the moment
+    presentToast(next);
+    return;
+  }
+
   toastTime = Math.max(0, toastTime - dt);
   if (toastTime > 0) return;
-  if (hud.toast.style.opacity === '1') {
+
+  if (toastPhase === 'in') {
+    const backlog = toastQueue.length >= 1;
+    const first = !!presentToast._first;
+    toastPhase = 'hold';
+    toastTime = first ? TOAST_LESSON_HOLD : (backlog ? TOAST_RUSH_HOLD : TOAST_HOLD);
+    return;
+  }
+  if (toastPhase === 'hold') {
     // Remember a lesson only after the player has had its full reading time.
     if (activePickupHint) {
       seenDrops.add(activePickupHint);
       activePickupHint = null;
     }
-    hud.toast.style.opacity = 0;
+    hud.toast.classList.remove('shown');
+    toastPhase = 'out';
+    toastTime = TOAST_OUT;
     toastIsBotsLeft = false;
-    toastTime = 0.25; // let the current notice fade before replacing it
     return;
   }
-
-  // Teach new pickups before routine upgrade/repeat notices, in collection order.
-  const lessonIndex = toastQueue.findIndex(notice => notice.pickup && !seenDrops.has(notice.pickup.id));
-  const next = toastQueue.splice(lessonIndex < 0 ? 0 : lessonIndex, 1)[0];
-  if (!next) return;
-  if (next.botsLeft && (bannerShowing() || bossOnField())) {
-    if (!bossOnField()) toastQueue.unshift(next);
-    return;
+  if (toastPhase === 'out') {
+    toastPhase = 'idle';
+    toastTime = TOAST_GAP;
+    presentToast._first = false;
   }
-  const { text, color, pickup } = next;
-  const firstPickup = pickup && !seenDrops.has(pickup.id);
-  // Same glyph as the floor label so the notice matches what they just collected.
-  hud.toastIcon.textContent = pickup ? pickup.icon : '';
-  hud.toastTitle.textContent = text;
-  hud.toastDetail.textContent = firstPickup ? pickup.detail : '';
-  hud.toast.style.color = color;
-  hud.toast.style.opacity = 1;
-  toastTime = firstPickup ? NOTICE_READ_HOLD : 1.4;
-  activePickupHint = firstPickup ? pickup.id : null;
-  toastIsBotsLeft = !!next.botsLeft;
 }
 
 function showBanner(text, sub, dur = 1.6, kind = 'wave') {
@@ -2785,11 +2832,6 @@ function showBanner(text, sub, dur = 1.6, kind = 'wave') {
   hud.bannerText.textContent = text;
   hud.bannerSub.textContent = sub || '';
   hud.banner.style.opacity = 1;
-  if (toastIsBotsLeft) {
-    hud.toast.style.opacity = 0;
-    toastTime = 0.2;
-    toastIsBotsLeft = false;
-  }
   clearTimeout(showBanner._t);
   showBanner._t = setTimeout(() => { hud.banner.style.opacity = 0; }, dur * 1000);
 }
@@ -4358,7 +4400,7 @@ function killDrone(z, idx, allowShieldDrop = true) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  // Name already carries the +; an icon of '+' made the toast read "++1 SHIELD".
+  // Floor label omits a med icon (name already has +); toast injects '+' in the pill badge.
   { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 0 },
   { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
   { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
@@ -4526,10 +4568,7 @@ function collect(type, opts = {}) {
   if (!silent) {
     audio.pickup(type.id);
     toastQueue.push({ text: type.name, color: type.tint, pickup: type });
-    if (!seenDrops.has(type.id) && !activePickupHint) {
-      // Let a routine notice yield promptly, but never cut another lesson short.
-      toastTime = Math.min(toastTime, 0.15);
-    }
+    if (!seenDrops.has(type.id)) yieldToastForLesson();
   }
   if (type.id === 'med') {
     // Toast / pip / heal only when the player actually picks it up (not silent banking).
@@ -5273,6 +5312,7 @@ function openPicker() {
     return;
   }
   state.choosing = true;
+  dismissToastVisual();
   hud.cards.dataset.input = lastPlayInput === 'gamepad' ? 'gamepad' : 'pointer';
   padPickerSel = 0;
   resetGameplayInput();
@@ -5343,7 +5383,6 @@ function choose(i) {
   }, 320);
   // Wave 10 → Defence Bay walk instead of wave 11.
   if (!startBay) queueWave(2.0);
-  toastQueue.push({ text: u.id === 'bot' ? (state.upgrades.bot === 1 ? 'HELPER BOT DEPLOYED' : `HELPER BOT UPGRADED · RANK ${state.upgrades.bot}`) : u.name, color: UPGRADE_CATS[u.cat] });
   audio.upgrade(u.cat);
 }
 
@@ -6376,11 +6415,14 @@ function clearRun() {
   clearBossDeath();
   toastQueue.length = 0;
   toastTime = 0;
+  toastPhase = 'idle';
   activePickupHint = null;
+  presentToast._first = false;
   hud.toastIcon.textContent = '';
   hud.toastTitle.textContent = '';
   hud.toastDetail.textContent = '';
-  hud.toast.style.opacity = 0;
+  hud.toast.classList.remove('shown');
+  hud.toast.style.removeProperty('--toast-accent');
   toastIsBotsLeft = false;
   hidePicker();
 }
