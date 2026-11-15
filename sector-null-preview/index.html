@@ -21,12 +21,19 @@
 <div id="hud">
   <div id="topbar">
     <div class="run-stats">
-      <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
-      <div id="health" role="img" aria-label="Shields">
-        <span id="shieldPips" aria-hidden="true"></span>
-        <span id="shieldCount" aria-hidden="true"></span>
+      <button type="button" id="touchPause" aria-label="Pause">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
+        </svg>
+      </button>
+      <div class="run-copy">
+        <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
+        <div id="health" role="img" aria-label="Shields">
+          <span id="shieldPips" aria-hidden="true"></span>
+          <span id="shieldCount" aria-hidden="true"></span>
+        </div>
+        <div id="powerups"></div>
       </div>
-      <div id="powerups"></div>
     </div>
     <div id="toast" role="status" aria-live="polite" aria-atomic="true">
       <span id="toastIcon" aria-hidden="true"></span>
@@ -40,11 +47,6 @@
         <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
         <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
       </div>
-      <button type="button" id="touchPause" aria-label="Pause">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
-        </svg>
-      </button>
     </div>
   </div>
 

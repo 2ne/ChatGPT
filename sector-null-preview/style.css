@@ -91,6 +91,8 @@ body {
   user-select: none;
 }
 #topbar {
+  --hud-panel-w: 156px;
+  --hud-panel-h: 58px;
   position: absolute;
   top: calc(var(--safe-top) + var(--hud-gutter));
   left: calc(var(--safe-left) + var(--hud-edge));
@@ -103,12 +105,35 @@ body {
     0 0 8px #000,
     0 0 2px #000;
 }
-#topbar > div:not(#toast) {
-  min-height: 34px;
-  min-width: 116px;
-  padding: 8px clamp(9px, 1.3vw, 16px);
+/* Matched WAVE and SCORE panels — same box on phone and desktop */
+#topbar > .run-stats,
+#topbar > .enemy-stats {
+  box-sizing: border-box;
+  width: var(--hud-panel-w);
+  min-width: var(--hud-panel-w);
+  max-width: var(--hud-panel-w);
+  min-height: var(--hud-panel-h);
+  height: var(--hud-panel-h);
+  padding: 8px 12px;
   border-top: 1px solid #6dd9ed99;
   background: linear-gradient(#0a1b26f2, #081623c9);
+}
+#topbar > .run-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  overflow: visible;
+}
+#topbar > .run-stats .run-copy,
+#topbar > .enemy-stats .score-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+#topbar > .enemy-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 /* Pickup / drones-left / upgrade notice — same panel language as WAVE and SCORE */
 #toast {
@@ -129,7 +154,7 @@ body {
   min-height: 34px;
   width: max-content;
   /* Use more of the gap between WAVE and SCORE; stay clear of both panels */
-  max-width: min(340px, calc(100% - 268px));
+  max-width: min(340px, calc(100% - 2 * var(--hud-panel-w) - 24px));
   padding: 9px clamp(9px, 1.3vw, 16px) 7px;
   /* Top border tracks content accent (HUD blue / pickup / category) */
   border-top: 1px solid color-mix(in srgb, var(--toast-accent) 60%, transparent);
@@ -1556,14 +1581,6 @@ body.pad-aiming #game {
     transform: none;
     margin: 0 auto;
   }
-  #topbar > .enemy-stats {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    overflow: visible;
-    min-width: 0;
-    padding-right: 8px;
-  }
   #touchPause {
     display: grid;
     place-items: center;
@@ -1576,9 +1593,8 @@ body.pad-aiming #game {
     height: 18px;
     min-height: 18px;
     padding: 13px;
-    /* Layout gap is ~6px to the SCORE text and ~8px to the box edge; 13px
-       padding keeps an invisible 44×44 hit target via negative margin. */
-    margin: -13px -13px -13px -7px;
+    /* 18+13×2 = 44px hit target; negative margin keeps the panel box tidy */
+    margin: -13px -7px -13px -13px;
     border: 0;
     background: none;
     color: #d9f4fa;
@@ -1645,10 +1661,14 @@ body.pad-aiming #game {
     /* ~72% of the default 136–176px panel */
     --hud-ammo-w: clamp(98px, 12.5vw, 128px);
   }
+  #topbar {
+    --hud-panel-w: 124px;
+    --hud-panel-h: 52px;
+  }
   #toast {
     /* Wider single-line fit between panels on ~390px; slightly tighter type/padding */
     --toast-off: calc(-100% - var(--safe-top) - var(--hud-phone-margin) - 28px);
-    max-width: min(168px, calc(100% - 216px));
+    max-width: min(168px, calc(100% - 2 * var(--hud-panel-w) - 20px));
     padding: 7px 8px 5px;
   }
   #toastTitle {
@@ -1706,17 +1726,21 @@ body.pad-aiming #game {
     right: calc(var(--safe-right) + var(--hud-phone-margin));
     gap: 6px;
   }
+  #topbar {
+    --hud-panel-w: 118px;
+    --hud-panel-h: 46px;
+  }
   #toast {
-    max-width: min(200px, calc(100% - 200px));
+    max-width: min(200px, calc(100% - 2 * var(--hud-panel-w) - 16px));
     min-height: 26px;
     padding: 6px 8px 4px;
   }
-  #topbar > div:not(#toast) {
-    min-height: 26px;
-    min-width: 90px;
+  #topbar > .run-stats,
+  #topbar > .enemy-stats {
     padding: 5px 8px;
   }
   #topbar .run-stats,
+  #topbar .run-copy,
   #topbar .score-copy,
   #topbar .enemy-stats {
     pointer-events: none;
@@ -1747,7 +1771,8 @@ body.pad-aiming #game {
     height: 16px;
     min-height: 16px;
     padding: 12px;
-    margin: -12px -12px -12px -6px;
+    /* 16+12×2 = 40px hit target on compact landscape */
+    margin: -12px -6px -12px -12px;
   }
   #touchPause svg {
     width: 16px;
