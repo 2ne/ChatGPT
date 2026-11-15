@@ -314,32 +314,97 @@ body {
   pointer-events: none;
 }
 
-/* banner */
-#banner {
+/* Shared WAVE notice — start banner + cleared picker header (DOM above canvas). */
+.wave-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+#banner.wave-notice {
   position: fixed;
-  top: 38%;
+  top: 34%;
   left: 0;
   right: 0;
-  text-align: center;
+  z-index: 4;
+  padding: 0 max(16px, var(--safe-left), var(--safe-right));
   opacity: 0;
-  text-shadow:
-    0 0 18px #64dfee66,
-    0 0 4px #000;
-  transition: opacity 0.35s;
+  transition: opacity 0.35s ease;
 }
-#bannerSub {
-  display: block;
-  font-size: 16px;
+.wave-notice-title {
+  font-family: "Oxanium", "Rajdhani", sans-serif;
+  font-size: clamp(26px, 5.6vw, 56px);
   font-weight: 700;
-  letter-spacing: 3px;
-  color: #d4e8f0;
-  margin-top: 10px;
-  text-shadow:
-    0 0 10px #000c,
-    0 1px 2px #000;
+  line-height: 1.05;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8befff;
+  text-shadow: 0 0 10px #5de9ff55;
 }
-#bannerSub:empty {
+.wave-notice-sub {
+  font-family: "Rajdhani", sans-serif;
+  font-size: clamp(11px, 2.2vw, 15px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e8f2f6;
+  max-width: min(36rem, 92vw);
+  /* ~10–14px from title letterforms (flex gap 12px). */
+}
+.wave-notice-sub:empty {
   display: none;
+}
+.wave-kw-reactor {
+  color: #ffa64c;
+}
+/* Boss names still use #banner — keep red title, same frame. */
+#banner.boss .wave-notice-title {
+  color: #ff708c;
+  text-shadow: 0 0 10px #ff368c55;
+}
+
+.wave-decoration {
+  width: min(92vw, 520px);
+  line-height: 0;
+  flex: 0 0 auto;
+}
+.wave-decoration svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+.wave-decoration path {
+  fill: none;
+  stroke: #5de9ff;
+  stroke-width: 1.5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px #5de9ff66);
+}
+.wave-decoration-top svg {
+  /* Extra headroom above the title for the diagonal ticks. */
+  aspect-ratio: 480 / 32;
+}
+.wave-decoration-bottom svg {
+  aspect-ratio: 480 / 24;
+}
+
+/* Cleared screen: same notice; bottom deco closer to sub than to cards. */
+.wave-notice-picker {
+  width: min(1080px, 100%);
+  flex: 0 0 auto;
+  padding: 0 12px;
+}
+#picker .wave-notice-picker + #cards {
+  margin-top: 28px;
 }
 
 /* Centre-screen drones-left — above WAVE/boss banners (banner sits ~38%). */
@@ -553,43 +618,6 @@ body {
   #picker {
     transition: none;
   }
-}
-#bannerText,
-#pickerTitle {
-  font-family: "Rajdhani", sans-serif;
-  font-size: clamp(32px, 7vw, 64px);
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: #64dfee;
-  text-shadow:
-    0 0 18px #64dfee66,
-    0 0 4px #000;
-}
-#banner.boss #bannerText {
-  color: #ff708c;
-  text-shadow:
-    0 0 18px #ff368c66,
-    0 0 4px #000;
-}
-#pickerSub {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 6px;
-  margin-top: 2px;
-  color: #d4e8f0;
-  text-shadow:
-    0 0 10px #000c,
-    0 1px 2px #000;
-}
-#pickerSub::before,
-#pickerSub::after {
-  content: "";
-  display: inline-block;
-  width: 40px;
-  height: 1px;
-  background: #9ec4d0;
-  vertical-align: middle;
-  margin: 0 14px;
 }
 #cards {
   display: flex;
@@ -1280,21 +1308,19 @@ body.paused #flash {
     overflow: hidden;
     padding: calc(var(--safe-top) + 6px) calc(var(--safe-right) + 10px) calc(var(--safe-bottom) + 6px) calc(var(--safe-left) + 10px);
   }
-  #pickerTitle {
+  .wave-notice-picker .wave-notice-title {
     font-size: clamp(20px, 7.2dvh, 32px);
-    letter-spacing: 0.16em;
-    line-height: 1.05;
+    letter-spacing: 0.12em;
   }
-  #pickerSub {
+  .wave-notice-picker .wave-notice-sub {
     font-size: clamp(11px, 3.5dvh, 14px);
-    letter-spacing: 0.32em;
-    margin-top: 1px;
-    line-height: 1.2;
+    letter-spacing: 0.14em;
   }
-  #pickerSub::before,
-  #pickerSub::after {
-    width: clamp(16px, 4vw, 28px);
-    margin: 0 0.55em;
+  .wave-notice-picker {
+    gap: 8px;
+  }
+  #picker .wave-notice-picker + #cards {
+    margin-top: clamp(14px, 4dvh, 22px);
   }
   #cards {
     display: flex;
@@ -1367,32 +1393,22 @@ body.paused #flash {
     animation: card-pick-flash 0.22s ease-out forwards;
   }
 
-  #banner {
-    top: 36%;
-    /* Same gutter on both sides so the title stays on the viewport centre
-       while the subtitle still wraps clear of the side HUD / safe areas. */
+  #banner.wave-notice {
+    top: 30%;
+    gap: 8px;
     --banner-gutter: max(168px, 21vw, calc(var(--safe-left) + 24px), calc(var(--safe-right) + 24px));
     padding-left: var(--banner-gutter);
     padding-right: var(--banner-gutter);
   }
-  #bannerText {
-    display: inline-block;
-    max-width: 100%;
+  #banner .wave-notice-title {
     font-size: clamp(20px, 8dvh, 32px);
-    letter-spacing: 0.14em;
-    padding-left: 0.14em;
-    line-height: 1.05;
   }
-  #bannerSub {
+  #banner .wave-notice-sub {
     font-size: clamp(11px, 3.6dvh, 14px);
-    letter-spacing: 0.12em;
-    padding-left: 0.12em;
-    line-height: 1.35;
-    margin-top: 6px;
     max-width: min(36rem, 100%);
-    margin-left: auto;
-    margin-right: auto;
-    white-space: normal;
+  }
+  #banner .wave-decoration {
+    width: min(70vw, 420px);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1758,7 +1774,7 @@ body.pad-aiming #game {
   }
   /* Auto margins centre the stack when it fits; they collapse so it
      scrolls from the top when the content is taller than the viewport. */
-  #pickerTitle {
+  .wave-notice-picker {
     margin-top: auto;
   }
   #cards {
@@ -1767,6 +1783,9 @@ body.pad-aiming #game {
     margin-top: 18px;
     margin-bottom: auto;
     padding: 0;
+  }
+  #picker .wave-notice-picker + #cards {
+    margin-top: 18px;
   }
   #cards .recommended {
     grid-column: 1 / -1;
@@ -1802,13 +1821,9 @@ body.pad-aiming #game {
   .cdesc {
     font-size: 14px;
   }
-  #pickerSub {
+  .wave-notice-picker .wave-notice-sub {
     font-size: 12px;
-    letter-spacing: 1px;
-  }
-  #pickerSub::before,
-  #pickerSub::after {
-    display: none;
+    letter-spacing: 0.12em;
   }
 }
 @media (max-height: 500px) {
@@ -2326,35 +2341,14 @@ body.pad-aiming #game {
   /* No full-screen backdrop-filter — blur over the live 3D scene is too costly. */
   background: radial-gradient(ellipse at 50% 45%, #04101ccc, #020810f2);
 }
-#pickerTitle {
-  position: relative;
-  width: min(1080px, 100%);
-  padding-bottom: 12px;
-  font-family: "Oxanium", "Rajdhani", sans-serif;
-  font-size: clamp(28px, 4vw, 56px);
-  line-height: 1.15;
-  letter-spacing: .09em;
-  color: #9af5ff;
-  text-shadow: 0 0 8px #45ecff99, 0 0 30px #45ecff55;
-}
-#pickerTitle::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 14px;
-  margin-top: 10px;
-  transform: translateY(clamp(-16px, -1vw, -8px));
-  background: #45ecff;
-  clip-path: polygon(0 0, 13% 0, 16% 90%, 84% 90%, 87% 0, 100% 0, 100% 10%, 87.2% 10%, 84.2% 100%, 15.8% 100%, 12.8% 10%, 0 10%);
-  opacity: .7;
-}
-#pickerSub { font-size: 14px; letter-spacing: .3em; }
-#pickerSub::before, #pickerSub::after { background: #45ecff; }
 #cards {
   width: min(1120px, 100%);
   grid-template-columns: 1.06fr 1fr 1fr;
   gap: 24px;
   margin-top: 34px;
+}
+#picker .wave-notice-picker + #cards {
+  margin-top: 28px;
 }
 /* Desktop card chrome lives in upgrade-cards.css (.upgrade-card). */
 #cards .upgrade-card:is(:focus-visible, .pad-sel):not(.dropped):not(.picked) {
@@ -2382,9 +2376,9 @@ body.pad-aiming #game {
   #cards .upgrade-card.picked { transform: translateY(-4px) scale(1.035); }
 }
 @media (max-width: 600px) and (min-height: 501px) {
-  #pickerTitle { font-size: clamp(23px, 6vw, 34px); padding-bottom: 6px; }
-  #pickerTitle::after { margin-top: 8px; height: 8px; }
-  #pickerSub { font-size: 11px; letter-spacing: .12em; }
+  .wave-notice-picker .wave-notice-title { font-size: clamp(23px, 6vw, 34px); }
+  .wave-notice-picker .wave-notice-sub { font-size: 11px; letter-spacing: 0.12em; }
+  #picker .wave-notice-picker + #cards { margin-top: 20px; }
   #cards { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
   #cards .card { padding: 15px 12px; }
   #cards .ctop { font-size: 10px; letter-spacing: .03em; }
@@ -2398,9 +2392,10 @@ body.pad-aiming #game {
   #cards .clvl { margin-top: 10px; }
 }
 @media (max-height: 600px) and (min-width: 601px) {
-  #pickerTitle { font-size: 28px; padding-bottom: 2px; }
-  #pickerTitle::after { height: 6px; margin-top: 2px; }
-  #pickerSub { font-size: 11px; letter-spacing: .15em; }
+  .wave-notice-picker .wave-notice-title { font-size: 28px; }
+  .wave-notice-picker .wave-notice-sub { font-size: 11px; letter-spacing: 0.14em; }
+  .wave-notice-picker { gap: 8px; }
+  #picker .wave-notice-picker + #cards { margin-top: clamp(14px, 4dvh, 22px); }
   #cards { width: min(960px, 100%); gap: 14px; margin-top: clamp(16px, 4.5dvh, 24px); }
   #cards .card { padding: 10px 12px 8px; }
   #cards .ctop { font-size: 11px; min-height: 18px; }

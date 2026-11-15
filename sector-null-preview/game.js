@@ -3045,11 +3045,30 @@ function updateFloatWords(dt) {
   }
 }
 
+/** Set a wave-notice subtitle; highlight REACTOR in restrained orange. */
+function setWaveNoticeSub(el, sub) {
+  if (!el) return;
+  el.textContent = '';
+  el.style.removeProperty('color');
+  if (!sub) return;
+  const parts = String(sub).split(/(REACTOR)/g);
+  for (const part of parts) {
+    if (!part) continue;
+    if (part === 'REACTOR') {
+      const span = document.createElement('span');
+      span.className = 'wave-kw-reactor';
+      span.textContent = part;
+      el.appendChild(span);
+    } else {
+      el.appendChild(document.createTextNode(part));
+    }
+  }
+}
+
 function showBanner(text, sub, dur = 1.6, kind = 'wave') {
   hud.banner.classList.toggle('boss', kind === 'boss');
   hud.bannerText.textContent = text;
-  hud.bannerSub.textContent = sub || '';
-  hud.bannerSub.style.removeProperty('color');
+  setWaveNoticeSub(hud.bannerSub, sub || '');
   hud.banner.style.opacity = 1;
   // Centre banner owns the middle — clear drones-left so they don't overlap.
   if (hud.botsLeft && hud.botsLeft.style.opacity === '1') hideBotsLeft(0.2);
@@ -5543,7 +5562,7 @@ function openPicker() {
   clearTimeout(choose._t);
   clearTimeout(openPicker._t);
   hud.pickerTitle.textContent = 'WAVE ' + state.wave + ' CLEARED';
-  hud.pickerSub.textContent = 'CHOOSE YOUR NEXT UPGRADE';
+  setWaveNoticeSub(hud.pickerSub, 'CHOOSE YOUR NEXT UPGRADE');
   hud.cards.innerHTML = offered.map((u, i) => {
     if (!u) return '<div aria-hidden="true"></div>';
     const recommended = i === 0 && u.id !== 'magnet';

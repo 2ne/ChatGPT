@@ -57,7 +57,27 @@
     <div id="reloadBar"><div id="reloadFill"></div></div>
   </div>
 
-  <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
+  <!-- Shared WAVE notice (start banner + cleared header): title/sub + SVG frame. -->
+  <div id="banner" class="wave-notice" aria-live="polite">
+    <div class="wave-decoration wave-decoration-top" aria-hidden="true">
+      <svg viewBox="0 0 480 32" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M28 18 H196"/>
+        <path d="M284 18 H452"/>
+        <path d="M214 26 L226 10"/>
+        <path d="M230 26 L242 10"/>
+        <path d="M246 26 L258 10"/>
+        <path d="M262 26 L274 10"/>
+      </svg>
+    </div>
+    <div class="wave-notice-title" id="bannerText"></div>
+    <div class="wave-notice-sub" id="bannerSub"></div>
+    <div class="wave-decoration wave-decoration-bottom" aria-hidden="true">
+      <svg viewBox="0 0 480 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M36 18 H178 L190 6"/>
+        <path d="M444 18 H302 L290 6"/>
+      </svg>
+    </div>
+  </div>
   <!-- Centre-screen drones-left (above WAVE/boss banners). -->
   <div id="botsLeft" role="status" aria-live="polite"></div>
 
@@ -77,8 +97,26 @@
 <div id="flash"></div>
 
 <div id="picker" class="hidden">
-  <div id="pickerTitle"></div>
-  <div id="pickerSub"></div>
+  <header class="wave-notice wave-notice-picker">
+    <div class="wave-decoration wave-decoration-top" aria-hidden="true">
+      <svg viewBox="0 0 480 32" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M28 18 H196"/>
+        <path d="M284 18 H452"/>
+        <path d="M214 26 L226 10"/>
+        <path d="M230 26 L242 10"/>
+        <path d="M246 26 L258 10"/>
+        <path d="M262 26 L274 10"/>
+      </svg>
+    </div>
+    <div class="wave-notice-title" id="pickerTitle"></div>
+    <div class="wave-notice-sub" id="pickerSub"></div>
+    <div class="wave-decoration wave-decoration-bottom" aria-hidden="true">
+      <svg viewBox="0 0 480 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M36 18 H178 L190 6"/>
+        <path d="M444 18 H302 L290 6"/>
+      </svg>
+    </div>
+  </header>
   <div id="cards"></div>
 </div>
 
