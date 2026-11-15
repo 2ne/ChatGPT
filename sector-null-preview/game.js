@@ -2448,10 +2448,8 @@ const hud = {
   shieldPips: document.getElementById('shieldPips'),
   shieldCount: document.getElementById('shieldCount'),
   powerups: document.getElementById('powerups'),
-  toast: document.getElementById('toast'),
-  toastIcon: document.getElementById('toastIcon'),
-  toastTitle: document.getElementById('toastTitle'),
-  toastDetail: document.getElementById('toastDetail'),
+  waveLeft: document.getElementById('waveLeft'),
+  floatWords: document.getElementById('floatWords'),
   picker: document.getElementById('picker'),
   pickerTitle: document.getElementById('pickerTitle'),
   pickerSub: document.getElementById('pickerSub'),
@@ -2669,7 +2667,7 @@ function updateHUD() {
       }
     });
   }
-  // Timed power-ups use under-operator bars; pickup feedback is the top toast pill.
+  // Timed power-ups use under-operator bars; pickup names float above the operator.
   if (hud.powerups.innerHTML) hud.powerups.innerHTML = '';
   const infinite = state.pAmmo > 0;
   const lastCharge = !infinite && !state.reloading && state.mag === 1;
@@ -2690,26 +2688,14 @@ function updateHUD() {
 let flashT = 0;
 function damageFlash() { hud.flash.style.background = '#ff1e1e'; flashT = 0.4; state.shake = 0.5; }
 
-const toastQueue = [];
-let toastTime = 0;
-let toastPhase = 'idle'; // idle | in | hold | out
-let activePickupHint = null;
-let toastIsBotsLeft = false;
-// Wave / boss centre banners keep this read hold; toast lessons use TOAST_LESSON_HOLD.
+// Wave / boss centre banners keep this read hold.
 const NOTICE_READ_HOLD = 4.5;
-const TOAST_HOLD = 1.5;
-const TOAST_LESSON_HOLD = 4;
-const TOAST_RUSH_HOLD = 0.9;
-const TOAST_UPGRADE_HOLD = 2.5;
-const TOAST_IN = 0.35;
-const TOAST_OUT = 0.25;
-const TOAST_GAP = 0.06;
 const RANK_ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 function rankRoman(n) {
   return RANK_ROMAN[n] || String(n);
 }
 
-/** Category + card name (with rank); no description line. */
+/** Card name + roman rank for WAVE banner hint / float fallback. */
 function upgradeToastCopy(u, newRank) {
   const ownedBefore = Math.max(0, (newRank | 0) - 1);
   let name = u.name;
@@ -2724,58 +2710,120 @@ function upgradeToastCopy(u, newRank) {
     line: u.max <= 1 ? name : `${name} ${rankRoman(newRank)}`,
   };
 }
-// No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
+
+// No "1 LEFT" — that fires as the boss dies / wave clears and fights the picker.
 const BOT_MILESTONES = [10, 5, 3];
 const botMilestonesDone = new Set();
-
-function botsLeftLabel(n) {
-  return `${n} DRONES LEFT`;
-}
 
 function bossOnField() {
   return drones.some(z => z.userData.boss);
 }
 
-function dismissToastVisual() {
-  if (toastPhase === 'idle' && !hud.toast.classList.contains('shown') && !hud.toast.classList.contains('hiding')) return;
-  hud.toast.classList.remove('shown', 'hiding', 'bots', 'upgrade');
-  toastPhase = 'idle';
-  toastTime = 0;
-  toastIsBotsLeft = false;
-  // Don't mark a cut-short lesson as seen.
-  activePickupHint = null;
-  presentToast._first = false;
-  presentToast._hold = null;
+// ===================================================================
+// Float-up words — short labels projected above the operator (pickups +
+// upgrade fallback when no WAVE banner follows). Drones-left → WAVE panel.
+// ===================================================================
+const FLOAT_LIFE = 0.9;
+const FLOAT_LESSON = 1.4;
+const floatPool = [];
+const _floatProj = new THREE.Vector3();
+/** @type {{ text: string, color: string } | null} */
+let pendingUpgradeBanner = null;
+
+function spawnFloatWord(title, color, opts = {}) {
+  let item = floatPool.find((f) => f.t <= 0);
+  if (!item) {
+    const el = document.createElement('div');
+    el.className = 'float-word';
+    el.innerHTML = '<span class="fw-title"></span><span class="fw-detail"></span>';
+    hud.floatWords.appendChild(el);
+    item = {
+      el,
+      titleEl: el.querySelector('.fw-title'),
+      detailEl: el.querySelector('.fw-detail'),
+      t: 0,
+      life: FLOAT_LIFE,
+      lessonId: null,
+    };
+    floatPool.push(item);
+  }
+  item.titleEl.textContent = title || '';
+  item.detailEl.textContent = opts.detail || '';
+  item.detailEl.hidden = !opts.detail;
+  item.el.style.color = color || '#e8f4ff';
+  item.el.style.setProperty('--fw-glow', color || '#e8f4ff');
+  item.life = opts.lesson ? FLOAT_LESSON : FLOAT_LIFE;
+  item.t = item.life;
+  item.lessonId = opts.lessonId || null;
+  item.el.classList.add('shown');
 }
 
-function clearBotsLeftToasts() {
-  for (let i = toastQueue.length - 1; i >= 0; i--) {
-    if (toastQueue[i].botsLeft) toastQueue.splice(i, 1);
-  }
-  if (toastIsBotsLeft && (toastPhase === 'in' || toastPhase === 'hold')) {
-    dismissToastVisual();
+function clearFloatWords() {
+  for (const f of floatPool) {
+    if (f.lessonId) seenDrops.add(f.lessonId);
+    f.t = 0;
+    f.lessonId = null;
+    f.el.classList.remove('shown');
+    f.el.style.opacity = '0';
   }
 }
 
-/** Nudge a routine toast out early so a first-time lesson can take the slot. */
-function yieldToastForLesson() {
-  if (activePickupHint) return;
-  if (toastPhase === 'hold' || toastPhase === 'in') {
-    hud.toast.classList.remove('shown');
-    hud.toast.classList.add('hiding');
-    toastPhase = 'out';
-    toastTime = Math.min(toastTime, TOAST_OUT * 0.5);
-    toastIsBotsLeft = false;
+function updateFloatWords(dt) {
+  if (!floatPool.length) return;
+  const rising = floatPool.some((f) => f.t > 0);
+  if (!rising) return;
+  _floatProj.set(player.position.x, 2.15, player.position.z);
+  _floatProj.project(camera);
+  const sx = (_floatProj.x * 0.5 + 0.5) * window.innerWidth;
+  const sy = (-_floatProj.y * 0.5 + 0.5) * window.innerHeight;
+  for (const f of floatPool) {
+    if (f.t <= 0) {
+      if (f.el.classList.contains('shown')) f.el.classList.remove('shown');
+      continue;
+    }
+    f.t -= dt;
+    if (f.t <= 0) {
+      if (f.lessonId) {
+        seenDrops.add(f.lessonId);
+        f.lessonId = null;
+      }
+      f.el.classList.remove('shown');
+      f.el.style.opacity = '0';
+      continue;
+    }
+    const u = 1 - f.t / f.life;
+    const rise = u * 52;
+    const opacity = u < 0.12 ? u / 0.12 : u > 0.55 ? (1 - u) / 0.45 : 1;
+    f.el.style.transform = `translate(-50%, -100%) translate(${sx}px, ${sy - rise}px)`;
+    f.el.style.opacity = String(Math.max(0, Math.min(1, opacity)));
   }
+}
+
+function hideWaveLeft() {
+  if (!hud.waveLeft) return;
+  hud.waveLeft.hidden = true;
+  hud.waveLeft.textContent = '';
+  hud.waveLeft.classList.remove('pulse');
+}
+
+function showWaveLeft(n) {
+  if (!hud.waveLeft) return;
+  hud.waveLeft.hidden = false;
+  hud.waveLeft.textContent = `${n} LEFT`;
+  hud.waveLeft.classList.remove('pulse');
+  void hud.waveLeft.offsetWidth;
+  hud.waveLeft.classList.add('pulse');
 }
 
 function checkBotMilestones(remaining) {
   if (!state.running || state.choosing || state.intermission > 0 || state.paused) return;
-  if (bossDeath.active || remaining <= 0) return;
-  // Skip during boss fights; centre banners no longer suppress drones-left (top toast).
+  if (bossDeath.active || remaining <= 0) {
+    if (remaining <= 0) hideWaveLeft();
+    return;
+  }
+  // Skip during boss fights.
   if (bossOnField()) return;
-  // Mark every crossed threshold, but only announce the lowest new one so rapid
-  // multi-kills do not stack 10 / 5 / 3 toasts back-to-back.
+  // Mark every crossed threshold, but only announce the lowest new one.
   let hit = null;
   for (const n of BOT_MILESTONES) {
     if (remaining <= n && !botMilestonesDone.has(n)) {
@@ -2784,105 +2832,21 @@ function checkBotMilestones(remaining) {
     }
   }
   if (hit === null) return;
-  clearBotsLeftToasts();
-  toastQueue.push({ text: botsLeftLabel(hit), color: '#6dd9ed', botsLeft: true });
-  yieldToastForLesson();
+  showWaveLeft(hit);
 }
 
-function presentToast(next) {
-  const { text, color, pickup } = next;
-  const firstPickup = !!(pickup && !seenDrops.has(pickup.id));
-  const bots = !!next.botsLeft;
-  const upgrade = !!next.upgrade;
-  // Top-border / label accent: HUD blue default, pickup tint, or upgrade category colour.
-  const accent = color || pickup?.tint || '#6dd9ed';
-  // Pickups keep their glyph; drones-left / upgrades are text-only.
-  const icon = pickup ? (pickup.icon || (pickup.id === 'med' ? '+' : '')) : '';
-  const el = hud.toast;
-  const token = (presentToast._token = (presentToast._token || 0) + 1);
-  // Reset to the off-screen start state before content swaps (iOS skips transitions
-  // when .shown is applied in the same turn as a text mutate).
-  el.classList.remove('shown', 'hiding');
-  el.style.setProperty('--toast-accent', accent);
-  el.classList.toggle('bots', bots);
-  el.classList.toggle('upgrade', upgrade);
-  hud.toastIcon.textContent = icon;
-  if (upgrade) {
-    // Category eyebrow on top; name + rank · card desc underneath.
-    hud.toastTitle.textContent = next.catLabel || '';
-    hud.toastDetail.textContent = text || '';
-  } else {
-    hud.toastTitle.textContent = text;
-    hud.toastDetail.textContent = firstPickup ? (pickup.detail || '') : '';
-  }
-  toastPhase = 'in';
-  toastTime = TOAST_IN;
-  activePickupHint = firstPickup ? pickup.id : null;
-  toastIsBotsLeft = bots;
-  // Hold length decided when the enter finishes (queue may grow during the slide-in).
-  presentToast._first = firstPickup;
-  presentToast._hold = next.hold;
-  // Double rAF so Safari paints the off-screen frame, then runs the slide-in keyframes.
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      if (presentToast._token !== token || toastPhase !== 'in') return;
-      el.classList.add('shown');
-    });
-  });
-}
-
-function updateToast(dt) {
-  if (toastPhase === 'idle' && toastTime <= 0) {
-    // Teach new pickups before routine / drones-left notices, in collection order.
-    const lessonIndex = toastQueue.findIndex(notice => notice.pickup && !seenDrops.has(notice.pickup.id));
-    const next = toastQueue.splice(lessonIndex < 0 ? 0 : lessonIndex, 1)[0];
-    if (!next) return;
-    if (next.botsLeft && bossOnField()) return; // drop — boss fight owns the moment
-    presentToast(next);
-    return;
-  }
-
-  toastTime = Math.max(0, toastTime - dt);
-  if (toastTime > 0) return;
-
-  if (toastPhase === 'in') {
-    const backlog = toastQueue.length >= 1;
-    const first = !!presentToast._first;
-    toastPhase = 'hold';
-    toastTime = first
-      ? TOAST_LESSON_HOLD
-      : (presentToast._hold != null ? presentToast._hold : (backlog ? TOAST_RUSH_HOLD : TOAST_HOLD));
-    return;
-  }
-  if (toastPhase === 'hold') {
-    // Remember a lesson only after the player has had its full reading time.
-    if (activePickupHint) {
-      seenDrops.add(activePickupHint);
-      activePickupHint = null;
-    }
-    hud.toast.classList.remove('shown');
-    hud.toast.classList.add('hiding');
-    toastPhase = 'out';
-    toastTime = TOAST_OUT;
-    toastIsBotsLeft = false;
-    return;
-  }
-  if (toastPhase === 'out') {
-    hud.toast.classList.remove('hiding');
-    toastPhase = 'idle';
-    toastTime = TOAST_GAP;
-    presentToast._first = false;
-    presentToast._hold = null;
-  }
-}
-
-function showBanner(text, sub, dur = 1.6, kind = 'wave') {
+function showBanner(text, sub, dur = 1.6, kind = 'wave', subColor = null) {
   hud.banner.classList.toggle('boss', kind === 'boss');
   hud.bannerText.textContent = text;
   hud.bannerSub.textContent = sub || '';
+  if (subColor) hud.bannerSub.style.color = subColor;
+  else hud.bannerSub.style.removeProperty('color');
   hud.banner.style.opacity = 1;
   clearTimeout(showBanner._t);
-  showBanner._t = setTimeout(() => { hud.banner.style.opacity = 0; }, dur * 1000);
+  showBanner._t = setTimeout(() => {
+    hud.banner.style.opacity = 0;
+    hud.bannerSub.style.removeProperty('color');
+  }, dur * 1000);
 }
 
 // ===================================================================
@@ -3239,7 +3203,7 @@ function spawnWaveBoss() {
     type = { name: Math.floor(state.wave / 5) % 2 ? 'REACTOR WARDEN' : 'NULL OVERSEER', kit: 4, health: hp * 1.2, speed: 0.72, size: 1.55, style: 'heavy', boss: true, milestone: true, loco: 'stomp' };
   }
   spawnDrone(undefined, type);
-  clearBotsLeftToasts();
+  hideWaveLeft();
   showBanner(type.name, '', 2.5, 'boss');
 }
 
@@ -4208,7 +4172,7 @@ function bankRemainingLoot() {
 }
 
 function finishWaveClear() {
-  clearBotsLeftToasts();
+  hideWaveLeft();
   clearEnemyBolts();
   awardWaveBonuses();
   bankRemainingLoot();
@@ -4449,7 +4413,7 @@ function killDrone(z, idx, allowShieldDrop = true) {
 // DROPS — supplies drones sometimes leave behind
 // ===================================================================
 const DROP_TYPES = [
-  // Floor label omits a med icon (name already has +); toast injects '+' in the pill badge.
+  // Floor label omits a med icon (name already has +).
   { id: 'med',  name: '+1 SHIELD',     detail: 'Restores one shield', icon: '', color: 0xff78b5, weight: 0 },
   { id: 'dmg',  name: 'OVERCHARGE',    detail: 'Double damage for 10 seconds', icon: '↑', color: 0xffa64c, weight: 25 },
   { id: 'ammo', name: 'INFINITE CELL', detail: 'Unlimited ammo for 8 seconds', icon: '∞', color: 0x76bcf0, weight: 25 },
@@ -4616,11 +4580,15 @@ function collect(type, opts = {}) {
   const silent = !!opts.silent;
   if (!silent) {
     audio.pickup(type.id);
-    toastQueue.push({ text: type.name, color: type.tint, pickup: type });
-    if (!seenDrops.has(type.id)) yieldToastForLesson();
+    const first = !seenDrops.has(type.id);
+    spawnFloatWord(type.name, type.tint || '#e8f4ff', {
+      detail: first ? (type.detail || '') : '',
+      lesson: first,
+      lessonId: first ? type.id : null,
+    });
   }
   if (type.id === 'med') {
-    // Toast / pip / heal only when the player actually picks it up (not silent banking).
+    // Pip / heal only when the player actually picks it up (not silent banking).
     restoreShieldSegment({ sfx: !silent });
   }
   else if (type.id === 'dmg') state.pDamage += 10;
@@ -5361,7 +5329,6 @@ function openPicker() {
     return;
   }
   state.choosing = true;
-  dismissToastVisual();
   hud.cards.dataset.input = lastPlayInput === 'gamepad' ? 'gamepad' : 'pointer';
   padPickerSel = 0;
   resetGameplayInput();
@@ -5422,26 +5389,26 @@ function choose(i) {
   state.choosing = false;
   resetGameplayInput();
   focusGame();
-  // brief beat so the pick registers visually before the picker closes
+  // Brief flash + lift before the picker closes (~250ms).
   [...hud.cards.children].forEach((c, k) => c.classList.add(k === i ? 'picked' : 'dropped'));
   clearTimeout(choose._t);
   const startBay = state.wave === 10 && !state.bayActive;
+  const rank = state.upgrades[u.id] || 1;
+  const { line } = upgradeToastCopy(u, rank);
+  const tip = { text: line, color: UPGRADE_CATS[u.cat] || '#7ec8e8' };
   choose._t = setTimeout(() => {
     hidePicker();
-    if (startBay) vacuumWaveClearShieldThen(beginBayTransition);
-  }, 320);
+    if (startBay) {
+      // No WAVE banner follows — float the pick above the operator.
+      spawnFloatWord(tip.text, tip.color);
+      vacuumWaveClearShieldThen(beginBayTransition);
+    }
+  }, 250);
   // Wave 10 → Defence Bay walk instead of wave 11.
-  if (!startBay) queueWave(2.0);
-  // Top-row toast after the picker closes (updateToast only runs once it's hidden).
-  const rank = state.upgrades[u.id] || 1;
-  const { catLabel, line } = upgradeToastCopy(u, rank);
-  toastQueue.push({
-    text: line,
-    catLabel,
-    color: UPGRADE_CATS[u.cat] || undefined,
-    hold: TOAST_UPGRADE_HOLD,
-    upgrade: true,
-  });
+  if (!startBay) {
+    pendingUpgradeBanner = tip;
+    queueWave(2.0);
+  }
   audio.upgrade(u.cat);
 }
 
@@ -6233,7 +6200,7 @@ function beginBossDeath(z) {
   if (ud.chargeRing) ud.chargeRing.visible = false;
   if (ud.climb >= 0) endClimb(z, true);
   clearEnemyBolts();
-  clearBotsLeftToasts();
+  hideWaveLeft();
   bossDeath.active = true;
   bossDeath.t = 0;
   bossDeath.boss = z;
@@ -6398,6 +6365,7 @@ function startWave(n) {
   state.shotsFired = 0;
   state.shotsHit = 0;
   botMilestonesDone.clear();
+  hideWaveLeft();
   // Drones toughen steadily but slower than upgrades let the player scale, so
   // runs can go long; speed caps below the player's so kiting always works.
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
@@ -6426,11 +6394,16 @@ function startWave(n) {
     12: 'Hold the bay · Heavier mix',
     13: 'South door opens · Mortars return',
   };
-  showBanner(
-    'WAVE ' + n,
-    n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected',
-    NOTICE_READ_HOLD,
-  );
+  const omen = n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected';
+  // After an upgrade pick, show the card name/rank in category colour on this banner.
+  let sub = omen;
+  let subColor = null;
+  if (pendingUpgradeBanner) {
+    sub = pendingUpgradeBanner.text;
+    subColor = pendingUpgradeBanner.color;
+    pendingUpgradeBanner = null;
+  }
+  showBanner('WAVE ' + n, sub, NOTICE_READ_HOLD, 'wave', subColor);
 }
 
 // ===================================================================
@@ -6472,18 +6445,9 @@ function clearRun() {
   bullets.length = 0; drones.length = 0; drops.length = 0; debris.length = 0; droneBlasts.length = 0;
   shockwaves.length = 0;
   clearBossDeath();
-  toastQueue.length = 0;
-  toastTime = 0;
-  toastPhase = 'idle';
-  activePickupHint = null;
-  presentToast._first = false;
-  presentToast._hold = null;
-  hud.toastIcon.textContent = '';
-  hud.toastTitle.textContent = '';
-  hud.toastDetail.textContent = '';
-  hud.toast.classList.remove('shown', 'hiding', 'bots', 'upgrade');
-  hud.toast.style.removeProperty('--toast-accent');
-  toastIsBotsLeft = false;
+  clearFloatWords();
+  pendingUpgradeBanner = null;
+  hideWaveLeft();
   hidePicker();
 }
 
@@ -7936,7 +7900,7 @@ function update(dt, lightFrame = false) {
 
   updateCamera(dt);
 
-  if (state.running && !state.choosing && hud.picker.classList.contains('hidden')) updateToast(dt);
+  updateFloatWords(dt);
   updateHUD();
   updatePuBars();
 }

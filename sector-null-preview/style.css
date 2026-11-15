@@ -135,157 +135,29 @@ body {
   flex-direction: row;
   align-items: center;
 }
-/* Pickup / drones-left / upgrade notice — same panel language as WAVE and SCORE */
-#toast {
-  --toast-accent: #6dd9ed;
-  /* Fully above the viewport (topbar already sits under safe-area + gutter).
-     -120% alone was only ~one toast height and got clipped by body overflow. */
-  --toast-off: calc(-100% - var(--safe-top) - var(--hud-gutter) - 28px);
-  position: absolute;
-  left: 50%;
-  top: 0;
-  z-index: 1;
-  box-sizing: border-box;
-  display: flex;
-  /* Optical centre for uppercase (no descenders): slight extra top padding */
-  align-items: center;
-  gap: 0.42em;
-  min-width: 0;
-  min-height: 34px;
-  width: max-content;
-  /* Use more of the gap between WAVE and SCORE; stay clear of both panels */
-  max-width: min(340px, calc(100% - 2 * var(--hud-panel-w) - 24px));
-  padding: 9px clamp(9px, 1.3vw, 16px) 7px;
-  /* Top border tracks content accent (HUD blue / pickup / category) */
-  border-top: 1px solid color-mix(in srgb, var(--toast-accent) 60%, transparent);
-  background: linear-gradient(#0a1b26f2, #081623c9);
-  box-shadow: 0 -4px 14px color-mix(in srgb, var(--toast-accent) 22%, transparent);
-  transform: translate(-50%, var(--toast-off));
-  opacity: 0;
-  pointer-events: none;
-  /* Children ellipsize themselves; don't clip the slide against the panel box */
-  overflow: visible;
-  transition: none;
-}
-@keyframes toast-slide-in {
-  from {
-    transform: translate(-50%, var(--toast-off));
-    opacity: 0;
-  }
-  82% {
-    transform: translate(-50%, 3px);
-    opacity: 1;
-  }
-  to {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-}
-@keyframes toast-slide-out {
-  from {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-  to {
-    transform: translate(-50%, var(--toast-off));
-    opacity: 0;
-  }
-}
-#toast.shown {
-  animation: toast-slide-in 0.35s cubic-bezier(0.2, 0.9, 0.25, 1) forwards;
-}
-#toast.hiding {
-  animation: toast-slide-out 0.25s ease-in forwards;
-}
-#toastIcon {
-  flex: 0 0 auto;
-  display: none;
-  font-size: 1.05em;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1;
-  color: var(--toast-accent);
-}
-#toastIcon:not(:empty) {
-  display: inline-block;
-}
-.toast-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2px;
-  min-width: 0;
-}
-#toastTitle {
-  font-size: clamp(13px, 1.6vw, 16px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #e2f8ff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-#toastDetail {
-  display: none;
-  font-size: clamp(11px, 1.35vw, 13px);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: 0.04em;
-  color: #bdd1dc;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-#toastDetail:not(:empty) {
-  display: block;
-}
-/* Drones-left: text only, centred, cyan accent */
-#toast.bots {
-  justify-content: center;
-  text-align: center;
-}
-#toast.bots .toast-copy {
-  align-items: center;
-}
-#toast.bots #toastTitle {
-  color: #e2f8ff;
-}
-/* Upgrade pick: category eyebrow + name/rank · card desc */
-#toast.upgrade {
-  align-items: center;
-}
-#toast.upgrade #toastTitle {
+/* Drones-left counter inside the WAVE panel */
+.wave-left {
+  margin-top: 2px;
   font-size: 10px;
-  letter-spacing: 0.16em;
-  line-height: 1.1;
-  color: var(--toast-accent);
-}
-#toast.upgrade #toastDetail {
-  display: block;
-  font-size: clamp(12px, 1.5vw, 15px);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.14em;
   line-height: 1.1;
   text-transform: uppercase;
-  color: #e2f8ff;
+  color: #6dd9ed;
+  opacity: 0.85;
+}
+.wave-left.pulse {
+  animation: wave-left-pulse 0.7s ease-out;
+}
+@keyframes wave-left-pulse {
+  0% { opacity: 1; filter: brightness(1.55); transform: scale(1.08); }
+  100% { opacity: 0.85; filter: brightness(1); transform: scale(1); }
 }
 @media (prefers-reduced-motion: reduce) {
-  #toast.shown,
-  #toast.hiding {
-    animation: none !important;
-    transform: translate(-50%, 0) !important;
-    transition: opacity 0.18s ease !important;
-  }
-  #toast.shown {
-    opacity: 1 !important;
-  }
-  #toast.hiding {
-    opacity: 0 !important;
+  .wave-left.pulse {
+    animation: none;
+    opacity: 1;
+    filter: brightness(1.35);
   }
 }
 #touchPause {
@@ -541,6 +413,58 @@ body {
   line-height: 1.45;
 }
 
+/* World-anchored float-up words (pickups / upgrade fallback) */
+#floatWords {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 3;
+}
+.float-word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: min(220px, 70vw);
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-shadow:
+    0 0 10px color-mix(in srgb, var(--fw-glow, #e8f4ff) 55%, transparent),
+    0 1px 3px #000c,
+    0 0 2px #000;
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+.float-word.shown {
+  display: flex;
+}
+.float-word .fw-title {
+  font-size: clamp(13px, 2.4vw, 17px);
+  white-space: nowrap;
+}
+.float-word .fw-detail {
+  font-size: clamp(10px, 1.8vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #d5e4ee;
+  opacity: 0.92;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.float-word .fw-detail[hidden] {
+  display: none !important;
+}
+
 /* Screen-space OVERCHARGE / INFINITE CELL bars under the operator */
 #puBars {
   position: absolute;
@@ -705,13 +629,33 @@ body {
   box-shadow: 0 0 12px var(--accent);
 }
 .card.picked {
-  transform: translateY(-14px) scale(1.06);
   border-color: var(--accent);
-  box-shadow: 0 0 40px var(--accent);
+  animation: card-pick-flash 0.25s ease-out forwards;
 }
 .card.dropped {
   opacity: 0;
   transform: translateY(16px) scale(0.95);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+@keyframes card-pick-flash {
+  0% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+    box-shadow: 0 0 0 transparent;
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(-16px) scale(1.07);
+    filter: brightness(1.4);
+    box-shadow: 0 0 44px var(--accent);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-28px) scale(1.1);
+    filter: brightness(1.25);
+    box-shadow: 0 0 36px var(--accent);
+    opacity: 0.82;
+  }
 }
 @keyframes dealIn {
   from {
@@ -1406,7 +1350,7 @@ body.paused #flash {
     height: 4px;
   }
   .card.picked {
-    transform: translateY(-5px) scale(1.03);
+    animation: card-pick-flash 0.22s ease-out forwards;
   }
 
   #banner {
@@ -1665,27 +1609,15 @@ body.pad-aiming #game {
     --hud-panel-w: 124px;
     --hud-panel-h: 52px;
   }
-  #toast {
-    /* Wider single-line fit between panels on ~390px; slightly tighter type/padding */
-    --toast-off: calc(-100% - var(--safe-top) - var(--hud-phone-margin) - 28px);
-    max-width: min(168px, calc(100% - 2 * var(--hud-panel-w) - 20px));
-    padding: 7px 8px 5px;
-  }
-  #toastTitle {
-    font-size: 11px;
-    letter-spacing: 0.04em;
-  }
-  #toastDetail {
-    font-size: 10px;
-    letter-spacing: 0.03em;
-  }
-  #toast.upgrade #toastTitle {
+  .wave-left {
     font-size: 9px;
     letter-spacing: 0.12em;
   }
-  #toast.upgrade #toastDetail {
+  .float-word .fw-title {
+    font-size: 12px;
+  }
+  .float-word .fw-detail {
     font-size: 10px;
-    letter-spacing: 0.04em;
   }
   #ammoWrap {
     right: calc(var(--safe-right) + var(--hud-phone-margin));
@@ -1729,11 +1661,6 @@ body.pad-aiming #game {
   #topbar {
     --hud-panel-w: 118px;
     --hud-panel-h: 46px;
-  }
-  #toast {
-    max-width: min(200px, calc(100% - 2 * var(--hud-panel-w) - 16px));
-    min-height: 26px;
-    padding: 6px 8px 4px;
   }
   #topbar > .run-stats,
   #topbar > .enemy-stats {
