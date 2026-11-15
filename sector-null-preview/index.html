@@ -86,8 +86,19 @@
 
   <!-- Screen-space power-up timers under the operator (projected each frame). -->
   <div id="puBars" hidden aria-hidden="true">
-    <div class="pu-bar pu-dmg" hidden aria-hidden="true"></div>
-    <div class="pu-bar pu-ammo" hidden aria-hidden="true"></div>
+    <div class="pu-bar pu-dmg" hidden>
+      <svg class="pu-icon" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M7.1.6 3 6.3h2.55L4.35 11.4 9.1 5.5H6.45z"/>
+      </svg>
+      <div class="pu-track"><div class="pu-fill"></div></div>
+    </div>
+    <div class="pu-bar pu-ammo" hidden>
+      <svg class="pu-icon" viewBox="0 0 16 12" aria-hidden="true" focusable="false">
+        <path fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"
+          d="M8 6c1.15-2.05 2.35-3.05 3.55-3.05S14.9 4.15 14.9 6s-1.2 3.05-3.35 3.05S9.15 8.05 8 6c-1.15 2.05-2.35 3.05-3.55 3.05S1.1 7.85 1.1 6s1.2-3.05 3.35-3.05S6.85 3.95 8 6z"/>
+      </svg>
+      <div class="pu-track"><div class="pu-fill"></div></div>
+    </div>
   </div>
 
   <!-- World-anchored enemy HP bars (pooled; same thin track style as puBars). -->

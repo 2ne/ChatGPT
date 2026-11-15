@@ -2468,78 +2468,43 @@ const hud = {
   puBars: document.getElementById('puBars'),
   puDmg: document.querySelector('#puBars .pu-dmg'),
   puAmmo: document.querySelector('#puBars .pu-ammo'),
+  puDmgFill: document.querySelector('#puBars .pu-dmg .pu-fill'),
+  puAmmoFill: document.querySelector('#puBars .pu-ammo .pu-fill'),
   enemyHpBars: document.getElementById('enemyHpBars'),
 };
 
-/** Screen-space power-up bars under the operator — reused nodes, no per-frame allocs.
- *  Segmented 1/sec (Overcharge 10, Infinite Cell 8); empty right→left. Enemy HP stays solid. */
+/** Screen-space power-up bars under the operator — continuous fill + shimmer.
+ *  Hide at ≤ eps (b302); remaining bar re-centres. Enemy HP stays plain. */
 const _puWorld = new THREE.Vector3();
-const PU_DMG_SEGS = 10;
-const PU_AMMO_SEGS = 8;
 const puBarState = {
   shown: false,
   dmgOn: false,
   ammoOn: false,
-  dmgLit: -1,
-  ammoLit: -1,
+  dmgFill: -1,
+  ammoFill: -1,
   dmgBlink: false,
   ammoBlink: false,
   x: NaN,
   y: NaN,
 };
 
-/** Treat near-zero timers as expired so a lone segment doesn't linger. */
+/** Treat near-zero timers as expired so bars don't leave a blinking sliver. */
 const PU_BAR_EPS = 0.05;
-
-function ensurePuSegments(el, count) {
-  if (!el || el.dataset.segs === String(count)) return;
-  el.dataset.segs = String(count);
-  // Static segment nodes — toggled with .on; no per-frame DOM rebuild.
-  el.textContent = '';
-  for (let i = 0; i < count; i++) {
-    const seg = document.createElement('i');
-    seg.className = 'pu-seg';
-    el.appendChild(seg);
-  }
-}
-
-function puSegLit(t, maxSegs) {
-  // ceil only while time remains; ≤ eps is treated as expired by the caller.
-  if (!(t > 0)) return 0;
-  return Math.min(maxSegs, Math.ceil(t));
-}
-
-function setPuLit(el, lit, prevKey) {
-  if (!el) return prevKey;
-  if (lit === puBarState[prevKey]) return lit;
-  const segs = el.children;
-  for (let i = 0; i < segs.length; i++) {
-    const on = i < lit;
-    if (segs[i].classList.contains('on') !== on) segs[i].classList.toggle('on', on);
-  }
-  puBarState[prevKey] = lit;
-  return lit;
-}
-
-function clearPuSegOn(el) {
-  if (!el) return;
-  const segs = el.children;
-  for (let i = 0; i < segs.length; i++) segs[i].classList.remove('on');
-}
 
 function hidePuBar(kind) {
   const el = kind === 'dmg' ? hud.puDmg : hud.puAmmo;
+  const fill = kind === 'dmg' ? hud.puDmgFill : hud.puAmmoFill;
   if (!el) return;
   el.hidden = true;
   el.classList.remove('blink');
-  clearPuSegOn(el);
+  if (fill) fill.style.transform = 'scaleX(0)';
   if (kind === 'dmg') {
     puBarState.dmgOn = false;
-    puBarState.dmgLit = -1;
+    puBarState.dmgFill = -1;
     puBarState.dmgBlink = false;
   } else {
     puBarState.ammoOn = false;
-    puBarState.ammoLit = -1;
+    puBarState.ammoFill = -1;
     puBarState.ammoBlink = false;
   }
 }
@@ -2563,6 +2528,7 @@ function hidePuBarsRoot() {
 function updatePuBars() {
   const root = hud.puBars;
   if (!root) return;
+  // Expire slightly early so scaleX never sticks on a sub-pixel blink sliver.
   const dmgT = state.pDamage > PU_BAR_EPS ? state.pDamage : 0;
   const ammoT = state.pAmmo > PU_BAR_EPS ? state.pAmmo : 0;
   const dmgOn = dmgT > 0;
@@ -2606,23 +2572,22 @@ function updatePuBars() {
   if (!dmgOn) {
     if (puBarState.dmgOn) hidePuBar('dmg');
   } else if (!puBarState.dmgOn) {
-    ensurePuSegments(hud.puDmg, PU_DMG_SEGS);
     hud.puDmg.hidden = false;
     puBarState.dmgOn = true;
-    puBarState.dmgLit = -1;
   }
   if (!ammoOn) {
     if (puBarState.ammoOn) hidePuBar('ammo');
   } else if (!puBarState.ammoOn) {
-    ensurePuSegments(hud.puAmmo, PU_AMMO_SEGS);
     hud.puAmmo.hidden = false;
     puBarState.ammoOn = true;
-    puBarState.ammoLit = -1;
   }
 
   if (dmgOn) {
-    // One segment per second; empty from the right as time runs out.
-    setPuLit(hud.puDmg, puSegLit(dmgT, PU_DMG_SEGS), 'dmgLit');
+    const fill = Math.min(1, dmgT / 10);
+    if (fill !== puBarState.dmgFill) {
+      hud.puDmgFill.style.transform = `scaleX(${fill})`;
+      puBarState.dmgFill = fill;
+    }
     const blink = dmgT <= 2;
     if (blink !== puBarState.dmgBlink) {
       hud.puDmg.classList.toggle('blink', blink);
@@ -2630,7 +2595,11 @@ function updatePuBars() {
     }
   }
   if (ammoOn) {
-    setPuLit(hud.puAmmo, puSegLit(ammoT, PU_AMMO_SEGS), 'ammoLit');
+    const fill = Math.min(1, ammoT / 8);
+    if (fill !== puBarState.ammoFill) {
+      hud.puAmmoFill.style.transform = `scaleX(${fill})`;
+      puBarState.ammoFill = fill;
+    }
     const blink = ammoT <= 2;
     if (blink !== puBarState.ammoBlink) {
       hud.puAmmo.classList.toggle('blink', blink);
