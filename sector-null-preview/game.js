@@ -2709,20 +2709,19 @@ function rankRoman(n) {
   return RANK_ROMAN[n] || String(n);
 }
 
-/** Same name/desc the picker card showed for this pick (owned = rank before taking it). */
+/** Category + card name (with rank); no description line. */
 function upgradeToastCopy(u, newRank) {
   const ownedBefore = Math.max(0, (newRank | 0) - 1);
   let name = u.name;
-  let desc = u.desc;
+  // Match picker rename on follow-up bot/gun/bomb picks.
   if (ownedBefore > 0) {
-    if (u.id === 'bot') { name = 'UPGRADE BOT'; desc = 'Stronger companion shots'; }
-    else if (u.id === 'botGun') { name = 'UPGRADE GUNS'; desc = 'Faster twin fire'; }
-    else if (u.id === 'botBomb') { name = 'UPGRADE BOMBS'; desc = 'Bigger blast radius'; }
+    if (u.id === 'bot') name = 'UPGRADE BOT';
+    else if (u.id === 'botGun') name = 'UPGRADE GUNS';
+    else if (u.id === 'botBomb') name = 'UPGRADE BOMBS';
   }
-  const label = u.max <= 1 ? name : `${name} ${rankRoman(newRank)}`;
   return {
     catLabel: String(u.cat || '').toUpperCase(),
-    line: `${label} · ${desc}`,
+    line: u.max <= 1 ? name : `${name} ${rankRoman(newRank)}`,
   };
 }
 // No "1 DRONE LEFT" — that fires as the boss dies / wave clears and fights the picker.
