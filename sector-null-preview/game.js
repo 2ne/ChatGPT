@@ -6588,7 +6588,7 @@ function startWave(n) {
   armPersistFloorExpiry();
   pressure.target = Math.min(1, Math.max(0, (n - 2) / 10));
   const omens = {
-    1: 'Grey patrols · Defeat the red boss last',
+    1: 'SECURITY BREACH · DEFEND THE REACTOR',
     2: 'Cyan flankers · Fast, lightly armoured',
     3: 'Purple gunners · Dodge charged shots',
     4: 'Gold bulwarks · Slow, armoured, heavy strikes',
