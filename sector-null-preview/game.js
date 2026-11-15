@@ -2470,7 +2470,115 @@ const hud = {
   banner: document.getElementById('banner'),
   bannerText: document.getElementById('bannerText'),
   bannerSub: document.getElementById('bannerSub'),
+  puBars: document.getElementById('puBars'),
+  puDmg: document.querySelector('#puBars .pu-dmg'),
+  puAmmo: document.querySelector('#puBars .pu-ammo'),
+  puDmgFill: document.querySelector('#puBars .pu-dmg .pu-fill'),
+  puAmmoFill: document.querySelector('#puBars .pu-ammo .pu-fill'),
 };
+
+/** Screen-space power-up bars under the operator — reused nodes, no per-frame allocs. */
+const _puWorld = new THREE.Vector3();
+const puBarState = {
+  shown: false,
+  dmgOn: false,
+  ammoOn: false,
+  dmgFill: -1,
+  ammoFill: -1,
+  dmgBlink: false,
+  ammoBlink: false,
+  x: NaN,
+  y: NaN,
+};
+
+function updatePuBars() {
+  const root = hud.puBars;
+  if (!root) return;
+  const dmgT = state.pDamage;
+  const ammoT = state.pAmmo;
+  const show = state.running
+    && !state.choosing
+    && !state.paused
+    && !title.active
+    && (dmgT > 0 || ammoT > 0);
+  if (!show) {
+    if (puBarState.shown) {
+      root.hidden = true;
+      root.setAttribute('aria-hidden', 'true');
+      puBarState.shown = false;
+      puBarState.x = NaN;
+      puBarState.y = NaN;
+    }
+    return;
+  }
+  if (!puBarState.shown) {
+    root.hidden = false;
+    root.setAttribute('aria-hidden', 'false');
+    puBarState.shown = true;
+  }
+
+  // Project feet; constant CSS size so zoom doesn't grow/shrink the bars.
+  _puWorld.set(player.position.x, 0.02, player.position.z);
+  _puWorld.project(camera);
+  if (_puWorld.z > 1) {
+    if (puBarState.shown) {
+      root.hidden = true;
+      root.setAttribute('aria-hidden', 'true');
+      puBarState.shown = false;
+    }
+    return;
+  }
+  const vv = window.visualViewport;
+  const vw = vv?.width || layoutSize().w;
+  const vh = vv?.height || layoutSize().h;
+  const ox = vv?.offsetLeft || 0;
+  const oy = vv?.offsetTop || 0;
+  const x = (_puWorld.x * 0.5 + 0.5) * vw + ox;
+  const y = (-_puWorld.y * 0.5 + 0.5) * vh + oy + 16;
+  if (x !== puBarState.x || y !== puBarState.y) {
+    root.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,0)`;
+    puBarState.x = x;
+    puBarState.y = y;
+  }
+
+  const dmgOn = dmgT > 0;
+  const ammoOn = ammoT > 0;
+  if (dmgOn !== puBarState.dmgOn) {
+    hud.puDmg.hidden = !dmgOn;
+    puBarState.dmgOn = dmgOn;
+    if (!dmgOn) puBarState.dmgFill = -1;
+  }
+  if (ammoOn !== puBarState.ammoOn) {
+    hud.puAmmo.hidden = !ammoOn;
+    puBarState.ammoOn = ammoOn;
+    if (!ammoOn) puBarState.ammoFill = -1;
+  }
+
+  if (dmgOn) {
+    const fill = Math.min(1, dmgT / 10);
+    if (fill !== puBarState.dmgFill) {
+      hud.puDmgFill.style.transform = `scaleX(${fill})`;
+      puBarState.dmgFill = fill;
+    }
+    const blink = dmgT <= 2;
+    if (blink !== puBarState.dmgBlink) {
+      hud.puDmg.classList.toggle('blink', blink);
+      puBarState.dmgBlink = blink;
+    }
+  }
+  if (ammoOn) {
+    const fill = Math.min(1, ammoT / 8);
+    if (fill !== puBarState.ammoFill) {
+      hud.puAmmoFill.style.transform = `scaleX(${fill})`;
+      puBarState.ammoFill = fill;
+    }
+    const blink = ammoT <= 2;
+    if (blink !== puBarState.ammoBlink) {
+      hud.puAmmo.classList.toggle('blink', blink);
+      puBarState.ammoBlink = blink;
+    }
+  }
+}
 
 const formatScore = n => Math.max(0, Math.round(n)).toLocaleString('en-US');
 function readHighScore() {
@@ -2530,11 +2638,8 @@ function updateHUD() {
       }
     });
   }
-  // power-up time left as a clock: 0:10 … 0:01 (what they do was taught on first pickup)
-  const clock = t => { const s = Math.ceil(t); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+  // Timed power-ups use the under-operator bars; left HUD keeps the shield-restore flash only.
   let pu = '';
-  if (state.pDamage > 0) pu += `<div style="color:#ffa64c">OVERCHARGE ${clock(state.pDamage)}${state.pDamage > 10 ? ' · EXTENDED' : ''}</div>`;
-  if (state.pAmmo > 0) pu += `<div style="color:#76bcf0">INFINITE CELL ${clock(state.pAmmo)}${state.pAmmo > 8 ? ' · EXTENDED' : ''}</div>`;
   if (healGlow > 0) pu += '<div style="color:#ff78b5">+1 SHIELD RESTORED</div>';
   hud.powerups.innerHTML = pu;
   const infinite = state.pAmmo > 0;
@@ -6318,6 +6423,7 @@ function setPaused(on) {
   document.getElementById('pauseStat').textContent =
     `WAVE ${state.wave}  ·  ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
+  updatePuBars();
   if (on) {
     menu.drawSettings();
     if (finePointerUi() || gamepadLive) {
@@ -6629,6 +6735,7 @@ function die() {
   }
   audio.death();
   updateHUD();
+  updatePuBars();
 }
 
 // ===================================================================
@@ -7698,6 +7805,7 @@ function update(dt, lightFrame = false) {
 
   if (state.running && !state.choosing && hud.picker.classList.contains('hidden')) updateToast(dt);
   updateHUD();
+  updatePuBars();
 }
 
 // ===================================================================

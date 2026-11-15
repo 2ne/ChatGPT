@@ -395,7 +395,7 @@ body {
     0 0 3px #000;
 }
 
-/* active power-up timers */
+/* active power-up timers (left HUD: shield-restore flash only) */
 #powerups:empty {
   margin-top: 0;
 }
@@ -404,6 +404,57 @@ body {
   font-size: 14px;
   letter-spacing: 2px;
   line-height: 1.45;
+}
+
+/* Screen-space OVERCHARGE / INFINITE CELL bars under the operator */
+#puBars {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 2;
+}
+.pu-bar {
+  height: 4px;
+  border-radius: 1px;
+  overflow: hidden;
+  /* Slightly darker translucent track so fills read on light floor tiles */
+  background: rgba(6, 10, 16, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+.pu-fill {
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+.pu-dmg .pu-fill {
+  background: #ffa64c;
+}
+.pu-ammo .pu-fill {
+  background: #76bcf0;
+}
+.pu-bar.blink {
+  animation: puBarBlink 0.32s steps(2, end) infinite;
+}
+@keyframes puBarBlink {
+  50% { opacity: 0.18; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pu-bar.blink {
+    animation: puBarPulse 1.1s ease-in-out infinite;
+  }
+  @keyframes puBarPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
 }
 
 /* between-wave upgrade picker */
