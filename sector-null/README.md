@@ -4,6 +4,16 @@
 
 ## Live release — 16 November 2026
 
+The start screen and main menu share one persistent animated reactor deck. Press
+Start takes a 2.2-second eased camera arc through the scene, with staggered menu
+arrival. Patrols remain visible in both views and use the exact gameplay drone
+geometries/palettes, with articulated walking, scanning heads and a heavier
+Bulwark gait. The helper uses its shared gameplay mesh. Gantry lights, runway
+strips, rising reactor particles, rotating rings and drifting mist add depth to
+the wet deck. Portrait framing adapts to phone screens; reduced motion skips
+the camera travel and freezes ambient animation. Presentation rigs are isolated
+from combat state and reuse the gameplay geometry without changing enemy balance.
+
 Promoted the current Room 2 preview into the public game, including the Defence
 Bay after wave 10, Tesla Coil upgrades, revised enemy balance, white/orange
 operator and rifle, updated upgrade cards, and overhead shield feedback.

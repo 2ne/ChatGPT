@@ -3543,6 +3543,7 @@ function bakeDrone({ plate, joint, trim, optic }, seed) {
   };
 }
 const DRONE_KITS = DRONE_PALETTES.map((palette, i) => bakeDrone(palette, 7 + i * 31));
+titleScene.setDroneKits(DRONE_KITS);
 // Low white hull, dark continuous tracks and a separate armoured turret.
 const tankHullGeo = bakeBlocks([
   [0.9, 0.3, 1.05, 0, 0.38, 0, 0xf2f5f7],
