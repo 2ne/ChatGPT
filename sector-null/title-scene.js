@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Reflector } from 'three/addons/objects/Reflector.js';
-import { createHelperBotMesh } from './helper-bot-mesh.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const NOISE = /* glsl */ `
   float hash(vec2 p) {
@@ -171,6 +171,7 @@ export function createTitleScene() {
   const brightPink = neon(0xffa6d3);
   const brightAmber = neon(0xffdf9c);
   const cube = new THREE.BoxGeometry(1, 1, 1);
+  const armour = new RoundedBoxGeometry(1, 1, 1, 2, .045);
   const batches = new Map();
   const transform = new THREE.Object3D();
 
@@ -389,73 +390,44 @@ export function createTitleScene() {
     depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false,
   })));
 
-  // Render the actual gameplay meshes, with a lightweight articulated presentation rig.
-  const patrol = [];
-  const droneMaterial = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .48, metalness: .32 });
-  function addPatrol(kit, x, z, scale, phase, heavy = false) {
+  function drone(x, z, size, heading) {
     const robot = new THREE.Group();
-    robot.scale.setScalar(scale * 1.08);
+    robot.position.set(x, 0, z);
+    robot.scale.setScalar(size);
+    robot.rotation.y = heading;
     scene.add(robot);
-    const hips = mesh(robot, kit.pelvis, droneMaterial, 0, .9);
-    const upper = new THREE.Group();
-    upper.position.y = .9;
-    upper.scale.setScalar(1.1);
-    robot.add(upper);
-    mesh(upper, kit.torso, droneMaterial);
+    block(robot, black, 0, 1.28, 0, .76, .28, .59);
+    block(robot, steel, 0, 1.87, 0, .95, .92, .63, armour);
+    block(robot, trim, 0, 1.97, -.36, .72, .73, .19, armour);
+    block(robot, dark, 0, 2.41, 0, .37, .28, .41);
     const head = new THREE.Group();
-    head.position.set(0, .68, .06);
-    upper.add(head);
-    mesh(head, kit.head, droneMaterial);
-    mesh(head, kit.eyes, kit.optic);
-    mesh(head, kit.jaw, droneMaterial, 0, 0, -.06);
-    const limbs = [-1, 1].map(side => {
-      const leg = new THREE.Group();
-      leg.position.set(side * .14, .9, 0);
-      robot.add(leg);
-      mesh(leg, kit.thigh, droneMaterial, 0, -.21);
-      const knee = new THREE.Group();
-      knee.position.y = -.42;
-      leg.add(knee);
-      mesh(knee, kit.shin, droneMaterial, 0, -.2);
-      const foot = mesh(knee, kit.feet[side > 0 ? 0 : 1], droneMaterial, 0, -.37);
+    head.position.set(0, 2.83, 0);
+    robot.add(head);
+    block(head, steel, 0, 0, 0, .88, .73, .75, armour);
+    block(head, trim, 0, .35, -.04, .75, .08, .59);
+    block(head, black, 0, -.02, .38, .75, .46, .1);
+    block(head, pink, .04, .02, .444, .6, .146, .054);
+    block(head, brightPink, .04, .034, .474, .51, .059, .013);
+    halo(head, pinkHue, .04, .03, .51, 1.34, .55, .63);
+    for (const side of [-1, 1]) {
+      const x = side * .26;
+      block(robot, steel, x, .88, 0, .36, .57, .4);
+      block(robot, black, x, .58, 0, .29, .19, .35);
+      block(robot, trim, x, .33, .02, .37, .46, .39);
+      block(robot, black, x, .105, .13, .42, .21, .64);
       const arm = new THREE.Group();
-      arm.position.set(side * .4, .58, 0);
-      upper.add(arm);
-      mesh(arm, kit.upperArm, droneMaterial, 0, -.2);
-      const elbow = new THREE.Group();
-      elbow.position.y = -.4;
-      elbow.rotation.x = -.28;
-      arm.add(elbow);
-      mesh(elbow, kit.forearm, droneMaterial, 0, -.195);
-      return { leg, knee, foot, arm, side };
-    });
-    const shadow = mesh(scene, new THREE.PlaneGeometry(scale * 2.4, scale * 1.7),
-      new THREE.MeshBasicMaterial({ map: haloTexture, color: 0x000000, transparent: true, opacity: .65, depthWrite: false }));
-    shadow.rotation.x = -Math.PI / 2;
-    patrol.push({ robot, hips, upper, head, limbs, shadow, x, z, phase, heavy });
-  }
-  const helper = createHelperBotMesh('base', { detail: 'game' });
-  helper.scale.setScalar(.85);
-  scene.add(helper);
-
-  // Gantry and runway lighting create foreground parallax during the camera swing.
-  for (const x of [-18, 19]) {
-    box(steel, x, 7, -9, .65, 14, .8);
-    box(trim, x, 6, -8.5, .22, 10, .15);
-    box(amber, x, 5.6, -8.4, .07, 7.8, .06);
-  }
-  box(dark, .5, 13.6, -9, 38, 1, 1.3);
-  for (let x = -16; x < 19; x += 3) {
-    box(trim, x, 13, -9, 1.6, .12, 1.1);
-    box(ice, x, 12.88, -8.45, .9, .07, .09);
-  }
-  for (const x of [-7.5, 7.5]) {
-    for (let z = -3; z < 16; z += 2.2) {
-      box(cyan, x, .015, z, .065, .025, 1.3);
-      box(trim, x + Math.sign(x) * .22, .01, z, .12, .02, 1.7);
+      arm.position.set(side * .61, 2.11, 0);
+      arm.rotation.z = side * .12;
+      robot.add(arm);
+      block(arm, steel, 0, -.04, 0, .38, .44, .49, armour);
+      block(arm, black, 0, -.35, 0, .25, .17, .28);
+      block(arm, trim, 0, -.56, .04, .34, .35, .41, armour);
+      block(arm, pink, side * .173, -.62, .045, .026, .06, .33);
+      block(arm, black, 0, -.79, .04, .26, .16, .29);
     }
+    return { robot, head, heading };
   }
-  for (let x = 6; x < 15; x += .6) box(amber, x, .02, -5.4, .3, .025, .9, -.55);
+  const patrol = [drone(-4.42, 5.35, 1.05, 1.01), drone(-4.9, -.2, .82, 1.45)];
 
   const hazeMap = makeHazeTexture();
   const clouds = [];
@@ -491,39 +463,18 @@ export function createTitleScene() {
   scene.add(foregroundLight);
 
   let menuMix = 0;
-  let previousIntro;
-  let sceneTime = 0;
-  const look = new THREE.Vector3();
   return {
-    setDroneKits(kits) {
-      if (patrol.length) return;
-      addPatrol(kits[0], -3.7, 4.7, 1.45, .4);
-      addPatrol(kits[3], 4.7, .3, 1.7, 2.6, true);
-      addPatrol(kits[0], -2, -1.5, 1.1, 4.3);
-    },
     render(renderer, time, dt, intro, aspect, reducedMotion) {
-      const step = Math.min(dt, .05);
-      if (!reducedMotion) sceneTime += step;
-      if (previousIntro === undefined || (intro && !previousIntro)) menuMix = intro ? 0 : 1;
-      previousIntro = intro;
-      menuMix = THREE.MathUtils.clamp(menuMix + (intro ? -1 : 1) * step / 2.2, 0, 1);
+      menuMix = THREE.MathUtils.damp(menuMix, intro ? 0 : 1, 4, dt);
       if (reducedMotion) menuMix = intro ? 0 : 1;
-      const blend = menuMix * menuMix * menuMix * (menuMix * (menuMix * 6 - 15) + 10);
-      const t = sceneTime;
+      const t = reducedMotion ? 0 : time;
       const portrait = aspect < 1.15;
       camera.aspect = aspect;
-      camera.fov = portrait ? 64 : 45;
+      camera.fov = portrait ? 57 : 45;
       camera.updateProjectionMatrix();
-      // A 30-degree dolly arc through one persistent scene.
-      const angle = -.16 + blend * .53;
-      const radius = 24 - blend * 1.8;
-      const focusX = portrait ? 5.8 : 2.5;
-      camera.position.set(focusX + Math.sin(angle) * radius,
-        3.2 + blend * 1.1 + Math.sin(t * .23) * .07,
-        -9 + Math.cos(angle) * radius);
-      look.set(portrait ? 4.8 - blend * 1.5 : 1.3 - blend * 2.5,
-        portrait ? 4.7 : 4.1, -9);
-      camera.lookAt(look);
+      const x = 0.15 - menuMix * 1.4 + Math.sin(t * .25) * .16;
+      camera.position.set(x, 2.56 + menuMix * .35, 14.35 + menuMix * .45);
+      camera.lookAt(portrait ? 7.2 : menuMix * .65, 4.78 - menuMix * .32, -10);
       sky.position.copy(camera.position);
       sky.material.uniforms.time.value = t;
       core.rotation.set(t * .18, t * .31, .12);
@@ -531,43 +482,11 @@ export function createTitleScene() {
       innerOrbit.rotation.copy(orbital.rotation);
       reactorLight.intensity = 187 + Math.sin(t * 2.7) * 13;
       clouds.forEach(({ mist, x }, i) => { mist.position.x = x + Math.sin(t * .19 + i) * 2; });
-      const positions = sparks.attributes.position;
-      for (let i = 0; i < positions.count; i++) {
-        positions.array[i * 3 + 1] = 3.16 + ((i * .137 + t * .48) % 5.5);
-      }
-      positions.needsUpdate = true;
-      innerOrbit.rotation.y += t * .32;
-      core.position.y = 6.06 + Math.sin(t * 1.1) * .22;
-      patrol.forEach(({ robot, hips, upper, head, limbs, shadow, x, z, phase, heavy }) => {
-        const route = t * (heavy ? .14 : .22) + phase;
-        const rx = heavy ? 1.7 : 2.3, rz = heavy ? .7 : 1;
-        robot.position.set(x + Math.sin(route) * rx, 0, z + Math.cos(route) * rz);
-        robot.rotation.y = Math.atan2(Math.cos(route) * rx, -Math.sin(route) * rz);
-        const stride = t * (heavy ? 2.5 : 3.7) + phase;
-        hips.position.y = .9 + Math.cos(stride * 2) * .018;
-        upper.position.y = hips.position.y;
-        upper.rotation.z = Math.sin(stride) * (heavy ? .045 : .025);
-        upper.rotation.y = Math.sin(stride) * .06;
-        head.rotation.y = Math.sin(t * .7 + phase) * .38;
-        head.rotation.x = Math.sin(t * .9 + phase) * .06;
-        limbs.forEach(({ leg, knee, foot, arm, side }) => {
-          const cycle = stride + (side > 0 ? Math.PI : 0);
-          // Solve a two-bone stride: grounded stance, lifted return, level soles.
-          const footZ = Math.cos(cycle) * .25;
-          const footY = .11 + Math.max(0, Math.sin(cycle)) * .15;
-          const down = .9 - footY;
-          const bend = Math.acos(THREE.MathUtils.clamp(
-            (down * down + footZ * footZ - .42 * .42 - .37 * .37) / (2 * .42 * .37), -1, 1));
-          leg.rotation.x = Math.atan2(-footZ, down) - Math.atan2(.37 * Math.sin(bend), .42 + .37 * Math.cos(bend));
-          knee.rotation.x = bend;
-          foot.rotation.x = -leg.rotation.x - knee.rotation.x;
-          arm.rotation.x = -Math.sin(cycle) * .3;
-          arm.rotation.z = -side * .1;
-        });
-        shadow.position.set(robot.position.x, -.025, robot.position.z);
+      patrol.forEach(({ robot, head, heading }, i) => {
+        robot.visible = menuMix < .72;
+        robot.rotation.y = heading + Math.sin(t * .6 + i) * .12;
+        head.rotation.y = Math.sin(t * .9 + i) * .16;
       });
-      helper.position.set(5.4 + Math.sin(t * .55) * 1.3, 3.1 + Math.sin(t * 1.7) * .28, 3 + Math.cos(t * .55) * .8);
-      helper.rotation.set(Math.sin(t * .8) * .09, -.6 + Math.sin(t * .55) * .65, Math.cos(t * .7) * .08);
       renderer.render(scene, camera);
     },
   };
