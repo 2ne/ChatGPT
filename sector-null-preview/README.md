@@ -10,6 +10,14 @@ game unless James asks to release them.
 
 ## Player model
 
+The preview shows shield icons above the operator after shield changes and while
+Shield Regen charges. Filled icons show current shields; empty outlines preserve
+capacity (including Shield Array upgrades). Gains glow, damage cracks the lost
+segments, and other shield costs drain softly. The next empty shield fills from
+the actual 12/8-second damage-free regeneration timer; hits reset that progress.
+The row fades after 2.4 seconds once settled, hides during menus/pause, and respects
+reduced motion. Shield rules and the existing HUD count are unchanged.
+
 The preview operator now wears white ceramic armour over a charcoal undersuit,
 an orange-striped round helmet with a curved teal visor and circular ear housings,
 orange shoulder/knee markings, heavy boots, and a cyan-lit life-support backpack.

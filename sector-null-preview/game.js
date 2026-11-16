@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createShieldDisplay } from './shield-display.js';
 import { bevelBox } from './bevel-box.js';
 import { addRifleShell } from './rifle-mesh.js';
 import { buildIndustrialExterior } from './industrial-exterior.js';
@@ -146,6 +147,7 @@ function createRenderer() {
 const renderer = createRenderer();
 const titleScene = createTitleScene();
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const shieldDisplay = createShieldDisplay();
 const finePointerUi = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.4;
@@ -6710,6 +6712,7 @@ function clearRun() {
 // `keep` carries over what's on the field (coming from the title: the operator stays where
 // they are and the yard's drones join wave 1, which starts once the camera is down)
 function resetGame(keep = false) {
+  shieldDisplay.reset();
   playerDeath.active = false;
   playerDeath.exploded = false;
   resetGameplayInput();
@@ -7624,6 +7627,7 @@ function hurtPlayer(damage = 1) {
   equipment.safe = 0;
   if (state.upgrades.pulse) equipment.pulse = true;
   state.hp = Math.max(0, state.hp - damage);
+  shieldDisplay.sync(state.hp, state.maxHp, 'hit');
   state.dmgCd = HURT_IFRAMES;
   damageFlash();
   audio.hurt();
@@ -8216,6 +8220,9 @@ function loop(now) {
   const dt = Math.min(raw > 0.085 ? 0.033 : 0.05, raw);
   if (gamepadLive) pollGamepad(dt);
   if (!state.paused) update(dt, lightFrame);
+  shieldDisplay.update(dt, state, equipment.safe, player, camera,
+    state.running && !title.active && !state.choosing && !state.paused,
+    state.running && !state.paused && !state.choosing && !state.scripted && state.intermission <= 0);
   hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
