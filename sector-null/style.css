@@ -28,14 +28,20 @@ body {
   touch-action: none;
   overscroll-behavior: none;
 }
+/* Kill iOS Safari text-selection loupe / callout during play. Real text
+   inputs re-enable selection below (#deathName and generic input/textarea). */
 html,
 body,
 #game,
 #hud,
+#hud *,
 #touchControls,
+#touchControls *,
+.stick,
 #menu,
 #picker,
 #death,
+#pause,
 #flash,
 button,
 canvas,
@@ -46,6 +52,14 @@ a {
   user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none;
+}
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 #game {
   display: block;
@@ -77,6 +91,8 @@ body {
   user-select: none;
 }
 #topbar {
+  --hud-panel-w: 156px;
+  --hud-panel-h: 58px;
   position: absolute;
   top: calc(var(--safe-top) + var(--hud-gutter));
   left: calc(var(--safe-left) + var(--hud-edge));
@@ -89,12 +105,35 @@ body {
     0 0 8px #000,
     0 0 2px #000;
 }
-#topbar > div {
-  min-height: 34px;
-  min-width: 116px;
-  padding: 8px clamp(9px, 1.3vw, 16px);
+/* Matched WAVE and SCORE panels — same box on phone and desktop */
+#topbar > .run-stats,
+#topbar > .enemy-stats {
+  box-sizing: border-box;
+  width: var(--hud-panel-w);
+  min-width: var(--hud-panel-w);
+  max-width: var(--hud-panel-w);
+  min-height: var(--hud-panel-h);
+  height: var(--hud-panel-h);
+  padding: 8px 12px;
   border-top: 1px solid #6dd9ed99;
   background: linear-gradient(#0a1b26f2, #081623c9);
+}
+#topbar > .run-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  overflow: visible;
+}
+#topbar > .run-stats .run-copy,
+#topbar > .enemy-stats .score-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+#topbar > .enemy-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 #touchPause {
   display: none;
@@ -111,41 +150,6 @@ body {
 }
 .stat[hidden] {
   display: none;
-}
-#bossPanel {
-  position: absolute;
-  bottom: calc(var(--safe-bottom) + var(--hud-gutter));
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(180px, 40vw);
-  padding: 5px 8px;
-  background: #170e18e8;
-  border: 1px solid #cf5267;
-  color: #ffb2bd;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-#bossPanel[hidden] {
-  display: none;
-}
-#bossHealth {
-  display: block;
-  width: 100%;
-  height: 5px;
-  margin-top: 4px;
-  border: 0;
-  appearance: none;
-  background: #40222b;
-}
-#bossHealth::-webkit-progress-bar {
-  background: #40222b;
-}
-#bossHealth::-webkit-progress-value {
-  background: #ff708c;
-}
-#bossHealth::-moz-progress-bar {
-  background: #ff708c;
 }
 .stat + .stat {
   margin-top: 3px;
@@ -310,78 +314,181 @@ body {
   pointer-events: none;
 }
 
-/* banner */
-#banner {
+/* Shared WAVE notice — WAVE start (#banner.framed) + WAVE CLEARED picker header.
+   Boss / SPAWNER / REACTOR SURGE / DEFENCE BAY stay on the plain pre-b304 look. */
+.wave-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+#banner.wave-notice {
   position: fixed;
   top: 38%;
   left: 0;
   right: 0;
-  text-align: center;
+  z-index: 4;
+  gap: 0;
+  padding: 0;
   opacity: 0;
+  transition: opacity 0.35s ease;
   text-shadow:
     0 0 18px #64dfee66,
     0 0 4px #000;
-  transition: opacity 0.35s;
 }
-#bannerSub {
+/* Plain centre banners (boss names, SPAWNER, DEFENCE BAY, etc.) */
+#banner:not(.framed) .wave-decoration {
+  display: none;
+}
+#banner:not(.framed) .wave-notice-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: clamp(32px, 7vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #64dfee;
+  text-shadow:
+    0 0 18px #64dfee66,
+    0 0 4px #000;
+}
+#banner:not(.framed) .wave-notice-sub {
   display: block;
+  font-family: "Rajdhani", sans-serif;
   font-size: 16px;
   font-weight: 700;
+  line-height: 1.3;
   letter-spacing: 3px;
+  text-transform: uppercase;
   color: #d4e8f0;
   margin-top: 10px;
+  max-width: none;
   text-shadow:
     0 0 10px #000c,
     0 1px 2px #000;
 }
-#bannerSub:empty {
+#banner:not(.framed) .wave-notice-sub:empty {
   display: none;
 }
+#banner.boss .wave-notice-title {
+  color: #ff708c;
+  text-shadow:
+    0 0 18px #ff368c66,
+    0 0 4px #000;
+}
 
-/* pickup toast */
-#toast {
+/* Framed WAVE start only */
+#banner.framed {
+  top: 34%;
+  gap: 12px;
+  padding: 0 max(16px, var(--safe-left), var(--safe-right));
+  text-shadow: none;
+}
+#banner.framed .wave-notice-title,
+.wave-notice-picker .wave-notice-title {
+  font-family: "Oxanium", "Rajdhani", sans-serif;
+  font-size: clamp(26px, 5.6vw, 56px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  /* Gradient + glow come from the shared .pause-word child (same as PAUSED). */
+  color: transparent;
+  text-shadow: none;
+}
+#banner.framed .wave-notice-sub,
+.wave-notice-picker .wave-notice-sub {
+  font-family: "Rajdhani", sans-serif;
+  font-size: clamp(11px, 2.2vw, 15px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e8f2f6;
+  max-width: min(36rem, 92vw);
+  margin-top: 0;
+  /* Keep readable over the pale operator / bright floor. */
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.55);
+}
+#banner.framed .wave-notice-sub:empty,
+.wave-notice-picker .wave-notice-sub:empty {
+  display: none;
+}
+.wave-kw-reactor {
+  color: #ffa64c;
+}
+
+.wave-decoration {
+  display: none;
+  width: min(92vw, 520px);
+  line-height: 0;
+  flex: 0 0 auto;
+}
+#banner.framed .wave-decoration,
+.wave-notice-picker .wave-decoration {
+  display: block;
+}
+.wave-decoration svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+.wave-decoration path {
+  fill: none;
+  stroke: #5de9ff;
+  stroke-width: 1.5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px #5de9ff66);
+}
+.wave-decoration-top svg {
+  aspect-ratio: 480 / 32;
+}
+.wave-decoration-bottom svg {
+  aspect-ratio: 480 / 24;
+}
+
+/* Cleared screen: same framed notice; bottom deco closer to sub than to cards. */
+.wave-notice-picker {
+  width: min(1080px, 100%);
+  flex: 0 0 auto;
+  gap: 12px;
+  padding: 0 12px;
+}
+#picker .wave-notice-picker + #cards {
+  margin-top: 28px;
+}
+
+/* Centre-screen drones-left — above WAVE/boss banners (banner sits ~38%). */
+#botsLeft {
   position: fixed;
   top: 24%;
   left: 0;
   right: 0;
+  z-index: 5;
   text-align: center;
-  font-size: 28px;
-  letter-spacing: 6px;
+  font-size: clamp(18px, 4.2vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #82eaf5;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.25s;
   text-shadow:
     0 0 12px currentColor,
     0 0 3px #000;
 }
-#toastLine {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35em;
-}
-#toastIcon {
-  display: none;
-  font-size: 1.15em;
-  letter-spacing: 0;
-  line-height: 1;
-  text-shadow:
-    0 0 12px currentColor,
-    0 0 3px #000;
-}
-#toastIcon:not(:empty) {
-  display: inline-block;
-}
-#toastDetail {
-  display: block;
-  color: #e2f8ff;
-  font-size: 18px;
-  letter-spacing: 0.04em;
-  text-shadow:
-    0 0 6px #000,
-    0 0 3px #000;
-}
 
-/* active power-up timers */
+/* Left HUD powerups slot (kept for layout; timed PUs use under-operator bars) */
 #powerups:empty {
   margin-top: 0;
 }
@@ -390,6 +497,220 @@ body {
   font-size: 14px;
   letter-spacing: 2px;
   line-height: 1.45;
+}
+
+/* World-anchored float-up words (pickups / upgrade fallback) */
+#floatWords {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 3;
+}
+.float-word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: min(220px, 70vw);
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-shadow:
+    0 0 10px color-mix(in srgb, var(--fw-glow, #e8f4ff) 55%, transparent),
+    0 1px 3px #000c,
+    0 0 2px #000;
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+.float-word.shown {
+  display: flex;
+}
+.float-word .fw-title {
+  font-size: clamp(13px, 2.4vw, 17px);
+  white-space: nowrap;
+}
+.float-word .fw-detail {
+  font-size: clamp(10px, 1.8vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #d5e4ee;
+  opacity: 0.92;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.float-word .fw-detail[hidden] {
+  display: none !important;
+}
+/* Upgrade confirm: small category eyebrow + name (no description). */
+.float-word.upgrade .fw-title {
+  font-size: clamp(10px, 1.8vw, 12px);
+  letter-spacing: 0.14em;
+}
+.float-word.upgrade .fw-detail {
+  font-size: clamp(13px, 2.4vw, 17px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #e8f4ff;
+  opacity: 1;
+}
+
+/* Screen-space OVERCHARGE / INFINITE CELL bars under the operator.
+   Continuous fill + shimmer (distinct from plain enemy HP bars). */
+#puBars {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 2;
+}
+.pu-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  height: 12px;
+  background: transparent;
+  overflow: visible;
+}
+/* Author `display:flex` would otherwise beat [hidden] and leave a stuck bar. */
+.pu-bar[hidden] {
+  display: none !important;
+}
+.pu-icon {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 auto;
+  display: block;
+  overflow: visible;
+}
+.pu-dmg .pu-icon {
+  color: #ffa64c;
+  filter: drop-shadow(0 0 2px #ffa64c88);
+}
+.pu-ammo .pu-icon {
+  color: #76bcf0;
+  filter: drop-shadow(0 0 2px #76bcf088);
+}
+.pu-track {
+  width: 60px;
+  height: 4px;
+  border-radius: 1px;
+  overflow: hidden;
+  background: rgba(6, 10, 16, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+.pu-fill {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+  overflow: hidden;
+}
+.pu-dmg .pu-fill {
+  background: #ffa64c;
+}
+.pu-ammo .pu-fill {
+  background: #76bcf0;
+}
+/* Gentle charged shimmer — CSS only, clipped to the fill. */
+.pu-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 48%,
+    transparent 100%
+  );
+  background-size: 42% 100%;
+  background-repeat: no-repeat;
+  background-position: -50% 0;
+  animation: puShimmer 1.55s linear infinite;
+  pointer-events: none;
+}
+@keyframes puShimmer {
+  0% { background-position: -50% 0; }
+  100% { background-position: 160% 0; }
+}
+.pu-bar.blink {
+  animation: puBarBlink 0.32s steps(2, end) infinite;
+}
+@keyframes puBarBlink {
+  50% { opacity: 0.18; }
+}
+
+/* World-anchored enemy / boss HP — same thin track language as #puBars */
+#enemyHpBars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+.enemy-hp {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  width: 52px;
+  height: 4px;
+  border-radius: 1px;
+  overflow: hidden;
+  background: rgba(6, 10, 16, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, 0);
+  will-change: transform;
+  pointer-events: none;
+}
+.enemy-hp.boss {
+  width: 68px;
+}
+.enemy-hp-fill {
+  width: 100%;
+  height: 100%;
+  transform: scaleX(1);
+  transform-origin: left center;
+  will-change: transform;
+  background: #ff708c;
+}
+@media (max-width: 420px) {
+  .enemy-hp {
+    width: 44px;
+  }
+  .enemy-hp.boss {
+    width: 56px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pu-bar.blink {
+    animation: puBarPulse 1.1s ease-in-out infinite;
+  }
+  @keyframes puBarPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .pu-fill::after {
+    animation: none;
+    background-position: 50% 0;
+    opacity: 0.35;
+  }
 }
 
 /* between-wave upgrade picker */
@@ -415,43 +736,6 @@ body {
   #picker {
     transition: none;
   }
-}
-#bannerText,
-#pickerTitle {
-  font-family: "Rajdhani", sans-serif;
-  font-size: clamp(32px, 7vw, 64px);
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: #64dfee;
-  text-shadow:
-    0 0 18px #64dfee66,
-    0 0 4px #000;
-}
-#banner.boss #bannerText {
-  color: #ff708c;
-  text-shadow:
-    0 0 18px #ff368c66,
-    0 0 4px #000;
-}
-#pickerSub {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 6px;
-  margin-top: 2px;
-  color: #d4e8f0;
-  text-shadow:
-    0 0 10px #000c,
-    0 1px 2px #000;
-}
-#pickerSub::before,
-#pickerSub::after {
-  content: "";
-  display: inline-block;
-  width: 40px;
-  height: 1px;
-  background: #9ec4d0;
-  vertical-align: middle;
-  margin: 0 14px;
 }
 #cards {
   display: flex;
@@ -505,13 +789,33 @@ body {
   box-shadow: 0 0 12px var(--accent);
 }
 .card.picked {
-  transform: translateY(-14px) scale(1.06);
   border-color: var(--accent);
-  box-shadow: 0 0 40px var(--accent);
+  animation: card-pick-flash 0.25s ease-out forwards;
 }
 .card.dropped {
   opacity: 0;
   transform: translateY(16px) scale(0.95);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+@keyframes card-pick-flash {
+  0% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+    box-shadow: 0 0 0 transparent;
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(-16px) scale(1.07);
+    filter: brightness(1.4);
+    box-shadow: 0 0 44px var(--accent);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-28px) scale(1.1);
+    filter: brightness(1.25);
+    box-shadow: 0 0 36px var(--accent);
+    opacity: 0.82;
+  }
 }
 @keyframes dealIn {
   from {
@@ -1122,21 +1426,19 @@ body.paused #flash {
     overflow: hidden;
     padding: calc(var(--safe-top) + 6px) calc(var(--safe-right) + 10px) calc(var(--safe-bottom) + 6px) calc(var(--safe-left) + 10px);
   }
-  #pickerTitle {
+  .wave-notice-picker .wave-notice-title {
     font-size: clamp(20px, 7.2dvh, 32px);
-    letter-spacing: 0.16em;
-    line-height: 1.05;
+    letter-spacing: 0.12em;
   }
-  #pickerSub {
+  .wave-notice-picker .wave-notice-sub {
     font-size: clamp(11px, 3.5dvh, 14px);
-    letter-spacing: 0.32em;
-    margin-top: 1px;
-    line-height: 1.2;
+    letter-spacing: 0.14em;
   }
-  #pickerSub::before,
-  #pickerSub::after {
-    width: clamp(16px, 4vw, 28px);
-    margin: 0 0.55em;
+  .wave-notice-picker {
+    gap: 8px;
+  }
+  #picker .wave-notice-picker + #cards {
+    margin-top: clamp(14px, 4dvh, 22px);
   }
   #cards {
     display: flex;
@@ -1206,35 +1508,43 @@ body.paused #flash {
     height: 4px;
   }
   .card.picked {
-    transform: translateY(-5px) scale(1.03);
+    animation: card-pick-flash 0.22s ease-out forwards;
   }
 
-  #banner {
+  #banner.wave-notice:not(.framed) {
     top: 36%;
-    /* Same gutter on both sides so the title stays on the viewport centre
-       while the subtitle still wraps clear of the side HUD / safe areas. */
     --banner-gutter: max(168px, 21vw, calc(var(--safe-left) + 24px), calc(var(--safe-right) + 24px));
     padding-left: var(--banner-gutter);
     padding-right: var(--banner-gutter);
   }
-  #bannerText {
-    display: inline-block;
-    max-width: 100%;
+  #banner:not(.framed) .wave-notice-title {
     font-size: clamp(20px, 8dvh, 32px);
     letter-spacing: 0.14em;
-    padding-left: 0.14em;
     line-height: 1.05;
   }
-  #bannerSub {
+  #banner:not(.framed) .wave-notice-sub {
     font-size: clamp(11px, 3.6dvh, 14px);
     letter-spacing: 0.12em;
-    padding-left: 0.12em;
     line-height: 1.35;
     margin-top: 6px;
     max-width: min(36rem, 100%);
-    margin-left: auto;
-    margin-right: auto;
-    white-space: normal;
+  }
+  #banner.framed {
+    top: 30%;
+    gap: 8px;
+    --banner-gutter: max(168px, 21vw, calc(var(--safe-left) + 24px), calc(var(--safe-right) + 24px));
+    padding-left: var(--banner-gutter);
+    padding-right: var(--banner-gutter);
+  }
+  #banner.framed .wave-notice-title {
+    font-size: clamp(20px, 8dvh, 32px);
+  }
+  #banner.framed .wave-notice-sub {
+    font-size: clamp(11px, 3.6dvh, 14px);
+    max-width: min(36rem, 100%);
+  }
+  #banner.framed .wave-decoration {
+    width: min(70vw, 420px);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1374,21 +1684,6 @@ body.pad-aiming #game {
     min-height: 44px;
     touch-action: manipulation;
   }
-  #bossPanel {
-    left: calc(var(--safe-left) + var(--hud-gutter));
-    right: calc(var(--safe-right) + clamp(136px, 17vw, 176px) + 28px);
-    width: min(180px, 100%);
-    transform: none;
-    margin: 0 auto;
-  }
-  #topbar > .enemy-stats {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    overflow: visible;
-    min-width: 0;
-    padding-right: 8px;
-  }
   #touchPause {
     display: grid;
     place-items: center;
@@ -1401,9 +1696,8 @@ body.pad-aiming #game {
     height: 18px;
     min-height: 18px;
     padding: 13px;
-    /* Layout gap is ~6px to the SCORE text and ~8px to the box edge; 13px
-       padding keeps an invisible 44×44 hit target via negative margin. */
-    margin: -13px -13px -13px -7px;
+    /* 18+13×2 = 44px hit target; negative margin keeps the panel box tidy */
+    margin: -13px -7px -13px -13px;
     border: 0;
     background: none;
     color: #d9f4fa;
@@ -1427,6 +1721,11 @@ body.pad-aiming #game {
     border: 1px solid #6bc7db9c;
     border-radius: 50%;
     background: #0916236a;
+    pointer-events: none;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
   }
   .stick.active {
     display: block;
@@ -1465,6 +1764,21 @@ body.pad-aiming #game {
     /* ~72% of the default 136–176px panel */
     --hud-ammo-w: clamp(98px, 12.5vw, 128px);
   }
+  #topbar {
+    --hud-panel-w: 124px;
+    --hud-panel-h: 52px;
+  }
+  .float-word .fw-title {
+    font-size: 12px;
+  }
+  .float-word .fw-detail {
+    font-size: 10px;
+  }
+  #botsLeft {
+    top: 22%;
+    font-size: clamp(15px, 3.8vw, 22px);
+    letter-spacing: 0.14em;
+  }
   #ammoWrap {
     right: calc(var(--safe-right) + var(--hud-phone-margin));
     bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
@@ -1488,12 +1802,6 @@ body.pad-aiming #game {
     height: 4px;
     margin-top: 4px;
   }
-  #bossPanel {
-    bottom: calc(var(--safe-bottom) + var(--hud-phone-margin));
-    left: calc(var(--safe-left) + var(--hud-phone-margin));
-    right: calc(var(--safe-right) + var(--hud-ammo-w) + 16px);
-    pointer-events: none;
-  }
 }
 
 /* Phone landscape only: also pull the header stats flush to the edges. */
@@ -1504,12 +1812,16 @@ body.pad-aiming #game {
     right: calc(var(--safe-right) + var(--hud-phone-margin));
     gap: 6px;
   }
-  #topbar > div {
-    min-height: 26px;
-    min-width: 90px;
+  #topbar {
+    --hud-panel-w: 118px;
+    --hud-panel-h: 46px;
+  }
+  #topbar > .run-stats,
+  #topbar > .enemy-stats {
     padding: 5px 8px;
   }
   #topbar .run-stats,
+  #topbar .run-copy,
   #topbar .score-copy,
   #topbar .enemy-stats {
     pointer-events: none;
@@ -1540,7 +1852,8 @@ body.pad-aiming #game {
     height: 16px;
     min-height: 16px;
     padding: 12px;
-    margin: -12px -12px -12px -6px;
+    /* 16+12×2 = 40px hit target on compact landscape */
+    margin: -12px -6px -12px -12px;
   }
   #touchPause svg {
     width: 16px;
@@ -1597,7 +1910,7 @@ body.pad-aiming #game {
   }
   /* Auto margins centre the stack when it fits; they collapse so it
      scrolls from the top when the content is taller than the viewport. */
-  #pickerTitle {
+  .wave-notice-picker {
     margin-top: auto;
   }
   #cards {
@@ -1606,6 +1919,9 @@ body.pad-aiming #game {
     margin-top: 18px;
     margin-bottom: auto;
     padding: 0;
+  }
+  #picker .wave-notice-picker + #cards {
+    margin-top: 18px;
   }
   #cards .recommended {
     grid-column: 1 / -1;
@@ -1641,13 +1957,9 @@ body.pad-aiming #game {
   .cdesc {
     font-size: 14px;
   }
-  #pickerSub {
+  .wave-notice-picker .wave-notice-sub {
     font-size: 12px;
-    letter-spacing: 1px;
-  }
-  #pickerSub::before,
-  #pickerSub::after {
-    display: none;
+    letter-spacing: 0.12em;
   }
 }
 @media (max-height: 500px) {
@@ -2165,35 +2477,14 @@ body.pad-aiming #game {
   /* No full-screen backdrop-filter — blur over the live 3D scene is too costly. */
   background: radial-gradient(ellipse at 50% 45%, #04101ccc, #020810f2);
 }
-#pickerTitle {
-  position: relative;
-  width: min(1080px, 100%);
-  padding-bottom: 12px;
-  font-family: "Oxanium", "Rajdhani", sans-serif;
-  font-size: clamp(28px, 4vw, 56px);
-  line-height: 1.15;
-  letter-spacing: .09em;
-  color: #9af5ff;
-  text-shadow: 0 0 8px #45ecff99, 0 0 30px #45ecff55;
-}
-#pickerTitle::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 14px;
-  margin-top: 10px;
-  transform: translateY(clamp(-16px, -1vw, -8px));
-  background: #45ecff;
-  clip-path: polygon(0 0, 13% 0, 16% 90%, 84% 90%, 87% 0, 100% 0, 100% 10%, 87.2% 10%, 84.2% 100%, 15.8% 100%, 12.8% 10%, 0 10%);
-  opacity: .7;
-}
-#pickerSub { font-size: 14px; letter-spacing: .3em; }
-#pickerSub::before, #pickerSub::after { background: #45ecff; }
 #cards {
   width: min(1120px, 100%);
   grid-template-columns: 1.06fr 1fr 1fr;
   gap: 24px;
   margin-top: 34px;
+}
+#picker .wave-notice-picker + #cards {
+  margin-top: 28px;
 }
 /* Desktop card chrome lives in upgrade-cards.css (.upgrade-card). */
 #cards .upgrade-card:is(:focus-visible, .pad-sel):not(.dropped):not(.picked) {
@@ -2221,9 +2512,9 @@ body.pad-aiming #game {
   #cards .upgrade-card.picked { transform: translateY(-4px) scale(1.035); }
 }
 @media (max-width: 600px) and (min-height: 501px) {
-  #pickerTitle { font-size: clamp(23px, 6vw, 34px); padding-bottom: 6px; }
-  #pickerTitle::after { margin-top: 8px; height: 8px; }
-  #pickerSub { font-size: 11px; letter-spacing: .12em; }
+  .wave-notice-picker .wave-notice-title { font-size: clamp(23px, 6vw, 34px); }
+  .wave-notice-picker .wave-notice-sub { font-size: 11px; letter-spacing: 0.12em; }
+  #picker .wave-notice-picker + #cards { margin-top: 20px; }
   #cards { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
   #cards .card { padding: 15px 12px; }
   #cards .ctop { font-size: 10px; letter-spacing: .03em; }
@@ -2237,9 +2528,10 @@ body.pad-aiming #game {
   #cards .clvl { margin-top: 10px; }
 }
 @media (max-height: 600px) and (min-width: 601px) {
-  #pickerTitle { font-size: 28px; padding-bottom: 2px; }
-  #pickerTitle::after { height: 6px; margin-top: 2px; }
-  #pickerSub { font-size: 11px; letter-spacing: .15em; }
+  .wave-notice-picker .wave-notice-title { font-size: 28px; }
+  .wave-notice-picker .wave-notice-sub { font-size: 11px; letter-spacing: 0.14em; }
+  .wave-notice-picker { gap: 8px; }
+  #picker .wave-notice-picker + #cards { margin-top: clamp(14px, 4dvh, 22px); }
   #cards { width: min(960px, 100%); gap: 14px; margin-top: clamp(16px, 4.5dvh, 24px); }
   #cards .card { padding: 10px 12px 8px; }
   #cards .ctop { font-size: 11px; min-height: 18px; }
@@ -2257,3 +2549,8 @@ body.pad-aiming #game {
   #cards .card, .card-frame { transition: none; }
   #picker #cards .card:is(:hover, :focus-visible, .pad-sel, :active, .picked, .dropped) { transform: none; }
 }
+
+/* Let the death blast finish before the overlay fades over the deck. */
+#death { animation: game-over-fade 0.85s ease-out both; }
+@keyframes game-over-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #death { animation-duration: 0.2s; } }

@@ -1,5 +1,28 @@
 # Sector Null
 
+**Play:** https://2ne.github.io/ChatGPT/sector-null/
+
+## Live release — 16 November 2026
+
+Promoted the current Room 2 preview into the public game, including the Defence
+Bay after wave 10, Tesla Coil upgrades, revised enemy balance, white/orange
+operator and rifle, updated upgrade cards, and overhead shield feedback.
+Waves continue beyond 20; restarting returns to room 1.
+
+Pink shield icons match the HUD, animate gains and damage, and fill from the real
+Shield Regen timer. The opening starts music immediately, reveals the shields,
+fades them before the Wave 1 title at 2.3 seconds, then starts enemies 1.5 seconds
+later. Subsequent waves retain their usual entry. Shield pickups keep their floor
+label, glow and sound without the redundant floating +1 SHIELD message.
+
+The live project retains its existing Vite build/version setup and leaderboard
+endpoint. Preview build badges, version polling, cache metadata and service-worker
+code are excluded. Preview QA URL shortcuts are disabled on the public game;
+the independent `../sector-null-preview/` project retains those tools.
+
+The release supersedes older descriptions below where they describe the original
+operator, room layout or wave balance. Setup and build commands remain unchanged.
+
 A top-down sci-fi survival shooter and competition remix of [Abandon All Hope by Josh Werner](https://codepen.io/editor/joshwerner/pen/01a18d27-5cbe-77c4-9685-9f3836db15e6). Keep the reactor deck clear as rogue security units breach the bulkheads. After each wave, the operator stands still while you choose an upgrade.
 
 ## Status

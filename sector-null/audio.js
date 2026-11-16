@@ -295,6 +295,42 @@ export function createAudio(settings, listener) {
       grain(520, 0.28, 0.2, out);
       voice(155, 42, 0.24, 0.28, { out, type: 'triangle', echo: true });
     },
+    /** Rising charge whine before a Tesla discharge. */
+    teslaCharge(pos) {
+      if (!ctx) return;
+      const out = spatial(pos, 0.7);
+      // Soft rising whine into the snap window.
+      voice(180, 720, 0.28, 0.14, { out, type: 'sawtooth', attack: 0.02 });
+      voice(90, 340, 0.28, 0.1, { out, type: 'triangle', attack: 0.02 });
+      grain(2400, 0.22, 0.12, out);
+    },
+    /**
+     * Punchy Tesla discharge — charge already played; this is the crack/thump/sizzle.
+     * Louder and heavier than a normal explode so coil kills read as electrical.
+     */
+    teslaZap(pos) {
+      const out = spatial(pos, 0.95);
+      // Loud crack / snap
+      grain(6400, 0.07, 0.55, out);
+      grain(3200, 0.12, 0.48, out);
+      grain(1100, 0.2, 0.32, out);
+      voice(1200, 180, 0.1, 0.28, { out, type: 'square', attack: 0.001 });
+      // Low thump
+      grain(90, 0.35, 0.55, out);
+      voice(55, 22, 0.4, 0.48, { out, type: 'sine' });
+      voice(110, 40, 0.28, 0.32, { out, type: 'triangle' });
+      // Sizzle tail
+      grain(4800, 0.35, 0.22, out);
+      voice(880, 220, 0.28, 0.1, { out, type: 'square', attack: 0.002, t: (ctx?.currentTime ?? 0) + 0.05 });
+    },
+    /** Short crackle-pop when a coil-killed bot finally bursts. */
+    teslaPop(pos) {
+      const out = spatial(pos, 0.6);
+      grain(5400, 0.06, 0.38, out);
+      grain(1600, 0.14, 0.28, out);
+      voice(720, 160, 0.1, 0.18, { out, type: 'square', attack: 0.001 });
+      voice(90, 35, 0.2, 0.22, { out, type: 'triangle' });
+    },
     // Layered boom for the boss finale — heavier bass and a longer tail.
     bossExplode(pos) {
       const out = spatial(pos, 0.75);
@@ -311,6 +347,33 @@ export function createAudio(settings, listener) {
     bash(pos, strength = 1) { const out = spatial(pos, 0.35); voice(106, 50, 0.18, 0.29 * strength, { out, type: 'triangle' }); grain(1600, 0.12, 0.24 * strength, out); },
     crack(pos) { grain(4300, 0.14, 0.3, spatial(pos, 0.3)); },
     doorBreak(pos) { const out = spatial(pos, 0.6); grain(820, 0.48, 0.42, out); voice(210, 42, 0.38, 0.3, { out, type: 'triangle' }); },
+    /**
+     * Heavy blast-door raising — grinding hydraulics + metallic scrape.
+     * Longer than a bash so the motion reads weighty on the walk.
+     */
+    doorRaise(pos) {
+      const out = spatial(pos, 0.95);
+      // Low hydraulic pump rumble
+      voice(48, 62, 0.95, 0.28, { out, type: 'sine' });
+      voice(72, 38, 0.85, 0.22, { out, type: 'triangle' });
+      // Metallic scrape / grind as the slab climbs
+      grain(180, 0.9, 0.38, out);
+      grain(420, 0.7, 0.28, out);
+      grain(980, 0.35, 0.14, out);
+      // Soft servo whine near the end
+      voice(140, 220, 0.45, 0.08, { out, type: 'triangle', t: (ctx?.currentTime ?? 0) + 0.4 });
+    },
+    /** Heavy blast-door slam — deep thud + short metal rattle. */
+    doorSlam(pos) {
+      const out = spatial(pos, 1.05);
+      grain(95, 0.85, 0.62, out);
+      grain(280, 0.55, 0.48, out);
+      grain(1400, 0.14, 0.18, out);
+      voice(58, 16, 0.55, 0.55, { out, type: 'triangle' });
+      voice(28, 10, 0.75, 0.52, { out, type: 'sine' });
+      // Brief settling clank
+      voice(90, 55, 0.18, 0.16, { out, type: 'triangle', t: (ctx?.currentTime ?? 0) + 0.12 });
+    },
     shatter(pos) { const out = spatial(pos, 0.5); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
     waveClear() { score?.clearWave(); },
     /** Soft restorative chime for wave-clear / announced shield refill. */

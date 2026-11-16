@@ -1,0 +1,476 @@
+/** Preview-only Defence Bay. Architecture is batched; only doors and coil animate.
+ * The walkable dais and existing cover footprints are retained. */
+import * as THREE from 'three';
+import { BAY_CX, BAY_DOOR_GAP, BAY_DOOR_X, ROOM2_CZ, ROOM2_HX, ROOM2_HZ,
+  ROOM2_NORTH, ROOM2_SOUTH, ROOM2_WEST, ROOM2_EAST } from './facility-exterior.js';
+import { COIL_MAX_RANK, coilStatsForRank } from './upgrades.js';
+
+const C = { panel: 0x304756, edge: 0x536b7c, dark: 0x111e29,
+  shell: 0x293e4f, cyan: 0x62edff, amber: 0xe5a044 };
+const OCT_R = 5.35;
+const CHANNEL = 0.72;
+// Each pocket holds an entire leaf, including its raised braces on both faces.
+const DOOR_HALF = BAY_DOOR_GAP / 2;
+const POCKET_WIDTH = 2.8;
+const PORTAL_HALF = DOOR_HALF + POCKET_WIDTH;
+
+export function buildDefenceBay(parent, { box, model, halo, cyanLight,
+  BlockBatch, seeded, worldMat, reducedMotion }) {
+  const group = new THREE.Group();
+  group.name = 'defenceBay';
+  parent.add(group);
+  const solids = [];
+  const material = worldMat.clone();
+  material.roughness = 0.78;
+  material.metalness = 0.22;
+  const glowMaterial = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+  const architecture = new BlockBatch();
+  const lamps = new BlockBatch();
+  const fixedTint = () => 0.5;
+  function block(batch, w, h, d, x, y, z, color, ry = 0, rz = 0, bevel = 0.035) {
+    batch.add([[w, h, d, x, y, z, color, 0, ry, rz, bevel]], fixedTint);
+  }
+  const metal = (...args) => block(architecture, ...args);
+  const lamp = (...args) => block(lamps, ...args, 0, 0, 0.008);
+  function bake(batch, target = group, mat = material, shadow = true) {
+    const mesh = new THREE.Mesh(batch.build(), mat);
+    mesh.castShadow = shadow;
+    mesh.receiveShadow = mat !== glowMaterial;
+    target.add(mesh);
+    return mesh;
+  }
+  // Soft floor reflections from the existing glow texture: no extra lights.
+  function lightPool(x, z, size, opacity) {
+    const glow = halo(group, C.cyan, x, 0.3, z, size * 0.5, opacity * 0.6);
+    const pool = model(group, new THREE.PlaneGeometry(size, size), new THREE.MeshBasicMaterial({
+      map: glow.material.map, color: C.cyan, transparent: true, opacity,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    }), x, 0.012, z);
+    pool.rotation.x = -Math.PI / 2;
+  }
+
+  // Interior deck matches Room 1: same plate size, panel palette, bevel and
+  // worldMat. Plates trim against the service cross (no coplanar z-fight); the
+  // dais sits above continuous decking. Exterior pad stays the uniform dark.
+  const DECK_STEP = 1.6;
+  const DECK_TILE = 1.565;
+  const PANELS = [0x263543, 0x2b3e4b, 0x314452, 0x223340, 0x384a58];
+  const deckRng = seeded(401);
+  const deck = new BlockBatch();
+  const inset = 0.35;
+  const lip = CHANNEL + 0.08;
+  const ix0 = Math.ceil((ROOM2_WEST + inset) / DECK_STEP);
+  const ix1 = Math.floor((ROOM2_EAST - inset) / DECK_STEP);
+  const iz0 = Math.ceil((ROOM2_NORTH + inset) / DECK_STEP);
+  const iz1 = Math.floor((ROOM2_SOUTH - inset) / DECK_STEP);
+  for (let iz = iz0; iz <= iz1; iz++) {
+    for (let ix = ix0; ix <= ix1; ix++) {
+      const cx = ix * DECK_STEP;
+      const cz = iz * DECK_STEP;
+      const x0 = cx - DECK_TILE / 2;
+      const x1 = cx + DECK_TILE / 2;
+      const z0 = cz - DECK_TILE / 2;
+      const z1 = cz + DECK_TILE / 2;
+      const xs = [[x0, Math.min(x1, BAY_CX - lip)], [Math.max(x0, BAY_CX + lip), x1]];
+      const zs = [[z0, Math.min(z1, ROOM2_CZ - lip)], [Math.max(z0, ROOM2_CZ + lip), z1]];
+      const tint = PANELS[Math.floor(deckRng() * PANELS.length)];
+      for (const [a, b] of xs) for (const [c, d] of zs) {
+        if (b - a < 0.07 || d - c < 0.07) continue;
+        deck.add([[b - a, 0.11, d - c, (a + b) / 2, -0.06, (c + d) / 2, tint, 0, 0, 0, 0.024]], deckRng);
+      }
+    }
+  }
+  bake(deck, group, worldMat, false);
+
+  // Recessed grilles: quiet rails lead to concentrated banks of light.
+  for (const axis of ['x', 'z']) {
+    const extent = axis === 'x' ? ROOM2_HX : ROOM2_HZ;
+    const place = (u, v) => axis === 'x' ? [BAY_CX + u, ROOM2_CZ + v] : [BAY_CX + v, ROOM2_CZ + u];
+    const strip = (u, v, length, width, y, h, color, glowing = false) => {
+      const [x, z] = place(u, v);
+      (glowing ? lamp : metal)(axis === 'x' ? length : width, h, axis === 'x' ? width : length, x, y, z, color);
+    };
+    for (const side of [-1, 1]) {
+      const length = extent - OCT_R - 0.5;
+      strip(side * (OCT_R + length / 2), 0, length, CHANNEL * 2, -0.065, 0.035, C.dark);
+      for (const edge of [-1, 1]) strip(side * (OCT_R + length / 2), edge * (CHANNEL + 0.015), length, 0.085, 0.002, 0.045, C.edge);
+      for (let u = OCT_R; u < extent - 0.5; u += 0.24) strip(side * u, 0, 0.045, 1.3, -0.02, 0.04, C.panel);
+      for (let i = 0; i < 5; i++) strip(side * (OCT_R + length * 0.52 + i * 0.19), 0, 0.065, 0.85, 0.012, 0.025, axis === 'z' && side > 0 ? C.amber : C.cyan, true);
+    }
+  }
+
+  // Inset vent panels, deep rails and wide structural ribs. Lamps face inward.
+  function wall(axis, fixed, a, b, inward) {
+    const put = (u, y, n, w, h, d, color) => {
+      if (axis === 'x') metal(w, h, d, u, y, fixed + inward * n, color);
+      else metal(d, h, w, fixed + inward * n, y, u, color);
+    };
+    const light = (u, y, n, w, h, d) => {
+      if (axis === 'x') lamp(w, h, d, u, y, fixed + inward * n, C.cyan);
+      else lamp(d, h, w, fixed + inward * n, y, u, C.cyan);
+    };
+    const count = Math.ceil((b - a) / 4.2);
+    const step = (b - a) / count;
+    put((a + b) / 2, 1.42, 0, b - a, 2.84, 0.72, C.dark);
+    put((a + b) / 2, 2.78, 0.04, b - a, 0.32, 0.94, C.edge);
+    put((a + b) / 2, 0.24, 0.08, b - a, 0.38, 0.94, C.shell);
+    for (let i = 0; i < count; i++) {
+      const u = a + step * (i + 0.5);
+      put(u, 1.52, 0.32, step - 0.35, 2.15, 0.16, C.shell);
+      put(u, 1.44, 0.44, step - 0.85, 0.96, 0.1, C.dark);
+      for (let j = 0; j < 5; j++) put(u, 1.08 + j * 0.17, 0.51, step - 0.96, 0.055, 0.09, C.panel);
+      light(u, 0.72, 0.55, Math.min(1.35, step - 1), 0.075, 0.1);
+      put(u, 0.85, 0.52, 1.6, 0.11, 0.26, C.edge);
+      if (i > 0) put(a + step * i, 1.5, 0.08, 0.48, 3, 1.22, C.edge);
+    }
+  }
+  for (const z of [ROOM2_NORTH, ROOM2_SOUTH]) {
+    const inward = z === ROOM2_NORTH ? 1 : -1;
+    wall('x', z, ROOM2_WEST, BAY_CX - PORTAL_HALF, inward);
+    wall('x', z, BAY_CX + PORTAL_HALF, ROOM2_EAST, inward);
+  }
+  for (const x of [ROOM2_WEST, ROOM2_EAST]) {
+    const inward = x === ROOM2_WEST ? 1 : -1;
+    wall('z', x, ROOM2_NORTH, ROOM2_CZ - PORTAL_HALF, inward);
+    wall('z', x, ROOM2_CZ + PORTAL_HALF, ROOM2_SOUTH, inward);
+  }
+  for (const x of [ROOM2_WEST, ROOM2_EAST]) for (const z of [ROOM2_NORTH, ROOM2_SOUTH]) {
+    metal(1.35, 3.15, 1.35, x, 1.575, z, C.shell);
+    metal(1.5, 0.24, 1.5, x, 3.15, z, C.edge);
+  }
+
+  // Taller dark capacitor pylons with metal caps and thin luminous collars.
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+    const x = BAY_CX + sx * ROOM2_HX * 0.52;
+    const z = ROOM2_CZ + sz * ROOM2_HZ * 0.52;
+    metal(2.2, 0.19, 2.2, x, 0.095, z, C.shell);
+    metal(1.82, 3.65, 1.82, x, 2.02, z, C.dark);
+    metal(1.96, 0.35, 1.96, x, 4.02, z, C.panel);
+    metal(2.12, 0.16, 2.12, x, 4.25, z, C.edge);
+    for (const side of [-1, 1]) {
+      lamp(1.88, 0.075, 0.055, x, 0.27, z + side * 0.96, C.cyan);
+      lamp(0.055, 0.075, 1.88, x + side * 0.96, 0.27, z, C.cyan);
+      lamp(1.72, 0.095, 0.06, x, 3.67, z + side * 0.925, C.cyan);
+      lamp(0.06, 0.095, 1.72, x + side * 0.925, 3.67, z, C.cyan);
+      metal(0.1, 2.65, 0.08, x + side * 0.74, 1.95, z + 0.93, C.panel);
+    }
+    lightPool(x, z, 5, 0.24);
+    solids.push({ x, z, hx: 1.1, hz: 1.1, c: 1, s: 0 });
+  }
+
+  // Armoured portals detailed on both faces for approach and arrival.
+  // All four can open for the handoff / combat break; lights recolour like room 1.
+  const doors = [];
+  function door(x, z, rotation, id = 'door') {
+    const root = new THREE.Group();
+    root.position.set(x, 0, z);
+    root.rotation.y = rotation;
+    group.add(root);
+    const frame = new BlockBatch(), lit = new BlockBatch(), amberTrim = new BlockBatch();
+    const indicator = new THREE.MeshBasicMaterial({
+      color: C.cyan, toneMapped: false, fog: false,
+    });
+    const fb = (...args) => block(frame, ...args);
+    const fl = (...args) => block(lit, ...args, 0, 0, 0.008);
+    const fa = (...args) => block(amberTrim, ...args, 0, 0, 0.008);
+    for (const side of [-1, 1]) {
+      const pocketX = side * (DOOR_HALF + POCKET_WIDTH / 2);
+      // Hollow cassette: front/back skins, a roof and an outer end cap.
+      // The mouth at the jamb is open; walls begin beyond the cassette.
+      // Moving leaves are naturally occluded, including from the overhead view.
+      for (const face of [-1, 1]) {
+        fb(POCKET_WIDTH, 3.9, 0.18, pocketX, 1.95, face * 0.76, C.shell);
+        fb(1.25, 2.65, 0.08, side * 4.35, 1.62, face * 0.89, C.dark);
+        for (let i = 0; i < 3; i++) {
+          fb(0.85, 0.055, 0.055, side * 4.35, 0.75 + i * 0.2, face * 0.96, C.panel);
+        }
+      }
+      fb(POCKET_WIDTH, 0.22, 1.79, pocketX, 4.01, 0, C.edge);
+      fb(0.22, 3.9, 1.79, side * (PORTAL_HALF - 0.11), 1.95, 0, C.shell);
+      fb(0.22, 3.65, 1.85, side * (PORTAL_HALF - 0.12), 1.84, 0, C.edge);
+      // Sloped shoulder skins stay outside the cavity too; a solid crosspiece
+      // here would intersect the upper corners of a retracting leaf.
+      for (const face of [-1, 1]) {
+        fb(1.8, 0.62, 0.12, side * 2.85, 3.92, face * 0.87, C.edge, 0, side * -0.42);
+        fb(0.4, 2.75, 0.13, side * 3.02, 1.65, face * 0.87, C.dark);
+        fl(0.13, 2.35, 0.08, side * 3.02, 1.65, face * 0.95, C.cyan);
+      }
+    }
+    fb(4.8, 0.65, 1.6, 0, 4.12, 0, C.shell);
+    fb(4.5, 0.17, 1.7, 0, 4.53, 0, C.edge);
+    fb(BAY_DOOR_GAP, 0.04, 1.7, 0, 0.015, 0, C.dark);
+    // Continuous inset guide tracks connect the opening to both cassettes.
+    for (const railZ of [-0.6, 0.6]) {
+      fb(PORTAL_HALF * 2 - 0.3, 0.025, 0.055, 0, 0.038, railZ, C.edge);
+    }
+    for (const face of [-1, 1]) {
+      fl(2.9, 0.1, 0.07, 0, 4.08, face * 0.84, C.cyan);
+      fl(2.9, 0.08, 0.07, 0, 4.34, face * 0.84, C.cyan);
+      for (let i = -4; i <= 4; i++) fa(0.16, 0.025, 0.22, i * 0.31, 0.085, face * 0.68, C.amber);
+    }
+    bake(frame, root);
+    bake(lit, root, indicator, false);
+    bake(amberTrim, root, glowMaterial, false);
+    const leaves = [];
+    const leafW = BAY_DOOR_GAP / 2 - 0.05;
+    for (const side of [-1, 1]) {
+      const leaf = new THREE.Group(), batch = new BlockBatch();
+      const lb = (...args) => block(batch, ...args);
+      lb(leafW, 3.72, 0.44, 0, 1.91, 0, C.dark);
+      for (const face of [-1, 1]) {
+        lb(leafW - 0.18, 3.42, 0.12, 0, 1.93, face * 0.27, C.panel);
+        // Layer the crossing braces, with the centre fastener above both.
+        // Mirror the depth ordering on the rear face too.
+        for (const slope of [-1, 1]) lb(2.05, 0.16, 0.09, 0, 1.94,
+          face * (slope < 0 ? 0.39 : 0.45), C.edge, 0, slope * 0.64);
+        lb(0.34, 0.48, 0.12, 0, 1.94, face * 0.55, C.shell);
+        for (const y of [0.4, 3.45]) {
+          lb(leafW - 0.24, 0.24, 0.09, 0, y, face * 0.36, C.dark);
+          for (let i = 0; i < 7; i++) lb(0.14, 0.24, 0.025, -0.91 + i * 0.3, y, face * 0.42, C.amber, 0, -0.55, 0);
+        }
+      }
+      bake(batch, leaf);
+      root.add(leaf);
+      leaves.push({ leaf, side });
+    }
+    // Travel only far enough to clear the mouth, with room inside the end cap.
+    const travel = DOOR_HALF + 0.12;
+    let phase = 'shut', t = 0, openness = 0, startAmount = 0, broken = false, jolt = 0;
+    function amount(k) {
+      openness = k;
+      for (const { leaf, side } of leaves) {
+        leaf.position.x = side * (BAY_DOOR_GAP / 4 + k * travel);
+      }
+    }
+    amount(0);
+    const glow = halo(root, C.cyan, 0, 4.2, 0, 4.4, 0.28);
+    const ctrl = {
+      id, root, x, z, rotation, indicator, glow, leaves,
+      open() {
+        if (broken) return;
+        if (phase !== 'open' && phase !== 'opening') { startAmount = openness; phase = 'opening'; t = 0; }
+      },
+      shut() {
+        if (broken) return;
+        if (phase !== 'shut' && phase !== 'slamming') { startAmount = openness; phase = 'slamming'; t = 0; }
+      },
+      snapShut() {
+        if (broken) return;
+        phase = 'shut'; t = 0; amount(0);
+      },
+      /** Combat break — panels retract into cassettes and stay open for the run. */
+      breakOpen() {
+        broken = true;
+        startAmount = openness;
+        phase = 'opening';
+        t = 0;
+        indicator.color.setHex(C.amber);
+        glow.material.color.setHex(C.amber);
+      },
+      reset() {
+        broken = false;
+        phase = 'shut';
+        t = 0;
+        jolt = 0;
+        amount(0);
+        indicator.color.setHex(C.cyan);
+        glow.material.color.setHex(C.cyan);
+        glow.material.opacity = 0.28;
+      },
+      bashJolt() { jolt = 1; },
+      get broken() { return broken; },
+      get slammed() { return phase === 'shut'; },
+      get isOpen() { return phase === 'open' || broken; },
+      get raising() { return phase === 'opening'; },
+      get slamming() { return phase === 'slamming'; },
+      update(dt) {
+        jolt *= Math.exp(-9 * dt);
+        if (jolt > 0.02) {
+          for (const { leaf, side } of leaves) {
+            leaf.position.z = side * 0.04 * jolt * Math.sin(performance.now() * 0.04);
+          }
+        } else {
+          for (const { leaf } of leaves) leaf.position.z = 0;
+        }
+        if (phase !== 'opening' && phase !== 'slamming') return;
+        t += dt;
+        const opening = phase === 'opening';
+        const k = Math.min(1, t / (opening ? 1.05 : 0.4));
+        // Smooth acceleration and braking when opening; a heavier closing stroke.
+        const eased = opening ? k * k * (3 - 2 * k) : k ** 3;
+        amount(THREE.MathUtils.lerp(startAmount, opening ? 1 : 0, eased));
+        if (k === 1) phase = opening ? 'open' : 'shut';
+      },
+      setLight(brokenLit, time = 0) {
+        const colour = brokenLit ? C.amber : C.cyan;
+        const intensity = brokenLit ? 0.75 + 0.25 * Math.sin(time * 6 + x) : 1;
+        indicator.color.setHex(colour);
+        glow.material.color.setHex(colour);
+        glow.material.opacity = 0.28 * intensity;
+        glow.scale.setScalar(4.4 * (0.9 + 0.1 * intensity));
+      },
+    };
+    doors.push(ctrl);
+    return ctrl;
+  }
+  const northDoor = door(BAY_DOOR_X, ROOM2_NORTH, 0, 'north');
+  const westDoor = door(ROOM2_WEST, ROOM2_CZ, Math.PI / 2, 'west');
+  const eastDoor = door(ROOM2_EAST, ROOM2_CZ, -Math.PI / 2, 'east');
+  const southDoor = door(BAY_DOOR_X, ROOM2_SOUTH, 0, 'south');
+  lightPool(BAY_CX, ROOM2_NORTH + 0.7, 5, 0.2);
+  lightPool(BAY_CX, ROOM2_SOUTH - 0.7, 5, 0.2);
+  lightPool(ROOM2_WEST + 0.7, ROOM2_CZ, 5, 0.2);
+  lightPool(ROOM2_EAST - 0.7, ROOM2_CZ, 5, 0.2);
+
+  // Machined octagonal dais. Dark reveals separate nested plates. Edge details
+  // follow the actual chords (the old circular dashes floated off the corners).
+  const platform = new THREE.Group();
+  platform.position.set(BAY_CX, 0, ROOM2_CZ);
+  group.add(platform);
+  const matte = hex => new THREE.MeshStandardMaterial({ color: hex, roughness: 0.8, metalness: 0.22 });
+  const plate = matte(C.panel), edge = matte(C.edge), dark = matte(C.dark);
+  function oct(r, h, y, mat) {
+    const m = model(platform, new THREE.CylinderGeometry(r, r, h, 8), mat, 0, y, 0);
+    m.rotation.y = Math.PI / 8;
+    m.receiveShadow = true;
+    return m;
+  }
+  oct(OCT_R, 0.08, 0.04, dark);
+  oct(OCT_R - 0.1, 0.045, 0.1, edge);
+  oct(OCT_R - 0.22, 0.035, 0.14, plate);
+  oct(4.3, 0.035, 0.175, dark);
+  oct(4.16, 0.035, 0.21, plate);
+  oct(3.67, 0.025, 0.24, dark);
+  oct(3.61, 0.025, 0.265, matte(0x2b404f));
+  const apothem = (OCT_R - 0.18) * Math.cos(Math.PI / 8);
+  for (let i = 0; i < 8; i++) {
+    const a = i * Math.PI / 4, dx = Math.cos(a), dz = Math.sin(a);
+    for (let j = -4; j <= 4; j++) {
+      const along = j * 0.34;
+      metal(0.2, 0.018, 0.1, BAY_CX + dx * apothem - dz * along, 0.169,
+        ROOM2_CZ + dz * apothem + dx * along, j % 2 ? C.dark : C.amber, -a + Math.PI / 2, 0, 0);
+    }
+  }
+  for (const side of [-1, 1]) {
+    const x = BAY_CX + side * 4.35;
+    metal(0.78, 0.06, 1.9, x, 0.18, ROOM2_CZ, C.dark);
+    for (let i = -5; i <= 5; i++) metal(0.64, 0.025, 0.045, x, 0.225, ROOM2_CZ + i * 0.15, C.edge);
+    lamp(0.065, 0.025, 1.4, BAY_CX + side * 4.9, 0.17, ROOM2_CZ, C.cyan);
+    lamp(1.6, 0.025, 0.07, BAY_CX, 0.17, ROOM2_CZ + side * 4.9, C.cyan);
+  }
+
+  // Six windings, dark insulated mast and a steel terminal sphere.
+  const coil = new THREE.Group();
+  coil.position.set(BAY_CX, 0, ROOM2_CZ);
+  group.add(coil);
+  const coilMetal = new THREE.MeshStandardMaterial({ color: 0x718b9c, metalness: 0.65, roughness: 0.32 });
+  const base = model(coil, new THREE.CylinderGeometry(1.16, 1.3, 0.38, 8), dark, 0, 0.47, 0);
+  base.rotation.y = Math.PI / 8;
+  base.castShadow = true;
+  model(coil, new THREE.CylinderGeometry(0.72, 0.92, 0.28, 12), coilMetal, 0, 0.79, 0);
+  const mast = model(coil, new THREE.CylinderGeometry(0.38, 0.46, 2.65, 20), dark, 0, 2.22, 0);
+  mast.castShadow = true;
+  const winding = new THREE.MeshStandardMaterial({ color: 0x135968, emissive: 0x29d6e9,
+    emissiveIntensity: 0.65, roughness: 0.4, metalness: 0.35 });
+  for (let i = 0; i < 6; i++) {
+    const y = 1.15 + i * 0.39;
+    const collar = model(coil, new THREE.TorusGeometry(0.54, 0.075, 8, 32), coilMetal, 0, y - 0.06, 0);
+    collar.rotation.x = Math.PI / 2;
+    const ring = model(coil, new THREE.TorusGeometry(0.55, 0.035, 6, 32), winding, 0, y, 0);
+    ring.rotation.x = Math.PI / 2;
+  }
+  model(coil, new THREE.CylinderGeometry(0.39, 0.52, 0.25, 16), coilMetal, 0, 3.55, 0);
+  const ballMat = new THREE.MeshStandardMaterial({ color: 0x9eb6c7, metalness: 0.6, roughness: 0.25 });
+  const ball = model(coil, new THREE.SphereGeometry(0.83, 28, 20), ballMat, 0, 4.08, 0);
+  ball.castShadow = true;
+  for (let i = 0; i < 8; i++) {
+    const a = i * Math.PI / 4;
+    const accent = box(coil, cyanLight, Math.cos(a) * 1.13, 0.52, Math.sin(a) * 1.13, 0.45, 0.1, 0.05);
+    accent.rotation.y = Math.PI / 2 - a;
+  }
+  solids.push({ x: BAY_CX, z: ROOM2_CZ, hx: 1.3, hz: 1.3, c: 1, s: 0 });
+  const coilGlow = halo(coil, C.cyan, 0, 2.4, 0, 3, 0.13);
+  const tipGlow = halo(coil, C.cyan, 0, 4.08, 0, 1.6, 0);
+  tipGlow.visible = false;
+  const floorPulse = model(platform, new THREE.CircleGeometry(4.2, 24), new THREE.MeshBasicMaterial({
+    color: C.cyan, transparent: true, opacity: 0, depthWrite: false,
+    blending: THREE.AdditiveBlending, toneMapped: false,
+  }), 0, 0.02, 0);
+  floorPulse.rotation.x = -Math.PI / 2;
+  model(platform, new THREE.RingGeometry(0.23, 0.29, 32), cyanLight, 0, 0.29, 1.75).rotation.x = -Math.PI / 2;
+  /** World tip of the terminal sphere — lightning arcs originate here. */
+  const coilTip = new THREE.Vector3(BAY_CX, 4.08, ROOM2_CZ);
+  let chargeLevel = 0;
+  let dischargeT = 0;
+  const ballBaseColor = ballMat.color.clone();
+  const ballFlashColor = new THREE.Color(0xd8fbff);
+  ballMat.emissive = new THREE.Color(0x29d6e9);
+  ballMat.emissiveIntensity = 0;
+
+  const stencil = document.createElement('canvas');
+  stencil.width = 1024; stencil.height = 256;
+  const ctx = stencil.getContext('2d');
+  ctx.fillStyle = '#8299a6'; ctx.textAlign = 'center';
+  ctx.font = '600 130px monospace'; ctx.fillText('02', 512, 135);
+  ctx.font = '500 36px monospace'; ctx.fillText('D E F E N C E   B A Y', 512, 208);
+  const tex = new THREE.CanvasTexture(stencil);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const label = model(group, new THREE.PlaneGeometry(7.5, 1.875), new THREE.MeshBasicMaterial({
+    map: tex, transparent: true, opacity: 0.52, depthWrite: false }), BAY_CX + 5.5, 0.008, ROOM2_SOUTH - 4.6);
+  label.rotation.x = -Math.PI / 2;
+
+  bake(architecture);
+  bake(lamps, group, glowMaterial, false);
+  let time = 0;
+  /** Ranked combat stats live in upgrades.js (Stage 6 card only increments rank). */
+  const coilWeapon = {
+    rank: 0,
+    cd: 0,
+    tip: coilTip,
+    charging: false,
+    stats() {
+      return coilStatsForRank(this.rank);
+    },
+    setRank(rank) {
+      this.rank = Math.max(0, Math.min(COIL_MAX_RANK, rank | 0));
+    },
+    /** 0–1 charge tell before the bolt. */
+    setCharge(level) {
+      chargeLevel = Math.max(0, Math.min(1, level));
+      this.charging = chargeLevel > 0.02;
+    },
+    /** Brief white-blue flash on the tip / platform after the bolt fires. */
+    dischargeFlash() {
+      dischargeT = 0.28;
+      chargeLevel = 0;
+      this.charging = false;
+    },
+  };
+  return {
+    group, solids, coil, coilTip, coilWeapon,
+    doors, northDoor, westDoor, eastDoor, southDoor,
+    update(dt) {
+      for (const d of doors) d.update(dt);
+      time += dt;
+      if (dischargeT > 0) dischargeT = Math.max(0, dischargeT - dt);
+      const pulse = reducedMotion?.matches ? 0 : Math.sin(time * 1.8);
+      const charge = chargeLevel;
+      const flash = dischargeT > 0 ? (dischargeT / 0.28) : 0;
+      const flashEase = flash * flash;
+      const rank = coilWeapon.rank | 0;
+      // Idle look scales with rank so a maxed coil reads hotter even between shots.
+      const rankIdle = rank * 0.22;
+      winding.emissiveIntensity = 0.65 + rankIdle + pulse * 0.12 + charge * 1.35 + flashEase * 1.8;
+      coilGlow.material.opacity = 0.13 + rank * 0.045 + pulse * 0.025 + charge * 0.28 + flashEase * 0.35;
+      coilGlow.scale.setScalar(3 + rank * 0.18 + charge * 1.4 + flashEase * 2.2);
+      tipGlow.visible = charge > 0.05 || flash > 0.05 || rank >= 2;
+      tipGlow.material.opacity = (rank >= 2 ? 0.12 : 0) + charge * 0.55 + flashEase * 0.9;
+      tipGlow.scale.setScalar(1.4 + rank * 0.12 + charge * 2.4 + flashEase * 3.2);
+      tipGlow.material.color.setHex(flash > 0.4 ? 0xd8fbff : C.cyan);
+      floorPulse.material.opacity = charge * 0.12 + flashEase * 0.55 + rank * 0.02;
+      floorPulse.scale.setScalar(0.55 + charge * 0.35 + flashEase * 0.7 + rank * 0.04);
+      ballMat.emissiveIntensity = charge * 0.85 + flashEase * 1.6 + rank * 0.12;
+      ballMat.color.copy(ballBaseColor).lerp(ballFlashColor, Math.min(1, charge * 0.55 + flashEase + rank * 0.06));
+    },
+  };
+}

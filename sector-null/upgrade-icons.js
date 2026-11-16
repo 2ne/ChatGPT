@@ -1,11 +1,17 @@
 import * as THREE from 'three';
+import { bevelBox } from './bevel-box.js';
+import { addRifleShell } from './rifle-mesh.js';
 import { UPGRADE_CATS } from './upgrades.js';
 import { createHelperBotMesh } from './helper-bot-mesh.js';
 
 const CAT_COLORS = UPGRADE_CATS;
+const SURVIVAL_COLOR = UPGRADE_CATS.survival;
+const SURVIVAL_HIGHLIGHT = 0xffb5d6;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
-const SWAY_IDS = new Set(['bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag']);
+const RIFLE_IDS = new Set(['damage', 'rate', 'spread']);
+// Split Beam keeps a full orbit so its 2 / 3 / 4-shot fan is readable from every angle.
+const SWAY_IDS = new Set(['damage', 'rate', 'bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
 const SWAY_ANGLE = 20 * Math.PI / 180;
 
 // Same basis as game.js tracers: lookAt aims local -Z forward.
@@ -124,15 +130,31 @@ function mineBody(shock = false, owned = 0) {
 
 function rifleBase() {
   const g = new THREE.Group();
-  // Card-only mesh (not the in-game rifle) — lifted steel so it reads on dark card backs.
-  const body = std(0x8aa4b6, { emissive: 0x243848, emissiveIntensity: 0.22 });
-  const metal = std(0xc2d4e0, { metalness: 0.62, roughness: 0.34, emissive: 0x2a4050, emissiveIntensity: 0.12 });
-  addBox(g, body, 0.22, 0.28, 0.55, 0, 0, -0.15);
-  addBox(g, metal, 0.16, 0.18, 0.7, 0, 0.04, 0.35);
-  addBox(g, metal, 0.1, 0.1, 0.55, 0, 0.05, 0.9);
-  addBox(g, body, 0.18, 0.16, 0.32, 0, -0.05, 0.55);
-  const grip = addBox(g, body, 0.14, 0.32, 0.16, 0, -0.22, 0.05);
-  grip.rotation.x = 0.35;
+  const rifle = new THREE.Group();
+  const M = {
+    gunBody: std(0x26333c, { roughness: 0.47, metalness: 0.3 }), metal: std(0x334957, { roughness: 0.38, metalness: 0.62 }),
+    rubber: std(0x151f27), plating: std(0x243341),
+    suit: std(0xe4e9ed, { roughness: 0.65, metalness: 0.12 }),
+    trim: std(0xf59a25, { roughness: 0.65, metalness: 0.3 }),
+    status: glow(0x36dcff, 0.8),
+  };
+  const box = (mat, w, h, d, x, y, z, parent, r = 0.03) => {
+    // Cards own their geometry copies; disposal cannot invalidate the game rig.
+    const mesh = new THREE.Mesh(bevelBox(w, h, d, r).clone(), mat);
+    mesh.position.set(x, y, z);
+    parent.add(mesh);
+    return mesh;
+  };
+  addRifleShell(rifle, M, box);
+  const cell = box(std(0x1a4558, {
+    roughness: 0.3, metalness: 0.55, emissive: 0x36dcff, emissiveIntensity: 0.55,
+  }), 0.11, 0.28, 0.15, 0, -0.14, 0.52, rifle, 0.02);
+  cell.rotation.x = -0.12;
+  // Preserve the in-game proportions and keep the effect anchor at the muzzle.
+  rifle.scale.setScalar(1.1);
+  rifle.position.set(0, 0.008, -0.437);
+  g.add(rifle);
+  g.userData.rifle = rifle;
   return g;
 }
 
@@ -204,15 +226,22 @@ const builders = {
   damage(owned = 0) {
     const g = rifleBase();
     const next = owned + 1;
-    const amp = new THREE.Mesh(new THREE.SphereGeometry(0.18 + next * 0.035, 16, 12), glow(0xffad61, 1.4 + next * 0.2));
-    amp.position.set(0, 0.08, 1.15);
-    g.add(amp);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.26 + next * 0.03, 0.035, 8, 24), glow(0xffad61, 1.2));
-    ring.position.copy(amp.position);
-    ring.rotation.y = Math.PI / 2;
-    g.add(ring);
-    g.userData.pulse = amp;
-    g.userData.ring = ring;
+    // A fixed amplifier sleeve belongs to the gun, leaving its silhouette visible.
+    const rifle = g.userData.rifle;
+    const housing = new THREE.Mesh(bevelBox(0.22, 0.18, 0.24, 0.025).clone(), std(0x35434d));
+    housing.position.set(0, 0.025, 1.13);
+    rifle.add(housing);
+    const indicators = [];
+    for (const side of [-1, 1]) {
+      for (let i = 0; i < 6; i++) {
+        const lit = i < next;
+        const material = lit ? glow(0xf59a25, 0.65) : std(0x172530);
+        const strip = addBox(rifle, material, 0.012, 0.09, 0.022,
+          side * 0.116, 0.025, 1.035 + i * 0.035);
+        if (lit) indicators.push(strip);
+      }
+    }
+    g.userData.amplifierIndicators = indicators;
     return g;
   },
   rate(owned = 0) {
@@ -295,9 +324,9 @@ const builders = {
   },
   regen() {
     const g = new THREE.Group();
-    const shield = shieldPlate(0x70dfb8, 0.95);
+    const shield = shieldPlate(SURVIVAL_COLOR, 0.95);
     g.add(shield);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.04, 8, 40), glow(0x70dfb8, 1.4));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.04, 8, 40), glow(SURVIVAL_COLOR, 1.4));
     ring.rotation.x = Math.PI / 2;
     g.add(ring);
     g.userData.ring = ring;
@@ -306,12 +335,12 @@ const builders = {
   },
   pulse(owned = 0) {
     const g = new THREE.Group();
-    g.add(shieldPlate(0x70dfb8, 0.85));
+    g.add(shieldPlate(SURVIVAL_COLOR, 0.85));
     const count = owned + 1;
     const waves = Array.from({ length: count }, (_, i) => {
       const ring = new THREE.Mesh(
         new THREE.TorusGeometry(0.65 + i * 0.28, 0.03, 6, 40),
-        new THREE.MeshBasicMaterial({ color: 0x9af5ff, transparent: true, opacity: 0.55 - i * 0.12 })
+        new THREE.MeshBasicMaterial({ color: SURVIVAL_HIGHLIGHT, transparent: true, opacity: 0.55 - i * 0.12 })
       );
       ring.rotation.x = Math.PI / 2;
       g.add(ring);
@@ -324,7 +353,7 @@ const builders = {
     const g = new THREE.Group();
     const layers = Math.min(4, owned + 2);
     for (let i = 0; i < layers; i++) {
-      const p = shieldPlate(i === layers - 1 ? 0x9af5ff : 0x70dfb8, 0.8 - i * 0.04);
+      const p = shieldPlate(i === layers - 1 ? SURVIVAL_HIGHLIGHT : SURVIVAL_COLOR, 0.8 - i * 0.04);
       p.position.z = -0.22 + i * 0.18;
       p.position.x = i * 0.06;
       g.add(p);
@@ -337,13 +366,13 @@ const builders = {
     hub.rotation.z = Math.PI / 2;
     g.add(hub);
     const jets = [-0.28, 0.28].map(y => {
-      const jet = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.55, 10), glow(0x70dfb8, 1.6));
+      const jet = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.55, 10), glow(SURVIVAL_COLOR, 1.6));
       jet.rotation.z = Math.PI / 2;
       jet.position.set(-0.45, y, 0);
       g.add(jet);
       return jet;
     });
-    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.18 + owned * 0.04, 0.65 + owned * 0.12, 10), glow(0x9af5ff, 2));
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.18 + owned * 0.04, 0.65 + owned * 0.12, 10), glow(SURVIVAL_HIGHLIGHT, 2));
     flame.rotation.z = -Math.PI / 2;
     flame.position.set(0.55, 0, 0);
     g.add(flame);
@@ -353,11 +382,11 @@ const builders = {
   },
   heal() {
     const g = new THREE.Group();
-    const shield = shieldPlate(0xff708c, 0.9);
+    const shield = shieldPlate(SURVIVAL_COLOR, 0.9);
     g.add(shield);
     const plus = new THREE.Group();
-    addBox(plus, glow(0xffb0c4, 1.8), 0.16, 0.55, 0.12);
-    addBox(plus, glow(0xffb0c4, 1.8), 0.55, 0.16, 0.12);
+    addBox(plus, glow(SURVIVAL_HIGHLIGHT, 1.8), 0.16, 0.55, 0.12);
+    addBox(plus, glow(SURVIVAL_HIGHLIGHT, 1.8), 0.55, 0.16, 0.12);
     plus.position.z = 0.2;
     g.add(plus);
     g.userData.plus = plus;
@@ -510,6 +539,117 @@ const builders = {
     g.userData.gemShadows = gemShadows;
     return g;
   },
+  /** Defence Bay Tesla coil — silhouette matches room-2 (defence-bay.js), simplified for card size. */
+  coil(owned = 0) {
+    const g = new THREE.Group();
+    const next = Math.min(3, (owned | 0) + 1);
+    const dark = std(0x111e29, { metalness: 0.55, roughness: 0.55 });
+    const metal = std(0x718b9c, { metalness: 0.7, roughness: 0.32 });
+    const windingMat = new THREE.MeshStandardMaterial({
+      color: 0x135968,
+      emissive: 0x29d6e9,
+      emissiveIntensity: 0.65 + next * 0.22,
+      roughness: 0.4,
+      metalness: 0.35,
+    });
+
+    // Octagonal-ish foot + metal collar (real coil base / first band).
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.58, 0.16, 8), dark);
+    base.position.y = -0.42;
+    base.rotation.y = Math.PI / 8;
+    g.add(base);
+    const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.44, 0.11, 12), metal);
+    foot.position.y = -0.28;
+    g.add(foot);
+    // Cyan accent pips around the base — simplified from the bay’s eight strips.
+    for (let i = 0; i < 4; i++) {
+      const a = i * Math.PI / 2 + Math.PI / 4;
+      addBox(g, glow(0x62edff, 1.1), 0.2, 0.045, 0.04,
+        Math.cos(a) * 0.5, -0.4, Math.sin(a) * 0.5);
+    }
+
+    // Insulated mast.
+    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.19, 1.05, 14), dark);
+    mast.position.y = 0.32;
+    g.add(mast);
+
+    // Winding stack (5 rings — reads clearly at icon size; bay uses six).
+    const rings = new THREE.Group();
+    const ringCount = 6;
+    for (let i = 0; i < ringCount; i++) {
+      const y = -0.08 + i * (0.9 / Math.max(1, ringCount - 1));
+      const collar = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.032, 8, 24), metal);
+      collar.rotation.x = Math.PI / 2;
+      collar.position.y = y - 0.025;
+      rings.add(collar);
+      const glowRing = new THREE.Mesh(new THREE.TorusGeometry(0.27, 0.018, 6, 24), windingMat);
+      glowRing.rotation.x = Math.PI / 2;
+      glowRing.position.y = y;
+      rings.add(glowRing);
+    }
+    g.add(rings);
+
+    // Terminal collar + steel ball.
+    const topCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.22, 0.09, 12), metal);
+    topCollar.position.y = 0.98;
+    g.add(topCollar);
+    const ballMat = std(0x9eb6c7, {
+      metalness: 0.65, roughness: 0.25,
+      emissive: 0x29d6e9, emissiveIntensity: 0.12 + next * 0.1,
+    });
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.36, 28, 20), ballMat);
+    ball.position.y = 1.22;
+    g.add(ball);
+
+    // Soft cyan bloom around the windings (matches bay coilGlow).
+    const halo = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5, 16, 12),
+      new THREE.MeshBasicMaterial({
+        color: 0x62edff,
+        transparent: true,
+        opacity: 0.11 + next * 0.03,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      }),
+    );
+    halo.position.y = 0.35;
+    g.add(halo);
+
+    // Tip spark — flickers in animateIcon when motion is allowed.
+    const spark = new THREE.Mesh(
+      new THREE.SphereGeometry(0.055, 8, 6),
+      new THREE.MeshBasicMaterial({
+        color: 0xd8fbff,
+        transparent: true,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      }),
+    );
+    spark.position.y = 1.42;
+    g.add(spark);
+
+    const bolts = Array.from({ length: next + 1 }, () => {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(48), 3));
+      const bolt = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({
+        color: 0xb9f6ff, transparent: true, opacity: 0,
+        blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+      }));
+      g.add(bolt);
+      return bolt;
+    });
+    g.userData.coilBolts = bolts;
+    g.userData.coilRings = rings;
+    g.userData.coilHalo = halo;
+    g.userData.coilBall = ball;
+    g.userData.coilSpark = spark;
+    g.userData.coilOwned = next;
+    g.userData.coilWinding = windingMat;
+    return g;
+  },
 };
 
 function disposeObject(root) {
@@ -558,8 +698,18 @@ function makeScene(upgrade) {
   const subject = (builders[upgrade.id] || builders.bot)(owned);
   subject.position.y = 0.08;
   subject.scale.multiplyScalar(0.64);
+  // Give the tall coil the same breathing room as the other card subjects.
+  if (upgrade.id === 'coil') {
+    subject.scale.setScalar(0.49);
+    subject.position.y = -0.17;
+  }
   // Mag cells sit on +Z — keep them facing the camera (sway only; no full spin).
-  if (upgrade.id === 'mag') subject.rotation.y = -0.28;
+  if (RIFLE_IDS.has(upgrade.id)) {
+    subject.rotation.set(-0.1, -1.12, -0.08);
+    subject.scale.setScalar(0.96);
+    key.position.set(-3, 4, 4);
+    rim.intensity = 0.7;
+  } else if (upgrade.id === 'mag') subject.rotation.y = -0.28;
   else if (upgrade.cat === 'firepower' || upgrade.cat === 'handling') subject.rotation.y = -0.55;
   enableCast(subject);
   // Magnet uses painted blob shadows under each gem; skip map casts so they don't double.
@@ -569,6 +719,15 @@ function makeScene(upgrade) {
       disc.castShadow = false;
       disc.receiveShadow = false;
     });
+  }
+  if (upgrade.id === 'coil') {
+    // A soft contact patch keeps the miniature grounded at its raised card position.
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 0.85),
+      new THREE.MeshBasicMaterial({ map: softShadowMap(), transparent: true,
+        depthWrite: false, toneMapped: false, opacity: 0.85 }));
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = -0.42;
+    root.add(shadow);
   }
   root.add(subject);
   root.userData.subject = subject;
@@ -587,19 +746,22 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
   const idle = reducedMotion.matches ? 0 : 1;
   const spin = entry.dragging ? 0 : (0.35 + (hot ? 0.55 : 0)) * idle;
 
-  if (!entry.dragging) {
+  if (!entry.dragging && id !== 'coil') {
     if (SWAY_IDS.has(id) && idle) {
-      entry.yaw = entry.baseYaw + Math.sin(t * 1.15 + entry.phase) * SWAY_ANGLE;
+      entry.yaw = entry.baseYaw + Math.sin(t * 1.15 + entry.phase) * (RIFLE_IDS.has(id) ? 0.1 : SWAY_ANGLE);
     } else if (!SWAY_IDS.has(id)) {
       entry.yaw += spin * dt;
     }
   }
 
   root.rotation.y = entry.yaw;
-  subject.position.y = idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0;
+  subject.position.y = id === 'coil' ? -0.17 : (idle ? Math.sin(t * 1.6 + entry.phase) * 0.06 : 0);
 
   const ud = subject.userData;
-  if (ud.pulse) ud.pulse.scale.setScalar(1 + 0.12 * Math.sin(t * 6));
+  if (ud.amplifierIndicators) {
+    const intensity = idle ? 0.6 + 0.12 * Math.sin(t * 2.4) : 0.65;
+    ud.amplifierIndicators.forEach(strip => { strip.material.emissiveIntensity = intensity; });
+  }
   if (ud.rotor) ud.rotor.rotation.z += dt * (hot ? (ud.rotorSpeed || 5) * 1.8 : (ud.rotorSpeed || 5)) * idle;
   if (ud.ring) ud.ring.rotation.z += dt * 1.5 * idle;
   if (ud.arcs) ud.arcs.rotation.y += dt * 2.2 * idle;
@@ -667,6 +829,52 @@ function animateIcon(entry, t, dt, hot, reducedMotion) {
       shadow.scale.setScalar(0.94 + shrink * 0.14);
       shadow.material.opacity = 0.72 + shrink * 0.2;
     });
+  }
+  if (ud.coilHalo) {
+    const base = 0.1 + (ud.coilOwned || 1) * 0.03;
+    ud.coilHalo.material.opacity = base * (0.7 + 0.3 * Math.sin(t * 2.8 + entry.phase) * idle);
+  }
+  if (ud.coilWinding) {
+    ud.coilWinding.emissiveIntensity = (0.55 + (ud.coilOwned || 1) * 0.2)
+      * (0.85 + 0.15 * Math.sin(t * 3.4 + entry.phase) * idle);
+  }
+  if (ud.coilBall?.material) {
+    ud.coilBall.material.emissiveIntensity = (0.1 + (ud.coilOwned || 1) * 0.08)
+      * (0.75 + 0.25 * Math.sin(t * 4.2 + entry.phase) * idle);
+  }
+  if (ud.coilBolts) {
+    const tick = Math.floor(t * 12);
+    ud.coilBolts.forEach((bolt, i) => {
+      bolt.material.opacity = idle && (t * 0.85 + entry.phase + i * 0.27) % 1 < 0.32 ? 0.9 : 0;
+      if (!idle || bolt.userData.tick === tick) return;
+      bolt.userData.tick = tick;
+      const a = i * 2.4 + tick * 0.67;
+      const points = Array.from({ length: 7 }, (_, j) => {
+        const u = j / 6;
+        return new THREE.Vector3(
+          Math.cos(a) * (0.28 + u * 0.8) + (j % 6 ? Math.sin(tick * 13 + j * 7) * 0.12 : 0),
+          1.32 - u * 0.85 + (j % 6 ? Math.cos(tick * 9 + j * 4) * 0.12 : 0),
+          Math.sin(a) * (0.22 + u * 0.3));
+      });
+      const attr = bolt.geometry.attributes.position;
+      for (let j = 0; j < 6; j++) {
+        attr.setXYZ(j * 2, ...points[j].toArray());
+        attr.setXYZ(j * 2 + 1, ...points[j + 1].toArray());
+      }
+      for (let j = 0; j < 2; j++) {
+        const point = points[j + 2];
+        attr.setXYZ(12 + j * 2, ...point.toArray());
+        attr.setXYZ(13 + j * 2, point.x + Math.cos(a + j) * 0.25, point.y + 0.19, point.z);
+      }
+      attr.needsUpdate = true;
+      bolt.geometry.computeBoundingSphere();
+    });
+  }
+  if (ud.coilSpark) {
+    // Brief tip flickers — same spirit as shock arcs / damage pulse; off under reduced motion.
+    const flick = idle && Math.sin(t * 9.5 + entry.phase * 2) > 0.72;
+    ud.coilSpark.material.opacity = flick ? 0.9 : 0;
+    ud.coilSpark.scale.setScalar(flick ? 0.85 + 0.35 * Math.abs(Math.sin(t * 17)) : 1);
   }
   if (ud.swap) {
     const u = (Math.sin(t * 1.5) + 1) * 0.5;

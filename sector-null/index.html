@@ -21,30 +21,28 @@
 <div id="hud">
   <div id="topbar">
     <div class="run-stats">
-      <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
-      <div id="health" role="img" aria-label="Shields">
-        <span id="shieldPips" aria-hidden="true"></span>
-        <span id="shieldCount" aria-hidden="true"></span>
+      <button type="button" id="touchPause" aria-label="Pause">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
+        </svg>
+      </button>
+      <div class="run-copy">
+        <div class="stat"><span class="label">Wave</span> <span class="stat-value" id="waveNum">1</span></div>
+        <div id="health" role="img" aria-label="Shields">
+          <span id="shieldPips" aria-hidden="true"></span>
+          <span id="shieldCount" aria-hidden="true"></span>
+        </div>
+        <div id="powerups"></div>
       </div>
-      <div id="powerups"></div>
     </div>
     <div class="enemy-stats">
       <div class="score-copy">
         <div class="stat"><span class="label">Score</span> <span class="stat-value" id="score">0</span></div>
         <div class="stat score-high"><span class="label">High</span> <span class="stat-value" id="highScore">0</span></div>
       </div>
-      <button type="button" id="touchPause" aria-label="Pause">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" d="M5 7h14M5 12h14M5 17h14"/>
-        </svg>
-      </button>
     </div>
   </div>
 
-  <div id="bossPanel" hidden>
-    <span id="bossName"></span>
-    <progress id="bossHealth" max="1" value="1" aria-label="Boss health"></progress>
-  </div>
   <div id="ammoWrap">
     <svg id="weaponIcon" viewBox="0 0 176 60" role="img" aria-label="Pulse rifle">
       <g stroke="#a4e4fa" stroke-width="1.2" stroke-linejoin="round">
@@ -59,21 +57,77 @@
     <div id="reloadBar"><div id="reloadFill"></div></div>
   </div>
 
-  <div id="banner"><span id="bannerText"></span><span id="bannerSub"></span></div>
-  <div id="toast" role="status">
-    <span id="toastLine">
-      <span id="toastIcon" aria-hidden="true"></span>
-      <span id="toastTitle"></span>
-    </span>
-    <span id="toastDetail"></span>
+  <!-- Shared WAVE notice (start banner + cleared header): title/sub + SVG frame. -->
+  <div id="banner" class="wave-notice" aria-live="polite">
+    <div class="wave-decoration wave-decoration-top" aria-hidden="true">
+      <svg viewBox="0 0 480 32" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M28 18 H196"/>
+        <path d="M284 18 H452"/>
+        <path d="M214 26 L226 10"/>
+        <path d="M230 26 L242 10"/>
+        <path d="M246 26 L258 10"/>
+        <path d="M262 26 L274 10"/>
+      </svg>
+    </div>
+    <div class="wave-notice-title" id="bannerText"></div>
+    <div class="wave-notice-sub" id="bannerSub"></div>
+    <div class="wave-decoration wave-decoration-bottom" aria-hidden="true">
+      <svg viewBox="0 0 480 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M36 18 H178 L190 6"/>
+        <path d="M444 18 H302 L290 6"/>
+      </svg>
+    </div>
   </div>
+  <!-- Centre-screen drones-left (above WAVE/boss banners). -->
+  <div id="botsLeft" role="status" aria-live="polite"></div>
+
+  <!-- Short float-up pickup / upgrade words, projected from the operator. -->
+  <div id="floatWords" aria-hidden="true"></div>
+
+  <!-- Screen-space power-up timers under the operator (projected each frame). -->
+  <div id="puBars" hidden aria-hidden="true">
+    <div class="pu-bar pu-dmg" hidden>
+      <svg class="pu-icon" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M7.1.6 3 6.3h2.55L4.35 11.4 9.1 5.5H6.45z"/>
+      </svg>
+      <div class="pu-track"><div class="pu-fill"></div></div>
+    </div>
+    <div class="pu-bar pu-ammo" hidden>
+      <svg class="pu-icon" viewBox="0 0 16 12" aria-hidden="true" focusable="false">
+        <path fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"
+          d="M8 6c1.15-2.05 2.35-3.05 3.55-3.05S14.9 4.15 14.9 6s-1.2 3.05-3.35 3.05S9.15 8.05 8 6c-1.15 2.05-2.35 3.05-3.55 3.05S1.1 7.85 1.1 6s1.2-3.05 3.35-3.05S6.85 3.95 8 6z"/>
+      </svg>
+      <div class="pu-track"><div class="pu-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- World-anchored enemy HP bars (pooled; same thin track style as puBars). -->
+  <div id="enemyHpBars" aria-hidden="true"></div>
 </div>
 
 <div id="flash"></div>
 
 <div id="picker" class="hidden">
-  <div id="pickerTitle"></div>
-  <div id="pickerSub"></div>
+  <header class="wave-notice wave-notice-picker">
+    <div class="wave-decoration wave-decoration-top" aria-hidden="true">
+      <svg viewBox="0 0 480 32" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M28 18 H196"/>
+        <path d="M284 18 H452"/>
+        <path d="M214 26 L226 10"/>
+        <path d="M230 26 L242 10"/>
+        <path d="M246 26 L258 10"/>
+        <path d="M262 26 L274 10"/>
+      </svg>
+    </div>
+    <div class="wave-notice-title" id="pickerTitle"></div>
+    <div class="wave-notice-sub" id="pickerSub"></div>
+    <div class="wave-decoration wave-decoration-bottom" aria-hidden="true">
+      <svg viewBox="0 0 480 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <path d="M36 18 H178 L190 6"/>
+        <path d="M444 18 H302 L290 6"/>
+      </svg>
+    </div>
+  </header>
   <div id="cards"></div>
 </div>
 
