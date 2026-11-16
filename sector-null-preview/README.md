@@ -19,8 +19,8 @@ Shields enter in a quick left-to-right stagger over a soft, transparent-ended
 linear-gradient backdrop. Reduced motion shows all icons immediately.
 The opening reveal waits 0.9 seconds after gameplay becomes visible; wave titles
 and subtitles render above the shield row. The delay preserves the full display hold.
-New runs start combat music immediately. Shields reveal first, the Wave 1
-icons linger and fade out before the title/subtitle appears at 2.3 seconds,
+New runs start combat music immediately. Shield icons reveal first,
+linger and fade out before the Wave 1 title/subtitle appears at 2.3 seconds,
 and enemies begin spawning 1.5 seconds
 later while the announcement remains readable. Spawn timers pause with gameplay;
 QA wave jumps retain their direct entry. Title-scene drones clear before the intro.
