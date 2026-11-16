@@ -3231,7 +3231,7 @@ const WAVE_TYPE_INTRO = {
   1: BOT_TYPES.patrol,
   2: BOT_TYPES.runner,
   3: BOT_TYPES.gunner,
-  4: BOT_TYPES.heavy,
+  6: BOT_TYPES.heavy,
   10: BOT_TYPES.mortar,
 };
 const WAVE_INTRO_HOLD = 4.5; // seconds after intro spawns before the full mix resumes (or sooner if they die)
@@ -3298,7 +3298,7 @@ function waveBotType() {
   const r = Math.random();
   if (state.wave >= 2 && r < 0.25) return BOT_TYPES.runner;
   if (state.wave >= 3 && r >= 0.25 && r < 0.45) return BOT_TYPES.gunner;
-  if (state.wave >= 4 && r >= 0.45 && r < 0.6) return BOT_TYPES.heavy;
+  if (state.wave >= 6 && r >= 0.45 && r < 0.6) return BOT_TYPES.heavy;
   return BOT_TYPES.patrol;
 }
 
@@ -6597,7 +6597,8 @@ function startWave(n) {
   // Drones toughen steadily but slower than upgrades let the player scale, so
   // runs can go long; speed caps below the player's so kiting always works.
   state.droneSpeed = Math.min(5.2, 2.3 + n * 0.18);
-  state.droneHp = 2 + (n - 1) * 0.4;
+  // Wave 4 held at wave-3 toughness so regulars stay 3 HP; jump to 4 HP at wave 5.
+  state.droneHp = 2 + ((n === 4 ? 3 : n) - 1) * 0.4;
   // anything already up counts toward the wave (the yard's shamblers when you leave the title)
   state.toSpawn = Math.max(0, waveSpawnCount(n) - drones.length);
   for (const z of drones) {
@@ -6616,7 +6617,7 @@ function startWave(n) {
     1: 'SECURITY BREACH · DEFEND THE REACTOR',
     2: 'Cyan flankers · Fast, lightly armoured',
     3: 'Purple gunners · Dodge charged shots',
-    4: 'Gold bulwarks · Slow, armoured, heavy strikes',
+    6: 'Gold bulwarks · Slow, armoured, heavy strikes',
     7: 'Containment warning',
     11: 'Defence Bay · Gunners and a bulwark',
     12: 'Hold the bay · Heavier mix',
@@ -8095,16 +8096,7 @@ function update(dt, lightFrame = false) {
   if (state.running || title.active) {
     if (!lightFrame || ((performance.now() / 90) | 0) % 2 === 0) separateDrones();
   }
-  // Wave 4 music: crossfade once 4 bots are in the room-1 arena at once (no fallback).
-  if (state.running && state.wave === 4 && !state.choosing && !state.scripted) {
-    let insideN = 0;
-    for (const z of drones) {
-      if (inside(z.position) && ++insideN >= 4) {
-        audio.intensify();
-        break;
-      }
-    }
-  }
+  // Late track starts with wave 5 via score.queueWave (LATE_WAVE); no mid-wave intensify.
   updateEquipment(dt);
 
   updateBossDeath(dt);

@@ -11,7 +11,7 @@ const ABILITY_CUTOFF = 1000;
 const BAR = 1.65704;
 const COMBAT_CROSSFADE = 0.6;
 // The late asset measures ~3.5 dB louder in RMS than early; trim it at every entry.
-const CLIP_GAIN = { early: 1, late: 0.65, ability: 1 };
+const CLIP_GAIN = { early: 1, late: 0.55, ability: 1 };
 const LATE_WAVE = 5;
 
 export function createScore(ctx, musicBus) {
