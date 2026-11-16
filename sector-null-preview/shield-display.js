@@ -74,5 +74,9 @@ export function createShieldDisplay() {
       slot.el.style.setProperty('--echo', slot.time / 0.6);
     });
   }
-  return { reset, sync, update };
+  function dismiss() {
+    hold = 0;
+    row.hidden = true;
+  }
+  return { reset, sync, update, dismiss };
 }

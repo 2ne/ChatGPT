@@ -6729,7 +6729,7 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0, waveClearShieldDone: false,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
-    bayActive: false, scripted: null, openingReveal: 3.5, openingTitleShown: false,
+    bayActive: false, scripted: null, openingReveal: 1.5, openingTitleShown: false,
   });
   pickerFrozen = false;
   bayRevealTime = 0;
@@ -6748,13 +6748,13 @@ function resetGame(keep = false) {
   botMilestonesDone.clear();
   updateWeaponIcon();
   if (!keep) player.position.set(0, 0, 0);
-  // Shields first, then the announcement, then live combat. Title-scene
-  // drones must not attack during either opening beat.
+  // Music starts immediately; the short visual lead-in only holds enemies.
   clearFieldDrones();
   clearTimeout(showBanner._t);
   hud.banner.style.opacity = 0;
   state.intermission = state.openingReveal;
   waveAt = null;
+  audio.queueWave(1, 0);
   updateHUD();
 }
 
@@ -8052,14 +8052,14 @@ function update(dt, lightFrame = false) {
       state.openingReveal = Math.max(0, state.openingReveal - dt);
       if (state.openingReveal === 0) {
         state.openingTitleShown = true;
+        shieldDisplay.dismiss();
         showBanner('WAVE 1', 'SECURITY BREACH · DEFEND THE REACTOR', NOTICE_READ_HOLD);
-        clearTimeout(showBanner._t); // Opening banner follows the pause-aware wave countdown.
-        queueWave(NOTICE_READ_HOLD + 0.35);
+        state.intermission = 1.5;
+        waveAt = null; // Keep the music running; only delay spawning.
       }
     } else if (state.intermission > 0) {
       const scoreTime = audio.scoreTime();
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
-      if (state.wave === 0 && state.openingTitleShown) hud.banner.style.opacity = state.intermission > 0.35 ? 1 : 0;
       if (state.intermission <= 0) startWave(state.wave + 1);
     } else if (!bossDeath.active) {
       updateWaveTypeIntro(dt);
