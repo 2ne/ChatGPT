@@ -19,6 +19,10 @@ Shields enter in a quick left-to-right stagger over a soft, transparent-ended
 linear-gradient backdrop. Reduced motion shows all icons immediately.
 The opening reveal waits 0.9 seconds after gameplay becomes visible; wave titles
 and subtitles render above the shield row. The delay preserves the full display hold.
+New runs show the shield reveal first (3.5 seconds including delay and fade), then
+the Wave 1 title/subtitle for 4.5 seconds plus its fade, then start enemy spawning
+and combat music. Opening timers pause with gameplay; QA wave jumps retain their
+direct entry. Title-scene drones are cleared before this introduction.
 The row fades after 2.4 seconds once settled, hides during menus/pause, and respects
 reduced motion. Shield rules and the existing HUD count are unchanged.
 

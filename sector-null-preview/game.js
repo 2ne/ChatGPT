@@ -12,7 +12,6 @@ import './title.css';
 import { enhanceScrollArea } from './scroll-area.js';
 import { createScoreRow, renderSubmittedBoard } from './leaderboard.js';
 import { createAudio } from './audio.js';
-import { WAVE_LEAD_IN } from './score.js';
 import { createTitleScene } from './title-scene.js';
 import { firstBlocker, resolveShotStart } from './shot-collision.js';
 import { createUpgradeIconHost } from './upgrade-icons.js';
@@ -5873,6 +5872,8 @@ function applyQaWaveLoadout(seed, startWave) {
 
 /** Place the operator in the room that hosts `startWave` and queue that wave. */
 function bootQaWaveStart(startWave) {
+  state.openingReveal = 0;
+  state.openingTitleShown = false;
   const room = roomForWave(startWave);
   state.intermission = 0;
   waveAt = null;
@@ -6651,7 +6652,7 @@ function startWave(n) {
     12: 'Hold the bay · Heavier mix',
     13: 'South door opens · Mortars return',
   };
-  showBanner(
+  if (!(n === 1 && state.openingTitleShown)) showBanner(
     'WAVE ' + n,
     n === 10 ? 'Mortar tanks incoming · Dodge the orange blast zones' : omens[n] || 'Hostile signatures detected',
     NOTICE_READ_HOLD,
@@ -6709,8 +6710,7 @@ function clearRun() {
   hidePicker();
 }
 
-// `keep` carries over what's on the field (coming from the title: the operator stays where
-// they are and the yard's drones join wave 1, which starts once the camera is down)
+// `keep` preserves the operator's title-scene position; combat waits for the opening.
 function resetGame(keep = false) {
   shieldDisplay.reset();
   playerDeath.active = false;
@@ -6729,7 +6729,7 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0, waveClearShieldDone: false,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
-    bayActive: false, scripted: null,
+    bayActive: false, scripted: null, openingReveal: 3.5, openingTitleShown: false,
   });
   pickerFrozen = false;
   bayRevealTime = 0;
@@ -6747,13 +6747,14 @@ function resetGame(keep = false) {
   emeraldChain = 0;
   botMilestonesDone.clear();
   updateWeaponIcon();
-  if (keep) {
-    queueWave(SWOOP_TIME * 0.85);
-    for (const z of drones) Object.assign(z.userData, { cross: null, idle: 0, via: -1 });
-  } else {
-    player.position.set(0, 0, 0);
-    queueWave(WAVE_LEAD_IN);
-  }
+  if (!keep) player.position.set(0, 0, 0);
+  // Shields first, then the announcement, then live combat. Title-scene
+  // drones must not attack during either opening beat.
+  clearFieldDrones();
+  clearTimeout(showBanner._t);
+  hud.banner.style.opacity = 0;
+  state.intermission = state.openingReveal;
+  waveAt = null;
   updateHUD();
 }
 
@@ -8047,9 +8048,18 @@ function update(dt, lightFrame = false) {
     // Scripted bay walk / upgrade picker pause combat; bayActive itself does not.
     if (state.choosing || state.scripted) {
       // hold — no spawns during picker or the walk-in
+    } else if (state.wave === 0 && state.openingReveal > 0) {
+      state.openingReveal = Math.max(0, state.openingReveal - dt);
+      if (state.openingReveal === 0) {
+        state.openingTitleShown = true;
+        showBanner('WAVE 1', 'SECURITY BREACH · DEFEND THE REACTOR', NOTICE_READ_HOLD);
+        clearTimeout(showBanner._t); // Opening banner follows the pause-aware wave countdown.
+        queueWave(NOTICE_READ_HOLD + 0.35);
+      }
     } else if (state.intermission > 0) {
       const scoreTime = audio.scoreTime();
       state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
+      if (state.wave === 0 && state.openingTitleShown) hud.banner.style.opacity = state.intermission > 0.35 ? 1 : 0;
       if (state.intermission <= 0) startWave(state.wave + 1);
     } else if (!bossDeath.active) {
       updateWaveTypeIntro(dt);
@@ -8221,8 +8231,8 @@ function loop(now) {
   if (gamepadLive) pollGamepad(dt);
   if (!state.paused) update(dt, lightFrame);
   shieldDisplay.update(dt, state, equipment.safe, player, camera,
-    state.running && !title.active && !state.choosing && !state.paused,
-    state.running && !state.paused && !state.choosing && !state.scripted && state.intermission <= 0);
+    state.running && !title.active && !state.choosing && !state.paused && !(state.wave === 0 && state.openingTitleShown),
+    state.running && !state.paused && !state.choosing && !state.scripted && (state.intermission <= 0 || (state.wave === 0 && state.openingReveal > 0)));
   hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
     titleScene.render(renderer, title.t, dt, menuEl.classList.contains('splash'), camera.aspect, reducedMotion.matches);
