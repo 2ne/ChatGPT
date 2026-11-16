@@ -2491,6 +2491,9 @@ const puBarState = {
   ammoFill: -1,
   dmgBlink: false,
   ammoBlink: false,
+  // Total stacked duration at last pickup — fill = remaining / dur so stacks drain (not freeze at full).
+  dmgDur: 0,
+  ammoDur: 0,
   x: NaN,
   y: NaN,
 };
@@ -2509,10 +2512,12 @@ function hidePuBar(kind) {
     puBarState.dmgOn = false;
     puBarState.dmgFill = -1;
     puBarState.dmgBlink = false;
+    puBarState.dmgDur = 0;
   } else {
     puBarState.ammoOn = false;
     puBarState.ammoFill = -1;
     puBarState.ammoBlink = false;
+    puBarState.ammoDur = 0;
   }
 }
 
@@ -2590,7 +2595,8 @@ function updatePuBars() {
   }
 
   if (dmgOn) {
-    const fill = Math.min(1, dmgT / 10);
+    const dur = puBarState.dmgDur > PU_BAR_EPS ? puBarState.dmgDur : dmgT;
+    const fill = Math.min(1, dmgT / dur);
     if (fill !== puBarState.dmgFill) {
       hud.puDmgFill.style.transform = `scaleX(${fill})`;
       puBarState.dmgFill = fill;
@@ -2602,7 +2608,8 @@ function updatePuBars() {
     }
   }
   if (ammoOn) {
-    const fill = Math.min(1, ammoT / 8);
+    const dur = puBarState.ammoDur > PU_BAR_EPS ? puBarState.ammoDur : ammoT;
+    const fill = Math.min(1, ammoT / dur);
     if (fill !== puBarState.ammoFill) {
       hud.puAmmoFill.style.transform = `scaleX(${fill})`;
       puBarState.ammoFill = fill;
@@ -4815,10 +4822,13 @@ function collect(type, opts = {}) {
     // Pip / heal only when the player actually picks it up (not silent banking).
     restoreShieldSegment({ sfx: !silent });
   }
-  else if (type.id === 'dmg') state.pDamage += 10;
-  else if (type.id === 'ammo') {
+  else if (type.id === 'dmg') {
+    state.pDamage += 10;
+    puBarState.dmgDur = state.pDamage; // recompute stacked bar total on each pickup
+  } else if (type.id === 'ammo') {
     audio.cancelReload();
     state.pAmmo += 8;
+    puBarState.ammoDur = state.pAmmo; // recompute stacked bar total on each pickup
     state.reloading = false;
     state.mag = state.magSize;
     abortReloadVisuals();
