@@ -13,8 +13,11 @@ game unless James asks to release them.
 The preview shows shield icons above the operator after shield changes and while
 Shield Regen charges. Filled icons show current shields; empty outlines preserve
 capacity (including Shield Array upgrades). Gains glow, damage cracks the lost
-segments, and other shield costs drain softly. The next empty shield fills from
-the actual 12/8-second damage-free regeneration timer; hits reset that progress.
+segments, and other shield costs drain softly.
+Shield pickups no longer show a floating +1 SHIELD message; the floor label,
+overhead recovery animation, pink glow and healing sound remain.
+The next empty shield fills from the actual 12/8-second damage-free regeneration
+timer; hits reset that progress.
 Shields enter in a quick left-to-right stagger over a soft, transparent-ended
 linear-gradient backdrop. Reduced motion shows all icons immediately.
 The opening reveal waits 0.9 seconds after gameplay becomes visible; wave titles

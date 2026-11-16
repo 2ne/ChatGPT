@@ -4828,6 +4828,9 @@ function collect(type, opts = {}) {
   const silent = !!opts.silent;
   if (!silent) {
     audio.pickup(type.id);
+  }
+  // Shields already communicate recovery through the overhead icons, glow and chime.
+  if (!silent && type.id !== 'med') {
     const first = !seenDrops.has(type.id);
     spawnFloatWord(type.name, type.tint || '#e8f4ff', {
       detail: first ? (type.detail || '') : '',
