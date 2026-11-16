@@ -9,6 +9,11 @@ Bay after wave 10, Tesla Coil upgrades, revised enemy balance, white/orange
 operator and rifle, updated upgrade cards, and overhead shield feedback.
 Waves continue beyond 20; restarting returns to room 1.
 
+The opening HUD and pause screen show Wave 1 throughout the shield reveal.
+Between waves, the gameplay countdown advances independently of the music clock,
+so interrupted or stalled iOS audio cannot block the next wave. Upgrade taps claim
+their touch event and resume audio before scheduling the next combat track.
+
 Pink shield icons match the HUD and briefly animate gains and damage. Shield
 Regen uses a pink shield icon and a steadily filling power-up bar beneath the
 operator, driven by the real 12/8-second damage-free timer. Hits reset its fill;

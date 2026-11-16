@@ -2436,7 +2436,7 @@ document.addEventListener('visibilitychange', () => {
 bindTap(document.getElementById('cards'), e => {
   const c = e.target.closest('.card');
   if (c) choose(+c.dataset.i);
-}, { filter: e => e.target.closest('.card') });
+}, { filter: e => e.target.closest('.card'), claim: true });
 document.getElementById('cards').addEventListener('mouseover', e => {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const c = e.target.closest('.card');
@@ -2821,7 +2821,8 @@ function updateWeaponIcon() {
 
 function updateHUD() {
   syncTouchControls();
-  hud.wave.textContent = state.wave;
+  // Wave 0 is only the internal opening phase; the run starts on wave 1.
+  hud.wave.textContent = Math.max(1, state.wave);
   hud.score.textContent = formatScore(state.score);
   hud.highScore.textContent = formatScore(readHighScore().score);
   const remaining = drones.length + state.toSpawn + (state.bossPending ? 1 : 0);
@@ -5668,6 +5669,7 @@ function hidePicker() {
 function choose(i) {
   const u = offered[i];
   if (!state.choosing || !u || state.paused || !hud.cards.classList.contains('ready')) return;
+  audio.ensure(); // Resume interrupted audio inside the upgrade tap/key gesture.
   state.upgrades[u.id] = (state.upgrades[u.id] || 0) + 1;
   u.apply(state);
   if (u.cat === 'firepower' || u.cat === 'handling') updateWeaponIcon();
@@ -6642,6 +6644,7 @@ function updateWaveTypeIntro(dt) {
 }
 
 function startWave(n) {
+  waveAt = null;
   state.wave = n;
   state.shieldDropsThisWave = 0;
   state.waveClearShieldDone = false;
@@ -6812,7 +6815,7 @@ function setPaused(on) {
   syncTouchControls();
   resetGameplayInput();
   document.getElementById('pauseStat').textContent =
-    `WAVE ${state.wave}  ·  ${formatScore(state.score)} PTS`;
+    `WAVE ${Math.max(1, state.wave)}  ·  ${formatScore(state.score)} PTS`;
   document.getElementById('pause').classList.toggle('hidden', !on);
   updatePuBars();
   if (on) {
@@ -8090,7 +8093,13 @@ function update(dt, lightFrame = false) {
       }
     } else if (state.intermission > 0) {
       const scoreTime = audio.scoreTime();
-      state.intermission = waveAt !== null && scoreTime !== null ? waveAt - scoreTime : state.intermission - dt;
+      // Audio can report running with a frozen clock on iOS. Keep the game
+      // countdown advancing independently; music may bring the start forward,
+      // but an interrupted or stalled audio clock must never hold a wave back.
+      const remaining = state.intermission - dt;
+      state.intermission = waveAt !== null && scoreTime !== null
+        ? Math.min(remaining, waveAt - scoreTime)
+        : remaining;
       if (state.intermission <= 0) startWave(state.wave + 1);
     } else if (!bossDeath.active) {
       updateWaveTypeIntro(dt);
