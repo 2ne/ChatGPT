@@ -3325,6 +3325,22 @@ function waveSpawnCount(n) {
   return Math.max(0, 5 + n * 3);
 }
 
+/**
+ * Spawn cadence between bursts (seconds). Waves 5–10 ease enemies/sec
+ * (−10/−15/−20/−20/−15/−10%); HP, counts, intros, music, and bay 11+ unchanged.
+ */
+function waveSpawnInterval(n) {
+  const base = Math.max(0.35, 1.4 - n * 0.08);
+  const pressure =
+    n === 5 ? 0.90
+    : n === 6 ? 0.85
+    : n === 7 || n === 8 ? 0.80
+    : n === 9 ? 0.85
+    : n === 10 ? 0.90
+    : 1;
+  return base / pressure;
+}
+
 /** Doors that exist for this wave (south opens from 13). */
 function baySpawnDoors(n) {
   if (n <= 12) {
@@ -8002,7 +8018,7 @@ function update(dt, lightFrame = false) {
             }
             state.toSpawn--;
           }
-          state.spawnTimer = Math.max(0.35, 1.4 - state.wave * 0.08);
+          state.spawnTimer = waveSpawnInterval(state.wave);
         }
       }
     }
