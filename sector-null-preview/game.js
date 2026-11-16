@@ -6661,6 +6661,8 @@ function startWave(n) {
 // ===================================================================
 // clear everything a run leaves lying around
 function clearRun() {
+  playerDeath.active = false;
+  playerDeath.exploded = false;
   clearEquipmentField();
   equipment.shot = equipment.mine = equipment.safe = 0;
   helper.visible = false;
@@ -6708,6 +6710,8 @@ function clearRun() {
 // `keep` carries over what's on the field (coming from the title: the operator stays where
 // they are and the yard's drones join wave 1, which starts once the camera is down)
 function resetGame(keep = false) {
+  playerDeath.active = false;
+  playerDeath.exploded = false;
   resetGameplayInput();
   resetPlayInputStats();
   if (!keep) { clearRun(); resetOpenings(); }
@@ -7029,13 +7033,58 @@ async function publishRunScore(name) {
   }
 }
 
+const playerDeath = { active: false, exploded: false, time: 0 };
+
 function die() {
+  if (!state.running || playerDeath.active) return;
   if (lastPlayInput === 'gamepad') overlayInput = 'gamepad';
   state.running = false;
-  mouseFire = false;
-  padFire = false;
-  firing = false;
-  setPadAiming(false);
+  resetGameplayInput();
+  state.reloading = false;
+  audio.death();
+  playerDeath.active = true;
+  playerDeath.exploded = false;
+  playerDeath.time = 0;
+}
+
+function updatePlayerDeath(dt) {
+  if (!playerDeath.active) return;
+  playerDeath.time += dt;
+  if (!playerDeath.exploded) {
+    // Run outside the combat loops: removing blast victims must not invalidate their indices.
+    playerDeath.exploded = true;
+    clearEnemyBolts();
+    clearEquipmentField();
+    for (const bullet of bullets) releaseTracer(bullet);
+    bullets.length = 0;
+    const origin = player.position.clone();
+    origin.y = 1;
+    audio.bossExplode(origin);
+    spawnBlastFlare(origin, 6, 0xffe5b0);
+    spawnBlastFlare(origin.clone().add(new THREE.Vector3(0, 0.7, 0)), 4, 0xff762b);
+    spawnBlastSparks(origin, 70, 2.2, 1.8);
+    spawnShockwave(origin, 10, 0xffd7a0);
+    spawnShockwave(origin, 7, 0xff823e);
+    bumpShake(1.35);
+  }
+  // The expanding blast wipes out nearby drones, including bosses, without wave-clear rewards.
+  const radius = 7 * Math.min(1, playerDeath.time / 0.5);
+  for (let i = drones.length - 1; i >= 0; i--) {
+    const drone = drones[i];
+    if (Math.hypot(drone.position.x - player.position.x, drone.position.z - player.position.z) > radius) continue;
+    explodeDrone(drone);
+    if (drone.userData.climb >= 0) endClimb(drone, true);
+    scene.remove(drone);
+    drones.splice(i, 1);
+    state.kills++;
+  }
+  if (playerDeath.time >= (reducedMotion.matches ? 0.9 : 1.8)) {
+    playerDeath.active = false;
+    showGameOver();
+  }
+}
+
+function showGameOver() {
   // Bank a partial accuracy bonus for the unfinished wave.
   addScore(accuracyBonus());
   document.getElementById('deathStat').textContent =
@@ -7085,7 +7134,6 @@ function die() {
   } else if (finePointerUi() || gamepadLive) {
     setDeathPadFocus(document.getElementById('retryBtn'));
   }
-  audio.death();
   updateHUD();
   updatePuBars();
 }
@@ -7572,7 +7620,7 @@ function walkToward(z, dx, dz, speed, turn, dt, precise = false) {
 }
 
 function hurtPlayer(damage = 1) {
-  if (bossDeath.active || state.dmgCd > 0) return false;
+  if (!state.running || bossDeath.active || state.dmgCd > 0) return false;
   equipment.safe = 0;
   if (state.upgrades.pulse) equipment.pulse = true;
   state.hp = Math.max(0, state.hp - damage);
@@ -8126,6 +8174,7 @@ function update(dt, lightFrame = false) {
   updateEquipment(dt);
 
   updateBossDeath(dt);
+  updatePlayerDeath(dt);
   updateDroneBlasts(dt);
   updateOpenings(dt);
   if (!lightFrame) updateWorld(dt);
@@ -8137,7 +8186,7 @@ function update(dt, lightFrame = false) {
   updatePowerGlow(dt);
   updateMagnetAura();
   // flicker while the post-hit grace period lasts
-  player.visible = !state.running || state.dmgCd <= 0 || Math.floor(state.dmgCd * 12) % 2 === 0;
+  player.visible = !playerDeath.exploded && (!state.running || state.dmgCd <= 0 || Math.floor(state.dmgCd * 12) % 2 === 0);
   // Debris is pure cosmetics — drop updates briefly after a hitch so movement recovers first.
   if (!lightFrame || debris.length < 40) updateDebris(dt);
 

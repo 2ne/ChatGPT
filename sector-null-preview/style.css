@@ -2583,3 +2583,8 @@ body.pad-aiming #game {
     left: calc(var(--safe-left) + 10px);
   }
 }
+
+/* Let the death blast finish before the overlay fades over the deck. */
+#death { animation: game-over-fade 0.85s ease-out both; }
+@keyframes game-over-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #death { animation-duration: 0.2s; } }

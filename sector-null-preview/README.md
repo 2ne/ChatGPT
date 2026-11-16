@@ -145,3 +145,7 @@ fans at each rank; the other rifle cards keep their gentle sway. Reduced-motion
 settings continue to suppress card rotation.
 
 Survival card dioramas share the shield-pink category colour (#ff78b5), with pale pink highlights across Shield Regen, Emergency Pulse, Shield Array, Motion Servo and Shield Reset.
+
+## Player death finale
+
+Lethal damage stops combat and detonates the operator with a large orange explosion, screen shake, sparks and expanding shockwaves. Drones within 7 units are destroyed, including bosses, without drops or wave-clear rewards. Game Over fades in over 0.85 seconds after a 1.8-second hold. Reduced motion suppresses shake/flashes and shortens the hold and fade.
