@@ -31,7 +31,10 @@ export function createShieldDisplay() {
       slots.push({ el, fill: el.querySelector('svg svg'), time: 0, kind: '' });
     }
     while (slots.length > max) slots.pop().el.remove();
-    if (hp === null || next !== previous) hold = 2.4;
+    // Opening: 0.9s delay + 1.3s reveal/hold/fade, before the title at 2.3s.
+    // Later shield changes retain their longer feedback hold.
+    if (hp === null) hold = 1.3;
+    else if (next !== previous) hold = 2.4;
     slots.forEach((slot, i) => {
       if ((i >= previous && i < next) || (i >= next && i < previous)) {
         slot.kind = next > previous ? 'gain' : kind;

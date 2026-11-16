@@ -6729,7 +6729,7 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0, waveClearShieldDone: false,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
-    bayActive: false, scripted: null, openingReveal: 1.5, openingTitleShown: false,
+    bayActive: false, scripted: null, openingReveal: 2.3, openingTitleShown: false,
   });
   pickerFrozen = false;
   bayRevealTime = 0;
