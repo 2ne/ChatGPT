@@ -15,6 +15,8 @@ Shield Regen charges. Filled icons show current shields; empty outlines preserve
 capacity (including Shield Array upgrades). Gains glow, damage cracks the lost
 segments, and other shield costs drain softly. The next empty shield fills from
 the actual 12/8-second damage-free regeneration timer; hits reset that progress.
+Shields enter in a quick left-to-right stagger over a soft, transparent-ended
+linear-gradient backdrop. Reduced motion shows all icons immediately.
 The row fades after 2.4 seconds once settled, hides during menus/pause, and respects
 reduced motion. Shield rules and the existing HUD count are unchanged.
 

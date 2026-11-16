@@ -5,6 +5,7 @@ import './shield-display.css';
 export function createShieldDisplay() {
   const row = document.createElement('div');
   row.className = 'operator-shields';
+  row.hidden = true;
   row.setAttribute('aria-hidden', 'true'); // The existing HUD supplies the accessible count.
   document.body.appendChild(row);
   const point = new THREE.Vector3();
@@ -21,6 +22,7 @@ export function createShieldDisplay() {
     const previous = hp ?? next;
     while (slots.length < max) {
       const el = document.createElement('span');
+      el.style.setProperty('--shield-order', slots.length);
       el.innerHTML = `<svg viewBox="0 0 20 20" preserveAspectRatio="none"><path class="shield-shell" d="${path}"/><svg y="0" height="20" viewBox="0 0 20 20"><path class="shield-charge" d="${path}"/></svg><path class="shield-echo" d="${path}"/><path class="shield-crack" d="M11 3L8 8L12 10L9 16"/></svg>`;
       row.appendChild(el);
       slots.push({ el, fill: el.querySelector('svg svg'), time: 0, kind: '' });
