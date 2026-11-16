@@ -9,7 +9,8 @@ export function createShieldDisplay() {
   document.body.appendChild(row);
   const point = new THREE.Vector3();
   let slots = [], hp = null, hold = 0;
-  const path = 'M3 2H17V9C17 14 10 18 10 18S3 14 3 9Z';
+  // Same six-point silhouette as the HUD shield-pip clip-path.
+  const path = 'M10 0L20 3.6L18 13.6L10 20L2 13.6L0 3.6Z';
   function reset() {
     hp = null;
     hold = 0;
@@ -20,7 +21,7 @@ export function createShieldDisplay() {
     const previous = hp ?? next;
     while (slots.length < max) {
       const el = document.createElement('span');
-      el.innerHTML = `<svg viewBox="0 0 20 20"><path class="shield-shell" d="${path}"/><svg y="0" height="20" viewBox="0 0 20 20"><path class="shield-charge" d="${path}"/></svg><path class="shield-echo" d="${path}"/><path class="shield-crack" d="M11 3L8 8L12 10L9 16"/></svg>`;
+      el.innerHTML = `<svg viewBox="0 0 20 20" preserveAspectRatio="none"><path class="shield-shell" d="${path}"/><svg y="0" height="20" viewBox="0 0 20 20"><path class="shield-charge" d="${path}"/></svg><path class="shield-echo" d="${path}"/><path class="shield-crack" d="M11 3L8 8L12 10L9 16"/></svg>`;
       row.appendChild(el);
       slots.push({ el, fill: el.querySelector('svg svg'), time: 0, kind: '' });
     }

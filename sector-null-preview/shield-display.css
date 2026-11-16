@@ -1,6 +1,6 @@
 .operator-shields { position: fixed; top: 0; left: 0; z-index: 12; display: flex; gap: 3px; padding: 4px 6px; border-radius: 5px; background: #07151ddd; pointer-events: none; will-change: transform; }
 .operator-shields[hidden] { display: none; }
-.operator-shields > span { display: block; width: 17px; height: 20px; }
+.operator-shields > span { display: block; width: 17px; height: 18.789px; }
 .operator-shields > span > svg { width: 100%; height: 100%; overflow: hidden; }
 .operator-shields svg svg { overflow: hidden; }
 .operator-shields .shield-shell { fill: #291522; stroke: #ad7e96; stroke-width: 1.3; }
