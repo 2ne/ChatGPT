@@ -7,7 +7,9 @@ export function createShieldDisplay() {
   row.className = 'operator-shields';
   row.hidden = true;
   row.setAttribute('aria-hidden', 'true'); // The existing HUD supplies the accessible count.
-  document.body.appendChild(row);
+  // Share the banner's stacking context: HUD is fixed and forms its own layer.
+  // A body-level shield row would sit above that entire layer on desktop.
+  document.getElementById('hud').appendChild(row);
   const point = new THREE.Vector3();
   let slots = [], hp = null, hold = 0, entranceDelay = 0.9;
   // Same six-point silhouette as the HUD shield-pip clip-path.
