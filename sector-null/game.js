@@ -2472,6 +2472,8 @@ const hud = {
   bannerText: document.getElementById('bannerText'),
   bannerSub: document.getElementById('bannerSub'),
   puBars: document.getElementById('puBars'),
+  puRegen: document.querySelector('#puBars .pu-regen'),
+  puRegenFill: document.querySelector('#puBars .pu-regen .pu-fill'),
   puDmg: document.querySelector('#puBars .pu-dmg'),
   puAmmo: document.querySelector('#puBars .pu-ammo'),
   puDmgFill: document.querySelector('#puBars .pu-dmg .pu-fill'),
@@ -2495,6 +2497,8 @@ const puBarState = {
   ammoDur: 0,
   x: NaN,
   y: NaN,
+  viewportKey: '',
+  safe: { left: 0, right: 0, top: 0, bottom: 0 },
 };
 
 /** Treat near-zero timers as expired so bars don't leave a blinking sliver. */
@@ -2521,6 +2525,7 @@ function hidePuBar(kind) {
 }
 
 function hidePuBarsRoot() {
+  hud.puRegen.hidden = true;
   const root = hud.puBars;
   if (!root || !puBarState.shown) {
     if (puBarState.dmgOn) hidePuBar('dmg');
@@ -2544,11 +2549,12 @@ function updatePuBars() {
   const ammoT = state.pAmmo > PU_BAR_EPS ? state.pAmmo : 0;
   const dmgOn = dmgT > 0;
   const ammoOn = ammoT > 0;
+  const regenOn = !!state.upgrades.regen && state.hp < state.maxHp;
   const show = state.running
     && !state.choosing
     && !state.paused
     && !title.active
-    && (dmgOn || ammoOn);
+    && (dmgOn || ammoOn || regenOn);
   if (!show) {
     hidePuBarsRoot();
     return;
@@ -2571,8 +2577,24 @@ function updatePuBars() {
   const vh = vv?.height || layoutSize().h;
   const ox = vv?.offsetLeft || 0;
   const oy = vv?.offsetTop || 0;
-  const x = (_puWorld.x * 0.5 + 0.5) * vw + ox;
-  const y = (-_puWorld.y * 0.5 + 0.5) * vh + oy + 16;
+  // Three compact rows use 44px. Keep the whole stack inside safe screen edges.
+  const viewportKey = `${vw}:${vh}:${ox}:${oy}`;
+  if (puBarState.viewportKey !== viewportKey) {
+    const css = getComputedStyle(document.documentElement);
+    for (const side of ['left', 'right', 'top', 'bottom']) {
+      puBarState.safe[side] = parseFloat(css.getPropertyValue(`--safe-${side}`)) || 0;
+    }
+    puBarState.viewportKey = viewportKey;
+  }
+  const safe = puBarState.safe;
+  const rows = Number(dmgOn) + Number(ammoOn) + Number(regenOn);
+  const stackHeight = rows * 12 + (rows - 1) * 4;
+  const x = THREE.MathUtils.clamp((_puWorld.x * 0.5 + 0.5) * vw + ox,
+    ox + safe.left + 46, ox + vw - safe.right - 46);
+  const feetY = (-_puWorld.y * 0.5 + 0.5) * vh + oy;
+  const bottom = oy + vh - safe.bottom - 16;
+  const preferredY = feetY + 16 + stackHeight > bottom ? feetY - stackHeight - 20 : feetY + 16;
+  const y = THREE.MathUtils.clamp(preferredY, oy + safe.top + 16, bottom - stackHeight);
   if (x !== puBarState.x || y !== puBarState.y) {
     root.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,0)`;
     puBarState.x = x;
@@ -2580,6 +2602,13 @@ function updatePuBars() {
   }
 
   // Per-bar hide/show: expired bar gone; remaining bar stays centred.
+  hud.puRegen.hidden = !regenOn;
+  if (regenOn) {
+    const progress = Math.min(1, equipment.safe / (state.upgrades.regen === 2 ? 8 : 12));
+    hud.puRegenFill.style.transform = `scaleX(${progress})`;
+    const percent = String(Math.floor(progress * 100));
+    if (hud.puRegen.getAttribute('aria-valuenow') !== percent) hud.puRegen.setAttribute('aria-valuenow', percent);
+  }
   if (!dmgOn) {
     if (puBarState.dmgOn) hidePuBar('dmg');
   } else if (!puBarState.dmgOn) {

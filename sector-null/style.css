@@ -563,7 +563,7 @@ body {
   opacity: 1;
 }
 
-/* Screen-space OVERCHARGE / INFINITE CELL bars under the operator.
+/* Screen-space SHIELD REGEN / OVERCHARGE / INFINITE CELL bars under the operator.
    Continuous fill + shimmer (distinct from plain enemy HP bars). */
 #puBars {
   position: absolute;
@@ -587,7 +587,7 @@ body {
   overflow: visible;
 }
 /* Author `display:flex` would otherwise beat [hidden] and leave a stuck bar. */
-.pu-bar[hidden] {
+#puBars[hidden], .pu-bar[hidden] {
   display: none !important;
 }
 .pu-icon {
@@ -628,6 +628,10 @@ body {
 .pu-ammo .pu-fill {
   background: #76bcf0;
 }
+.pu-regen .pu-icon { color: #ff78b5; }
+.pu-regen .pu-fill { background: #ff78b5; }
+/* Recharge grows steadily left-to-right; timed buffs drain toward the left. */
+.pu-regen .pu-fill::after { display: none; }
 /* Gentle charged shimmer — CSS only, clipped to the fill. */
 .pu-fill::after {
   content: "";

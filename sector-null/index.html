@@ -86,6 +86,12 @@
 
   <!-- Screen-space power-up timers under the operator (projected each frame). -->
   <div id="puBars" hidden aria-hidden="true">
+    <div class="pu-bar pu-regen" hidden role="progressbar" aria-label="Shield recharge" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <svg class="pu-icon" viewBox="0 0 19 21" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M9.5 0L19 3.78L17.1 14.28L9.5 21L1.9 14.28L0 3.78Z"/>
+      </svg>
+      <div class="pu-track"><div class="pu-fill"></div></div>
+    </div>
     <div class="pu-bar pu-dmg" hidden>
       <svg class="pu-icon" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
         <path fill="currentColor" d="M7.1.6 3 6.3h2.55L4.35 11.4 9.1 5.5H6.45z"/>

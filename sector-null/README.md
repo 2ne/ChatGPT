@@ -9,8 +9,13 @@ Bay after wave 10, Tesla Coil upgrades, revised enemy balance, white/orange
 operator and rifle, updated upgrade cards, and overhead shield feedback.
 Waves continue beyond 20; restarting returns to room 1.
 
-Pink shield icons match the HUD, animate gains and damage, and fill from the real
-Shield Regen timer. The opening starts music immediately, reveals the shields,
+Pink shield icons match the HUD and briefly animate gains and damage. Shield
+Regen uses a pink shield icon and a steadily filling power-up bar beneath the
+operator, driven by the real 12/8-second damage-free timer. Hits reset its fill;
+full shields hide it. It stacks with Overcharge and Infinite Cell in three compact
+rows (44px total), constrained to the safe viewport and moved above the feet near
+the bottom edge. Recharge no longer keeps the overhead shield row visible.
+The opening starts music immediately, reveals the shields,
 fades them before the Wave 1 title at 2.3 seconds, then starts enemies 1.5 seconds
 later. Subsequent waves retain their usual entry. Shield pickups keep their floor
 label, glow and sound without the redundant floating +1 SHIELD message.
