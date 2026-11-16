@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { addRailgunRails } from './railgun-mesh.js';
 import { bevelBox } from './bevel-box.js';
 import { addRifleShell } from './rifle-mesh.js';
 import { UPGRADE_CATS } from './upgrades.js';
@@ -9,9 +10,9 @@ const SURVIVAL_COLOR = UPGRADE_CATS.survival;
 const SURVIVAL_HIGHLIGHT = 0xffb5d6;
 
 // Full orbit hides the face of these icons — sway ±20° instead.
-const RIFLE_IDS = new Set(['damage', 'rate', 'spread']);
+const RIFLE_IDS = new Set(['damage', 'rate', 'spread', 'railgun']);
 // Split Beam keeps a full orbit so its 2 / 3 / 4-shot fan is readable from every angle.
-const SWAY_IDS = new Set(['damage', 'rate', 'bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil']);
+const SWAY_IDS = new Set(['damage', 'rate', 'bot', 'botGun', 'botBomb', 'magnet', 'luck', 'mag', 'coil', 'railgun']);
 const SWAY_ANGLE = 20 * Math.PI / 180;
 
 // Same basis as game.js tracers: lookAt aims local -Z forward.
@@ -218,6 +219,11 @@ function gemCrystal(color = 0x7cff4a, s = 1) {
 }
 
 const builders = {
+  railgun: () => {
+    const g = rifleBase();
+    addRailgunRails(g.userData.rifle);
+    return g;
+  },
   bot: (owned = 0) => helperBot('base', owned),
   botGun: (owned = 0) => helperBot('twin', owned),
   botBomb: (owned = 0) => helperBot('bomb', owned),

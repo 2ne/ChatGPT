@@ -451,6 +451,10 @@ export function buildDefenceBay(parent, { box, model, halo, cyanLight,
     doors, northDoor, westDoor, eastDoor, southDoor,
     update(dt) {
       for (const d of doors) d.update(dt);
+      if (coilWeapon.destroyed) {
+        floorPulse.material.opacity = 0;
+        return;
+      }
       time += dt;
       if (dischargeT > 0) dischargeT = Math.max(0, dischargeT - dt);
       const pulse = reducedMotion?.matches ? 0 : Math.sin(time * 1.8);

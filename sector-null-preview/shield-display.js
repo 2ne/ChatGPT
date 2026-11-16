@@ -46,8 +46,6 @@ export function createShieldDisplay() {
   }
   function update(dt, state, safe, player, camera, shown, ticking) {
     sync(state.hp, state.maxHp);
-    const charging = !!state.upgrades.regen && state.hp < state.maxHp;
-    const progress = charging ? Math.min(1, safe / (state.upgrades.regen === 2 ? 8 : 12)) : 0;
     // Start the opening reveal only once gameplay is visible, not behind the title.
     if (shown && entranceDelay > 0) {
       entranceDelay = Math.max(0, entranceDelay - dt);
@@ -55,9 +53,9 @@ export function createShieldDisplay() {
       return;
     }
     if (shown && ticking) hold = Math.max(0, hold - dt);
-    row.hidden = !shown || (!charging && hold <= 0);
+    row.hidden = !shown || hold <= 0;
     if (row.hidden) return;
-    row.style.opacity = charging ? '1' : String(Math.min(1, hold / 0.4));
+    row.style.opacity = String(Math.min(1, hold / 0.4));
     point.copy(player.position);
     point.y += 2.65;
     point.project(camera);
@@ -68,12 +66,12 @@ export function createShieldDisplay() {
     row.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-100%)`;
     slots.forEach((slot, i) => {
       if (ticking) slot.time = Math.max(0, slot.time - dt);
-      const amount = i < hp ? 1 : i === hp ? progress : 0;
+      const amount = i < hp ? 1 : 0;
       // Nested SVG viewport crops the same shield from bottom to top.
       slot.fill.setAttribute('y', 20 * (1 - amount));
       slot.fill.setAttribute('height', 20 * amount);
       slot.fill.setAttribute('viewBox', `0 ${20 * (1 - amount)} 20 ${Math.max(0.001, 20 * amount)}`);
-      slot.el.className = `${i < hp ? 'full' : 'empty'} ${charging && i === hp ? 'charging' : ''} ${slot.time > 0 ? slot.kind : ''}`;
+      slot.el.className = `${i < hp ? 'full' : 'empty'} ${slot.time > 0 ? slot.kind : ''}`;
       slot.el.style.setProperty('--echo', slot.time / 0.6);
     });
   }

@@ -563,7 +563,7 @@ body {
   opacity: 1;
 }
 
-/* Screen-space OVERCHARGE / INFINITE CELL bars under the operator.
+/* Screen-space SHIELD REGEN / OVERCHARGE / INFINITE CELL bars under the operator.
    Continuous fill + shimmer (distinct from plain enemy HP bars). */
 #puBars {
   position: absolute;
@@ -587,7 +587,7 @@ body {
   overflow: visible;
 }
 /* Author `display:flex` would otherwise beat [hidden] and leave a stuck bar. */
-.pu-bar[hidden] {
+#puBars[hidden], .pu-bar[hidden] {
   display: none !important;
 }
 .pu-icon {
@@ -628,6 +628,10 @@ body {
 .pu-ammo .pu-fill {
   background: #76bcf0;
 }
+.pu-regen .pu-icon { color: #ff78b5; }
+.pu-regen .pu-fill { background: #ff78b5; }
+/* Recharge grows steadily left-to-right; timed buffs drain toward the left. */
+.pu-regen .pu-fill::after { display: none; }
 /* Gentle charged shimmer — CSS only, clipped to the fill. */
 .pu-fill::after {
   content: "";
@@ -2550,6 +2554,10 @@ body.pad-aiming #game {
   #picker #cards .card:is(:hover, :focus-visible, .pad-sel, :active, .picked, .dropped) { transform: none; }
 }
 
+/* Let the death blast finish before the overlay fades over the deck. */
+#death { animation: game-over-fade 0.85s ease-out both; }
+@keyframes game-over-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #death { animation-duration: 0.2s; } }
 /* Preview build stamp — PREVIEW=1 builds only. Keep clear of HUD + twin sticks. */
 #previewStamp {
   position: fixed;
@@ -2584,7 +2592,4 @@ body.pad-aiming #game {
   }
 }
 
-/* Let the death blast finish before the overlay fades over the deck. */
-#death { animation: game-over-fade 0.85s ease-out both; }
-@keyframes game-over-fade { from { opacity: 0; } to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { #death { animation-duration: 0.2s; } }
+

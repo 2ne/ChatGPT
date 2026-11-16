@@ -2,6 +2,35 @@
 
 An independent preview of the Defence Bay, entered after clearing wave 10.
 
+## Wave 20 — coil destruction and Chain Railgun
+
+Refreshed from live commit `4b90b5d` on 16 November 2026, including the compact
+Shield Regen power-up bar and shield-upgrade feedback. Preview build/version
+tooling and QA wave jumps remain exclusive to this project; live is unchanged.
+
+The wave-20 boss launches three rockets at the coil after entering the room.
+An orange boundary and warning announce the impact; after the volley, the coil
+explodes and stops firing. Scorched wreckage and fire remain in the centre for
+later waves. The marked 3.8-unit radius deals one shield of damage, with a
+1.2-second initial grace period and at least 1.5 seconds between fire hits.
+Fire damage and the sequence pause with menus and intermissions. Restart restores
+the coil and removes the fire. The boss cannot die before completing this event.
+
+After wave 20, **Chain Railgun** is guaranteed in the first upgrade slot until
+chosen. It replaces normal rifle shots using the existing fire/reload controls.
+The shot hits instantly; a kill jumps to a nearby enemy within 6.5 units, losing
+10% damage each jump. Cover blocks shots and chains; surviving targets stop the
+chain. Base capacity is four targets, plus one per salvaged coil rank and Split
+Beam rank. Damage, fire-rate, magazine and reload upgrades remain useful; Piercing
+adds 12% damage per rank. Overcharge and Infinite Cell still work. Coil upgrades
+stop being offered from the wave-20 clear onward. Accelerator rails appear on
+both the operator's weapon and the upgrade card.
+
+- `?dev=wave=20&boss=1`: enter directly at the wave-20 boss with a simulated build.
+- `?dev=wave=21&railgun=1`: try the railgun with the destroyed coil and fire.
+- Existing wave/build/coil/bare-start parameters still work; jumps past wave 20
+  restore the destroyed-room state automatically.
+
 **Preview:** https://2ne.github.io/ChatGPT/sector-null-preview/?dev=bay
 
 The public game remains in `../sector-null/` at its existing URL. Changes here
@@ -10,13 +39,14 @@ game unless James asks to release them.
 
 ## Player model
 
-The preview shows shield icons above the operator after shield changes and while
-Shield Regen charges. Filled icons show current shields; empty outlines preserve
+The preview shows shield icons above the operator briefly after shield changes.
+Shield Regen fills a pink power-up bar below the operator, stacked safely with
+Overcharge and Infinite Cell. Filled icons show current shields; empty outlines preserve
 capacity (including Shield Array upgrades). Gains glow, damage cracks the lost
 segments, and other shield costs drain softly.
 Shield pickups no longer show a floating +1 SHIELD message; the floor label,
 overhead recovery animation, pink glow and healing sound remain.
-The next empty shield fills from the actual 12/8-second damage-free regeneration
+The regeneration bar fills from the actual 12/8-second damage-free regeneration
 timer; hits reset that progress.
 Shields enter in a quick left-to-right stagger over a soft, transparent-ended
 linear-gradient backdrop. Reduced motion shows all icons immediately.

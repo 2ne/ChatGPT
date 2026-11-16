@@ -1,5 +1,14 @@
 # Preview boundary
 
+## Wave-20 destruction (preview feature)
+
+`coil-ruin.js` owns the bounded rocket/fire/wreckage meshes and lifecycle.
+The wave-20 boss destroys the coil; `state.coilDestroyed` disables it and the
+floor hazard persists. Restart restores the coil; QA jumps past wave 20 restore
+the destroyed state. No coil cards at wave 20 or later. Chain Railgun is pinned
+in slot 1 after wave 20 until chosen; existing coil ranks extend its kill chain.
+Preview shortcuts: `?dev=wave=20&boss=1`, `?dev=wave=21&railgun=1`.
+
 This is the independent Room 2 preview. Implement preview changes here, build
 with `npm run build`, and deploy through the existing Pages workflow to
 `/sector-null-preview/`. The public game source is `../sector-null/` and must not

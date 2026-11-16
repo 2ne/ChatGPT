@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import { addRailgunRails } from './railgun-mesh.js';
+import { createCoilRuin } from './coil-ruin.js';
+import { initPreviewStamp, setPreviewStampNote } from './preview-stamp.js';
 import { createShieldDisplay } from './shield-display.js';
 import { bevelBox } from './bevel-box.js';
 import { addRifleShell } from './rifle-mesh.js';
@@ -79,15 +82,13 @@ import {
   shutBlocksWallSample,
 } from './door-gap-nav.js';
 import { huntPointToward } from './drone-hunt.js';
-import { initPreviewStamp, setPreviewStampNote } from './preview-stamp.js';
 // Room-2 footprint constants live in facility-exterior.js for later stages.
 
 // Must run before any material compiles — swaps camera-depth fog for world-XZ falloff
 // so the extended exterior fades (classic “bigger map” trick on a top-down camera).
 installWorldXzFog();
-// Preview-only badge + version.json reload (no-op on live builds).
-initPreviewStamp();
 
+initPreviewStamp();
 const bootParams = new URLSearchParams(location.search);
 const mapView = bootParams.get('dev') === 'mapview';
 /**
@@ -708,6 +709,24 @@ const defenceBay = buildDefenceBay(world, {
   BlockBatch, seeded, worldMat, reducedMotion,
 });
 const room2SouthDoor = defenceBay.southDoor;
+const coilRuin = createCoilRuin({
+  scene, bay: defenceBay, reducedMotion,
+  onWarning: () => {
+    showBanner('COIL TARGETED', 'ROCKETS INCOMING · CLEAR THE CENTRE', 2.8, 'boss');
+    audio.enemyCharge(defenceBay.coilTip);
+  },
+  onImpact: (p) => { spawnBlastSparks(p, 14); spawnBlastFlare(p, 1.4, 0xffa04b); audio.hit(p); },
+  onDestroyed: (p) => {
+    state.coilDestroyed = true;
+    spawnBlastSparks(p.clone().setY(2), 64, 2, 1.8);
+    spawnBlastFlare(p.clone().setY(1.5), 5, 0xffae55);
+    spawnShockwave(p, 7, 0xff8d39);
+    bumpShake(reducedMotion.matches ? 0 : 0.7);
+    audio.bossExplode(p);
+    showBanner('COIL DESTROYED', 'BURNING CENTRE · KEEP CLEAR', 3, 'boss');
+  },
+  hurt: () => hurtPlayer(1),
+});
 const bayDoorById = {
   north: defenceBay.northDoor,
   west: defenceBay.westDoor,
@@ -973,6 +992,8 @@ for (const side of [-1, 1]) {
 // --- rifle: origin at the butt plate, barrel along +Z ---
 const gun = new THREE.Group(); gun.rotation.order = 'YXZ'; player.add(gun);
 addRifleShell(gun, M, blk);
+const railgunRails = addRailgunRails(gun);
+railgunRails.visible = false;
 // Energy cell — chunky + emissive so eject/slot reads from the top-down camera.
 const cellGeo = bevelBox(0.11, 0.28, 0.15, 0.02);
 const cellFreshMat = new THREE.MeshStandardMaterial({
@@ -2474,6 +2495,8 @@ const hud = {
   bannerText: document.getElementById('bannerText'),
   bannerSub: document.getElementById('bannerSub'),
   puBars: document.getElementById('puBars'),
+  puRegen: document.querySelector('#puBars .pu-regen'),
+  puRegenFill: document.querySelector('#puBars .pu-regen .pu-fill'),
   puDmg: document.querySelector('#puBars .pu-dmg'),
   puAmmo: document.querySelector('#puBars .pu-ammo'),
   puDmgFill: document.querySelector('#puBars .pu-dmg .pu-fill'),
@@ -2497,6 +2520,8 @@ const puBarState = {
   ammoDur: 0,
   x: NaN,
   y: NaN,
+  viewportKey: '',
+  safe: { left: 0, right: 0, top: 0, bottom: 0 },
 };
 
 /** Treat near-zero timers as expired so bars don't leave a blinking sliver. */
@@ -2523,6 +2548,7 @@ function hidePuBar(kind) {
 }
 
 function hidePuBarsRoot() {
+  hud.puRegen.hidden = true;
   const root = hud.puBars;
   if (!root || !puBarState.shown) {
     if (puBarState.dmgOn) hidePuBar('dmg');
@@ -2546,11 +2572,12 @@ function updatePuBars() {
   const ammoT = state.pAmmo > PU_BAR_EPS ? state.pAmmo : 0;
   const dmgOn = dmgT > 0;
   const ammoOn = ammoT > 0;
+  const regenOn = !!state.upgrades.regen && state.hp < state.maxHp;
   const show = state.running
     && !state.choosing
     && !state.paused
     && !title.active
-    && (dmgOn || ammoOn);
+    && (dmgOn || ammoOn || regenOn);
   if (!show) {
     hidePuBarsRoot();
     return;
@@ -2573,8 +2600,24 @@ function updatePuBars() {
   const vh = vv?.height || layoutSize().h;
   const ox = vv?.offsetLeft || 0;
   const oy = vv?.offsetTop || 0;
-  const x = (_puWorld.x * 0.5 + 0.5) * vw + ox;
-  const y = (-_puWorld.y * 0.5 + 0.5) * vh + oy + 16;
+  // Three compact rows use 44px. Keep the whole stack inside safe screen edges.
+  const viewportKey = `${vw}:${vh}:${ox}:${oy}`;
+  if (puBarState.viewportKey !== viewportKey) {
+    const css = getComputedStyle(document.documentElement);
+    for (const side of ['left', 'right', 'top', 'bottom']) {
+      puBarState.safe[side] = parseFloat(css.getPropertyValue(`--safe-${side}`)) || 0;
+    }
+    puBarState.viewportKey = viewportKey;
+  }
+  const safe = puBarState.safe;
+  const rows = Number(dmgOn) + Number(ammoOn) + Number(regenOn);
+  const stackHeight = rows * 12 + (rows - 1) * 4;
+  const x = THREE.MathUtils.clamp((_puWorld.x * 0.5 + 0.5) * vw + ox,
+    ox + safe.left + 46, ox + vw - safe.right - 46);
+  const feetY = (-_puWorld.y * 0.5 + 0.5) * vh + oy;
+  const bottom = oy + vh - safe.bottom - 16;
+  const preferredY = feetY + 16 + stackHeight > bottom ? feetY - stackHeight - 20 : feetY + 16;
+  const y = THREE.MathUtils.clamp(preferredY, oy + safe.top + 16, bottom - stackHeight);
   if (x !== puBarState.x || y !== puBarState.y) {
     root.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,0)`;
     puBarState.x = x;
@@ -2582,6 +2625,13 @@ function updatePuBars() {
   }
 
   // Per-bar hide/show: expired bar gone; remaining bar stays centred.
+  hud.puRegen.hidden = !regenOn;
+  if (regenOn) {
+    const progress = Math.min(1, equipment.safe / (state.upgrades.regen === 2 ? 8 : 12));
+    hud.puRegenFill.style.transform = `scaleX(${progress})`;
+    const percent = String(Math.floor(progress * 100));
+    if (hud.puRegen.getAttribute('aria-valuenow') !== percent) hud.puRegen.setAttribute('aria-valuenow', percent);
+  }
   if (!dmgOn) {
     if (puBarState.dmgOn) hidePuBar('dmg');
   } else if (!puBarState.dmgOn) {
@@ -2777,8 +2827,10 @@ function addScore(points) {
 }
 
 function updateWeaponIcon() {
+  railgunRails.visible = !!state.upgrades.railgun;
   const { mag = 0, reload = 0, damage = 0, rate = 0, pierce = 0, spread = 0 } = state.upgrades;
   hud.weaponMods.innerHTML = [
+    state.upgrades.railgun && '<path d="M70 17H151v4H70zM70 35H151v4H70z"/>',
     pierce && `<path d="M${22 - 4 * pierce} 27H35v6H${22 - 4 * pierce}z"/>`,
     spread && `<path d="M${42 - 5 * spread} 35H66v5H${42 - 5 * spread}z"/>`,
     damage && `<path d="M${80 - 5 * damage} 24l5-7h${8 + 5 * damage}l6 7z"/>`,
@@ -2789,7 +2841,7 @@ function updateWeaponIcon() {
   const installed = UPGRADES
     .filter(u => (u.cat === 'firepower' || u.cat === 'handling') && state.upgrades[u.id])
     .map(u => `${u.name} level ${state.upgrades[u.id]}`);
-  hud.weaponIcon.setAttribute('aria-label', ['Pulse rifle', ...installed].join(', '));
+  hud.weaponIcon.setAttribute('aria-label', [state.upgrades.railgun ? 'Chain railgun' : 'Pulse rifle', ...installed].join(', '));
 }
 
 function updateHUD() {
@@ -3177,6 +3229,55 @@ function spawnPulse(fromX, fromZ, muzzlePos, dir, userData, hot) {
   bullets.push(b);
 }
 
+function fireRailgun(mp, aim) {
+  const world = shotWorld();
+  const start = resolveShotStart(player.position.x, player.position.z, mp.x, mp.z, aim.x, aim.z, world);
+  if (start.shatter) breakOpening(start.shatter);
+  if (start.impact) { strikeShotBlock(start.impact, aim, mp.y); return; }
+  let from = new THREE.Vector3(start.x, mp.y, start.z);
+  const end = from.clone().addScaledVector(aim, 32);
+  const block = firstBlocker(from.x, from.z, end.x, end.z, world.wallBoxes, world.solids, world.openings);
+  const range = block ? block.t * 32 : 32;
+  let target = null, nearest = range;
+  for (const z of drones) {
+    if (z.userData.dying) continue;
+    const dx = z.position.x - from.x, dz = z.position.z - from.z;
+    const along = dx * aim.x + dz * aim.z;
+    if (along <= 0 || along >= nearest) continue;
+    if (Math.abs(dx * aim.z - dz * aim.x) > 0.65 * z.userData.type.size) continue;
+    target = z; nearest = along;
+  }
+  if (!target) {
+    end.copy(from).addScaledVector(aim, range);
+    spawnTeslaBolt(from, end, { scale: 1.4 });
+    if (block) strikeShotBlock(block, aim, mp.y);
+    return;
+  }
+  state.shotsHit++;
+  const used = new Set();
+  const cap = 4 + (state.upgrades.coil || 0) + state.spread;
+  let damage = Math.max(state.damage * 5, teslaDamage(1.8)) * (1 + state.pierce * 0.12) * (state.pDamage > 0 ? 2 : 1);
+  for (let hop = 0; target && hop < cap; hop++) {
+    used.add(target);
+    const to = droneAimPoint(target);
+    spawnTeslaBolt(from, to, { main: hop === 0, scale: 1.6 });
+    target.userData.hp -= damage * (target.userData.recovery > 0 ? 1.75 : 1);
+    applyTeslaHitFlash(target);
+    if (target.userData.hp > 0) { maybeSplitBoss(target); break; }
+    beginTeslaDeath(target);
+    if (bossDeath.active) break;
+    from = to.clone();
+    target = null; let best = 6.5 * 6.5;
+    for (const z of drones) {
+      if (z.userData.dying || used.has(z) || !inside(z.position)) continue;
+      const distance = from.distanceToSquared(droneAimPoint(z));
+      if (distance >= best || firstBlocker(from.x, from.z, z.position.x, z.position.z, world.wallBoxes, world.solids, world.openings)) continue;
+      target = z; best = distance;
+    }
+    damage *= 0.9;
+  }
+}
+
 function fire() {
   if (state.fireCd > 0 || state.reloading || state.mag <= 0 || !state.running) return;
   const aim = new THREE.Vector3(aimPoint.x - player.position.x, 0, aimPoint.z - player.position.z);
@@ -3184,13 +3285,18 @@ function fire() {
   aim.normalize();
   const charge = state.pAmmo > 0 ? 1 : (state.mag - 1) / Math.max(1, state.magSize - 1);
   if (state.pAmmo <= 0) state.mag--;
-  state.fireCd = state.fireRate;
+  state.fireCd = state.upgrades.railgun ? Math.max(0.32, state.fireRate * 5) : state.fireRate;
 
   // spawn at muzzle world position; SPLIT BEAM fans extra bullets around the aim line
   const mp = new THREE.Vector3();
   muzzle.getWorldPosition(mp);
   const count = 1 + state.spread;
-  for (let k = 0; k < count; k++) {
+  if (state.upgrades.railgun) {
+    state.shotsFired++;
+    fireRailgun(mp, aim);
+    audio.teslaZap(mp);
+  }
+  for (let k = 0; !state.upgrades.railgun && k < count; k++) {
     const a = (k - (count - 1) / 2) * 0.13;
     const c = Math.cos(a), s = Math.sin(a);
     const dir = new THREE.Vector3(aim.x * c - aim.z * s, 0, aim.x * s + aim.z * c);
@@ -5497,7 +5603,7 @@ function pickWeighted(candidates) {
 }
 
 function coilOfferEligible() {
-  return (state.upgrades.coil || 0) < COIL_MAX_RANK
+  return !state.coilDestroyed && state.wave < 20 && (state.upgrades.coil || 0) < COIL_MAX_RANK
     && (state.bayActive || state.wave >= 11);
 }
 
@@ -5519,6 +5625,7 @@ function pickUpgradeOffers(count = 3) {
   };
 
   // Tesla Coil: always in the offer after wave 11 until maxed (pinned to slot 1 below).
+  if (state.wave >= 20 && !state.upgrades.railgun) take(pool.find(u => u.id === 'railgun'));
   if (coilOfferEligible()) take(pool.find(u => u.id === 'coil'));
 
   // Keep an equipment path available, including follow-up modules once owned.
@@ -5557,6 +5664,7 @@ function pickUpgradeOffers(count = 3) {
 }
 
 function recommendationScore(u) {
+  if (u.id === 'railgun') return 2000;
   if (u.id === 'magnet') return -Infinity;
   // Coil is the recommended first slot after wave 11 until maxed.
   if (u.id === 'coil' && coilOfferEligible()) return 1000;
@@ -5658,11 +5766,13 @@ function choose(i) {
   const tipColor = UPGRADE_CATS[u.cat] || '#7ec8e8';
   choose._t = setTimeout(() => {
     hidePicker();
-    // Same two-line float as first-time pickups: small coloured category + name below.
-    spawnFloatWord(`${catLabel} UPGRADED`, tipColor, {
-      detail: line,
-      upgrade: true,
-    });
+    // Shield capacity/recovery is already shown by the overhead shield animation.
+    if (u.id !== 'hp' && u.id !== 'heal') {
+      spawnFloatWord(`${catLabel} UPGRADED`, tipColor, {
+        detail: line,
+        upgrade: true,
+      });
+    }
     if (startBay) vacuumWaveClearShieldThen(beginBayTransition);
   }, 250);
   // Wave 10 → Defence Bay walk instead of wave 11.
@@ -5869,7 +5979,6 @@ function applyQaWaveLoadout(seed, startWave) {
     `\n score=${state.score} kills=${state.kills}`,
     `\n repeat: ${repeat}`,
   );
-  setPreviewStampNote(`w${startWave} · seed ${seed} · coil×${coilRank} · ${summary || 'bare'}`);
   return { seed, history, summary, startWave, room };
 }
 
@@ -5906,6 +6015,31 @@ function bootQaWaveStart(startWave) {
   followPos.copy(player.position).add(gameplayCamOffset());
   camera.position.copy(followPos);
   camMix = 1;
+  if (startWave > 20) {
+    state.coilDestroyed = true;
+    coilRuin.destroy(true);
+  }
+  if (bootParams.get('railgun') === '1') {
+    state.upgrades.railgun = 1;
+    updateWeaponIcon();
+  }
+  if (startWave === 20 && bootParams.get('boss') === '1') {
+    startWaveNowForQaBoss();
+  }
+  setPreviewStampNote(`w${startWave} · coil×${state.upgrades.coil || 0}${state.upgrades.railgun ? ' · railgun' : ''}`);
+}
+
+function startWaveNowForQaBoss() {
+  startWave(20);
+  clearFieldDrones();
+  spawnWaveBoss();
+  const boss = drones.find(z => z.userData.boss);
+  if (boss) {
+    boss.position.set(BAY_CX, 0, ROOM2_CZ - 7);
+    boss.userData.opening = null;
+    boss.userData.stage = 1;
+    boss.userData.climb = -1;
+  }
 }
 
 // ===================================================================
@@ -6234,6 +6368,7 @@ function updateTeslaCoil(dt) {
   if (!weapon || !state.bayActive) return;
   updateTeslaBolts(dt);
   updateTeslaDeaths(dt);
+  if (weapon.destroyed) return;
   weapon.cd -= dt;
   const { interval, range, targets, damageScale, boltScale } = weapon.stats();
   const tip = weapon.tip;
@@ -6454,6 +6589,11 @@ function bumpShake(amount) {
 }
 
 function beginBossDeath(z) {
+  if (state.wave === 20 && state.bayActive && !state.coilDestroyed) {
+    z.userData.hp = 1;
+    coilRuin.start(z);
+    return;
+  }
   const ud = z.userData;
   ud.dying = true;
   ud.hp = 0;
@@ -6715,6 +6855,7 @@ function clearRun() {
 
 // `keep` preserves the operator's title-scene position; combat waits for the opening.
 function resetGame(keep = false) {
+  coilRuin.reset();
   shieldDisplay.reset();
   playerDeath.active = false;
   playerDeath.exploded = false;
@@ -6732,7 +6873,7 @@ function resetGame(keep = false) {
     intermission: 0, choosing: false, shake: 0, upgrades: {},
     pDamage: 0, pAmmo: 0, sinceDrop: 0, shieldDropsThisWave: 0, waveClearShieldDone: false,
     introType: null, introLeft: 0, introHold: false, introTimer: 0,
-    bayActive: false, scripted: null, openingReveal: 2.3, openingTitleShown: false,
+    bayActive: false, scripted: null, openingReveal: 2.3, openingTitleShown: false, coilDestroyed: false,
   });
   pickerFrozen = false;
   bayRevealTime = 0;
@@ -7689,6 +7830,10 @@ function chaseDrone(z, dt) {
     nearWall
     || (ud.stage === 1 && Math.hypot(z.position.x - ud.opening.ix, z.position.z - ud.opening.iz) > 0.12))));
   const onDeck = inside(z.position) && !bossEntering;
+  if (ud.boss && state.wave === 20 && state.bayActive && onDeck && ud.climb < 0 && !state.coilDestroyed) {
+    coilRuin.start(z);
+    return;
+  }
   if (ud.boss && onDeck) { ud.opening = null; ud.stage = 0; }
   if (ud.type.milestone && onDeck && ud.climb < 0) {
     if (ud.recovery > 0) {
@@ -8189,6 +8334,7 @@ function update(dt, lightFrame = false) {
   }
   // Late track starts with wave 5 via score.queueWave (LATE_WAVE); no mid-wave intensify.
   updateEquipment(dt);
+  coilRuin.update(dt, state.running && state.bayActive && !state.choosing && !state.scripted && !bossDeath.active && state.intermission <= 0, player);
 
   updateBossDeath(dt);
   updatePlayerDeath(dt);
@@ -8307,9 +8453,7 @@ whenViewportSettled(() => {
         console.info(`[dev=wave] bare start (upgrades=0) → wave ${qaWaveTarget} · room ${roomForWave(qaWaveTarget)}`);
         if (qaCoilOverride != null) {
           setQaCoilRank(qaCoilOverride);
-          setPreviewStampNote(`w${qaWaveTarget} · bare · coil×${qaCoilOverride}`);
         } else {
-          setPreviewStampNote(`w${qaWaveTarget} · bare`);
         }
       } else {
         applyQaWaveLoadout(resolveQaSeed(), qaWaveTarget);

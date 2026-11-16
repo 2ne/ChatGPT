@@ -161,7 +161,7 @@ export const COIL_UPGRADE = {
   desc: 'Upgrade defences',
   max: COIL_MAX_RANK,
   // First offered on the wave-11 clear (bay live / wave ≥ 11).
-  ok: (s) => !!s.bayActive || s.wave >= 11,
+  ok: (s) => !s.coilDestroyed && s.wave < 20 && (!!s.bayActive || s.wave >= 11),
   stat: (s) => {
     const owned = s.upgrades.coil || 0;
     const now = coilStatsForRank(owned);
@@ -179,6 +179,13 @@ export const COIL_UPGRADE = {
 
 // Register in the live catalog (Stage 6).
 UPGRADES.push(COIL_UPGRADE);
+UPGRADES.push({
+  id: 'railgun', cat: 'firepower', name: 'CHAIN RAILGUN', max: 1,
+  desc: 'Replace rifle · kills jump to nearby enemies',
+  ok: (s) => s.wave >= 20,
+  stat: (s) => ['Off', `Up to ${4 + (s.upgrades.coil || 0) + (s.spread || 0)} targets · coil ranks salvaged`],
+  apply: () => {},
+});
 
 /**
  * Simulated run state for previewing a card at a given owned rank.
