@@ -5656,11 +5656,13 @@ function choose(i) {
   const tipColor = UPGRADE_CATS[u.cat] || '#7ec8e8';
   choose._t = setTimeout(() => {
     hidePicker();
-    // Same two-line float as first-time pickups: small coloured category + name below.
-    spawnFloatWord(`${catLabel} UPGRADED`, tipColor, {
-      detail: line,
-      upgrade: true,
-    });
+    // Shield capacity/recovery is already shown by the overhead shield animation.
+    if (u.id !== 'hp' && u.id !== 'heal') {
+      spawnFloatWord(`${catLabel} UPGRADED`, tipColor, {
+        detail: line,
+        upgrade: true,
+      });
+    }
     if (startBay) vacuumWaveClearShieldThen(beginBayTransition);
   }, 250);
   // Wave 10 → Defence Bay walk instead of wave 11.

@@ -14,6 +14,9 @@ Shield Regen timer. The opening starts music immediately, reveals the shields,
 fades them before the Wave 1 title at 2.3 seconds, then starts enemies 1.5 seconds
 later. Subsequent waves retain their usual entry. Shield pickups keep their floor
 label, glow and sound without the redundant floating +1 SHIELD message.
+Shield Array and Shield Reset also use the overhead shield animation instead of
+a post-selection upgrade message. Their picker cards and upgrade sounds remain;
+other upgrades still show their confirmation text.
 
 The live project retains its existing Vite build/version setup and leaderboard
 endpoint. Preview build badges, version polling, cache metadata and service-worker
