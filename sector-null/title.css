@@ -144,6 +144,15 @@ body.titling #game {
   margin-inline: auto;
   font-size: clamp(75px, min(13.9cqw, 25cqh), 264px);
 }
+#titleVersion {
+  margin: 12px 0 0;
+  color: #a6c2ce;
+  font: 600 11px/1.2 "Rajdhani", sans-serif;
+  letter-spacing: 0.12em;
+}
+#menu:not(.splash) #titleVersion {
+  display: none;
+}
 #title::after {
   content: "";
   position: absolute;

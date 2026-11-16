@@ -7426,6 +7426,9 @@ for (const button of document.querySelectorAll('.close-panel')) {
   });
 }
 const BUILD_VERSION = typeof __BUILD_VERSION__ !== 'undefined' ? __BUILD_VERSION__ : 'dev';
+const titleVersion = document.getElementById('titleVersion');
+titleVersion.textContent = BUILD_VERSION === 'dev' ? 'dev' : `0.0.${BUILD_VERSION}`;
+titleVersion.setAttribute('aria-label', `Game version ${titleVersion.textContent}`);
 
 let scoresLoadToken = 0;
 
