@@ -9,12 +9,13 @@ export function createShieldDisplay() {
   row.setAttribute('aria-hidden', 'true'); // The existing HUD supplies the accessible count.
   document.body.appendChild(row);
   const point = new THREE.Vector3();
-  let slots = [], hp = null, hold = 0;
+  let slots = [], hp = null, hold = 0, entranceDelay = 0.9;
   // Same six-point silhouette as the HUD shield-pip clip-path.
   const path = 'M10 0L20 3.6L18 13.6L10 20L2 13.6L0 3.6Z';
   function reset() {
     hp = null;
     hold = 0;
+    entranceDelay = 0.9;
     slots.forEach(s => { s.time = 0; });
     row.hidden = true;
   }
@@ -42,7 +43,13 @@ export function createShieldDisplay() {
     sync(state.hp, state.maxHp);
     const charging = !!state.upgrades.regen && state.hp < state.maxHp;
     const progress = charging ? Math.min(1, safe / (state.upgrades.regen === 2 ? 8 : 12)) : 0;
-    if (ticking) hold = Math.max(0, hold - dt);
+    // Start the opening reveal only once gameplay is visible, not behind the title.
+    if (shown && entranceDelay > 0) {
+      entranceDelay = Math.max(0, entranceDelay - dt);
+      row.hidden = true;
+      return;
+    }
+    if (shown && ticking) hold = Math.max(0, hold - dt);
     row.hidden = !shown || (!charging && hold <= 0);
     if (row.hidden) return;
     row.style.opacity = charging ? '1' : String(Math.min(1, hold / 0.4));

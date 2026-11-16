@@ -1,4 +1,4 @@
-.operator-shields { position: fixed; top: 0; left: 0; z-index: 12; display: flex; gap: 3px; padding: 5px 13px; border-radius: 50%; background: linear-gradient(90deg, transparent, #07151dbd 25%, #07151ddd 50%, #07151dbd 75%, transparent); pointer-events: none; will-change: transform; }
+.operator-shields { position: fixed; top: 0; left: 0; z-index: 3; display: flex; gap: 3px; padding: 5px 13px; border-radius: 50%; background: linear-gradient(90deg, transparent, #07151dbd 25%, #07151ddd 50%, #07151dbd 75%, transparent); pointer-events: none; will-change: transform; }
 .operator-shields[hidden] { display: none; }
 .operator-shields > span { display: block; width: 17px; height: 18.789px; animation: operator-shield-enter 280ms cubic-bezier(.2,.8,.3,1) both; animation-delay: calc(var(--shield-order, 0) * 100ms); }
 @keyframes operator-shield-enter {

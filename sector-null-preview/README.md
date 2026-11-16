@@ -17,6 +17,8 @@ segments, and other shield costs drain softly. The next empty shield fills from
 the actual 12/8-second damage-free regeneration timer; hits reset that progress.
 Shields enter in a quick left-to-right stagger over a soft, transparent-ended
 linear-gradient backdrop. Reduced motion shows all icons immediately.
+The opening reveal waits 0.9 seconds after gameplay becomes visible; wave titles
+and subtitles render above the shield row. The delay preserves the full display hold.
 The row fades after 2.4 seconds once settled, hides during menus/pause, and respects
 reduced motion. Shield rules and the existing HUD count are unchanged.
 
