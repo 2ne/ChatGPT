@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Full history so sector-null can stamp BUILD from git rev-list --count.
+          # Preserve full history for project build metadata.
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -42,8 +42,6 @@ jobs:
             treadmill-coach/package-lock.json
             primary-learn/package-lock.json
             prototype-to-pilot/package-lock.json
-            sector-null/package-lock.json
-            sector-null-preview/package-lock.json
       - name: Install dependencies
         run: |
           npm ci --prefix readability-presentation
@@ -51,8 +49,6 @@ jobs:
           npm ci --prefix treadmill-coach
           npm ci --prefix primary-learn
           npm ci --prefix prototype-to-pilot
-          npm ci --prefix sector-null
-          npm ci --prefix sector-null-preview
       - name: Build projects
         run: |
           npm run build --prefix readability-presentation
@@ -60,8 +56,6 @@ jobs:
           npm run build --prefix treadmill-coach
           npm run build --prefix primary-learn
           npm run build --prefix prototype-to-pilot
-          npm run build --prefix sector-null
-          npm run build --prefix sector-null-preview
       - name: Package projects at their own URLs
         run: |
           mkdir -p pages/readability-presentation pages/snip pages/treadmill-coach pages/research-agent-orbs pages/primary-learn pages/prototype-to-pilot pages/sector-null pages/sector-null-preview
@@ -71,9 +65,10 @@ jobs:
           cp -R research-agent-orbs/. pages/research-agent-orbs/
           cp -R primary-learn/dist/. pages/primary-learn/
           cp -R prototype-to-pilot/dist/. pages/prototype-to-pilot/
-          cp -R sector-null/dist/. pages/sector-null/
-          # Independent preview source and output; live sector-null is unchanged.
-          cp -R sector-null-preview/dist/. pages/sector-null-preview/
+          # Retired game URLs remain available as redirects to the custom domain.
+          cp sector-null/index.html sector-null/upgrade-cards-3d.html pages/sector-null/
+          cp sector-null-preview/index.html sector-null-preview/upgrade-cards-3d.html pages/sector-null-preview/
+          cp sector-null-preview/sw.js sector-null-preview/version.json pages/sector-null-preview/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

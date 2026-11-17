@@ -1,6 +1,16 @@
 # Sector Null
 
-**Play:** https://2ne.github.io/ChatGPT/sector-null/
+**Play:** https://www.sectornull.dev/
+
+## Archived Pages copy — 17 November 2026
+
+Active development moved to https://github.com/2ne/sector-null. This folder's
+previous game source is retained as an archive. The old Pages index and upgrade
+card preview now redirect immediately to the custom domain, and the shared
+workflow publishes only those redirect files for this location. It no longer
+installs or builds this old game. The independent preview application has been
+removed and its URLs redirect too. The historical notes below describe the
+archived game and are not current release information.
 
 ## Live release — 16 November 2026
 
