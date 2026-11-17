@@ -8028,12 +8028,13 @@ function update(dt, lightFrame = false) {
     }
     // --- aim ---
     raycaster.setFromCamera(mouse, camera);
-    // Right stick / pad steers aim when deflected; otherwise the gun follows the move stick
-    // so walking up also points the rifle up until you override with the right thumb.
+    // Holding the right thumb owns aim even inside its deadzone: keep the last
+    // direction so backing up cannot turn the gun around mid-burst.
+    // With no right thumb held, movement can still turn the rifle.
     const aimSteer = aimStick.id !== null && aimStick.delta.lengthSq() > AIM_DEAD * AIM_DEAD;
     const moveSteer = moveStick.id !== null && moveStick.delta.lengthSq() > AIM_DEAD * AIM_DEAD;
-    if (aimSteer) {
-      touchDirection.copy(aimStick.delta).normalize();
+    if (aimStick.id !== null) {
+      if (aimSteer) touchDirection.copy(aimStick.delta).normalize();
       touchAiming = true;
       setPadAiming(false);
     } else if (padAiming) {
