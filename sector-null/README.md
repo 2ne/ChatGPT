@@ -23,6 +23,8 @@ rows (44px total), constrained to the safe viewport and moved above the feet nea
 the bottom edge. Recharge no longer keeps the overhead shield row visible.
 The opening starts music and its countdown immediately. The menu camera move
 takes 1.2 seconds, with shields beginning to reveal during its final easing at 0.9 seconds.
+Each opening shield icon adds a quiet rising power-up tick, timed to its animation
+and controlled by the SFX volume setting.
 Shields fade before the Wave 1 title at 2.3 seconds, then enemies start 1.5 seconds
 later. Subsequent waves retain their usual entry. Shield pickups keep their floor
 label, glow and sound without the redundant floating +1 SHIELD message.

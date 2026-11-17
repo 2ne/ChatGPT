@@ -376,6 +376,12 @@ export function createAudio(settings, listener) {
     },
     shatter(pos) { const out = spatial(pos, 0.5); grain(4800, 0.36, 0.52, out); voice(880, 250, 0.18, 0.13, { out, echo: true }); },
     waveClear() { score?.clearWave(); },
+    /** Quiet rising ticks, triggered by the opening shield icon animations. */
+    shieldBuild(index) {
+      if (!ctx || paused || ctx.state !== 'running') return;
+      const hz = midiHz(72 + Math.min(index, 8) * 2);
+      voice(hz * 0.94, hz, 0.14, 0.035, { attack: 0.015 });
+    },
     /** Soft restorative chime for wave-clear / announced shield refill. */
     heal() {
       signal([69, 76, 81], 0.12, 0.07);

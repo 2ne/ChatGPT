@@ -144,7 +144,7 @@ function createRenderer() {
 const renderer = createRenderer();
 const titleScene = createTitleScene();
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const shieldDisplay = createShieldDisplay();
+const shieldDisplay = createShieldDisplay(index => audio.shieldBuild(index));
 const finePointerUi = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.4;

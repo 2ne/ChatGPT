@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import './shield-display.css';
 
 // Screen-space icons stay legible on phones without adding lights or draw calls.
-export function createShieldDisplay() {
+export function createShieldDisplay(onBuild = () => {}) {
   const row = document.createElement('div');
   row.className = 'operator-shields';
   row.hidden = true;
@@ -12,12 +12,16 @@ export function createShieldDisplay() {
   document.getElementById('hud').appendChild(row);
   const point = new THREE.Vector3();
   let slots = [], hp = null, hold = 0, entranceDelay = 0.9;
+  let openingBuild = true;
+  const sounded = new Set();
   // Same six-point silhouette as the HUD shield-pip clip-path.
   const path = 'M10 0L20 3.6L18 13.6L10 20L2 13.6L0 3.6Z';
   function reset() {
     hp = null;
     hold = 0;
     entranceDelay = 0.9;
+    openingBuild = true;
+    sounded.clear();
     slots.forEach(s => { s.time = 0; });
     row.hidden = true;
   }
@@ -25,7 +29,15 @@ export function createShieldDisplay() {
     const previous = hp ?? next;
     while (slots.length < max) {
       const el = document.createElement('span');
-      el.style.setProperty('--shield-order', slots.length);
+      const index = slots.length;
+      el.style.setProperty('--shield-order', index);
+      // CSS dispatches this after each icon's stagger delay, keeping audio in
+      // step with the visible reveal without timers surviving a restart.
+      el.addEventListener('animationstart', e => {
+        if (e.animationName !== 'operator-shield-enter' || !openingBuild || row.hidden || index >= hp || sounded.has(index)) return;
+        sounded.add(index);
+        onBuild(index);
+      });
       el.innerHTML = `<svg viewBox="0 0 20 20" preserveAspectRatio="none"><path class="shield-shell" d="${path}"/><svg y="0" height="20" viewBox="0 0 20 20"><path class="shield-charge" d="${path}"/></svg><path class="shield-echo" d="${path}"/><path class="shield-crack" d="M11 3L8 8L12 10L9 16"/></svg>`;
       row.appendChild(el);
       slots.push({ el, fill: el.querySelector('svg svg'), time: 0, kind: '' });
@@ -34,7 +46,7 @@ export function createShieldDisplay() {
     // Opening: 0.9s delay + 1.3s reveal/hold/fade, before the title at 2.3s.
     // Later shield changes retain their longer feedback hold.
     if (hp === null) hold = 1.3;
-    else if (next !== previous) hold = 2.4;
+    else if (next !== previous) { hold = 2.4; openingBuild = false; }
     slots.forEach((slot, i) => {
       if ((i >= previous && i < next) || (i >= next && i < previous)) {
         slot.kind = next > previous ? 'gain' : kind;
@@ -76,6 +88,7 @@ export function createShieldDisplay() {
     });
   }
   function dismiss() {
+    openingBuild = false;
     hold = 0;
     row.hidden = true;
   }
