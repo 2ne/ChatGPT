@@ -7183,7 +7183,7 @@ function showGameOver() {
 // ===================================================================
 const TITLE_DRONES = 4;
 const SWOOP_TIME = 1.8;
-const GAME_ENTRY_TIME = 0.6; // Arrive before the shield reveal starts at 0.9s.
+const GAME_ENTRY_TIME = 1.2; // Gentle entry; the shield reveal overlaps the final easing.
 const title = { active: true, t: 0, groan: 3 };
 const menuEl = document.getElementById('menu');
 const TITLE_CAM = new THREE.Vector3(0.8, 0, 24); // roughly where the title camera stands

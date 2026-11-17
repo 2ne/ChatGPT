@@ -22,7 +22,7 @@ full shields hide it. It stacks with Overcharge and Infinite Cell in three compa
 rows (44px total), constrained to the safe viewport and moved above the feet near
 the bottom edge. Recharge no longer keeps the overhead shield row visible.
 The opening starts music and its countdown immediately. The menu camera move
-takes 0.6 seconds, finishing before shields begin revealing at 0.9 seconds.
+takes 1.2 seconds, with shields beginning to reveal during its final easing at 0.9 seconds.
 Shields fade before the Wave 1 title at 2.3 seconds, then enemies start 1.5 seconds
 later. Subsequent waves retain their usual entry. Shield pickups keep their floor
 label, glow and sound without the redundant floating +1 SHIELD message.
