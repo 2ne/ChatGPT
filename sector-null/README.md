@@ -15,7 +15,7 @@ so interrupted or stalled iOS audio cannot block the next wave. Upgrade taps cla
 their touch event and resume audio before scheduling the next combat track.
 
 Pink shield icons match the HUD and briefly animate gains and damage. Overhead
-icons are 15px wide, with compact spacing and backing for a smaller footprint. Shield
+icons are 12px wide, with compact spacing and backing for a smaller footprint. Shield
 Regen uses a pink shield icon and a steadily filling power-up bar beneath the
 operator, driven by the real 12/8-second damage-free timer. Hits reset its fill;
 full shields hide it. It stacks with Overcharge and Infinite Cell in three compact

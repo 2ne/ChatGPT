@@ -1,6 +1,6 @@
-.operator-shields { position: fixed; top: 0; left: 0; z-index: 3; display: flex; gap: 2.5px; padding: 4px 11px; border-radius: 50%; background: linear-gradient(90deg, transparent, #07151dbd 25%, #07151ddd 50%, #07151dbd 75%, transparent); pointer-events: none; will-change: transform; }
+.operator-shields { position: fixed; top: 0; left: 0; z-index: 3; display: flex; gap: 2px; padding: 3px 8px; border-radius: 50%; background: linear-gradient(90deg, transparent, #07151dbd 25%, #07151ddd 50%, #07151dbd 75%, transparent); pointer-events: none; will-change: transform; }
 .operator-shields[hidden] { display: none; }
-.operator-shields > span { display: block; width: 15px; height: 16.579px; animation: operator-shield-enter 280ms cubic-bezier(.2,.8,.3,1) both; animation-delay: calc(var(--shield-order, 0) * 100ms); }
+.operator-shields > span { display: block; width: 12px; height: 13.263px; animation: operator-shield-enter 280ms cubic-bezier(.2,.8,.3,1) both; animation-delay: calc(var(--shield-order, 0) * 100ms); }
 @keyframes operator-shield-enter {
   from { opacity: 0; transform: translateY(6px) scale(.75); }
   to { opacity: 1; transform: translateY(0) scale(1); }
