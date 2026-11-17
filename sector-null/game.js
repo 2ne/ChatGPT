@@ -7183,6 +7183,7 @@ function showGameOver() {
 // ===================================================================
 const TITLE_DRONES = 4;
 const SWOOP_TIME = 1.8;
+const GAME_ENTRY_TIME = 0.6; // Arrive before the shield reveal starts at 0.9s.
 const title = { active: true, t: 0, groan: 3 };
 const menuEl = document.getElementById('menu');
 const TITLE_CAM = new THREE.Vector3(0.8, 0, 24); // roughly where the title camera stands
@@ -7291,7 +7292,7 @@ function updateCamera(dt) {
   }
   if (camMix === 0) followPos.copy(tmp);
   else followPos.lerp(tmp, 1 - Math.pow(0.001, dt));
-  camMix = THREE.MathUtils.clamp(camMix + (title.active ? -1 : 1) * dt / SWOOP_TIME, 0, 1);
+  camMix = THREE.MathUtils.clamp(camMix + (title.active ? -dt / SWOOP_TIME : dt / GAME_ENTRY_TIME), 0, 1);
 
   // title shot: low in the yard, drifting side to side and breathing like a handheld
   const t = title.t;
@@ -8087,9 +8088,7 @@ function update(dt, lightFrame = false) {
     if (state.choosing || state.scripted) {
       // hold — no spawns during picker or the walk-in
     } else if (state.wave === 0 && state.openingReveal > 0) {
-      // Menu entry has a camera swoop; restart is already in gameplay view.
-      // Give both paths the full shield reveal after the camera has arrived.
-      if (camMix === 1) state.openingReveal = Math.max(0, state.openingReveal - dt);
+      state.openingReveal = Math.max(0, state.openingReveal - dt);
       if (state.openingReveal === 0) {
         state.openingTitleShown = true;
         shieldDisplay.dismiss();
@@ -8277,7 +8276,7 @@ function loop(now) {
   if (gamepadLive) pollGamepad(dt);
   if (!state.paused) update(dt, lightFrame);
   shieldDisplay.update(dt, state, equipment.safe, player, camera,
-    state.running && !title.active && camMix === 1 && !state.choosing && !state.paused && !(state.wave === 0 && state.openingTitleShown),
+    state.running && !title.active && !state.choosing && !state.paused && !(state.wave === 0 && state.openingTitleShown),
     state.running && !state.paused && !state.choosing && !state.scripted && (state.intermission <= 0 || (state.wave === 0 && state.openingReveal > 0)));
   hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {
