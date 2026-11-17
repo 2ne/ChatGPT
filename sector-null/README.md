@@ -133,6 +133,10 @@ The pulse rifle uses a low, weighty energy pulse with a short midrange attack an
 
 Destroyed drones burst into sparks and scattered parts. Reduced-motion settings suppress the blast flash and cut the spark count.
 
+On mobile, the Press Start touch is captured through release and its follow-up
+click is consumed. Menu options require a fresh tap, so holding Start cannot
+also open a newly revealed panel such as Leaderboard.
+
 | Action | Keyboard and mouse | Touch | Xbox / standard gamepad |
 | --- | --- | --- | --- |
 | Move | WASD or arrow keys | Plant and drag on the left side (also turns the gun) | Left stick (radial deadzone) |

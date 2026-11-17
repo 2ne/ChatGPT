@@ -7346,8 +7346,7 @@ const menu = {
     this.paintSel();
   },
   activate(i = this.sel) {
-    // Start's pointerdown reveals the list; the leftover click retargets onto
-    // whichever button now sits under that point (How, on landscape).
+    // Brief keyboard/gamepad debounce after leaving the splash screen.
     if (performance.now() < this.ignoreUntil) return;
     const act = menuButtons[i].dataset.act;
     this.select(i, true);
@@ -7578,6 +7577,23 @@ pauseSettingRows.forEach((r) => bindSettingRow(r, () => {
   if (document.activeElement !== r) r.focus({ preventScroll: true });
   syncOverlaySelection();
 }));
+let splashTouchClickPending = false;
+menuEl.addEventListener('pointerdown', e => {
+  // A fresh press can use the menu even if Safari never sent the previous click.
+  splashTouchClickPending = false;
+  if (isMousePointer(e) || !menuEl.classList.contains('splash')) return;
+  // Claim Start before revealing buttons underneath the finger. Capture keeps
+  // the release on this container even if the thumb is held or drifts.
+  claimPointer(e);
+  menuEl.setPointerCapture(e.pointerId);
+  splashTouchClickPending = true;
+  menu.leaveSplash();
+}, { capture: true, passive: false });
+menuEl.addEventListener('click', e => {
+  if (!splashTouchClickPending || e.detail === 0) return;
+  splashTouchClickPending = false;
+  claimPointer(e);
+}, { capture: true, passive: false });
 bindTap(menuEl, e => {
   if (menuEl.classList.contains('splash')) {
     if (e.cancelable) e.preventDefault();
