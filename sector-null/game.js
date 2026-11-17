@@ -8087,7 +8087,9 @@ function update(dt, lightFrame = false) {
     if (state.choosing || state.scripted) {
       // hold — no spawns during picker or the walk-in
     } else if (state.wave === 0 && state.openingReveal > 0) {
-      state.openingReveal = Math.max(0, state.openingReveal - dt);
+      // Menu entry has a camera swoop; restart is already in gameplay view.
+      // Give both paths the full shield reveal after the camera has arrived.
+      if (camMix === 1) state.openingReveal = Math.max(0, state.openingReveal - dt);
       if (state.openingReveal === 0) {
         state.openingTitleShown = true;
         shieldDisplay.dismiss();
@@ -8275,7 +8277,7 @@ function loop(now) {
   if (gamepadLive) pollGamepad(dt);
   if (!state.paused) update(dt, lightFrame);
   shieldDisplay.update(dt, state, equipment.safe, player, camera,
-    state.running && !title.active && !state.choosing && !state.paused && !(state.wave === 0 && state.openingTitleShown),
+    state.running && !title.active && camMix === 1 && !state.choosing && !state.paused && !(state.wave === 0 && state.openingTitleShown),
     state.running && !state.paused && !state.choosing && !state.scripted && (state.intermission <= 0 || (state.wave === 0 && state.openingReveal > 0)));
   hitchCool = Math.max(0, hitchCool - dt);
   if (title.active) {

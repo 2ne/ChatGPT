@@ -21,8 +21,9 @@ operator, driven by the real 12/8-second damage-free timer. Hits reset its fill;
 full shields hide it. It stacks with Overcharge and Infinite Cell in three compact
 rows (44px total), constrained to the safe viewport and moved above the feet near
 the bottom edge. Recharge no longer keeps the overhead shield row visible.
-The opening starts music immediately, reveals the shields,
-fades them before the Wave 1 title at 2.3 seconds, then starts enemies 1.5 seconds
+The opening starts music immediately, waits for the menu camera transition to
+finish before starting the shield reveal and Wave 1 countdown, reveals the shields,
+fades them before the Wave 1 title 2.3 seconds into that countdown, then starts enemies 1.5 seconds
 later. Subsequent waves retain their usual entry. Shield pickups keep their floor
 label, glow and sound without the redundant floating +1 SHIELD message.
 Shield Array and Shield Reset also use the overhead shield animation instead of
